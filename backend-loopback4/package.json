@@ -1,0 +1,84 @@
+{
+  "name": "react-fast-training-api",
+  "version": "1.0.0",
+  "description": "React Fast Training Backend API - First Aid Training Company in Yorkshire",
+  "keywords": [
+    "loopback-application",
+    "loopback"
+  ],
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "engines": {
+    "node": ">=18"
+  },
+  "scripts": {
+    "build": "lb-tsc",
+    "build:watch": "lb-tsc --watch",
+    "lint": "npm run eslint && npm run prettier:check",
+    "lint:fix": "npm run eslint:fix && npm run prettier:fix",
+    "prettier:cli": "lb-prettier \"**/*.ts\" \"**/*.js\"",
+    "prettier:check": "npm run prettier:cli -- -l",
+    "prettier:fix": "npm run prettier:cli -- --write",
+    "eslint": "lb-eslint --report-unused-disable-directives .",
+    "eslint:fix": "npm run eslint -- --fix",
+    "pretest": "npm run rebuild",
+    "test": "lb-mocha --allow-console-logs \"dist/__tests__\"",
+    "posttest": "npm run lint",
+    "test:dev": "lb-mocha --allow-console-logs dist/__tests__/**/*.js && npm run posttest",
+    "docker:build": "docker build -t react-fast-training-api .",
+    "docker:run": "docker run -p 3000:3000 -d react-fast-training-api",
+    "premigrate": "npm run build",
+    "migrate": "node ./dist/migrate",
+    "preopenapi-spec": "npm run build",
+    "openapi-spec": "node ./dist/openapi-spec",
+    "prestart": "npm run rebuild",
+    "start": "node -r source-map-support/register .",
+    "clean": "lb-clean dist *.tsbuildinfo .eslintcache",
+    "rebuild": "npm run clean && npm run build",
+    "seed": "node ./dist/seed-data"
+  },
+  "repository": {
+    "type": "git",
+    "url": ""
+  },
+  "author": "React Fast Training",
+  "license": "UNLICENSED",
+  "files": [
+    "README.md",
+    "dist",
+    "src",
+    "!*/__tests__"
+  ],
+  "dependencies": {
+    "@loopback/authentication": "^11.0.6",
+    "@loopback/authentication-jwt": "^0.15.6",
+    "@loopback/authorization": "^0.15.6",
+    "@loopback/boot": "^7.0.6",
+    "@loopback/core": "^6.1.3",
+    "@loopback/cron": "^0.11.6",
+    "@loopback/repository": "^7.0.6",
+    "@loopback/rest": "^14.0.6",
+    "@loopback/rest-explorer": "^7.0.6",
+    "@loopback/service-proxy": "^7.0.6",
+    "bcryptjs": "^2.4.3",
+    "date-fns": "^3.3.1",
+    "dotenv": "^16.4.5",
+    "loopback-connector-postgresql": "^7.1.4",
+    "nodemailer": "^6.9.13",
+    "stripe": "^14.25.0",
+    "tslib": "^2.6.2",
+    "uuid": "^9.0.1"
+  },
+  "devDependencies": {
+    "@loopback/build": "^11.0.6",
+    "@loopback/eslint-config": "^15.0.4",
+    "@loopback/testlab": "^7.0.6",
+    "@types/bcryptjs": "^2.4.6",
+    "@types/node": "^18.19.42",
+    "@types/nodemailer": "^6.4.15",
+    "@types/uuid": "^9.0.8",
+    "eslint": "^8.57.0",
+    "source-map-support": "^0.5.21",
+    "typescript": "~5.3.3"
+  }
+}

@@ -17,26 +17,18 @@ interface NavItem {
 
 const navItems: NavItem[] = [
   { label: 'Home', href: '/' },
-  { label: 'About', href: '/about' },
+  { label: 'About Us', href: '/about' },
   {
-    label: 'Products',
-    href: '/products',
+    label: 'Courses',
+    href: '/courses',
     children: [
-      { label: 'All Products', href: '/products' },
-      { label: 'Categories', href: '/products/categories' },
-      { label: 'New Arrivals', href: '/products/new' },
+      { label: 'Emergency First Aid at Work', href: '/courses/efaw' },
+      { label: 'First Aid at Work', href: '/courses/faw' },
+      { label: 'Paediatric First Aid', href: '/courses/paediatric' },
+      { label: 'Mental Health First Aid', href: '/courses/mental-health' },
     ],
   },
-  {
-    label: 'Services',
-    href: '/services',
-    children: [
-      { label: 'All Services', href: '/services' },
-      { label: 'Consulting', href: '/services/consulting' },
-      { label: 'Support', href: '/services/support' },
-    ],
-  },
-  { label: 'FAQ', href: '/faq' },
+  { label: 'Training Venue', href: '/venue' },
   { label: 'Contact', href: '/contact' },
 ]
 
@@ -101,10 +93,13 @@ const Header: React.FC = () => {
             {/* Logo */}
             <Link
               to="/"
-              className="flex items-center space-x-2 text-xl font-bold text-gray-900 dark:text-white"
+              className="flex items-center"
             >
-              <span className="text-primary-600 dark:text-primary-400">Lex</span>
-              <span>Business</span>
+              <img 
+                src="/images/logos/fulllogo_transparent.png" 
+                alt="React Fast Training" 
+                className="h-10 md:h-12 w-auto"
+              />
             </Link>
 
             {/* Desktop Navigation */}
@@ -177,6 +172,17 @@ const Header: React.FC = () => {
 
             {/* Right Side Actions */}
             <div className="flex items-center space-x-2 sm:space-x-3 md:space-x-4">
+              {/* Phone Number */}
+              <a 
+                href="tel:07845123456" 
+                className="hidden md:flex items-center space-x-2 text-primary-600 dark:text-primary-400 font-semibold hover:text-primary-700 dark:hover:text-primary-300 transition-colors"
+              >
+                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
+                </svg>
+                <span>07845 123456</span>
+              </a>
+
               {/* Search */}
               <button
                 onClick={() => setShowSearch(true)}
@@ -235,7 +241,7 @@ const Header: React.FC = () => {
                 to="/contact"
                 className="hidden md:inline-flex btn btn-primary"
               >
-                Get Started
+                Book Course
               </Link>
 
               {/* Mobile Menu Toggle */}
