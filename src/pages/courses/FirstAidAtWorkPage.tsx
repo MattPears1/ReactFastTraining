@@ -53,14 +53,6 @@ const FirstAidAtWorkPage: React.FC = () => {
         canonical="/courses/first-aid-at-work"
       />
 
-      {/* Logo at very top right */}
-      <div className="fixed top-4 right-4 z-50">
-        <img 
-          src="/images/logos/fulllogo_transparent.png" 
-          alt="React Fast Training" 
-          className="h-20 md:h-30 lg:h-40 w-auto"
-        />
-      </div>
 
       {/* Hero Section */}
       <section className="relative py-20 bg-gradient-to-br from-secondary-50 via-white to-primary-50 dark:from-gray-900 dark:via-gray-900 dark:to-gray-800 overflow-hidden">
@@ -321,8 +313,7 @@ const FirstAidAtWorkPage: React.FC = () => {
                 Check Available Dates
               </Button>
               <Button
-                as={Link}
-                to="/contact"
+                href="/contact"
                 size="lg"
                 variant="outline"
                 className="border-2 border-white text-white hover:bg-white/10"

@@ -177,14 +177,6 @@ const CoursesPage: React.FC = () => {
         canonical="/courses"
       />
       
-      {/* Logo at very top right */}
-      <div className="fixed top-4 right-4 z-50">
-        <img 
-          src="/images/logos/fulllogo_transparent.png" 
-          alt="React Fast Training" 
-          className="h-20 md:h-30 lg:h-40 w-auto"
-        />
-      </div>
       
       {/* Hero Section */}
       <section className="relative py-20 md:py-32 overflow-hidden bg-gradient-to-br from-primary-50 to-secondary-50 dark:from-gray-900 dark:to-gray-800">
@@ -254,8 +246,7 @@ const CoursesPage: React.FC = () => {
                         {course.price}
                       </p>
                       <Button
-                        as={Link}
-                        to={course.href}
+                        href={course.href}
                         variant="outline"
                         rightIcon={<ArrowRight className="w-4 h-4" />}
                         className={`border-${course.color}-500 text-${course.color}-600 hover:bg-${course.color}-50 dark:hover:bg-${course.color}-900/20 group-hover:scale-105 transition-transform`}
@@ -322,8 +313,7 @@ const CoursesPage: React.FC = () => {
                         {course.price}
                       </p>
                       <Button
-                        as={Link}
-                        to={course.href}
+                        href={course.href}
                         size="sm"
                         variant="outline"
                         rightIcon={<ArrowRight className="w-3 h-3" />}
@@ -433,8 +423,7 @@ const CoursesPage: React.FC = () => {
               <Button
                 size="lg"
                 variant="secondary"
-                as={Link}
-                to="/contact"
+                href="/contact"
               >
                 Get in Touch
               </Button>
@@ -442,7 +431,6 @@ const CoursesPage: React.FC = () => {
                 size="lg"
                 variant="outline"
                 className="border-white text-white hover:bg-white/10"
-                as="a"
                 href="tel:07447485644"
               >
                 Call 07447 485644

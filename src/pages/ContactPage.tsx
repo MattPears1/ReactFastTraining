@@ -38,14 +38,6 @@ const ContactPage: React.FC = () => {
         canonical="/contact"
       />
       
-      {/* Logo at very top right */}
-      <div className="fixed top-4 right-4 z-50">
-        <img 
-          src="/images/logos/fulllogo_transparent.png" 
-          alt="React Fast Training" 
-          className="h-20 md:h-30 lg:h-40 w-auto"
-        />
-      </div>
       
       {/* Hero Section */}
       <section className="relative py-20 md:py-32 overflow-hidden">

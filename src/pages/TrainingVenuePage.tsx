@@ -73,14 +73,6 @@ const TrainingVenuePage: React.FC = () => {
         canonical="/venue"
       />
 
-      {/* Logo at very top right */}
-      <div className="fixed top-4 right-4 z-50">
-        <img 
-          src="/images/logos/fulllogo_transparent.png" 
-          alt="React Fast Training" 
-          className="h-20 md:h-30 lg:h-40 w-auto"
-        />
-      </div>
 
       {/* Hero Section */}
       <section className="relative py-20 bg-gradient-to-br from-primary-50 via-white to-secondary-50 dark:from-gray-900 dark:via-gray-900 dark:to-gray-800 overflow-hidden">
@@ -118,8 +110,7 @@ const TrainingVenuePage: React.FC = () => {
             
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <Button
-                as={Link}
-                to="/contact"
+                href="/contact"
                 size="lg"
                 className="bg-gradient-to-r from-primary-500 to-primary-600 hover:from-primary-600 hover:to-primary-700 text-white"
               >
@@ -389,8 +380,7 @@ const TrainingVenuePage: React.FC = () => {
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <Button
-                as={Link}
-                to="/contact"
+                href="/contact"
                 size="lg"
                 className="bg-white text-primary-600 hover:bg-gray-100"
               >
@@ -398,7 +388,6 @@ const TrainingVenuePage: React.FC = () => {
                 Get Directions
               </Button>
               <Button
-                as="a"
                 href="tel:0800123456"
                 size="lg"
                 variant="outline"

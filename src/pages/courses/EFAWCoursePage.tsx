@@ -70,14 +70,6 @@ const EFAWCoursePage: React.FC = () => {
         jsonLd={courseStructuredData}
       />
       
-      {/* Logo at very top right */}
-      <div className="fixed top-4 right-4 z-50">
-        <img 
-          src="/images/logos/fulllogo_transparent.png" 
-          alt="React Fast Training" 
-          className="h-20 md:h-30 lg:h-40 w-auto"
-        />
-      </div>
       
       {/* Hero Section */}
       <section className="relative py-20 md:py-32 overflow-hidden bg-gradient-to-br from-primary-50 to-secondary-50 dark:from-gray-900 dark:to-gray-800">
@@ -105,11 +97,11 @@ const EFAWCoursePage: React.FC = () => {
             </p>
             
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <Button size="lg" className="group" as={Link} to="/booking?course=EFAW">
+              <Button size="lg" className="group" href="/booking?course=EFAW">
                 Book Your Place - £100
                 <CheckCircle className="w-5 h-5 ml-2 group-hover:scale-110 transition-transform" />
               </Button>
-              <Button variant="outline" size="lg" as={Link} to="/contact">
+              <Button variant="outline" size="lg" href="/contact">
                 <Phone className="w-5 h-5 mr-2" />
                 Call 07447 485644
               </Button>
@@ -329,11 +321,11 @@ const EFAWCoursePage: React.FC = () => {
                 Next available dates: Every Wednesday & Saturday
               </p>
               <div className="flex flex-col sm:flex-row gap-4 justify-center">
-                <Button size="lg" as={Link} to="/booking?course=EFAW">
+                <Button size="lg" href="/booking?course=EFAW">
                   <Calendar className="w-5 h-5 mr-2" />
                   Book This Course
                 </Button>
-                <Button variant="outline" size="lg" as={Link} to="/contact">
+                <Button variant="outline" size="lg" href="/contact">
                   <Mail className="w-5 h-5 mr-2" />
                   Contact Us
                 </Button>
