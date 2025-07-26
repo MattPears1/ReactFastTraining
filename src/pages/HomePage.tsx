@@ -1,13 +1,38 @@
-import React, { useMemo } from 'react'
+import React, { useMemo, useEffect } from 'react'
 import { motion } from 'framer-motion'
-import { ArrowRight, CheckCircle, Heart, Clock, MapPin, Award, Shield, Users, BookOpen, Calendar, Phone, Star } from 'lucide-react'
+import { ArrowRight, CheckCircle, Heart, Clock, MapPin, Award, Shield, Users, BookOpen, Calendar, Phone, Star, Sun } from 'lucide-react'
 import Button from '@components/ui/Button'
 import HeroSection from '@components/sections/HeroSection'
 import CTASection from '@components/sections/CTASection'
 import SEO from '@components/common/SEO'
 import { Link } from 'react-router-dom'
+import { useNotifications } from '@contexts/NotificationContext'
+import { useTheme } from '@contexts/ThemeContext'
 
 const HomePage: React.FC = () => {
+  const { addNotification } = useNotifications()
+  const { setTheme } = useTheme()
+
+  useEffect(() => {
+    const firstVisit = localStorage.getItem('firstVisit')
+    if (!firstVisit) {
+      addNotification({
+        type: 'info',
+        title: 'Light Mode Available',
+        message: 'Prefer a lighter background? Switch to light mode.',
+        persistent: true,
+        icon: <Sun className="w-5 h-5" />,
+        actions: [
+          {
+            label: 'Switch to Light Mode',
+            onClick: () => setTheme('light'),
+          },
+        ],
+      })
+      localStorage.setItem('firstVisit', 'false')
+    }
+  }, [addNotification, setTheme])
+
   const courseCategories = useMemo(() => [
     {
       title: 'Oxygen Therapy Training',
