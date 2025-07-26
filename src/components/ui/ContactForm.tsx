@@ -6,6 +6,7 @@ import { Send, Loader2 } from 'lucide-react'
 import { useToast } from '@contexts/ToastContext'
 import Button from '@components/ui/Button'
 import { contactApi } from '@services/api.service'
+import { COURSE_LIST } from '@constants/courses'
 
 const contactSchema = z.object({
   firstName: z.string().min(2, 'First name must be at least 2 characters'),
@@ -176,19 +177,9 @@ const ContactForm: React.FC = () => {
           disabled={isLoading}
         >
           <option value="">Select a course...</option>
-          <option value="Emergency First Aid at Work">Emergency First Aid at Work</option>
-          <option value="First Aid at Work">First Aid at Work</option>
-          <option value="Paediatric First Aid">Paediatric First Aid</option>
-          <option value="Emergency Paediatric First Aid">Emergency Paediatric First Aid</option>
-          <option value="First Aid at Work Requalification">First Aid at Work Requalification</option>
-          <option value="Emergency First Aid at Work Requalification">Emergency First Aid at Work Requalification</option>
-          <option value="Paediatric First Aid Requalification">Paediatric First Aid Requalification</option>
-          <option value="Emergency Paediatric First Aid Requalification">Emergency Paediatric First Aid Requalification</option>
-          <option value="Activity First Aid">Activity First Aid</option>
-          <option value="Activity First Aid Requalification">Activity First Aid Requalification</option>
-          <option value="CPR and AED">CPR and AED</option>
-          <option value="Annual Skills Refresher">Annual Skills Refresher</option>
-          <option value="Oxygen Therapy Course">Oxygen Therapy Course</option>
+          {COURSE_LIST.map(course => (
+            <option key={course} value={course}>{course}</option>
+          ))}
           <option value="General Enquiry">General Enquiry</option>
         </select>
         {errors.course && (

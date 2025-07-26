@@ -4,6 +4,7 @@ import { ChevronDown, Search, HelpCircle, MessageSquare } from 'lucide-react'
 import { cn } from '@utils/cn'
 import CTASection from '@components/sections/CTASection'
 import SEO from '@components/common/SEO'
+import { AnimatedFAQ } from '@components/ui/AnimatedFAQ'
 
 interface FAQItem {
   id: string
@@ -199,55 +200,7 @@ const FAQPage: React.FC = () => {
             </motion.div>
 
             {/* FAQ Items */}
-            <div className="space-y-4">
-              <AnimatePresence>
-                {filteredFAQs.map((item, index) => (
-                  <motion.div
-                    key={item.id}
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    exit={{ opacity: 0, y: -20 }}
-                    transition={{ delay: index * 0.05 }}
-                    className="bg-white dark:bg-gray-800 rounded-xl shadow-md overflow-hidden"
-                  >
-                    <button
-                      onClick={() => toggleItem(item.id)}
-                      className="w-full px-6 py-5 text-left flex items-center justify-between gap-4 hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors duration-200"
-                    >
-                      <div className="flex-1">
-                        <h3 className="text-lg font-semibold text-gray-900 dark:text-white">
-                          {item.question}
-                        </h3>
-                        <span className="text-sm text-primary-600 dark:text-primary-400 mt-1">
-                          {item.category}
-                        </span>
-                      </div>
-                      <ChevronDown
-                        className={cn(
-                          'w-5 h-5 text-gray-500 transition-transform duration-200',
-                          openItems.includes(item.id) && 'rotate-180'
-                        )}
-                      />
-                    </button>
-                    <AnimatePresence>
-                      {openItems.includes(item.id) && (
-                        <motion.div
-                          initial={{ height: 0 }}
-                          animate={{ height: 'auto' }}
-                          exit={{ height: 0 }}
-                          transition={{ duration: 0.3 }}
-                          className="overflow-hidden"
-                        >
-                          <div className="px-6 pb-5 text-gray-600 dark:text-gray-400 border-t border-gray-200 dark:border-gray-700 pt-4">
-                            {item.answer}
-                          </div>
-                        </motion.div>
-                      )}
-                    </AnimatePresence>
-                  </motion.div>
-                ))}
-              </AnimatePresence>
-            </div>
+            <AnimatedFAQ items={filteredFAQs} />
 
             {filteredFAQs.length === 0 && (
               <motion.div

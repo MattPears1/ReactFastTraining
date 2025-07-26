@@ -1,6 +1,6 @@
-import React, { forwardRef } from 'react'
+import React, { forwardRef, useState } from 'react'
 import { Link } from 'react-router-dom'
-import { motion, HTMLMotionProps } from 'framer-motion'
+import { motion, HTMLMotionProps, AnimatePresence } from 'framer-motion'
 import { cn } from '@utils/cn'
 
 export interface ButtonProps extends Omit<HTMLMotionProps<'button'>, 'size'> {
@@ -12,6 +12,12 @@ export interface ButtonProps extends Omit<HTMLMotionProps<'button'>, 'size'> {
   rightIcon?: React.ReactNode
   href?: string
   external?: boolean
+}
+
+interface Ripple {
+  x: number
+  y: number
+  id: number
 }
 
 const Button = forwardRef<HTMLButtonElement, ButtonProps>(
@@ -28,10 +34,29 @@ const Button = forwardRef<HTMLButtonElement, ButtonProps>(
       external,
       className,
       disabled,
+      onClick,
       ...props
     },
     ref
   ) => {
+    const [ripples, setRipples] = useState<Ripple[]>([])
+    
+    const createRipple = (event: React.MouseEvent<HTMLElement>) => {
+      const button = event.currentTarget
+      const rect = button.getBoundingClientRect()
+      const x = event.clientX - rect.left
+      const y = event.clientY - rect.top
+      const ripple = { x, y, id: Date.now() }
+      
+      setRipples([...ripples, ripple])
+      setTimeout(() => {
+        setRipples(prev => prev.filter(r => r.id !== ripple.id))
+      }, 600)
+
+      if (onClick && !href) {
+        onClick(event as any)
+      }
+    }
     const baseStyles = 'relative inline-flex items-center justify-center font-medium transition-all duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed overflow-hidden transform hover:-translate-y-0.5 active:translate-y-0'
     
     const variants = {
@@ -114,6 +139,7 @@ const Button = forwardRef<HTMLButtonElement, ButtonProps>(
         disabled={disabled || loading}
         whileHover={{ scale: disabled || loading ? 1 : 1.01 }}
         whileTap={{ scale: disabled || loading ? 1 : 0.99 }}
+        onClick={createRipple}
         {...props}
       >
         {content}
