@@ -1,0 +1,72 @@
+export const mockCourseSchedules = [
+  {
+    id: 1,
+    courseType: 'EFAW',
+    courseName: 'Emergency First Aid at Work',
+    startDate: '2025-02-15T09:00:00',
+    endDate: '2025-02-15T17:00:00',
+    venue: 'SHEFFIELD',
+    venueName: 'Sheffield Training Centre',
+    venueAddress: 'City Centre, Sheffield',
+    availableSpots: 8,
+    maxParticipants: 12,
+    pricePerPerson: 100,
+    instructorName: 'Lex Hancock'
+  },
+  {
+    id: 2,
+    courseType: 'FAW',
+    courseName: 'First Aid at Work',
+    startDate: '2025-02-20T09:00:00',
+    endDate: '2025-02-22T17:00:00',
+    venue: 'SHEFFIELD',
+    venueName: 'Sheffield Training Centre',
+    venueAddress: 'City Centre, Sheffield',
+    availableSpots: 10,
+    maxParticipants: 12,
+    pricePerPerson: 200,
+    instructorName: 'Lex Hancock'
+  },
+  {
+    id: 3,
+    courseType: 'PAEDIATRIC',
+    courseName: 'Paediatric First Aid',
+    startDate: '2025-02-25T09:00:00',
+    endDate: '2025-02-26T17:00:00',
+    venue: 'SHEFFIELD',
+    venueName: 'Sheffield Training Centre',
+    venueAddress: 'City Centre, Sheffield',
+    availableSpots: 6,
+    maxParticipants: 12,
+    pricePerPerson: 120,
+    instructorName: 'Sarah Johnson'
+  },
+  {
+    id: 4,
+    courseType: 'EFAW',
+    courseName: 'Emergency First Aid at Work',
+    startDate: '2025-03-01T09:00:00',
+    endDate: '2025-03-01T17:00:00',
+    venue: 'LEEDS',
+    venueName: 'Leeds Training Centre',
+    venueAddress: 'City Centre, Leeds',
+    availableSpots: 0,
+    maxParticipants: 12,
+    pricePerPerson: 100,
+    instructorName: 'Mike Thompson'
+  },
+  {
+    id: 5,
+    courseType: 'MENTAL_HEALTH',
+    courseName: 'Mental Health First Aid',
+    startDate: '2025-03-05T09:00:00',
+    endDate: '2025-03-06T17:00:00',
+    venue: 'SHEFFIELD',
+    venueName: 'Sheffield Training Centre',
+    venueAddress: 'City Centre, Sheffield',
+    availableSpots: 12,
+    maxParticipants: 12,
+    pricePerPerson: 150,
+    instructorName: 'Dr. Emily Carter'
+  }
+]

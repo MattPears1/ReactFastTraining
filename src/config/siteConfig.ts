@@ -1,6 +1,6 @@
 export const siteConfig = {
   name: 'React Fast Training',
-  slogan: 'Act Fast | Save Lives',
+  slogan: 'Act Fast | Learn Skills',
   description: 'Professional onsite first aid training for businesses across Yorkshire. Ofqual accredited courses delivered at your workplace.',
   url: process.env.VITE_SITE_URL || 'https://example.com',
   
@@ -13,7 +13,7 @@ export const siteConfig = {
     // Contact Information
     contact: {
       phone: '07447 485644',
-      email: 'info@reactfasttraining.com',
+      email: 'info@reactfasttraining.co.uk',
       address: {
         street: '123 Training Street',
         city: 'Yorkshire',
@@ -25,13 +25,13 @@ export const siteConfig = {
     
     // Business Hours
     hours: {
-      monday: '9:00 AM - 6:00 PM',
-      tuesday: '9:00 AM - 6:00 PM',
-      wednesday: '9:00 AM - 6:00 PM',
-      thursday: '9:00 AM - 6:00 PM',
-      friday: '9:00 AM - 6:00 PM',
-      saturday: '9:00 AM - 1:00 PM',
-      sunday: 'Closed',
+      monday: '8:00 AM - 6:00 PM',
+      tuesday: '8:00 AM - 6:00 PM',
+      wednesday: '8:00 AM - 6:00 PM',
+      thursday: '8:00 AM - 6:00 PM',
+      friday: '8:00 AM - 6:00 PM',
+      saturday: '10:00 AM - 3:00 PM',
+      sunday: 'Emergency enquiries only',
     },
   },
   
@@ -94,8 +94,8 @@ export const siteConfig = {
   // SEO & Social
   seo: {
     defaultTitle: 'Professional First Aid Training Yorkshire | React Fast Training',
-    titleTemplate: '%s | React Fast Training - Act Fast Save Lives',
-    defaultDescription: 'Ofqual accredited first aid training delivered at your workplace across Yorkshire. Save time and money with our professional onsite courses. Act Fast, Save Lives.',
+    titleTemplate: '%s | React Fast Training - Professional First Aid',
+    defaultDescription: 'Ofqual accredited first aid training delivered at your workplace across Yorkshire. Professional courses delivered by an experienced instructor.',
     keywords: [
       'first aid training Yorkshire',
       'React Fast Training',
@@ -108,7 +108,7 @@ export const siteConfig = {
       'CPR training Yorkshire',
       'defibrillator training Yorkshire',
       'health and safety training Yorkshire',
-      'act fast save lives',
+      'professional first aid training',
       'Yorkshire first aid trainer',
     ],
   },

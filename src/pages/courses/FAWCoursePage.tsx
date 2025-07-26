@@ -8,15 +8,17 @@ const FAWCoursePage: React.FC = () => {
     duration: '3 Days (18 hours)',
     price: '£200',
     certificateValidity: 'Valid for 3 years',
-    description: 'Comprehensive 3-day first aid training course for workplace appointed first aiders. This HSE approved course provides in-depth knowledge and practical skills to deal with a wide range of workplace emergencies.',
+    description: 'This is the most comprehensive workplace first aid course, designed for individuals in higher-risk environments such as factories, construction sites, and manufacturing facilities. It equips first aiders to handle a wide array of injuries and medical emergencies.',
     
     learningOutcomes: [
-      'Assess and manage emergency situations confidently',
-      'Provide CPR and use an AED (defibrillator)',
-      'Deal with wounds, bleeding, and shock',
-      'Manage fractures, sprains, and spinal injuries',
-      'Treat burns, scalds, and poisoning',
-      'Handle medical emergencies including heart attacks, strokes, and epilepsy',
+      'Understand the roles and responsibilities of a first aider',
+      'Assess an incident and manage the scene safely',
+      'Provide Cardiopulmonary Resuscitation (CPR) and use an Automated External Defibrillator (AED) for adults',
+      'Manage an unresponsive casualty effectively',
+      'Treat choking, bleeding (including catastrophic bleeding), shock, and burns',
+      'Manage fractures, dislocations, and head, neck, and spinal injuries',
+      'Respond to medical emergencies such as heart attacks, strokes, seizures, asthma, and diabetic emergencies',
+      'Handle eye injuries and poisoning',
       'Complete accident report forms and understand first aid regulations'
     ],
     
@@ -31,34 +33,37 @@ const FAWCoursePage: React.FC = () => {
     
     courseContent: [
       {
-        title: 'Day 1: Foundations',
+        title: 'Day 1: Emergency Response & Life Support',
         topics: [
-          'Role and responsibilities of a first aider',
-          'Managing incidents and casualties',
-          'Basic life support and CPR',
-          'AED usage and maintenance',
-          'Managing unconscious casualties'
+          'Roles and responsibilities of a first aider',
+          'Assessing an incident and managing the scene safely',
+          'Cardiopulmonary Resuscitation (CPR) for adults',
+          'Automated External Defibrillator (AED) use and maintenance',
+          'Managing an unresponsive casualty',
+          'Recovery position techniques'
         ]
       },
       {
-        title: 'Day 2: Injury Management',
+        title: 'Day 2: Trauma & Injury Management',
         topics: [
-          'Wounds and bleeding control',
-          'Shock recognition and treatment',
-          'Burns and scalds',
-          'Fractures and spinal injuries',
-          'Head injuries and concussion'
+          'Treating choking in conscious and unconscious casualties',
+          'Managing bleeding including catastrophic bleeding',
+          'Recognising and treating shock',
+          'Burns and scalds treatment',
+          'Managing fractures and dislocations',
+          'Head, neck and spinal injury protocols'
         ]
       },
       {
-        title: 'Day 3: Medical Emergencies',
+        title: 'Day 3: Medical Conditions & Assessment',
         topics: [
-          'Heart attacks and angina',
-          'Strokes and mini-strokes',
-          'Epilepsy and seizures',
-          'Diabetes emergencies',
-          'Asthma and anaphylaxis',
-          'Poisoning and substance misuse'
+          'Heart attacks, angina and cardiac emergencies',
+          'Strokes - recognition using FAST protocol',
+          'Seizures, epilepsy and convulsions',
+          'Asthma attacks and breathing difficulties',
+          'Diabetic emergencies - hypo and hyperglycemia',
+          'Eye injuries, poisoning and anaphylaxis',
+          'Practical assessment and certification'
         ]
       }
     ],

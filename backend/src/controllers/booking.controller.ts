@@ -1,15 +1,17 @@
 import { Request, Response, NextFunction } from 'express'
-import { Service } from 'typedi'
 import { Op } from 'sequelize'
 import { Booking } from '../models/Booking.model'
 import { CourseSchedule } from '../models/CourseSchedule.model'
 import { EmailService } from '../services/email/email.service'
 import { logger } from '../utils/logger'
-import sequelize from '../config/database'
+import { sequelize } from '../config/database'
 
-@Service()
 export class BookingController {
-  constructor(private emailService: EmailService) {}
+  private emailService: EmailService
+  
+  constructor() {
+    this.emailService = new EmailService()
+  }
 
   // Get available course dates
   async getAvailableCourses(req: Request, res: Response, next: NextFunction) {
@@ -103,7 +105,7 @@ export class BookingController {
 
       // Create booking
       const booking = await Booking.create({
-        userId: req.user?.id,
+        userId: (req as any).user?.id,
         courseType: courseSchedule.courseType,
         courseName: courseSchedule.courseName,
         courseDate: courseSchedule.courseDate,
@@ -137,9 +139,9 @@ export class BookingController {
         // Email to customer
         await this.emailService.send({
           to: contactEmail,
-          subject: `Booking Confirmation - ${courseName} on ${new Date(courseSchedule.courseDate).toLocaleDateString('en-GB')}`,
+          subject: `Booking Confirmation - ${courseSchedule.courseName} on ${new Date(courseSchedule.courseDate).toLocaleDateString('en-GB')}`,
           template: 'booking-confirmation',
-          data: {
+          context: {
             booking,
             courseSchedule,
             confirmationCode: booking.confirmationCode
@@ -149,9 +151,9 @@ export class BookingController {
         // Email to admin
         await this.emailService.send({
           to: process.env.ADMIN_EMAIL || 'info@reactfasttraining.co.uk',
-          subject: `New Booking - ${courseName} on ${new Date(courseSchedule.courseDate).toLocaleDateString('en-GB')}`,
+          subject: `New Booking - ${courseSchedule.courseName} on ${new Date(courseSchedule.courseDate).toLocaleDateString('en-GB')}`,
           template: 'booking-notification-admin',
-          data: {
+          context: {
             booking,
             courseSchedule
           }

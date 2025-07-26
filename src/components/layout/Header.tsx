@@ -25,7 +25,16 @@ const navItems: NavItem[] = [
       { label: 'Emergency First Aid at Work', href: '/courses/efaw' },
       { label: 'First Aid at Work', href: '/courses/faw' },
       { label: 'Paediatric First Aid', href: '/courses/paediatric' },
-      { label: 'Mental Health First Aid', href: '/courses/mental-health' },
+      { label: 'Emergency Paediatric First Aid', href: '/courses/emergency-paediatric' },
+      { label: 'FAW Requalification', href: '/courses/faw-requalification' },
+      { label: 'EFAW Requalification', href: '/courses/efaw-requalification' },
+      { label: 'Paediatric Requalification', href: '/courses/paediatric-requalification' },
+      { label: 'Emergency Paediatric Requalification', href: '/courses/emergency-paediatric-requalification' },
+      { label: 'Activity First Aid', href: '/courses/activity-first-aid' },
+      { label: 'Activity First Aid Requalification', href: '/courses/activity-first-aid-requalification' },
+      { label: 'CPR and AED', href: '/courses/cpr-aed' },
+      { label: 'Annual Skills Refresher', href: '/courses/annual-skills-refresher' },
+      { label: 'Oxygen Therapy', href: '/courses/oxygen-therapy' },
     ],
   },
   { label: 'Training Venue', href: '/venue' },
@@ -98,7 +107,7 @@ const Header: React.FC = () => {
               <img 
                 src="/images/logos/fulllogo_transparent.png" 
                 alt="React Fast Training" 
-                className="h-24 sm:h-28 md:h-32 w-auto"
+                className="h-32 sm:h-36 md:h-40 w-auto"
               />
             </Link>
               
@@ -111,7 +120,8 @@ const Header: React.FC = () => {
                       onMouseEnter={() => setOpenDropdown(item.label)}
                       onMouseLeave={() => setOpenDropdown(null)}
                     >
-                      <button
+                      <Link
+                        to={item.href}
                         className={cn(
                           'flex items-center space-x-1 text-sm font-medium transition-colors',
                           isActive(item.href)
@@ -120,17 +130,10 @@ const Header: React.FC = () => {
                         )}
                         aria-expanded={openDropdown === item.label}
                         aria-haspopup="true"
-                        onClick={() => setOpenDropdown(openDropdown === item.label ? null : item.label)}
-                        onKeyDown={(e) => {
-                          if (e.key === 'Enter' || e.key === ' ') {
-                            e.preventDefault()
-                            setOpenDropdown(openDropdown === item.label ? null : item.label)
-                          }
-                        }}
                       >
                         <span>{item.label}</span>
                         <ChevronDown className={cn("w-4 h-4 transition-transform", openDropdown === item.label && "rotate-180")} />
-                      </button>
+                      </Link>
                       <AnimatePresence>
                         {openDropdown === item.label && (
                           <motion.div
@@ -192,35 +195,6 @@ const Header: React.FC = () => {
                 <Search className="w-5 h-5" />
               </button>
 
-              {/* Notifications */}
-              <div className="relative notification-center-container">
-                <button
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    setShowNotifications(!showNotifications);
-                  }}
-                  className="relative p-2.5 sm:p-2 rounded-lg text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors min-w-[44px] min-h-[44px] sm:min-w-0 sm:min-h-0 flex items-center justify-center"
-                  aria-label="View notifications"
-                >
-                  <Bell className="w-5 h-5" />
-                  <NotificationBadge count={unreadCount} />
-                </button>
-                {showNotifications && (
-                  <div
-                    className="fixed top-20 right-4 z-50 w-auto max-w-[calc(100vw-2rem)] sm:absolute sm:top-full sm:right-0 sm:mt-2 sm:w-96 sm:max-w-none"
-                    onClick={(e) => e.stopPropagation()}
-                  >
-                    <NotificationCenter
-                      notifications={notifications}
-                      onMarkAsRead={markAsRead}
-                      onMarkAllAsRead={markAllAsRead}
-                      onDelete={removeNotification}
-                      onClearAll={clearAll}
-                      onClose={() => setShowNotifications(false)}
-                    />
-                  </div>
-                )}
-              </div>
 
               {/* Theme Toggle */}
               <button
@@ -237,7 +211,7 @@ const Header: React.FC = () => {
 
               {/* CTA Button */}
               <Link
-                to="/booking"
+                to="/contact"
                 className="hidden md:inline-flex btn btn-primary btn-yorkshire shadow-blue"
               >
                 Book Course
@@ -292,27 +266,35 @@ const Header: React.FC = () => {
                     <div key={item.label}>
                       {item.children ? (
                         <div>
-                          <button
-                            onClick={() =>
-                              setOpenDropdown(
-                                openDropdown === item.label ? null : item.label
-                              )
-                            }
-                            className={cn(
-                              'flex items-center justify-between w-full text-left py-3 px-4 -mx-4 text-lg font-medium transition-colors rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800',
-                              isActive(item.href)
-                                ? 'text-primary-600 dark:text-primary-400'
-                                : 'text-gray-700 dark:text-gray-300'
-                            )}
-                          >
-                            <span>{item.label}</span>
-                            <ChevronDown
+                          <div className="flex items-center justify-between">
+                            <Link
+                              to={item.href}
+                              onClick={() => setIsOpen(false)}
                               className={cn(
-                                'w-5 h-5 transition-transform',
-                                openDropdown === item.label && 'rotate-180'
+                                'flex-1 py-3 px-4 -mx-4 text-lg font-medium transition-colors rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800',
+                                isActive(item.href)
+                                  ? 'text-primary-600 dark:text-primary-400'
+                                  : 'text-gray-700 dark:text-gray-300'
                               )}
-                            />
-                          </button>
+                            >
+                              {item.label}
+                            </Link>
+                            <button
+                              onClick={() =>
+                                setOpenDropdown(
+                                  openDropdown === item.label ? null : item.label
+                                )
+                              }
+                              className="p-3 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-lg transition-colors"
+                            >
+                              <ChevronDown
+                                className={cn(
+                                  'w-5 h-5 transition-transform',
+                                  openDropdown === item.label && 'rotate-180'
+                                )}
+                              />
+                            </button>
+                          </div>
                           <AnimatePresence>
                             {openDropdown === item.label && (
                               <motion.div

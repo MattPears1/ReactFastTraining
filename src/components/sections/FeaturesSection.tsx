@@ -86,7 +86,7 @@ const FeaturesSection: React.FC = () => {
             Our First Aid Training Courses
           </h2>
           <p className="text-lg text-gray-600 dark:text-gray-400 max-w-3xl mx-auto">
-            Professional, practical first aid training delivered by experienced instructors. 
+            Professional, practical first aid training delivered by an experienced instructor. 
             All courses are Ofqual regulated and HSE approved.
           </p>
         </motion.div>

@@ -2,63 +2,86 @@ import React from 'react'
 import CourseTemplate from '@components/templates/CourseTemplate'
 
 const ActivityFirstAidPage: React.FC = () => {
-  return (
-    <CourseTemplate
-      courseName="Activity First Aid"
-      courseAcronym="AFA"
-      duration="2 Days"
-      price="£120"
-      certificateValidity="3 years"
-      description="Specialized first aid training for activity leaders, sports coaches, and outdoor instructors. Learn to manage injuries and emergencies in active and outdoor environments."
-      learningOutcomes={[
-        'Manage first aid in activity environments',
-        'Treat sports and activity-related injuries',
-        'Handle outdoor emergency situations',
-        'Perform CPR in challenging conditions',
-        'Manage fractures and dislocations',
-        'Treat environmental injuries (heat/cold)',
-        'Improvise first aid equipment',
-        'Coordinate emergency evacuations'
-      ]}
-      whoShouldAttend={[
-        'Sports coaches and instructors',
-        'Outdoor activity leaders',
-        'PE teachers and sports staff',
-        'Adventure activity providers',
-        'Scout and guide leaders',
-        'Youth group leaders',
-        'Expedition leaders'
-      ]}
-      courseContent={[
-        {
-          title: 'Day 1: Core Activity First Aid',
-          topics: [
-            'Activity-specific risk assessment',
-            'Emergency action planning',
-            'CPR in outdoor settings',
-            'Major trauma management',
-            'Spinal injury management',
-            'Head injury protocols'
-          ]
-        },
-        {
-          title: 'Day 2: Specialized Skills',
-          topics: [
-            'Sports injury treatment',
-            'Fracture and dislocation management',
-            'Environmental emergencies',
-            'Improvised first aid techniques',
-            'Evacuation procedures',
-            'Practical outdoor scenarios'
-          ]
-        }
-      ]}
-      accreditations={['HSE Approved', 'Adventure Activities Licensing Authority Recognized', 'Sports England Endorsed']}
-      assessmentMethod="Practical scenarios and continuous assessment"
-      prerequisites="None - suitable for beginners"
-      seoKeywords="activity first aid course, sports first aid training, outdoor first aid Yorkshire, activity instructor first aid Sheffield"
-    />
-  )
+  const courseData = {
+    courseName: 'Activity First Aid',
+    courseAcronym: 'AFA',
+    duration: '2 Days (12 hours)',
+    price: '£120',
+    certificateValidity: 'Valid for 3 years',
+    description: 'This course is tailored for individuals involved in sports, leisure, and recreational activities. It covers the content of the EFAW course but with a focus on activity-related injuries and emergencies that may occur in outdoor and sporting environments.',
+    
+    learningOutcomes: [
+      'Core first aid skills including CPR, AED use, and managing an unresponsive casualty',
+      'Dealing with fractures, dislocations, sprains, and strains',
+      'Managing head, neck, and spinal injuries',
+      'Treating the effects of heat and cold',
+      'Responding to major illnesses in an activity setting'
+    ],
+    
+    whoShouldAttend: [
+      'Sports coaches and fitness instructors',
+      'Outdoor activity leaders and guides',
+      'PE teachers and sports staff',
+      'Adventure activity providers',
+      'Scout, guide and youth group leaders',
+      'Expedition and trek leaders',
+      'Leisure center staff',
+      'Anyone leading physical activities'
+    ],
+    
+    courseContent: [
+      {
+        title: 'Day 1: Core Emergency Skills',
+        topics: [
+          'Roles and responsibilities in activity settings',
+          'Assessing incidents in challenging environments',
+          'Adult CPR in outdoor and activity settings',
+          'Using an AED in various conditions',
+          'Managing an unresponsive casualty',
+          'Recovery position adaptations for outdoor settings',
+          'Choking management during activities',
+          'Controlling severe bleeding in remote locations',
+          'Shock management with limited resources'
+        ]
+      },
+      {
+        title: 'Day 2: Activity-Specific Injuries',
+        topics: [
+          'Managing fractures and dislocations',
+          'Treating sprains, strains and soft tissue injuries',
+          'Head injuries and concussion protocols',
+          'Neck and spinal injury management',
+          'Heat exhaustion and heat stroke',
+          'Hypothermia and cold injuries',
+          'Altitude sickness basics',
+          'Improvised first aid techniques',
+          'Major illness recognition in activity settings',
+          'Emergency evacuation planning'
+        ]
+      }
+    ],
+    
+    accreditations: ['HSE Approved', 'Adventure Activities Licensing Authority Recognized', 'Sports England Endorsed'],
+    
+    whatToExpect: [
+      'Scenario-based training in outdoor settings',
+      'Practice with sports and activity injuries',
+      'Improvisation techniques for remote locations',
+      'Weather-resistant training approaches',
+      'Small group sizes for personalized training',
+      'Activity-specific risk assessment skills',
+      'Comprehensive course manual',
+      'Certificate recognized by sports governing bodies'
+    ],
+    
+    assessmentMethod: 'Practical scenarios and continuous assessment in activity-based settings',
+    
+    prerequisites: 'None - suitable for beginners',
+    
+    seoKeywords: 'activity first aid course Yorkshire, sports first aid training Leeds, outdoor first aid Sheffield, activity instructor first aid'
+  }
+
+  return <CourseTemplate {...courseData} />
 }
 
 export default ActivityFirstAidPage

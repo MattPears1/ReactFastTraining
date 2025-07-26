@@ -302,7 +302,7 @@ const FirstAidAtWorkPage: React.FC = () => {
               Ready to Become a Workplace First Aider?
             </h2>
             <p className="text-xl mb-8 text-white/90 max-w-2xl mx-auto">
-              Join our next First Aid at Work course and gain the skills and confidence to save lives.
+              Join our next First Aid at Work course and gain essential workplace first aid skills.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <Button

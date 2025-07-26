@@ -18,6 +18,7 @@ const CoursesPage = lazy(() => import('@pages/CoursesPage'))
 const EFAWCoursePage = lazy(() => import('@pages/courses/EFAWCoursePage'))
 const FAWCoursePage = lazy(() => import('@pages/courses/FAWCoursePage'))
 const PaediatricCoursePage = lazy(() => import('@pages/courses/PaediatricCoursePage'))
+const PaediatricRequalificationPage = lazy(() => import('@pages/courses/PaediatricRequalificationPage'))
 const MentalHealthCoursePage = lazy(() => import('@pages/courses/MentalHealthCoursePage'))
 const FAWRequalificationPage = lazy(() => import('@pages/courses/FAWRequalificationPage'))
 const EFAWRequalificationPage = lazy(() => import('@pages/courses/EFAWRequalificationPage'))
@@ -28,9 +29,6 @@ const ActivityFirstAidRequalificationPage = lazy(() => import('@pages/courses/Ac
 const CPRAEDPage = lazy(() => import('@pages/courses/CPRAEDPage'))
 const AnnualSkillsRefresherPage = lazy(() => import('@pages/courses/AnnualSkillsRefresherPage'))
 const OxygenTherapyPage = lazy(() => import('@pages/courses/OxygenTherapyPage'))
-const LeedsPage = lazy(() => import('@pages/locations/LeedsPage'))
-const SheffieldPage = lazy(() => import('@pages/locations/SheffieldPage'))
-const BradfordPage = lazy(() => import('@pages/locations/BradfordPage'))
 const FAQPage = lazy(() => import('@pages/FAQPage'))
 const ProductsPage = lazy(() => import('@pages/ProductsPage'))
 const NotFoundPage = lazy(() => import('@pages/NotFoundPage'))
@@ -79,6 +77,7 @@ function App() {
                   <Route path="/courses/efaw" element={<EFAWCoursePage />} />
                   <Route path="/courses/faw" element={<FAWCoursePage />} />
                   <Route path="/courses/paediatric" element={<PaediatricCoursePage />} />
+                  <Route path="/courses/paediatric-requalification" element={<PaediatricRequalificationPage />} />
                   <Route path="/courses/mental-health" element={<MentalHealthCoursePage />} />
                   <Route path="/courses/faw-requalification" element={<FAWRequalificationPage />} />
                   <Route path="/courses/efaw-requalification" element={<EFAWRequalificationPage />} />
@@ -89,9 +88,6 @@ function App() {
                   <Route path="/courses/cpr-aed" element={<CPRAEDPage />} />
                   <Route path="/courses/annual-skills-refresher" element={<AnnualSkillsRefresherPage />} />
                   <Route path="/courses/oxygen-therapy" element={<OxygenTherapyPage />} />
-                  <Route path="/locations/leeds" element={<LeedsPage />} />
-                  <Route path="/locations/sheffield" element={<SheffieldPage />} />
-                  <Route path="/locations/bradford" element={<BradfordPage />} />
                   <Route path="/venue" element={<TrainingVenuePage />} />
                   <Route path="/booking" element={<BookingPage />} />
                   <Route path="/faq" element={<FAQPage />} />

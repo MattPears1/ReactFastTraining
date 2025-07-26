@@ -6,6 +6,7 @@ import SEO from '@components/common/SEO'
 import Button from '@components/ui/Button'
 
 const courses = [
+  // Primary courses - ordered as requested
   {
     id: 'efaw',
     title: 'Emergency First Aid at Work',
@@ -43,16 +44,16 @@ const courses = [
     href: '/courses/paediatric'
   },
   {
-    id: 'mental-health',
-    title: 'Mental Health First Aid',
-    acronym: 'MHFA',
-    duration: '2 Days',
-    price: 'From £200',
-    icon: Brain,
-    color: 'info',
-    description: 'Support mental wellbeing in your workplace',
-    highlights: ['Crisis Intervention', 'Active Listening', 'MHFA England Approved'],
-    href: '/courses/mental-health'
+    id: 'emergency-paediatric',
+    title: 'Emergency Paediatric First Aid',
+    acronym: 'EPFA',
+    duration: '1 Day',
+    price: '£100',
+    icon: Users,
+    color: 'accent',
+    description: 'Essential emergency care for infants and children',
+    highlights: ['Child CPR', 'EYFS Compliant', '1-Day Course'],
+    href: '/courses/emergency-paediatric'
   }
 ]
 
@@ -82,16 +83,16 @@ const additionalCourses = [
     href: '/courses/efaw-requalification'
   },
   {
-    id: 'emergency-paediatric',
-    title: 'Emergency Paediatric First Aid',
-    acronym: 'EPFA',
+    id: 'paediatric-requalification',
+    title: 'Paediatric First Aid Requalification',
+    acronym: 'PFA-R',
     duration: '1 Day',
-    price: '£100',
-    icon: Users,
+    price: '£90',
+    icon: RefreshCw,
     color: 'accent',
-    description: 'Essential emergency care for infants and children',
-    highlights: ['Child CPR', 'EYFS Compliant', '1-Day Course'],
-    href: '/courses/emergency-paediatric'
+    description: 'Refresh your paediatric first aid certification',
+    highlights: ['Skills Update', 'Ofsted Approved', 'Quick Renewal'],
+    href: '/courses/paediatric-requalification'
   },
   {
     id: 'emergency-paediatric-requalification',

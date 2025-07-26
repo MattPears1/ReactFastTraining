@@ -3,6 +3,7 @@ import { motion } from 'framer-motion'
 import { Calendar, MapPin, Users, Clock, ChevronRight } from 'lucide-react'
 import { bookingApi } from '@services/api.service'
 import { cn } from '@utils/cn'
+import { mockCourseSchedules } from '@/mocks/bookingData'
 
 interface CourseSchedule {
   id: number
@@ -68,19 +69,29 @@ export const CourseAvailability: React.FC<CourseAvailabilityProps> = ({
       setLoading(true)
       setError(null)
       
-      const response = await bookingApi.getAvailableCourses({ 
-        courseType,
-        venue: undefined,
-        month: undefined
-      })
+      // Use mock data for now
+      setTimeout(() => {
+        let filteredSchedules = mockCourseSchedules
+        if (courseType) {
+          filteredSchedules = mockCourseSchedules.filter(s => s.courseType === courseType)
+        }
+        setSchedules(filteredSchedules)
+        setLoading(false)
+      }, 500)
       
-      if (response.success && response.data) {
-        setSchedules(response.data)
-      }
+      // TODO: Replace with real API call when backend is ready
+      // const response = await bookingApi.getAvailableCourses({ 
+      //   courseType,
+      //   venue: undefined,
+      //   month: undefined
+      // })
+      
+      // if (response.success && response.data) {
+      //   setSchedules(response.data)
+      // }
     } catch (err) {
       setError('Failed to load available courses. Please try again.')
       console.error('Error fetching courses:', err)
-    } finally {
       setLoading(false)
     }
   }

@@ -12,13 +12,13 @@ const values = [
   },
   {
     icon: Shield,
-    title: 'Military Precision',
+    title: 'Our Founder\'s Royal Navy and Policing Background',
     description: 'Our founder\'s Navy and policing background brings discipline, clarity, and real-world experience to every course.',
   },
   {
     icon: Users,
-    title: 'Small Groups',
-    description: 'We keep class sizes small to ensure everyone gets personal attention and hands-on practice time.',
+    title: 'Group Sizes',
+    description: 'We can accommodate up to 12 people per course to ensure everyone gets personal attention and hands-on practice time.',
   },
   {
     icon: Award,
@@ -66,7 +66,7 @@ const AboutPage: React.FC = () => {
               About <span className="text-gradient gradient-primary">React Fast Training</span>
             </h1>
             <p className="text-lg md:text-xl text-gray-600 dark:text-gray-400">
-              Yorkshire's newest first aid training provider. 
+              South Yorkshire's newest first aid training provider. 
               Professional, practical, and personal - because every second counts.
             </p>
           </motion.div>
@@ -161,7 +161,6 @@ const AboutPage: React.FC = () => {
         </div>
       </section>
 
-
       {/* Instructor Section */}
       <section className="section bg-gray-50 dark:bg-gray-800">
         <div className="container">
@@ -223,10 +222,14 @@ const AboutPage: React.FC = () => {
 
 
       <CTASection
-        title="Ready to Save Lives?"
-        description="Join Yorkshire professionals ready to make a difference. Book your course today."
+        title="Ready to Learn First Aid?"
+        description="Join our training courses and gain essential skills. Book your course today."
         primaryButtonText="Book Your Course"
-        secondaryButtonText="Download Course Guide"
+        secondaryButtonText="Call 07447 485644"
+        features={[
+          "Ofqual Regulated",
+          "HSE Approved",
+        ]}
       />
     </div>
   )

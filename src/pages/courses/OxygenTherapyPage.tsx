@@ -2,60 +2,78 @@ import React from 'react'
 import CourseTemplate from '@components/templates/CourseTemplate'
 
 const OxygenTherapyPage: React.FC = () => {
-  return (
-    <CourseTemplate
-      courseName="Oxygen Therapy Course"
-      courseAcronym="O2"
-      duration="Half Day (4 hours)"
-      price="£60"
-      certificateValidity="3 years"
-      description="Learn to safely administer emergency oxygen therapy. This course covers the use of oxygen equipment and is essential for first aiders in high-risk environments."
-      learningOutcomes={[
-        'Understand when oxygen therapy is needed',
-        'Safely operate oxygen equipment',
-        'Recognize oxygen therapy indications',
-        'Identify contraindications and risks',
-        'Perform safety checks',
-        'Maintain oxygen equipment',
-        'Document oxygen administration',
-        'Handle oxygen emergencies'
-      ]}
-      whoShouldAttend={[
-        'First aiders in high-risk workplaces',
-        'Sports injury therapists',
-        'Dive center staff',
-        'Care home personnel',
-        'Industrial first aiders',
-        'Event medical staff',
-        'Anyone using emergency oxygen'
-      ]}
-      courseContent={[
-        {
-          title: 'Theory and Practice',
-          topics: [
-            'Physiology of oxygen therapy',
-            'When to give oxygen',
-            'Types of oxygen delivery systems',
-            'Safety considerations',
-            'Practical oxygen administration',
-            'Equipment maintenance',
-            'Legal considerations',
-            'Documentation requirements'
-          ]
-        }
-      ]}
-      accreditations={['BOC Medical Approved', 'First Aid Industry Body (FAIB) Recognized']}
-      assessmentMethod="Written assessment and practical demonstration"
-      prerequisites="Current first aid certificate recommended"
-      whatToExpect={[
-        'Hands-on practice with oxygen equipment',
-        'Safety protocols training',
-        'Equipment familiarization',
-        'Certificate valid for 3 years'
-      ]}
-      seoKeywords="oxygen therapy course Yorkshire, emergency oxygen training Sheffield, O2 administration course, first aid oxygen therapy"
-    />
-  )
+  const courseData = {
+    courseName: 'Oxygen Therapy Course',
+    courseAcronym: 'O2',
+    duration: 'Half Day (3-6 hours)',
+    price: '£60',
+    certificateValidity: 'Valid for 3 years',
+    description: 'This specialised course is for qualified first aiders and healthcare professionals who may need to administer oxygen during a medical emergency. Learn the safe use, storage, and handling of oxygen equipment in emergency situations.',
+    
+    learningOutcomes: [
+      'The indications for and contraindications of oxygen therapy',
+      'Health and safety guidelines for the use, storage, and handling of oxygen',
+      'Operational checks of oxygen equipment',
+      'Administering oxygen using various delivery devices like non-rebreather masks and bag-valve masks'
+    ],
+    
+    whoShouldAttend: [
+      'Qualified first aiders requiring oxygen administration skills',
+      'Sports injury therapists and physiotherapists',
+      'Dive center staff and dive masters',
+      'Care home and nursing staff',
+      'Industrial first aiders in high-risk environments',
+      'Event and festival medical staff',
+      'Ambulance community first responders',
+      'Anyone responsible for emergency oxygen equipment'
+    ],
+    
+    courseContent: [
+      {
+        title: 'Oxygen Therapy Training Programme',
+        topics: [
+          'Understanding hypoxia and oxygen deficiency',
+          'Indications for emergency oxygen therapy',
+          'Contraindications and precautions',
+          'Types of oxygen delivery systems',
+          'Oxygen cylinder types and identification',
+          'Health and safety in oxygen use',
+          'Storage and handling regulations',
+          'Pre-use equipment safety checks',
+          'Flow rate calculations and settings',
+          'Using non-rebreather masks',
+          'Bag-valve-mask (BVM) techniques',
+          'Nasal cannula and simple face masks',
+          'Monitoring oxygen saturation',
+          'Documentation and record keeping',
+          'Dealing with oxygen emergencies',
+          'Maintenance and testing schedules'
+        ]
+      }
+    ],
+    
+    accreditations: ['BOC Medical Approved', 'First Aid Industry Body (FAIB) Recognized', 'CPD Certified'],
+    
+    whatToExpect: [
+      'Comprehensive theory on oxygen physiology',
+      'Hands-on practice with various oxygen equipment',
+      'Safety protocols and risk assessment training',
+      'Multiple delivery device familiarization',
+      'Cylinder changing and safety procedures',
+      'Practical scenarios with oxygen administration',
+      'Written and practical assessments',
+      'Reference manual to keep',
+      'Certificate valid for 3 years'
+    ],
+    
+    assessmentMethod: 'Written assessment and practical demonstration of safe oxygen administration',
+    
+    prerequisites: 'Current first aid certificate (FAW, EFAW or equivalent) required',
+    
+    seoKeywords: 'oxygen therapy course Yorkshire, emergency oxygen training Leeds, O2 administration Sheffield, medical oxygen first aid'
+  }
+
+  return <CourseTemplate {...courseData} />
 }
 
 export default OxygenTherapyPage

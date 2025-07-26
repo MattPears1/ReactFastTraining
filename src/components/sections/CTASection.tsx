@@ -12,14 +12,14 @@ interface CTASectionProps {
 }
 
 const CTASection: React.FC<CTASectionProps> = ({
-  title = "Ready to Save Lives?",
-  description = "Join thousands of Yorkshire professionals who have trained with React Fast Training.",
+  title = "Ready to Learn First Aid?",
+  description = "Start your first aid training journey with React Fast Training.",
   primaryButtonText = "Book Your Course",
   secondaryButtonText = "Call 07447 485644",
   features = [
     "Ofqual Regulated",
-    "Same Day Certificates",
-    "98% Pass Rate",
+    "HSE Approved",
+    "CPD Certified",
   ]
 }) => {
   return (
@@ -72,7 +72,7 @@ const CTASection: React.FC<CTASectionProps> = ({
               <Button
                 size="lg"
                 variant="secondary"
-                href="/signup"
+                href="/contact"
                 rightIcon={<ArrowRight />}
                 className="bg-white text-primary-600 hover:bg-gray-100"
               >
@@ -110,7 +110,7 @@ const CTASection: React.FC<CTASectionProps> = ({
             )}
           </motion.div>
 
-          {/* Trust Badge */}
+          {/* Service Areas */}
           <motion.div
             initial={{ opacity: 0 }}
             whileInView={{ opacity: 1 }}
@@ -119,18 +119,16 @@ const CTASection: React.FC<CTASectionProps> = ({
             className="mt-12 pt-8 border-t border-white/20"
           >
             <p className="text-sm text-primary-100 mb-4">
-              Trusted by Yorkshire businesses and organizations
+              Available for training across South Yorkshire
             </p>
             <div className="flex flex-wrap justify-center items-center gap-6 text-white/80">
-              <span className="font-semibold">NHS</span>
+              <span className="font-semibold">Sheffield</span>
               <span className="text-white/40">•</span>
-              <span className="font-semibold">Yorkshire Ambulance Service</span>
+              <span className="font-semibold">Rotherham</span>
               <span className="text-white/40">•</span>
-              <span className="font-semibold">Local Schools</span>
+              <span className="font-semibold">Barnsley</span>
               <span className="text-white/40">•</span>
-              <span className="font-semibold">Care Homes</span>
-              <span className="text-white/40">•</span>
-              <span className="font-semibold">Construction Companies</span>
+              <span className="font-semibold">Doncaster</span>
             </div>
           </motion.div>
         </div>

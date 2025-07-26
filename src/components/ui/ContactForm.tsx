@@ -13,6 +13,8 @@ const contactSchema = z.object({
   email: z.string().email('Please enter a valid email address'),
   phone: z.string().optional(),
   company: z.string().optional(),
+  address: z.string().optional(),
+  course: z.string().optional(),
   subject: z.string().min(5, 'Subject must be at least 5 characters'),
   message: z.string().min(20, 'Message must be at least 20 characters'),
   consent: z.boolean().refine((val) => val === true, {
@@ -143,6 +145,54 @@ const ContactForm: React.FC = () => {
         />
         {errors.company && (
           <p className="form-error">{errors.company.message}</p>
+        )}
+      </div>
+
+      <div>
+        <label htmlFor="address" className="form-label">
+          Address
+        </label>
+        <input
+          id="address"
+          type="text"
+          className="form-input"
+          placeholder="123 Main Street, Sheffield"
+          {...register('address')}
+          disabled={isLoading}
+        />
+        {errors.address && (
+          <p className="form-error">{errors.address.message}</p>
+        )}
+      </div>
+
+      <div>
+        <label htmlFor="course" className="form-label">
+          Which course are you inquiring about?
+        </label>
+        <select
+          id="course"
+          className="form-input"
+          {...register('course')}
+          disabled={isLoading}
+        >
+          <option value="">Select a course...</option>
+          <option value="Emergency First Aid at Work">Emergency First Aid at Work</option>
+          <option value="First Aid at Work">First Aid at Work</option>
+          <option value="Paediatric First Aid">Paediatric First Aid</option>
+          <option value="Emergency Paediatric First Aid">Emergency Paediatric First Aid</option>
+          <option value="First Aid at Work Requalification">First Aid at Work Requalification</option>
+          <option value="Emergency First Aid at Work Requalification">Emergency First Aid at Work Requalification</option>
+          <option value="Paediatric First Aid Requalification">Paediatric First Aid Requalification</option>
+          <option value="Emergency Paediatric First Aid Requalification">Emergency Paediatric First Aid Requalification</option>
+          <option value="Activity First Aid">Activity First Aid</option>
+          <option value="Activity First Aid Requalification">Activity First Aid Requalification</option>
+          <option value="CPR and AED">CPR and AED</option>
+          <option value="Annual Skills Refresher">Annual Skills Refresher</option>
+          <option value="Oxygen Therapy Course">Oxygen Therapy Course</option>
+          <option value="General Enquiry">General Enquiry</option>
+        </select>
+        {errors.course && (
+          <p className="form-error">{errors.course.message}</p>
         )}
       </div>
 

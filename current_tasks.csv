@@ -1,0 +1,74 @@
+Task ID,Task Description,Status
+HP-001,Increase logo size in header top-left corner,Not Started
+HP-002,Remove floating logo on right side near book course button,Not Started
+HP-003,Remove notification bell icon from header,Not Started
+HP-004,Change main heading from 'React Fast Training' to 'Professional First Aid Training in South Yorkshire',Not Started
+HP-005,Change 'Small Groups' to 'Individual Groups' in hero section features,Not Started
+HP-006,Remove all course images from homepage course section,Not Started
+HP-007,Convert course section to 2-column text-only grid layout,Not Started
+HP-008,Reorder courses: EFAW FAW Paediatric Emergency Paediatric first,Not Started
+HP-009,Add prices to all course tiles on homepage,Not Started
+HP-010,Center the 13th course tile in the last row,Not Started
+HP-011,Fix 'Our Training Approach' section layout - equal height tiles,Not Started
+HP-012,Make 'Flexible Scheduling' tile full width below other three,Not Started
+HP-013,Change 'On-site Training' text to 'We can come to your South Yorkshire workplace',Not Started
+HP-014,Change 'Small Group Sizes' to 'Group Sizes',Not Started
+HP-015,Change 'Experienced Trainers' to 'Experienced Trainer' (singular),Not Started
+HP-016,Update text to 'Learn from a professional with military and emergency service background',Not Started
+HP-017,Change 'across Yorkshire' to 'across South Yorkshire' in journey section,Not Started
+HP-018,Change phone icon and 'Get in Touch' text to white in CTA section,Not Started
+HP-019,Change 'View All Courses' button text to white in CTA section,Not Started
+HP-020,Change locations heading to 'Training Locations Across South Yorkshire',Not Started
+HP-021,Update locations text to focus on on-site training with venue note,Not Started
+HP-022,Replace city tiles with simple list: Barnsley Doncaster Rotherham Sheffield,Not Started
+HP-023,Remove 'View courses' buttons from locations section,Not Started
+HP-024,Update 'Also serving' text to: Leeds Bradford York Wakefield and all of Yorkshire,Not Started
+HP-025,Remove 'Contact us for other locations' button,Not Started
+HP-026,Replace hero image with company logo (temporarily),Not Started
+AB-001,Change heading to 'South Yorkshire's newest first aid training provider',Not Started
+AB-002,Change 'Military Position' to 'Our Founder's Royal Navy and Policing Background',Not Started
+AB-003,Change 'Small Groups' title to 'Group Sizes',Not Started
+AB-004,Update group sizes text to '12 people per course for personal attention',Not Started
+AB-005,Reduce white space between Core Values and Meet Your Instructor sections,Not Started
+AB-006,Change 'Book your course' button to link to contact page,Not Started
+AB-007,Remove 'Download course guide' button completely,Not Started
+AB-008,Center remaining 'Book your course' button in CTA section,Not Started
+AB-009,Remove 'Same Day Certificates' from features list,Not Started
+AB-010,Change 'NHS Yorkshire Ambulance Service' to 'Public Services',Not Started
+AB-011,Update CTA text to 'Join South Yorkshire professionals ready to make a difference',Not Started
+CO-001,Create dedicated All Courses page listing all courses,Not Started
+CO-002,Make 'Courses' menu item clickable linking to All Courses page,Not Started
+CO-003,Change all 'Book your place' buttons to link to contact page,Not Started
+CO-004,Change all location references to 'South Yorkshire',Not Started
+CO-005,Replace pricing tiles with single 'On and off-site training' section,Not Started
+CO-006,Add text 'We can come to your workplace anywhere in South Yorkshire',Not Started
+CO-007,Remove 'Next available dates' section from all course pages,Not Started
+CO-008,Remove 'Every Wednesday and Saturday' text,Not Started
+CO-009,Replace dual buttons with single 'Book this course' linking to contact,Not Started
+CO-010,Change 'Expert trainers' to 'Expert trainer' on all course pages,Not Started
+CO-011,Update text to 'Ex-military and emergency service professional',Not Started
+CO-012,Change 'Local to Yorkshire' to 'Based in South Yorkshire and beyond',Not Started
+CO-013,Reduce white space between booking section and Why Choose section,Not Started
+FT-001,Increase footer logo size,Not Started
+FT-002,Center footer logo above text,Not Started
+FT-003,Change tagline to 'South Yorkshire's premier first aid training provider',Not Started
+FT-004,Update text to 'delivered by an experienced instructor with military and emergency services background',Not Started
+FT-005,Update full course list in footer Courses column,Not Started
+FT-006,Remove 'Our Instructor' link from footer,Not Started
+FT-007,Remove 'Training Venue' link from footer,Not Started
+FT-008,Remove entire Services column from footer,Not Started
+FT-009,Remove 'Course Calendar' link from Support column,Not Started
+FT-010,Change 'Training venues across Yorkshire' to 'On-site and off-site training',Not Started
+FT-011,Remove YouTube social icon,Not Started
+FT-012,Replace Twitter/X icon with TikTok icon,Not Started
+CF-001,Create contact form with Name Email Phone Address Message fields,Not Started
+CF-002,Link all booking buttons to new contact form,Not Started
+CF-003,Configure form to send emails to specified address,Not Started
+CF-004,Remove booking system pages/components,Not Started
+GL-001,Implement proper routing for About Us page sections,Not Started
+GL-002,Verify all internal links work correctly,Not Started
+GL-003,Test responsive design for all changes,Not Started
+GL-004,Update SEO meta tags to reflect South Yorkshire focus,Not Started
+GL-005,Create FAQ content placeholder,Not Started
+GL-006,Plan Downloads page content or remove link,Not Started
+GL-007,Plan Testimonials implementation strategy,Not Started

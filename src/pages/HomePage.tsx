@@ -34,47 +34,39 @@ const HomePage: React.FC = () => {
   }, [addNotification, setTheme])
 
   const courseCategories = useMemo(() => [
-    {
-      title: 'Oxygen Therapy Training',
-      duration: '3 Hours',
-      price: 'From £75',
-      icon: Heart,
-      color: 'primary',
-      description: 'Professional training in oxygen administration and therapy'
-    },
-    {
-      title: 'First Aid at Work',
-      duration: '3 Days',
-      price: 'Contact for pricing',
-      icon: Shield,
-      color: 'secondary',
-      description: 'Comprehensive training for designated workplace first aiders'
-    },
-    {
-      title: 'Paediatric First Aid',
-      duration: '2 Days',
-      price: 'Contact for pricing',
-      icon: Users,
-      color: 'accent',
-      description: 'Specialized training for those working with children'
-    }
+    // Primary courses first as requested
+    { title: 'Emergency First Aid at Work', duration: '1 Day', price: '£100', href: '/courses/efaw' },
+    { title: 'First Aid at Work', duration: '3 Days', price: '£200', href: '/courses/faw' },
+    { title: 'Paediatric First Aid', duration: '2 Days', price: '£120', href: '/courses/paediatric' },
+    { title: 'Emergency Paediatric First Aid', duration: '1 Day', price: '£100', href: '/courses/emergency-paediatric' },
+    // Requalification courses
+    { title: 'First Aid at Work Requalification', duration: '2 Days', price: '£150', href: '/courses/faw-requalification' },
+    { title: 'Emergency First Aid at Work Requalification', duration: '1 Day', price: '£70', href: '/courses/efaw-requalification' },
+    { title: 'Paediatric First Aid Requalification', duration: '1 Day', price: '£90', href: '/courses/paediatric-requalification' },
+    { title: 'Emergency Paediatric First Aid Requalification', duration: '1 Day', price: '£70', href: '/courses/emergency-paediatric-requalification' },
+    // Specialist courses
+    { title: 'Activity First Aid', duration: '2 Days', price: '£120', href: '/courses/activity-first-aid' },
+    { title: 'Activity First Aid Requalification', duration: '1 Day', price: '£90', href: '/courses/activity-first-aid-requalification' },
+    { title: 'CPR and AED', duration: 'Half Day', price: '£60', href: '/courses/cpr-aed' },
+    { title: 'Annual Skills Refresher', duration: 'Half Day', price: '£60', href: '/courses/annual-skills-refresher' },
+    { title: 'Oxygen Therapy Course', duration: 'Half Day', price: '£60', href: '/courses/oxygen-therapy' },
   ], [])
 
   const trainingApproach = useMemo(() => [
     {
       icon: MapPin,
       title: 'On-Site Training',
-      description: 'We come to your Yorkshire workplace - no travel time or expenses for your team',
+      description: 'We can come to your South Yorkshire workplace',
     },
     {
       icon: Users,
-      title: 'Small Group Sizes',
+      title: 'Group Sizes',
       description: 'Maximum 12 learners per course ensures personal attention and effective learning',
     },
     {
       icon: Award,
-      title: 'Experienced Trainers',
-      description: 'Learn from professionals with military and emergency service backgrounds',
+      title: 'Experienced Trainer',
+      description: 'Learn from a professional with military and emergency service background',
     },
     {
       icon: Calendar,
@@ -94,7 +86,7 @@ const HomePage: React.FC = () => {
       
       <HeroSection />
       
-      {/* Unique Zigzag Course Section */}
+      {/* Course Section - Simple 2-Column Grid */}
       <section className="relative py-20 overflow-hidden">
         <div className="absolute inset-0 bg-gradient-to-b from-gray-50 to-white dark:from-gray-800 dark:to-gray-900" />
         
@@ -113,66 +105,61 @@ const HomePage: React.FC = () => {
             </p>
           </motion.div>
 
-          <div className="space-y-8">
-            {courseCategories.map((course, index) => (
+          <div className="grid md:grid-cols-2 gap-4 max-w-5xl mx-auto">
+            {courseCategories.slice(0, 12).map((course, index) => (
               <motion.div
                 key={course.title}
-                initial={{ opacity: 0, x: index % 2 === 0 ? -50 : 50 }}
-                whileInView={{ opacity: 1, x: 0 }}
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
-                transition={{ delay: index * 0.2 }}
-                className={`grid md:grid-cols-2 gap-8 items-center ${
-                  index % 2 === 1 ? 'md:flex-row-reverse' : ''
-                }`}
+                transition={{ delay: index * 0.05 }}
               >
-                <div className={`${index % 2 === 1 ? 'md:order-2' : ''}`}>
-                  <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 border border-gray-100 dark:border-gray-700/50 p-8">
-                    <div className={`w-16 h-16 bg-${course.color}-100 dark:bg-${course.color}-900/30 rounded-xl flex items-center justify-center mb-6`}>
-                      <course.icon className={`w-8 h-8 text-${course.color}-600 dark:text-${course.color}-400`} />
-                    </div>
-                    <h3 className="text-2xl font-bold text-gray-900 dark:text-white mb-2">
-                      {course.title}
-                    </h3>
-                    <p className="text-gray-600 dark:text-gray-400 mb-4">
-                      {course.description}
-                    </p>
-                    <div className="flex items-center justify-between mb-4">
-                      <span className="text-sm font-medium text-gray-500 dark:text-gray-400">
-                        Duration: {course.duration}
-                      </span>
-                      <span className="text-lg font-bold text-primary-600 dark:text-primary-400">
-                        {course.price}
-                      </span>
-                    </div>
-                    <Button
-                      href={course.title === 'Oxygen Therapy Training'
-                        ? '/courses/oxygen-therapy'
-                        : '/courses'}
-                      variant={course.color === 'secondary' ? 'secondary' : 'primary'}
-                      className="w-full"
-                      rightIcon={<ArrowRight className="w-4 h-4" />}
-                    >
-                      Learn More
-                    </Button>
+                <Link
+                  to={course.href}
+                  className="block bg-white dark:bg-gray-800 rounded-lg shadow hover:shadow-lg transition-all duration-300 border border-gray-100 dark:border-gray-700/50 p-6 hover:border-primary-300 dark:hover:border-primary-600"
+                >
+                  <h3 className="text-lg font-bold text-gray-900 dark:text-white mb-2">
+                    {course.title}
+                  </h3>
+                  <div className="flex items-center justify-between text-sm">
+                    <span className="text-gray-600 dark:text-gray-400">
+                      {course.duration}
+                    </span>
+                    <span className="font-bold text-primary-600 dark:text-primary-400">
+                      {course.price}
+                    </span>
                   </div>
-                </div>
-                <div className={`${index % 2 === 1 ? 'md:order-1' : ''}`}>
-                  <div className="relative">
-                    <div className={`absolute inset-0 bg-gradient-to-br from-${course.color}-100 to-${course.color}-200 dark:from-${course.color}-900/20 dark:to-${course.color}-800/20 rounded-3xl transform rotate-3`} />
-                    <img
-                      src={course.title === 'Oxygen Therapy Training' 
-                        ? '/images/hero/homepage_AI_oxygen.png'
-                        : `/images/courses/${course.title.toLowerCase().replace(/\s+/g, '-')}.jpg`}
-                      alt={course.title}
-                      className="relative rounded-3xl shadow-lg w-full h-64 object-cover"
-                      onError={(e) => {
-                        e.currentTarget.src = '/images/placeholder-course.jpg'
-                      }}
-                    />
-                  </div>
-                </div>
+                </Link>
               </motion.div>
             ))}
+          </div>
+          
+          {/* Centered 13th course */}
+          <div className="flex justify-center mt-4">
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ delay: 0.6 }}
+              className="w-full md:w-1/2 max-w-md"
+            >
+              <Link
+                to={courseCategories[12].href}
+                className="block bg-white dark:bg-gray-800 rounded-lg shadow hover:shadow-lg transition-all duration-300 border border-gray-100 dark:border-gray-700/50 p-6 hover:border-primary-300 dark:hover:border-primary-600"
+              >
+                <h3 className="text-lg font-bold text-gray-900 dark:text-white mb-2">
+                  {courseCategories[12].title}
+                </h3>
+                <div className="flex items-center justify-between text-sm">
+                  <span className="text-gray-600 dark:text-gray-400">
+                    {courseCategories[12].duration}
+                  </span>
+                  <span className="font-bold text-primary-600 dark:text-primary-400">
+                    {courseCategories[12].price}
+                  </span>
+                </div>
+              </Link>
+            </motion.div>
           </div>
         </div>
       </section>
@@ -194,19 +181,15 @@ const HomePage: React.FC = () => {
             </p>
           </motion.div>
 
-          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
-            {trainingApproach.map((item, index) => (
+          <div className="grid md:grid-cols-3 gap-6">
+            {trainingApproach.slice(0, 3).map((item, index) => (
               <motion.div
                 key={item.title}
                 initial={{ opacity: 0, y: 20 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ delay: index * 0.1 }}
-                className={`
-                  bg-white dark:bg-gray-800 rounded-2xl p-6 shadow-lg hover:shadow-xl transition-all duration-300
-                  ${index === 0 ? 'lg:col-span-2 lg:row-span-2' : ''}
-                  ${index === 3 ? 'lg:col-span-2' : ''}
-                `}
+                className="bg-white dark:bg-gray-800 rounded-2xl p-6 shadow-lg hover:shadow-xl transition-all duration-300"
               >
                 <div className={`
                   w-12 h-12 rounded-lg flex items-center justify-center mb-4
@@ -223,15 +206,34 @@ const HomePage: React.FC = () => {
                     ${index === 3 ? 'text-info dark:text-info-light' : ''}
                   `} />
                 </div>
-                <h3 className={`font-semibold text-gray-900 dark:text-white mb-2 ${index === 0 ? 'text-2xl' : 'text-xl'}`}>
+                <h3 className="text-xl font-semibold text-gray-900 dark:text-white mb-2">
                   {item.title}
                 </h3>
-                <p className={`text-gray-600 dark:text-gray-400 ${index === 0 ? 'text-base' : 'text-sm'}`}>
+                <p className="text-sm text-gray-600 dark:text-gray-400">
                   {item.description}
                 </p>
               </motion.div>
             ))}
           </div>
+          
+          {/* Flexible Scheduling - Full Width */}
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ delay: 0.3 }}
+            className="mt-6 bg-white dark:bg-gray-800 rounded-2xl p-6 shadow-lg hover:shadow-xl transition-all duration-300"
+          >
+            <div className="w-12 h-12 bg-info-light dark:bg-info-dark/30 rounded-lg flex items-center justify-center mb-4 mx-auto md:mx-0">
+              <Calendar className="w-6 h-6 text-info dark:text-info-light" />
+            </div>
+            <h3 className="text-xl font-semibold text-gray-900 dark:text-white mb-2 text-center md:text-left">
+              {trainingApproach[3].title}
+            </h3>
+            <p className="text-sm text-gray-600 dark:text-gray-400 text-center md:text-left">
+              {trainingApproach[3].description}
+            </p>
+          </motion.div>
         </div>
       </section>
 
@@ -248,7 +250,7 @@ const HomePage: React.FC = () => {
               Start Your First Aid Journey
             </h2>
             <p className="text-lg text-gray-600 dark:text-gray-400 max-w-2xl mx-auto">
-              Join a growing community of trained first aiders across Yorkshire
+              Join a growing community of trained first aiders across South Yorkshire
             </p>
           </motion.div>
 
@@ -332,7 +334,7 @@ const HomePage: React.FC = () => {
                 <Button
                   href="/contact"
                   size="lg"
-                  className="bg-white text-primary-600 hover:bg-gray-100"
+                  className="bg-primary-500 text-white hover:bg-primary-600 border-2 border-white"
                 >
                   <Phone className="w-5 h-5 mr-2" />
                   Get in Touch
@@ -340,8 +342,7 @@ const HomePage: React.FC = () => {
                 <Button
                   href="/courses"
                   size="lg"
-                  variant="outline"
-                  className="border-2 border-white text-white hover:bg-white/10"
+                  className="bg-primary-500 text-white hover:bg-primary-600 border-2 border-white"
                 >
                   View All Courses
                 </Button>
@@ -428,94 +429,32 @@ const HomePage: React.FC = () => {
             className="text-center mb-12"
           >
             <h2 className="text-3xl md:text-4xl font-heading font-bold text-gray-900 dark:text-white mb-4">
-              Training Locations Across Yorkshire
+              Training Locations Across South Yorkshire
             </h2>
             <p className="text-lg text-gray-600 dark:text-gray-400 max-w-2xl mx-auto">
-              Convenient venues in major Yorkshire cities. Choose your nearest location for first aid training.
+              We can come to your workplace anywhere in South Yorkshire, or training venues are available if needed.
             </p>
           </motion.div>
-
-          <div className="grid md:grid-cols-3 gap-8 max-w-5xl mx-auto">
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ delay: 0.1 }}
-            >
-              <Link to="/locations/leeds" className="block group">
-                <div className="relative overflow-hidden rounded-2xl shadow-lg transition-transform duration-300 group-hover:scale-105">
-                  <div className="bg-gradient-to-br from-blue-600 to-blue-700 p-8 text-white">
-                    <MapPin className="w-12 h-12 mb-4" />
-                    <h3 className="text-2xl font-bold mb-2">Leeds</h3>
-                    <p className="text-blue-100 mb-4">City centre location near Leeds Station</p>
-                    <div className="flex items-center gap-2 text-sm">
-                      <span>View courses</span>
-                      <ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-1" />
-                    </div>
-                  </div>
-                </div>
-              </Link>
-            </motion.div>
-
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ delay: 0.2 }}
-            >
-              <Link to="/locations/sheffield" className="block group">
-                <div className="relative overflow-hidden rounded-2xl shadow-lg transition-transform duration-300 group-hover:scale-105">
-                  <div className="bg-gradient-to-br from-green-600 to-green-700 p-8 text-white">
-                    <MapPin className="w-12 h-12 mb-4" />
-                    <h3 className="text-2xl font-bold mb-2">Sheffield</h3>
-                    <p className="text-green-100 mb-4">Central venue with parking nearby</p>
-                    <div className="flex items-center gap-2 text-sm">
-                      <span>View courses</span>
-                      <ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-1" />
-                    </div>
-                  </div>
-                </div>
-              </Link>
-            </motion.div>
-
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ delay: 0.3 }}
-            >
-              <Link to="/locations/bradford" className="block group">
-                <div className="relative overflow-hidden rounded-2xl shadow-lg transition-transform duration-300 group-hover:scale-105">
-                  <div className="bg-gradient-to-br from-purple-600 to-purple-700 p-8 text-white">
-                    <MapPin className="w-12 h-12 mb-4" />
-                    <h3 className="text-2xl font-bold mb-2">Bradford</h3>
-                    <p className="text-purple-100 mb-4">Free parking available on-site</p>
-                    <div className="flex items-center gap-2 text-sm">
-                      <span>View courses</span>
-                      <ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-1" />
-                    </div>
-                  </div>
-                </div>
-              </Link>
-            </motion.div>
-          </div>
 
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            transition={{ delay: 0.4 }}
-            className="text-center mt-12"
+            className="text-center"
           >
-            <p className="text-gray-600 dark:text-gray-400 mb-4">
-              Also serving: York, Huddersfield, Wakefield, Halifax, Harrogate and all of Yorkshire
+            <div className="flex flex-wrap justify-center gap-4 text-lg font-medium text-gray-700 dark:text-gray-300 mb-8">
+              <span>Barnsley</span>
+              <span className="text-gray-400">•</span>
+              <span>Doncaster</span>
+              <span className="text-gray-400">•</span>
+              <span>Rotherham</span>
+              <span className="text-gray-400">•</span>
+              <span>Sheffield</span>
+            </div>
+            
+            <p className="text-gray-600 dark:text-gray-400">
+              Also serving: Leeds, Bradford, York, Wakefield, and all of Yorkshire
             </p>
-            <Link to="/contact">
-              <Button variant="outline" size="lg">
-                <Phone className="w-4 h-4 mr-2" />
-                Contact Us for Other Locations
-              </Button>
-            </Link>
           </motion.div>
         </div>
       </section>

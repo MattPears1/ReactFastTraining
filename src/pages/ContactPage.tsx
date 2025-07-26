@@ -2,29 +2,28 @@ import React from 'react'
 import { motion } from 'framer-motion'
 import { MapPin, Phone, Mail, Clock, MessageSquare, Send } from 'lucide-react'
 import ContactForm from '@components/ui/ContactForm'
-import Map from '@components/ui/Map'
 import SEO from '@components/common/SEO'
 
 const contactInfo = [
   {
     icon: MapPin,
-    title: 'Yorkshire Training Locations',
-    details: ['Leeds City Centre', 'Sheffield City Centre', 'Bradford City Centre', 'Full venue details provided upon booking'],
+    title: 'South Yorkshire Training',
+    details: ['Barnsley', 'Doncaster', 'Rotherham', 'Sheffield'],
   },
   {
     icon: Phone,
     title: 'Call Us',
-    details: ['0800 123 4567', '07123 456789 (Mobile)', 'Mon-Fri 8AM-6PM, Sat 9AM-4PM'],
+    details: ['07447 485644'],
   },
   {
     icon: Mail,
     title: 'Email Us',
-    details: ['info@reactfasttraining.co.uk', 'bookings@reactfasttraining.co.uk', 'lex@reactfasttraining.co.uk'],
+    details: ['info@reactfasttraining.co.uk', 'Quick response times', 'Booking enquiries welcome'],
   },
   {
     icon: Clock,
     title: 'Office Hours',
-    details: ['Monday - Friday: 8:00 AM - 6:00 PM', 'Saturday: 9:00 AM - 4:00 PM', 'Sunday: Emergency enquiries only'],
+    details: ['Monday - Friday: 8:00 AM - 6:00 PM', 'Saturday: 10:00 AM - 3:00 PM', 'Sunday: Emergency enquiries only'],
   },
 ]
 
@@ -32,9 +31,9 @@ const ContactPage: React.FC = () => {
   return (
     <div className="relative">
       <SEO
-        title="Contact React Fast Training | First Aid Courses Yorkshire"
-        description="Contact React Fast Training for first aid courses in Leeds, Sheffield, Bradford and across Yorkshire. Book EFAW training from £75. Call 0800 123 4567 or book online."
-        keywords="contact first aid training Yorkshire, book EFAW course Leeds, first aid training Sheffield contact, emergency first aid Bradford booking"
+        title="Contact React Fast Training | First Aid Courses South Yorkshire"
+        description="Contact React Fast Training for first aid courses in South Yorkshire. Book professional first aid training from £60. Call 07447 485644 or email lex@reactfasttraining.com."
+        keywords="contact first aid training South Yorkshire, book first aid course Barnsley, first aid training Sheffield contact, emergency first aid Rotherham booking"
         canonical="/contact"
       />
       
@@ -52,11 +51,11 @@ const ContactPage: React.FC = () => {
             className="max-w-4xl mx-auto text-center"
           >
             <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-gray-900 dark:text-white mb-6">
-              Book Your <span className="text-gradient gradient-primary">Yorkshire</span> First Aid Course
+              Book Your <span className="text-gradient gradient-primary">South Yorkshire</span> First Aid Course
             </h1>
             <p className="text-lg md:text-xl text-gray-600 dark:text-gray-400">
-              Contact us today to book your first aid training in Leeds, Sheffield, Bradford or anywhere in Yorkshire. 
-              Courses from £75 with flexible scheduling.
+              Contact us today to book your first aid training in South Yorkshire and beyond. 
+              Courses available from £75 with flexible scheduling.
             </p>
           </motion.div>
         </div>
@@ -94,14 +93,14 @@ const ContactPage: React.FC = () => {
             ))}
           </div>
 
-          {/* Contact Form and Map */}
-          <div className="grid lg:grid-cols-2 gap-12">
+          {/* Contact Form */}
+          <div className="max-w-2xl mx-auto">
             <motion.div
-              initial={{ opacity: 0, x: -30 }}
-              whileInView={{ opacity: 1, x: 0 }}
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
             >
-              <div className="mb-8">
+              <div className="mb-8 text-center">
                 <h2 className="text-3xl font-bold text-gray-900 dark:text-white mb-4">
                   Send Us a Message
                 </h2>
@@ -110,15 +109,6 @@ const ContactPage: React.FC = () => {
                 </p>
               </div>
               <ContactForm />
-            </motion.div>
-
-            <motion.div
-              initial={{ opacity: 0, x: 30 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              viewport={{ once: true }}
-              className="h-full min-h-[500px]"
-            >
-              <Map />
             </motion.div>
           </div>
         </div>
@@ -157,74 +147,6 @@ const ContactPage: React.FC = () => {
         </div>
       </section>
 
-      {/* Additional Contact Options */}
-      <section className="section">
-        <div className="container">
-          <div className="grid md:grid-cols-3 gap-8">
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              className="text-center"
-            >
-              <div className="w-16 h-16 bg-success-100 dark:bg-success-900/30 rounded-2xl flex items-center justify-center mx-auto mb-4">
-                <MessageSquare className="w-8 h-8 text-success-600 dark:text-success-400" />
-              </div>
-              <h3 className="text-xl font-semibold text-gray-900 dark:text-white mb-2">
-                Live Chat
-              </h3>
-              <p className="text-gray-600 dark:text-gray-400 mb-4">
-                Get instant support from our team through live chat.
-              </p>
-              <button className="btn btn-outline">
-                Start Chat
-              </button>
-            </motion.div>
-
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.1 }}
-              viewport={{ once: true }}
-              className="text-center"
-            >
-              <div className="w-16 h-16 bg-primary-100 dark:bg-primary-900/30 rounded-2xl flex items-center justify-center mx-auto mb-4">
-                <Phone className="w-8 h-8 text-primary-600 dark:text-primary-400" />
-              </div>
-              <h3 className="text-xl font-semibold text-gray-900 dark:text-white mb-2">
-                Schedule a Call
-              </h3>
-              <p className="text-gray-600 dark:text-gray-400 mb-4">
-                Book a consultation call with our experts.
-              </p>
-              <button className="btn btn-outline">
-                Book Now
-              </button>
-            </motion.div>
-
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.2 }}
-              viewport={{ once: true }}
-              className="text-center"
-            >
-              <div className="w-16 h-16 bg-accent-100 dark:bg-accent-900/30 rounded-2xl flex items-center justify-center mx-auto mb-4">
-                <Send className="w-8 h-8 text-accent-600 dark:text-accent-400" />
-              </div>
-              <h3 className="text-xl font-semibold text-gray-900 dark:text-white mb-2">
-                Support Ticket
-              </h3>
-              <p className="text-gray-600 dark:text-gray-400 mb-4">
-                Submit a support ticket for technical assistance.
-              </p>
-              <button className="btn btn-outline">
-                Create Ticket
-              </button>
-            </motion.div>
-          </div>
-        </div>
-      </section>
     </div>
   )
 }

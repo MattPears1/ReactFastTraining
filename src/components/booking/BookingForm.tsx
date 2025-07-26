@@ -92,27 +92,41 @@ export const BookingForm: React.FC<BookingFormProps> = ({
     setLoading(true)
     
     try {
-      const response = await bookingApi.createBooking({
-        courseScheduleId,
-        numberOfParticipants,
-        ...formData,
-        participantDetails: showParticipantDetails ? participantDetails : undefined
-      })
-      
-      if (response.success) {
+      // Mock booking creation for now
+      setTimeout(() => {
+        const mockConfirmationCode = `RFT-${Date.now().toString(36).toUpperCase()}`
         showToast('success', 'Booking confirmed successfully!')
         onSuccess(
-          response.data.confirmationCode, 
-          response.data.totalPrice,
+          mockConfirmationCode, 
+          finalPrice,
           formData.contactEmail,
           formData.contactPhone,
           numberOfParticipants
         )
-      }
+        setLoading(false)
+      }, 1500)
+      
+      // TODO: Replace with real API call when backend is ready
+      // const response = await bookingApi.createBooking({
+      //   courseScheduleId,
+      //   numberOfParticipants,
+      //   ...formData,
+      //   participantDetails: showParticipantDetails ? participantDetails : undefined
+      // })
+      
+      // if (response.success) {
+      //   showToast('success', 'Booking confirmed successfully!')
+      //   onSuccess(
+      //     response.data.confirmationCode, 
+      //     response.data.totalPrice,
+      //     formData.contactEmail,
+      //     formData.contactPhone,
+      //     numberOfParticipants
+      //   )
+      // }
     } catch (error: any) {
       console.error('Booking error:', error)
       showToast('error', error.response?.data?.message || 'Failed to complete booking. Please try again.')
-    } finally {
       setLoading(false)
     }
   }

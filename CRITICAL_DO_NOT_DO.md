@@ -34,3 +34,12 @@
 - **NO** File uploads to cloud services (S3, Google Cloud Storage)
 - **NO** Third-party cloud storage services
 - **NO** Any caching mechanisms that could serve outdated content
+
+### 5. Business Representation
+- **NO** References to multiple instructors or staff - This is a SINGLE instructor business
+- **NO** Scalable solutions language - This is a solo trainer, not a scalable business
+- **NO** Enterprise features or bank-level security claims
+- **NO** Team or staff pages
+- **NO** Multiple trainer profiles
+- **NO** Language suggesting growth or scaling capabilities
+- **ALWAYS** Use "instructor" (singular) not "instructors" (plural)

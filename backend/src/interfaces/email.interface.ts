@@ -9,6 +9,8 @@ export interface IEmailOptions {
   text?: string;
   attachments?: IEmailAttachment[];
   variables?: Record<string, any>;
+  context?: Record<string, any>;
+  data?: Record<string, any>;
   replyTo?: string;
   headers?: Record<string, string>;
   tags?: string[];

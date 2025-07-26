@@ -5,7 +5,7 @@ import MagneticButton from '@components/ui/MagneticButton'
 import { useKineticTypography } from '@hooks/useAnimation'
 
 const HeroSection: React.FC = () => {
-  const { ref: titleRef, displayText } = useKineticTypography('React Fast Training')
+  const { ref: titleRef, displayText } = useKineticTypography('Professional First Aid Training')
   
   return (
     <section className="relative min-h-screen flex items-center overflow-hidden">
@@ -85,7 +85,7 @@ const HeroSection: React.FC = () => {
               <h1 ref={titleRef} className="text-5xl md:text-6xl lg:text-7xl font-heading font-bold text-gray-900 dark:text-white leading-tight">
                 <span className="block">{displayText}</span>
                 <span className="block mt-2 text-transparent bg-clip-text bg-gradient-to-r from-primary-500 to-secondary-500">
-                  Act Fast. Save Lives.
+                  in South Yorkshire
                 </span>
               </h1>
               {/* Decorative Line */}
@@ -98,7 +98,7 @@ const HeroSection: React.FC = () => {
             </div>
 
             <p className="text-lg md:text-xl text-gray-600 dark:text-gray-400 mb-8 max-w-xl">
-              Professional first aid training in Yorkshire. Learn life-saving skills from experienced instructors with real-world emergency service backgrounds.
+              Professional first aid training in Yorkshire. Learn life-saving skills from an experienced instructor with real-world emergency service background.
             </p>
 
             {/* CTA Buttons in Unique Layout */}
@@ -139,7 +139,7 @@ const HeroSection: React.FC = () => {
                 className="text-center p-4 rounded-lg bg-white/50 dark:bg-gray-800/50 backdrop-blur-sm"
               >
                 <Users className="w-8 h-8 text-secondary-500 mx-auto mb-2" />
-                <p className="text-sm font-medium text-gray-900 dark:text-white">Small Groups</p>
+                <p className="text-sm font-medium text-gray-900 dark:text-white">Individual Groups</p>
               </motion.div>
               <motion.div
                 initial={{ opacity: 0, y: 20 }}
@@ -186,21 +186,17 @@ const HeroSection: React.FC = () => {
                   ease: "easeInOut",
                 }}
               />
-              {/* Front Card with Image */}
-              <div className="relative rounded-3xl overflow-hidden shadow-2xl">
-                <img 
-                  src="/images/hero/homepage_AI_1.png" 
-                  alt="First Aid Training in Progress"
-                  className="w-full h-full object-cover"
-                  onError={(e) => {
-                    e.currentTarget.src = '/images/placeholder-course.jpg'
-                  }}
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-primary-900/80 via-primary-800/40 to-transparent flex flex-col items-center justify-end p-8 text-white">
-                  <h3 className="text-2xl font-bold mb-2">Learn to Save Lives</h3>
-                  <p className="text-center text-white/90">
-                    Professional training that makes a difference
-                  </p>
+              {/* Front Card with Logo */}
+              <div className="relative rounded-3xl overflow-hidden shadow-2xl bg-white dark:bg-gray-800">
+                <div className="flex items-center justify-center h-full p-12">
+                  <img 
+                    src="/images/logos/fulllogo_transparent.png" 
+                    alt="React Fast Training Logo"
+                    className="w-full h-auto max-w-md"
+                    onError={(e) => {
+                      e.currentTarget.src = '/images/placeholder-course.jpg'
+                    }}
+                  />
                 </div>
               </div>
             </div>

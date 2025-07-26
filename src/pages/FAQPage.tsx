@@ -58,7 +58,7 @@ const faqData: FAQItem[] = [
   {
     id: '8',
     question: 'What happens if I fail the assessment?',
-    answer: 'Our courses have a very high pass rate. If you don\'t pass the first time, we\'ll work with you to identify areas for improvement and offer a free reassessment. We want everyone to succeed and gain these vital skills.',
+    answer: 'If you don\'t pass the first time, we\'ll work with you to identify areas for improvement and offer a free reassessment. We want everyone to succeed and gain these vital skills.',
     category: 'Certification',
   },
   {

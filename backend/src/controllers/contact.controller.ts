@@ -1,11 +1,13 @@
 import { Request, Response, NextFunction } from 'express'
-import { Service } from 'typedi'
 import { EmailService } from '../services/email/email.service'
 import { logger } from '../utils/logger'
 
-@Service()
 export class ContactController {
-  constructor(private emailService: EmailService) {}
+  private emailService: EmailService
+  
+  constructor() {
+    this.emailService = new EmailService()
+  }
 
   async submitForm(req: Request, res: Response, next: NextFunction) {
     try {
@@ -31,7 +33,7 @@ export class ContactController {
         to: process.env.ADMIN_EMAIL || 'info@reactfasttraining.co.uk',
         subject: `Contact Form: ${subject}`,
         template: 'contact-form-admin',
-        data: {
+        context: {
           firstName,
           lastName,
           email,
@@ -48,7 +50,7 @@ export class ContactController {
         to: email,
         subject: 'Thank you for contacting React Fast Training',
         template: 'contact-form-confirmation',
-        data: {
+        context: {
           firstName,
           subject
         }

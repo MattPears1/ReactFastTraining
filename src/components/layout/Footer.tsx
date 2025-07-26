@@ -8,13 +8,16 @@ const footerLinks = {
     { label: 'Emergency First Aid at Work', href: '/courses/efaw' },
     { label: 'First Aid at Work', href: '/courses/faw' },
     { label: 'Paediatric First Aid', href: '/courses/paediatric' },
-    { label: 'Mental Health First Aid', href: '/courses/mental-health' },
-  ],
-  services: [
-    { label: 'On-Site Training', href: '/services/onsite' },
-    { label: 'Group Bookings', href: '/services/groups' },
-    { label: 'Refresher Courses', href: '/services/refresher' },
-    { label: 'Corporate Accounts', href: '/services/corporate' },
+    { label: 'Emergency Paediatric First Aid', href: '/courses/emergency-paediatric' },
+    { label: 'First Aid at Work Requalification', href: '/courses/faw-requalification' },
+    { label: 'Emergency First Aid at Work Requalification', href: '/courses/efaw-requalification' },
+    { label: 'Paediatric First Aid Requalification', href: '/courses/paediatric-requalification' },
+    { label: 'Emergency Paediatric First Aid Requalification', href: '/courses/emergency-paediatric-requalification' },
+    { label: 'Activity First Aid', href: '/courses/activity-first-aid' },
+    { label: 'Activity First Aid Requalification', href: '/courses/activity-first-aid-requalification' },
+    { label: 'CPR and AED', href: '/courses/cpr-aed' },
+    { label: 'Annual Skills Refresher', href: '/courses/annual-skills-refresher' },
+    { label: 'Oxygen Therapy Course', href: '/courses/oxygen-therapy' },
   ],
   support: [
     { label: 'Book a Course', href: '/contact' },
@@ -24,9 +27,6 @@ const footerLinks = {
   ],
   company: [
     { label: 'About Us', href: '/about' },
-    { label: 'Our Instructor', href: '/about#instructor' },
-    { label: 'Testimonials', href: '/testimonials' },
-    { label: 'Training Venue', href: '/venue' },
   ],
   legal: [
     { label: 'Privacy Policy', href: '/privacy' },
@@ -40,8 +40,6 @@ const socialLinks = [
   { icon: Facebook, href: 'https://facebook.com', label: 'Facebook' },
   { icon: Twitter, href: 'https://twitter.com', label: 'Twitter' },
   { icon: Instagram, href: 'https://instagram.com', label: 'Instagram' },
-  { icon: Linkedin, href: 'https://linkedin.com', label: 'LinkedIn' },
-  { icon: Youtube, href: 'https://youtube.com', label: 'YouTube' },
 ]
 
 const Footer: React.FC = () => {
@@ -55,10 +53,10 @@ const Footer: React.FC = () => {
           <div className="flex flex-col md:flex-row items-center justify-between gap-4 sm:gap-6">
             <div className="text-center md:text-left">
               <h3 className="text-xl sm:text-2xl font-bold text-white mb-2">
-                Stay Certified
+                Stay Updated
               </h3>
               <p className="text-sm sm:text-base text-primary-100 max-w-md mx-auto md:mx-0">
-                Get course updates, certification reminders, and special offers
+                Get the latest first aid training news and exclusive offers
               </p>
             </div>
             <div className="w-full sm:w-auto max-w-md">
@@ -70,44 +68,44 @@ const Footer: React.FC = () => {
 
       {/* Main Footer Content */}
       <div className="container py-8 sm:py-10 md:py-12 lg:py-16">
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-6 sm:gap-8">
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-6 sm:gap-8">
           {/* Company Info */}
-          <div className="col-span-1 sm:col-span-2 md:col-span-3 lg:col-span-2 mb-6 sm:mb-0">
-            <Link to="/" className="inline-block mb-4">
+          <div className="col-span-1 sm:col-span-2 md:col-span-3 lg:col-span-2 mb-6 sm:mb-0 text-center lg:text-left">
+            <Link to="/" className="inline-block mb-4 w-full">
               <img 
                 src="/images/logos/fulllogo_transparent.png" 
                 alt="React Fast Training" 
-                className="h-10 w-auto"
+                className="h-16 w-auto mx-auto"
               />
             </Link>
-            <p className="text-gray-600 dark:text-gray-400 mb-6 max-w-xs">
-              Yorkshire's premier first aid training provider. Professional courses delivered by experienced instructors with military and emergency services backgrounds.
+            <p className="text-gray-600 dark:text-gray-400 mb-6 max-w-xs text-center mx-auto">
+              South Yorkshire's premier first aid training provider. Professional courses delivered by an experienced instructor with military and emergency services background.
             </p>
             
             {/* Contact Info */}
-            <div className="space-y-3 mb-6">
+            <div className="space-y-3 mb-6 text-center lg:text-left">
               <a
                 href="tel:07447485644"
-                className="flex items-center gap-3 text-gray-600 dark:text-gray-400 hover:text-primary-600 dark:hover:text-primary-400 transition-colors"
+                className="flex items-center gap-3 text-gray-600 dark:text-gray-400 hover:text-primary-600 dark:hover:text-primary-400 transition-colors justify-center lg:justify-start"
               >
                 <Phone className="w-5 h-5" />
                 <span>07447 485644</span>
               </a>
               <a
-                href="mailto:info@reactfasttraining.com"
-                className="flex items-center gap-3 text-gray-600 dark:text-gray-400 hover:text-primary-600 dark:hover:text-primary-400 transition-colors"
+                href="mailto:info@reactfasttraining.co.uk"
+                className="flex items-center gap-3 text-gray-600 dark:text-gray-400 hover:text-primary-600 dark:hover:text-primary-400 transition-colors justify-center lg:justify-start"
               >
                 <Mail className="w-5 h-5" />
-                <span>info@reactfasttraining.com</span>
+                <span>info@reactfasttraining.co.uk</span>
               </a>
-              <div className="flex items-start gap-3 text-gray-600 dark:text-gray-400">
+              <div className="flex items-start gap-3 text-gray-600 dark:text-gray-400 justify-center lg:justify-start">
                 <MapPin className="w-5 h-5 flex-shrink-0 mt-0.5" />
                 <span>Training venues across<br />Yorkshire</span>
               </div>
             </div>
 
             {/* Social Links */}
-            <div className="flex items-center gap-2 sm:gap-3 md:gap-4">
+            <div className="flex items-center gap-2 sm:gap-3 md:gap-4 justify-center lg:justify-start">
               {socialLinks.map((social) => (
                 <a
                   key={social.label}
@@ -148,24 +146,6 @@ const Footer: React.FC = () => {
             </h4>
             <ul className="space-y-2 sm:space-y-3">
               {footerLinks.company.map((link) => (
-                <li key={link.href}>
-                  <Link
-                    to={link.href}
-                    className="text-sm sm:text-base text-gray-600 dark:text-gray-400 hover:text-primary-600 dark:hover:text-primary-400 transition-colors inline-block py-1"
-                  >
-                    {link.label}
-                  </Link>
-                </li>
-              ))}
-            </ul>
-          </div>
-
-          <div className="col-span-1">
-            <h4 className="font-semibold text-gray-900 dark:text-white mb-3 sm:mb-4 text-base sm:text-lg">
-              Services
-            </h4>
-            <ul className="space-y-2 sm:space-y-3">
-              {footerLinks.services.map((link) => (
                 <li key={link.href}>
                   <Link
                     to={link.href}
