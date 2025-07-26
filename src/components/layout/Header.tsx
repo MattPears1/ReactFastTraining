@@ -207,8 +207,7 @@ const Header: React.FC = () => {
                 </button>
                 {showNotifications && (
                   <div
-                    className="absolute right-0 mt-2 z-50 w-screen max-w-[calc(100vw-2rem)] sm:w-auto sm:max-w-none"
-                    style={{ right: 'max(-1rem, calc(-100vw + 100% + 2rem))' }}
+                    className="fixed top-20 right-4 z-50 w-auto max-w-[calc(100vw-2rem)] sm:absolute sm:top-full sm:right-0 sm:mt-2 sm:w-96 sm:max-w-none"
                     onClick={(e) => e.stopPropagation()}
                   >
                     <NotificationCenter
