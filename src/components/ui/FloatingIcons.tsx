@@ -1,6 +1,6 @@
 import React from 'react'
 import { motion } from 'framer-motion'
-import { Heart, Stethoscope, Siren, Activity, ShieldCheck, BandaidIcon, Thermometer, HeartHandshake } from 'lucide-react'
+import { Heart, Stethoscope, Siren, Activity, ShieldCheck, Bandage, Thermometer, HeartHandshake } from 'lucide-react'
 
 const icons = [
   { Icon: Heart, color: 'text-red-500', delay: 0 },
@@ -8,7 +8,7 @@ const icons = [
   { Icon: Siren, color: 'text-orange-500', delay: 2 },
   { Icon: Activity, color: 'text-green-500', delay: 3 },
   { Icon: ShieldCheck, color: 'text-purple-500', delay: 4 },
-  { Icon: BandaidIcon, color: 'text-pink-500', delay: 5 },
+  { Icon: Bandage, color: 'text-pink-500', delay: 5 },
   { Icon: Thermometer, color: 'text-teal-500', delay: 6 },
   { Icon: HeartHandshake, color: 'text-indigo-500', delay: 7 },
 ]
