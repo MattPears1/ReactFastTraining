@@ -32,15 +32,15 @@ const Button = forwardRef<HTMLButtonElement, ButtonProps>(
     },
     ref
   ) => {
-    const baseStyles = 'relative inline-flex items-center justify-center font-medium transition-all duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed overflow-hidden'
+    const baseStyles = 'relative inline-flex items-center justify-center font-medium transition-all duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed overflow-hidden transform hover:-translate-y-0.5 active:translate-y-0'
     
     const variants = {
-      primary: 'bg-primary-600 text-white hover:bg-primary-700 focus-visible:ring-primary-500',
-      secondary: 'bg-secondary-600 text-white hover:bg-secondary-700 focus-visible:ring-secondary-500',
-      outline: 'border-2 border-current hover:bg-gray-50 dark:hover:bg-gray-800',
-      ghost: 'hover:bg-gray-100 dark:hover:bg-gray-800',
-      danger: 'bg-error-600 text-white hover:bg-error-700 focus-visible:ring-error-500',
-      success: 'bg-success-600 text-white hover:bg-success-700 focus-visible:ring-success-500',
+      primary: 'bg-gradient-to-r from-primary-500 to-primary-600 text-white hover:from-primary-600 hover:to-primary-700 shadow-blue hover:shadow-lg transition-all focus-visible:ring-primary-500',
+      secondary: 'bg-gradient-to-r from-secondary-500 to-secondary-600 text-white hover:from-secondary-600 hover:to-secondary-700 shadow-green hover:shadow-lg transition-all focus-visible:ring-secondary-500',
+      outline: 'border-2 border-primary-400 text-primary-700 dark:text-primary-300 hover:bg-primary-50 dark:hover:bg-primary-900/10 hover:border-primary-500 transition-all',
+      ghost: 'text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 hover:text-primary-600 dark:hover:text-primary-400 transition-all',
+      danger: 'bg-gray-100 text-error border border-error/20 hover:bg-error/10 hover:border-error/40 focus-visible:ring-error/50 transition-all',
+      success: 'bg-gradient-to-r from-secondary-500 to-secondary-600 text-white hover:from-secondary-600 hover:to-secondary-700 shadow-green hover:shadow-lg transition-all focus-visible:ring-secondary-500',
     }
     
     const sizes = {
@@ -112,8 +112,8 @@ const Button = forwardRef<HTMLButtonElement, ButtonProps>(
         ref={ref}
         className={buttonClasses}
         disabled={disabled || loading}
-        whileHover={{ scale: disabled || loading ? 1 : 1.02 }}
-        whileTap={{ scale: disabled || loading ? 1 : 0.98 }}
+        whileHover={{ scale: disabled || loading ? 1 : 1.01 }}
+        whileTap={{ scale: disabled || loading ? 1 : 0.99 }}
         {...props}
       >
         {content}

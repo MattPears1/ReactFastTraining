@@ -61,7 +61,7 @@ const EFAWCoursePage: React.FC = () => {
   }
 
   return (
-    <div>
+    <div className="relative">
       <SEO
         title="Emergency First Aid at Work Course Yorkshire | EFAW Training"
         description="1-day Emergency First Aid at Work (EFAW) course in Yorkshire from £75. HSE approved training in Leeds, Sheffield & Bradford. Book your place today."
@@ -69,7 +69,16 @@ const EFAWCoursePage: React.FC = () => {
         canonical="/courses/emergency-first-aid-at-work"
         jsonLd={courseStructuredData}
       />
-
+      
+      {/* Logo at very top right */}
+      <div className="fixed top-4 right-4 z-50">
+        <img 
+          src="/images/logos/fulllogo_transparent.png" 
+          alt="React Fast Training" 
+          className="h-20 md:h-30 lg:h-40 w-auto"
+        />
+      </div>
+      
       {/* Hero Section */}
       <section className="relative py-20 md:py-32 overflow-hidden bg-gradient-to-br from-primary-50 to-secondary-50 dark:from-gray-900 dark:to-gray-800">
         <div className="container relative z-10">
@@ -78,11 +87,6 @@ const EFAWCoursePage: React.FC = () => {
             animate={{ opacity: 1, y: 0 }}
             className="max-w-4xl mx-auto text-center"
           >
-            <img 
-              src="/images/logos/fulllogo_transparent.png" 
-              alt="React Fast Training" 
-              className="h-16 w-auto mx-auto mb-6"
-            />
             <div className="inline-flex items-center gap-2 bg-accent-100 dark:bg-accent-900 text-accent-800 dark:text-accent-200 px-4 py-2 rounded-full mb-6">
               <Award className="w-4 h-4" />
               <span className="text-sm font-medium">HSE Approved & Ofqual Regulated</span>

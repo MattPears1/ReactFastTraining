@@ -1,5 +1,5 @@
-# Robots.txt for Lex Business
-# https://www.lexbusiness.com
+# Robots.txt for React Fast Training
+# https://reactfasttraining.co.uk
 # Last updated: 2025-07-26
 
 # Default rules for all crawlers
@@ -22,9 +22,10 @@ Allow: /*?utm_*
 Allow: /*?ref=*
 Allow: /*?source=*
 Allow: /search?q=*
+Allow: /*?location=*
 
 # Sitemap location
-Sitemap: https://www.lexbusiness.com/sitemap.xml
+Sitemap: https://reactfasttraining.co.uk/sitemap.xml
 
 # Default crawl delay
 Crawl-delay: 1

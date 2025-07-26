@@ -8,35 +8,45 @@ import SEO from '@components/common/SEO'
 const contactInfo = [
   {
     icon: MapPin,
-    title: 'Visit Us',
-    details: ['123 Business Ave, Suite 100', 'New York, NY 10001', 'United States'],
+    title: 'Yorkshire Training Locations',
+    details: ['Leeds City Centre', 'Sheffield City Centre', 'Bradford City Centre', 'Full venue details provided upon booking'],
   },
   {
     icon: Phone,
     title: 'Call Us',
-    details: ['+1 (234) 567-890', '+1 (234) 567-891', 'Mon-Fri 9AM-6PM EST'],
+    details: ['0800 123 4567', '07123 456789 (Mobile)', 'Mon-Fri 8AM-6PM, Sat 9AM-4PM'],
   },
   {
     icon: Mail,
     title: 'Email Us',
-    details: ['info@lexbusiness.com', 'support@lexbusiness.com', 'sales@lexbusiness.com'],
+    details: ['info@reactfasttraining.co.uk', 'bookings@reactfasttraining.co.uk', 'lex@reactfasttraining.co.uk'],
   },
   {
     icon: Clock,
-    title: 'Business Hours',
-    details: ['Monday - Friday: 9:00 AM - 6:00 PM', 'Saturday: 10:00 AM - 4:00 PM', 'Sunday: Closed'],
+    title: 'Office Hours',
+    details: ['Monday - Friday: 8:00 AM - 6:00 PM', 'Saturday: 9:00 AM - 4:00 PM', 'Sunday: Emergency enquiries only'],
   },
 ]
 
 const ContactPage: React.FC = () => {
   return (
-    <div>
+    <div className="relative">
       <SEO
-        title="Contact Us"
-        description="Get in touch with Lex Business. Contact our team for support, sales inquiries, or partnership opportunities. We're here to help your business succeed."
-        keywords="contact lex business, customer support, sales inquiry, business partnership, get in touch"
+        title="Contact React Fast Training | First Aid Courses Yorkshire"
+        description="Contact React Fast Training for first aid courses in Leeds, Sheffield, Bradford and across Yorkshire. Book EFAW training from £75. Call 0800 123 4567 or book online."
+        keywords="contact first aid training Yorkshire, book EFAW course Leeds, first aid training Sheffield contact, emergency first aid Bradford booking"
         canonical="/contact"
       />
+      
+      {/* Logo at very top right */}
+      <div className="fixed top-4 right-4 z-50">
+        <img 
+          src="/images/logos/fulllogo_transparent.png" 
+          alt="React Fast Training" 
+          className="h-20 md:h-30 lg:h-40 w-auto"
+        />
+      </div>
+      
       {/* Hero Section */}
       <section className="relative py-20 md:py-32 overflow-hidden">
         <div className="absolute inset-0 bg-gradient-to-br from-primary-50 to-secondary-50 dark:from-gray-900 dark:to-gray-800">
@@ -49,17 +59,12 @@ const ContactPage: React.FC = () => {
             animate={{ opacity: 1, y: 0 }}
             className="max-w-4xl mx-auto text-center"
           >
-            <img 
-              src="/images/logos/fulllogo_transparent.png" 
-              alt="React Fast Training" 
-              className="h-20 w-auto mx-auto mb-8"
-            />
             <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-gray-900 dark:text-white mb-6">
-              Get in <span className="text-gradient gradient-primary">Touch</span>
+              Book Your <span className="text-gradient gradient-primary">Yorkshire</span> First Aid Course
             </h1>
             <p className="text-lg md:text-xl text-gray-600 dark:text-gray-400">
-              We're here to help and answer any questions you might have. 
-              We look forward to hearing from you.
+              Contact us today to book your first aid training in Leeds, Sheffield, Bradford or anywhere in Yorkshire. 
+              Courses from £75 with flexible scheduling.
             </p>
           </motion.div>
         </div>

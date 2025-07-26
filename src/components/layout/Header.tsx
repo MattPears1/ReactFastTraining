@@ -83,14 +83,14 @@ const Header: React.FC = () => {
         className={cn(
           'fixed top-0 left-0 right-0 z-40 transition-all duration-300',
           scrolled
-            ? 'bg-white/80 dark:bg-gray-900/80 backdrop-blur-md shadow-lg'
-            : 'bg-transparent'
+            ? 'bg-white/95 dark:bg-gray-900/95 backdrop-blur-xl shadow-lg border-b border-gray-100 dark:border-gray-800'
+            : 'bg-gradient-to-b from-white/10 to-transparent dark:from-gray-900/20'
         )}
         role="banner"
       >
         <nav id="main-navigation" className="container" role="navigation" aria-label="Main navigation">
-          <div className="flex items-center justify-between h-16 md:h-20">
-            {/* Logo */}
+          <div className="flex items-center justify-between h-20 md:h-24 lg:h-28">
+            {/* Logo on the left */}
             <Link
               to="/"
               className="flex items-center"
@@ -98,10 +98,10 @@ const Header: React.FC = () => {
               <img 
                 src="/images/logos/fulllogo_transparent.png" 
                 alt="React Fast Training" 
-                className="h-20 sm:h-24 md:h-32 w-auto"
+                className="h-24 sm:h-28 md:h-32 w-auto"
               />
             </Link>
-
+              
             {/* Desktop Navigation */}
             <div className="hidden lg:flex items-center space-x-8">
               {navItems.map((item) => (
@@ -138,13 +138,13 @@ const Header: React.FC = () => {
                             animate={{ opacity: 1, y: 0 }}
                             exit={{ opacity: 0, y: -10 }}
                             transition={{ duration: 0.2 }}
-                            className="absolute top-full left-0 mt-2 w-48 bg-white dark:bg-gray-800 rounded-lg shadow-xl py-2"
+                            className="absolute top-full left-0 mt-2 w-56 bg-white dark:bg-gray-800 rounded-xl shadow-xl border border-gray-100 dark:border-gray-700 py-2 overflow-hidden"
                           >
                             {item.children.map((child) => (
                               <Link
                                 key={child.href}
                                 to={child.href}
-                                className="block px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 hover:text-primary-600 dark:hover:text-primary-400 transition-colors"
+                                className="block px-4 py-3 text-sm text-gray-700 dark:text-gray-300 hover:bg-gradient-to-r hover:from-primary-50 hover:to-secondary-50 dark:hover:from-primary-900/20 dark:hover:to-secondary-900/20 hover:text-primary-600 dark:hover:text-primary-400 transition-all duration-200 border-l-2 border-transparent hover:border-primary-500"
                               >
                                 {child.label}
                               </Link>
@@ -168,6 +168,7 @@ const Header: React.FC = () => {
                   )}
                 </div>
               ))}
+              </div>
             </div>
 
             {/* Right Side Actions */}
@@ -239,7 +240,7 @@ const Header: React.FC = () => {
               {/* CTA Button */}
               <Link
                 to="/contact"
-                className="hidden md:inline-flex btn btn-primary"
+                className="hidden md:inline-flex btn btn-primary btn-yorkshire shadow-blue"
               >
                 Book Course
               </Link>
@@ -378,7 +379,7 @@ const Header: React.FC = () => {
       </AnimatePresence>
 
       {/* Spacer for fixed header */}
-      <div className="h-16 md:h-20" />
+      <div className="h-20 md:h-24 lg:h-28" />
 
       {/* Search Modal */}
       <SearchModal isOpen={showSearch} onClose={() => setShowSearch(false)} />

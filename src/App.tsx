@@ -14,6 +14,14 @@ import { AnalyticsProvider } from '@components/providers/AnalyticsProvider'
 const HomePage = lazy(() => import('@pages/HomePage'))
 const AboutPage = lazy(() => import('@pages/AboutPage'))
 const ContactPage = lazy(() => import('@pages/ContactPage'))
+const CoursesPage = lazy(() => import('@pages/CoursesPage'))
+const EFAWCoursePage = lazy(() => import('@pages/courses/EFAWCoursePage'))
+const FAWCoursePage = lazy(() => import('@pages/courses/FAWCoursePage'))
+const PaediatricCoursePage = lazy(() => import('@pages/courses/PaediatricCoursePage'))
+const MentalHealthCoursePage = lazy(() => import('@pages/courses/MentalHealthCoursePage'))
+const LeedsPage = lazy(() => import('@pages/locations/LeedsPage'))
+const SheffieldPage = lazy(() => import('@pages/locations/SheffieldPage'))
+const BradfordPage = lazy(() => import('@pages/locations/BradfordPage'))
 const FAQPage = lazy(() => import('@pages/FAQPage'))
 const ProductsPage = lazy(() => import('@pages/ProductsPage'))
 const NotFoundPage = lazy(() => import('@pages/NotFoundPage'))
@@ -28,6 +36,7 @@ const NotificationDemo = lazy(() => import('@pages/NotificationDemo'))
 const SearchPage = lazy(() => import('@pages/SearchPage'))
 const SocialMediaDemo = lazy(() => import('@pages/SocialMediaDemo'))
 const ProfilePage = lazy(() => import('@pages/ProfilePage'))
+const TrainingVenuePage = lazy(() => import('@pages/TrainingVenuePage'))
 
 function App() {
   const location = useLocation()
@@ -56,6 +65,15 @@ function App() {
                   <Route path="/" element={<HomePage />} />
                   <Route path="/about" element={<AboutPage />} />
                   <Route path="/contact" element={<ContactPage />} />
+                  <Route path="/courses" element={<CoursesPage />} />
+                  <Route path="/courses/efaw" element={<EFAWCoursePage />} />
+                  <Route path="/courses/faw" element={<FAWCoursePage />} />
+                  <Route path="/courses/paediatric" element={<PaediatricCoursePage />} />
+                  <Route path="/courses/mental-health" element={<MentalHealthCoursePage />} />
+                  <Route path="/locations/leeds" element={<LeedsPage />} />
+                  <Route path="/locations/sheffield" element={<SheffieldPage />} />
+                  <Route path="/locations/bradford" element={<BradfordPage />} />
+                  <Route path="/venue" element={<TrainingVenuePage />} />
                   <Route path="/faq" element={<FAQPage />} />
                   <Route path="/products" element={<ProductsPage />} />
                   <Route path="/services" element={<ProductsPage />} />

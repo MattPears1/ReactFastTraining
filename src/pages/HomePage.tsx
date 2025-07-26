@@ -59,13 +59,22 @@ const HomePage: React.FC = () => {
   ], [])
 
   return (
-    <div className="bg-white dark:bg-gray-900">
+    <div className="relative bg-white dark:bg-gray-900">
       <SEO
-        title="Yorkshire First Aid Training | React Fast Training"
-        description="Act Fast. Save Lives. Professional first aid training in Yorkshire. Ofqual regulated courses from £75. Emergency First Aid at Work, Paediatric First Aid & more."
-        keywords="first aid training Yorkshire, emergency first aid at work, EFAW course, first aid trainer Yorkshire, HSE approved first aid, Ofqual regulated training"
+        title="First Aid Training Yorkshire | EFAW Courses Leeds, Sheffield, Bradford | React Fast Training"
+        description="Professional first aid training across Yorkshire from £75. Emergency First Aid at Work (EFAW), HSE approved courses in Leeds, Sheffield, Bradford. Led by ex-military trainer Lex. Book today!"
+        keywords="first aid training Yorkshire, first aid courses Leeds, first aid training Sheffield, EFAW Yorkshire, emergency first aid Bradford, HSE approved first aid training, first aid training near me"
         canonical="/"
       />
+      
+      {/* Logo at very top right */}
+      <div className="fixed top-4 right-4 z-50">
+        <img 
+          src="/images/logos/fulllogo_transparent.png" 
+          alt="React Fast Training" 
+          className="h-20 md:h-30 lg:h-40 w-auto"
+        />
+      </div>
       
       <HeroSection />
       
@@ -101,7 +110,7 @@ const HomePage: React.FC = () => {
                 }`}
               >
                 <div className={`${index % 2 === 1 ? 'md:order-2' : ''}`}>
-                  <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-xl p-8 hover:shadow-2xl transition-shadow duration-300">
+                  <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 border border-gray-100 dark:border-gray-700/50 p-8">
                     <div className={`w-16 h-16 bg-${course.color}-100 dark:bg-${course.color}-900/30 rounded-xl flex items-center justify-center mb-6`}>
                       <course.icon className={`w-8 h-8 text-${course.color}-600 dark:text-${course.color}-400`} />
                     </div>
@@ -122,7 +131,9 @@ const HomePage: React.FC = () => {
                     <Button
                       as={Link}
                       to="/courses"
-                      className={`w-full bg-${course.color}-600 hover:bg-${course.color}-700 text-white`}
+                      variant={course.color === 'secondary' ? 'secondary' : 'primary'}
+                      className="w-full"
+                      rightIcon={<ArrowRight className="w-4 h-4" />}
                     >
                       Learn More
                     </Button>
@@ -327,11 +338,6 @@ const HomePage: React.FC = () => {
       <section className="py-20 bg-gray-50 dark:bg-gray-800">
         <div className="container">
           <div className="text-center mb-12">
-            <img 
-              src="/images/logos/fulllogo_transparent.png" 
-              alt="React Fast Training" 
-              className="h-16 w-auto mx-auto mb-6"
-            />
             <h2 className="text-3xl font-heading font-bold text-gray-900 dark:text-white mb-4">
               Fully Accredited Training
             </h2>
@@ -392,6 +398,108 @@ const HomePage: React.FC = () => {
               <p className="text-sm font-medium text-gray-900 dark:text-white">Quality Assured</p>
             </motion.div>
           </div>
+        </div>
+      </section>
+
+      {/* Yorkshire Locations Section */}
+      <section className="py-20 bg-white dark:bg-gray-900">
+        <div className="container">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            className="text-center mb-12"
+          >
+            <h2 className="text-3xl md:text-4xl font-heading font-bold text-gray-900 dark:text-white mb-4">
+              Training Locations Across Yorkshire
+            </h2>
+            <p className="text-lg text-gray-600 dark:text-gray-400 max-w-2xl mx-auto">
+              Convenient venues in major Yorkshire cities. Choose your nearest location for first aid training.
+            </p>
+          </motion.div>
+
+          <div className="grid md:grid-cols-3 gap-8 max-w-5xl mx-auto">
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ delay: 0.1 }}
+            >
+              <Link to="/locations/leeds" className="block group">
+                <div className="relative overflow-hidden rounded-2xl shadow-lg transition-transform duration-300 group-hover:scale-105">
+                  <div className="bg-gradient-to-br from-blue-600 to-blue-700 p-8 text-white">
+                    <MapPin className="w-12 h-12 mb-4" />
+                    <h3 className="text-2xl font-bold mb-2">Leeds</h3>
+                    <p className="text-blue-100 mb-4">City centre location near Leeds Station</p>
+                    <div className="flex items-center gap-2 text-sm">
+                      <span>View courses</span>
+                      <ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-1" />
+                    </div>
+                  </div>
+                </div>
+              </Link>
+            </motion.div>
+
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ delay: 0.2 }}
+            >
+              <Link to="/locations/sheffield" className="block group">
+                <div className="relative overflow-hidden rounded-2xl shadow-lg transition-transform duration-300 group-hover:scale-105">
+                  <div className="bg-gradient-to-br from-green-600 to-green-700 p-8 text-white">
+                    <MapPin className="w-12 h-12 mb-4" />
+                    <h3 className="text-2xl font-bold mb-2">Sheffield</h3>
+                    <p className="text-green-100 mb-4">Central venue with parking nearby</p>
+                    <div className="flex items-center gap-2 text-sm">
+                      <span>View courses</span>
+                      <ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-1" />
+                    </div>
+                  </div>
+                </div>
+              </Link>
+            </motion.div>
+
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ delay: 0.3 }}
+            >
+              <Link to="/locations/bradford" className="block group">
+                <div className="relative overflow-hidden rounded-2xl shadow-lg transition-transform duration-300 group-hover:scale-105">
+                  <div className="bg-gradient-to-br from-purple-600 to-purple-700 p-8 text-white">
+                    <MapPin className="w-12 h-12 mb-4" />
+                    <h3 className="text-2xl font-bold mb-2">Bradford</h3>
+                    <p className="text-purple-100 mb-4">Free parking available on-site</p>
+                    <div className="flex items-center gap-2 text-sm">
+                      <span>View courses</span>
+                      <ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-1" />
+                    </div>
+                  </div>
+                </div>
+              </Link>
+            </motion.div>
+          </div>
+
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ delay: 0.4 }}
+            className="text-center mt-12"
+          >
+            <p className="text-gray-600 dark:text-gray-400 mb-4">
+              Also serving: York, Huddersfield, Wakefield, Halifax, Harrogate and all of Yorkshire
+            </p>
+            <Link to="/contact">
+              <Button variant="outline" size="lg">
+                <Phone className="w-4 h-4 mr-2" />
+                Contact Us for Other Locations
+              </Button>
+            </Link>
+          </motion.div>
         </div>
       </section>
     </div>

@@ -1,6 +1,7 @@
 /* Import 2025 Design System */
 @import './themes.css';
 @import './animations.css';
+@import './yorkshire-enhancements.css';
 
 @tailwind base;
 @tailwind components;
@@ -127,39 +128,39 @@
     @apply mx-auto px-4 sm:px-6 lg:px-8 max-w-7xl;
   }
 
-  /* Buttons */
+  /* Buttons - Enhanced for better mobile experience */
   .btn {
-    @apply inline-flex items-center justify-center px-5 sm:px-6 py-3 font-medium rounded-lg transition-all duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed min-h-[44px] sm:min-h-0;
+    @apply inline-flex items-center justify-center px-5 sm:px-6 py-3 font-medium rounded-lg transition-all duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed min-h-[48px] sm:min-h-[44px] transform hover:-translate-y-0.5 active:translate-y-0;
   }
 
   .btn-primary {
-    @apply bg-primary-600 text-white hover:bg-primary-700 focus-visible:ring-primary-500;
+    @apply bg-gradient-to-r from-primary-500 to-primary-600 text-white hover:from-primary-600 hover:to-primary-700 shadow-blue hover:shadow-lg focus-visible:ring-primary-500;
   }
 
   .btn-secondary {
-    @apply bg-secondary-600 text-white hover:bg-secondary-700 focus-visible:ring-secondary-500;
+    @apply bg-gradient-to-r from-secondary-500 to-secondary-600 text-white hover:from-secondary-600 hover:to-secondary-700 shadow-green hover:shadow-lg focus-visible:ring-secondary-500;
   }
 
   .btn-outline {
-    @apply border-2 border-current hover:bg-gray-50 dark:hover:bg-gray-800;
+    @apply border-2 border-primary-400 text-primary-700 dark:text-primary-300 hover:bg-primary-50 dark:hover:bg-primary-900/10 hover:border-primary-500;
   }
 
   .btn-ghost {
-    @apply hover:bg-gray-100 dark:hover:bg-gray-800;
+    @apply text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 hover:text-primary-600 dark:hover:text-primary-400;
   }
 
-  /* Cards */
+  /* Cards - Enhanced depth and visual appeal */
   .card {
-    @apply bg-white dark:bg-gray-800 rounded-xl shadow-lg overflow-hidden;
+    @apply bg-white dark:bg-gray-800 rounded-xl shadow-md hover:shadow-lg border border-gray-100 dark:border-gray-700/50 overflow-hidden transition-all duration-300;
   }
 
   .card-body {
     @apply p-6;
   }
 
-  /* Forms */
+  /* Forms - Enhanced mobile touch targets */
   .form-group {
-    @apply mb-6;
+    @apply mb-6 sm:mb-5;
   }
 
   .form-label {
@@ -167,7 +168,7 @@
   }
 
   .form-input {
-    @apply w-full px-4 py-3 sm:py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-800 text-gray-900 dark:text-white placeholder-gray-400 dark:placeholder-gray-500 focus:border-primary-500 focus:ring-2 focus:ring-primary-500 focus:ring-opacity-50 text-base sm:text-sm;
+    @apply w-full px-4 py-3 sm:py-2.5 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-800 text-gray-900 dark:text-white placeholder-gray-400 dark:placeholder-gray-500 focus:border-primary-500 focus:ring-2 focus:ring-primary-500/30 focus:shadow-blue text-base transition-all duration-200 min-h-[48px] sm:min-h-[42px];
   }
 
   .form-textarea {
@@ -182,7 +183,18 @@
   }
 
   .form-error {
-    @apply mt-1 text-sm text-error dark:text-error-light;
+    @apply mt-1.5 text-sm text-error dark:text-error-light flex items-center gap-1;
+  }
+  
+  /* Enhanced sections with Yorkshire touches */
+  .yorkshire-section {
+    @apply relative overflow-hidden;
+  }
+  
+  .yorkshire-section::before {
+    @apply absolute inset-0 opacity-[0.02] pointer-events-none;
+    background-image: radial-gradient(circle at 20% 80%, rgba(16, 185, 129, 0.1) 0%, transparent 50%),
+                      radial-gradient(circle at 80% 20%, rgba(14, 165, 233, 0.1) 0%, transparent 50%);
   }
 
   /* Sections */
@@ -218,25 +230,25 @@
     @apply animate-pulse bg-gray-200 dark:bg-gray-700 rounded;
   }
 
-  /* Badges */
+  /* Badges - Enhanced with gradients */
   .badge {
-    @apply inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium;
+    @apply inline-flex items-center px-3 py-1 rounded-full text-xs font-medium transition-all duration-200;
   }
 
   .badge-primary {
-    @apply bg-primary-100 text-primary-800 dark:bg-primary-800 dark:text-primary-100;
+    @apply bg-gradient-to-r from-primary-100 to-primary-200 text-primary-800 dark:from-primary-800 dark:to-primary-900 dark:text-primary-100 border border-primary-200 dark:border-primary-700;
   }
 
   .badge-success {
-    @apply bg-success-100 text-success-800 dark:bg-success-800 dark:text-success-100;
+    @apply bg-gradient-to-r from-secondary-100 to-secondary-200 text-secondary-800 dark:from-secondary-800 dark:to-secondary-900 dark:text-secondary-100 border border-secondary-200 dark:border-secondary-700;
   }
 
   .badge-warning {
-    @apply bg-warning-100 text-warning-800 dark:bg-warning-800 dark:text-warning-100;
+    @apply bg-gradient-to-r from-accent-100 to-accent-200 text-accent-800 dark:from-accent-800 dark:to-accent-900 dark:text-accent-100 border border-accent-200 dark:border-accent-700;
   }
 
   .badge-error {
-    @apply bg-error-100 text-error-800 dark:bg-error-800 dark:text-error-100;
+    @apply bg-gray-100 text-gray-700 dark:bg-gray-800 dark:text-gray-300 border border-error/20 dark:border-error/20;
   }
 }
 

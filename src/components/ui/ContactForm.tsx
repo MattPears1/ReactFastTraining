@@ -51,11 +51,11 @@ const ContactForm: React.FC = () => {
   }
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
+    <form onSubmit={handleSubmit(onSubmit)} className="space-y-6 bg-gradient-to-br from-white to-gray-50 dark:from-gray-800 dark:to-gray-900 p-6 sm:p-8 rounded-2xl shadow-lg border border-gray-100 dark:border-gray-700/50">
       <div className="grid md:grid-cols-2 gap-6">
         <div>
           <label htmlFor="firstName" className="form-label">
-            First Name <span className="text-error-500">*</span>
+            First Name <span className="text-accent-600 dark:text-accent-400">*</span>
           </label>
           <input
             id="firstName"
@@ -72,7 +72,7 @@ const ContactForm: React.FC = () => {
 
         <div>
           <label htmlFor="lastName" className="form-label">
-            Last Name <span className="text-error-500">*</span>
+            Last Name <span className="text-accent-600 dark:text-accent-400">*</span>
           </label>
           <input
             id="lastName"
@@ -91,7 +91,7 @@ const ContactForm: React.FC = () => {
       <div className="grid md:grid-cols-2 gap-6">
         <div>
           <label htmlFor="email" className="form-label">
-            Email Address <span className="text-error-500">*</span>
+            Email Address <span className="text-accent-600 dark:text-accent-400">*</span>
           </label>
           <input
             id="email"
@@ -143,7 +143,7 @@ const ContactForm: React.FC = () => {
 
       <div>
         <label htmlFor="subject" className="form-label">
-          Subject <span className="text-error-500">*</span>
+          Subject <span className="text-accent-600 dark:text-accent-400">*</span>
         </label>
         <input
           id="subject"
@@ -160,7 +160,7 @@ const ContactForm: React.FC = () => {
 
       <div>
         <label htmlFor="message" className="form-label">
-          Message <span className="text-error-500">*</span>
+          Message <span className="text-accent-600 dark:text-accent-400">*</span>
         </label>
         <textarea
           id="message"
@@ -179,7 +179,7 @@ const ContactForm: React.FC = () => {
         <label className="flex items-start gap-3">
           <input
             type="checkbox"
-            className="mt-1 w-4 h-4 text-primary-600 bg-white dark:bg-gray-800 border-gray-300 dark:border-gray-600 rounded focus:ring-primary-500 focus:ring-2"
+            className="mt-1 w-5 h-5 text-primary-600 bg-white dark:bg-gray-800 border-gray-300 dark:border-gray-600 rounded focus:ring-primary-500 focus:ring-2 transition-all duration-200"
             {...register('consent')}
             disabled={isLoading}
           />
@@ -192,7 +192,7 @@ const ContactForm: React.FC = () => {
             <a href="/terms" className="text-primary-600 dark:text-primary-400 hover:underline">
               Terms of Service
             </a>
-            . <span className="text-error-500">*</span>
+            . <span className="text-accent-600 dark:text-accent-400">*</span>
           </span>
         </label>
         {errors.consent && (

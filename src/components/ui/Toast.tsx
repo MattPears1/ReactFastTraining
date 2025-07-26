@@ -26,17 +26,17 @@ const icons = {
 };
 
 const colors = {
-  success: 'bg-green-50 dark:bg-green-900/20 text-green-800 dark:text-green-200 border-green-200 dark:border-green-800',
-  error: 'bg-red-50 dark:bg-red-900/20 text-red-800 dark:text-red-200 border-red-200 dark:border-red-800',
-  warning: 'bg-yellow-50 dark:bg-yellow-900/20 text-yellow-800 dark:text-yellow-200 border-yellow-200 dark:border-yellow-800',
-  info: 'bg-blue-50 dark:bg-blue-900/20 text-blue-800 dark:text-blue-200 border-blue-200 dark:border-blue-800',
+  success: 'bg-gradient-to-r from-secondary-50 to-secondary-100 dark:from-secondary-900/20 dark:to-secondary-800/10 text-secondary-800 dark:text-secondary-200 border-secondary-300 dark:border-secondary-700',
+  error: 'bg-gradient-to-r from-gray-50 to-gray-100 dark:from-gray-800 dark:to-gray-700 text-gray-800 dark:text-gray-200 border-error/20 dark:border-error/20',
+  warning: 'bg-gradient-to-r from-accent-50 to-accent-100 dark:from-accent-900/20 dark:to-accent-800/10 text-accent-800 dark:text-accent-200 border-accent-300 dark:border-accent-700',
+  info: 'bg-gradient-to-r from-primary-50 to-primary-100 dark:from-primary-900/20 dark:to-primary-800/10 text-primary-800 dark:text-primary-200 border-primary-300 dark:border-primary-700',
 };
 
 const iconColors = {
-  success: 'text-green-600 dark:text-green-400',
-  error: 'text-red-600 dark:text-red-400',
-  warning: 'text-yellow-600 dark:text-yellow-400',
-  info: 'text-blue-600 dark:text-blue-400',
+  success: 'text-secondary-600 dark:text-secondary-400',
+  error: 'text-error dark:text-error-light',
+  warning: 'text-accent-600 dark:text-accent-400',
+  info: 'text-primary-600 dark:text-primary-400',
 };
 
 export const Toast: React.FC<ToastProps> = ({
@@ -67,7 +67,7 @@ export const Toast: React.FC<ToastProps> = ({
       animate={{ opacity: 1, y: 0, scale: 1 }}
       exit={{ opacity: 0, scale: 0.5, transition: { duration: 0.2 } }}
       className={clsx(
-        'pointer-events-auto w-full max-w-sm overflow-hidden rounded-lg border shadow-lg',
+        'pointer-events-auto w-full max-w-sm overflow-hidden rounded-xl border shadow-lg backdrop-blur-sm',
         colors[type]
       )}
     >

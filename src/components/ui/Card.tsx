@@ -21,13 +21,13 @@ const Card: React.FC<CardProps> = ({
   ...props
 }) => {
   const variants = {
-    default: 'bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700',
-    bordered: 'bg-transparent border-2 border-gray-300 dark:border-gray-600',
-    elevated: 'bg-white dark:bg-gray-800 shadow-xl',
-    ghost: 'bg-gray-50 dark:bg-gray-800/50',
+    default: 'bg-white dark:bg-gray-800 border border-gray-200/50 dark:border-gray-700/50 shadow-sm',
+    bordered: 'bg-white/50 dark:bg-gray-800/50 border-2 border-primary-200 dark:border-primary-800 hover:border-primary-400 dark:hover:border-primary-600',
+    elevated: 'bg-white dark:bg-gray-800 shadow-lg hover:shadow-xl',
+    ghost: 'bg-gradient-to-br from-gray-50 to-gray-100/50 dark:from-gray-800/50 dark:to-gray-900/30',
     '3d': 'bg-white dark:bg-gray-800 shadow-2xl transform-gpu perspective-1000',
-    brutalist: 'bg-white dark:bg-black border-4 border-black dark:border-white',
-    glass: 'bg-white/10 dark:bg-gray-800/10 backdrop-blur-lg border border-white/20 dark:border-gray-700/20',
+    brutalist: 'bg-white dark:bg-gray-900 border-4 border-primary-900 dark:border-primary-400',
+    glass: 'bg-white/70 dark:bg-gray-800/70 backdrop-blur-xl border border-white/30 dark:border-gray-700/30 shadow-lg',
   }
 
   const paddings = {
@@ -75,7 +75,7 @@ const Card: React.FC<CardProps> = ({
         'relative rounded-xl overflow-hidden transition-all duration-300',
         variants[variant],
         paddings[padding],
-        hover && 'hover:shadow-xl hover:-translate-y-1',
+        hover && 'hover:shadow-lg hover:-translate-y-0.5 transition-all duration-300',
         variant === '3d' && 'card-3d preserve-3d',
         variant === 'brutalist' && 'shadow-[8px_8px_0_0_#000] dark:shadow-[8px_8px_0_0_#fff]',
         variant === 'brutalist' && hover && 'hover:shadow-[12px_12px_0_0_#000] dark:hover:shadow-[12px_12px_0_0_#fff]',
@@ -86,10 +86,15 @@ const Card: React.FC<CardProps> = ({
       {...(variant === '3d' ? card3DStyles : {})}
       {...(variant === 'brutalist' ? brutalistStyles : {})}
     >
-      {/* Gradient overlay */}
+      {/* Yorkshire-inspired gradient overlay */}
       {gradient && (
-        <div className="absolute inset-0 bg-gradient-to-br from-primary-500/5 via-transparent to-secondary-500/5 pointer-events-none" />
+        <div className="absolute inset-0 bg-gradient-to-br from-primary-500/8 via-transparent to-secondary-500/8 pointer-events-none" />
       )}
+      
+      {/* Subtle pattern overlay */}
+      <div className="absolute inset-0 opacity-[0.03] pointer-events-none">
+        <div className="absolute inset-0 medical-pattern" />
+      </div>
       
       {/* Glass effect highlight */}
       {variant === 'glass' && (

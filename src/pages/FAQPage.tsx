@@ -15,67 +15,79 @@ interface FAQItem {
 const faqData: FAQItem[] = [
   {
     id: '1',
-    question: 'What services does Lex Business offer?',
-    answer: 'We offer a comprehensive suite of business solutions including consulting, software development, digital transformation, cloud services, and ongoing support. Our services are tailored to meet the unique needs of each client.',
-    category: 'General',
+    question: 'What first aid courses does React Fast Training offer in Yorkshire?',
+    answer: 'We offer Emergency First Aid at Work (EFAW), First Aid at Work (FAW), Paediatric First Aid, and Mental Health First Aid courses. All courses are HSE approved and Ofqual regulated, delivered at venues in Leeds, Sheffield, Bradford and across Yorkshire.',
+    category: 'Courses',
   },
   {
     id: '2',
-    question: 'How do I get started with Lex Business?',
-    answer: 'Getting started is easy! Simply contact us through our contact form, schedule a consultation call, or start with our free trial. Our team will guide you through the process and help you choose the right solutions for your business.',
-    category: 'Getting Started',
+    question: 'How much does the Emergency First Aid at Work course cost?',
+    answer: 'Our EFAW course costs £75 per person for public courses. This includes all training materials, certification, and refreshments. For on-site group training at your workplace, prices start from £600 for up to 12 delegates.',
+    category: 'Pricing',
   },
   {
     id: '3',
-    question: 'What is your pricing model?',
-    answer: 'We offer flexible pricing models including subscription-based plans, one-time project fees, and custom enterprise solutions. Pricing depends on the services you need and the scale of your business. Contact our sales team for a personalized quote.',
-    category: 'Pricing',
+    question: 'Where are your training venues located in Yorkshire?',
+    answer: 'We have training venues in Leeds city centre (near Leeds Station), Sheffield city centre, and Bradford city centre. All venues have excellent transport links and parking nearby. We also offer on-site training at your workplace anywhere in Yorkshire.',
+    category: 'Locations',
   },
   {
     id: '4',
-    question: 'Do you offer a free trial?',
-    answer: 'Yes! We offer a 14-day free trial for most of our services. No credit card is required to start, and you can cancel anytime. This allows you to experience our solutions and see the value they bring to your business.',
-    category: 'Pricing',
+    question: 'How long is a first aid certificate valid?',
+    answer: 'Emergency First Aid at Work (EFAW) and First Aid at Work (FAW) certificates are valid for 3 years. After this, you\'ll need to complete a requalification course. We recommend annual refresher training to keep skills current.',
+    category: 'Certification',
   },
   {
     id: '5',
-    question: 'What kind of support do you provide?',
-    answer: 'We provide 24/7 customer support through multiple channels including live chat, email, and phone. Our support team includes technical experts who can help with any issues or questions you may have.',
-    category: 'Support',
+    question: 'Do I need any prior experience to attend a first aid course?',
+    answer: 'No prior experience or qualifications are needed for our first aid courses. Our training is designed for complete beginners and our experienced trainers will guide you through everything step-by-step.',
+    category: 'Requirements',
   },
   {
     id: '6',
-    question: 'How secure is my data with Lex Business?',
-    answer: 'Security is our top priority. We use enterprise-grade encryption, regular security audits, and comply with industry standards including GDPR, SOC 2, and ISO 27001. Your data is stored in secure, redundant data centers with regular backups.',
-    category: 'Security',
+    question: 'How many people are in each training group?',
+    answer: 'We keep our class sizes small with a maximum of 12 delegates per course. This ensures everyone gets personal attention and plenty of hands-on practice time with the equipment.',
+    category: 'Courses',
   },
   {
     id: '7',
-    question: 'Can I integrate Lex Business with my existing tools?',
-    answer: 'Absolutely! We offer robust API access and pre-built integrations with popular business tools including CRM systems, accounting software, project management tools, and more. Our team can also help with custom integrations.',
-    category: 'Integration',
+    question: 'Can you provide training at our workplace?',
+    answer: 'Yes! We offer on-site training anywhere in Yorkshire. This is ideal for businesses as it saves travel time and allows us to tailor the training to your specific workplace hazards. Contact us for a quote.',
+    category: 'Business',
   },
   {
     id: '8',
-    question: 'What makes Lex Business different from competitors?',
-    answer: 'We combine cutting-edge technology with personalized service. Our solutions are built on modern architecture, we offer exceptional customer support, and we focus on delivering measurable results for your business.',
-    category: 'General',
+    question: 'What happens if I fail the assessment?',
+    answer: 'Our courses have a very high pass rate. If you don\'t pass the first time, we\'ll work with you to identify areas for improvement and offer a free reassessment. We want everyone to succeed and gain these vital skills.',
+    category: 'Certification',
   },
   {
     id: '9',
-    question: 'Do you offer training for your products?',
-    answer: 'Yes, we provide comprehensive training resources including documentation, video tutorials, webinars, and personalized training sessions. We ensure your team is fully equipped to leverage our solutions effectively.',
-    category: 'Support',
+    question: 'Are your courses HSE approved?',
+    answer: 'Yes, all our first aid courses are fully HSE (Health and Safety Executive) approved and meet the requirements of the Health and Safety (First Aid) Regulations 1981. We\'re also Ofqual regulated.',
+    category: 'Accreditation',
   },
   {
     id: '10',
-    question: 'What is your refund policy?',
-    answer: 'We offer a 30-day money-back guarantee for most services. If you\'re not satisfied with our solutions, you can request a full refund within 30 days of purchase. Some restrictions may apply to custom development work.',
-    category: 'Pricing',
+    question: 'Do you offer weekend or evening courses?',
+    answer: 'Yes, we offer flexible scheduling including weekend and evening courses to fit around your work commitments. Our regular public courses run on Wednesdays and Saturdays, with additional dates available on request.',
+    category: 'Scheduling',
+  },
+  {
+    id: '11',
+    question: 'What should I bring to the first aid course?',
+    answer: 'Just bring yourself and wear comfortable clothing as there will be practical exercises. We provide all training materials, equipment, and refreshments. You might want to bring a pen and notepad for personal notes.',
+    category: 'Requirements',
+  },
+  {
+    id: '12',
+    question: 'Who is Lex, the founder of React Fast Training?',
+    answer: 'Lex Hancock is our founder and lead trainer. With extensive experience in the military and emergency services, Lex brings real-world first aid experience to every course. His practical, engaging teaching style makes learning both effective and enjoyable.',
+    category: 'About Us',
   },
 ]
 
-const categories = ['All', 'General', 'Getting Started', 'Pricing', 'Support', 'Security', 'Integration']
+const categories = ['All', 'Courses', 'Pricing', 'Locations', 'Certification', 'Requirements', 'Business', 'Accreditation', 'Scheduling', 'About Us']
 
 const FAQPage: React.FC = () => {
   const [searchTerm, setSearchTerm] = useState('')
@@ -114,9 +126,9 @@ const FAQPage: React.FC = () => {
   return (
     <div>
       <SEO
-        title="Frequently Asked Questions"
-        description="Find answers to common questions about Lex Business products, services, pricing, and support. Get help with integration, security, and technical issues."
-        keywords="lex business faq, frequently asked questions, help center, support, pricing questions, integration help"
+        title="First Aid Training FAQs | Yorkshire Course Questions | React Fast Training"
+        description="Find answers about first aid training courses in Yorkshire. EFAW course costs, Leeds Sheffield Bradford locations, HSE certification requirements and more."
+        keywords="first aid training questions Yorkshire, EFAW course FAQ, first aid certification Leeds, HSE approved training Sheffield, first aid course costs Bradford"
         canonical="/faq"
         jsonLd={faqJsonLd}
       />
@@ -134,10 +146,10 @@ const FAQPage: React.FC = () => {
           >
             <HelpCircle className="w-16 h-16 text-primary-600 dark:text-primary-400 mx-auto mb-6" />
             <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-gray-900 dark:text-white mb-6">
-              Frequently Asked <span className="text-gradient gradient-primary">Questions</span>
+              First Aid Training <span className="text-gradient gradient-primary">FAQs</span>
             </h1>
             <p className="text-lg md:text-xl text-gray-600 dark:text-gray-400">
-              Find answers to common questions about our products and services.
+              Everything you need to know about our Yorkshire first aid courses
             </p>
           </motion.div>
         </div>
@@ -293,11 +305,11 @@ const FAQPage: React.FC = () => {
       </section>
 
       <CTASection
-        title="Ready to Experience the Difference?"
-        description="Join thousands of businesses already using Lex Business solutions."
-        primaryButtonText="Start Free Trial"
-        secondaryButtonText="Watch Demo"
-        features={['No credit card required', '14-day free trial', 'Full access to all features']}
+        title="Still Have Questions?"
+        description="Get your first aid training questions answered by our expert team."
+        primaryButtonText="Contact Us"
+        secondaryButtonText="View Courses"
+        features={['Personal support', 'Yorkshire based', 'Quick response']}
       />
     </div>
   )
