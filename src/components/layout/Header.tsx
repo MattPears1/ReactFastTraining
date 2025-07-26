@@ -98,7 +98,7 @@ const Header: React.FC = () => {
         role="banner"
       >
         <nav id="main-navigation" className="container" role="navigation" aria-label="Main navigation">
-          <div className="flex items-center justify-between h-20 md:h-24 lg:h-28">
+          <div className="flex items-center justify-between h-16 md:h-20 lg:h-24">
             {/* Logo on the left */}
             <Link
               to="/"
@@ -107,7 +107,7 @@ const Header: React.FC = () => {
               <img 
                 src="/images/logos/fulllogo_transparent.png" 
                 alt="React Fast Training" 
-                className="h-32 sm:h-36 md:h-40 w-auto"
+                className="h-24 sm:h-28 md:h-32 w-auto"
               />
             </Link>
               
@@ -359,7 +359,7 @@ const Header: React.FC = () => {
       </AnimatePresence>
 
       {/* Spacer for fixed header */}
-      <div className="h-20 md:h-24 lg:h-28" />
+      <div className="h-16 md:h-20 lg:h-24" />
 
       {/* Search Modal */}
       <SearchModal isOpen={showSearch} onClose={() => setShowSearch(false)} />

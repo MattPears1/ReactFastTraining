@@ -8,7 +8,7 @@ const HeroSection: React.FC = () => {
   const { ref: titleRef, displayText } = useKineticTypography('Professional First Aid Training')
   
   return (
-    <section className="relative min-h-screen flex items-center overflow-hidden">
+    <section className="relative min-h-[calc(100vh-5rem)] flex items-center overflow-hidden pt-8 md:pt-12 lg:pt-16">
       {/* Unique Diagonal Split Background */}
       <div className="absolute inset-0">
         <div className="absolute inset-0 bg-gradient-to-br from-primary-50 via-white to-secondary-50 dark:from-gray-900 dark:via-gray-900 dark:to-gray-800" />
@@ -23,41 +23,6 @@ const HeroSection: React.FC = () => {
         </svg>
       </div>
 
-      {/* Floating Medical Icons Background */}
-      <div className="absolute inset-0 overflow-hidden">
-        <motion.div
-          className="absolute top-20 left-10 opacity-10"
-          animate={{
-            y: [0, -30, 0],
-            rotate: [0, 10, 0],
-          }}
-          transition={{
-            duration: 20,
-            repeat: Infinity,
-            ease: "easeInOut",
-          }}
-        >
-          <svg width="200" height="200" viewBox="0 0 24 24" fill="currentColor" className="text-primary-500">
-            <path d="M19 8h-2v3h-3v2h3v3h2v-3h3v-2h-3zM2 12v2h7v7h2v-7h7v-2H11V5H9v7z"/>
-          </svg>
-        </motion.div>
-        <motion.div
-          className="absolute bottom-20 right-10 opacity-10"
-          animate={{
-            y: [0, 30, 0],
-            rotate: [0, -10, 0],
-          }}
-          transition={{
-            duration: 25,
-            repeat: Infinity,
-            ease: "easeInOut",
-          }}
-        >
-          <svg width="150" height="150" viewBox="0 0 24 24" fill="currentColor" className="text-secondary-500">
-            <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/>
-          </svg>
-        </motion.div>
-      </div>
 
       <div className="container relative z-10">
         {/* Unique Asymmetric Layout */}
