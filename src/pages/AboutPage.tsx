@@ -13,8 +13,8 @@ const values = [
   },
   {
     icon: Shield,
-    title: 'Professional Training',
-    description: 'Professional training that brings discipline, clarity, and real-world experience to every course.',
+    title: 'Royal Navy and Policing Background',
+    description: 'Our founder\'s Navy and policing background brings discipline, clarity, and real-world experience to every course.',
   },
   {
     icon: Users,
@@ -106,8 +106,9 @@ const AboutPage: React.FC = () => {
                 Our Story
               </h2>
               <p className="text-gray-600 dark:text-gray-400 mb-6">
-                Founded by Lex, React Fast Training focuses on delivering practical, no-nonsense training 
-                with real-world application.
+                Founded by Lex, React Fast Training brings together the discipline from Royal Navy 
+                and policing service. This background shapes our approach to training - practical, 
+                no-nonsense, and focused on real-world application.
               </p>
               <p className="text-gray-600 dark:text-gray-400">
                 We're not a faceless corporation - we're a small, personal operation that cares deeply about 
@@ -233,8 +234,9 @@ const AboutPage: React.FC = () => {
                     Lex - Founder & Lead Instructor
                   </h3>
               <p className="text-gray-600 dark:text-gray-400 mb-4">
-                Lex brings a unique perspective to first aid training, ensuring you're learning practical 
-                skills that work in real situations.
+                With a background in the Royal Navy and law enforcement, Lex brings a unique perspective 
+                to first aid training. This means you're learning from someone who understands the importance 
+                of clear instruction and practical skills.
               </p>
               <p className="text-gray-600 dark:text-gray-400">
                 "I founded React Fast Training because I saw a need for practical, no-nonsense first aid training 
@@ -244,11 +246,11 @@ const AboutPage: React.FC = () => {
               <div className="mt-6 flex flex-wrap justify-center gap-4">
                 <div className="flex items-center gap-2">
                   <Shield className="w-5 h-5 text-primary-600 dark:text-primary-400" />
-                  <span className="text-gray-700 dark:text-gray-300">Certified Instructor</span>
+                  <span className="text-gray-700 dark:text-gray-300">Royal Navy Veteran</span>
                 </div>
                 <div className="flex items-center gap-2">
                   <Award className="w-5 h-5 text-primary-600 dark:text-primary-400" />
-                  <span className="text-gray-700 dark:text-gray-300">Qualified Trainer</span>
+                  <span className="text-gray-700 dark:text-gray-300">Police Service</span>
                 </div>
                 <div className="flex items-center gap-2">
                   <Heart className="w-5 h-5 text-primary-600 dark:text-primary-400" />

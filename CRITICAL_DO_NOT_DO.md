@@ -47,8 +47,9 @@
 ### 6. Founder Information
 - **ONLY** use the first name "Lex" when referring to the founder
 - **NO** Last names or surnames
-- **NO** Years of experience claims
-- **NO** Background information (military, medical, etc.)
-- **NO** Qualifications or certifications attributed to Lex
+- **NO** Years of experience claims (e.g., "20+ years")
+- **ALLOWED**: Royal Navy and policing background mentions only
+- **NO** Other background information (medical, etc.)
+- **NO** Specific qualifications or certifications attributed to Lex
 - **NO** Made-up biographical information
-- **NO** Professional history or career details
+- **NO** Detailed professional history or career timelines
