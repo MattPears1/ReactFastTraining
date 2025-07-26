@@ -3,6 +3,8 @@ import { motion } from 'framer-motion'
 import { ArrowRight, CheckCircle, BookOpen, Users, Award } from 'lucide-react'
 import MagneticButton from '@components/ui/MagneticButton'
 import { useKineticTypography } from '@hooks/useAnimation'
+import { FloatingIcons } from '@components/ui/FloatingIcons'
+import { AnimatedGradientText } from '@components/ui/AnimatedGradientText'
 
 const HeroSection: React.FC = () => {
   const { ref: titleRef, displayText } = useKineticTypography('Professional First Aid Training')
@@ -24,30 +26,7 @@ const HeroSection: React.FC = () => {
       </div>
 
       {/* Floating Medical Icons Background */}
-      <div className="absolute inset-0 overflow-hidden">
-        <motion.div
-          className="absolute top-20 left-10 opacity-10"
-          animate={{
-            y: [0, -30, 0],
-            rotate: [0, 10, 0],
-          }}
-          transition={{
-            duration: 20,
-            repeat: Infinity,
-            ease: "easeInOut",
-          }}
-        >
-          <svg width="200" height="200" viewBox="0 0 24 24" fill="currentColor" className="text-primary-500">
-            <path d="M19 8h-2v3h-3v2h3v3h2v-3h3v-2h-3zM2 12v2h7v7h2v-7h7v-2H11V5H9v7z"/>
-          </svg>
-        </motion.div>
-        <motion.div
-          className="absolute bottom-20 right-10 opacity-10"
-          animate={{
-            y: [0, 30, 0],
-            rotate: [0, -10, 0],
-          }}
-          transition={{
+      <FloatingIcons />
             duration: 25,
             repeat: Infinity,
             ease: "easeInOut",
