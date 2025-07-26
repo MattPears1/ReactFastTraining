@@ -2,7 +2,6 @@ import React from 'react'
 import { Helmet } from 'react-helmet-async'
 import { Link } from 'react-router-dom'
 import { MapPin, Phone, Clock, Car } from 'lucide-react'
-import Hero from '@components/ui/Hero'
 import Button from '@components/ui/Button'
 import Card from '@components/ui/Card'
 
@@ -56,12 +55,20 @@ export default function SheffieldPage() {
         </script>
       </Helmet>
 
-      <Hero
-        title="First Aid Training in Sheffield"
-        subtitle="HSE Approved Emergency First Aid Courses from £75"
-        backgroundImage="/images/locations/sheffield-hero.jpg"
-        height="medium"
-      />
+      {/* Hero Section */}
+      <section className="relative bg-gradient-to-br from-primary-600 to-primary-800 text-white py-24">
+        <div className="absolute inset-0 bg-black/20" />
+        <div className="container mx-auto px-4 relative z-10">
+          <div className="text-center max-w-3xl mx-auto">
+            <h1 className="text-4xl md:text-5xl font-bold mb-6">
+              First Aid Training in Sheffield
+            </h1>
+            <p className="text-xl opacity-90">
+              HSE Approved Emergency First Aid Courses from £75
+            </p>
+          </div>
+        </div>
+      </section>
 
       <section className="py-16 bg-white dark:bg-gray-900">
         <div className="container">

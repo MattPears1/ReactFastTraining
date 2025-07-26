@@ -182,10 +182,22 @@ const AboutPage: React.FC = () => {
             <h2 className="text-3xl md:text-4xl font-bold text-gray-900 dark:text-white mb-4">
               Meet Your Instructor
             </h2>
-            <div className="mt-8 bg-white dark:bg-gray-900 rounded-lg shadow-lg p-8">
-              <h3 className="text-2xl font-bold text-gray-900 dark:text-white mb-4">
-                Lex - Founder & Lead Instructor
-              </h3>
+            <div className="mt-8 bg-white dark:bg-gray-900 rounded-lg shadow-lg overflow-hidden">
+              <div className="grid md:grid-cols-2 gap-8">
+                <div className="relative">
+                  <img 
+                    src="/images/about/instructor-teaching.jpg"
+                    alt="Lex - Lead Instructor teaching first aid"
+                    className="w-full h-full object-cover"
+                    onError={(e) => {
+                      e.currentTarget.src = '/images/placeholder-course.jpg'
+                    }}
+                  />
+                </div>
+                <div className="p-8">
+                  <h3 className="text-2xl font-bold text-gray-900 dark:text-white mb-4">
+                    Lex - Founder & Lead Instructor
+                  </h3>
               <p className="text-gray-600 dark:text-gray-400 mb-4">
                 With extensive experience in high-risk environments including military service in the Royal Navy 
                 and law enforcement, Lex brings a unique perspective to first aid training. This real-world 
@@ -208,6 +220,8 @@ const AboutPage: React.FC = () => {
                 <div className="flex items-center gap-2">
                   <Heart className="w-5 h-5 text-primary-600 dark:text-primary-400" />
                   <span className="text-gray-700 dark:text-gray-300">First Aid Expert</span>
+                </div>
+              </div>
                 </div>
               </div>
             </div>

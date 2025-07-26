@@ -2,7 +2,6 @@ import React from 'react'
 import { Helmet } from 'react-helmet-async'
 import { Link } from 'react-router-dom'
 import { MapPin, Phone, Clock, Car } from 'lucide-react'
-import Hero from '@components/ui/Hero'
 import Button from '@components/ui/Button'
 import Card from '@components/ui/Card'
 
