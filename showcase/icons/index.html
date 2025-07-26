@@ -1,0 +1,620 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Icon Library Showcase</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: #f5f5f5;
+            padding: 40px 20px;
+            color: #333;
+        }
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+        h1 {
+            text-align: center;
+            margin-bottom: 40px;
+            color: #1a1a1a;
+        }
+        .icon-section {
+            background: white;
+            padding: 40px;
+            margin-bottom: 40px;
+            border-radius: 12px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+        .section-title {
+            font-size: 24px;
+            font-weight: 600;
+            margin-bottom: 30px;
+            color: #1a1a1a;
+        }
+        .section-description {
+            color: #6b7280;
+            margin-bottom: 30px;
+        }
+        .icon-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+            gap: 20px;
+        }
+        .icon-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            padding: 20px 10px;
+            border-radius: 8px;
+            transition: all 0.2s;
+            cursor: pointer;
+        }
+        .icon-item:hover {
+            background: #f3f4f6;
+            transform: translateY(-2px);
+        }
+        .icon-wrapper {
+            font-size: 32px;
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 48px;
+            height: 48px;
+        }
+        .icon-name {
+            font-size: 12px;
+            color: #6b7280;
+        }
+
+        /* SVG Icon Styles */
+        .svg-icon {
+            width: 32px;
+            height: 32px;
+        }
+        .svg-icon-outlined {
+            stroke: currentColor;
+            stroke-width: 2;
+            fill: none;
+        }
+        .svg-icon-filled {
+            fill: currentColor;
+        }
+
+        /* Icon Style Variations */
+        .style-minimal .icon-wrapper {
+            color: #1a1a1a;
+        }
+        .style-colorful .icon-wrapper {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        .style-outlined .icon-wrapper {
+            border: 2px solid #e5e7eb;
+            border-radius: 12px;
+            color: #3b82f6;
+        }
+        .style-filled .icon-wrapper {
+            background: #3b82f6;
+            color: white;
+            border-radius: 12px;
+        }
+        .style-rounded .icon-wrapper {
+            background: #f3f4f6;
+            border-radius: 50%;
+            color: #6b7280;
+        }
+        
+        /* Category specific styling */
+        .category-filter {
+            display: flex;
+            gap: 12px;
+            margin-bottom: 30px;
+            flex-wrap: wrap;
+        }
+        .filter-btn {
+            padding: 8px 16px;
+            background: #f3f4f6;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: all 0.2s;
+        }
+        .filter-btn:hover,
+        .filter-btn.active {
+            background: #3b82f6;
+            color: white;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Icon Library Showcase</h1>
+
+        <!-- Business & Commerce Icons -->
+        <div class="icon-section">
+            <h2 class="section-title">Business & Commerce Icons</h2>
+            <p class="section-description">Essential icons for business websites, e-commerce, and professional services</p>
+            <div class="icon-grid">
+                <div class="icon-item">
+                    <div class="icon-wrapper">💼</div>
+                    <span class="icon-name">Briefcase</span>
+                </div>
+                <div class="icon-item">
+                    <div class="icon-wrapper">🛒</div>
+                    <span class="icon-name">Cart</span>
+                </div>
+                <div class="icon-item">
+                    <div class="icon-wrapper">💳</div>
+                    <span class="icon-name">Payment</span>
+                </div>
+                <div class="icon-item">
+                    <div class="icon-wrapper">📊</div>
+                    <span class="icon-name">Analytics</span>
+                </div>
+                <div class="icon-item">
+                    <div class="icon-wrapper">📈</div>
+                    <span class="icon-name">Growth</span>
+                </div>
+                <div class="icon-item">
+                    <div class="icon-wrapper">💰</div>
+                    <span class="icon-name">Money</span>
+                </div>
+                <div class="icon-item">
+                    <div class="icon-wrapper">🏢</div>
+                    <span class="icon-name">Building</span>
+                </div>
+                <div class="icon-item">
+                    <div class="icon-wrapper">📦</div>
+                    <span class="icon-name">Package</span>
+                </div>
+                <div class="icon-item">
+                    <div class="icon-wrapper">🚚</div>
+                    <span class="icon-name">Delivery</span>
+                </div>
+                <div class="icon-item">
+                    <div class="icon-wrapper">🎯</div>
+                    <span class="icon-name">Target</span>
+                </div>
+                <div class="icon-item">
+                    <div class="icon-wrapper">🤝</div>
+                    <span class="icon-name">Handshake</span>
+                </div>
+                <div class="icon-item">
+                    <div class="icon-wrapper">📋</div>
+                    <span class="icon-name">Clipboard</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Communication Icons -->
+        <div class="icon-section">
+            <h2 class="section-title">Communication Icons</h2>
+            <p class="section-description">Icons for contact, messaging, and customer support</p>
+            <div class="icon-grid">
+                <div class="icon-item">
+                    <div class="icon-wrapper">📧</div>
+                    <span class="icon-name">Email</span>
+                </div>
+                <div class="icon-item">
+                    <div class="icon-wrapper">📱</div>
+                    <span class="icon-name">Phone</span>
+                </div>
+                <div class="icon-item">
+                    <div class="icon-wrapper">💬</div>
+                    <span class="icon-name">Chat</span>
+                </div>
+                <div class="icon-item">
+                    <div class="icon-wrapper">📞</div>
+                    <span class="icon-name">Call</span>
+                </div>
+                <div class="icon-item">
+                    <div class="icon-wrapper">🎧</div>
+                    <span class="icon-name">Support</span>
+                </div>
+                <div class="icon-item">
+                    <div class="icon-wrapper">📨</div>
+                    <span class="icon-name">Send</span>
+                </div>
+                <div class="icon-item">
+                    <div class="icon-wrapper">🔔</div>
+                    <span class="icon-name">Notification</span>
+                </div>
+                <div class="icon-item">
+                    <div class="icon-wrapper">📢</div>
+                    <span class="icon-name">Announce</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- User & Account Icons -->
+        <div class="icon-section">
+            <h2 class="section-title">User & Account Icons</h2>
+            <p class="section-description">User profiles, authentication, and account management</p>
+            <div class="icon-grid">
+                <div class="icon-item">
+                    <div class="icon-wrapper">👤</div>
+                    <span class="icon-name">User</span>
+                </div>
+                <div class="icon-item">
+                    <div class="icon-wrapper">👥</div>
+                    <span class="icon-name">Users</span>
+                </div>
+                <div class="icon-item">
+                    <div class="icon-wrapper">🔒</div>
+                    <span class="icon-name">Lock</span>
+                </div>
+                <div class="icon-item">
+                    <div class="icon-wrapper">🔓</div>
+                    <span class="icon-name">Unlock</span>
+                </div>
+                <div class="icon-item">
+                    <div class="icon-wrapper">🔑</div>
+                    <span class="icon-name">Key</span>
+                </div>
+                <div class="icon-item">
+                    <div class="icon-wrapper">⚙️</div>
+                    <span class="icon-name">Settings</span>
+                </div>
+                <div class="icon-item">
+                    <div class="icon-wrapper">👁️</div>
+                    <span class="icon-name">View</span>
+                </div>
+                <div class="icon-item">
+                    <div class="icon-wrapper">✏️</div>
+                    <span class="icon-name">Edit</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Navigation & UI Icons -->
+        <div class="icon-section">
+            <h2 class="section-title">Navigation & UI Icons</h2>
+            <p class="section-description">Essential icons for website navigation and user interface</p>
+            <div class="icon-grid">
+                <div class="icon-item">
+                    <div class="icon-wrapper">🏠</div>
+                    <span class="icon-name">Home</span>
+                </div>
+                <div class="icon-item">
+                    <div class="icon-wrapper">☰</div>
+                    <span class="icon-name">Menu</span>
+                </div>
+                <div class="icon-item">
+                    <div class="icon-wrapper">🔍</div>
+                    <span class="icon-name">Search</span>
+                </div>
+                <div class="icon-item">
+                    <div class="icon-wrapper">➕</div>
+                    <span class="icon-name">Add</span>
+                </div>
+                <div class="icon-item">
+                    <div class="icon-wrapper">✖️</div>
+                    <span class="icon-name">Close</span>
+                </div>
+                <div class="icon-item">
+                    <div class="icon-wrapper">⬅️</div>
+                    <span class="icon-name">Back</span>
+                </div>
+                <div class="icon-item">
+                    <div class="icon-wrapper">➡️</div>
+                    <span class="icon-name">Forward</span>
+                </div>
+                <div class="icon-item">
+                    <div class="icon-wrapper">⬆️</div>
+                    <span class="icon-name">Up</span>
+                </div>
+                <div class="icon-item">
+                    <div class="icon-wrapper">⬇️</div>
+                    <span class="icon-name">Down</span>
+                </div>
+                <div class="icon-item">
+                    <div class="icon-wrapper">↔️</div>
+                    <span class="icon-name">Expand</span>
+                </div>
+                <div class="icon-item">
+                    <div class="icon-wrapper">🔄</div>
+                    <span class="icon-name">Refresh</span>
+                </div>
+                <div class="icon-item">
+                    <div class="icon-wrapper">ℹ️</div>
+                    <span class="icon-name">Info</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Status & Feedback Icons -->
+        <div class="icon-section">
+            <h2 class="section-title">Status & Feedback Icons</h2>
+            <p class="section-description">Icons for showing status, alerts, and user feedback</p>
+            <div class="icon-grid">
+                <div class="icon-item">
+                    <div class="icon-wrapper">✅</div>
+                    <span class="icon-name">Success</span>
+                </div>
+                <div class="icon-item">
+                    <div class="icon-wrapper">❌</div>
+                    <span class="icon-name">Error</span>
+                </div>
+                <div class="icon-item">
+                    <div class="icon-wrapper">⚠️</div>
+                    <span class="icon-name">Warning</span>
+                </div>
+                <div class="icon-item">
+                    <div class="icon-wrapper">❓</div>
+                    <span class="icon-name">Question</span>
+                </div>
+                <div class="icon-item">
+                    <div class="icon-wrapper">⭐</div>
+                    <span class="icon-name">Star</span>
+                </div>
+                <div class="icon-item">
+                    <div class="icon-wrapper">❤️</div>
+                    <span class="icon-name">Heart</span>
+                </div>
+                <div class="icon-item">
+                    <div class="icon-wrapper">👍</div>
+                    <span class="icon-name">Like</span>
+                </div>
+                <div class="icon-item">
+                    <div class="icon-wrapper">🏆</div>
+                    <span class="icon-name">Trophy</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Technology & Tools Icons -->
+        <div class="icon-section">
+            <h2 class="section-title">Technology & Tools Icons</h2>
+            <p class="section-description">Icons for tech services, tools, and features</p>
+            <div class="icon-grid">
+                <div class="icon-item">
+                    <div class="icon-wrapper">💻</div>
+                    <span class="icon-name">Computer</span>
+                </div>
+                <div class="icon-item">
+                    <div class="icon-wrapper">🖥️</div>
+                    <span class="icon-name">Desktop</span>
+                </div>
+                <div class="icon-item">
+                    <div class="icon-wrapper">📲</div>
+                    <span class="icon-name">Mobile</span>
+                </div>
+                <div class="icon-item">
+                    <div class="icon-wrapper">⌨️</div>
+                    <span class="icon-name">Keyboard</span>
+                </div>
+                <div class="icon-item">
+                    <div class="icon-wrapper">🖱️</div>
+                    <span class="icon-name">Mouse</span>
+                </div>
+                <div class="icon-item">
+                    <div class="icon-wrapper">💾</div>
+                    <span class="icon-name">Save</span>
+                </div>
+                <div class="icon-item">
+                    <div class="icon-wrapper">☁️</div>
+                    <span class="icon-name">Cloud</span>
+                </div>
+                <div class="icon-item">
+                    <div class="icon-wrapper">🌐</div>
+                    <span class="icon-name">Globe</span>
+                </div>
+                <div class="icon-item">
+                    <div class="icon-wrapper">🛡️</div>
+                    <span class="icon-name">Security</span>
+                </div>
+                <div class="icon-item">
+                    <div class="icon-wrapper">🚀</div>
+                    <span class="icon-name">Launch</span>
+                </div>
+                <div class="icon-item">
+                    <div class="icon-wrapper">⚡</div>
+                    <span class="icon-name">Lightning</span>
+                </div>
+                <div class="icon-item">
+                    <div class="icon-wrapper">🔧</div>
+                    <span class="icon-name">Tools</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- SVG Icon Examples -->
+        <div class="icon-section">
+            <h2 class="section-title">SVG Icon Style Examples</h2>
+            <p class="section-description">Scalable vector icons with different styles and effects</p>
+            <div class="icon-grid">
+                <!-- Home Icon - Outlined -->
+                <div class="icon-item">
+                    <div class="icon-wrapper">
+                        <svg class="svg-icon svg-icon-outlined" viewBox="0 0 24 24">
+                            <path d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/>
+                        </svg>
+                    </div>
+                    <span class="icon-name">Home Line</span>
+                </div>
+
+                <!-- Settings Icon - Filled -->
+                <div class="icon-item">
+                    <div class="icon-wrapper">
+                        <svg class="svg-icon svg-icon-filled" viewBox="0 0 24 24">
+                            <path d="M12 2C11.45 2 11 2.45 11 3v1.27c-.59.12-1.14.34-1.65.63L8.46 3.96c-.39-.39-1.02-.39-1.41 0l-1.41 1.41c-.39.39-.39 1.02 0 1.41l.9.9c-.29.51-.51 1.06-.63 1.65H5c-.55 0-1 .45-1 1v2c0 .55.45 1 1 1h1.27c.12.59.34 1.14.63 1.65l-.9.9c-.39.39-.39 1.02 0 1.41l1.41 1.41c.39.39 1.02.39 1.41 0l.9-.9c.51.29 1.06.51 1.65.63V19c0 .55.45 1 1 1h2c.55 0 1-.45 1-1v-1.27c.59-.12 1.14-.34 1.65-.63l.9.9c.39.39 1.02.39 1.41 0l1.41-1.41c.39-.39.39-1.02 0-1.41l-.9-.9c.29-.51.51-1.06.63-1.65H19c.55 0 1-.45 1-1v-2c0-.55-.45-1-1-1h-1.27c-.12-.59-.34-1.14-.63-1.65l.9-.9c.39-.39.39-1.02 0-1.41l-1.41-1.41c-.39-.39-1.02-.39-1.41 0l-.9.9c-.51-.29-1.06-.51-1.65-.63V3c0-.55-.45-1-1-1h-2zm0 7c1.66 0 3 1.34 3 3s-1.34 3-3 3-3-1.34-3-3 1.34-3 3-3z"/>
+                        </svg>
+                    </div>
+                    <span class="icon-name">Settings Fill</span>
+                </div>
+
+                <!-- Search Icon -->
+                <div class="icon-item">
+                    <div class="icon-wrapper">
+                        <svg class="svg-icon svg-icon-outlined" viewBox="0 0 24 24">
+                            <circle cx="11" cy="11" r="8"/>
+                            <path d="m21 21-4.35-4.35"/>
+                        </svg>
+                    </div>
+                    <span class="icon-name">Search</span>
+                </div>
+
+                <!-- Shopping Cart -->
+                <div class="icon-item">
+                    <div class="icon-wrapper">
+                        <svg class="svg-icon svg-icon-outlined" viewBox="0 0 24 24">
+                            <path d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17M7 13h10m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"/>
+                        </svg>
+                    </div>
+                    <span class="icon-name">Cart</span>
+                </div>
+
+                <!-- Heart Icon -->
+                <div class="icon-item">
+                    <div class="icon-wrapper">
+                        <svg class="svg-icon svg-icon-filled" viewBox="0 0 24 24" style="color: #ef4444;">
+                            <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
+                        </svg>
+                    </div>
+                    <span class="icon-name">Heart</span>
+                </div>
+
+                <!-- Bell Icon -->
+                <div class="icon-item">
+                    <div class="icon-wrapper">
+                        <svg class="svg-icon svg-icon-outlined" viewBox="0 0 24 24">
+                            <path d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"/>
+                        </svg>
+                    </div>
+                    <span class="icon-name">Bell</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Icon Style Variations -->
+        <div class="icon-section">
+            <h2 class="section-title">Icon Style Variations</h2>
+            <p class="section-description">Same icons with different visual treatments</p>
+            
+            <h3 style="margin: 20px 0;">Minimal Style</h3>
+            <div class="icon-grid style-minimal">
+                <div class="icon-item">
+                    <div class="icon-wrapper">📧</div>
+                    <span class="icon-name">Email</span>
+                </div>
+                <div class="icon-item">
+                    <div class="icon-wrapper">📱</div>
+                    <span class="icon-name">Phone</span>
+                </div>
+                <div class="icon-item">
+                    <div class="icon-wrapper">🏠</div>
+                    <span class="icon-name">Home</span>
+                </div>
+                <div class="icon-item">
+                    <div class="icon-wrapper">⚙️</div>
+                    <span class="icon-name">Settings</span>
+                </div>
+            </div>
+
+            <h3 style="margin: 20px 0;">Outlined Style</h3>
+            <div class="icon-grid style-outlined">
+                <div class="icon-item">
+                    <div class="icon-wrapper">📧</div>
+                    <span class="icon-name">Email</span>
+                </div>
+                <div class="icon-item">
+                    <div class="icon-wrapper">📱</div>
+                    <span class="icon-name">Phone</span>
+                </div>
+                <div class="icon-item">
+                    <div class="icon-wrapper">🏠</div>
+                    <span class="icon-name">Home</span>
+                </div>
+                <div class="icon-item">
+                    <div class="icon-wrapper">⚙️</div>
+                    <span class="icon-name">Settings</span>
+                </div>
+            </div>
+
+            <h3 style="margin: 20px 0;">Filled Style</h3>
+            <div class="icon-grid style-filled">
+                <div class="icon-item">
+                    <div class="icon-wrapper">📧</div>
+                    <span class="icon-name">Email</span>
+                </div>
+                <div class="icon-item">
+                    <div class="icon-wrapper">📱</div>
+                    <span class="icon-name">Phone</span>
+                </div>
+                <div class="icon-item">
+                    <div class="icon-wrapper">🏠</div>
+                    <span class="icon-name">Home</span>
+                </div>
+                <div class="icon-item">
+                    <div class="icon-wrapper">⚙️</div>
+                    <span class="icon-name">Settings</span>
+                </div>
+            </div>
+
+            <h3 style="margin: 20px 0;">Rounded Style</h3>
+            <div class="icon-grid style-rounded">
+                <div class="icon-item">
+                    <div class="icon-wrapper">📧</div>
+                    <span class="icon-name">Email</span>
+                </div>
+                <div class="icon-item">
+                    <div class="icon-wrapper">📱</div>
+                    <span class="icon-name">Phone</span>
+                </div>
+                <div class="icon-item">
+                    <div class="icon-wrapper">🏠</div>
+                    <span class="icon-name">Home</span>
+                </div>
+                <div class="icon-item">
+                    <div class="icon-wrapper">⚙️</div>
+                    <span class="icon-name">Settings</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Social Media Icons -->
+        <div class="icon-section">
+            <h2 class="section-title">Social Media Icons</h2>
+            <p class="section-description">Popular social media platform icons</p>
+            <div class="icon-grid">
+                <div class="icon-item">
+                    <div class="icon-wrapper" style="color: #1877f2;">f</div>
+                    <span class="icon-name">Facebook</span>
+                </div>
+                <div class="icon-item">
+                    <div class="icon-wrapper" style="color: #1da1f2;">𝕏</div>
+                    <span class="icon-name">X/Twitter</span>
+                </div>
+                <div class="icon-item">
+                    <div class="icon-wrapper" style="background: linear-gradient(45deg, #f09433 0%,#e6683c 25%,#dc2743 50%,#cc2366 75%,#bc1888 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">📷</div>
+                    <span class="icon-name">Instagram</span>
+                </div>
+                <div class="icon-item">
+                    <div class="icon-wrapper" style="color: #0077b5;">in</div>
+                    <span class="icon-name">LinkedIn</span>
+                </div>
+                <div class="icon-item">
+                    <div class="icon-wrapper" style="color: #ff0000;">▶️</div>
+                    <span class="icon-name">YouTube</span>
+                </div>
+                <div class="icon-item">
+                    <div class="icon-wrapper" style="color: #6441a5;">📺</div>
+                    <span class="icon-name">Twitch</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

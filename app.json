@@ -1,0 +1,142 @@
+{
+  "name": "Lex Business Website",
+  "description": "Full-stack business website with e-commerce capabilities",
+  "repository": "https://github.com/your-repo/lex-site-v1",
+  "logo": "https://your-logo-url.png",
+  "keywords": ["node", "express", "react", "typescript", "postgresql"],
+  "website": "https://www.lexbusiness.com",
+  "success_url": "/",
+  "scripts": {
+    "postdeploy": "npm run migrate:prod"
+  },
+  "env": {
+    "NODE_ENV": {
+      "description": "Node environment",
+      "value": "production"
+    },
+    "JWT_SECRET": {
+      "description": "Secret key for JWT tokens",
+      "generator": "secret"
+    },
+    "DATABASE_URL": {
+      "description": "PostgreSQL database URL",
+      "required": true
+    },
+    "REDIS_URL": {
+      "description": "Redis URL for caching and sessions",
+      "required": false
+    },
+    "CORS_ORIGIN": {
+      "description": "Allowed CORS origins (comma-separated)",
+      "value": "https://yourdomain.com"
+    },
+    "EMAIL_HOST": {
+      "description": "SMTP host for sending emails",
+      "required": false
+    },
+    "EMAIL_USER": {
+      "description": "SMTP username",
+      "required": false
+    },
+    "EMAIL_PASS": {
+      "description": "SMTP password",
+      "required": false
+    },
+    "EMAIL_FROM": {
+      "description": "Default from email address",
+      "value": "noreply@lexbusiness.com"
+    },
+    "SENDGRID_API_KEY": {
+      "description": "SendGrid API key for email service",
+      "required": false
+    },
+    "STRIPE_SECRET_KEY": {
+      "description": "Stripe secret key for payment processing",
+      "required": false
+    },
+    "STRIPE_WEBHOOK_SECRET": {
+      "description": "Stripe webhook endpoint secret",
+      "required": false
+    },
+    "AWS_ACCESS_KEY_ID": {
+      "description": "AWS access key for S3 storage",
+      "required": false
+    },
+    "AWS_SECRET_ACCESS_KEY": {
+      "description": "AWS secret key for S3 storage",
+      "required": false
+    },
+    "AWS_S3_BUCKET": {
+      "description": "S3 bucket name for file storage",
+      "required": false
+    },
+    "CLOUDINARY_CLOUD_NAME": {
+      "description": "Cloudinary cloud name for image storage",
+      "required": false
+    },
+    "CLOUDINARY_API_KEY": {
+      "description": "Cloudinary API key",
+      "required": false
+    },
+    "CLOUDINARY_API_SECRET": {
+      "description": "Cloudinary API secret",
+      "required": false
+    },
+    "SENTRY_DSN": {
+      "description": "Sentry DSN for error tracking",
+      "required": false
+    },
+    "GOOGLE_ANALYTICS_ID": {
+      "description": "Google Analytics tracking ID",
+      "required": false
+    }
+  },
+  "formation": {
+    "web": {
+      "quantity": 1,
+      "size": "standard-1x"
+    },
+    "worker": {
+      "quantity": 1,
+      "size": "standard-1x"
+    }
+  },
+  "image": "heroku/nodejs",
+  "addons": [
+    {
+      "plan": "heroku-postgresql:mini"
+    },
+    {
+      "plan": "heroku-redis:mini"
+    },
+    {
+      "plan": "papertrail:choklad"
+    },
+    {
+      "plan": "newrelic:wayne"
+    },
+    {
+      "plan": "scheduler:standard"
+    }
+  ],
+  "buildpacks": [
+    {
+      "url": "heroku/nodejs"
+    }
+  ],
+  "environments": {
+    "test": {
+      "env": {
+        "NODE_ENV": "test"
+      },
+      "scripts": {
+        "test-setup": "npm test"
+      }
+    },
+    "review": {
+      "env": {
+        "NODE_ENV": "staging"
+      }
+    }
+  }
+}

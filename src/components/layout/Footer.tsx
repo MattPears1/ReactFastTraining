@@ -1,0 +1,226 @@
+import React from 'react'
+import { Link } from 'react-router-dom'
+import { Facebook, Twitter, Instagram, Linkedin, Youtube, Mail, Phone, MapPin } from 'lucide-react'
+import NewsletterForm from '@components/ui/NewsletterForm'
+
+const footerLinks = {
+  company: [
+    { label: 'About Us', href: '/about' },
+    { label: 'Careers', href: '/careers' },
+    { label: 'Press', href: '/press' },
+    { label: 'Partners', href: '/partners' },
+  ],
+  products: [
+    { label: 'All Products', href: '/products' },
+    { label: 'Categories', href: '/products/categories' },
+    { label: 'New Arrivals', href: '/products/new' },
+    { label: 'Best Sellers', href: '/products/best-sellers' },
+  ],
+  services: [
+    { label: 'Consulting', href: '/services/consulting' },
+    { label: 'Support', href: '/services/support' },
+    { label: 'Training', href: '/services/training' },
+    { label: 'Custom Solutions', href: '/services/custom' },
+  ],
+  support: [
+    { label: 'Help Center', href: '/help' },
+    { label: 'Contact Us', href: '/contact' },
+    { label: 'FAQ', href: '/faq' },
+    { label: 'Status', href: '/status' },
+  ],
+  legal: [
+    { label: 'Privacy Policy', href: '/privacy' },
+    { label: 'Terms of Service', href: '/terms' },
+    { label: 'Cookie Policy', href: '/cookies' },
+    { label: 'GDPR', href: '/gdpr' },
+  ],
+}
+
+const socialLinks = [
+  { icon: Facebook, href: 'https://facebook.com', label: 'Facebook' },
+  { icon: Twitter, href: 'https://twitter.com', label: 'Twitter' },
+  { icon: Instagram, href: 'https://instagram.com', label: 'Instagram' },
+  { icon: Linkedin, href: 'https://linkedin.com', label: 'LinkedIn' },
+  { icon: Youtube, href: 'https://youtube.com', label: 'YouTube' },
+]
+
+const Footer: React.FC = () => {
+  const currentYear = new Date().getFullYear()
+
+  return (
+    <footer id="footer" className="bg-gray-50 dark:bg-gray-900 border-t border-gray-200 dark:border-gray-800" role="contentinfo">
+      {/* Newsletter Section */}
+      <div className="bg-primary-600 dark:bg-primary-700">
+        <div className="container py-8 sm:py-10 md:py-12">
+          <div className="flex flex-col md:flex-row items-center justify-between gap-4 sm:gap-6">
+            <div className="text-center md:text-left">
+              <h3 className="text-xl sm:text-2xl font-bold text-white mb-2">
+                Stay Updated
+              </h3>
+              <p className="text-sm sm:text-base text-primary-100 max-w-md mx-auto md:mx-0">
+                Subscribe to our newsletter for the latest updates and offers
+              </p>
+            </div>
+            <div className="w-full sm:w-auto max-w-md">
+              <NewsletterForm />
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Main Footer Content */}
+      <div className="container py-8 sm:py-10 md:py-12 lg:py-16">
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-6 sm:gap-8">
+          {/* Company Info */}
+          <div className="col-span-1 sm:col-span-2 md:col-span-3 lg:col-span-2 mb-6 sm:mb-0">
+            <Link
+              to="/"
+              className="inline-flex items-center space-x-2 text-2xl font-bold text-gray-900 dark:text-white mb-4"
+            >
+              <span className="text-primary-600 dark:text-primary-400">Lex</span>
+              <span>Business</span>
+            </Link>
+            <p className="text-gray-600 dark:text-gray-400 mb-6 max-w-xs">
+              Empowering businesses with innovative solutions and exceptional service since 2025.
+            </p>
+            
+            {/* Contact Info */}
+            <div className="space-y-3 mb-6">
+              <a
+                href="tel:+1234567890"
+                className="flex items-center gap-3 text-gray-600 dark:text-gray-400 hover:text-primary-600 dark:hover:text-primary-400 transition-colors"
+              >
+                <Phone className="w-5 h-5" />
+                <span>+1 (234) 567-890</span>
+              </a>
+              <a
+                href="mailto:info@lexbusiness.com"
+                className="flex items-center gap-3 text-gray-600 dark:text-gray-400 hover:text-primary-600 dark:hover:text-primary-400 transition-colors"
+              >
+                <Mail className="w-5 h-5" />
+                <span>info@lexbusiness.com</span>
+              </a>
+              <div className="flex items-start gap-3 text-gray-600 dark:text-gray-400">
+                <MapPin className="w-5 h-5 flex-shrink-0 mt-0.5" />
+                <span>123 Business Ave, Suite 100<br />New York, NY 10001</span>
+              </div>
+            </div>
+
+            {/* Social Links */}
+            <div className="flex items-center gap-2 sm:gap-3 md:gap-4">
+              {socialLinks.map((social) => (
+                <a
+                  key={social.label}
+                  href={social.href}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="p-2.5 sm:p-2 rounded-lg bg-gray-200 dark:bg-gray-800 text-gray-600 dark:text-gray-400 hover:bg-primary-600 hover:text-white dark:hover:bg-primary-600 transition-all duration-200 min-w-[44px] min-h-[44px] sm:min-w-0 sm:min-h-0 flex items-center justify-center"
+                  aria-label={social.label}
+                >
+                  <social.icon className="w-5 h-5" />
+                </a>
+              ))}
+            </div>
+          </div>
+
+          {/* Quick Links */}
+          <div className="col-span-1">
+            <h4 className="font-semibold text-gray-900 dark:text-white mb-3 sm:mb-4 text-base sm:text-lg">
+              Company
+            </h4>
+            <ul className="space-y-2 sm:space-y-3">
+              {footerLinks.company.map((link) => (
+                <li key={link.href}>
+                  <Link
+                    to={link.href}
+                    className="text-sm sm:text-base text-gray-600 dark:text-gray-400 hover:text-primary-600 dark:hover:text-primary-400 transition-colors inline-block py-1"
+                  >
+                    {link.label}
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </div>
+
+          <div className="col-span-1">
+            <h4 className="font-semibold text-gray-900 dark:text-white mb-3 sm:mb-4 text-base sm:text-lg">
+              Products
+            </h4>
+            <ul className="space-y-2 sm:space-y-3">
+              {footerLinks.products.map((link) => (
+                <li key={link.href}>
+                  <Link
+                    to={link.href}
+                    className="text-sm sm:text-base text-gray-600 dark:text-gray-400 hover:text-primary-600 dark:hover:text-primary-400 transition-colors inline-block py-1"
+                  >
+                    {link.label}
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </div>
+
+          <div className="col-span-1">
+            <h4 className="font-semibold text-gray-900 dark:text-white mb-3 sm:mb-4 text-base sm:text-lg">
+              Services
+            </h4>
+            <ul className="space-y-2 sm:space-y-3">
+              {footerLinks.services.map((link) => (
+                <li key={link.href}>
+                  <Link
+                    to={link.href}
+                    className="text-sm sm:text-base text-gray-600 dark:text-gray-400 hover:text-primary-600 dark:hover:text-primary-400 transition-colors inline-block py-1"
+                  >
+                    {link.label}
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </div>
+
+          <div className="col-span-1">
+            <h4 className="font-semibold text-gray-900 dark:text-white mb-3 sm:mb-4 text-base sm:text-lg">
+              Support
+            </h4>
+            <ul className="space-y-2 sm:space-y-3">
+              {footerLinks.support.map((link) => (
+                <li key={link.href}>
+                  <Link
+                    to={link.href}
+                    className="text-sm sm:text-base text-gray-600 dark:text-gray-400 hover:text-primary-600 dark:hover:text-primary-400 transition-colors inline-block py-1"
+                  >
+                    {link.label}
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      {/* Bottom Bar */}
+      <div className="border-t border-gray-200 dark:border-gray-800">
+        <div className="container py-4 sm:py-6">
+          <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
+            <p className="text-xs sm:text-sm text-gray-600 dark:text-gray-400 text-center sm:text-left">
+              © {currentYear} Lex Business. All rights reserved.
+            </p>
+            <div className="flex flex-wrap items-center justify-center gap-3 sm:gap-4 md:gap-6">
+              {footerLinks.legal.map((link) => (
+                <Link
+                  key={link.href}
+                  to={link.href}
+                  className="text-xs sm:text-sm text-gray-600 dark:text-gray-400 hover:text-primary-600 dark:hover:text-primary-400 transition-colors py-1"
+                >
+                  {link.label}
+                </Link>
+              ))}
+            </div>
+          </div>
+        </div>
+      </div>
+    </footer>
+  )
+}
+
+export default Footer

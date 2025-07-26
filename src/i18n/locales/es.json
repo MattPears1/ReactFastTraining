@@ -1,0 +1,76 @@
+{
+  "common": {
+    "home": "Inicio",
+    "about": "Acerca de",
+    "contact": "Contacto",
+    "products": "Productos",
+    "services": "Servicios",
+    "faq": "Preguntas Frecuentes",
+    "getStarted": "Comenzar",
+    "learnMore": "Aprender Más",
+    "submit": "Enviar",
+    "cancel": "Cancelar",
+    "loading": "Cargando...",
+    "error": "Error",
+    "success": "Éxito"
+  },
+  "nav": {
+    "allProducts": "Todos los Productos",
+    "categories": "Categorías",
+    "newArrivals": "Nuevos Productos",
+    "allServices": "Todos los Servicios",
+    "consulting": "Consultoría",
+    "support": "Soporte",
+    "toggleTheme": "Cambiar tema",
+    "toggleMenu": "Abrir menú"
+  },
+  "hero": {
+    "title": "Transforma Tu Negocio con Soluciones Modernas",
+    "subtitle": "Potencia a tu equipo con herramientas y servicios de vanguardia diseñados para impulsar el crecimiento, aumentar la eficiencia y ofrecer resultados excepcionales.",
+    "cta": {
+      "primary": "Comenzar Gratis",
+      "secondary": "Ver Demo"
+    },
+    "announcement": "Nuevo: Presentamos Soluciones Impulsadas por IA"
+  },
+  "features": {
+    "title": "Todo lo que Necesitas para Tener Éxito",
+    "subtitle": "Nuestro conjunto completo de funciones está diseñado para ayudarte a alcanzar tus objetivos más rápido y eficientemente que nunca."
+  },
+  "contact": {
+    "title": "Ponte en Contacto",
+    "subtitle": "Estamos aquí para ayudarte y responder cualquier pregunta que puedas tener. Esperamos saber de ti.",
+    "form": {
+      "firstName": "Nombre",
+      "lastName": "Apellido",
+      "email": "Correo Electrónico",
+      "phone": "Número de Teléfono",
+      "company": "Nombre de la Empresa",
+      "subject": "Asunto",
+      "message": "Mensaje",
+      "consent": "Acepto la Política de Privacidad y los Términos de Servicio",
+      "send": "Enviar Mensaje",
+      "sending": "Enviando...",
+      "success": "¡Mensaje enviado con éxito! Nos pondremos en contacto contigo pronto.",
+      "error": "Error al enviar el mensaje. Por favor, inténtalo de nuevo."
+    }
+  },
+  "footer": {
+    "newsletter": {
+      "title": "Mantente Actualizado",
+      "subtitle": "Suscríbete a nuestro boletín para las últimas actualizaciones y ofertas",
+      "placeholder": "Ingresa tu correo",
+      "button": "Suscribirse"
+    },
+    "company": "Empresa",
+    "support": "Soporte",
+    "legal": "Legal",
+    "copyright": "© {{year}} Lex Business. Todos los derechos reservados."
+  },
+  "404": {
+    "title": "Página No Encontrada",
+    "subtitle": "¡Ups! La página que buscas no existe. Puede haber sido movida o eliminada.",
+    "goBack": "Volver",
+    "goHome": "Ir al Inicio"
+  }
+}

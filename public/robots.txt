@@ -1,0 +1,91 @@
+# Robots.txt for Lex Business
+# https://www.lexbusiness.com
+# Last updated: 2025-07-26
+
+# Default rules for all crawlers
+User-agent: *
+Allow: /
+Disallow: /api/
+Disallow: /admin/
+Disallow: /private/
+Disallow: /tmp/
+Disallow: /test/
+Disallow: /_next/
+Disallow: /node_modules/
+Disallow: *.json$
+Disallow: /*.log$
+Disallow: /*_test*
+Disallow: /*_temp*
+
+# Allow specific query parameters for better SEO
+Allow: /*?utm_*
+Allow: /*?ref=*
+Allow: /*?source=*
+Allow: /search?q=*
+
+# Sitemap location
+Sitemap: https://www.lexbusiness.com/sitemap.xml
+
+# Default crawl delay
+Crawl-delay: 1
+
+# Google (no crawl delay for better indexing)
+User-agent: Googlebot
+Allow: /
+Disallow: /api/
+Disallow: /admin/
+Disallow: /private/
+Crawl-delay: 0
+
+# Google Images
+User-agent: Googlebot-Image
+Allow: /
+Allow: /images/
+Allow: /*.jpg$
+Allow: /*.jpeg$
+Allow: /*.png$
+Allow: /*.webp$
+Allow: /*.svg$
+Disallow: /private/
+
+# Bing (no crawl delay for better indexing)
+User-agent: Bingbot
+Allow: /
+Disallow: /api/
+Disallow: /admin/
+Disallow: /private/
+Crawl-delay: 0
+
+# Block bad bots
+User-agent: AhrefsBot
+Disallow: /
+
+User-agent: SemrushBot
+Disallow: /
+
+User-agent: MJ12bot
+Disallow: /
+
+User-agent: DotBot
+Crawl-delay: 10
+
+# Social media crawlers (allow for rich previews)
+User-agent: facebookexternalhit
+Allow: /
+Crawl-delay: 0
+
+User-agent: Twitterbot
+Allow: /
+Crawl-delay: 0
+
+User-agent: LinkedInBot
+Allow: /
+Crawl-delay: 0
+
+User-agent: WhatsApp
+Allow: /
+Crawl-delay: 0
+
+User-agent: Slackbot
+Allow: /
+Crawl-delay: 0
