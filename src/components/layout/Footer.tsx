@@ -4,35 +4,35 @@ import { Facebook, Twitter, Instagram, Linkedin, Youtube, Mail, Phone, MapPin } 
 import NewsletterForm from '@components/ui/NewsletterForm'
 
 const footerLinks = {
-  company: [
-    { label: 'About Us', href: '/about' },
-    { label: 'Careers', href: '/careers' },
-    { label: 'Press', href: '/press' },
-    { label: 'Partners', href: '/partners' },
-  ],
-  products: [
-    { label: 'All Products', href: '/products' },
-    { label: 'Categories', href: '/products/categories' },
-    { label: 'New Arrivals', href: '/products/new' },
-    { label: 'Best Sellers', href: '/products/best-sellers' },
+  courses: [
+    { label: 'Emergency First Aid at Work', href: '/courses/efaw' },
+    { label: 'First Aid at Work', href: '/courses/faw' },
+    { label: 'Paediatric First Aid', href: '/courses/paediatric' },
+    { label: 'Mental Health First Aid', href: '/courses/mental-health' },
   ],
   services: [
-    { label: 'Consulting', href: '/services/consulting' },
-    { label: 'Support', href: '/services/support' },
-    { label: 'Training', href: '/services/training' },
-    { label: 'Custom Solutions', href: '/services/custom' },
+    { label: 'On-Site Training', href: '/services/onsite' },
+    { label: 'Group Bookings', href: '/services/groups' },
+    { label: 'Refresher Courses', href: '/services/refresher' },
+    { label: 'Corporate Accounts', href: '/services/corporate' },
   ],
   support: [
-    { label: 'Help Center', href: '/help' },
-    { label: 'Contact Us', href: '/contact' },
+    { label: 'Book a Course', href: '/contact' },
+    { label: 'Course Calendar', href: '/calendar' },
     { label: 'FAQ', href: '/faq' },
-    { label: 'Status', href: '/status' },
+    { label: 'Downloads', href: '/downloads' },
+  ],
+  company: [
+    { label: 'About Us', href: '/about' },
+    { label: 'Our Instructor', href: '/about#instructor' },
+    { label: 'Testimonials', href: '/testimonials' },
+    { label: 'Training Venue', href: '/venue' },
   ],
   legal: [
     { label: 'Privacy Policy', href: '/privacy' },
-    { label: 'Terms of Service', href: '/terms' },
+    { label: 'Terms & Conditions', href: '/terms' },
     { label: 'Cookie Policy', href: '/cookies' },
-    { label: 'GDPR', href: '/gdpr' },
+    { label: 'Certifications', href: '/certifications' },
   ],
 }
 
@@ -55,10 +55,10 @@ const Footer: React.FC = () => {
           <div className="flex flex-col md:flex-row items-center justify-between gap-4 sm:gap-6">
             <div className="text-center md:text-left">
               <h3 className="text-xl sm:text-2xl font-bold text-white mb-2">
-                Stay Updated
+                Stay Certified
               </h3>
               <p className="text-sm sm:text-base text-primary-100 max-w-md mx-auto md:mx-0">
-                Subscribe to our newsletter for the latest updates and offers
+                Get course updates, certification reminders, and special offers
               </p>
             </div>
             <div className="w-full sm:w-auto max-w-md">
@@ -73,36 +73,36 @@ const Footer: React.FC = () => {
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-6 sm:gap-8">
           {/* Company Info */}
           <div className="col-span-1 sm:col-span-2 md:col-span-3 lg:col-span-2 mb-6 sm:mb-0">
-            <Link
-              to="/"
-              className="inline-flex items-center space-x-2 text-2xl font-bold text-gray-900 dark:text-white mb-4"
-            >
-              <span className="text-primary-600 dark:text-primary-400">Lex</span>
-              <span>Business</span>
+            <Link to="/" className="inline-block mb-4">
+              <img 
+                src="/images/logos/fulllogo_transparent.png" 
+                alt="React Fast Training" 
+                className="h-10 w-auto"
+              />
             </Link>
             <p className="text-gray-600 dark:text-gray-400 mb-6 max-w-xs">
-              Empowering businesses with innovative solutions and exceptional service since 2025.
+              Yorkshire's premier first aid training provider. Professional courses delivered by experienced instructors with military and emergency services backgrounds.
             </p>
             
             {/* Contact Info */}
             <div className="space-y-3 mb-6">
               <a
-                href="tel:+1234567890"
+                href="tel:07845123456"
                 className="flex items-center gap-3 text-gray-600 dark:text-gray-400 hover:text-primary-600 dark:hover:text-primary-400 transition-colors"
               >
                 <Phone className="w-5 h-5" />
-                <span>+1 (234) 567-890</span>
+                <span>07845 123456</span>
               </a>
               <a
-                href="mailto:info@lexbusiness.com"
+                href="mailto:info@reactfasttraining.com"
                 className="flex items-center gap-3 text-gray-600 dark:text-gray-400 hover:text-primary-600 dark:hover:text-primary-400 transition-colors"
               >
                 <Mail className="w-5 h-5" />
-                <span>info@lexbusiness.com</span>
+                <span>info@reactfasttraining.com</span>
               </a>
               <div className="flex items-start gap-3 text-gray-600 dark:text-gray-400">
                 <MapPin className="w-5 h-5 flex-shrink-0 mt-0.5" />
-                <span>123 Business Ave, Suite 100<br />New York, NY 10001</span>
+                <span>Training venues across<br />Yorkshire</span>
               </div>
             </div>
 
@@ -126,10 +126,10 @@ const Footer: React.FC = () => {
           {/* Quick Links */}
           <div className="col-span-1">
             <h4 className="font-semibold text-gray-900 dark:text-white mb-3 sm:mb-4 text-base sm:text-lg">
-              Company
+              Courses
             </h4>
             <ul className="space-y-2 sm:space-y-3">
-              {footerLinks.company.map((link) => (
+              {footerLinks.courses.map((link) => (
                 <li key={link.href}>
                   <Link
                     to={link.href}
@@ -144,10 +144,10 @@ const Footer: React.FC = () => {
 
           <div className="col-span-1">
             <h4 className="font-semibold text-gray-900 dark:text-white mb-3 sm:mb-4 text-base sm:text-lg">
-              Products
+              Company
             </h4>
             <ul className="space-y-2 sm:space-y-3">
-              {footerLinks.products.map((link) => (
+              {footerLinks.company.map((link) => (
                 <li key={link.href}>
                   <Link
                     to={link.href}
@@ -203,7 +203,7 @@ const Footer: React.FC = () => {
         <div className="container py-4 sm:py-6">
           <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
             <p className="text-xs sm:text-sm text-gray-600 dark:text-gray-400 text-center sm:text-left">
-              © {currentYear} Lex Business. All rights reserved.
+              © {currentYear} React Fast Training. All rights reserved.
             </p>
             <div className="flex flex-wrap items-center justify-center gap-3 sm:gap-4 md:gap-6">
               {footerLinks.legal.map((link) => (

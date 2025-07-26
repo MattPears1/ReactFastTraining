@@ -98,7 +98,7 @@ const Header: React.FC = () => {
               <img 
                 src="/images/logos/fulllogo_transparent.png" 
                 alt="React Fast Training" 
-                className="h-8 sm:h-10 md:h-12 w-auto"
+                className="h-20 sm:h-24 md:h-32 w-auto"
               />
             </Link>
 
@@ -172,15 +172,15 @@ const Header: React.FC = () => {
 
             {/* Right Side Actions */}
             <div className="flex items-center space-x-2 sm:space-x-3 md:space-x-4">
-              {/* Phone Number */}
+              {/* Phone Number - visible on mobile and desktop */}
               <a 
                 href="tel:07845123456" 
-                className="hidden md:flex items-center space-x-2 text-primary-600 dark:text-primary-400 font-semibold hover:text-primary-700 dark:hover:text-primary-300 transition-colors"
+                className="flex items-center space-x-1 sm:space-x-2 text-primary-600 dark:text-primary-400 font-semibold hover:text-primary-700 dark:hover:text-primary-300 transition-colors text-sm sm:text-base"
               >
-                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                <svg className="w-4 h-4 sm:w-5 sm:h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
                 </svg>
-                <span>07845 123456</span>
+                <span className="hidden sm:inline">07845 123456</span>
               </a>
 
               {/* Search */}

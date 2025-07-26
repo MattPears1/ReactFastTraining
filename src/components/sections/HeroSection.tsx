@@ -1,245 +1,227 @@
 import React from 'react'
 import { motion } from 'framer-motion'
-import { ArrowRight, PlayCircle, CheckCircle } from 'lucide-react'
+import { ArrowRight, CheckCircle, BookOpen, Users, Award } from 'lucide-react'
 import MagneticButton from '@components/ui/MagneticButton'
-import OrganicDivider from '@components/ui/OrganicDivider'
-import { useKineticTypography, useParallax } from '@hooks/useAnimation'
-import RetroFilter from '@components/ui/RetroFilter'
+import { useKineticTypography } from '@hooks/useAnimation'
 
 const HeroSection: React.FC = () => {
-  const { ref: parallaxRef, scrollY } = useParallax(0.5)
-  const { ref: titleRef, displayText } = useKineticTypography('Act Fast. Save Lives.')
+  const { ref: titleRef, displayText } = useKineticTypography('React Fast Training')
   
   return (
-    <section className="relative min-h-[100vh] flex items-center overflow-hidden py-20 sm:py-24 md:py-0">
-      {/* Dynamic Background with Medical Theme */}
-      <div className="absolute inset-0 bg-gradient-to-br from-primary-50 via-white to-red-50 dark:from-gray-900 dark:via-gray-900 dark:to-gray-800">
-        <div className="absolute inset-0 medical-cross-pattern" />
-        {/* Liquid gradient background */}
-        <div className="absolute inset-0 liquid-gradient opacity-10" />
+    <section className="relative min-h-screen flex items-center overflow-hidden">
+      {/* Unique Diagonal Split Background */}
+      <div className="absolute inset-0">
+        <div className="absolute inset-0 bg-gradient-to-br from-primary-50 via-white to-secondary-50 dark:from-gray-900 dark:via-gray-900 dark:to-gray-800" />
+        <svg className="absolute inset-0 w-full h-full" preserveAspectRatio="none">
+          <defs>
+            <pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse">
+              <path d="M 40 0 L 0 0 0 40" fill="none" stroke="rgba(14, 165, 233, 0.05)" strokeWidth="1"/>
+            </pattern>
+          </defs>
+          <rect width="100%" height="100%" fill="url(#grid)" />
+          <path d="M 0 0 L 100 0 L 100 70 L 0 100 Z" fill="rgba(16, 185, 129, 0.03)" />
+        </svg>
       </div>
 
-      {/* Animated Background Shapes - Enhanced with Organic Movement */}
+      {/* Floating Medical Icons Background */}
       <div className="absolute inset-0 overflow-hidden">
         <motion.div
-          ref={parallaxRef}
-          className="absolute -top-20 sm:-top-40 -right-20 sm:-right-40 w-40 sm:w-60 md:w-80 h-40 sm:h-60 md:h-80 organic-shape-1 bg-primary-400/20 blur-3xl float-organic"
-          style={{
-            transform: `translateY(${scrollY}px)`,
+          className="absolute top-20 left-10 opacity-10"
+          animate={{
+            y: [0, -30, 0],
+            rotate: [0, 10, 0],
           }}
-        />
+          transition={{
+            duration: 20,
+            repeat: Infinity,
+            ease: "easeInOut",
+          }}
+        >
+          <svg width="200" height="200" viewBox="0 0 24 24" fill="currentColor" className="text-primary-500">
+            <path d="M19 8h-2v3h-3v2h3v3h2v-3h3v-2h-3zM2 12v2h7v7h2v-7h7v-2H11V5H9v7z"/>
+          </svg>
+        </motion.div>
         <motion.div
-          className="absolute -bottom-20 sm:-bottom-40 -left-20 sm:-left-40 w-48 sm:w-72 md:w-96 h-48 sm:h-72 md:h-96 organic-shape-2 bg-secondary-400/20 blur-3xl float-organic animation-delay-400"
-          style={{
-            transform: `translateY(${-scrollY * 0.8}px)`,
+          className="absolute bottom-20 right-10 opacity-10"
+          animate={{
+            y: [0, 30, 0],
+            rotate: [0, -10, 0],
           }}
-        />
-        <motion.div
-          className="absolute top-1/2 left-1/3 w-32 sm:w-48 md:w-64 h-32 sm:h-48 md:h-64 organic-shape-3 bg-accent-400/10 blur-2xl float-organic animation-delay-600"
-          style={{
-            transform: `translateY(${scrollY * 0.3}px)`,
+          transition={{
+            duration: 25,
+            repeat: Infinity,
+            ease: "easeInOut",
           }}
-        />
+        >
+          <svg width="150" height="150" viewBox="0 0 24 24" fill="currentColor" className="text-secondary-500">
+            <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/>
+          </svg>
+        </motion.div>
       </div>
 
-      <div className="container relative z-10 px-4 sm:px-6 lg:px-8">
-        <div className="grid lg:grid-cols-2 gap-8 sm:gap-10 md:gap-12 items-center">
-          {/* Content */}
+      <div className="container relative z-10">
+        {/* Unique Asymmetric Layout */}
+        <div className="grid lg:grid-cols-12 gap-8 items-center">
+          {/* Main Content - Takes up 7 columns */}
           <motion.div
             initial={{ opacity: 0, x: -50 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.8 }}
+            className="lg:col-span-7"
           >
+            {/* Certification Badge */}
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.2 }}
-              className="inline-flex items-center gap-2 px-4 py-2 bg-primary-100 dark:bg-primary-900/30 text-primary-700 dark:text-primary-300 rounded-full text-sm font-medium mb-6"
+              className="inline-flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-primary-100 to-secondary-100 dark:from-primary-900/30 dark:to-secondary-900/30 text-primary-700 dark:text-primary-300 rounded-full text-sm font-medium mb-6"
             >
-              <span className="relative flex h-2 w-2">
-                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-primary-400 opacity-75"></span>
-                <span className="relative inline-flex rounded-full h-2 w-2 bg-primary-500"></span>
-              </span>
-              Ofqual Regulated & HSE Approved Training
+              <Award className="w-4 h-4" />
+              Ofqual Regulated & HSE Approved
             </motion.div>
 
-            <h1 ref={titleRef} className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl xl:text-8xl font-bold text-gray-900 dark:text-white mb-4 sm:mb-6 text-ultra-bold leading-tight">
-              <span className="block kinetic-text">
-                {displayText}
-              </span>
-              <span className="block text-2xl sm:text-3xl md:text-4xl mt-4 text-gray-700 dark:text-gray-300 font-semibold">
-                Yorkshire's Premier First Aid Training
-              </span>
-            </h1>
+            {/* Title with Unique Typography */}
+            <div className="relative mb-8">
+              <h1 ref={titleRef} className="text-5xl md:text-6xl lg:text-7xl font-heading font-bold text-gray-900 dark:text-white leading-tight">
+                <span className="block">{displayText}</span>
+                <span className="block mt-2 text-transparent bg-clip-text bg-gradient-to-r from-primary-500 to-secondary-500">
+                  Act Fast. Save Lives.
+                </span>
+              </h1>
+              {/* Decorative Line */}
+              <motion.div
+                initial={{ width: 0 }}
+                animate={{ width: '100px' }}
+                transition={{ delay: 0.5, duration: 0.8 }}
+                className="h-1 bg-gradient-to-r from-primary-500 to-secondary-500 rounded-full mt-4"
+              />
+            </div>
 
-            <p className="text-base sm:text-lg md:text-xl text-gray-600 dark:text-gray-400 mb-6 sm:mb-8 max-w-2xl">
-              Professional first aid training delivered by experienced instructors with military and emergency services backgrounds. 
-              Courses from £75. On-site training available across Yorkshire.
+            <p className="text-lg md:text-xl text-gray-600 dark:text-gray-400 mb-8 max-w-xl">
+              Professional first aid training in Yorkshire. Learn life-saving skills from experienced instructors with real-world emergency service backgrounds.
             </p>
 
-            <div className="flex flex-col sm:flex-row gap-3 sm:gap-4">
+            {/* CTA Buttons in Unique Layout */}
+            <div className="flex flex-wrap gap-4 mb-8">
               <MagneticButton
                 size="lg"
-                href="/contact"
-                rightIcon={<ArrowRight className="w-4 h-4 sm:w-5 sm:h-5" />}
-                className="group w-full sm:w-auto justify-center"
+                href="/courses"
+                className="bg-gradient-to-r from-primary-500 to-primary-600 hover:from-primary-600 hover:to-primary-700 text-white"
+                rightIcon={<ArrowRight className="w-5 h-5" />}
               >
-                <span className="relative">
-                  Book Your Course
-                  <span className="absolute inset-0 text-gradient gradient-primary opacity-0 group-hover:opacity-100 transition-opacity">
-                    Book Your Course
-                  </span>
-                </span>
+                View Courses
               </MagneticButton>
               <MagneticButton
                 variant="outline"
                 size="lg"
-                leftIcon={<PlayCircle className="w-4 h-4 sm:w-5 sm:h-5" />}
-                className="border-2 sm:border-3 hover:border-primary-500 transition-colors w-full sm:w-auto justify-center"
+                href="/contact"
+                className="border-2 border-secondary-500 text-secondary-600 hover:bg-secondary-50"
               >
-                View Courses
+                Get a Quote
               </MagneticButton>
             </div>
 
-            {/* Trust Indicators */}
-            <motion.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ delay: 0.6 }}
-              className="mt-12 pt-8 border-t border-gray-200 dark:border-gray-700"
-            >
-              <p className="text-sm text-gray-600 dark:text-gray-400 mb-4">
-                Trusted by Yorkshire businesses and organizations
-              </p>
-              <div className="flex flex-wrap items-center gap-4 sm:gap-6 md:gap-8">
-                <div className="flex items-center gap-2">
-                  <CheckCircle className="w-5 h-5 text-primary-600 dark:text-primary-400" />
-                  <span className="text-gray-700 dark:text-gray-300 font-medium">98% Pass Rate</span>
-                </div>
-                <div className="flex items-center gap-2">
-                  <CheckCircle className="w-5 h-5 text-primary-600 dark:text-primary-400" />
-                  <span className="text-gray-700 dark:text-gray-300 font-medium">Same Day Certificates</span>
-                </div>
-                <div className="flex items-center gap-2">
-                  <CheckCircle className="w-5 h-5 text-primary-600 dark:text-primary-400" />
-                  <span className="text-gray-700 dark:text-gray-300 font-medium">Small Group Sizes</span>
-                </div>
-              </div>
-            </motion.div>
-          </motion.div>
-
-          {/* Asymmetric Hero Visual - 3D Transform */}
-          <motion.div
-            initial={{ opacity: 0, x: 50, rotateY: -30 }}
-            animate={{ opacity: 1, x: 0, rotateY: 0 }}
-            transition={{ duration: 1, ease: "easeOut" }}
-            className="relative perspective-1000 hidden lg:block"
-          >
-            <div className="relative z-10 transform-gpu">
-              {/* 3D Card with depth */}
-              <motion.div 
-                className="aspect-square bg-gradient-to-br from-primary-500 to-secondary-500 rounded-3xl shadow-2xl flex items-center justify-center card-3d"
-                whileHover={{ 
-                  rotateY: 15,
-                  rotateX: -10,
-                  scale: 1.05,
-                }}
-                transition={{ type: "spring", stiffness: 100 }}
+            {/* Key Features Grid */}
+            <div className="grid grid-cols-3 gap-4">
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.3 }}
+                className="text-center p-4 rounded-lg bg-white/50 dark:bg-gray-800/50 backdrop-blur-sm"
               >
-                <div className="text-white text-center p-8 relative">
-                  <div className="absolute inset-0 flex items-center justify-center opacity-10">
-                    <svg className="w-48 h-48" fill="currentColor" viewBox="0 0 24 24">
-                      <path d="M19 8h-2v3h-3v2h3v3h2v-3h3v-2h-3zM2 12v2h7v7h2v-7h7v-2H11V5H9v7z"/>
-                    </svg>
-                  </div>
-                  <div className="relative z-10">
-                    <h3 className="text-3xl font-bold mb-4">
-                      Learn Life-Saving Skills
-                    </h3>
-                    <p className="mb-6 text-lg">
-                      Join thousands who've trained with us
-                    </p>
-                    <MagneticButton variant="secondary" size="lg">
-                      Book Now - £75
-                    </MagneticButton>
-                  </div>
-                </div>
+                <BookOpen className="w-8 h-8 text-primary-500 mx-auto mb-2" />
+                <p className="text-sm font-medium text-gray-900 dark:text-white">From £75</p>
+              </motion.div>
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.4 }}
+                className="text-center p-4 rounded-lg bg-white/50 dark:bg-gray-800/50 backdrop-blur-sm"
+              >
+                <Users className="w-8 h-8 text-secondary-500 mx-auto mb-2" />
+                <p className="text-sm font-medium text-gray-900 dark:text-white">Small Groups</p>
+              </motion.div>
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.5 }}
+                className="text-center p-4 rounded-lg bg-white/50 dark:bg-gray-800/50 backdrop-blur-sm"
+              >
+                <CheckCircle className="w-8 h-8 text-accent-500 mx-auto mb-2" />
+                <p className="text-sm font-medium text-gray-900 dark:text-white">Certified</p>
               </motion.div>
             </div>
+          </motion.div>
 
-            {/* Brutalist/Asymmetric Decorative Elements */}
-            <motion.div
-              className="absolute -z-10 top-12 -right-12 w-full h-full brutalist-border bg-black dark:bg-white"
-              animate={{
-                rotate: [0, 8, 0],
-                x: [0, 20, 0],
-              }}
-              transition={{
-                duration: 15,
-                repeat: Infinity,
-                ease: "easeInOut",
-              }}
-            />
-            <motion.div
-              className="absolute -z-20 -top-8 right-8 w-full h-full border-4 border-primary-500 rounded-3xl"
-              animate={{
-                rotate: [0, -12, 0],
-                scale: [1, 1.05, 1],
-              }}
-              transition={{
-                duration: 20,
-                repeat: Infinity,
-                ease: "easeInOut",
-              }}
-            />
-
-            {/* Floating Elements */}
-            <motion.div
-              className="absolute -top-4 -left-4 w-12 h-12 bg-accent-400 rounded-lg shadow-lg"
-              animate={{
-                y: [0, -20, 0],
-              }}
-              transition={{
-                duration: 4,
-                repeat: Infinity,
-                ease: "easeInOut",
-              }}
-            />
-            <motion.div
-              className="absolute -bottom-4 -right-4 w-16 h-16 bg-success-400 rounded-full shadow-lg"
-              animate={{
-                y: [0, 20, 0],
-              }}
-              transition={{
-                duration: 5,
-                repeat: Infinity,
-                ease: "easeInOut",
-              }}
-            />
+          {/* Visual Element - Takes up 5 columns */}
+          <motion.div
+            initial={{ opacity: 0, scale: 0.8 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ duration: 1, delay: 0.3 }}
+            className="lg:col-span-5 relative hidden lg:block"
+          >
+            {/* Unique Card Stack Design */}
+            <div className="relative">
+              {/* Back Card */}
+              <motion.div
+                className="absolute inset-0 bg-gradient-to-br from-secondary-400 to-secondary-600 rounded-3xl transform rotate-6 scale-95"
+                animate={{
+                  rotate: [6, 8, 6],
+                }}
+                transition={{
+                  duration: 10,
+                  repeat: Infinity,
+                  ease: "easeInOut",
+                }}
+              />
+              {/* Middle Card */}
+              <motion.div
+                className="absolute inset-0 bg-gradient-to-br from-accent-400 to-accent-600 rounded-3xl transform -rotate-3 scale-98"
+                animate={{
+                  rotate: [-3, -5, -3],
+                }}
+                transition={{
+                  duration: 12,
+                  repeat: Infinity,
+                  ease: "easeInOut",
+                }}
+              />
+              {/* Front Card */}
+              <div className="relative bg-gradient-to-br from-primary-500 to-primary-700 rounded-3xl p-8 shadow-2xl">
+                <div className="aspect-square flex flex-col items-center justify-center text-white">
+                  <motion.div
+                    animate={{
+                      scale: [1, 1.1, 1],
+                    }}
+                    transition={{
+                      duration: 3,
+                      repeat: Infinity,
+                      ease: "easeInOut",
+                    }}
+                  >
+                    <svg width="120" height="120" viewBox="0 0 24 24" fill="currentColor" className="mb-6">
+                      <path d="M19 8h-2v3h-3v2h3v3h2v-3h3v-2h-3zM2 12v2h7v7h2v-7h7v-2H11V5H9v7z"/>
+                    </svg>
+                  </motion.div>
+                  <h3 className="text-2xl font-bold mb-2">Learn to Save Lives</h3>
+                  <p className="text-center text-white/90">
+                    Professional training that makes a difference
+                  </p>
+                </div>
+              </div>
+            </div>
           </motion.div>
         </div>
       </div>
-      
-      {/* Organic Divider at Bottom */}
-      <div className="absolute bottom-0 left-0 right-0 transform translate-y-1">
-        <OrganicDivider 
-          variant="wave" 
-          color="rgb(var(--primary-100))" 
-          className="dark:opacity-20" 
-          animate 
-        />
+
+      {/* Bottom Wave */}
+      <div className="absolute bottom-0 left-0 right-0">
+        <svg viewBox="0 0 1440 100" fill="none" xmlns="http://www.w3.org/2000/svg" className="w-full">
+          <path d="M0 50C240 20 480 80 720 50C960 20 1200 80 1440 50V100H0V50Z" fill="white" fillOpacity="0.1"/>
+          <path d="M0 60C240 30 480 90 720 60C960 30 1200 90 1440 60V100H0V60Z" fill="white" fillOpacity="0.2"/>
+          <path d="M0 70C240 40 480 100 720 70C960 40 1200 100 1440 70V100H0V70Z" fill="white" fillOpacity="0.3"/>
+        </svg>
       </div>
-      
-      {/* SVG Filters for Gooey Effect */}
-      <svg className="absolute" width="0" height="0">
-        <defs>
-          <filter id="gooey-filter">
-            <feGaussianBlur in="SourceGraphic" stdDeviation="10" result="blur" />
-            <feColorMatrix in="blur" mode="matrix" values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 19 -9" result="gooey" />
-            <feComposite in="SourceGraphic" in2="gooey" operator="atop"/>
-          </filter>
-        </defs>
-      </svg>
     </section>
   )
 }

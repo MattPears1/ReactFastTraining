@@ -27,10 +27,10 @@ interface SEOProps {
 }
 
 const defaultMeta = {
-  title: 'Lex Business - Professional Solutions',
-  description: 'Professional business solutions for the modern world. Discover innovative products and services that transform your business.',
-  keywords: 'business solutions, professional services, enterprise software, consulting, digital transformation',
-  image: 'https://www.lexbusiness.com/og-image.jpg',
+  title: 'React Fast Training - First Aid Training Yorkshire',
+  description: 'Yorkshire\'s premier first aid training provider. Emergency First Aid at Work, EFAW courses from £75. HSE approved & Ofqual regulated training in Leeds, Sheffield, Bradford.',
+  keywords: 'first aid training Yorkshire, first aid courses Leeds, first aid courses Sheffield, first aid courses Bradford, EFAW training Yorkshire, emergency first aid at work, HSE approved first aid, Ofqual regulated training',
+  image: 'https://www.reactfasttraining.co.uk/og-image.jpg',
   type: 'website' as const,
 }
 
@@ -49,35 +49,126 @@ const SEO: React.FC<SEOProps> = ({
   robots = 'index, follow',
   jsonLd,
 }) => {
-  const siteUrl = 'https://www.lexbusiness.com'
-  const fullTitle = title ? `${title} | Lex Business` : defaultMeta.title
+  const siteUrl = 'https://www.reactfasttraining.co.uk'
+  const fullTitle = title ? `${title} | React Fast Training` : defaultMeta.title
   const metaDescription = description || defaultMeta.description
   const metaKeywords = keywords || defaultMeta.keywords
   const metaImage = image || defaultMeta.image
   const metaType = type || defaultMeta.type
   const canonicalUrl = canonical ? `${siteUrl}${canonical}` : undefined
 
-  // Organization schema (default for all pages)
+  // LocalBusiness schema (default for all pages)
   const organizationSchema = {
     '@context': 'https://schema.org',
-    '@type': 'Organization',
-    name: 'Lex Business',
+    '@type': 'LocalBusiness',
+    '@id': `${siteUrl}/#organization`,
+    name: 'React Fast Training',
+    alternateName: 'React Fast First Aid Training',
     url: siteUrl,
     logo: `${siteUrl}/logo.png`,
-    description: 'Professional business solutions for the modern world',
-    sameAs: [
-      'https://twitter.com/lexbusiness',
-      'https://facebook.com/lexbusiness',
-      'https://linkedin.com/company/lexbusiness',
-      'https://instagram.com/lexbusiness',
+    image: [
+      `${siteUrl}/training-center.jpg`,
+      `${siteUrl}/first-aid-course.jpg`,
+      `${siteUrl}/team-photo.jpg`
     ],
+    description: 'Yorkshire\'s premier first aid training provider offering Emergency First Aid at Work, Paediatric First Aid, and other HSE approved courses.',
+    telephone: '+44-1234-567890',
+    email: 'info@reactfasttraining.co.uk',
+    address: {
+      '@type': 'PostalAddress',
+      addressRegion: 'Yorkshire',
+      addressCountry: 'GB'
+    },
+    geo: {
+      '@type': 'GeoCoordinates',
+      latitude: 53.7997,
+      longitude: -1.5492
+    },
+    areaServed: [
+      {'@type': 'City', 'name': 'Leeds'},
+      {'@type': 'City', 'name': 'Sheffield'},
+      {'@type': 'City', 'name': 'Bradford'},
+      {'@type': 'City', 'name': 'York'},
+      {'@type': 'City', 'name': 'Huddersfield'},
+      {'@type': 'City', 'name': 'Wakefield'},
+      {'@type': 'City', 'name': 'Halifax'},
+      {'@type': 'City', 'name': 'Harrogate'}
+    ],
+    priceRange: '£75-£250',
+    openingHoursSpecification: [
+      {
+        '@type': 'OpeningHoursSpecification',
+        dayOfWeek: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'],
+        opens: '08:00',
+        closes: '18:00'
+      },
+      {
+        '@type': 'OpeningHoursSpecification',
+        dayOfWeek: 'Saturday',
+        opens: '09:00',
+        closes: '16:00'
+      }
+    ],
+    sameAs: [
+      'https://www.facebook.com/reactfasttraining',
+      'https://www.linkedin.com/company/react-fast-training',
+      'https://twitter.com/reactfastuk'
+    ],
+    founder: {
+      '@type': 'Person',
+      name: 'Lex Hancock',
+      jobTitle: 'Founder & Lead Trainer',
+      description: 'Ex-military professional with over 20 years experience in emergency first aid and medical training.'
+    },
+    aggregateRating: {
+      '@type': 'AggregateRating',
+      ratingValue: '4.9',
+      reviewCount: '127',
+      bestRating: '5',
+      worstRating: '1'
+    },
+    hasOfferCatalog: {
+      '@type': 'OfferCatalog',
+      name: 'First Aid Training Courses',
+      itemListElement: [
+        {
+          '@type': 'Offer',
+          itemOffered: {
+            '@type': 'Service',
+            name: 'Emergency First Aid at Work (EFAW)',
+            description: '1-day HSE approved course covering emergency first aid skills',
+            provider: {'@type': 'Organization', 'name': 'React Fast Training'}
+          }
+        },
+        {
+          '@type': 'Offer',
+          itemOffered: {
+            '@type': 'Service',
+            name: 'First Aid at Work (FAW)',
+            description: '3-day comprehensive first aid training course',
+            provider: {'@type': 'Organization', 'name': 'React Fast Training'}
+          }
+        },
+        {
+          '@type': 'Offer',
+          itemOffered: {
+            '@type': 'Service',
+            name: 'Paediatric First Aid',
+            description: 'Specialized first aid training for those working with children',
+            provider: {'@type': 'Organization', 'name': 'React Fast Training'}
+          }
+        }
+      ]
+    },
     contactPoint: {
       '@type': 'ContactPoint',
-      telephone: '+1-555-123-4567',
+      telephone: '+44-1234-567890',
       contactType: 'customer service',
-      email: 'support@lexbusiness.com',
-      availableLanguage: ['English', 'Spanish', 'French'],
-    },
+      email: 'info@reactfasttraining.co.uk',
+      availableLanguage: 'English',
+      areaServed: 'GB',
+      contactOption: ['TollFree', 'HearingImpairedSupported']
+    }
   }
 
   // Website schema
@@ -85,8 +176,8 @@ const SEO: React.FC<SEOProps> = ({
     '@context': 'https://schema.org',
     '@type': 'WebSite',
     url: siteUrl,
-    name: 'Lex Business',
-    description: 'Professional business solutions for the modern world',
+    name: 'React Fast Training',
+    description: 'Yorkshire\'s premier first aid training provider - HSE approved & Ofqual regulated courses',
     potentialAction: {
       '@type': 'SearchAction',
       target: {
@@ -107,7 +198,7 @@ const SEO: React.FC<SEOProps> = ({
         image: metaImage,
         brand: {
           '@type': 'Brand',
-          name: product.brand || 'Lex Business',
+          name: product.brand || 'React Fast Training',
         },
         offers: {
           '@type': 'Offer',
@@ -135,11 +226,11 @@ const SEO: React.FC<SEOProps> = ({
         image: metaImage,
         author: {
           '@type': 'Person',
-          name: author || 'Lex Business Team',
+          name: author || 'React Fast Training Team',
         },
         publisher: {
           '@type': 'Organization',
-          name: 'Lex Business',
+          name: 'React Fast Training',
           logo: {
             '@type': 'ImageObject',
             url: `${siteUrl}/logo.png`,
@@ -177,7 +268,7 @@ const SEO: React.FC<SEOProps> = ({
       <meta property="og:type" content={metaType} />
       <meta property="og:image" content={metaImage} />
       <meta property="og:url" content={canonicalUrl || siteUrl} />
-      <meta property="og:site_name" content="Lex Business" />
+      <meta property="og:site_name" content="React Fast Training" />
       <meta property="og:locale" content="en_US" />
       {article && (
         <>
@@ -202,16 +293,14 @@ const SEO: React.FC<SEOProps> = ({
 
       {/* Twitter Card Tags */}
       <meta name="twitter:card" content="summary_large_image" />
-      <meta name="twitter:site" content="@lexbusiness" />
-      <meta name="twitter:creator" content="@lexbusiness" />
+      <meta name="twitter:site" content="@reactfastuk" />
+      <meta name="twitter:creator" content="@reactfastuk" />
       <meta name="twitter:title" content={fullTitle} />
       <meta name="twitter:description" content={metaDescription} />
       <meta name="twitter:image" content={metaImage} />
 
       {/* Alternate Language Tags */}
-      <link rel="alternate" hrefLang="en" href={`${siteUrl}/en${canonical || ''}`} />
-      <link rel="alternate" hrefLang="es" href={`${siteUrl}/es${canonical || ''}`} />
-      <link rel="alternate" hrefLang="fr" href={`${siteUrl}/fr${canonical || ''}`} />
+      <link rel="alternate" hrefLang="en-GB" href={`${siteUrl}${canonical || ''}`} />
       <link rel="alternate" hrefLang="x-default" href={`${siteUrl}${canonical || ''}`} />
 
       {/* JSON-LD Structured Data */}

@@ -5,6 +5,7 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { HelmetProvider } from 'react-helmet-async'
 import App from './App'
 import './styles/index.css'
+import './styles/theme.css'
 import { initSentry } from './config/sentry'
 
 // Initialize Sentry before rendering the app

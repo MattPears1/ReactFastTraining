@@ -204,7 +204,7 @@ git push heroku main
 docker build -t lex-business .
 
 # Run container
-docker run -p 3000:3000 lex-business
+docker run -p 3002:3002 lex-business
 ```
 
 ## 🧪 Testing Strategy

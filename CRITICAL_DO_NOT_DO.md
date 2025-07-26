@@ -24,8 +24,13 @@
 - **NO** Sample customer logos without permission
 - **NO** Fictional case studies
 
----
+### 3. Frontend Features
+- **NO** Comments sections on any pages
+- **NO** Multi-language support (i18n)
 
-## 🤔 PENDING CLARIFICATION
-
-*The following features need your input on whether they should be included or excluded:*
+### 4. Backend Infrastructure
+- **NO** Server-side caching (Redis, Memcached)
+- **NO** CDN integration (CloudFlare, AWS CloudFront, etc.)
+- **NO** File uploads to cloud services (S3, Google Cloud Storage)
+- **NO** Third-party cloud storage services
+- **NO** Any caching mechanisms that could serve outdated content

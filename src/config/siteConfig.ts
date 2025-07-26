@@ -50,13 +50,23 @@ export const siteConfig = {
   
   theme: {
     colors: {
-      primary: '#DC2626', // Red for medical/first aid
-      secondary: '#00A79D', // Teal accent
-      accent: '#0EA5E9', // Blue for trust
-      success: '#10B981',
-      warning: '#F59E0B',
-      error: '#EF4444',
-      info: '#3B82F6',
+      primary: '#0EA5E9', // Trust blue - main brand color
+      secondary: '#10B981', // Calming green - growth and healing
+      accent: '#F97316', // Warm orange - energy and urgency
+      success: '#10B981', // Green for positive outcomes
+      warning: '#F59E0B', // Amber for caution
+      error: '#DC2626', // Red used sparingly for critical alerts only
+      info: '#3B82F6', // Information blue
+      background: {
+        light: '#F0F9FF', // Very light blue tint
+        card: '#FFFFFF',
+        dark: '#0F172A',
+      },
+      text: {
+        primary: '#1E293B',
+        secondary: '#64748B',
+        light: '#FFFFFF',
+      }
     },
   },
   

@@ -67,6 +67,11 @@ const AboutPage: React.FC = () => {
             animate={{ opacity: 1, y: 0 }}
             className="max-w-4xl mx-auto text-center"
           >
+            <img 
+              src="/images/logos/fulllogo_transparent.png" 
+              alt="React Fast Training" 
+              className="h-20 w-auto mx-auto mb-8"
+            />
             <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-gray-900 dark:text-white mb-6">
               About <span className="text-gradient gradient-primary">React Fast Training</span>
             </h1>

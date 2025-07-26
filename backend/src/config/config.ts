@@ -51,9 +51,9 @@ interface Config {
 
 export const config: Config = {
   env: process.env.NODE_ENV || 'development',
-  port: parseInt(process.env.PORT || '5000', 10),
+  port: parseInt(process.env.PORT || '5002', 10),
   cors: {
-    origin: process.env.CORS_ORIGIN?.split(',') || ['http://localhost:3000'],
+    origin: process.env.CORS_ORIGIN?.split(',') || ['http://localhost:3002'],
     credentials: true,
     optionsSuccessStatus: 200,
   },

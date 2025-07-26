@@ -48,6 +48,49 @@
     animation: text-morph 4s ease-in-out infinite;
   }
   
+  /* Medical pulse animation */
+  .medical-pulse {
+    animation: medical-pulse 2s ease-in-out infinite;
+  }
+  
+  @keyframes medical-pulse {
+    0% {
+      transform: scale(1);
+      opacity: 1;
+    }
+    50% {
+      transform: scale(1.05);
+      opacity: 0.8;
+    }
+    100% {
+      transform: scale(1);
+      opacity: 1;
+    }
+  }
+  
+  /* Heartbeat animation */
+  .heartbeat {
+    animation: heartbeat 1.5s ease-in-out infinite;
+  }
+  
+  @keyframes heartbeat {
+    0% {
+      transform: scale(1);
+    }
+    14% {
+      transform: scale(1.1);
+    }
+    28% {
+      transform: scale(1);
+    }
+    42% {
+      transform: scale(1.1);
+    }
+    70% {
+      transform: scale(1);
+    }
+  }
+  
   @keyframes text-morph {
     0%, 100% {
       font-weight: 100;
