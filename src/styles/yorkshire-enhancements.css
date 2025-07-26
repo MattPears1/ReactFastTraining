@@ -262,3 +262,10 @@
   color: rgb(var(--color-secondary));
   font-weight: bold;
 }
+
+/* Move page logo down on mobile to avoid header overlap */
+@media (max-width: 1023px) {
+  .page-logo-container {
+    margin-top: 5rem; /* h-20, same as header height on mobile */
+  }
+}

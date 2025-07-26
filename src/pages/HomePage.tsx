@@ -68,10 +68,10 @@ const HomePage: React.FC = () => {
       />
       
       {/* Logo at very top right */}
-      <div className="fixed top-4 right-4 z-50">
-        <img 
-          src="/images/logos/fulllogo_transparent.png" 
-          alt="React Fast Training" 
+      <div className="fixed top-4 right-4 z-50 page-logo-container">
+        <img
+          src="/images/logos/fulllogo_transparent.png"
+          alt="React Fast Training"
           className="h-20 md:h-30 lg:h-40 w-auto"
         />
       </div>
@@ -129,9 +129,8 @@ const HomePage: React.FC = () => {
                       </span>
                     </div>
                     <Button
-                      as={Link}
-                      to={course.title === 'Oxygen Therapy Training' 
-                        ? '/courses/oxygen-therapy' 
+                      href={course.title === 'Oxygen Therapy Training'
+                        ? '/courses/oxygen-therapy'
                         : '/courses'}
                       variant={course.color === 'secondary' ? 'secondary' : 'primary'}
                       className="w-full"
@@ -315,8 +314,7 @@ const HomePage: React.FC = () => {
               </p>
               <div className="flex flex-col sm:flex-row gap-4 justify-center">
                 <Button
-                  as={Link}
-                  to="/contact"
+                  href="/contact"
                   size="lg"
                   className="bg-white text-primary-600 hover:bg-gray-100"
                 >
@@ -324,8 +322,7 @@ const HomePage: React.FC = () => {
                   Get in Touch
                 </Button>
                 <Button
-                  as={Link}
-                  to="/courses"
+                  href="/courses"
                   size="lg"
                   variant="outline"
                   className="border-2 border-white text-white hover:bg-white/10"
