@@ -20,7 +20,7 @@ const EFAWCoursePage: React.FC = () => {
     offers: {
       '@type': 'Offer',
       category: 'Paid',
-      price: '75',
+      price: '100',
       priceCurrency: 'GBP',
       availability: 'https://schema.org/InStock',
       url: 'https://www.reactfasttraining.co.uk/courses/emergency-first-aid-at-work',
@@ -64,7 +64,7 @@ const EFAWCoursePage: React.FC = () => {
     <div className="relative">
       <SEO
         title="Emergency First Aid at Work Course Yorkshire | EFAW Training"
-        description="1-day Emergency First Aid at Work (EFAW) course in Yorkshire from £75. HSE approved training in Leeds, Sheffield & Bradford. Book your place today."
+        description="1-day Emergency First Aid at Work (EFAW) course in Yorkshire from £100. HSE approved training in Sheffield. Book your place today."
         keywords="EFAW course Yorkshire, emergency first aid at work Leeds, EFAW training Sheffield, first aid course Bradford, 1 day first aid course Yorkshire"
         canonical="/courses/emergency-first-aid-at-work"
         jsonLd={courseStructuredData}
@@ -105,13 +105,13 @@ const EFAWCoursePage: React.FC = () => {
             </p>
             
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <Button size="lg" className="group">
-                Book Your Place - £75
+              <Button size="lg" className="group" as={Link} to="/booking?course=EFAW">
+                Book Your Place - £100
                 <CheckCircle className="w-5 h-5 ml-2 group-hover:scale-110 transition-transform" />
               </Button>
               <Button variant="outline" size="lg" as={Link} to="/contact">
                 <Phone className="w-5 h-5 mr-2" />
-                Call 01234 567890
+                Call 07447 485644
               </Button>
             </div>
           </motion.div>
@@ -284,7 +284,7 @@ const EFAWCoursePage: React.FC = () => {
                     </li>
                   </ul>
                   <div className="text-3xl font-bold text-primary-600 dark:text-primary-400 mb-2">
-                    £75 per person
+                    £100 per person
                   </div>
                   <p className="text-sm text-gray-600 dark:text-gray-400">
                     Includes certification, manual & refreshments
@@ -329,9 +329,9 @@ const EFAWCoursePage: React.FC = () => {
                 Next available dates: Every Wednesday & Saturday
               </p>
               <div className="flex flex-col sm:flex-row gap-4 justify-center">
-                <Button size="lg">
+                <Button size="lg" as={Link} to="/booking?course=EFAW">
                   <Calendar className="w-5 h-5 mr-2" />
-                  View Course Dates
+                  Book This Course
                 </Button>
                 <Button variant="outline" size="lg" as={Link} to="/contact">
                   <Mail className="w-5 h-5 mr-2" />

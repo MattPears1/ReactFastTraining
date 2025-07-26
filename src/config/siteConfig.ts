@@ -12,7 +12,7 @@ export const siteConfig = {
     
     // Contact Information
     contact: {
-      phone: '07845 123456',
+      phone: '07447 485644',
       email: 'info@reactfasttraining.com',
       address: {
         street: '123 Training Street',

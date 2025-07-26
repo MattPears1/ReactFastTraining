@@ -87,11 +87,11 @@ const Footer: React.FC = () => {
             {/* Contact Info */}
             <div className="space-y-3 mb-6">
               <a
-                href="tel:07845123456"
+                href="tel:07447485644"
                 className="flex items-center gap-3 text-gray-600 dark:text-gray-400 hover:text-primary-600 dark:hover:text-primary-400 transition-colors"
               >
                 <Phone className="w-5 h-5" />
-                <span>07845 123456</span>
+                <span>07447 485644</span>
               </a>
               <a
                 href="mailto:info@reactfasttraining.com"

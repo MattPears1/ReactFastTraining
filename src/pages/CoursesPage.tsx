@@ -1,7 +1,7 @@
 import React from 'react'
 import { motion } from 'framer-motion'
 import { Link } from 'react-router-dom'
-import { Heart, Shield, Users, Brain, Clock, Award, ArrowRight, CheckCircle } from 'lucide-react'
+import { Heart, Shield, Users, Brain, Clock, Award, ArrowRight, CheckCircle, RefreshCw, Activity, Zap, Calendar, Wind } from 'lucide-react'
 import SEO from '@components/common/SEO'
 import Button from '@components/ui/Button'
 
@@ -11,7 +11,7 @@ const courses = [
     title: 'Emergency First Aid at Work',
     acronym: 'EFAW',
     duration: '1 Day',
-    price: 'From £75',
+    price: '£100',
     icon: Heart,
     color: 'primary',
     description: 'Essential life-saving skills for workplace emergencies',
@@ -23,7 +23,7 @@ const courses = [
     title: 'First Aid at Work',
     acronym: 'FAW',
     duration: '3 Days',
-    price: 'From £225',
+    price: '£200',
     icon: Shield,
     color: 'secondary',
     description: 'Comprehensive training for designated workplace first aiders',
@@ -35,7 +35,7 @@ const courses = [
     title: 'Paediatric First Aid',
     acronym: 'PFA',
     duration: '2 Days',
-    price: 'From £150',
+    price: '£120',
     icon: Users,
     color: 'accent',
     description: 'Specialized training for those working with children',
@@ -53,6 +53,117 @@ const courses = [
     description: 'Support mental wellbeing in your workplace',
     highlights: ['Crisis Intervention', 'Active Listening', 'MHFA England Approved'],
     href: '/courses/mental-health'
+  }
+]
+
+const additionalCourses = [
+  {
+    id: 'faw-requalification',
+    title: 'First Aid at Work Requalification',
+    acronym: 'FAW-R',
+    duration: '2 Days',
+    price: '£150',
+    icon: RefreshCw,
+    color: 'secondary',
+    description: 'Refresh your FAW qualification before it expires',
+    highlights: ['HSE Approved', 'Refresh Skills', '3-Year Certificate'],
+    href: '/courses/faw-requalification'
+  },
+  {
+    id: 'efaw-requalification',
+    title: 'Emergency First Aid at Work Requalification',
+    acronym: 'EFAW-R',
+    duration: '1 Day',
+    price: '£70',
+    icon: RefreshCw,
+    color: 'primary',
+    description: 'Renew your emergency first aid certification',
+    highlights: ['Quick Refresh', 'HSE Compliant', 'Same Day Certificate'],
+    href: '/courses/efaw-requalification'
+  },
+  {
+    id: 'emergency-paediatric',
+    title: 'Emergency Paediatric First Aid',
+    acronym: 'EPFA',
+    duration: '1 Day',
+    price: '£100',
+    icon: Users,
+    color: 'accent',
+    description: 'Essential emergency care for infants and children',
+    highlights: ['Child CPR', 'EYFS Compliant', '1-Day Course'],
+    href: '/courses/emergency-paediatric'
+  },
+  {
+    id: 'emergency-paediatric-requalification',
+    title: 'Emergency Paediatric First Aid Requalification',
+    acronym: 'EPFA-R',
+    duration: '1 Day',
+    price: '£70',
+    icon: RefreshCw,
+    color: 'accent',
+    description: 'Refresh your paediatric emergency skills',
+    highlights: ['Skills Update', 'Ofsted Approved', 'Quick Renewal'],
+    href: '/courses/emergency-paediatric-requalification'
+  },
+  {
+    id: 'activity-first-aid',
+    title: 'Activity First Aid',
+    acronym: 'AFA',
+    duration: '2 Days',
+    price: '£120',
+    icon: Activity,
+    color: 'warning',
+    description: 'First aid for sports and outdoor activities',
+    highlights: ['Outdoor Skills', 'Sports Injuries', 'Adventure Activities'],
+    href: '/courses/activity-first-aid'
+  },
+  {
+    id: 'activity-first-aid-requalification',
+    title: 'Activity First Aid Requalification',
+    acronym: 'AFA-R',
+    duration: '1 Day',
+    price: '£90',
+    icon: RefreshCw,
+    color: 'warning',
+    description: 'Renew your activity first aid skills',
+    highlights: ['Quick Update', 'Practical Focus', 'Sports Endorsed'],
+    href: '/courses/activity-first-aid-requalification'
+  },
+  {
+    id: 'cpr-aed',
+    title: 'CPR and AED',
+    acronym: 'CPR/AED',
+    duration: 'Half Day',
+    price: '£60',
+    icon: Zap,
+    color: 'error',
+    description: 'Life-saving CPR and defibrillator training',
+    highlights: ['Hands-on Practice', 'AED Training', 'Essential Skills'],
+    href: '/courses/cpr-aed'
+  },
+  {
+    id: 'annual-skills-refresher',
+    title: 'Annual Skills Refresher',
+    acronym: 'ASR',
+    duration: 'Half Day',
+    price: '£60',
+    icon: Calendar,
+    color: 'info',
+    description: 'Keep your first aid skills current',
+    highlights: ['Annual Update', 'Skills Practice', 'HSE Recommended'],
+    href: '/courses/annual-skills-refresher'
+  },
+  {
+    id: 'oxygen-therapy',
+    title: 'Oxygen Therapy Course',
+    acronym: 'O2',
+    duration: 'Half Day',
+    price: '£60',
+    icon: Wind,
+    color: 'success',
+    description: 'Safe administration of emergency oxygen',
+    highlights: ['Oxygen Equipment', 'Safety Protocols', '3-Year Certificate'],
+    href: '/courses/oxygen-therapy'
   }
 ]
 
@@ -160,8 +271,77 @@ const CoursesPage: React.FC = () => {
         </div>
       </section>
 
+      {/* Additional Courses */}
+      <section className="section bg-gray-50 dark:bg-gray-900">
+        <div className="container">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            className="text-center mb-12"
+          >
+            <h2 className="text-3xl md:text-4xl font-bold text-gray-900 dark:text-white mb-4">
+              Specialist & Refresher Courses
+            </h2>
+            <p className="text-lg text-gray-600 dark:text-gray-400 max-w-2xl mx-auto">
+              Keep your skills current with our range of requalification and specialist courses
+            </p>
+          </motion.div>
+
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {additionalCourses.map((course, index) => (
+              <motion.div
+                key={course.id}
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: index * 0.05 }}
+              >
+                <div className="h-full bg-white dark:bg-gray-800 rounded-xl shadow-md hover:shadow-lg transition-all duration-300 overflow-hidden group">
+                  <div className={`h-1.5 bg-gradient-to-r from-${course.color}-500 to-${course.color}-600`} />
+                  <div className="p-6">
+                    <div className="flex items-start justify-between mb-4">
+                      <div className={`w-12 h-12 bg-${course.color}-100 dark:bg-${course.color}-900/30 rounded-lg flex items-center justify-center`}>
+                        <course.icon className={`w-6 h-6 text-${course.color}-600 dark:text-${course.color}-400`} />
+                      </div>
+                      <span className="text-sm font-medium text-gray-500 dark:text-gray-400">{course.duration}</span>
+                    </div>
+
+                    <h3 className="text-lg font-bold text-gray-900 dark:text-white mb-1">
+                      {course.title}
+                    </h3>
+                    <p className="text-xs font-medium text-gray-500 dark:text-gray-400 mb-3">
+                      {course.acronym}
+                    </p>
+                    <p className="text-sm text-gray-600 dark:text-gray-400 mb-4">
+                      {course.description}
+                    </p>
+
+                    <div className="flex items-center justify-between">
+                      <p className="text-xl font-bold text-primary-600 dark:text-primary-400">
+                        {course.price}
+                      </p>
+                      <Button
+                        as={Link}
+                        to={course.href}
+                        size="sm"
+                        variant="outline"
+                        rightIcon={<ArrowRight className="w-3 h-3" />}
+                        className={`text-${course.color}-600 border-${course.color}-500 hover:bg-${course.color}-50 dark:hover:bg-${course.color}-900/20`}
+                      >
+                        Details
+                      </Button>
+                    </div>
+                  </div>
+                </div>
+              </motion.div>
+            ))}
+          </div>
+        </div>
+      </section>
+
       {/* Why Choose Us */}
-      <section className="section bg-gray-50 dark:bg-gray-800">
+      <section className="section">
         <div className="container">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -263,9 +443,9 @@ const CoursesPage: React.FC = () => {
                 variant="outline"
                 className="border-white text-white hover:bg-white/10"
                 as="a"
-                href="tel:07845123456"
+                href="tel:07447485644"
               >
-                Call 07845 123456
+                Call 07447 485644
               </Button>
             </div>
           </motion.div>

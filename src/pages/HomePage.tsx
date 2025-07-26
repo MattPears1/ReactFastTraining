@@ -10,12 +10,12 @@ import { Link } from 'react-router-dom'
 const HomePage: React.FC = () => {
   const courseCategories = useMemo(() => [
     {
-      title: 'Emergency First Aid at Work',
-      duration: '1 Day',
+      title: 'Oxygen Therapy Training',
+      duration: '3 Hours',
       price: 'From £75',
       icon: Heart,
       color: 'primary',
-      description: 'Essential life-saving skills for workplace emergencies'
+      description: 'Professional training in oxygen administration and therapy'
     },
     {
       title: 'First Aid at Work',
@@ -90,7 +90,7 @@ const HomePage: React.FC = () => {
             className="text-center mb-12"
           >
             <h2 className="text-4xl md:text-5xl font-heading font-bold text-gray-900 dark:text-white mb-4">
-              Choose Your Training Path
+              Available Training Courses
             </h2>
             <p className="text-lg text-gray-600 dark:text-gray-400 max-w-2xl mx-auto">
               All courses are Ofqual regulated and HSE compliant, delivered by experienced professionals
@@ -130,7 +130,9 @@ const HomePage: React.FC = () => {
                     </div>
                     <Button
                       as={Link}
-                      to="/courses"
+                      to={course.title === 'Oxygen Therapy Training' 
+                        ? '/courses/oxygen-therapy' 
+                        : '/courses'}
                       variant={course.color === 'secondary' ? 'secondary' : 'primary'}
                       className="w-full"
                       rightIcon={<ArrowRight className="w-4 h-4" />}
@@ -143,7 +145,9 @@ const HomePage: React.FC = () => {
                   <div className="relative">
                     <div className={`absolute inset-0 bg-gradient-to-br from-${course.color}-100 to-${course.color}-200 dark:from-${course.color}-900/20 dark:to-${course.color}-800/20 rounded-3xl transform rotate-3`} />
                     <img
-                      src={`/images/courses/${course.title.toLowerCase().replace(/\s+/g, '-')}.jpg`}
+                      src={course.title === 'Oxygen Therapy Training' 
+                        ? '/images/hero/homepage_AI_oxygen.png'
+                        : `/images/courses/${course.title.toLowerCase().replace(/\s+/g, '-')}.jpg`}
                       alt={course.title}
                       className="relative rounded-3xl shadow-lg w-full h-64 object-cover"
                       onError={(e) => {

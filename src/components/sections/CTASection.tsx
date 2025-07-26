@@ -15,7 +15,7 @@ const CTASection: React.FC<CTASectionProps> = ({
   title = "Ready to Save Lives?",
   description = "Join thousands of Yorkshire professionals who have trained with React Fast Training.",
   primaryButtonText = "Book Your Course",
-  secondaryButtonText = "Call 07845 123456",
+  secondaryButtonText = "Call 07447 485644",
   features = [
     "Ofqual Regulated",
     "Same Day Certificates",
@@ -81,7 +81,7 @@ const CTASection: React.FC<CTASectionProps> = ({
               <Button
                 size="lg"
                 variant="outline"
-                href="tel:07845123456"
+                href="tel:07447485644"
                 className="border-white text-white hover:bg-white/10"
               >
                 {secondaryButtonText}

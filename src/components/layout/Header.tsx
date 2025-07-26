@@ -174,13 +174,13 @@ const Header: React.FC = () => {
             <div className="flex items-center space-x-2 sm:space-x-3 md:space-x-4">
               {/* Phone Number - visible on mobile and desktop */}
               <a 
-                href="tel:07845123456" 
+                href="tel:07447485644" 
                 className="flex items-center space-x-1 sm:space-x-2 text-primary-600 dark:text-primary-400 font-semibold hover:text-primary-700 dark:hover:text-primary-300 transition-colors text-sm sm:text-base"
               >
                 <svg className="w-4 h-4 sm:w-5 sm:h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
                 </svg>
-                <span className="hidden sm:inline">07845 123456</span>
+                <span className="hidden sm:inline">07447 485644</span>
               </a>
 
               {/* Search */}
@@ -238,7 +238,7 @@ const Header: React.FC = () => {
 
               {/* CTA Button */}
               <Link
-                to="/contact"
+                to="/booking"
                 className="hidden md:inline-flex btn btn-primary btn-yorkshire shadow-blue"
               >
                 Book Course
@@ -356,19 +356,19 @@ const Header: React.FC = () => {
 
                 <div className="mt-8 pt-8 border-t border-gray-200 dark:border-gray-700">
                   <Link
-                    to="/contact"
+                    to="/booking"
                     className="btn btn-primary w-full text-center mb-4"
                   >
                     Book Course
                   </Link>
                   <a
-                    href="tel:07845123456"
+                    href="tel:07447485644"
                     className="btn btn-outline w-full text-center flex items-center justify-center gap-2"
                   >
                     <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
                     </svg>
-                    Call 07845 123456
+                    Call 07447 485644
                   </a>
                 </div>
               </div>

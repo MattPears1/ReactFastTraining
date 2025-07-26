@@ -20,6 +20,10 @@ export { Address, AddressType } from './Address.model';
 export { Review, ReviewStatus } from './Review.model';
 export { Notification, NotificationType, NotificationChannel, NotificationPriority } from './Notification.model';
 
+// Course Booking
+export { Booking } from './Booking.model';
+export { CourseSchedule } from './CourseSchedule.model';
+
 // Define associations
 export function defineAssociations(): void {
   const { User } = require('./User.model');
@@ -34,6 +38,8 @@ export function defineAssociations(): void {
   const { Review } = require('./Review.model');
   const { Notification } = require('./Notification.model');
   const { AuditLog } = require('./AuditLog.model');
+  const { Booking } = require('./Booking.model');
+  const { CourseSchedule } = require('./CourseSchedule.model');
 
   // User associations
   User.hasMany(Order, { foreignKey: 'userId', as: 'orders' });
@@ -45,6 +51,7 @@ export function defineAssociations(): void {
   User.hasMany(AuditLog, { foreignKey: 'userId', as: 'auditLogs' });
   User.hasMany(PaymentMethod, { foreignKey: 'userId', as: 'paymentMethods' });
   User.hasMany(Subscription, { foreignKey: 'userId', as: 'subscriptions' });
+  User.hasMany(Booking, { foreignKey: 'userId', as: 'bookings' });
 
   // Product associations
   Product.belongsTo(Category, { foreignKey: 'categoryId', as: 'category' });
@@ -131,4 +138,7 @@ export function defineAssociations(): void {
 
   // AuditLog associations
   AuditLog.belongsTo(User, { foreignKey: 'userId', as: 'user' });
+
+  // Booking associations
+  Booking.belongsTo(User, { foreignKey: 'userId', as: 'user' });
 }

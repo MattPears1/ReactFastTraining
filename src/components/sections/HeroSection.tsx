@@ -189,7 +189,7 @@ const HeroSection: React.FC = () => {
               {/* Front Card with Image */}
               <div className="relative rounded-3xl overflow-hidden shadow-2xl">
                 <img 
-                  src="/images/hero/first-aid-training-hero.jpg" 
+                  src="/images/hero/homepage_AI_1.png" 
                   alt="First Aid Training in Progress"
                   className="w-full h-full object-cover"
                   onError={(e) => {

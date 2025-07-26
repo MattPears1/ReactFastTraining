@@ -5,6 +5,7 @@ import { z } from 'zod'
 import { Send, Loader2 } from 'lucide-react'
 import { useToast } from '@contexts/ToastContext'
 import Button from '@components/ui/Button'
+import { contactApi } from '@services/api.service'
 
 const contactSchema = z.object({
   firstName: z.string().min(2, 'First name must be at least 2 characters'),
@@ -38,13 +39,17 @@ const ContactForm: React.FC = () => {
     setIsLoading(true)
     
     try {
-      // Simulate API call
-      await new Promise(resolve => setTimeout(resolve, 2000))
+      const response = await contactApi.submitForm(data)
       
-      showToast('success', 'Message sent successfully! We\'ll get back to you soon.')
-      reset()
-    } catch (error) {
-      showToast('error', 'Failed to send message. Please try again.')
+      if (response.success) {
+        showToast('success', response.message || 'Message sent successfully! We\'ll get back to you soon.')
+        reset()
+      } else {
+        showToast('error', 'Failed to send message. Please try again.')
+      }
+    } catch (error: any) {
+      console.error('Contact form submission error:', error)
+      showToast('error', error.response?.data?.message || 'Failed to send message. Please try again.')
     } finally {
       setIsLoading(false)
     }

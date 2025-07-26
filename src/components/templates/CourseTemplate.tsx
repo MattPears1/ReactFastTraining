@@ -96,13 +96,13 @@ const CourseTemplate: React.FC<CourseTemplateProps> = ({
             </p>
             
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <Button size="lg" className="group" as={Link} to="/contact">
+              <Button size="lg" className="group" as={Link} to={`/booking?course=${courseAcronym || courseName.toUpperCase().replace(/\s+/g, '_')}`}>
                 Book Your Place - {price}
                 <CheckCircle className="w-5 h-5 ml-2 group-hover:scale-110 transition-transform" />
               </Button>
-              <Button variant="outline" size="lg" as="a" href="tel:07845123456">
+              <Button variant="outline" size="lg" as="a" href="tel:07447485644">
                 <Phone className="w-5 h-5 mr-2" />
-                Call 07845 123456
+                Call 07447 485644
               </Button>
             </div>
           </motion.div>
@@ -382,7 +382,7 @@ const CourseTemplate: React.FC<CourseTemplateProps> = ({
                 size="lg"
                 variant="secondary"
                 as={Link}
-                to="/contact"
+                to={`/booking?course=${courseAcronym || courseName.toUpperCase().replace(/\s+/g, '_')}`}
               >
                 Book Now - {price}
               </Button>
@@ -391,7 +391,7 @@ const CourseTemplate: React.FC<CourseTemplateProps> = ({
                 variant="outline"
                 className="border-white text-white hover:bg-white/10"
                 as="a"
-                href="tel:07845123456"
+                href="tel:07447485644"
               >
                 <Phone className="w-5 h-5 mr-2" />
                 Call for Group Bookings
