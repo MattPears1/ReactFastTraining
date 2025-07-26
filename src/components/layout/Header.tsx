@@ -358,8 +358,6 @@ const Header: React.FC = () => {
         )}
       </AnimatePresence>
 
-      {/* Spacer for fixed header */}
-      <div className="h-16 md:h-20 lg:h-24" />
 
       {/* Search Modal */}
       <SearchModal isOpen={showSearch} onClose={() => setShowSearch(false)} />

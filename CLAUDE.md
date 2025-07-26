@@ -12,7 +12,7 @@
 **Domain**: reactfasttraining.co.uk
 **Industry**: Healthcare Education / First Aid Training
 **Service Area**: Yorkshire, UK (Leeds, Sheffield, Bradford, York, Huddersfield, Wakefield, Halifax, Harrogate)
-**Founder**: Lex Hancock (Ex-military professional with 20+ years emergency medical experience)
+**Founder**: Lex
 
 ### Business Model
 - Emergency First Aid at Work (EFAW) courses - 1 day - £75
@@ -235,7 +235,7 @@ Before any deployment:
 
 ## 📞 CONTACT & SUPPORT
 
-**Business Owner**: Lex Hancock
+**Business Owner**: Lex
 **Developer Support**: Check package.json for maintainer info
 **Urgent Issues**: Create HIGH priority issue in project tracker
 

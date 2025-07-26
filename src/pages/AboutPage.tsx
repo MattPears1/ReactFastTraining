@@ -13,8 +13,8 @@ const values = [
   },
   {
     icon: Shield,
-    title: 'Our Founder\'s Royal Navy and Policing Background',
-    description: 'Our founder\'s Navy and policing background brings discipline, clarity, and real-world experience to every course.',
+    title: 'Professional Training',
+    description: 'Professional training that brings discipline, clarity, and real-world experience to every course.',
   },
   {
     icon: Users,
@@ -45,8 +45,8 @@ const AboutPage: React.FC = () => {
     <div className="relative">
       <SEO
         title="About React Fast Training | Yorkshire First Aid Training"
-        description="Learn about React Fast Training - Yorkshire's premier first aid training provider. Founded by Lex, with extensive military and emergency services experience."
-        keywords="about react fast training, first aid trainer Yorkshire, military background, emergency services experience, Yorkshire training company"
+        description="Learn about React Fast Training - Yorkshire's premier first aid training provider. Founded by Lex."
+        keywords="about react fast training, first aid trainer Yorkshire, Yorkshire training company"
         canonical="/about"
       />
       
@@ -106,9 +106,8 @@ const AboutPage: React.FC = () => {
                 Our Story
               </h2>
               <p className="text-gray-600 dark:text-gray-400 mb-6">
-                Founded by Lex, React Fast Training brings together extensive experience from high-risk 
-                environments including military service and law enforcement. This unique background shapes 
-                our approach to training - practical, no-nonsense, and focused on real-world application.
+                Founded by Lex, React Fast Training focuses on delivering practical, no-nonsense training 
+                with real-world application.
               </p>
               <p className="text-gray-600 dark:text-gray-400">
                 We're not a faceless corporation - we're a small, personal operation that cares deeply about 
@@ -222,7 +221,7 @@ const AboutPage: React.FC = () => {
                 <div className="relative">
                   <img 
                     src="/images/about/instructor-teaching.jpg"
-                    alt="Lex - Lead Instructor teaching first aid"
+                    alt="Lead Instructor teaching first aid"
                     className="w-full h-full object-cover"
                     onError={(e) => {
                       e.currentTarget.src = '/images/placeholder-course.jpg'
@@ -234,9 +233,8 @@ const AboutPage: React.FC = () => {
                     Lex - Founder & Lead Instructor
                   </h3>
               <p className="text-gray-600 dark:text-gray-400 mb-4">
-                With extensive experience in high-risk environments including military service in the Royal Navy 
-                and law enforcement, Lex brings a unique perspective to first aid training. This real-world 
-                background means you're learning from someone who has actually used these skills in critical situations.
+                Lex brings a unique perspective to first aid training, ensuring you're learning practical 
+                skills that work in real situations.
               </p>
               <p className="text-gray-600 dark:text-gray-400">
                 "I founded React Fast Training because I saw a need for practical, no-nonsense first aid training 
@@ -246,11 +244,11 @@ const AboutPage: React.FC = () => {
               <div className="mt-6 flex flex-wrap justify-center gap-4">
                 <div className="flex items-center gap-2">
                   <Shield className="w-5 h-5 text-primary-600 dark:text-primary-400" />
-                  <span className="text-gray-700 dark:text-gray-300">Military Veteran</span>
+                  <span className="text-gray-700 dark:text-gray-300">Certified Instructor</span>
                 </div>
                 <div className="flex items-center gap-2">
                   <Award className="w-5 h-5 text-primary-600 dark:text-primary-400" />
-                  <span className="text-gray-700 dark:text-gray-300">Police Service</span>
+                  <span className="text-gray-700 dark:text-gray-300">Qualified Trainer</span>
                 </div>
                 <div className="flex items-center gap-2">
                   <Heart className="w-5 h-5 text-primary-600 dark:text-primary-400" />

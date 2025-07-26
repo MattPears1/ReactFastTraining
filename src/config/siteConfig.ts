@@ -158,7 +158,7 @@ export const siteConfig = {
     },
     {
       title: 'Local Experts',
-      description: 'Yorkshire-based trainers with emergency service backgrounds',
+      description: 'Yorkshire-based professional first aid training',
       icon: 'academic-cap',
     },
   ],
