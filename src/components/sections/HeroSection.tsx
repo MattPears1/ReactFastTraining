@@ -10,7 +10,7 @@ const HeroSection: React.FC = () => {
   const { ref: titleRef, displayText } = useKineticTypography('Professional First Aid Training')
   
   return (
-    <section className="relative min-h-screen flex items-center overflow-hidden">
+    <section className="relative min-h-screen flex items-center overflow-hidden -mt-16 md:-mt-20 lg:-mt-24 pt-16 md:pt-20 lg:pt-24">
       {/* Unique Diagonal Split Background */}
       <div className="absolute inset-0">
         <div className="absolute inset-0 bg-gradient-to-br from-primary-50 via-white to-secondary-50 dark:from-gray-900 dark:via-gray-900 dark:to-gray-800" />
