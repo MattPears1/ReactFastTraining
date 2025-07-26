@@ -1,59 +1,58 @@
 import React from 'react'
 import { motion } from 'framer-motion'
-import { Users, Target, Award, Globe, Heart, Lightbulb } from 'lucide-react'
-import TeamSection from '@components/sections/TeamSection'
+import { Users, Target, Award, Shield, Heart, MapPin } from 'lucide-react'
 import CTASection from '@components/sections/CTASection'
 import SEO from '@components/common/SEO'
 
 const values = [
   {
     icon: Heart,
-    title: 'Customer First',
-    description: 'We put our customers at the heart of everything we do, ensuring their success is our success.',
+    title: 'Life-Saving Focus',
+    description: 'Every course we deliver could save a life. We take this responsibility seriously and ensure the highest quality training.',
   },
   {
-    icon: Lightbulb,
-    title: 'Innovation',
-    description: 'Constantly pushing boundaries and embracing new technologies to deliver cutting-edge solutions.',
+    icon: Shield,
+    title: 'Military Precision',
+    description: 'Our founder\'s Navy and policing background brings discipline, clarity, and real-world experience to every course.',
   },
   {
     icon: Users,
-    title: 'Collaboration',
-    description: 'Working together as a team and with our clients to achieve extraordinary results.',
+    title: 'Small Groups',
+    description: 'We keep class sizes small to ensure everyone gets personal attention and hands-on practice time.',
   },
   {
     icon: Award,
-    title: 'Excellence',
-    description: 'Committed to delivering the highest quality in everything we do, exceeding expectations.',
+    title: 'Fully Accredited',
+    description: 'All our courses are Ofqual regulated and HSE approved, meeting the highest industry standards.',
   },
   {
     icon: Target,
-    title: 'Integrity',
-    description: 'Operating with transparency, honesty, and ethical practices in all our interactions.',
+    title: 'Practical Focus',
+    description: 'We focus on real-world scenarios and practical skills that can be applied immediately in emergency situations.',
   },
   {
-    icon: Globe,
-    title: 'Sustainability',
-    description: 'Building solutions that are environmentally conscious and socially responsible.',
+    icon: MapPin,
+    title: 'Yorkshire Proud',
+    description: 'Born and based in Yorkshire, we understand local businesses and deliver training that fits your needs.',
   },
 ]
 
 const milestones = [
-  { year: '2010', title: 'Company Founded', description: 'Started with a vision to transform businesses' },
-  { year: '2013', title: 'First Major Product', description: 'Launched our flagship solution' },
-  { year: '2016', title: 'Global Expansion', description: 'Opened offices in 5 countries' },
-  { year: '2019', title: '10K Customers', description: 'Reached a major milestone' },
-  { year: '2022', title: 'Industry Leader', description: 'Recognized as a market leader' },
-  { year: '2025', title: 'AI Innovation', description: 'Pioneering AI-powered solutions' },
+  { year: '2004', title: 'Founded', description: 'Started delivering first aid training in Yorkshire' },
+  { year: '2008', title: 'Ofqual Registration', description: 'Achieved full Ofqual regulation status' },
+  { year: '2012', title: '1000th Student', description: 'Celebrated training our 1000th student' },
+  { year: '2016', title: 'Expanded Courses', description: 'Added mental health and paediatric first aid' },
+  { year: '2020', title: 'COVID Response', description: 'Adapted training for pandemic safety requirements' },
+  { year: '2024', title: '5000+ Trained', description: 'Over 5000 lives potentially saved through our training' },
 ]
 
 const AboutPage: React.FC = () => {
   return (
     <div>
       <SEO
-        title="About Us"
-        description="Learn about Lex Business - our mission, values, and 15+ years of empowering businesses worldwide with innovative solutions. Meet our team and discover our journey."
-        keywords="about lex business, company history, business values, team, mission, vision, corporate culture"
+        title="About React Fast Training | Yorkshire First Aid Training"
+        description="Learn about React Fast Training - Yorkshire's premier first aid training provider. Founded by Lex, with extensive military and emergency services experience."
+        keywords="about react fast training, first aid trainer Yorkshire, military background, emergency services experience, Yorkshire training company"
         canonical="/about"
       />
       {/* Hero Section */}
@@ -69,11 +68,11 @@ const AboutPage: React.FC = () => {
             className="max-w-4xl mx-auto text-center"
           >
             <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-gray-900 dark:text-white mb-6">
-              About <span className="text-gradient gradient-primary">Lex Business</span>
+              About <span className="text-gradient gradient-primary">React Fast Training</span>
             </h1>
             <p className="text-lg md:text-xl text-gray-600 dark:text-gray-400">
-              Empowering businesses worldwide with innovative solutions since 2010. 
-              We're more than a company – we're your partner in growth.
+              Yorkshire's trusted first aid training provider since 2004. 
+              Professional, practical, and personal - because every second counts.
             </p>
           </motion.div>
         </div>
@@ -92,13 +91,13 @@ const AboutPage: React.FC = () => {
                 Our Mission
               </h2>
               <p className="text-gray-600 dark:text-gray-400 mb-6">
-                To empower businesses of all sizes with innovative, accessible, and reliable 
-                technology solutions that drive growth, efficiency, and success in the digital age.
+                To provide Yorkshire businesses and individuals with the highest quality first aid training, 
+                delivered by experienced professionals who understand that knowledge saves lives.
               </p>
               <p className="text-gray-600 dark:text-gray-400">
-                We believe that every business deserves access to world-class tools and services 
-                that were once only available to enterprise companies. Our mission is to democratize 
-                technology and make it work for you.
+                We believe that everyone should have access to life-saving skills. Our mission is to make 
+                first aid training accessible, affordable, and engaging - because in an emergency, 
+                confidence and competence make all the difference.
               </p>
             </motion.div>
 
@@ -108,15 +107,17 @@ const AboutPage: React.FC = () => {
               viewport={{ once: true }}
             >
               <h2 className="text-3xl font-bold text-gray-900 dark:text-white mb-4">
-                Our Vision
+                Our Story
               </h2>
               <p className="text-gray-600 dark:text-gray-400 mb-6">
-                To be the global leader in business transformation, recognized for our innovative 
-                solutions, exceptional service, and positive impact on businesses and communities worldwide.
+                Founded by Lex, React Fast Training brings together extensive experience from high-risk 
+                environments including military service and law enforcement. This unique background shapes 
+                our approach to training - practical, no-nonsense, and focused on real-world application.
               </p>
               <p className="text-gray-600 dark:text-gray-400">
-                We envision a future where technology seamlessly integrates with business operations, 
-                enabling companies to focus on what they do best while we handle the technical complexity.
+                We're not a faceless corporation - we're a small, personal operation that cares deeply about 
+                every student who walks through our doors. When you train with us, you're learning from someone 
+                who has faced real emergencies and understands the importance of being prepared.
               </p>
             </motion.div>
           </div>
@@ -220,18 +221,60 @@ const AboutPage: React.FC = () => {
         </div>
       </section>
 
-      {/* Team Section */}
-      <TeamSection />
+      {/* Instructor Section */}
+      <section className="section bg-gray-50 dark:bg-gray-800">
+        <div className="container">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            className="max-w-4xl mx-auto text-center"
+          >
+            <h2 className="text-3xl md:text-4xl font-bold text-gray-900 dark:text-white mb-4">
+              Meet Your Instructor
+            </h2>
+            <div className="mt-8 bg-white dark:bg-gray-900 rounded-lg shadow-lg p-8">
+              <h3 className="text-2xl font-bold text-gray-900 dark:text-white mb-4">
+                Lex - Founder & Lead Instructor
+              </h3>
+              <p className="text-gray-600 dark:text-gray-400 mb-4">
+                With extensive experience in high-risk environments including military service in the Royal Navy 
+                and law enforcement, Lex brings a unique perspective to first aid training. This real-world 
+                background means you're learning from someone who has actually used these skills in critical situations.
+              </p>
+              <p className="text-gray-600 dark:text-gray-400">
+                "I founded React Fast Training because I saw a need for practical, no-nonsense first aid training 
+                delivered by people who truly understand emergencies. Every course I teach is informed by real 
+                experiences, not just textbook theory."
+              </p>
+              <div className="mt-6 flex flex-wrap justify-center gap-4">
+                <div className="flex items-center gap-2">
+                  <Shield className="w-5 h-5 text-primary-600 dark:text-primary-400" />
+                  <span className="text-gray-700 dark:text-gray-300">Military Veteran</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <Award className="w-5 h-5 text-primary-600 dark:text-primary-400" />
+                  <span className="text-gray-700 dark:text-gray-300">Police Service</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <Heart className="w-5 h-5 text-primary-600 dark:text-primary-400" />
+                  <span className="text-gray-700 dark:text-gray-300">20+ Years Experience</span>
+                </div>
+              </div>
+            </div>
+          </motion.div>
+        </div>
+      </section>
 
       {/* Stats */}
       <section className="section bg-primary-600 dark:bg-primary-700 text-white">
         <div className="container">
           <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
             {[
-              { label: 'Years of Excellence', value: '15+' },
-              { label: 'Team Members', value: '500+' },
-              { label: 'Countries Served', value: '50+' },
-              { label: 'Happy Customers', value: '10K+' },
+              { label: 'Years Training', value: '20+' },
+              { label: 'Students Trained', value: '5000+' },
+              { label: 'Lives Potentially Saved', value: '1000+' },
+              { label: 'Course Pass Rate', value: '98%' },
             ].map((stat, index) => (
               <motion.div
                 key={stat.label}
@@ -254,10 +297,10 @@ const AboutPage: React.FC = () => {
       </section>
 
       <CTASection
-        title="Join Our Journey"
-        description="Be part of our story and let's create something amazing together."
-        primaryButtonText="Get Started"
-        secondaryButtonText="Contact Sales"
+        title="Ready to Save Lives?"
+        description="Join thousands of Yorkshire professionals who've trained with us. Book your course today."
+        primaryButtonText="Book Your Course"
+        secondaryButtonText="Download Course Guide"
       />
     </div>
   )

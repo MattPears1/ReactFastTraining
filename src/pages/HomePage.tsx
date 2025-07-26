@@ -119,7 +119,7 @@ const HomePage: React.FC = () => {
       {/* Value Propositions */}
       <section className="section bg-primary-50 dark:bg-gray-900">
         <div className="container">
-          <div className="grid md:grid-cols-3 gap-8">
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 md:gap-8">
             <motion.div
               initial={{ opacity: 0, x: -20 }}
               whileInView={{ opacity: 1, x: 0 }}
@@ -183,24 +183,24 @@ const HomePage: React.FC = () => {
               Our courses meet all regulatory requirements
             </p>
           </div>
-          <div className="flex flex-wrap items-center justify-center gap-8 md:gap-12">
+          <div className="grid grid-cols-3 gap-4 sm:gap-8 md:gap-12 max-w-2xl mx-auto">
             <div className="text-center">
-              <div className="w-32 h-32 bg-gray-100 dark:bg-gray-800 rounded-lg flex items-center justify-center mb-2">
-                <Shield className="w-16 h-16 text-primary-600 dark:text-primary-400" />
+              <div className="w-20 h-20 sm:w-28 sm:h-28 md:w-32 md:h-32 bg-gray-100 dark:bg-gray-800 rounded-lg flex items-center justify-center mb-2 mx-auto">
+                <Shield className="w-10 h-10 sm:w-14 sm:h-14 md:w-16 md:h-16 text-primary-600 dark:text-primary-400" />
               </div>
-              <p className="font-semibold text-gray-900 dark:text-white">Ofqual Regulated</p>
+              <p className="text-xs sm:text-sm md:text-base font-semibold text-gray-900 dark:text-white">Ofqual Regulated</p>
             </div>
             <div className="text-center">
-              <div className="w-32 h-32 bg-gray-100 dark:bg-gray-800 rounded-lg flex items-center justify-center mb-2">
-                <Award className="w-16 h-16 text-primary-600 dark:text-primary-400" />
+              <div className="w-20 h-20 sm:w-28 sm:h-28 md:w-32 md:h-32 bg-gray-100 dark:bg-gray-800 rounded-lg flex items-center justify-center mb-2 mx-auto">
+                <Award className="w-10 h-10 sm:w-14 sm:h-14 md:w-16 md:h-16 text-primary-600 dark:text-primary-400" />
               </div>
-              <p className="font-semibold text-gray-900 dark:text-white">HSE Approved</p>
+              <p className="text-xs sm:text-sm md:text-base font-semibold text-gray-900 dark:text-white">HSE Approved</p>
             </div>
             <div className="text-center">
-              <div className="w-32 h-32 bg-gray-100 dark:bg-gray-800 rounded-lg flex items-center justify-center mb-2">
-                <CheckCircle className="w-16 h-16 text-primary-600 dark:text-primary-400" />
+              <div className="w-20 h-20 sm:w-28 sm:h-28 md:w-32 md:h-32 bg-gray-100 dark:bg-gray-800 rounded-lg flex items-center justify-center mb-2 mx-auto">
+                <CheckCircle className="w-10 h-10 sm:w-14 sm:h-14 md:w-16 md:h-16 text-primary-600 dark:text-primary-400" />
               </div>
-              <p className="font-semibold text-gray-900 dark:text-white">CPD Certified</p>
+              <p className="text-xs sm:text-sm md:text-base font-semibold text-gray-900 dark:text-white">CPD Certified</p>
             </div>
           </div>
         </div>

@@ -1,62 +1,74 @@
 import React from 'react'
 import { motion } from 'framer-motion'
 import { 
-  Zap, Shield, Users, BarChart3, Globe, Smartphone, 
-  Cloud, Lock, Palette, Code, Headphones, TrendingUp 
+  Heart, Clock, MapPin, Award, Users, BookOpen,
+  GraduationCap, Building, Baby, Brain, Briefcase, CheckCircle
 } from 'lucide-react'
 
 const features = [
   {
-    icon: Zap,
-    title: 'Lightning Fast Performance',
-    description: 'Optimized for speed with cutting-edge technology that ensures your applications run at peak performance.',
-    color: 'text-yellow-500',
-    bgColor: 'bg-yellow-100 dark:bg-yellow-900/20',
+    icon: Heart,
+    title: 'Emergency First Aid at Work',
+    description: 'One-day course covering life-saving basics. HSE compliant training for workplace first aiders. Certificate valid for 3 years.',
+    price: '£75',
+    duration: '1 Day',
+    color: 'text-red-600',
+    bgColor: 'bg-red-100 dark:bg-red-900/20',
   },
   {
-    icon: Shield,
-    title: 'Enterprise Security',
-    description: 'Bank-level security with end-to-end encryption, regular security audits, and compliance certifications.',
-    color: 'text-blue-500',
+    icon: Briefcase,
+    title: 'First Aid at Work',
+    description: 'Comprehensive 3-day course for designated workplace first aiders. Covers all emergency situations and advanced techniques.',
+    price: '£225',
+    duration: '3 Days',
+    color: 'text-blue-600',
     bgColor: 'bg-blue-100 dark:bg-blue-900/20',
   },
   {
-    icon: Users,
-    title: 'Team Collaboration',
-    description: 'Built for teams with real-time collaboration features, role-based access, and activity tracking.',
-    color: 'text-green-500',
-    bgColor: 'bg-green-100 dark:bg-green-900/20',
+    icon: Baby,
+    title: 'Paediatric First Aid',
+    description: 'Essential training for childcare professionals. Covers infant and child CPR, choking, and common childhood emergencies.',
+    price: '£95',
+    duration: '1 Day',
+    color: 'text-pink-600',
+    bgColor: 'bg-pink-100 dark:bg-pink-900/20',
   },
   {
-    icon: BarChart3,
-    title: 'Advanced Analytics',
-    description: 'Comprehensive analytics dashboard with real-time insights and customizable reports.',
-    color: 'text-purple-500',
+    icon: Brain,
+    title: 'Mental Health First Aid',
+    description: 'Learn to recognize and support mental health issues in the workplace. Includes crisis intervention techniques.',
+    price: '£125',
+    duration: '2 Days',
+    color: 'text-purple-600',
     bgColor: 'bg-purple-100 dark:bg-purple-900/20',
   },
   {
-    icon: Globe,
-    title: 'Global Scale',
-    description: 'Deploy globally with our CDN and multi-region infrastructure for low latency worldwide.',
-    color: 'text-indigo-500',
-    bgColor: 'bg-indigo-100 dark:bg-indigo-900/20',
+    icon: Users,
+    title: 'Group Bookings',
+    description: 'On-site training for 6+ people. We come to your workplace. Flexible scheduling including weekends and evenings.',
+    price: 'From £60pp',
+    duration: 'Flexible',
+    color: 'text-green-600',
+    bgColor: 'bg-green-100 dark:bg-green-900/20',
   },
   {
-    icon: Smartphone,
-    title: 'Mobile First',
-    description: 'Responsive design that works seamlessly across all devices and screen sizes.',
-    color: 'text-pink-500',
-    bgColor: 'bg-pink-100 dark:bg-pink-900/20',
+    icon: GraduationCap,
+    title: 'Refresher Training',
+    description: 'Half-day refresher courses for those with existing certificates. Keep your skills sharp and certification current.',
+    price: '£45',
+    duration: 'Half Day',
+    color: 'text-indigo-600',
+    bgColor: 'bg-indigo-100 dark:bg-indigo-900/20',
   },
 ]
 
 const additionalFeatures = [
-  { icon: Cloud, label: 'Cloud Storage' },
-  { icon: Lock, label: 'Data Privacy' },
-  { icon: Palette, label: 'Customizable' },
-  { icon: Code, label: 'API Access' },
-  { icon: Headphones, label: '24/7 Support' },
-  { icon: TrendingUp, label: 'Scalable' },
+  { icon: Award, label: 'Ofqual Regulated' },
+  { icon: CheckCircle, label: 'HSE Approved' },
+  { icon: Clock, label: 'Same Day Certificates' },
+  { icon: MapPin, label: 'Yorkshire Based' },
+  { icon: BookOpen, label: 'Free Course Materials' },
+  { icon: Building, label: 'On-Site Training' },
 ]
 
 const FeaturesSection: React.FC = () => {
@@ -71,11 +83,11 @@ const FeaturesSection: React.FC = () => {
           className="text-center mb-16"
         >
           <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold text-gray-900 dark:text-white mb-4">
-            Everything You Need to Succeed
+            Our First Aid Training Courses
           </h2>
           <p className="text-lg text-gray-600 dark:text-gray-400 max-w-3xl mx-auto">
-            Our comprehensive suite of features is designed to help you achieve your goals faster 
-            and more efficiently than ever before.
+            Professional, practical first aid training delivered by experienced instructors. 
+            All courses are Ofqual regulated and HSE approved.
           </p>
         </motion.div>
 
@@ -98,9 +110,17 @@ const FeaturesSection: React.FC = () => {
                   <h3 className="text-xl font-semibold text-gray-900 dark:text-white mb-3">
                     {feature.title}
                   </h3>
-                  <p className="text-gray-600 dark:text-gray-400">
+                  <p className="text-gray-600 dark:text-gray-400 mb-4">
                     {feature.description}
                   </p>
+                  <div className="flex items-center justify-between mt-auto">
+                    <span className="text-2xl font-bold text-primary-600 dark:text-primary-400">
+                      {feature.price}
+                    </span>
+                    <span className="text-sm text-gray-500 dark:text-gray-400">
+                      {feature.duration}
+                    </span>
+                  </div>
                 </div>
               </div>
             </motion.div>
@@ -115,7 +135,7 @@ const FeaturesSection: React.FC = () => {
           className="bg-gray-50 dark:bg-gray-800 rounded-2xl p-8 md:p-12"
         >
           <h3 className="text-2xl font-bold text-gray-900 dark:text-white text-center mb-8">
-            Plus Many More Features
+            Why Choose React Fast Training?
           </h3>
           <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-6">
             {additionalFeatures.map((feature, index) => (
@@ -146,13 +166,13 @@ const FeaturesSection: React.FC = () => {
           className="mt-16 text-center"
         >
           <p className="text-gray-600 dark:text-gray-400 mb-6">
-            Not sure which features you need?
+            Not sure which course is right for you?
           </p>
           <a
-            href="/features"
+            href="/contact"
             className="inline-flex items-center gap-2 text-primary-600 dark:text-primary-400 font-medium hover:text-primary-700 dark:hover:text-primary-300 transition-colors"
           >
-            View detailed comparison
+            Contact us for advice
             <motion.span
               animate={{ x: [0, 5, 0] }}
               transition={{ duration: 1.5, repeat: Infinity }}

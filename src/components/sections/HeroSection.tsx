@@ -1,6 +1,6 @@
 import React from 'react'
 import { motion } from 'framer-motion'
-import { ArrowRight, PlayCircle } from 'lucide-react'
+import { ArrowRight, PlayCircle, CheckCircle } from 'lucide-react'
 import MagneticButton from '@components/ui/MagneticButton'
 import OrganicDivider from '@components/ui/OrganicDivider'
 import { useKineticTypography, useParallax } from '@hooks/useAnimation'
@@ -8,13 +8,13 @@ import RetroFilter from '@components/ui/RetroFilter'
 
 const HeroSection: React.FC = () => {
   const { ref: parallaxRef, scrollY } = useParallax(0.5)
-  const { ref: titleRef, displayText } = useKineticTypography('Transform Your Business with Modern Solutions')
+  const { ref: titleRef, displayText } = useKineticTypography('Act Fast. Save Lives.')
   
   return (
     <section className="relative min-h-[100vh] flex items-center overflow-hidden py-20 sm:py-24 md:py-0">
-      {/* Dynamic Background with Grain Option */}
-      <div className="absolute inset-0 bg-gradient-to-br from-primary-50 via-white to-secondary-50 dark:from-gray-900 dark:via-gray-900 dark:to-gray-800 grain-texture">
-        <div className="absolute inset-0 bg-grid-pattern opacity-5" />
+      {/* Dynamic Background with Medical Theme */}
+      <div className="absolute inset-0 bg-gradient-to-br from-primary-50 via-white to-red-50 dark:from-gray-900 dark:via-gray-900 dark:to-gray-800">
+        <div className="absolute inset-0 medical-cross-pattern" />
         {/* Liquid gradient background */}
         <div className="absolute inset-0 liquid-gradient opacity-10" />
       </div>
@@ -60,21 +60,21 @@ const HeroSection: React.FC = () => {
                 <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-primary-400 opacity-75"></span>
                 <span className="relative inline-flex rounded-full h-2 w-2 bg-primary-500"></span>
               </span>
-              New: Introducing AI-Powered Solutions
+              Ofqual Regulated & HSE Approved Training
             </motion.div>
 
             <h1 ref={titleRef} className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl xl:text-8xl font-bold text-gray-900 dark:text-white mb-4 sm:mb-6 text-ultra-bold leading-tight">
               <span className="block kinetic-text">
-                {displayText.split(' ').slice(0, 3).join(' ')}
+                {displayText}
               </span>
-              <span className="block text-gradient gradient-primary mt-1 sm:mt-2 kinetic-text animation-delay-200">
-                {displayText.split(' ').slice(3).join(' ')}
+              <span className="block text-2xl sm:text-3xl md:text-4xl mt-4 text-gray-700 dark:text-gray-300 font-semibold">
+                Yorkshire's Premier First Aid Training
               </span>
             </h1>
 
             <p className="text-base sm:text-lg md:text-xl text-gray-600 dark:text-gray-400 mb-6 sm:mb-8 max-w-2xl">
-              Empower your team with cutting-edge tools and services designed to drive growth, 
-              increase efficiency, and deliver exceptional results.
+              Professional first aid training delivered by experienced instructors with military and emergency services backgrounds. 
+              Courses from £75. On-site training available across Yorkshire.
             </p>
 
             <div className="flex flex-col sm:flex-row gap-3 sm:gap-4">
@@ -85,9 +85,9 @@ const HeroSection: React.FC = () => {
                 className="group w-full sm:w-auto justify-center"
               >
                 <span className="relative">
-                  Get Started Free
+                  Book Your Course
                   <span className="absolute inset-0 text-gradient gradient-primary opacity-0 group-hover:opacity-100 transition-opacity">
-                    Get Started Free
+                    Book Your Course
                   </span>
                 </span>
               </MagneticButton>
@@ -97,7 +97,7 @@ const HeroSection: React.FC = () => {
                 leftIcon={<PlayCircle className="w-4 h-4 sm:w-5 sm:h-5" />}
                 className="border-2 sm:border-3 hover:border-primary-500 transition-colors w-full sm:w-auto justify-center"
               >
-                Watch Demo
+                View Courses
               </MagneticButton>
             </div>
 
@@ -109,17 +109,21 @@ const HeroSection: React.FC = () => {
               className="mt-12 pt-8 border-t border-gray-200 dark:border-gray-700"
             >
               <p className="text-sm text-gray-600 dark:text-gray-400 mb-4">
-                Trusted by leading companies worldwide
+                Trusted by Yorkshire businesses and organizations
               </p>
               <div className="flex flex-wrap items-center gap-4 sm:gap-6 md:gap-8">
-                {['Company 1', 'Company 2', 'Company 3', 'Company 4'].map((company) => (
-                  <div
-                    key={company}
-                    className="text-gray-400 dark:text-gray-600 font-semibold text-sm sm:text-base"
-                  >
-                    {company}
-                  </div>
-                ))}
+                <div className="flex items-center gap-2">
+                  <CheckCircle className="w-5 h-5 text-primary-600 dark:text-primary-400" />
+                  <span className="text-gray-700 dark:text-gray-300 font-medium">98% Pass Rate</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <CheckCircle className="w-5 h-5 text-primary-600 dark:text-primary-400" />
+                  <span className="text-gray-700 dark:text-gray-300 font-medium">Same Day Certificates</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <CheckCircle className="w-5 h-5 text-primary-600 dark:text-primary-400" />
+                  <span className="text-gray-700 dark:text-gray-300 font-medium">Small Group Sizes</span>
+                </div>
               </div>
             </motion.div>
           </motion.div>
@@ -142,19 +146,24 @@ const HeroSection: React.FC = () => {
                 }}
                 transition={{ type: "spring", stiffness: 100 }}
               >
-                <RetroFilter variant="grain" intensity="light">
-                  <div className="text-white text-center p-8">
-                    <h3 className="text-3xl font-bold mb-4 glitch" data-text="Interactive Demo">
-                      Interactive Demo
+                <div className="text-white text-center p-8 relative">
+                  <div className="absolute inset-0 flex items-center justify-center opacity-10">
+                    <svg className="w-48 h-48" fill="currentColor" viewBox="0 0 24 24">
+                      <path d="M19 8h-2v3h-3v2h3v3h2v-3h3v-2h-3zM2 12v2h7v7h2v-7h7v-2H11V5H9v7z"/>
+                    </svg>
+                  </div>
+                  <div className="relative z-10">
+                    <h3 className="text-3xl font-bold mb-4">
+                      Learn Life-Saving Skills
                     </h3>
                     <p className="mb-6 text-lg">
-                      Experience our platform in action
+                      Join thousands who've trained with us
                     </p>
-                    <MagneticButton variant="secondary" size="lg" className="brutalist-border">
-                      Try Now
+                    <MagneticButton variant="secondary" size="lg">
+                      Book Now - £75
                     </MagneticButton>
                   </div>
-                </RetroFilter>
+                </div>
               </motion.div>
             </div>
 

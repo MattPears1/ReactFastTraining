@@ -12,14 +12,14 @@ interface CTASectionProps {
 }
 
 const CTASection: React.FC<CTASectionProps> = ({
-  title = "Ready to Get Started?",
-  description = "Join thousands of satisfied customers who have transformed their business with our solutions.",
-  primaryButtonText = "Start Free Trial",
-  secondaryButtonText = "Schedule Demo",
+  title = "Ready to Save Lives?",
+  description = "Join thousands of Yorkshire professionals who have trained with React Fast Training.",
+  primaryButtonText = "Book Your Course",
+  secondaryButtonText = "Call 07845 123456",
   features = [
-    "No credit card required",
-    "14-day free trial",
-    "Cancel anytime",
+    "Ofqual Regulated",
+    "Same Day Certificates",
+    "98% Pass Rate",
   ]
 }) => {
   return (
@@ -81,7 +81,7 @@ const CTASection: React.FC<CTASectionProps> = ({
               <Button
                 size="lg"
                 variant="outline"
-                href="/contact"
+                href="tel:07845123456"
                 className="border-white text-white hover:bg-white/10"
               >
                 {secondaryButtonText}
@@ -119,15 +119,18 @@ const CTASection: React.FC<CTASectionProps> = ({
             className="mt-12 pt-8 border-t border-white/20"
           >
             <p className="text-sm text-primary-100 mb-4">
-              Trusted by industry leaders
+              Trusted by Yorkshire businesses and organizations
             </p>
-            <div className="flex flex-wrap justify-center items-center gap-8">
-              {[1, 2, 3, 4, 5].map((i) => (
-                <div
-                  key={i}
-                  className="w-24 h-12 bg-white/20 rounded-lg animate-pulse"
-                />
-              ))}
+            <div className="flex flex-wrap justify-center items-center gap-6 text-white/80">
+              <span className="font-semibold">NHS</span>
+              <span className="text-white/40">•</span>
+              <span className="font-semibold">Yorkshire Ambulance Service</span>
+              <span className="text-white/40">•</span>
+              <span className="font-semibold">Local Schools</span>
+              <span className="text-white/40">•</span>
+              <span className="font-semibold">Care Homes</span>
+              <span className="text-white/40">•</span>
+              <span className="font-semibold">Construction Companies</span>
             </div>
           </motion.div>
         </div>
