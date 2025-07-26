@@ -6,7 +6,6 @@ import SEOChecklist from '@components/common/SEOChecklist'
 import { motion } from 'framer-motion'
 import { SystemAlert } from '@components/ui/AlertBanner'
 import { useNotifications } from '@contexts/NotificationContext'
-import PageLogo from '@components/common/PageLogo'
 
 interface LayoutProps {
   children: React.ReactNode
@@ -30,7 +29,6 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
         />
       )}
       <Header />
-      <PageLogo />
       <motion.main
         id="main-content"
         className="flex-1"
