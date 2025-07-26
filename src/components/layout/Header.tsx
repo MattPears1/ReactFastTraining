@@ -206,9 +206,8 @@ const Header: React.FC = () => {
                   <NotificationBadge count={unreadCount} />
                 </button>
                 {showNotifications && (
-                  <div 
-                    className="absolute right-0 mt-2 z-50 w-screen max-w-[calc(100vw-2rem)] sm:w-auto sm:max-w-none"
-                    style={{ right: 'max(-1rem, calc(-100vw + 100% + 2rem))' }}
+                  <div
+                    className="absolute right-0 mt-2 z-50 w-80 max-w-[calc(100vw-2rem)]"
                     onClick={(e) => e.stopPropagation()}
                   >
                     <NotificationCenter

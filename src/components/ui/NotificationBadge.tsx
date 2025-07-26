@@ -10,7 +10,7 @@ interface NotificationBadgeProps {
   size?: 'sm' | 'md' | 'lg';
   position?: 'top-right' | 'top-left' | 'bottom-right' | 'bottom-left';
   pulse?: boolean;
-  children: React.ReactNode;
+  children?: React.ReactNode;
   className?: string;
 }
 
