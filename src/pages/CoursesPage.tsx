@@ -4,6 +4,7 @@ import { Link } from 'react-router-dom'
 import { Heart, Shield, Users, Brain, Clock, Award, ArrowRight, CheckCircle, RefreshCw, Activity, Zap, Calendar, Wind } from 'lucide-react'
 import SEO from '@components/common/SEO'
 import Button from '@components/ui/Button'
+import { AnimatedCourseCard } from '@components/ui/AnimatedCourseCard'
 
 const courses = [
   // Primary courses - ordered as requested

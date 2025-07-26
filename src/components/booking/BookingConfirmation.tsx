@@ -75,8 +75,9 @@ For any queries, please call us on 07447 485644 or email info@reactfasttraining.
           initial={{ scale: 0 }}
           animate={{ scale: 1 }}
           transition={{ delay: 0.2, type: "spring", stiffness: 200 }}
+          className="mb-4"
         >
-          <CheckCircle className="w-20 h-20 text-green-500 mx-auto mb-4" />
+          <SuccessCheckmark size={100} />
         </motion.div>
         
         <h2 className="text-2xl font-bold text-green-900 dark:text-green-100 mb-2">

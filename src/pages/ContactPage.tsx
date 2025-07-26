@@ -3,6 +3,7 @@ import { motion } from 'framer-motion'
 import { MapPin, Phone, Mail, Clock, MessageSquare, Send } from 'lucide-react'
 import ContactForm from '@components/ui/ContactForm'
 import SEO from '@components/common/SEO'
+import { MapPinAnimation, PhoneRingAnimation } from '@components/ui/ContactAnimations'
 
 const contactInfo = [
   {
@@ -76,7 +77,15 @@ const ContactPage: React.FC = () => {
               >
                 <div className="card-body text-center">
                   <div className="w-12 h-12 bg-primary-100 dark:bg-primary-900/30 rounded-lg flex items-center justify-center mx-auto mb-4">
-                    <info.icon className="w-6 h-6 text-primary-600 dark:text-primary-400" />
+                    {info.icon === MapPin ? (
+                      <MapPinAnimation size={30} />
+                    ) : info.icon === Phone ? (
+                      <PhoneRingAnimation>
+                        <Phone className="w-6 h-6 text-primary-600 dark:text-primary-400" />
+                      </PhoneRingAnimation>
+                    ) : (
+                      <info.icon className="w-6 h-6 text-primary-600 dark:text-primary-400" />
+                    )}
                   </div>
                   <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-3">
                     {info.title}

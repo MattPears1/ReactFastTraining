@@ -3,6 +3,7 @@ import { motion } from 'framer-motion'
 import { Users, Target, Award, Shield, Heart, MapPin } from 'lucide-react'
 import CTASection from '@components/sections/CTASection'
 import SEO from '@components/common/SEO'
+import { AnimatedCounter } from '@components/ui/AnimatedCounter'
 
 const values = [
   {
@@ -114,6 +115,49 @@ const AboutPage: React.FC = () => {
                 every student who walks through our doors. When you train with us, you're learning from someone 
                 who has faced real emergencies and understands the importance of being prepared.
               </p>
+            </motion.div>
+          </div>
+        </div>
+      </section>
+
+      {/* Statistics Section */}
+      <section className="section bg-primary-50 dark:bg-primary-900/20">
+        <div className="container">
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+            >
+              <AnimatedCounter target={12} className="text-primary-600 dark:text-primary-400" />
+              <p className="text-gray-600 dark:text-gray-400 mt-2">Maximum Group Size</p>
+            </motion.div>
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ delay: 0.1 }}
+            >
+              <AnimatedCounter target={13} className="text-primary-600 dark:text-primary-400" />
+              <p className="text-gray-600 dark:text-gray-400 mt-2">Different Courses</p>
+            </motion.div>
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ delay: 0.2 }}
+            >
+              <AnimatedCounter target={3} suffix="+" className="text-primary-600 dark:text-primary-400" />
+              <p className="text-gray-600 dark:text-gray-400 mt-2">Years Experience</p>
+            </motion.div>
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ delay: 0.3 }}
+            >
+              <AnimatedCounter target={100} suffix="%" className="text-primary-600 dark:text-primary-400" />
+              <p className="text-gray-600 dark:text-gray-400 mt-2">Practical Focus</p>
             </motion.div>
           </div>
         </div>

@@ -4,6 +4,7 @@ import { User, Mail, Phone, Building, MapPin, Users, FileText, Plus, Minus } fro
 import { bookingApi } from '@services/api.service'
 import { useToast } from '@contexts/ToastContext'
 import { cn } from '@utils/cn'
+import { ProgressBar } from '@components/ui/SuccessAnimation'
 
 interface ParticipantDetail {
   name: string
@@ -131,8 +132,31 @@ export const BookingForm: React.FC<BookingFormProps> = ({
     }
   }
   
+  // Calculate form progress
+  const calculateProgress = () => {
+    let filled = 0
+    const totalFields = 5 // Basic contact fields
+    
+    if (formData.contactName) filled++
+    if (formData.contactEmail) filled++
+    if (formData.contactPhone) filled++
+    if (formData.companyName) filled++
+    if (formData.companyAddress) filled++
+    
+    return Math.round((filled / totalFields) * 100)
+  }
+  
   return (
     <form onSubmit={handleSubmit} className="space-y-6">
+      {/* Progress Bar */}
+      <div className="mb-6">
+        <div className="flex justify-between text-sm text-gray-600 dark:text-gray-400 mb-2">
+          <span>Booking Progress</span>
+          <span>{calculateProgress()}% Complete</span>
+        </div>
+        <ProgressBar progress={calculateProgress()} />
+      </div>
+      
       <div className="bg-primary-50 dark:bg-primary-900/20 rounded-lg p-4">
         <h3 className="font-semibold text-primary-900 dark:text-primary-100 mb-1">
           {courseName}

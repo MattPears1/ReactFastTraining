@@ -67,6 +67,11 @@ const HeroSection: React.FC = () => {
                   in South Yorkshire
                 </span>
               </h1>
+              {/* Animated Slogan */}
+              <AnimatedGradientText 
+                text="Act Fast | Learn Skills" 
+                className="text-2xl md:text-3xl mt-4 font-semibold"
+              />
               {/* Decorative Line */}
               <motion.div
                 initial={{ width: 0 }}
