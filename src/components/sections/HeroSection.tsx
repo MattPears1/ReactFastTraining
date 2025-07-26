@@ -186,23 +186,17 @@ const HeroSection: React.FC = () => {
                   ease: "easeInOut",
                 }}
               />
-              {/* Front Card */}
-              <div className="relative bg-gradient-to-br from-primary-500 to-primary-700 rounded-3xl p-8 shadow-2xl">
-                <div className="aspect-square flex flex-col items-center justify-center text-white">
-                  <motion.div
-                    animate={{
-                      scale: [1, 1.1, 1],
-                    }}
-                    transition={{
-                      duration: 3,
-                      repeat: Infinity,
-                      ease: "easeInOut",
-                    }}
-                  >
-                    <svg width="120" height="120" viewBox="0 0 24 24" fill="currentColor" className="mb-6">
-                      <path d="M19 8h-2v3h-3v2h3v3h2v-3h3v-2h-3zM2 12v2h7v7h2v-7h7v-2H11V5H9v7z"/>
-                    </svg>
-                  </motion.div>
+              {/* Front Card with Image */}
+              <div className="relative rounded-3xl overflow-hidden shadow-2xl">
+                <img 
+                  src="/images/hero/first-aid-training-hero.jpg" 
+                  alt="First Aid Training in Progress"
+                  className="w-full h-full object-cover"
+                  onError={(e) => {
+                    e.currentTarget.src = '/images/placeholder-course.jpg'
+                  }}
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-primary-900/80 via-primary-800/40 to-transparent flex flex-col items-center justify-end p-8 text-white">
                   <h3 className="text-2xl font-bold mb-2">Learn to Save Lives</h3>
                   <p className="text-center text-white/90">
                     Professional training that makes a difference

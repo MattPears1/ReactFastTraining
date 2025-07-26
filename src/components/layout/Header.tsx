@@ -168,7 +168,6 @@ const Header: React.FC = () => {
                   )}
                 </div>
               ))}
-              </div>
             </div>
 
             {/* Right Side Actions */}
