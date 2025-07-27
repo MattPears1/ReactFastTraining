@@ -170,8 +170,6 @@ class BookingService {
     console.log('Number of Participants:', data.numberOfParticipants);
     console.log('Total Amount:', data.totalAmount);
     
-    await new Promise(resolve => setTimeout(resolve, 500));
-    
     // Find the course schedule
     const schedule = this.mockSchedules.find(s => s.id === data.courseScheduleId);
     console.log('Schedule found:', !!schedule);
@@ -200,46 +198,126 @@ class BookingService {
     const confirmationCode = this.generateConfirmationCode();
     console.log('Generated confirmation code:', confirmationCode);
     
-    // Create booking object with confirmed payment
-    const booking: Booking = {
-      id: Math.random().toString(36).substr(2, 9),
-      bookingReference: confirmationCode,
-      courseSchedule: schedule,
-      primaryContact: {
-        firstName: data.firstName,
-        lastName: data.lastName,
-        email: data.email,
-        phone: data.phone,
-        companyName: data.companyName
-      },
-      participants: data.participantDetails || [{
-        firstName: data.firstName,
-        lastName: data.lastName,
-        email: data.email
-      }],
-      totalAmount: data.totalAmount,
-      bookingStatus: 'confirmed',
-      paymentStatus: 'paid',
-      paymentIntentId: data.paymentIntentId,
-      specialRequirements: data.specialRequirements,
-      createdAt: new Date().toISOString(),
-      updatedAt: new Date().toISOString()
-    };
-    
-    console.log('Created booking:', booking);
-    
-    // Update available spots
-    schedule.availableSpots -= data.numberOfParticipants;
-    console.log('Updated available spots to:', schedule.availableSpots);
-    
-    console.log('Booking confirmed successfully!');
-    return {
-      success: true,
-      data: {
-        booking,
-        confirmationCode
+    try {
+      // Send booking to backend API
+      const bookingData = {
+        id: confirmationCode,
+        courseId: schedule.courseDetails.courseId,
+        courseName: schedule.courseDetails.title,
+        courseDate: schedule.startDate.split('T')[0],
+        courseTime: schedule.startTime,
+        courseVenue: schedule.venueName,
+        coursePrice: schedule.pricePerPerson,
+        customerName: `${data.firstName} ${data.lastName}`,
+        customerEmail: data.email,
+        customerPhone: data.phone,
+        companyName: data.companyName || '',
+        bookingDate: new Date().toISOString().split('T')[0],
+        bookingReference: confirmationCode,
+        status: 'confirmed',
+        paymentStatus: 'paid',
+        paymentMethod: 'card',
+        paymentIntentId: data.paymentIntentId,
+        attendees: data.numberOfParticipants,
+        totalAmount: data.totalAmount,
+        notes: data.specialRequirements || '',
+        createdAt: new Date().toISOString(),
+        updatedAt: new Date().toISOString()
+      };
+
+      // Send to admin backend
+      const response = await fetch('/api/admin/bookings', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(bookingData),
+      });
+
+      if (!response.ok) {
+        console.error('Failed to save booking to admin system');
+        // Continue anyway - don't fail the customer booking
       }
-    };
+
+      // Create booking object with confirmed payment
+      const booking: Booking = {
+        id: confirmationCode,
+        bookingReference: confirmationCode,
+        courseSchedule: schedule,
+        primaryContact: {
+          firstName: data.firstName,
+          lastName: data.lastName,
+          email: data.email,
+          phone: data.phone,
+          companyName: data.companyName
+        },
+        participants: data.participantDetails || [{
+          firstName: data.firstName,
+          lastName: data.lastName,
+          email: data.email
+        }],
+        totalAmount: data.totalAmount,
+        bookingStatus: 'confirmed',
+        paymentStatus: 'paid',
+        paymentIntentId: data.paymentIntentId,
+        specialRequirements: data.specialRequirements,
+        createdAt: new Date().toISOString(),
+        updatedAt: new Date().toISOString()
+      };
+      
+      console.log('Created booking:', booking);
+      
+      // Update available spots
+      schedule.availableSpots -= data.numberOfParticipants;
+      console.log('Updated available spots to:', schedule.availableSpots);
+      
+      console.log('Booking confirmed successfully!');
+      return {
+        success: true,
+        data: {
+          booking,
+          confirmationCode
+        }
+      };
+    } catch (error) {
+      console.error('Error confirming booking:', error);
+      // Still return success to customer if booking was created
+      const booking: Booking = {
+        id: confirmationCode,
+        bookingReference: confirmationCode,
+        courseSchedule: schedule,
+        primaryContact: {
+          firstName: data.firstName,
+          lastName: data.lastName,
+          email: data.email,
+          phone: data.phone,
+          companyName: data.companyName
+        },
+        participants: data.participantDetails || [{
+          firstName: data.firstName,
+          lastName: data.lastName,
+          email: data.email
+        }],
+        totalAmount: data.totalAmount,
+        bookingStatus: 'confirmed',
+        paymentStatus: 'paid',
+        paymentIntentId: data.paymentIntentId,
+        specialRequirements: data.specialRequirements,
+        createdAt: new Date().toISOString(),
+        updatedAt: new Date().toISOString()
+      };
+      
+      // Update available spots
+      schedule.availableSpots -= data.numberOfParticipants;
+      
+      return {
+        success: true,
+        data: {
+          booking,
+          confirmationCode
+        }
+      };
+    }
   }
   
   private generateConfirmationCode(): string {

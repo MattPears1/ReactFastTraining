@@ -488,6 +488,26 @@ app.get('/api/admin/schedules/:id', (req, res) => {
   }
 });
 
+// Create new booking
+app.post('/api/admin/bookings', (req, res) => {
+  console.log('Create new booking:', req.body);
+  
+  const newBooking = {
+    ...req.body,
+    id: req.body.id || `BK-${Date.now()}`,
+    createdAt: req.body.createdAt || new Date().toISOString(),
+    updatedAt: req.body.updatedAt || new Date().toISOString()
+  };
+  
+  // Add to bookings array
+  bookings.push(newBooking);
+  
+  res.json({ 
+    success: true, 
+    booking: newBooking 
+  });
+});
+
 // Send email endpoint
 app.post('/api/admin/bookings/:id/email', (req, res) => {
   console.log('Email booking confirmation:', req.params.id, req.body);
