@@ -23,7 +23,7 @@ export const MetricCard: React.FC<MetricCardProps> = ({
 }) => {
   if (loading) {
     return (
-      <div className="bg-white rounded-lg shadow p-6 animate-pulse">
+      <div className="bg-white rounded-lg shadow p-6 animate-pulse border border-primary-500">
         <div className="h-4 bg-gray-200 rounded w-3/4 mb-4"></div>
         <div className="h-8 bg-gray-200 rounded w-1/2 mb-2"></div>
         <div className="h-3 bg-gray-200 rounded w-1/4"></div>
@@ -32,7 +32,7 @@ export const MetricCard: React.FC<MetricCardProps> = ({
   }
 
   return (
-    <div className="bg-white rounded-lg shadow p-6">
+    <div className="bg-white rounded-lg shadow p-6 border border-primary-500">
       <div className="flex items-center justify-between">
         <div className="flex-1">
           <p className="text-sm font-medium text-gray-600">{title}</p>

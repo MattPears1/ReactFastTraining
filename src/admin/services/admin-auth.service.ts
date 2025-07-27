@@ -35,8 +35,9 @@ class AdminAuthService {
   private api: AxiosInstance;
 
   constructor() {
-    const baseURL = import.meta.env.VITE_API_URL || 'http://localhost:3000';
-    console.log('🌐 [AdminAuthService] Initializing with baseURL:', baseURL);
+    // Use relative URLs - Vite will proxy to backend
+    const baseURL = '';
+    console.log('🌐 [AdminAuthService] Using relative URLs (proxied by Vite)');
     
     this.api = axios.create({
       baseURL,

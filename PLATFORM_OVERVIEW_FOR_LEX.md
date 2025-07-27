@@ -63,7 +63,6 @@ Each course (EFAW, FAW, Paediatric) has its own dedicated page featuring:
 - **Contact Form**: Direct inquiries sent to your email
 - **Phone Numbers**: Clickable for mobile users
 - **Email Addresses**: Properly configured for different departments
-- **Office Location**: With interactive map
 - **Business Hours**: Clearly displayed
 
 ---

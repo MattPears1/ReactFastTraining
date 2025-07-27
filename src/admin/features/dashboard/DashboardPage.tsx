@@ -92,7 +92,7 @@ export const DashboardPage: React.FC = () => {
 
       {/* Charts row */}
       <div className="grid grid-cols-1 gap-6 xl:grid-cols-2">
-        <div className="bg-white rounded-lg shadow overflow-hidden">
+        <div className="bg-white rounded-lg shadow overflow-hidden border border-primary-500">
           <div className="p-6">
             <div className="flex items-center justify-between mb-4">
               <h2 className="text-lg font-medium text-gray-900">Revenue Trend</h2>
@@ -102,7 +102,7 @@ export const DashboardPage: React.FC = () => {
           </div>
         </div>
         
-        <div className="bg-white rounded-lg shadow overflow-hidden">
+        <div className="bg-white rounded-lg shadow overflow-hidden border border-primary-500">
           <div className="p-6">
             <div className="flex items-center justify-between mb-4">
               <h2 className="text-lg font-medium text-gray-900">Booking Status</h2>
@@ -115,7 +115,7 @@ export const DashboardPage: React.FC = () => {
 
       {/* Bottom row */}
       <div className="grid grid-cols-1 gap-6 xl:grid-cols-2">
-        <div className="bg-white rounded-lg shadow overflow-hidden">
+        <div className="bg-white rounded-lg shadow overflow-hidden border border-primary-500">
           <div className="p-6">
             <div className="flex items-center justify-between mb-4">
               <h2 className="text-lg font-medium text-gray-900">Upcoming Schedules</h2>
@@ -127,7 +127,7 @@ export const DashboardPage: React.FC = () => {
           </div>
         </div>
         
-        <div className="bg-white rounded-lg shadow overflow-hidden">
+        <div className="bg-white rounded-lg shadow overflow-hidden border border-primary-500">
           <div className="p-6">
             <div className="flex items-center justify-between mb-4">
               <h2 className="text-lg font-medium text-gray-900">Recent Activity</h2>

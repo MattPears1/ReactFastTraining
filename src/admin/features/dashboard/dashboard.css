@@ -1,5 +1,10 @@
 /* Dashboard Chart Styles */
 
+/* Add thin blue borders to all dashboard boxes */
+.bg-white.rounded-lg.shadow {
+  border: 1px solid rgb(14, 165, 233) !important; /* primary-500 blue */
+}
+
 /* Ensure proper responsiveness for charts */
 @media (max-width: 640px) {
   .recharts-responsive-container {
