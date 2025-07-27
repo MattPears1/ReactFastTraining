@@ -60,15 +60,6 @@ const CourseTemplate: React.FC<CourseTemplateProps> = ({
         canonical={`/courses/${courseName.toLowerCase().replace(/\s+/g, '-')}`}
       />
       
-      {/* Logo at very top right */}
-      <div className="fixed top-4 right-4 z-50">
-        <img 
-          src="/images/logos/fulllogo_transparent.png" 
-          alt="React Fast Training" 
-          className="h-20 md:h-30 lg:h-40 w-auto"
-        />
-      </div>
-      
       {/* Hero Section */}
       <section className="relative py-20 md:py-32 overflow-hidden bg-gradient-to-br from-primary-50 to-secondary-50 dark:from-gray-900 dark:to-gray-800">
         <div className="container relative z-10">
