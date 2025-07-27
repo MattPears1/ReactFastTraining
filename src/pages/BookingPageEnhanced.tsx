@@ -402,11 +402,13 @@ const BookingPageEnhanced: React.FC = () => {
                     </div>
                     
                     {/* Price Summary */}
-                    <PricingSummary
-                      pricePerPerson={selectedSchedule.pricePerPerson}
-                      numberOfParticipants={1}
-                      showBreakdown={false}
-                    />
+                    <div className="bg-white dark:bg-gray-800 rounded-lg p-6 shadow-sm">
+                      <h3 className="font-semibold text-lg mb-4">Price</h3>
+                      <div className="text-2xl font-bold text-primary-600">
+                        £{selectedSchedule.pricePerPerson.toFixed(2)}
+                      </div>
+                      <p className="text-sm text-gray-600 dark:text-gray-400">per person</p>
+                    </div>
                     
                     {/* Help Section */}
                     <div className="mt-6 p-4 bg-blue-50 dark:bg-blue-900/20 rounded-lg">
