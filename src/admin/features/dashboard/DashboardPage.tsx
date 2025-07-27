@@ -56,7 +56,7 @@ export const DashboardPage: React.FC = () => {
     <div className="space-y-6">
       {/* Page header */}
       <div className="admin-page-header admin-fade-in">
-        <h1 className="admin-page-title">Dashboard</h1>
+        <h1 className="admin-page-title">Lex's Dashboard</h1>
         <p className="admin-page-subtitle">
           Welcome back! Here's what's happening with your business today.
         </p>
