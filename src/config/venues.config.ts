@@ -3,8 +3,8 @@ import { VenueConfig, VenueCode } from '@/types/booking.types';
 export const VENUE_CONFIG: Record<VenueCode, VenueConfig> = {
   SHEFFIELD: {
     code: 'SHEFFIELD',
-    name: 'Sheffield Training Centre',
-    address: 'City Centre',
+    name: 'South Yorkshire',
+    address: 'Venue TBC',
     city: 'Sheffield',
     postcode: 'S1 1AA',
     facilities: [
@@ -18,8 +18,8 @@ export const VENUE_CONFIG: Record<VenueCode, VenueConfig> = {
   },
   LEEDS: {
     code: 'LEEDS',
-    name: 'Leeds Training Centre',
-    address: 'City Centre',
+    name: 'South Yorkshire',
+    address: 'Venue TBC',
     city: 'Leeds',
     postcode: 'LS1 1AA',
     facilities: [
@@ -33,8 +33,8 @@ export const VENUE_CONFIG: Record<VenueCode, VenueConfig> = {
   },
   BARNSLEY: {
     code: 'BARNSLEY',
-    name: 'Barnsley Training Venue',
-    address: 'Town Centre',
+    name: 'South Yorkshire',
+    address: 'Venue TBC',
     city: 'Barnsley',
     postcode: 'S70 1AA',
     facilities: [
@@ -48,8 +48,8 @@ export const VENUE_CONFIG: Record<VenueCode, VenueConfig> = {
   },
   DONCASTER: {
     code: 'DONCASTER',
-    name: 'Doncaster Training Venue',
-    address: 'Town Centre',
+    name: 'South Yorkshire',
+    address: 'Venue TBC',
     city: 'Doncaster',
     postcode: 'DN1 1AA',
     facilities: [
@@ -63,8 +63,8 @@ export const VENUE_CONFIG: Record<VenueCode, VenueConfig> = {
   },
   ROTHERHAM: {
     code: 'ROTHERHAM',
-    name: 'Rotherham Training Centre',
-    address: 'Town Centre',
+    name: 'South Yorkshire',
+    address: 'Venue TBC',
     city: 'Rotherham',
     postcode: 'S60 1AA',
     facilities: [

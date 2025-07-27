@@ -31,44 +31,64 @@ class BookingService {
   }
   
   async getAvailableCourses(params: GetAvailableCoursesParams = {}): Promise<CourseSchedule[]> {
+    console.log('=== BOOKING SERVICE: Get Available Courses ===');
+    console.log('Parameters:', params);
+    
     // Simulate API delay
     await new Promise(resolve => setTimeout(resolve, 300));
     
     let schedules = [...this.mockSchedules];
+    console.log('Total mock schedules:', schedules.length);
     
     // Filter by course type
     if (params.courseType) {
       schedules = schedules.filter(s => s.courseType === params.courseType);
+      console.log(`After course type filter (${params.courseType}):`, schedules.length);
     }
     
     // Filter by venue
     if (params.venue) {
       schedules = schedules.filter(s => s.venue === params.venue);
+      console.log(`After venue filter (${params.venue}):`, schedules.length);
     }
     
     // Filter by date range
     if (params.dateFrom) {
       schedules = schedules.filter(s => new Date(s.startDate) >= params.dateFrom!);
+      console.log(`After dateFrom filter:`, schedules.length);
     }
     
     if (params.dateTo) {
       schedules = schedules.filter(s => new Date(s.startDate) <= params.dateTo!);
+      console.log(`After dateTo filter:`, schedules.length);
     }
     
     // Filter out full courses unless specified
     if (!params.showFullCourses) {
       schedules = schedules.filter(s => s.availableSpots > 0);
+      console.log('After availability filter:', schedules.length);
     }
     
     // Sort by date
     schedules.sort((a, b) => new Date(a.startDate).getTime() - new Date(b.startDate).getTime());
     
+    console.log('Final schedules returned:', schedules.length);
     return schedules;
   }
   
   async getCourseSchedule(id: number): Promise<CourseSchedule | null> {
+    console.log('=== BOOKING SERVICE: Get Course Schedule ===');
+    console.log('Schedule ID:', id);
+    
     await new Promise(resolve => setTimeout(resolve, 200));
-    return this.mockSchedules.find(s => s.id === id) || null;
+    const schedule = this.mockSchedules.find(s => s.id === id) || null;
+    
+    console.log('Schedule found:', !!schedule);
+    if (schedule) {
+      console.log('Schedule details:', schedule);
+    }
+    
+    return schedule;
   }
   
   async createBooking(data: BookingFormData): Promise<CreateBookingResponse> {
@@ -144,11 +164,20 @@ class BookingService {
   }
   
   async confirmBookingWithPayment(data: ConfirmBookingWithPaymentData): Promise<CreateBookingResponse> {
+    console.log('=== BOOKING SERVICE: Confirm Booking With Payment ===');
+    console.log('Payment Intent ID:', data.paymentIntentId);
+    console.log('Course Schedule ID:', data.courseScheduleId);
+    console.log('Number of Participants:', data.numberOfParticipants);
+    console.log('Total Amount:', data.totalAmount);
+    
     await new Promise(resolve => setTimeout(resolve, 500));
     
     // Find the course schedule
     const schedule = this.mockSchedules.find(s => s.id === data.courseScheduleId);
+    console.log('Schedule found:', !!schedule);
+    
     if (!schedule) {
+      console.error('Course schedule not found!');
       return {
         success: false,
         error: 'Course schedule not found'
@@ -156,7 +185,11 @@ class BookingService {
     }
     
     // Check availability again
+    console.log('Available spots:', schedule.availableSpots);
+    console.log('Requested spots:', data.numberOfParticipants);
+    
     if (schedule.availableSpots < data.numberOfParticipants) {
+      console.error('Not enough spots available!');
       return {
         success: false,
         error: 'Not enough spots available'
@@ -165,6 +198,7 @@ class BookingService {
     
     // Generate confirmation code
     const confirmationCode = this.generateConfirmationCode();
+    console.log('Generated confirmation code:', confirmationCode);
     
     // Create booking object with confirmed payment
     const booking: Booking = {
@@ -192,9 +226,13 @@ class BookingService {
       updatedAt: new Date().toISOString()
     };
     
+    console.log('Created booking:', booking);
+    
     // Update available spots
     schedule.availableSpots -= data.numberOfParticipants;
+    console.log('Updated available spots to:', schedule.availableSpots);
     
+    console.log('Booking confirmed successfully!');
     return {
       success: true,
       data: {

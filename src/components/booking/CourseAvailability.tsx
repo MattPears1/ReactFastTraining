@@ -29,6 +29,9 @@ export const CourseAvailability: React.FC<CourseAvailabilityProps> = ({
   }, [courseType])
 
   const fetchAvailableCourses = async () => {
+    console.log('=== COURSE AVAILABILITY: Fetching courses ===')
+    console.log('Course Type:', courseType)
+    
     try {
       setLoading(true)
       setError(null)
@@ -38,10 +41,14 @@ export const CourseAvailability: React.FC<CourseAvailabilityProps> = ({
         showFullCourses: false
       })
       
+      console.log('Schedules received:', schedules.length)
+      console.log('Schedules:', schedules)
+      
       setSchedules(schedules)
     } catch (err) {
+      console.error('=== ERROR FETCHING COURSES ===')
+      console.error('Error:', err)
       setError('Failed to load available courses. Please try again.')
-      console.error('Error fetching courses:', err)
     } finally {
       setLoading(false)
     }

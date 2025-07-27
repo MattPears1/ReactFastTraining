@@ -5,10 +5,10 @@ const FAWRequalificationPage: React.FC = () => {
   const courseData = {
     courseName: 'First Aid at Work Requalification',
     courseAcronym: 'FAW-R',
-    duration: 'Full Day (5 hours)',
+    duration: '5 Hours',
     price: '£150',
     certificateValidity: 'Valid for 3 years',
-    description: 'This course is for those who need to renew their FAW certificate. It serves as a comprehensive refresher of the three-day course content, ensuring that first aiders are up-to-date with any changes in protocols and maintain their competency.',
+    description: 'This course is for those who need to renew their FAW certificate. It serves as a comprehensive refresher of the course content, ensuring that first aiders are up-to-date with any changes in protocols and maintain their competency.',
     
     learningOutcomes: [
       'Refresh and update all key first aid skills',

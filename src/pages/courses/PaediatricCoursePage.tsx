@@ -5,7 +5,7 @@ const PaediatricCoursePage: React.FC = () => {
   const courseData = {
     courseName: 'Paediatric First Aid',
     courseAcronym: 'PFA',
-    duration: 'Full Day (6 hours)',
+    duration: '1 Day',
     price: '£120',
     certificateValidity: 'Valid for 3 years',
     description: 'This is a comprehensive course covering a wide range of first aid emergencies affecting infants and children. It\'s often delivered in a blended format, with online theory and in-person practical sessions. This course is essential for anyone working with children, including those in nurseries, schools, and as childminders, and is compliant with OFSTED and Early Years Foundation Stage (EYFS) requirements.',

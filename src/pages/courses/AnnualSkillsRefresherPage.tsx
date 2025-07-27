@@ -5,7 +5,7 @@ const AnnualSkillsRefresherPage: React.FC = () => {
   const courseData = {
     courseName: 'Annual Skills Refresher',
     courseAcronym: 'ASR',
-    duration: 'Half Day (3 hours)',
+    duration: '3 Hours',
     price: '£60',
     certificateValidity: 'Certificate of Attendance',
     description: 'The HSE strongly recommends that qualified first aiders complete an annual refresher course to maintain their skills and confidence. This is not a formal requalification but a skills update designed to keep first aiders competent between their formal requalification courses.',

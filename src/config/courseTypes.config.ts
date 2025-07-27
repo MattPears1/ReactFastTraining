@@ -4,7 +4,7 @@ export const COURSE_TYPE_CONFIG: Record<CourseTypeCode, CourseTypeConfig> = {
   EFAW: {
     code: 'EFAW',
     name: 'Emergency First Aid at Work',
-    duration: '1 Day (6 hours)',
+    duration: '1 Day',
     price: 100,
     certificateValidity: '3 years',
     color: {
@@ -18,7 +18,7 @@ export const COURSE_TYPE_CONFIG: Record<CourseTypeCode, CourseTypeConfig> = {
   FAW: {
     code: 'FAW',
     name: 'First Aid at Work',
-    duration: '1 Day (6 hours)',
+    duration: '1 Day',
     price: 200,
     certificateValidity: '3 years',
     color: {
@@ -32,7 +32,7 @@ export const COURSE_TYPE_CONFIG: Record<CourseTypeCode, CourseTypeConfig> = {
   PAEDIATRIC: {
     code: 'PAEDIATRIC',
     name: 'Paediatric First Aid',
-    duration: '1 Day (6 hours)',
+    duration: '1 Day',
     price: 150,
     certificateValidity: '3 years',
     color: {
@@ -46,7 +46,7 @@ export const COURSE_TYPE_CONFIG: Record<CourseTypeCode, CourseTypeConfig> = {
   EMERGENCY_PAEDIATRIC: {
     code: 'EMERGENCY_PAEDIATRIC',
     name: 'Emergency Paediatric First Aid',
-    duration: '1 Day (5 hours)',
+    duration: '5 Hours',
     price: 100,
     certificateValidity: '3 years',
     color: {
@@ -60,7 +60,7 @@ export const COURSE_TYPE_CONFIG: Record<CourseTypeCode, CourseTypeConfig> = {
   FAW_REQUALIFICATION: {
     code: 'FAW_REQUALIFICATION',
     name: 'FAW Requalification',
-    duration: '1 Day (5 hours)',
+    duration: '5 Hours',
     price: 150,
     certificateValidity: '3 years',
     color: {
@@ -74,7 +74,7 @@ export const COURSE_TYPE_CONFIG: Record<CourseTypeCode, CourseTypeConfig> = {
   EFAW_REQUALIFICATION: {
     code: 'EFAW_REQUALIFICATION',
     name: 'EFAW Requalification',
-    duration: 'Half Day (4 hours)',
+    duration: '3 Hours',
     price: 75,
     certificateValidity: '3 years',
     color: {
@@ -88,7 +88,7 @@ export const COURSE_TYPE_CONFIG: Record<CourseTypeCode, CourseTypeConfig> = {
   PAEDIATRIC_REQUALIFICATION: {
     code: 'PAEDIATRIC_REQUALIFICATION',
     name: 'Paediatric Requalification',
-    duration: 'Half Day (4 hours)',
+    duration: '3 Hours',
     price: 100,
     certificateValidity: '3 years',
     color: {
@@ -102,7 +102,7 @@ export const COURSE_TYPE_CONFIG: Record<CourseTypeCode, CourseTypeConfig> = {
   EMERGENCY_PAEDIATRIC_REQUALIFICATION: {
     code: 'EMERGENCY_PAEDIATRIC_REQUALIFICATION',
     name: 'Emergency Paediatric Requalification',
-    duration: 'Half Day (3 hours)',
+    duration: '3 Hours',
     price: 75,
     certificateValidity: '3 years',
     color: {
@@ -116,7 +116,7 @@ export const COURSE_TYPE_CONFIG: Record<CourseTypeCode, CourseTypeConfig> = {
   ACTIVITY_FIRST_AID: {
     code: 'ACTIVITY_FIRST_AID',
     name: 'Activity First Aid',
-    duration: '1 Day (5 hours)',
+    duration: '5 Hours',
     price: 175,
     certificateValidity: '3 years',
     color: {
@@ -130,7 +130,7 @@ export const COURSE_TYPE_CONFIG: Record<CourseTypeCode, CourseTypeConfig> = {
   ACTIVITY_FIRST_AID_REQUALIFICATION: {
     code: 'ACTIVITY_FIRST_AID_REQUALIFICATION',
     name: 'Activity First Aid Requalification',
-    duration: 'Half Day (3 hours)',
+    duration: '3 Hours',
     price: 100,
     certificateValidity: '3 years',
     color: {
@@ -144,7 +144,7 @@ export const COURSE_TYPE_CONFIG: Record<CourseTypeCode, CourseTypeConfig> = {
   CPR_AED: {
     code: 'CPR_AED',
     name: 'CPR and AED',
-    duration: 'Half Day (3 hours)',
+    duration: '3 Hours',
     price: 50,
     certificateValidity: '1 year',
     color: {
@@ -158,7 +158,7 @@ export const COURSE_TYPE_CONFIG: Record<CourseTypeCode, CourseTypeConfig> = {
   ANNUAL_SKILLS_REFRESHER: {
     code: 'ANNUAL_SKILLS_REFRESHER',
     name: 'Annual Skills Refresher',
-    duration: 'Half Day (3 hours)',
+    duration: '3 Hours',
     price: 50,
     certificateValidity: '1 year',
     color: {
@@ -172,7 +172,7 @@ export const COURSE_TYPE_CONFIG: Record<CourseTypeCode, CourseTypeConfig> = {
   OXYGEN_THERAPY: {
     code: 'OXYGEN_THERAPY',
     name: 'Oxygen Therapy',
-    duration: 'Half Day (4 hours)',
+    duration: '3 Hours',
     price: 75,
     certificateValidity: '3 years',
     color: {

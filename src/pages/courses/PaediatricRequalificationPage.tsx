@@ -6,7 +6,7 @@ const PaediatricRequalificationPage: React.FC = () => {
     <CourseTemplate
       courseName="Paediatric First Aid Requalification"
       courseAcronym="PFAR"
-      duration="Half Day (4 hours)"
+      duration="3 Hours"
       price="£90"
       certificateValidity="3 Years"
       description="Maintain your paediatric first aid qualification with this comprehensive requalification course. Designed for those whose certificate is nearing expiry, this course refreshes all essential skills for providing first aid to infants and children."
@@ -47,7 +47,7 @@ const PaediatricRequalificationPage: React.FC = () => {
       ]}
       accreditations={['Ofsted Approved', 'HSE Compliant']}
       whatToExpect={[
-        'Half-day comprehensive refresher training',
+        '3-hour comprehensive refresher training',
         'New 3-year certificate',
         'Updated course materials',
         'Practical hands-on sessions',

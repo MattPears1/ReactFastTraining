@@ -6,3 +6,5 @@ export * from './session.service';
 export * from './auth/password.service';
 export * from './course-session-capacity.service';
 export * from './websocket.service';
+export * from './jwt.service';
+export * from './rate-limit.service';

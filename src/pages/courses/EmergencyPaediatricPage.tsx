@@ -5,7 +5,7 @@ const EmergencyPaediatricPage: React.FC = () => {
   const courseData = {
     courseName: 'Emergency Paediatric First Aid',
     courseAcronym: 'EPFA',
-    duration: '1 Day (6 hours)',
+    duration: '1 Day',
     price: '£100',
     certificateValidity: 'Valid for 3 years',
     description: 'This course focuses on emergency scenarios involving infants and children and is suitable for those who do not require the full 12-hour Paediatric First Aid qualification. It provides essential skills for managing emergency situations with babies and young children.',

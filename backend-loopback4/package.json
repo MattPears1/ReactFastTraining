@@ -36,7 +36,14 @@
     "start": "node -r source-map-support/register .",
     "clean": "lb-clean dist *.tsbuildinfo .eslintcache",
     "rebuild": "npm run clean && npm run build",
-    "seed": "node ./dist/seed-data"
+    "seed": "node ./dist/seed-data",
+    "knex": "knex",
+    "migrate:latest": "knex migrate:latest",
+    "migrate:rollback": "knex migrate:rollback",
+    "migrate:make": "knex migrate:make",
+    "seed:run": "knex seed:run",
+    "setup:database": "ts-node src/scripts/setup-database.ts",
+    "heroku-postbuild": "npm run build && npm run setup:database"
   },
   "repository": {
     "type": "git",
@@ -64,8 +71,11 @@
     "bcryptjs": "^2.4.3",
     "date-fns": "^3.3.1",
     "dotenv": "^16.4.5",
+    "jsonwebtoken": "^9.0.2",
+    "knex": "^3.1.0",
     "loopback-connector-postgresql": "^7.1.4",
     "nodemailer": "^6.9.13",
+    "pg": "^8.11.3",
     "stripe": "^14.25.0",
     "tslib": "^2.6.2",
     "uuid": "^9.0.1"
@@ -75,8 +85,10 @@
     "@loopback/eslint-config": "^15.0.4",
     "@loopback/testlab": "^7.0.6",
     "@types/bcryptjs": "^2.4.6",
+    "@types/jsonwebtoken": "^9.0.5",
     "@types/node": "^18.19.42",
     "@types/nodemailer": "^6.4.15",
+    "@types/pg": "^8.10.9",
     "@types/uuid": "^9.0.8",
     "eslint": "^8.57.0",
     "source-map-support": "^0.5.21",

@@ -5,7 +5,7 @@ const FAWCoursePage: React.FC = () => {
   const courseData = {
     courseName: 'First Aid at Work',
     courseAcronym: 'FAW',
-    duration: 'Full Day (6 hours)',
+    duration: '1 Day',
     price: '£200',
     certificateValidity: 'Valid for 3 years',
     description: 'This is the most comprehensive workplace first aid course, designed for individuals in higher-risk environments such as factories, construction sites, and manufacturing facilities. It equips first aiders to handle a wide array of injuries and medical emergencies.',

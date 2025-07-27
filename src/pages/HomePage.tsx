@@ -8,6 +8,7 @@ import SEO from '@components/common/SEO'
 import { Link } from 'react-router-dom'
 import { useNotifications } from '@contexts/NotificationContext'
 import { useTheme } from '@contexts/ThemeContext'
+import { getCourseColorTheme } from '@/config/courseColorThemes.config'
 
 const HomePage: React.FC = () => {
   const { addNotification } = useNotifications()
@@ -34,22 +35,26 @@ const HomePage: React.FC = () => {
   }, [addNotification, setTheme])
 
   const courseCategories = useMemo(() => [
-    // Primary courses first as requested
-    { title: 'Emergency First Aid at Work', duration: '1 Day', price: '£100', href: '/courses/efaw' },
-    { title: 'First Aid at Work', duration: '3 Days', price: '£200', href: '/courses/faw' },
-    { title: 'Paediatric First Aid', duration: '2 Days', price: '£120', href: '/courses/paediatric' },
-    { title: 'Emergency Paediatric First Aid', duration: '1 Day', price: '£100', href: '/courses/emergency-paediatric' },
-    // Requalification courses
-    { title: 'First Aid at Work Requalification', duration: '2 Days', price: '£150', href: '/courses/faw-requalification' },
-    { title: 'Emergency First Aid at Work Requalification', duration: '1 Day', price: '£70', href: '/courses/efaw-requalification' },
-    { title: 'Paediatric First Aid Requalification', duration: '1 Day', price: '£90', href: '/courses/paediatric-requalification' },
-    { title: 'Emergency Paediatric First Aid Requalification', duration: '1 Day', price: '£70', href: '/courses/emergency-paediatric-requalification' },
-    // Specialist courses
-    { title: 'Activity First Aid', duration: '2 Days', price: '£120', href: '/courses/activity-first-aid' },
-    { title: 'Activity First Aid Requalification', duration: '1 Day', price: '£90', href: '/courses/activity-first-aid-requalification' },
-    { title: 'CPR and AED', duration: 'Half Day', price: '£60', href: '/courses/cpr-aed' },
+    // Row 1
+    { title: 'First Aid at Work (FAW)', duration: '1 Day', price: '£200', href: '/courses/faw' },
+    { title: 'Emergency First Aid at Work (EFAW)', duration: '1 Day', price: '£100', href: '/courses/efaw' },
+    // Row 2
+    { title: 'Paediatric First Aid (PFA)', duration: '1 Day', price: '£120', href: '/courses/paediatric' },
+    { title: 'Emergency Paediatric First Aid (EPFA)', duration: '5 Hours', price: '£100', href: '/courses/emergency-paediatric' },
+    // Row 3
+    { title: 'Activity First Aid (Act FA)', duration: '1 Day', price: '£120', href: '/courses/activity-first-aid' },
+    { title: 'CPR and AED', duration: '3 Hours', price: '£60', href: '/courses/cpr-aed' },
+    // Row 4
+    { title: 'First Aid at Work Requalification (FAW Requal)', duration: '5 Hours', price: '£150', href: '/courses/faw-requalification' },
+    { title: 'Emergency First Aid at Work Requalification (EFAW Requal)', duration: '3 Hours', price: '£70', href: '/courses/efaw-requalification' },
+    // Row 5
+    { title: 'Paediatric First Aid Requalification (PFA Requal)', duration: '3 Hours', price: '£90', href: '/courses/paediatric-requalification' },
+    { title: 'Emergency Paediatric First Aid Requalification (EPFA Requal)', duration: '3 Hours', price: '£70', href: '/courses/emergency-paediatric-requalification' },
+    // Row 6
+    { title: 'Activity First Aid Requalification (Act FA Requal)', duration: '3 Hours', price: '£90', href: '/courses/activity-first-aid-requalification' },
     { title: 'Annual Skills Refresher', duration: '3 Hours', price: '£60', href: '/courses/annual-skills-refresher' },
-    { title: 'Oxygen Therapy Course', duration: '3 Hours', price: '£60', href: '/courses/oxygen-therapy' },
+    // Row 7
+    { title: 'Oxygen Therapy Course', duration: '3 Hours', price: '£80', href: '/courses/oxygen-therapy' },
   ], [])
 
   const trainingApproach = useMemo(() => [
@@ -61,7 +66,7 @@ const HomePage: React.FC = () => {
     {
       icon: Users,
       title: 'Group Sizes',
-      description: 'Maximum 12 learners per course ensures personal attention and effective learning',
+      description: 'Maximum 12 learners per course ensuring personal attention and effective learning',
     },
     {
       icon: Award,
@@ -100,59 +105,121 @@ const HomePage: React.FC = () => {
             </p>
           </motion.div>
 
-          <div className="grid sm:grid-cols-2 gap-3 sm:gap-4 max-w-5xl mx-auto">
-            {courseCategories.slice(0, 12).map((course, index) => (
-              <motion.div
-                key={course.title}
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ delay: index * 0.05 }}
-              >
-                <Link
-                  to={course.href}
-                  className="block bg-white dark:bg-gray-800 rounded-lg shadow hover:shadow-lg transition-all duration-300 border border-gray-100 dark:border-gray-700/50 p-4 sm:p-5 md:p-6 hover:border-primary-300 dark:hover:border-primary-600 min-h-[80px] sm:min-h-[90px] md:min-h-[100px] flex flex-col justify-between"
+          <div className="grid sm:grid-cols-2 gap-4 sm:gap-6 max-w-6xl mx-auto">
+            {courseCategories.map((course, index) => {
+              // Skip the last course for special handling
+              if (index === courseCategories.length - 1) return null
+              
+              // Determine course category and color theme
+              const title = course.title.toLowerCase()
+              const isWorkplace = title.includes('work') && !title.includes('paediatric')
+              const isPaediatric = title.includes('paediatric')
+              const isSpecialist = !isWorkplace && !isPaediatric
+              const isPrimary = index < 2 // FAW and EFAW are most popular
+              
+              // Get color theme
+              const colorTheme = getCourseColorTheme(course.title)
+              
+              return (
+                <motion.div
+                  key={course.title}
+                  initial={{ opacity: 0, y: 20 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ delay: index * 0.05 }}
+                  className="group"
                 >
-                  <h3 className="text-base sm:text-lg font-bold text-gray-900 dark:text-white mb-2 line-clamp-2">
-                    {course.title}
-                  </h3>
-                  <div className="flex items-center justify-between text-xs sm:text-sm">
-                    <span className="text-gray-600 dark:text-gray-400">
-                      {course.duration}
-                    </span>
-                    <span className="font-bold text-primary-600 dark:text-primary-400">
-                      {course.price}
-                    </span>
-                  </div>
-                </Link>
-              </motion.div>
-            ))}
+                  <Link
+                    to={course.href}
+                    className={`
+                      block rounded-xl overflow-hidden transition-all duration-300
+                      bg-gradient-to-br shadow-lg hover:shadow-2xl transform hover:-translate-y-1
+                      ${isWorkplace ? 'from-blue-50 via-white to-blue-50/30 dark:from-blue-900/20 dark:via-gray-800 dark:to-blue-900/10 border border-blue-200 dark:border-blue-700' : ''}
+                      ${isPaediatric ? 'from-purple-50 via-white to-purple-50/30 dark:from-purple-900/20 dark:via-gray-800 dark:to-purple-900/10 border border-purple-200 dark:border-purple-700' : ''}
+                      ${isSpecialist ? 'from-orange-50 via-white to-orange-50/30 dark:from-orange-900/20 dark:via-gray-800 dark:to-orange-900/10 border border-orange-200 dark:border-orange-700' : ''}
+                      relative p-6 sm:p-8 min-h-[140px]
+                    `}
+                  >
+                    {/* Badge for primary courses */}
+                    {isPrimary && (
+                      <span className="absolute top-3 right-3 bg-blue-500 text-white text-xs font-bold px-2 py-1 rounded-full">
+                        Most Popular
+                      </span>
+                    )}
+                    
+                    <h3 className="text-lg sm:text-xl font-bold text-gray-900 dark:text-white mb-4 pr-20">
+                      {course.title}
+                    </h3>
+                    
+                    <div className="flex items-end justify-between">
+                      <div className="flex items-center gap-2">
+                        <Clock className="w-4 h-4 text-gray-500 dark:text-gray-400" />
+                        <span className="text-sm text-gray-600 dark:text-gray-400 font-medium">
+                          {course.duration}
+                        </span>
+                      </div>
+                      <div className="text-right">
+                        <span className={`
+                          text-2xl font-bold
+                          ${isWorkplace ? 'text-blue-600 dark:text-blue-400' : ''}
+                          ${isPaediatric ? 'text-purple-600 dark:text-purple-400' : ''}
+                          ${isSpecialist ? 'text-orange-600 dark:text-orange-400' : ''}
+                        `}>
+                          {course.price}
+                        </span>
+                      </div>
+                    </div>
+                    
+                    {/* Hover effect arrow */}
+                    <ArrowRight className={`
+                      absolute bottom-6 right-6 w-5 h-5 transform translate-x-2 opacity-0 
+                      group-hover:translate-x-0 group-hover:opacity-100 transition-all duration-300
+                      ${isWorkplace ? 'text-gray-400 group-hover:text-blue-500' : ''}
+                      ${isPaediatric ? 'text-gray-400 group-hover:text-purple-500' : ''}
+                      ${isSpecialist ? 'text-gray-400 group-hover:text-orange-500' : ''}
+                    `} />
+                  </Link>
+                </motion.div>
+              )
+            })}
           </div>
           
-          {/* Centered 13th course */}
-          <div className="flex justify-center mt-3 sm:mt-4">
+          {/* Last course - Oxygen Therapy */}
+          <div className="flex justify-center mt-6">
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ delay: 0.6 }}
-              className="w-full sm:w-1/2 max-w-md px-0 sm:px-4"
+              className="w-full sm:w-1/2 max-w-lg group"
             >
               <Link
-                to={courseCategories[12].href}
-                className="block bg-white dark:bg-gray-800 rounded-lg shadow hover:shadow-lg transition-all duration-300 border border-gray-100 dark:border-gray-700/50 p-4 sm:p-5 md:p-6 hover:border-primary-300 dark:hover:border-primary-600 min-h-[80px] sm:min-h-[90px] md:min-h-[100px] flex flex-col justify-between"
+                to={courseCategories[courseCategories.length - 1].href}
+                className="block rounded-xl overflow-hidden transition-all duration-300 bg-gradient-to-br from-sky-50 via-white to-sky-50/30 dark:from-sky-900/20 dark:via-gray-800 dark:to-sky-900/10 border border-sky-200 dark:border-sky-700 shadow-lg hover:shadow-2xl transform hover:-translate-y-1 relative p-6 sm:p-8 min-h-[140px]"
               >
-                <h3 className="text-base sm:text-lg font-bold text-gray-900 dark:text-white mb-2">
-                  {courseCategories[12].title}
+                <span className="absolute top-3 right-3 bg-sky-500 text-white text-xs font-bold px-2 py-1 rounded-full">
+                  Specialist
+                </span>
+                
+                <h3 className="text-lg sm:text-xl font-bold text-gray-900 dark:text-white mb-4 pr-20">
+                  {courseCategories[courseCategories.length - 1].title}
                 </h3>
-                <div className="flex items-center justify-between text-xs sm:text-sm">
-                  <span className="text-gray-600 dark:text-gray-400">
-                    {courseCategories[12].duration}
-                  </span>
-                  <span className="font-bold text-primary-600 dark:text-primary-400">
-                    {courseCategories[12].price}
-                  </span>
+                
+                <div className="flex items-end justify-between">
+                  <div className="flex items-center gap-2">
+                    <Clock className="w-4 h-4 text-gray-500 dark:text-gray-400" />
+                    <span className="text-sm text-gray-600 dark:text-gray-400 font-medium">
+                      {courseCategories[courseCategories.length - 1].duration}
+                    </span>
+                  </div>
+                  <div className="text-right">
+                    <span className="text-2xl font-bold text-sky-600 dark:text-sky-400">
+                      {courseCategories[courseCategories.length - 1].price}
+                    </span>
+                  </div>
                 </div>
+                
+                <ArrowRight className="absolute bottom-6 right-6 w-5 h-5 text-gray-400 group-hover:text-sky-500 transform translate-x-2 opacity-0 group-hover:translate-x-0 group-hover:opacity-100 transition-all duration-300" />
               </Link>
             </motion.div>
           </div>

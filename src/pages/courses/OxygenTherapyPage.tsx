@@ -5,7 +5,7 @@ const OxygenTherapyPage: React.FC = () => {
   const courseData = {
     courseName: 'Oxygen Therapy Course',
     courseAcronym: 'O2',
-    duration: 'Half Day (3-6 hours)',
+    duration: '3 Hours',
     price: '£60',
     certificateValidity: 'Valid for 3 years',
     description: 'This specialised course is for qualified first aiders and healthcare professionals who may need to administer oxygen during a medical emergency. Learn the safe use, storage, and handling of oxygen equipment in emergency situations.',

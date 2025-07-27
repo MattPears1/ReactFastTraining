@@ -1,6 +1,6 @@
 import React from 'react';
 import { motion } from 'framer-motion';
-import { ArrowRight, CheckCircle, BookOpen, Users, Award, Phone } from 'lucide-react';
+import { ArrowRight, Award, Phone } from 'lucide-react';
 import MagneticButton from '@components/ui/MagneticButton';
 import { useKineticTypography } from '@hooks/useAnimation';
 import { FloatingIcons } from '@components/ui/FloatingIcons';
@@ -70,7 +70,7 @@ const HeroSection: React.FC = () => {
             </div>
 
             <p className="text-base sm:text-lg md:text-xl text-gray-600 dark:text-gray-400 mb-6 sm:mb-8 max-w-xl mx-auto lg:mx-0 px-4 sm:px-0">
-              Professional first aid training in Yorkshire. Learn life-saving skills from an experienced instructor.
+              Learn life-saving skills from an experienced professional. For businesses and individuals.
             </p>
 
             {/* Mobile-Optimized CTA Buttons */}
@@ -108,36 +108,6 @@ const HeroSection: React.FC = () => {
               </div>
             </div>
 
-            {/* Key Features - Mobile Optimized Grid */}
-            <div className="grid grid-cols-3 gap-2 sm:gap-3 md:gap-4 px-4 sm:px-0">
-              <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.3 }}
-                className="text-center p-3 sm:p-4 rounded-lg bg-white/50 dark:bg-gray-800/50 backdrop-blur-sm"
-              >
-                <BookOpen className="w-6 h-6 sm:w-8 sm:h-8 text-primary-500 mx-auto mb-1 sm:mb-2" />
-                <p className="text-xs sm:text-sm font-medium text-gray-900 dark:text-white">From £75</p>
-              </motion.div>
-              <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.4 }}
-                className="text-center p-3 sm:p-4 rounded-lg bg-white/50 dark:bg-gray-800/50 backdrop-blur-sm"
-              >
-                <Users className="w-6 h-6 sm:w-8 sm:h-8 text-secondary-500 mx-auto mb-1 sm:mb-2" />
-                <p className="text-xs sm:text-sm font-medium text-gray-900 dark:text-white">Groups</p>
-              </motion.div>
-              <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.5 }}
-                className="text-center p-3 sm:p-4 rounded-lg bg-white/50 dark:bg-gray-800/50 backdrop-blur-sm"
-              >
-                <CheckCircle className="w-6 h-6 sm:w-8 sm:h-8 text-accent-500 mx-auto mb-1 sm:mb-2" />
-                <p className="text-xs sm:text-sm font-medium text-gray-900 dark:text-white">Certified</p>
-              </motion.div>
-            </div>
           </motion.div>
 
           {/* Visual Element - Hidden on Mobile, Shown on Desktop */}

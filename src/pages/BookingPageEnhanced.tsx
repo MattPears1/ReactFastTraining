@@ -44,20 +44,28 @@ const BookingPageEnhanced: React.FC = () => {
   const [showOptionsModal, setShowOptionsModal] = useState(false);
   
   const handleCourseSelect = (schedule: CourseSchedule) => {
+    console.log('=== BOOKING PAGE: Course Selected ===');
+    console.log('Schedule:', schedule);
     setSelectedSchedule(schedule);
     setShowOptionsModal(true);
   };
   
   const handleSelectDirectBooking = () => {
+    console.log('=== BOOKING PAGE: Direct Booking Selected ===');
+    console.log('Current step before:', currentStep);
     setShowOptionsModal(false);
     setCurrentStep('details');
     setCompletedSteps(['select-course']);
+    console.log('Step set to: details');
   };
   
   const handleSelectInquiry = () => {
+    console.log('=== BOOKING PAGE: Inquiry Selected ===');
+    console.log('Current step before:', currentStep);
     setShowOptionsModal(false);
     setCurrentStep('inquiry');
     setCompletedSteps(['select-course']);
+    console.log('Step set to: inquiry');
   };
   
   const handleBookingSuccess = (confirmationCode: string, booking: any) => {

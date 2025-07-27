@@ -5,3 +5,5 @@ export * from './course-session.model';
 export * from './booking.model';
 export * from './certificate.model';
 export * from './attendance.model';
+export * from './user.model';
+export * from './admin-activity-log.model';

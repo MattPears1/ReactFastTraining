@@ -117,61 +117,98 @@ export const BookingFormWithPayment: React.FC<BookingFormWithPaymentProps> = ({
   };
   
   const handleProceedToPayment = async () => {
+    console.log('=== BOOKING FORM: Proceeding to payment ===');
+    console.log('Course Schedule:', courseSchedule);
+    console.log('Form Data:', formData);
+    console.log('Final Price:', finalPrice);
+    
     if (!validateForm()) {
+      console.error('Form validation failed');
       return;
     }
     
     setLoading(true);
     
     try {
+      const apiUrl = `${import.meta.env.VITE_API_URL}/api/bookings/create-payment-intent`;
+      const requestBody = {
+        courseScheduleId: courseSchedule.id,
+        amount: Math.round(finalPrice * 100), // Convert to pence
+        bookingData: formData,
+      };
+      
+      console.log('Creating payment intent...');
+      console.log('API URL:', apiUrl);
+      console.log('Request Body:', requestBody);
+      
       // Create payment intent
-      const response = await fetch('/api/bookings/create-payment-intent', {
+      const response = await fetch(apiUrl, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({
-          courseScheduleId: courseSchedule.id,
-          amount: Math.round(finalPrice * 100), // Convert to pence
-          bookingData: formData,
-        }),
+        body: JSON.stringify(requestBody),
       });
       
+      console.log('Response Status:', response.status);
+      console.log('Response OK:', response.ok);
+      
       if (!response.ok) {
-        throw new Error('Failed to create payment intent');
+        const errorText = await response.text();
+        console.error('Payment Intent Error Response:', errorText);
+        throw new Error(`Failed to create payment intent: ${response.status} ${errorText}`);
       }
       
-      const { clientSecret, paymentIntentId } = await response.json();
+      const data = await response.json();
+      console.log('Payment Intent Response:', data);
+      
+      const { clientSecret, paymentIntentId } = data;
+      console.log('Client Secret received:', clientSecret ? 'Yes' : 'No');
+      console.log('Payment Intent ID:', paymentIntentId);
+      
       setPaymentIntent({ clientSecret, id: paymentIntentId });
       setCurrentStep('payment');
+      console.log('Successfully moved to payment step');
     } catch (error) {
+      console.error('=== PAYMENT INITIALIZATION ERROR ===');
+      console.error('Error details:', error);
       showToast('error', 'Failed to initialize payment. Please try again.');
-      console.error('Payment initialization error:', error);
     } finally {
       setLoading(false);
     }
   };
   
   const handlePaymentSuccess = async (paymentIntentId: string) => {
+    console.log('=== PAYMENT SUCCESS HANDLER ===');
+    console.log('Payment Intent ID:', paymentIntentId);
     setLoading(true);
     
     try {
-      // Confirm booking with payment
-      const response = await bookingService.confirmBookingWithPayment({
+      const confirmData = {
         ...formData,
         paymentIntentId,
         totalAmount: finalPrice,
-      } as BookingFormData & { paymentIntentId: string; totalAmount: number });
+      };
+      console.log('Confirming booking with data:', confirmData);
+      
+      // Confirm booking with payment
+      const response = await bookingService.confirmBookingWithPayment(confirmData as BookingFormData & { paymentIntentId: string; totalAmount: number });
+      
+      console.log('Booking confirmation response:', response);
       
       if (response.success && response.data) {
+        console.log('Booking confirmed successfully!');
+        console.log('Confirmation code:', response.data.confirmationCode);
         showToast('success', 'Booking confirmed successfully!');
         onSuccess(response.data.confirmationCode, response.data.booking);
       } else {
+        console.error('Booking confirmation failed:', response.error);
         showToast('error', response.error || 'Booking confirmation failed.');
       }
     } catch (error) {
+      console.error('=== BOOKING CONFIRMATION ERROR ===');
+      console.error('Error details:', error);
       showToast('error', 'Failed to confirm booking. Please contact support.');
-      console.error('Booking confirmation error:', error);
     } finally {
       setLoading(false);
     }
@@ -546,7 +583,14 @@ export const BookingFormWithPayment: React.FC<BookingFormWithPaymentProps> = ({
         </button>
       </div>
       
-      {paymentIntent && (
+      {loading ? (
+        <div className="flex items-center justify-center py-12">
+          <div className="text-center">
+            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary-600 mx-auto mb-4"></div>
+            <p className="text-gray-600">Initializing secure payment...</p>
+          </div>
+        </div>
+      ) : paymentIntent ? (
         <StripePaymentForm
           clientSecret={paymentIntent.clientSecret}
           courseSchedule={courseSchedule}
@@ -555,6 +599,26 @@ export const BookingFormWithPayment: React.FC<BookingFormWithPaymentProps> = ({
           onSuccess={handlePaymentSuccess}
           onError={handlePaymentError}
         />
+      ) : (
+        <div className="bg-red-50 border border-red-200 rounded-lg p-6 text-center">
+          <AlertCircle className="w-12 h-12 text-red-600 mx-auto mb-4" />
+          <h3 className="text-lg font-semibold text-red-900 mb-2">Payment Initialization Failed</h3>
+          <p className="text-red-700 mb-4">We couldn't initialize the payment system. Please check that:</p>
+          <ul className="text-left text-sm text-red-600 mb-4 max-w-md mx-auto">
+            <li>• The backend server is running on port 3000</li>
+            <li>• You have a stable internet connection</li>
+            <li>• Your browser allows cookies and JavaScript</li>
+          </ul>
+          <button
+            onClick={() => {
+              setCurrentStep('details');
+              setPaymentIntent(null);
+            }}
+            className="btn btn-primary"
+          >
+            Go Back and Try Again
+          </button>
+        </div>
       )}
     </div>
   );

@@ -1,6 +1,6 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
-import { Facebook, Instagram, Linkedin, Youtube, Mail, Phone, MapPin } from 'lucide-react'
+import { Facebook, Instagram, Linkedin, Youtube, Mail, Phone, MapPin, Lock } from 'lucide-react'
 import NewsletterForm from '@components/ui/NewsletterForm'
 
 const footerLinks = {
@@ -151,9 +151,19 @@ const Footer: React.FC = () => {
       <div className="border-t border-gray-200 dark:border-gray-800">
         <div className="container py-4 sm:py-6">
           <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
-            <p className="text-xs sm:text-sm text-gray-600 dark:text-gray-400 text-center sm:text-left">
-              © {currentYear} React Fast Training. All rights reserved.
-            </p>
+            <div className="flex items-center gap-4">
+              <p className="text-xs sm:text-sm text-gray-600 dark:text-gray-400 text-center sm:text-left">
+                © {currentYear} React Fast Training. All rights reserved.
+              </p>
+              <Link
+                to="/admin"
+                className="text-gray-400 dark:text-gray-600 hover:text-gray-600 dark:hover:text-gray-400 transition-colors p-1"
+                aria-label="Admin Portal"
+                title="Admin Portal"
+              >
+                <Lock className="w-4 h-4" />
+              </Link>
+            </div>
             <div className="flex flex-wrap items-center justify-center gap-3 sm:gap-4 md:gap-6">
               {footerLinks.legal.map((link) => (
                 <Link

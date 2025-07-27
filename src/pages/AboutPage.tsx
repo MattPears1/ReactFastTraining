@@ -222,7 +222,7 @@ const AboutPage: React.FC = () => {
               <div className="grid md:grid-cols-2 gap-8">
                 <div className="relative">
                   <img 
-                    src="/images/about/instructor-teaching.jpg"
+                    src="/images/homepage1.png"
                     alt="Lead Instructor teaching first aid"
                     className="w-full h-full object-cover"
                     onError={(e) => {
@@ -247,7 +247,7 @@ const AboutPage: React.FC = () => {
               <div className="mt-6 flex flex-wrap justify-center gap-4">
                 <div className="flex items-center gap-2">
                   <Shield className="w-5 h-5 text-primary-600 dark:text-primary-400" />
-                  <span className="text-gray-700 dark:text-gray-300">Royal Navy Veteran</span>
+                  <span className="text-gray-700 dark:text-gray-300">Royal Navy Experience</span>
                 </div>
                 <div className="flex items-center gap-2">
                   <Award className="w-5 h-5 text-primary-600 dark:text-primary-400" />

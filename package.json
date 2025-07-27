@@ -1,6 +1,6 @@
 {
   "name": "lex-business-website",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "description": "Flexible business website with e-commerce and service showcase capabilities",
   "main": "src/index.js",
   "scripts": {
@@ -32,8 +32,8 @@
     "worker:prod": "cd backend && npm run worker:prod",
     "heroku-prebuild": "echo Disabling Heroku cache && rm -rf node_modules && npm cache clean --force",
     "heroku-postbuild": "npm run build",
-    "start:backend": "cd backend && npm start",
-    "build:backend": "cd backend && npm run build"
+    "start:backend": "cd backend-loopback4 && npm start",
+    "build:backend": "cd backend-loopback4 && npm run build"
   },
   "dependencies": {
     "@headlessui/react": "^2.2.6",
@@ -52,6 +52,7 @@
     "canvas-confetti": "^1.9.3",
     "clsx": "^2.1.0",
     "compression": "^1.8.1",
+    "cors": "^2.8.5",
     "date-fns": "^3.3.1",
     "express": "^4.21.2",
     "framer-motion": "^11.0.3",

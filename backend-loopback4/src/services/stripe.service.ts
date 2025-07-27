@@ -38,7 +38,12 @@ export class StripeService {
     if (this.initialized) return;
 
     const stripeKey = process.env.STRIPE_SECRET_KEY;
+    console.log('=== STRIPE SERVICE INITIALIZATION ===');
+    console.log('Stripe Secret Key exists:', !!stripeKey);
+    console.log('Key starts with:', stripeKey?.substring(0, 14));
+    
     if (!stripeKey) {
+      console.error('STRIPE_SECRET_KEY is not configured in environment variables');
       throw new Error('STRIPE_SECRET_KEY is not configured');
     }
 
@@ -48,22 +53,30 @@ export class StripeService {
     });
 
     this.initialized = true;
+    console.log('Stripe service initialized successfully');
   }
 
   static async createPaymentIntent(data: CreatePaymentIntentData): Promise<{
     paymentIntent: Stripe.PaymentIntent;
     paymentRecord: any;
   }> {
+    console.log('=== STRIPE SERVICE: Create Payment Intent ===');
+    console.log('Input data:', data);
+    
     this.initialize();
 
     // Generate idempotency key to prevent duplicate charges
     const idempotencyKey = `${data.bookingId}-${Date.now()}`;
+    console.log('Idempotency key:', idempotencyKey);
 
     try {
       // Convert pounds to pence
       const amountInPence = Math.round(data.amount * 100);
+      console.log('Amount in pounds:', data.amount);
+      console.log('Amount in pence:', amountInPence);
 
       // Create Stripe payment intent
+      console.log('Creating Stripe payment intent...');
       const paymentIntent = await this.stripe.paymentIntents.create({
         amount: amountInPence,
         currency: 'gbp',

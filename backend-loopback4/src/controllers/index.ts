@@ -7,3 +7,4 @@ export * from './enquiry.controller';
 export * from './ping.controller';
 export * from './calendar.controller';
 export * from './payment-guest.controller';
+export * from './admin/auth-admin.controller';

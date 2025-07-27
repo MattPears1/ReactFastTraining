@@ -5,7 +5,7 @@ const EFAWCoursePage: React.FC = () => {
   const courseData = {
     courseName: 'Emergency First Aid at Work',
     courseAcronym: 'EFAW',
-    duration: '1 Day (6 hours)',
+    duration: '1 Day',
     price: '£100',
     certificateValidity: 'Valid for 3 years',
     description: 'This course is designed for individuals in lower-risk workplaces, such as offices, shops, and restaurants. It provides the essential skills to manage an emergency until professional help arrives.',

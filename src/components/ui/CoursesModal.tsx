@@ -23,49 +23,49 @@ const courses: Course[] = [
   {
     label: 'First Aid at Work',
     href: '/courses/faw',
-    duration: '3 Days',
+    duration: '1 Day',
     description: 'Comprehensive first aid training for appointed workplace first aiders',
     icon: '🏥'
   },
   {
     label: 'Paediatric First Aid',
     href: '/courses/paediatric',
-    duration: '2 Days',
+    duration: '1 Day',
     description: 'Specialized first aid for those working with children',
     icon: '👶'
   },
   {
     label: 'Emergency Paediatric First Aid',
     href: '/courses/emergency-paediatric',
-    duration: '1 Day',
+    duration: '5 Hours',
     description: 'Emergency first aid skills for childcare settings',
     icon: '🧸'
   },
   {
     label: 'FAW Requalification',
     href: '/courses/faw-requalification',
-    duration: '2 Days',
+    duration: '5 Hours',
     description: 'Refresh your First Aid at Work certification',
     icon: '📋'
   },
   {
     label: 'EFAW Requalification',
     href: '/courses/efaw-requalification',
-    duration: '1 Day',
+    duration: '3 Hours',
     description: 'Refresh your Emergency First Aid certification',
     icon: '🔄'
   },
   {
     label: 'Paediatric Requalification',
     href: '/courses/paediatric-requalification',
-    duration: '1 Day',
+    duration: '3 Hours',
     description: 'Refresh your Paediatric First Aid certification',
     icon: '👨‍👩‍👧‍👦'
   },
   {
     label: 'Emergency Paediatric Requalification',
     href: '/courses/emergency-paediatric-requalification',
-    duration: '1 Day',
+    duration: '3 Hours',
     description: 'Refresh your Emergency Paediatric certification',
     icon: '🍼'
   },
@@ -79,28 +79,28 @@ const courses: Course[] = [
   {
     label: 'Activity First Aid Requalification',
     href: '/courses/activity-first-aid-requalification',
-    duration: '1 Day',
+    duration: '3 Hours',
     description: 'Refresh your Activity First Aid certification',
     icon: '🏃'
   },
   {
     label: 'CPR and AED',
     href: '/courses/cpr-aed',
-    duration: '4 Hours',
+    duration: '3 Hours',
     description: 'Learn life-saving CPR and defibrillator skills',
     icon: '❤️'
   },
   {
     label: 'Annual Skills Refresher',
     href: '/courses/annual-skills-refresher',
-    duration: 'Half Day',
+    duration: '3 Hours',
     description: 'Keep your first aid skills sharp and up-to-date',
     icon: '📚'
   },
   {
     label: 'Oxygen Therapy',
     href: '/courses/oxygen-therapy',
-    duration: 'Half Day',
+    duration: '3 Hours',
     description: 'Safe administration of emergency oxygen',
     icon: '💨'
   }
@@ -197,13 +197,22 @@ export const CoursesModal: React.FC<CoursesModalProps> = ({ isOpen, onClose }) =
                 <p className="text-xs sm:text-sm text-gray-600 dark:text-gray-400 text-center sm:text-left">
                   All courses are HSE approved and Ofqual regulated
                 </p>
-                <Link
-                  to="/booking"
-                  onClick={onClose}
-                  className="btn btn-primary btn-xs sm:btn-sm w-full sm:w-auto"
-                >
-                  Book Your Course
-                </Link>
+                <div className="flex gap-3 sm:gap-4 w-full sm:w-auto">
+                  <Link
+                    to="/courses"
+                    onClick={onClose}
+                    className="btn btn-outline btn-xs sm:btn-sm flex-1 sm:flex-initial"
+                  >
+                    See All Courses
+                  </Link>
+                  <Link
+                    to="/booking"
+                    onClick={onClose}
+                    className="btn btn-primary btn-xs sm:btn-sm flex-1 sm:flex-initial"
+                  >
+                    Book Your Course
+                  </Link>
+                </div>
               </div>
             </div>
             </motion.div>

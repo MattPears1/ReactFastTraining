@@ -5,7 +5,7 @@ const CPRAEDPage: React.FC = () => {
   const courseData = {
     courseName: 'CPR and AED',
     courseAcronym: 'CPR/AED',
-    duration: 'Half Day (3-4 hours)',
+    duration: '3 Hours',
     price: '£60',
     certificateValidity: 'Valid for 1 year',
     description: 'This course provides focused training on performing Cardiopulmonary Resuscitation (CPR) and using an Automated External Defibrillator (AED). It is often aimed at both the general public and healthcare professionals needing annual updates.',

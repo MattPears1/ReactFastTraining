@@ -1,9 +1,20 @@
 import {ApplicationConfig, ReactFastTrainingApiApplication} from './application';
 import {websocketService} from './services/websocket.service';
+import * as dotenv from 'dotenv';
+
+// Load environment variables from .env file
+dotenv.config();
 
 export * from './application';
 
 export async function main(options: ApplicationConfig = {}) {
+  console.log('=== BACKEND STARTING ===');
+  console.log('Environment:', process.env.NODE_ENV || 'development');
+  console.log('Port:', process.env.PORT || 3000);
+  console.log('Frontend URL:', process.env.FRONTEND_URL || 'http://localhost:5173');
+  console.log('Stripe Secret Key exists:', !!process.env.STRIPE_SECRET_KEY);
+  console.log('Stripe Publishable Key exists:', !!process.env.STRIPE_PUBLISHABLE_KEY);
+  
   const app = new ReactFastTrainingApiApplication(options);
   await app.boot();
   await app.start();
@@ -16,8 +27,11 @@ export async function main(options: ApplicationConfig = {}) {
   }
 
   const url = app.restServer.url;
-  console.log(`Server is running at ${url}`);
-  console.log(`Try ${url}/ping`);
+  console.log(`=== SERVER RUNNING ===`);
+  console.log(`Server URL: ${url}`);
+  console.log(`API Base: ${url}/api`);
+  console.log(`Health Check: ${url}/ping`);
+  console.log(`Payment Endpoint: ${url}/api/bookings/create-payment-intent`);
 
   return app;
 }

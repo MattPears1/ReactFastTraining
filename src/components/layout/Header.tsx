@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import { Link, useLocation } from 'react-router-dom'
 import { motion, AnimatePresence } from 'framer-motion'
-import { Menu, X, Sun, Moon, ChevronDown, Bell, Search } from 'lucide-react'
+import { Menu, X, Sun, Moon, Bell, Search } from 'lucide-react'
 import { useTheme } from '@contexts/ThemeContext'
 import { useNotifications } from '@contexts/NotificationContext'
 import { NotificationCenter } from '@components/ui/NotificationCenter'
@@ -130,7 +130,6 @@ const Header: React.FC = () => {
                       aria-label="View courses"
                     >
                       <span>{item.label}</span>
-                      <ChevronDown className="w-4 h-4" />
                     </button>
                   ) : (
                     <Link
@@ -255,7 +254,6 @@ const Header: React.FC = () => {
                           )}
                         >
                           <span>{item.label}</span>
-                          <ChevronDown className="w-5 h-5" />
                         </button>
                       ) : (
                         <Link

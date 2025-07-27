@@ -13,6 +13,9 @@ import { useToast } from '@contexts/ToastContext';
 import { cn } from '@utils/cn';
 
 // Initialize Stripe
+console.log('=== STRIPE INITIALIZATION ===');
+console.log('Publishable Key:', import.meta.env.VITE_STRIPE_PUBLISHABLE_KEY ? 'Set' : 'Not Set');
+console.log('Key starts with:', import.meta.env.VITE_STRIPE_PUBLISHABLE_KEY?.substring(0, 7));
 const stripePromise = loadStripe(import.meta.env.VITE_STRIPE_PUBLISHABLE_KEY);
 
 interface StripePaymentFormProps {
@@ -50,47 +53,83 @@ const PaymentForm: React.FC<StripePaymentFormProps> = ({
   const [isProcessing, setIsProcessing] = useState(false);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
+  useEffect(() => {
+    console.log('=== PAYMENT FORM MOUNTED ===');
+    console.log('Course Schedule:', courseSchedule);
+    console.log('Booking Data:', bookingData);
+    console.log('Total Amount (pence):', totalAmount);
+    console.log('Total Amount (pounds):', totalAmount / 100);
+    console.log('Stripe loaded:', !!stripe);
+    console.log('Elements loaded:', !!elements);
+  }, [courseSchedule, bookingData, totalAmount, stripe, elements]);
+
   const handleSubmit = async (event: React.FormEvent) => {
     event.preventDefault();
+    console.log('=== PAYMENT FORM SUBMIT ===');
 
     if (!stripe || !elements) {
+      console.error('Stripe or Elements not loaded!');
+      console.log('Stripe:', stripe);
+      console.log('Elements:', elements);
       return;
     }
 
+    console.log('Starting payment processing...');
     setIsProcessing(true);
     setErrorMessage(null);
 
     try {
+      const confirmParams = {
+        return_url: `${window.location.origin}/booking-confirmation`,
+        receipt_email: bookingData.email,
+        payment_method_data: {
+          billing_details: {
+            name: `${bookingData.firstName} ${bookingData.lastName}`,
+            email: bookingData.email,
+            phone: bookingData.phone,
+          }
+        }
+      };
+      
+      console.log('Confirming payment with params:', confirmParams);
+      
       const { error, paymentIntent } = await stripe.confirmPayment({
         elements,
-        confirmParams: {
-          return_url: `${window.location.origin}/booking-confirmation`,
-          receipt_email: bookingData.email,
-          payment_method_data: {
-            billing_details: {
-              name: `${bookingData.firstName} ${bookingData.lastName}`,
-              email: bookingData.email,
-              phone: bookingData.phone,
-            }
-          }
-        },
+        confirmParams,
         redirect: 'if_required'
       });
 
+      console.log('Payment confirmation response:');
+      console.log('Error:', error);
+      console.log('Payment Intent:', paymentIntent);
+
       if (error) {
+        console.error('=== PAYMENT ERROR ===');
+        console.error('Error Type:', error.type);
+        console.error('Error Code:', error.code);
+        console.error('Error Message:', error.message);
         setErrorMessage(error.message || 'Payment failed');
         onError(error.message || 'Payment failed');
         showToast('error', error.message || 'Payment failed. Please try again.');
       } else if (paymentIntent && paymentIntent.status === 'succeeded') {
+        console.log('=== PAYMENT SUCCESS ===');
+        console.log('Payment Intent ID:', paymentIntent.id);
+        console.log('Payment Intent Status:', paymentIntent.status);
         showToast('success', 'Payment successful! Completing your booking...');
         onSuccess(paymentIntent.id);
+      } else {
+        console.log('=== PAYMENT UNEXPECTED STATE ===');
+        console.log('Payment Intent:', paymentIntent);
       }
     } catch (err) {
+      console.error('=== PAYMENT EXCEPTION ===');
+      console.error('Exception:', err);
       const message = 'An unexpected error occurred. Please try again.';
       setErrorMessage(message);
       onError(message);
       showToast('error', message);
     } finally {
+      console.log('Payment processing complete, resetting state');
       setIsProcessing(false);
     }
   };
@@ -220,6 +259,11 @@ export const StripePaymentForm: React.FC<StripePaymentFormProps & { clientSecret
   clientSecret,
   ...props
 }) => {
+  console.log('=== STRIPE PAYMENT FORM WRAPPER ===');
+  console.log('Client Secret:', clientSecret ? 'Provided' : 'Missing');
+  console.log('Client Secret length:', clientSecret?.length);
+  console.log('Props:', props);
+  
   const appearance = {
     theme: 'stripe' as const,
     variables: {
@@ -237,6 +281,8 @@ export const StripePaymentForm: React.FC<StripePaymentFormProps & { clientSecret
     appearance,
     loader: 'auto' as const,
   };
+
+  console.log('Stripe Elements options:', options);
 
   return (
     <Elements stripe={stripePromise} options={options}>

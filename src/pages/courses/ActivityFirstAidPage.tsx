@@ -5,7 +5,7 @@ const ActivityFirstAidPage: React.FC = () => {
   const courseData = {
     courseName: 'Activity First Aid',
     courseAcronym: 'AFA',
-    duration: 'Full Day (5 hours)',
+    duration: '5 Hours',
     price: '£120',
     certificateValidity: 'Valid for 3 years',
     description: 'This course is tailored for individuals involved in sports, leisure, and recreational activities. It covers the content of the EFAW course but with a focus on activity-related injuries and emergencies that may occur in outdoor and sporting environments.',

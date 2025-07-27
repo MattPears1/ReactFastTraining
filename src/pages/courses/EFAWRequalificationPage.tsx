@@ -5,7 +5,7 @@ const EFAWRequalificationPage: React.FC = () => {
   const courseData = {
     courseName: 'Emergency First Aid at Work Requalification',
     courseAcronym: 'EFAW-R',
-    duration: '1 Day (6 hours)',
+    duration: '1 Day',
     price: '£70',
     certificateValidity: 'Valid for 3 years',
     description: 'While the one-day EFAW course can be retaken to requalify, this refresher course is designed specifically for those who need to renew their Emergency First Aid at Work certificate. It provides a comprehensive review of emergency first aid skills and updates on any changes in protocols.',

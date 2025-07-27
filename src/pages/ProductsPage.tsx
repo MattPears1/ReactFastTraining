@@ -26,7 +26,7 @@ const courseCategories = [
       },
       {
         title: 'First Aid at Work',
-        duration: '3 Days',
+        duration: '1 Day',
         price: '£200',
         href: '/courses/faw',
         features: ['Comprehensive Training', '3-Year Certificate', 'Advanced Techniques', 'Emergency Protocols']
@@ -41,7 +41,7 @@ const courseCategories = [
     courses: [
       {
         title: 'Paediatric First Aid',
-        duration: '2 Days',
+        duration: '1 Day',
         price: '£120',
         href: '/courses/paediatric',
         features: ['EYFS Compliant', 'Child CPR', 'Common Illnesses', 'Emergency Response']
@@ -63,7 +63,7 @@ const courseCategories = [
     courses: [
       {
         title: 'FAW Requalification',
-        duration: '2 Days',
+        duration: '1 Day',
         price: '£150',
         href: '/courses/faw-requalification',
         features: ['Skills Refresh', 'Updated Protocols', '3-Year Renewal', 'HSE Approved']
@@ -85,14 +85,14 @@ const courseCategories = [
     courses: [
       {
         title: 'Activity First Aid',
-        duration: '2 Days',
+        duration: '1 Day',
         price: '£120',
         href: '/courses/activity-first-aid',
         features: ['Outdoor Focus', 'Sports Injuries', 'Remote Scenarios', 'Adventure Activities']
       },
       {
         title: 'CPR and AED',
-        duration: 'Half Day',
+        duration: '3 Hours',
         price: '£60',
         href: '/courses/cpr-aed',
         features: ['Life-Saving Skills', 'Defibrillator Training', 'Hands-on Practice', 'Essential Knowledge']

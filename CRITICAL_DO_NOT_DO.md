@@ -107,3 +107,8 @@
 - **NO** Capacity over 12 attendees per course
 - **NO** Digital signatures (implement later - sign on premises)
 - **NO** Drag-and-drop admin features (initially)
+- **NO** Course durations longer than 1 day
+- **NO** 2-day, 3-day, or multi-day courses
+- **ONLY** Allowed durations: "3 Hours", "5 Hours", or "1 Day"
+- **NEVER** Mention "2 Days", "3 Days", "multi-day", or "half day"
+- **MAXIMUM** duration is 1 Day (which is approximately 5 hours of training)

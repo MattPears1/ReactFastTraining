@@ -8,7 +8,6 @@ import { cn } from '@utils/cn';
 import { CourseSchedule } from '@/types/booking.types';
 import { COURSE_TYPE_CONFIG } from '@/config/courseTypes.config';
 import { formatTime } from '@/utils/dateFormatting';
-import { BookingOptionsModal } from './BookingOptionsModal';
 
 interface CalendarViewProps {
   schedules: CourseSchedule[];
@@ -30,8 +29,6 @@ export const CalendarView: React.FC<CalendarViewProps> = ({
   const [expandedDate, setExpandedDate] = useState<string | null>(null);
   const [showMobileSheet, setShowMobileSheet] = useState(false);
   const [selectedDaySchedules, setSelectedDaySchedules] = useState<DaySchedules | null>(null);
-  const [showBookingOptions, setShowBookingOptions] = useState(false);
-  const [selectedScheduleForBooking, setSelectedScheduleForBooking] = useState<CourseSchedule | null>(null);
 
   // Group schedules by date
   const schedulesByDate = useMemo(() => {
@@ -298,8 +295,7 @@ export const CalendarView: React.FC<CalendarViewProps> = ({
                     )}
                     onClick={() => {
                       if (!isFull) {
-                        setSelectedScheduleForBooking(schedule);
-                        setShowBookingOptions(true);
+                        onSelectCourse(schedule);
                       }
                     }}
                   >
@@ -415,8 +411,7 @@ export const CalendarView: React.FC<CalendarViewProps> = ({
                       )}
                       onClick={() => {
                         if (!isFull) {
-                          setSelectedScheduleForBooking(schedule);
-                          setShowBookingOptions(true);
+                          onSelectCourse(schedule);
                           setShowMobileSheet(false);
                         }
                       }}
@@ -466,28 +461,6 @@ export const CalendarView: React.FC<CalendarViewProps> = ({
         )}
       </AnimatePresence>
 
-      {/* Booking Options Modal */}
-      {selectedScheduleForBooking && (
-        <BookingOptionsModal
-          isOpen={showBookingOptions}
-          onClose={() => {
-            setShowBookingOptions(false);
-            setSelectedScheduleForBooking(null);
-          }}
-          courseSchedule={selectedScheduleForBooking}
-          onSelectDirectBooking={() => {
-            setShowBookingOptions(false);
-            onSelectCourse(selectedScheduleForBooking);
-            setSelectedScheduleForBooking(null);
-          }}
-          onSelectInquiry={() => {
-            setShowBookingOptions(false);
-            // Navigate to inquiry form - parent component will handle this
-            onSelectCourse({ ...selectedScheduleForBooking, isInquiry: true } as any);
-            setSelectedScheduleForBooking(null);
-          }}
-        />
-      )}
     </>
   );
 };
