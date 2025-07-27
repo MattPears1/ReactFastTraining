@@ -1,5 +1,6 @@
 import { Router } from 'express';
 import authRoutes from './auth.routes';
+import adminAuthRoutes from './admin-auth.routes';
 import userRoutes from './user.routes';
 import contactRoutes from './contact.routes';
 import newsletterRoutes from './newsletter.routes';
@@ -15,6 +16,7 @@ router.get('/v1', (req, res) => {
     version: '1.0.0',
     endpoints: {
       auth: '/api/v1/auth',
+      admin: '/api/admin/auth',
       users: '/api/v1/users',
       contact: '/api/v1/contact',
       newsletter: '/api/v1/newsletter',
@@ -26,6 +28,7 @@ router.get('/v1', (req, res) => {
 
 // Routes
 router.use('/v1/auth', authRoutes);
+router.use('/admin/auth', adminAuthRoutes);
 router.use('/v1/users', userRoutes);
 router.use('/v1/contact', contactRoutes);
 router.use('/v1/newsletter', newsletterRoutes);

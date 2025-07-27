@@ -52,7 +52,20 @@ if (require.main === module) {
         // useful when used with OpenAPI-to-GraphQL to locate your application
         setServersFromRequest: true,
       },
-      // No CORS needed - frontend and backend on same domain
+      // Enable CORS for cross-origin requests
+      cors: {
+        origin: [
+          'https://www.reactfasttraining.co.uk',
+          'https://reactfasttraining.co.uk',
+          'http://localhost:5173',
+          'http://localhost:3000',
+          'http://127.0.0.1:5173',
+          'http://127.0.0.1:3000'
+        ],
+        methods: 'GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS',
+        credentials: true,
+        allowedHeaders: 'Origin,X-Requested-With,Content-Type,Accept,Authorization,X-API-Key'
+      }
     },
   };
   main(config).catch(err => {
