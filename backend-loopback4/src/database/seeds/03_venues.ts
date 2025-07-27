@@ -1,78 +1,233 @@
 import { Knex } from "knex";
 
 export async function seed(knex: Knex): Promise<void> {
-  // Check if venues already exist
-  const existingVenues = await knex('venues').count('* as count');
+  // Deletes ALL existing entries
+  await knex('venues').del();
   
-  if (Number(existingVenues[0].count) === 0) {
-    // Insert Yorkshire training venues
-    await knex('venues').insert([
-      {
-        name: 'Leeds City Centre Training Venue',
-        address_line1: '123 Park Lane',
-        address_line2: 'City Centre',
-        city: 'Leeds',
-        postcode: 'LS1 3HL',
-        capacity: 20,
-        facilities: JSON.stringify(['projector', 'whiteboard', 'kitchen', 'breakout_rooms']),
-        parking_info: 'Public car park adjacent (£5 all day)',
-        is_active: true,
-        created_at: new Date(),
-        updated_at: new Date()
-      },
-      {
-        name: 'Sheffield Business Park',
-        address_line1: 'Europa Link',
-        address_line2: 'Sheffield Business Park',
-        city: 'Sheffield',
-        postcode: 'S9 1XU',
-        capacity: 15,
-        facilities: JSON.stringify(['projector', 'whiteboard', 'parking']),
-        parking_info: 'Free on-site parking available',
-        is_active: true,
-        created_at: new Date(),
-        updated_at: new Date()
-      },
-      {
-        name: 'Bradford Community Centre',
-        address_line1: 'Great Horton Road',
-        city: 'Bradford',
-        postcode: 'BD7 1AA',
-        capacity: 25,
-        facilities: JSON.stringify(['projector', 'kitchen', 'disabled_access']),
-        parking_info: 'Street parking available',
-        is_active: true,
-        created_at: new Date(),
-        updated_at: new Date()
-      },
-      {
-        name: 'York Conference Centre',
-        address_line1: 'Tower Street',
-        city: 'York',
-        postcode: 'YO1 9TW',
-        capacity: 30,
-        facilities: JSON.stringify(['projector', 'av_equipment', 'catering', 'parking']),
-        parking_info: 'Hotel parking £10/day',
-        is_active: true,
-        created_at: new Date(),
-        updated_at: new Date()
-      },
-      {
-        name: 'Client On-Site Training',
-        address_line1: 'Various Locations',
-        city: 'Yorkshire',
-        postcode: 'Various',
-        capacity: 999,
-        facilities: JSON.stringify(['varies']),
-        parking_info: 'Depends on client site',
-        is_active: true,
-        created_at: new Date(),
-        updated_at: new Date()
-      }
-    ]);
+  // Insert placeholder venues for all Yorkshire locations
+  await knex('venues').insert([
+    // Sheffield Locations
+    {
+      name: 'Sheffield Location 1 - To Be Announced',
+      address_line1: 'To Be Announced',
+      city: 'Sheffield',
+      postcode: 'S1 1AA',
+      capacity: 15,
+      facilities: JSON.stringify(['projector', 'whiteboard', 'parking', 'disabled_access']),
+      parking_info: 'Details to be confirmed',
+      is_active: true,
+      created_at: new Date(),
+      updated_at: new Date()
+    },
+    {
+      name: 'Sheffield Location 2 - To Be Announced',
+      address_line1: 'To Be Announced',
+      city: 'Sheffield',
+      postcode: 'S2 2BB',
+      capacity: 15,
+      facilities: JSON.stringify(['projector', 'whiteboard', 'parking', 'disabled_access']),
+      parking_info: 'Details to be confirmed',
+      is_active: true,
+      created_at: new Date(),
+      updated_at: new Date()
+    },
     
-    console.log('Training venues seeded successfully');
-  } else {
-    console.log('Venues already exist, skipping seed');
-  }
+    // Leeds Locations
+    {
+      name: 'Leeds Location 1 - To Be Announced',
+      address_line1: 'To Be Announced',
+      city: 'Leeds',
+      postcode: 'LS1 1AA',
+      capacity: 20,
+      facilities: JSON.stringify(['projector', 'whiteboard', 'parking', 'disabled_access']),
+      parking_info: 'Details to be confirmed',
+      is_active: true,
+      created_at: new Date(),
+      updated_at: new Date()
+    },
+    {
+      name: 'Leeds Location 2 - To Be Announced',
+      address_line1: 'To Be Announced',
+      city: 'Leeds',
+      postcode: 'LS2 2BB',
+      capacity: 20,
+      facilities: JSON.stringify(['projector', 'whiteboard', 'parking', 'disabled_access']),
+      parking_info: 'Details to be confirmed',
+      is_active: true,
+      created_at: new Date(),
+      updated_at: new Date()
+    },
+    
+    // Bradford Locations
+    {
+      name: 'Bradford Location 1 - To Be Announced',
+      address_line1: 'To Be Announced',
+      city: 'Bradford',
+      postcode: 'BD1 1AA',
+      capacity: 18,
+      facilities: JSON.stringify(['projector', 'whiteboard', 'parking', 'disabled_access']),
+      parking_info: 'Details to be confirmed',
+      is_active: true,
+      created_at: new Date(),
+      updated_at: new Date()
+    },
+    {
+      name: 'Bradford Location 2 - To Be Announced',
+      address_line1: 'To Be Announced',
+      city: 'Bradford',
+      postcode: 'BD2 2BB',
+      capacity: 18,
+      facilities: JSON.stringify(['projector', 'whiteboard', 'parking', 'disabled_access']),
+      parking_info: 'Details to be confirmed',
+      is_active: true,
+      created_at: new Date(),
+      updated_at: new Date()
+    },
+    
+    // York Locations
+    {
+      name: 'York Location 1 - To Be Announced',
+      address_line1: 'To Be Announced',
+      city: 'York',
+      postcode: 'YO1 1AA',
+      capacity: 16,
+      facilities: JSON.stringify(['projector', 'whiteboard', 'parking', 'disabled_access']),
+      parking_info: 'Details to be confirmed',
+      is_active: true,
+      created_at: new Date(),
+      updated_at: new Date()
+    },
+    {
+      name: 'York Location 2 - To Be Announced',
+      address_line1: 'To Be Announced',
+      city: 'York',
+      postcode: 'YO2 2BB',
+      capacity: 16,
+      facilities: JSON.stringify(['projector', 'whiteboard', 'parking', 'disabled_access']),
+      parking_info: 'Details to be confirmed',
+      is_active: true,
+      created_at: new Date(),
+      updated_at: new Date()
+    },
+    
+    // Huddersfield Locations
+    {
+      name: 'Huddersfield Location 1 - To Be Announced',
+      address_line1: 'To Be Announced',
+      city: 'Huddersfield',
+      postcode: 'HD1 1AA',
+      capacity: 15,
+      facilities: JSON.stringify(['projector', 'whiteboard', 'parking', 'disabled_access']),
+      parking_info: 'Details to be confirmed',
+      is_active: true,
+      created_at: new Date(),
+      updated_at: new Date()
+    },
+    {
+      name: 'Huddersfield Location 2 - To Be Announced',
+      address_line1: 'To Be Announced',
+      city: 'Huddersfield',
+      postcode: 'HD2 2BB',
+      capacity: 15,
+      facilities: JSON.stringify(['projector', 'whiteboard', 'parking', 'disabled_access']),
+      parking_info: 'Details to be confirmed',
+      is_active: true,
+      created_at: new Date(),
+      updated_at: new Date()
+    },
+    
+    // Wakefield Locations
+    {
+      name: 'Wakefield Location 1 - To Be Announced',
+      address_line1: 'To Be Announced',
+      city: 'Wakefield',
+      postcode: 'WF1 1AA',
+      capacity: 14,
+      facilities: JSON.stringify(['projector', 'whiteboard', 'parking', 'disabled_access']),
+      parking_info: 'Details to be confirmed',
+      is_active: true,
+      created_at: new Date(),
+      updated_at: new Date()
+    },
+    {
+      name: 'Wakefield Location 2 - To Be Announced',
+      address_line1: 'To Be Announced',
+      city: 'Wakefield',
+      postcode: 'WF2 2BB',
+      capacity: 14,
+      facilities: JSON.stringify(['projector', 'whiteboard', 'parking', 'disabled_access']),
+      parking_info: 'Details to be confirmed',
+      is_active: true,
+      created_at: new Date(),
+      updated_at: new Date()
+    },
+    
+    // Halifax Locations
+    {
+      name: 'Halifax Location 1 - To Be Announced',
+      address_line1: 'To Be Announced',
+      city: 'Halifax',
+      postcode: 'HX1 1AA',
+      capacity: 14,
+      facilities: JSON.stringify(['projector', 'whiteboard', 'parking', 'disabled_access']),
+      parking_info: 'Details to be confirmed',
+      is_active: true,
+      created_at: new Date(),
+      updated_at: new Date()
+    },
+    {
+      name: 'Halifax Location 2 - To Be Announced',
+      address_line1: 'To Be Announced',
+      city: 'Halifax',
+      postcode: 'HX2 2BB',
+      capacity: 14,
+      facilities: JSON.stringify(['projector', 'whiteboard', 'parking', 'disabled_access']),
+      parking_info: 'Details to be confirmed',
+      is_active: true,
+      created_at: new Date(),
+      updated_at: new Date()
+    },
+    
+    // Harrogate Locations
+    {
+      name: 'Harrogate Location 1 - To Be Announced',
+      address_line1: 'To Be Announced',
+      city: 'Harrogate',
+      postcode: 'HG1 1AA',
+      capacity: 15,
+      facilities: JSON.stringify(['projector', 'whiteboard', 'parking', 'disabled_access']),
+      parking_info: 'Details to be confirmed',
+      is_active: true,
+      created_at: new Date(),
+      updated_at: new Date()
+    },
+    {
+      name: 'Harrogate Location 2 - To Be Announced',
+      address_line1: 'To Be Announced',
+      city: 'Harrogate',
+      postcode: 'HG2 2BB',
+      capacity: 15,
+      facilities: JSON.stringify(['projector', 'whiteboard', 'parking', 'disabled_access']),
+      parking_info: 'Details to be confirmed',
+      is_active: true,
+      created_at: new Date(),
+      updated_at: new Date()
+    },
+    
+    // Client On-Site Training Option
+    {
+      name: 'Client On-Site Training',
+      address_line1: 'Your Location',
+      city: 'Yorkshire',
+      postcode: 'Various',
+      capacity: 999,
+      facilities: JSON.stringify(['varies']),
+      parking_info: 'Depends on client site',
+      is_active: true,
+      created_at: new Date(),
+      updated_at: new Date()
+    }
+  ]);
+  
+  console.log('Training venues seeded successfully - all placeholder locations ready for future updates');
 }

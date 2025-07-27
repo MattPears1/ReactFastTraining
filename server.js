@@ -6,6 +6,36 @@ const cors = require('cors');
 const app = express();
 const PORT = process.env.PORT || 3002;
 
+// In-memory storage for course sessions (temporary until database is connected)
+let courseSessions = [
+  {
+    id: '1',
+    courseId: 1,
+    courseName: 'Emergency First Aid at Work',
+    venueId: 1,
+    venueName: 'Sheffield Location 1 - To Be Announced',
+    date: '2025-02-10',
+    startTime: '09:00',
+    endTime: '17:00',
+    maxParticipants: 12,
+    currentBookings: 8,
+    status: 'scheduled'
+  },
+  {
+    id: '2',
+    courseId: 3,
+    courseName: 'Paediatric First Aid',
+    venueId: 3,
+    venueName: 'Leeds Location 1 - To Be Announced',
+    date: '2025-02-12',
+    startTime: '10:00',
+    endTime: '16:00',
+    maxParticipants: 12,
+    currentBookings: 10,
+    status: 'scheduled'
+  }
+];
+
 // Enable gzip compression
 app.use(compression());
 
@@ -129,20 +159,49 @@ app.get('/api/admin/dashboard/overview', (req, res) => {
 
 // Admin courses endpoint
 app.get('/api/admin/courses', (req, res) => {
+  // Return all 13 courses with proper data structure
   res.json([
-    { id: 1, name: 'Emergency First Aid at Work', category: 'workplace', duration: 'Full Day (6 hours)', price: 100, status: 'active', attendees: 145 },
-    { id: 2, name: 'First Aid at Work', category: 'workplace', duration: 'Full Day (6 hours)', price: 200, status: 'active', attendees: 89 },
-    { id: 3, name: 'Paediatric First Aid', category: 'paediatric', duration: 'Full Day (6 hours)', price: 150, status: 'active', attendees: 234 },
-    { id: 4, name: 'Emergency Paediatric First Aid', category: 'paediatric', duration: 'Full Day (5 hours)', price: 100, status: 'active', attendees: 67 },
-    { id: 5, name: 'FAW Requalification', category: 'workplace', duration: 'Full Day (5 hours)', price: 150, status: 'active', attendees: 45 },
-    { id: 6, name: 'EFAW Requalification', category: 'workplace', duration: '3 Hours', price: 75, status: 'active', attendees: 123 },
-    { id: 7, name: 'Paediatric Requalification', category: 'paediatric', duration: '3 Hours', price: 100, status: 'active', attendees: 56 },
-    { id: 8, name: 'Emergency Paediatric Requalification', category: 'paediatric', duration: '3 Hours', price: 75, status: 'active', attendees: 34 },
-    { id: 9, name: 'Activity First Aid', category: 'specialist', duration: 'Full Day (5 hours)', price: 175, status: 'active', attendees: 78 },
+    { id: 1, name: 'Emergency First Aid at Work', category: 'workplace', duration: '1 Day', price: 100, status: 'active', attendees: 145 },
+    { id: 2, name: 'First Aid at Work', category: 'workplace', duration: '1 Day', price: 200, status: 'active', attendees: 89 },
+    { id: 3, name: 'Paediatric First Aid', category: 'paediatric', duration: '1 Day', price: 120, status: 'active', attendees: 234 },
+    { id: 4, name: 'Emergency Paediatric First Aid', category: 'paediatric', duration: '1 Day', price: 100, status: 'active', attendees: 67 },
+    { id: 5, name: 'FAW Requalification', category: 'requalification', duration: '1 Day', price: 150, status: 'active', attendees: 45 },
+    { id: 6, name: 'EFAW Requalification', category: 'requalification', duration: '3 Hours', price: 75, status: 'active', attendees: 123 },
+    { id: 7, name: 'Paediatric Requalification', category: 'requalification', duration: '3 Hours', price: 100, status: 'active', attendees: 56 },
+    { id: 8, name: 'Emergency Paediatric Requalification', category: 'requalification', duration: '3 Hours', price: 75, status: 'active', attendees: 34 },
+    { id: 9, name: 'Activity First Aid', category: 'specialist', duration: '1 Day', price: 175, status: 'active', attendees: 78 },
     { id: 10, name: 'Activity First Aid Requalification', category: 'specialist', duration: '3 Hours', price: 100, status: 'active', attendees: 23 },
     { id: 11, name: 'CPR and AED', category: 'specialist', duration: '3 Hours', price: 50, status: 'active', attendees: 156 },
     { id: 12, name: 'Annual Skills Refresher', category: 'specialist', duration: '3 Hours', price: 50, status: 'active', attendees: 89 },
     { id: 13, name: 'Oxygen Therapy', category: 'specialist', duration: '3 Hours', price: 75, status: 'inactive', attendees: 12 }
+  ]);
+});
+
+// Admin schedules endpoint
+app.get('/api/admin/schedules', (req, res) => {
+  res.json(courseSessions);
+});
+
+// Admin venues endpoint
+app.get('/api/admin/venues', (req, res) => {
+  res.json([
+    { id: 1, name: 'Sheffield Location 1 - To Be Announced', address_line1: 'To Be Announced', city: 'Sheffield', capacity: 15 },
+    { id: 2, name: 'Sheffield Location 2 - To Be Announced', address_line1: 'To Be Announced', city: 'Sheffield', capacity: 15 },
+    { id: 3, name: 'Leeds Location 1 - To Be Announced', address_line1: 'To Be Announced', city: 'Leeds', capacity: 20 },
+    { id: 4, name: 'Leeds Location 2 - To Be Announced', address_line1: 'To Be Announced', city: 'Leeds', capacity: 20 },
+    { id: 5, name: 'Bradford Location 1 - To Be Announced', address_line1: 'To Be Announced', city: 'Bradford', capacity: 18 },
+    { id: 6, name: 'Bradford Location 2 - To Be Announced', address_line1: 'To Be Announced', city: 'Bradford', capacity: 18 },
+    { id: 7, name: 'York Location 1 - To Be Announced', address_line1: 'To Be Announced', city: 'York', capacity: 16 },
+    { id: 8, name: 'York Location 2 - To Be Announced', address_line1: 'To Be Announced', city: 'York', capacity: 16 },
+    { id: 9, name: 'Huddersfield Location 1 - To Be Announced', address_line1: 'To Be Announced', city: 'Huddersfield', capacity: 15 },
+    { id: 10, name: 'Huddersfield Location 2 - To Be Announced', address_line1: 'To Be Announced', city: 'Huddersfield', capacity: 15 },
+    { id: 11, name: 'Wakefield Location 1 - To Be Announced', address_line1: 'To Be Announced', city: 'Wakefield', capacity: 14 },
+    { id: 12, name: 'Wakefield Location 2 - To Be Announced', address_line1: 'To Be Announced', city: 'Wakefield', capacity: 14 },
+    { id: 13, name: 'Halifax Location 1 - To Be Announced', address_line1: 'To Be Announced', city: 'Halifax', capacity: 14 },
+    { id: 14, name: 'Halifax Location 2 - To Be Announced', address_line1: 'To Be Announced', city: 'Halifax', capacity: 14 },
+    { id: 15, name: 'Harrogate Location 1 - To Be Announced', address_line1: 'To Be Announced', city: 'Harrogate', capacity: 15 },
+    { id: 16, name: 'Harrogate Location 2 - To Be Announced', address_line1: 'To Be Announced', city: 'Harrogate', capacity: 15 },
+    { id: 17, name: 'Client On-Site Training', address_line1: 'Your Location', city: 'Yorkshire', capacity: 999 }
   ]);
 });
 
@@ -174,16 +233,128 @@ app.get('/api/admin/bookings', (req, res) => {
   ]);
 });
 
+// Public API endpoint for getting available course sessions
 app.get('/api/course-sessions', (req, res) => {
-  res.json({
-    message: 'Course sessions endpoint - database connection needed',
-    status: 'placeholder'
+  // Filter for future sessions that are not full
+  const availableSessions = courseSessions
+    .filter(session => {
+      const sessionDate = new Date(session.date);
+      const today = new Date();
+      today.setHours(0, 0, 0, 0);
+      return sessionDate >= today && 
+             session.status === 'scheduled' && 
+             session.currentBookings < session.maxParticipants;
+    })
+    .sort((a, b) => new Date(a.date) - new Date(b.date));
+  
+  res.json(availableSessions);
+});
+
+// Get course and venue data helpers
+const getCourse = (courseId) => {
+  const courses = [
+    { id: 1, name: 'Emergency First Aid at Work', category: 'workplace', duration: '1 Day', price: 100 },
+    { id: 2, name: 'First Aid at Work', category: 'workplace', duration: '1 Day', price: 200 },
+    { id: 3, name: 'Paediatric First Aid', category: 'paediatric', duration: '1 Day', price: 120 },
+    { id: 4, name: 'Emergency Paediatric First Aid', category: 'paediatric', duration: '1 Day', price: 100 },
+    { id: 5, name: 'FAW Requalification', category: 'requalification', duration: '1 Day', price: 150 },
+    { id: 6, name: 'EFAW Requalification', category: 'requalification', duration: '3 Hours', price: 75 },
+    { id: 7, name: 'Paediatric Requalification', category: 'requalification', duration: '3 Hours', price: 100 },
+    { id: 8, name: 'Emergency Paediatric Requalification', category: 'requalification', duration: '3 Hours', price: 75 },
+    { id: 9, name: 'Activity First Aid', category: 'specialist', duration: '1 Day', price: 175 },
+    { id: 10, name: 'Activity First Aid Requalification', category: 'specialist', duration: '3 Hours', price: 100 },
+    { id: 11, name: 'CPR and AED', category: 'specialist', duration: '3 Hours', price: 50 },
+    { id: 12, name: 'Annual Skills Refresher', category: 'specialist', duration: '3 Hours', price: 50 },
+    { id: 13, name: 'Oxygen Therapy', category: 'specialist', duration: '3 Hours', price: 75 }
+  ];
+  return courses.find(c => c.id === parseInt(courseId));
+};
+
+const getVenue = (venueId) => {
+  const venues = [
+    { id: 1, name: 'Sheffield Location 1 - To Be Announced', city: 'Sheffield' },
+    { id: 2, name: 'Sheffield Location 2 - To Be Announced', city: 'Sheffield' },
+    { id: 3, name: 'Leeds Location 1 - To Be Announced', city: 'Leeds' },
+    { id: 4, name: 'Leeds Location 2 - To Be Announced', city: 'Leeds' },
+    { id: 5, name: 'Bradford Location 1 - To Be Announced', city: 'Bradford' },
+    { id: 6, name: 'Bradford Location 2 - To Be Announced', city: 'Bradford' },
+    { id: 7, name: 'York Location 1 - To Be Announced', city: 'York' },
+    { id: 8, name: 'York Location 2 - To Be Announced', city: 'York' },
+    { id: 9, name: 'Huddersfield Location 1 - To Be Announced', city: 'Huddersfield' },
+    { id: 10, name: 'Huddersfield Location 2 - To Be Announced', city: 'Huddersfield' },
+    { id: 11, name: 'Wakefield Location 1 - To Be Announced', city: 'Wakefield' },
+    { id: 12, name: 'Wakefield Location 2 - To Be Announced', city: 'Wakefield' },
+    { id: 13, name: 'Halifax Location 1 - To Be Announced', city: 'Halifax' },
+    { id: 14, name: 'Halifax Location 2 - To Be Announced', city: 'Halifax' },
+    { id: 15, name: 'Harrogate Location 1 - To Be Announced', city: 'Harrogate' },
+    { id: 16, name: 'Harrogate Location 2 - To Be Announced', city: 'Harrogate' },
+    { id: 17, name: 'Client On-Site Training', city: 'Yorkshire' }
+  ];
+  return venues.find(v => v.id === parseInt(venueId));
+};
+
+// Course sessions POST endpoint for creating new sessions
+app.post('/course-sessions', express.json(), (req, res) => {
+  const { courseId, venueId, startDatetime, endDatetime, notes } = req.body;
+  
+  // Get course and venue details
+  const course = getCourse(courseId);
+  const venue = getVenue(venueId);
+  
+  if (!course || !venue) {
+    return res.status(400).json({
+      success: false,
+      message: 'Invalid course or venue ID'
+    });
+  }
+  
+  // Extract date and times
+  const date = startDatetime.split(' ')[0];
+  const startTime = startDatetime.split(' ')[1].substring(0, 5);
+  const endTime = endDatetime.split(' ')[1].substring(0, 5);
+  
+  // Create new session
+  const newSession = {
+    id: Date.now().toString(),
+    courseId: parseInt(courseId),
+    courseName: course.name,
+    venueId: parseInt(venueId),
+    venueName: venue.name,
+    date,
+    startTime,
+    endTime,
+    notes,
+    status: 'scheduled',
+    currentBookings: 0,
+    maxParticipants: 12,
+    createdAt: new Date().toISOString()
+  };
+  
+  // Add to our in-memory storage
+  courseSessions.push(newSession);
+  
+  console.log('New course session created:', newSession);
+  
+  res.status(201).json({
+    success: true,
+    data: newSession,
+    message: 'Course session created successfully'
   });
 });
 
 app.post('/api/bookings/create-payment-intent', (req, res) => {
   const timestamp = Date.now();
   const amount = req.body.amount || 7500;
+  const { sessionId } = req.body;
+  
+  // If a sessionId is provided, update the booking count
+  if (sessionId) {
+    const session = courseSessions.find(s => s.id === sessionId);
+    if (session && session.currentBookings < session.maxParticipants) {
+      session.currentBookings++;
+      console.log(`Updated session ${sessionId} bookings to ${session.currentBookings}/${session.maxParticipants}`);
+    }
+  }
   
   res.json({
     clientSecret: `pi_demo_${timestamp}_secret_demo`,

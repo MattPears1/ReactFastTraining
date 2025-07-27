@@ -60,7 +60,7 @@ export const SchedulePage: React.FC = () => {
       console.log('🔍 DEBUG: Token exists:', !!token);
       console.log('🔍 DEBUG: Token preview:', token ? token.substring(0, 20) + '...' : 'null');
       
-      const fullUrl = `${apiUrl}/course-sessions`;
+      const fullUrl = `${apiUrl}/api/admin/schedules`;
       console.log('🔍 DEBUG: Full request URL:', fullUrl);
       
       try {
@@ -107,17 +107,17 @@ export const SchedulePage: React.FC = () => {
           
           const transformed = {
             id: session.id,
-            courseName: session.course?.name || 'Unknown Course',
-            courseType: session.course?.type || session.course?.name || 'Unknown',
-            date: session.startDate ? session.startDate.split('T')[0] : new Date().toISOString().split('T')[0],
+            courseName: session.courseName || 'Unknown Course',
+            courseType: session.courseType || 'Unknown',
+            date: session.date,
             startTime: session.startTime,
             endTime: session.endTime,
-            location: session.location?.name || session.location?.address || 'Unknown Location',
-            instructor: session.trainer?.name || 'Lex Richardson',
-            maxParticipants: session.maxParticipants,
-            currentBookings: session.currentParticipants || 0,
-            status: session.status?.toLowerCase() || 'scheduled',
-            price: session.pricePerPerson || 0
+            location: session.venueName || 'Unknown Location',
+            instructor: 'Lex Richardson',
+            maxParticipants: session.maxParticipants || 12,
+            currentBookings: session.currentBookings || 0,
+            status: session.status || 'scheduled',
+            price: 100 // Default price, would come from course data
           };
           
           console.log(`🔍 DEBUG: Transformed session ${index}:`, transformed);
