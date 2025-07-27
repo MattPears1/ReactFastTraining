@@ -46,7 +46,8 @@ export const SchedulePage: React.FC = () => {
   const { data: schedules, isLoading, error } = useQuery({
     queryKey: ['admin-schedules', currentDate.getMonth(), currentDate.getFullYear()],
     queryFn: async () => {
-      const apiUrl = import.meta.env.VITE_API_URL || 'http://localhost:3000';
+      // In production, use the same domain as the frontend
+      const apiUrl = import.meta.env.PROD ? '' : (import.meta.env.VITE_API_URL || 'http://localhost:3000');
       const token = localStorage.getItem('adminAccessToken');
       
       try {

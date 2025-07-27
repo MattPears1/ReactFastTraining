@@ -41,7 +41,7 @@ export const AddSessionModal: React.FC<AddSessionModalProps> = ({ isOpen, onClos
   const { data: courses } = useQuery({
     queryKey: ['admin-courses'],
     queryFn: async () => {
-      const apiUrl = import.meta.env.VITE_API_URL || 'http://localhost:3000';
+      const apiUrl = import.meta.env.PROD ? '' : (import.meta.env.VITE_API_URL || 'http://localhost:3000');
       const token = localStorage.getItem('adminAccessToken');
       
       const response = await fetch(`${apiUrl}/api/admin/courses`, {
@@ -61,7 +61,7 @@ export const AddSessionModal: React.FC<AddSessionModalProps> = ({ isOpen, onClos
   const { data: venues } = useQuery({
     queryKey: ['admin-venues'],
     queryFn: async () => {
-      const apiUrl = import.meta.env.VITE_API_URL || 'http://localhost:3000';
+      const apiUrl = import.meta.env.PROD ? '' : (import.meta.env.VITE_API_URL || 'http://localhost:3000');
       const token = localStorage.getItem('adminAccessToken');
       
       const response = await fetch(`${apiUrl}/api/admin/venues`, {
@@ -79,7 +79,7 @@ export const AddSessionModal: React.FC<AddSessionModalProps> = ({ isOpen, onClos
 
   const createSessionMutation = useMutation({
     mutationFn: async (data: typeof formData) => {
-      const apiUrl = import.meta.env.VITE_API_URL || 'http://localhost:3000';
+      const apiUrl = import.meta.env.PROD ? '' : (import.meta.env.VITE_API_URL || 'http://localhost:3000');
       const token = localStorage.getItem('adminAccessToken');
       
       const startDatetime = `${data.date} ${data.startTime}:00`;
