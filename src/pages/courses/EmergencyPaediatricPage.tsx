@@ -65,7 +65,7 @@ const EmergencyPaediatricPage: React.FC = () => {
     
     prerequisites: 'None - suitable for beginners',
     
-    seoKeywords: 'emergency paediatric first aid Yorkshire, EPFA course Leeds, 1 day children first aid Sheffield, emergency childcare first aid'
+    seoKeywords: 'emergency paediatric first aid Yorkshire, EPFA course South Yorkshire, 1 day children first aid South Yorkshire, emergency childcare first aid'
   }
 
   return <CourseTemplate {...courseData} />

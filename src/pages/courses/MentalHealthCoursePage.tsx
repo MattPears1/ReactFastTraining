@@ -82,7 +82,7 @@ const MentalHealthCoursePage: React.FC = () => {
     
     assessmentMethod: 'Continuous assessment through participation and engagement',
     
-    seoKeywords: 'mental health first aid course Yorkshire, MHFA training Leeds, workplace mental health, wellbeing training, mental health awareness course'
+    seoKeywords: 'mental health first aid course Yorkshire, MHFA training South Yorkshire, workplace mental health, wellbeing training, mental health awareness course'
   }
 
   return <CourseTemplate {...courseData} />

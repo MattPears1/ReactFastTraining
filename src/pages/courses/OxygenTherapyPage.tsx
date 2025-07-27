@@ -70,7 +70,7 @@ const OxygenTherapyPage: React.FC = () => {
     
     prerequisites: 'Current first aid certificate (FAW, EFAW or equivalent) required',
     
-    seoKeywords: 'oxygen therapy course Yorkshire, emergency oxygen training Leeds, O2 administration Sheffield, medical oxygen first aid'
+    seoKeywords: 'oxygen therapy course Yorkshire, emergency oxygen training South Yorkshire, O2 administration South Yorkshire, medical oxygen first aid'
   }
 
   return <CourseTemplate {...courseData} />

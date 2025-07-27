@@ -78,7 +78,7 @@ const ActivityFirstAidPage: React.FC = () => {
     
     prerequisites: 'None - suitable for beginners',
     
-    seoKeywords: 'activity first aid course Yorkshire, sports first aid training Leeds, outdoor first aid Sheffield, activity instructor first aid'
+    seoKeywords: 'activity first aid course Yorkshire, sports first aid training South Yorkshire, outdoor first aid South Yorkshire, activity instructor first aid'
   }
 
   return <CourseTemplate {...courseData} />

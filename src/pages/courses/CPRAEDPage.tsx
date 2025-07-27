@@ -70,7 +70,7 @@ const CPRAEDPage: React.FC = () => {
     
     prerequisites: 'None - suitable for complete beginners and those needing refresher training',
     
-    seoKeywords: 'CPR course Yorkshire, AED training Leeds, defibrillator course Sheffield, CPR certification, resuscitation training'
+    seoKeywords: 'CPR course Yorkshire, AED training South Yorkshire, defibrillator course South Yorkshire, CPR certification, resuscitation training'
   }
 
   return <CourseTemplate {...courseData} />

@@ -50,7 +50,7 @@ const EmergencyPaediatricRequalificationPage: React.FC = () => {
       accreditations={['Ofqual Regulated', 'EYFS Compliant', 'Ofsted Approved']}
       assessmentMethod="Continuous practical assessment"
       prerequisites="Valid or recently expired Emergency Paediatric First Aid certificate"
-      seoKeywords="paediatric first aid requalification, EPFA renewal, children first aid refresher Yorkshire, paediatric requalification Sheffield"
+      seoKeywords="paediatric first aid requalification, EPFA renewal, children first aid refresher Yorkshire, paediatric requalification South Yorkshire"
     />
   )
 }

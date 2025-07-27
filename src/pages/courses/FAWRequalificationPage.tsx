@@ -79,7 +79,7 @@ const FAWRequalificationPage: React.FC = () => {
     
     assessmentMethod: 'Continuous practical assessment throughout the course and written assessment',
     
-    seoKeywords: 'first aid at work requalification Yorkshire, FAW refresher course Leeds, FAW renewal Sheffield, first aid requalification training'
+    seoKeywords: 'first aid at work requalification Yorkshire, FAW refresher course South Yorkshire, FAW renewal South Yorkshire, first aid requalification training'
   }
 
   return <CourseTemplate {...courseData} />

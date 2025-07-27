@@ -67,7 +67,7 @@ const EFAWRequalificationPage: React.FC = () => {
     
     assessmentMethod: 'Continuous practical assessment throughout the day',
     
-    seoKeywords: 'EFAW requalification Yorkshire, emergency first aid renewal Leeds, EFAW refresher Sheffield, 1 day first aid requalification'
+    seoKeywords: 'EFAW requalification Yorkshire, emergency first aid renewal South Yorkshire, EFAW refresher South Yorkshire, 1 day first aid requalification'
   }
 
   return <CourseTemplate {...courseData} />

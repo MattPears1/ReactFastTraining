@@ -62,7 +62,7 @@ const AnnualSkillsRefresherPage: React.FC = () => {
     
     prerequisites: 'Current valid first aid certificate (FAW, EFAW, or equivalent) recommended',
     
-    seoKeywords: 'first aid refresher Yorkshire, annual skills update Leeds, HSE recommended refresher Sheffield, first aid skills practice'
+    seoKeywords: 'first aid refresher Yorkshire, annual skills update South Yorkshire, HSE recommended refresher South Yorkshire, first aid skills practice'
   }
 
   return <CourseTemplate {...courseData} />
