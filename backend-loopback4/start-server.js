@@ -4,6 +4,7 @@ const cors = require('cors');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const { Client } = require('pg');
+const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY);
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -587,6 +588,71 @@ app.get('/api/admin/users', async (req, res) => {
   } catch (error) {
     console.error('Users error:', error);
     res.status(500).json({ error: 'Internal server error' });
+  }
+});
+
+// Payment intent endpoint
+app.post('/api/bookings/create-payment-intent', async (req, res) => {
+  try {
+    console.log('📊 Payment intent request received');
+    const { courseSessionId, amount, bookingData } = req.body;
+    
+    console.log('Creating Stripe payment intent for amount:', amount);
+    
+    // Create a payment intent with Stripe
+    const paymentIntent = await stripe.paymentIntents.create({
+      amount: amount, // Amount should be in pence
+      currency: 'gbp',
+      metadata: {
+        courseSessionId: courseSessionId.toString(),
+        customerName: `${bookingData.firstName} ${bookingData.lastName}`,
+        customerEmail: bookingData.email,
+        numberOfParticipants: bookingData.numberOfParticipants.toString()
+      }
+    });
+    
+    console.log('✅ Payment intent created:', paymentIntent.id);
+    
+    res.json({
+      clientSecret: paymentIntent.client_secret,
+      paymentIntentId: paymentIntent.id
+    });
+  } catch (error) {
+    console.error('❌ Payment intent error:', error);
+    res.status(500).json({ error: 'Failed to create payment intent', details: error.message });
+  }
+});
+
+// Confirm booking with payment endpoint
+app.post('/api/bookings/confirm-with-payment', async (req, res) => {
+  try {
+    console.log('📊 Booking confirmation request received');
+    const bookingData = req.body;
+    
+    // Generate a confirmation code
+    const confirmationCode = `RFT-${Date.now().toString(36).toUpperCase()}-${Math.random().toString(36).substring(2, 6).toUpperCase()}`;
+    
+    // In production, this would save to database
+    const mockBooking = {
+      id: Date.now(),
+      confirmationCode,
+      ...bookingData,
+      status: 'confirmed',
+      createdAt: new Date().toISOString()
+    };
+    
+    console.log('✅ Booking confirmed:', confirmationCode);
+    
+    res.json({
+      success: true,
+      data: {
+        booking: mockBooking,
+        confirmationCode
+      }
+    });
+  } catch (error) {
+    console.error('❌ Booking confirmation error:', error);
+    res.status(500).json({ error: 'Failed to confirm booking' });
   }
 });
 

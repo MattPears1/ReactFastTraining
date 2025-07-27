@@ -18,7 +18,7 @@ export const participantDetailSchema = z.object({
 });
 
 export const bookingFormSchema = z.object({
-  courseScheduleId: z.number().positive('Please select a course'),
+  courseSessionId: z.number().positive('Please select a course'),
   firstName: z.string()
     .min(2, 'First name must be at least 2 characters')
     .max(50, 'First name must be less than 50 characters')
