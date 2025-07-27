@@ -26,6 +26,24 @@ client.connect()
   .then(() => console.log('✅ Database connected'))
   .catch(err => console.error('❌ Database connection failed:', err));
 
+// Authentication middleware
+function authenticateToken(req, res, next) {
+  const authHeader = req.headers.authorization;
+  if (!authHeader || !authHeader.startsWith('Bearer ')) {
+    return res.status(401).json({ error: 'Unauthorized' });
+  }
+
+  const token = authHeader.substring(7);
+  
+  try {
+    const decoded = jwt.verify(token, process.env.JWT_SECRET);
+    req.user = decoded;
+    next();
+  } catch (error) {
+    return res.status(401).json({ error: 'Invalid token' });
+  }
+}
+
 // JWT helper functions
 function generateAccessToken(user) {
   return jwt.sign(
@@ -588,6 +606,100 @@ app.get('/api/admin/users', async (req, res) => {
   } catch (error) {
     console.error('Users error:', error);
     res.status(500).json({ error: 'Internal server error' });
+  }
+});
+
+// Course Sessions endpoints for admin schedule synchronization
+const mockCourseSessions = [
+  {
+    id: '1',
+    courseId: 'course-1',
+    course: { name: 'Emergency First Aid at Work', type: 'EFAW' },
+    trainerId: 'trainer-1',
+    trainer: { name: 'Lex Richardson' },
+    locationId: 'location-1',
+    location: { name: 'Leeds Training Centre', address: 'Leeds City Centre' },
+    startDate: '2025-02-15T00:00:00.000Z',
+    endDate: '2025-02-15T00:00:00.000Z',
+    startTime: '09:00',
+    endTime: '17:00',
+    maxParticipants: 12,
+    currentParticipants: 8,
+    pricePerPerson: 75,
+    status: 'SCHEDULED'
+  },
+  {
+    id: '2',
+    courseId: 'course-2',
+    course: { name: 'First Aid at Work', type: 'FAW' },
+    trainerId: 'trainer-1',
+    trainer: { name: 'Lex Richardson' },
+    locationId: 'location-2',
+    location: { name: 'Sheffield Training Centre', address: 'Sheffield City Centre' },
+    startDate: '2025-02-20T00:00:00.000Z',
+    endDate: '2025-02-20T00:00:00.000Z',
+    startTime: '09:00',
+    endTime: '17:00',
+    maxParticipants: 12,
+    currentParticipants: 12,
+    pricePerPerson: 200,
+    status: 'SCHEDULED'
+  },
+  {
+    id: '3',
+    courseId: 'course-3',
+    course: { name: 'Paediatric First Aid', type: 'PAEDIATRIC' },
+    trainerId: 'trainer-1',
+    trainer: { name: 'Lex Richardson' },
+    locationId: 'location-3',
+    location: { name: 'York Training Centre', address: 'York City Centre' },
+    startDate: '2025-02-25T00:00:00.000Z',
+    endDate: '2025-02-25T00:00:00.000Z',
+    startTime: '09:00',
+    endTime: '15:00',
+    maxParticipants: 10,
+    currentParticipants: 6,
+    pricePerPerson: 85,
+    status: 'SCHEDULED'
+  }
+];
+
+// Get all course sessions (admin only)
+app.get('/course-sessions', authenticateToken, (req, res) => {
+  console.log('Get course sessions');
+  res.json(mockCourseSessions);
+});
+
+// Get course sessions available for booking (public endpoint)
+app.get('/course-sessions/available', (req, res) => {
+  console.log('Get available course sessions for booking');
+  const availableSessions = mockCourseSessions.filter(session => 
+    session.currentParticipants < session.maxParticipants && 
+    session.status === 'SCHEDULED'
+  );
+  res.json(availableSessions);
+});
+
+// Get single course session
+app.get('/course-sessions/:id', (req, res) => {
+  console.log('Get course session:', req.params.id);
+  const session = mockCourseSessions.find(s => s.id === req.params.id);
+  if (session) {
+    res.json(session);
+  } else {
+    res.status(404).json({ error: 'Course session not found' });
+  }
+});
+
+// Delete course session (admin only)
+app.delete('/course-sessions/:id', authenticateToken, (req, res) => {
+  console.log('Delete course session:', req.params.id);
+  const index = mockCourseSessions.findIndex(s => s.id === req.params.id);
+  if (index !== -1) {
+    mockCourseSessions.splice(index, 1);
+    res.status(204).send();
+  } else {
+    res.status(404).json({ error: 'Course session not found' });
   }
 });
 
