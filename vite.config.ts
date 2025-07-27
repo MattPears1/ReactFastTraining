@@ -48,8 +48,9 @@ export default defineConfig({
         },
         manualChunks(id) {
           if (id.includes('node_modules')) {
-            // Core React dependencies
-            if (id.includes('react') && !id.includes('react-')) {
+            // Core React dependencies - keep react and react-dom together
+            if (id.includes('/react/') || id.includes('\\react\\') || 
+                id.includes('/react-dom/') || id.includes('\\react-dom\\')) {
               return 'react-vendor';
             }
             
