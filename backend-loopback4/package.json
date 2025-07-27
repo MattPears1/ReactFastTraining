@@ -44,7 +44,7 @@
     "migrate:make": "npx knex migrate:make",
     "seed:run": "npx knex seed:run",
     "setup:database": "node src/scripts/setup-database.js",
-    "heroku-postbuild": "npm run build && npm run setup:database"
+    "heroku-postbuild": "npm install && npm run build"
   },
   "repository": {
     "type": "git",
