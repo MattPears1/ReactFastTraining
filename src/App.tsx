@@ -52,6 +52,9 @@ const BookingSuccessPage = lazy(() => import('@pages/BookingSuccessPage'))
 const ClientDashboardPage = lazy(() => import('@pages/client/DashboardPage'))
 const ClientBookingHistoryPage = lazy(() => import('@pages/client/BookingHistoryPage'))
 
+// Legal Pages
+const TermsPage = lazy(() => import('@pages/TermsPage'))
+
 // Admin Pages
 const AdminPage = lazy(() => import('@pages/AdminPage'))
 const AdminRoutes = lazy(() => import('@/routes/AdminRoutes').then(module => ({ default: module.AdminRoutes })))
@@ -111,6 +114,9 @@ function App() {
                   <Route path="/verify-email" element={<EmailVerificationPage />} />
                   <Route path="/reset-password" element={<ResetPasswordPage />} />
                   <Route path="/forgot-password" element={<ForgotPasswordPage />} />
+                  
+                  {/* Legal Pages */}
+                  <Route path="/terms" element={<TermsPage />} />
                   
                   {/* Client Portal Routes */}
                   <Route path="/client" element={<ClientDashboardPage />} />

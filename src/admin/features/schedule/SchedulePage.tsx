@@ -242,33 +242,34 @@ export const SchedulePage: React.FC = () => {
 
       {viewMode === 'calendar' ? (
         /* Calendar View */
-        <div className="bg-white shadow rounded-lg overflow-hidden">
-          {/* Calendar Header */}
-          <div className="flex items-center justify-between px-6 py-4 border-b border-gray-200">
-            <h2 className="text-lg font-medium text-gray-900">
-              {monthNames[currentDate.getMonth()]} {currentDate.getFullYear()}
-            </h2>
-            <div className="flex space-x-2">
+        <AdminCard
+          title={`${monthNames[currentDate.getMonth()]} ${currentDate.getFullYear()}`}
+          icon={CalendarIcon}
+          iconColor="primary"
+          noPadding
+          actions={
+            <div className="flex gap-2">
               <button
                 onClick={() => navigateMonth('prev')}
-                className="p-2 hover:bg-gray-100 rounded-md"
+                className="admin-btn admin-btn-secondary p-2"
               >
-                <ChevronLeft className="h-4 w-4" />
+                <ChevronLeft className="admin-icon-sm" />
               </button>
               <button
                 onClick={() => setCurrentDate(new Date())}
-                className="px-3 py-2 text-sm bg-primary-100 text-primary-700 rounded-md hover:bg-primary-200"
+                className="admin-btn admin-btn-primary admin-btn-sm"
               >
                 Today
               </button>
               <button
                 onClick={() => navigateMonth('next')}
-                className="p-2 hover:bg-gray-100 rounded-md"
+                className="admin-btn admin-btn-secondary p-2"
               >
-                <ChevronRight className="h-4 w-4" />
+                <ChevronRight className="admin-icon-sm" />
               </button>
             </div>
-          </div>
+          }
+        >
 
           {/* Calendar Grid */}
           <div className="grid grid-cols-7 gap-0 border-r border-gray-200">
@@ -328,113 +329,116 @@ export const SchedulePage: React.FC = () => {
               );
             })}
           </div>
-        </div>
+        </AdminCard>
       ) : (
         /* List View */
-        <div className="bg-white shadow rounded-lg overflow-hidden">
-          <div className="overflow-x-auto">
-            <table className="min-w-full divide-y divide-gray-200">
-              <thead className="bg-gray-50">
-                <tr>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                    Course
-                  </th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                    Date & Time
-                  </th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                    Location
-                  </th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                    Bookings
-                  </th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                    Status
-                  </th>
-                  <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
-                    Actions
-                  </th>
-                </tr>
-              </thead>
-              <tbody className="bg-white divide-y divide-gray-200">
-                {schedules?.map((schedule) => (
-                  <tr key={schedule.id} className="hover:bg-gray-50">
-                    <td className="px-6 py-4 whitespace-nowrap">
-                      <div>
-                        <div className="text-sm font-medium text-gray-900">
-                          {schedule.courseName}
-                        </div>
-                        <div className="text-sm text-gray-500">
-                          {schedule.instructor}
-                        </div>
-                      </div>
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap">
-                      <div className="flex items-center text-sm text-gray-900">
-                        <CalendarIcon className="h-4 w-4 mr-2" />
-                        <div>
-                          <div>{new Date(schedule.date).toLocaleDateString()}</div>
-                          <div className="text-gray-500 flex items-center">
-                            <Clock className="h-3 w-3 mr-1" />
-                            {schedule.startTime} - {schedule.endTime}
-                          </div>
-                        </div>
-                      </div>
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap">
-                      <div className="flex items-center text-sm text-gray-900">
-                        <MapPin className="h-4 w-4 mr-2" />
-                        {schedule.location}
-                      </div>
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap">
-                      <div className="flex items-center">
-                        <Users className="h-4 w-4 mr-2" />
-                        <span className={`text-sm font-medium ${getAvailabilityColor(schedule.currentBookings, schedule.maxParticipants)}`}>
-                          {schedule.currentBookings}/{schedule.maxParticipants}
-                        </span>
-                      </div>
-                      <div className="w-full bg-gray-200 rounded-full h-2 mt-1">
-                        <div
-                          className={`h-2 rounded-full ${
-                            schedule.currentBookings >= schedule.maxParticipants
-                              ? 'bg-red-500'
-                              : schedule.currentBookings >= schedule.maxParticipants * 0.8
-                              ? 'bg-yellow-500'
-                              : 'bg-green-500'
-                          }`}
-                          style={{ width: `${(schedule.currentBookings / schedule.maxParticipants) * 100}%` }}
-                        />
-                      </div>
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap">
-                      <span className={getStatusBadge(schedule.status)}>
-                        {schedule.status}
-                      </span>
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                      <div className="flex justify-end space-x-2">
-                        <button className="text-gray-400 hover:text-gray-600">
-                          <Eye className="h-4 w-4" />
-                        </button>
-                        <button className="text-gray-400 hover:text-gray-600">
-                          <Edit3 className="h-4 w-4" />
-                        </button>
-                        <button 
-                          onClick={() => deleteScheduleMutation.mutate(schedule.id)}
-                          className="text-gray-400 hover:text-red-600"
-                          disabled={deleteScheduleMutation.isPending}
-                        >
-                          <Trash2 className="h-4 w-4" />
-                        </button>
-                      </div>
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
-        </div>
+        <AdminTable
+          columns={[
+            {
+              key: 'course',
+              header: 'Course',
+              render: (schedule: CourseSchedule) => (
+                <div>
+                  <div className="font-medium text-gray-900">
+                    {schedule.courseName}
+                  </div>
+                  <div className="admin-text-small admin-text-muted">
+                    {schedule.instructor}
+                  </div>
+                </div>
+              ),
+            },
+            {
+              key: 'datetime',
+              header: 'Date & Time',
+              render: (schedule: CourseSchedule) => (
+                <div className="flex items-center text-gray-900">
+                  <CalendarIcon className="admin-icon-md mr-2 text-primary-500" />
+                  <div>
+                    <div>{new Date(schedule.date).toLocaleDateString()}</div>
+                    <div className="admin-text-small admin-text-muted flex items-center">
+                      <Clock className="admin-icon-sm mr-1" />
+                      {schedule.startTime} - {schedule.endTime}
+                    </div>
+                  </div>
+                </div>
+              ),
+            },
+            {
+              key: 'location',
+              header: 'Location',
+              render: (schedule: CourseSchedule) => (
+                <div className="flex items-center text-gray-900">
+                  <MapPin className="admin-icon-md mr-2 text-primary-500" />
+                  {schedule.location}
+                </div>
+              ),
+            },
+            {
+              key: 'bookings',
+              header: 'Bookings',
+              render: (schedule: CourseSchedule) => (
+                <div>
+                  <div className="flex items-center">
+                    <Users className="admin-icon-md mr-2 text-primary-500" />
+                    <span className={`font-medium ${getAvailabilityColor(schedule.currentBookings, schedule.maxParticipants)}`}>
+                      {schedule.currentBookings}/{schedule.maxParticipants}
+                    </span>
+                  </div>
+                  <div className="w-24 bg-gray-200 rounded-full h-2 mt-2">
+                    <div
+                      className={`h-2 rounded-full transition-all ${
+                        schedule.currentBookings >= schedule.maxParticipants
+                          ? 'bg-red-500'
+                          : schedule.currentBookings >= schedule.maxParticipants * 0.8
+                          ? 'bg-yellow-500'
+                          : 'bg-green-500'
+                      }`}
+                      style={{ width: `${Math.min((schedule.currentBookings / schedule.maxParticipants) * 100, 100)}%` }}
+                    />
+                  </div>
+                </div>
+              ),
+            },
+            {
+              key: 'status',
+              header: 'Status',
+              render: (schedule: CourseSchedule) => (
+                <AdminBadge variant={getStatusVariant(schedule.status)}>
+                  {schedule.status}
+                </AdminBadge>
+              ),
+            },
+            {
+              key: 'actions',
+              header: 'Actions',
+              align: 'right',
+              render: (schedule: CourseSchedule) => (
+                <div className="flex justify-end gap-1">
+                  <button className="admin-btn admin-btn-secondary p-2" title="View">
+                    <Eye className="admin-icon-sm" />
+                  </button>
+                  <button className="admin-btn admin-btn-secondary p-2" title="Edit">
+                    <Edit3 className="admin-icon-sm" />
+                  </button>
+                  <button 
+                    onClick={() => deleteScheduleMutation.mutate(schedule.id)}
+                    className="admin-btn admin-btn-secondary p-2 hover:bg-red-50 hover:text-red-600 hover:border-red-300"
+                    disabled={deleteScheduleMutation.isPending}
+                    title="Delete"
+                  >
+                    <Trash2 className="admin-icon-sm" />
+                  </button>
+                </div>
+              ),
+            },
+          ]}
+          data={schedules || []}
+          keyExtractor={(schedule) => schedule.id}
+          loading={false}
+          emptyMessage="No scheduled courses found"
+          emptyIcon={<CalendarIcon className="w-12 h-12" />}
+        />
       )}
     </div>
   );
