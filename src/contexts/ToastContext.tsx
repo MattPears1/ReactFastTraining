@@ -46,9 +46,11 @@ const colors = {
 
 export const ToastProvider: React.FC<ToastProviderProps> = ({ children }) => {
   const [toasts, setToasts] = useState<Toast[]>([])
+  const [counter, setCounter] = useState(0)
 
   const showToast = useCallback((type: ToastType, message: string, duration = 5000) => {
-    const id = Date.now().toString()
+    const id = `${Date.now()}-${counter}`
+    setCounter(prev => prev + 1)
     const toast: Toast = { id, type, message, duration }
     
     setToasts(prev => [...prev, toast])
@@ -58,7 +60,7 @@ export const ToastProvider: React.FC<ToastProviderProps> = ({ children }) => {
         setToasts(prev => prev.filter(t => t.id !== id))
       }, duration)
     }
-  }, [])
+  }, [counter])
 
   const hideToast = useCallback((id: string) => {
     setToasts(prev => prev.filter(toast => toast.id !== id))

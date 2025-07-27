@@ -256,16 +256,20 @@ const PaymentForm: React.FC<PaymentFormInternalProps> = ({
 // Wrapper component with Stripe Elements
 export const StripePaymentForm: React.FC<StripePaymentFormProps> = (props) => {
   const [clientSecret, setClientSecret] = useState<string | null>(null);
+  const [hasCreatedIntent, setHasCreatedIntent] = useState(false);
   
   console.log('=== STRIPE PAYMENT FORM WRAPPER ===');
   console.log('Client Secret:', clientSecret ? 'Provided' : 'Missing');
   console.log('Props:', props);
 
-  // Create payment intent when wrapper mounts
+  // Create payment intent when wrapper mounts - only once
   useEffect(() => {
+    if (hasCreatedIntent) return; // Prevent multiple calls
+    
     const createPaymentIntent = async () => {
       try {
         console.log('=== CREATING REAL STRIPE PAYMENT INTENT ===');
+        setHasCreatedIntent(true);
         
         const response = await fetch(`${import.meta.env.VITE_API_URL || 'http://localhost:3000'}/api/bookings/create-payment-intent`, {
           method: 'POST',
@@ -282,6 +286,7 @@ export const StripePaymentForm: React.FC<StripePaymentFormProps> = (props) => {
               phone: props.bookingData.phone,
               companyName: props.bookingData.companyName,
               specialRequirements: props.bookingData.specialRequirements,
+              numberOfParticipants: props.bookingData.numberOfParticipants,
             },
           }),
         });
@@ -298,11 +303,12 @@ export const StripePaymentForm: React.FC<StripePaymentFormProps> = (props) => {
       } catch (error) {
         console.error('❌ Payment intent creation failed:', error);
         props.onError('Failed to initialize payment. Please try again.');
+        setHasCreatedIntent(false); // Allow retry on error
       }
     };
 
     createPaymentIntent();
-  }, [props]);
+  }, [hasCreatedIntent]); // Only depend on hasCreatedIntent flag
   
   if (!clientSecret) {
     return (

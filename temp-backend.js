@@ -203,9 +203,33 @@ app.post('/api/bookings/create-payment-intent', (req, res) => {
 // Handle preflight requests
 app.options('*', cors(corsOptions));
 
+// Admin courses endpoints
+app.get('/api/admin/courses', (req, res) => {
+  console.log('Courses list request');
+  
+  const courses = [
+    { id: 1, name: 'Emergency First Aid at Work', category: 'workplace', duration: 'Full Day (6 hours)', price: 100, status: 'active', attendees: 145 },
+    { id: 2, name: 'First Aid at Work', category: 'workplace', duration: 'Full Day (6 hours)', price: 200, status: 'active', attendees: 89 },
+    { id: 3, name: 'Paediatric First Aid', category: 'paediatric', duration: 'Full Day (6 hours)', price: 150, status: 'active', attendees: 234 },
+    { id: 4, name: 'Emergency Paediatric First Aid', category: 'paediatric', duration: 'Full Day (5 hours)', price: 100, status: 'active', attendees: 67 },
+    { id: 5, name: 'FAW Requalification', category: 'workplace', duration: 'Full Day (5 hours)', price: 150, status: 'active', attendees: 45 },
+    { id: 6, name: 'EFAW Requalification', category: 'workplace', duration: '3 Hours', price: 75, status: 'active', attendees: 123 },
+    { id: 7, name: 'Paediatric Requalification', category: 'paediatric', duration: '3 Hours', price: 100, status: 'active', attendees: 56 },
+    { id: 8, name: 'Emergency Paediatric Requalification', category: 'paediatric', duration: '3 Hours', price: 75, status: 'active', attendees: 34 },
+    { id: 9, name: 'Activity First Aid', category: 'specialist', duration: 'Full Day (5 hours)', price: 175, status: 'active', attendees: 78 },
+    { id: 10, name: 'Activity First Aid Requalification', category: 'specialist', duration: '3 Hours', price: 100, status: 'active', attendees: 23 },
+    { id: 11, name: 'CPR and AED', category: 'specialist', duration: '3 Hours', price: 50, status: 'active', attendees: 156 },
+    { id: 12, name: 'Annual Skills Refresher', category: 'specialist', duration: '3 Hours', price: 50, status: 'active', attendees: 89 },
+    { id: 13, name: 'Oxygen Therapy', category: 'specialist', duration: '3 Hours', price: 75, status: 'inactive', attendees: 12 }
+  ];
+  
+  res.json(courses);
+});
+
 app.listen(PORT, () => {
   console.log(`🚀 Temporary backend running on port ${PORT}`);
   console.log(`✅ CORS enabled for frontend domains`);
   console.log(`🔐 Admin login endpoint: POST /api/admin/auth/login`);
   console.log(`💳 Payment endpoint: POST /api/bookings/create-payment-intent`);
+  console.log(`📚 Courses endpoint: GET /api/admin/courses`);
 });

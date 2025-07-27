@@ -604,18 +604,24 @@ app.post('/api/bookings/create-payment-intent', async (req, res) => {
       amount: amount, // Amount should be in pence
       currency: 'gbp',
       metadata: {
-        courseSessionId: courseSessionId.toString(),
-        customerName: `${bookingData.firstName} ${bookingData.lastName}`,
-        customerEmail: bookingData.email,
-        numberOfParticipants: bookingData.numberOfParticipants.toString()
+        courseSessionId: courseSessionId?.toString() || 'unknown',
+        customerName: `${bookingData?.firstName || ''} ${bookingData?.lastName || ''}`.trim(),
+        customerEmail: bookingData?.email || '',
+        numberOfParticipants: (bookingData?.numberOfParticipants || 1).toString()
       }
     });
     
     console.log('✅ Payment intent created:', paymentIntent.id);
     
     res.json({
-      clientSecret: paymentIntent.client_secret,
-      paymentIntentId: paymentIntent.id
+      success: true,
+      paymentIntent: {
+        id: paymentIntent.id,
+        client_secret: paymentIntent.client_secret,
+        status: paymentIntent.status,
+        amount: paymentIntent.amount,
+        currency: paymentIntent.currency
+      }
     });
   } catch (error) {
     console.error('❌ Payment intent error:', error);

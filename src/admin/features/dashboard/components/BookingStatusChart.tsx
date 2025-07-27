@@ -23,12 +23,23 @@ const COLORS = {
 };
 
 export const BookingStatusChart: React.FC<BookingStatusChartProps> = ({ data }) => {
+  // Ensure we have valid data
+  const validData = data && data.length > 0 && data.some(item => item.count > 0);
+  
+  // If no valid data, use placeholder data
+  const chartData = validData ? data : [
+    { status: 'Confirmed', count: 0, percentage: 0 },
+    { status: 'Pending', count: 0, percentage: 0 },
+    { status: 'Cancelled', count: 0, percentage: 0 },
+  ];
+  
   // Calculate total for percentage display
-  const total = data.reduce((sum, item) => sum + item.count, 0);
+  const total = chartData.reduce((sum, item) => sum + item.count, 0);
   
   // Custom label to show both count and percentage
   const renderCustomLabel = (entry: any) => {
-    const percent = total > 0 ? ((entry.count / total) * 100).toFixed(0) : 0;
+    if (!validData || total === 0) return '';
+    const percent = ((entry.count / total) * 100).toFixed(0);
     return `${percent}%`;
   };
 
@@ -47,7 +58,7 @@ export const BookingStatusChart: React.FC<BookingStatusChartProps> = ({ data }) 
               <span className="text-gray-600">{entry.value}</span>
             </span>
             <span className="font-medium text-gray-900">
-              {data[index]?.count || 0}
+              {chartData[index]?.count || 0}
             </span>
           </li>
         ))}
@@ -56,11 +67,11 @@ export const BookingStatusChart: React.FC<BookingStatusChartProps> = ({ data }) 
   };
 
   return (
-    <div className="h-80 w-full">
+    <div className="h-80 w-full relative">
       <ResponsiveContainer width="100%" height="100%">
         <PieChart>
           <Pie
-            data={data}
+            data={chartData}
             cx="50%"
             cy="45%"
             labelLine={false}
@@ -69,7 +80,7 @@ export const BookingStatusChart: React.FC<BookingStatusChartProps> = ({ data }) 
             fill="#8884d8"
             dataKey="count"
           >
-            {data.map((entry, index) => (
+            {chartData.map((entry, index) => (
               <Cell 
                 key={`cell-${index}`} 
                 fill={COLORS[entry.status as keyof typeof COLORS] || '#8884d8'} 
@@ -91,6 +102,11 @@ export const BookingStatusChart: React.FC<BookingStatusChartProps> = ({ data }) 
           />
         </PieChart>
       </ResponsiveContainer>
+      {!validData && (
+        <div className="absolute inset-0 flex items-center justify-center bg-white bg-opacity-80">
+          <p className="text-gray-500 text-sm">No booking data available</p>
+        </div>
+      )}
     </div>
   );
 };

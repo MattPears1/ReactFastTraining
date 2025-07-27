@@ -41,26 +41,37 @@ export const RevenueChart: React.FC<RevenueChartProps> = ({ data }) => {
     return `£${value.toLocaleString()}`;
   };
 
+  // If no data, show empty chart with axes
+  const chartData = data && data.length > 0 ? data : [
+    { date: 'Jan', revenue: 0, bookings: 0 },
+    { date: 'Feb', revenue: 0, bookings: 0 },
+    { date: 'Mar', revenue: 0, bookings: 0 },
+    { date: 'Apr', revenue: 0, bookings: 0 },
+    { date: 'May', revenue: 0, bookings: 0 },
+    { date: 'Jun', revenue: 0, bookings: 0 },
+  ];
+
   // Prepare data with proper formatting
-  const formattedData = data.map(item => ({
+  const formattedData = chartData.map(item => ({
     ...item,
-    formattedDate: formatDate(item.date),
+    formattedDate: data && data.length > 0 ? formatDate(item.date) : item.date,
   }));
 
+  const hasData = data && data.length > 0;
+
   return (
-    <div className="h-80 w-full">
+    <div className="h-80 w-full relative">
       <ResponsiveContainer width="100%" height="100%">
         <ComposedChart
           data={formattedData}
-          margin={{ top: 10, right: 10, left: 10, bottom: 20 }}
+          margin={{ top: 10, right: 30, left: 60, bottom: 60 }}
         >
           <CartesianGrid strokeDasharray="3 3" stroke="#f0f0f0" />
           <XAxis
             dataKey="formattedDate"
             stroke="#6b7280"
             fontSize={12}
-            angle={-45}
-            textAnchor="end"
+            tick={{ fontSize: 12 }}
             height={60}
           />
           <YAxis
@@ -68,15 +79,15 @@ export const RevenueChart: React.FC<RevenueChartProps> = ({ data }) => {
             orientation="left"
             tickFormatter={formatCurrency}
             stroke="#0EA5E9"
-            fontSize={12}
-            width={60}
+            tick={{ fontSize: 12 }}
+            width={80}
           />
           <YAxis
             yAxisId="bookings"
             orientation="right"
             stroke="#10B981"
-            fontSize={12}
-            width={40}
+            tick={{ fontSize: 12 }}
+            width={50}
           />
           <Tooltip
             formatter={(value: any, name: string) => {
@@ -123,6 +134,11 @@ export const RevenueChart: React.FC<RevenueChartProps> = ({ data }) => {
           />
         </ComposedChart>
       </ResponsiveContainer>
+      {!hasData && (
+        <div className="absolute inset-0 flex items-center justify-center bg-white bg-opacity-80">
+          <p className="text-gray-500 text-sm">No data available</p>
+        </div>
+      )}
     </div>
   );
 };

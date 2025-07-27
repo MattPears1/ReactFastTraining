@@ -23,68 +23,15 @@ import { AdminEmptyState } from '../../components/ui/AdminEmptyState';
 import '../../styles/admin-design-system.css';
 
 interface Course {
-  id: string;
+  id: number;
   name: string;
-  code: string;
-  type: string;
-  duration: number;
+  category: string;
+  duration: string;
   price: number;
-  maxParticipants: number;
-  description: string;
-  status: 'active' | 'inactive' | 'draft';
-  totalBookings: number;
-  revenue: number;
-  createdAt: string;
-  updatedAt: string;
+  status: 'active' | 'inactive';
+  attendees: number;
 }
 
-const mockCourses: Course[] = [
-  {
-    id: '1',
-    name: 'Emergency First Aid at Work (EFAW)',
-    code: 'EFAW-001',
-    type: 'EFAW',
-    duration: 6,
-    price: 75,
-    maxParticipants: 12,
-    description: 'HSE approved Emergency First Aid at Work training course',
-    status: 'active',
-    totalBookings: 45,
-    revenue: 3375,
-    createdAt: '2025-01-15T09:00:00Z',
-    updatedAt: '2025-01-20T14:30:00Z'
-  },
-  {
-    id: '2',
-    name: 'First Aid at Work (FAW)',
-    code: 'FAW-001',
-    type: 'FAW',
-    duration: 18,
-    price: 150,
-    maxParticipants: 12,
-    description: 'Comprehensive First Aid at Work training over 3 days',
-    status: 'active',
-    totalBookings: 32,
-    revenue: 4800,
-    createdAt: '2025-01-10T09:00:00Z',
-    updatedAt: '2025-01-18T16:00:00Z'
-  },
-  {
-    id: '3',
-    name: 'Paediatric First Aid',
-    code: 'PFA-001',
-    type: 'PAEDIATRIC',
-    duration: 6,
-    price: 85,
-    maxParticipants: 10,
-    description: 'Specialized first aid training for children and infants',
-    status: 'active',
-    totalBookings: 28,
-    revenue: 2380,
-    createdAt: '2025-01-12T09:00:00Z',
-    updatedAt: '2025-01-19T11:15:00Z'
-  }
-];
 
 export const CoursesPage: React.FC = () => {
   const [searchTerm, setSearchTerm] = useState('');
@@ -92,29 +39,39 @@ export const CoursesPage: React.FC = () => {
   const [showCreateModal, setShowCreateModal] = useState(false);
   const queryClient = useQueryClient();
 
-  // Mock data fetching - replace with actual API call
+  // Fetch courses from API
   const { data: courses, isLoading, error } = useQuery({
-    queryKey: ['admin-courses', searchTerm, statusFilter],
+    queryKey: ['admin-courses'],
     queryFn: async () => {
-      // Simulate API delay
-      await new Promise(resolve => setTimeout(resolve, 500));
-      
-      let filtered = mockCourses;
-      
-      if (searchTerm) {
-        filtered = filtered.filter(course => 
-          course.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-          course.code.toLowerCase().includes(searchTerm.toLowerCase())
-        );
+      const response = await fetch('/api/admin/courses');
+      if (!response.ok) {
+        throw new Error('Failed to fetch courses');
       }
-      
-      if (statusFilter !== 'all') {
-        filtered = filtered.filter(course => course.status === statusFilter);
-      }
-      
-      return filtered;
+      const data = await response.json();
+      return data as Course[];
     },
+    staleTime: 5 * 60 * 1000, // 5 minutes
   });
+
+  // Filter courses locally
+  const filteredCourses = React.useMemo(() => {
+    if (!courses) return [];
+    
+    let filtered = courses;
+    
+    if (searchTerm) {
+      filtered = filtered.filter(course => 
+        course.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        course.category.toLowerCase().includes(searchTerm.toLowerCase())
+      );
+    }
+    
+    if (statusFilter !== 'all') {
+      filtered = filtered.filter(course => course.status === statusFilter);
+    }
+    
+    return filtered;
+  }, [courses, searchTerm, statusFilter]);
 
   const deleteMutation = useMutation({
     mutationFn: async (courseId: string) => {
@@ -137,8 +94,6 @@ export const CoursesPage: React.FC = () => {
     switch (status) {
       case 'active':
         return 'success';
-      case 'draft':
-        return 'warning';
       case 'inactive':
       default:
         return 'neutral';
@@ -208,7 +163,6 @@ export const CoursesPage: React.FC = () => {
               <option value="all">All Status</option>
               <option value="active">Active</option>
               <option value="inactive">Inactive</option>
-              <option value="draft">Draft</option>
             </select>
           </div>
           <div className="flex justify-end">
@@ -222,51 +176,44 @@ export const CoursesPage: React.FC = () => {
 
       {/* Course Cards */}
       <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-6">
-        {courses?.map((course) => (
+        {filteredCourses?.map((course) => (
           <AdminCard key={course.id} className="admin-hover-lift">
             <div className="flex items-start justify-between admin-mb-3">
               <div className="flex-1 min-w-0">
-                <h3 className="text-lg font-semibold text-gray-900 truncate">
+                <h3 className="text-lg font-semibold text-gray-900">
                   {course.name}
                 </h3>
-                <p className="admin-text-small admin-text-muted">{course.code}</p>
+                <p className="admin-text-small admin-text-muted capitalize">{course.category}</p>
               </div>
               <AdminBadge variant={getStatusVariant(course.status)}>
                 {course.status}
               </AdminBadge>
             </div>
-              
-            <p className="admin-text-small text-gray-600 line-clamp-2 admin-mb-4">
-              {course.description}
-            </p>
 
             <div className="grid grid-cols-2 gap-3 admin-mb-4">
               <div className="flex items-center admin-text-small admin-text-muted">
                 <Clock className="admin-icon-sm mr-1.5 text-primary-500" />
-                {course.duration}h
-              </div>
-              <div className="flex items-center admin-text-small admin-text-muted">
-                <Users className="admin-icon-sm mr-1.5 text-primary-500" />
-                Max {course.maxParticipants}
+                {course.duration}
               </div>
               <div className="flex items-center admin-text-small admin-text-muted">
                 <PoundSterling className="admin-icon-sm mr-1.5 text-primary-500" />
                 £{course.price}
               </div>
               <div className="flex items-center admin-text-small admin-text-muted">
+                <Users className="admin-icon-sm mr-1.5 text-primary-500" />
+                {course.attendees} attendees
+              </div>
+              <div className="flex items-center admin-text-small admin-text-muted">
                 <Calendar className="admin-icon-sm mr-1.5 text-primary-500" />
-                {course.totalBookings} bookings
+                £{(course.price * course.attendees).toLocaleString()} revenue
               </div>
             </div>
 
             <div className="pt-4 border-t border-gray-200">
               <div className="flex items-center justify-between">
                 <div>
-                  <p className="font-semibold text-gray-900">
-                    £{course.revenue.toLocaleString()} revenue
-                  </p>
                   <p className="admin-text-small admin-text-muted">
-                    Updated {new Date(course.updatedAt).toLocaleDateString()}
+                    Category: <span className="font-medium capitalize">{course.category}</span>
                   </p>
                 </div>
                 <div className="flex gap-1">
@@ -277,7 +224,7 @@ export const CoursesPage: React.FC = () => {
                     <Edit3 className="admin-icon-sm" />
                   </button>
                   <button 
-                    onClick={() => handleDelete(course.id)}
+                    onClick={() => handleDelete(course.id.toString())}
                     className="admin-btn admin-btn-secondary p-2 hover:bg-red-50 hover:text-red-600 hover:border-red-300"
                     disabled={deleteMutation.isPending}
                     title="Delete"
@@ -292,7 +239,7 @@ export const CoursesPage: React.FC = () => {
       </div>
 
       {/* Empty state */}
-      {courses?.length === 0 && (
+      {filteredCourses?.length === 0 && (
         <AdminCard>
           <AdminEmptyState
             icon={BookOpen}
