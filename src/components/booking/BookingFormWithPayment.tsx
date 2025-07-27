@@ -33,7 +33,7 @@ export const BookingFormWithPayment: React.FC<BookingFormWithPaymentProps> = ({
   const [paymentIntent, setPaymentIntent] = useState<{ clientSecret: string; id: string } | null>(null);
   
   const [formData, setFormData] = useState<Partial<BookingFormData>>({
-    courseScheduleId: courseSchedule.id,
+    courseSessionId: courseSchedule.id,
     firstName: '',
     lastName: '',
     email: '',
@@ -132,7 +132,7 @@ export const BookingFormWithPayment: React.FC<BookingFormWithPaymentProps> = ({
     try {
       const apiUrl = `${import.meta.env.VITE_API_URL}/api/bookings/create-payment-intent`;
       const requestBody = {
-        courseScheduleId: courseSchedule.id,
+        courseSessionId: courseSchedule.id,
         amount: Math.round(finalPrice * 100), // Convert to pence
         bookingData: formData,
       };

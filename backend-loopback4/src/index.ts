@@ -52,10 +52,7 @@ if (require.main === module) {
         // useful when used with OpenAPI-to-GraphQL to locate your application
         setServersFromRequest: true,
       },
-      cors: {
-        origin: process.env.FRONTEND_URL || 'http://localhost:5173',
-        credentials: true,
-      },
+      // No CORS needed - frontend and backend on same domain
     },
   };
   main(config).catch(err => {

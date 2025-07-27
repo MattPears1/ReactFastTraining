@@ -52,49 +52,146 @@ export class EmailService {
   }
 
   async sendBookingConfirmation(booking: Booking, session: CourseSession): Promise<void> {
+    const sessionDate = new Date(session.sessionDate || session.startDate);
+    const formattedDate = sessionDate.toLocaleDateString('en-GB', {
+      weekday: 'long',
+      day: 'numeric',
+      month: 'long',
+      year: 'numeric'
+    });
+
     const html = `
-      <h2>Booking Confirmation - React Fast Training</h2>
+<!DOCTYPE html>
+<html>
+<head>
+  <style>
+    body { font-family: Arial, sans-serif; line-height: 1.6; color: #333; margin: 0; padding: 0; }
+    .container { max-width: 600px; margin: 0 auto; }
+    .header { background: linear-gradient(135deg, #0EA5E9 0%, #10B981 100%); color: white; padding: 30px 20px; text-align: center; border-radius: 10px 10px 0 0; }
+    .header h1 { margin: 0; font-size: 28px; }
+    .content { padding: 30px 20px; background-color: #f8f9fa; }
+    .booking-box { background: white; padding: 20px; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); margin-bottom: 20px; }
+    .booking-ref { font-size: 24px; font-weight: bold; color: #0EA5E9; text-align: center; padding: 15px; background: #E0F2FE; border-radius: 8px; margin-bottom: 20px; }
+    .detail-row { display: flex; justify-content: space-between; padding: 10px 0; border-bottom: 1px solid #eee; }
+    .detail-label { color: #666; }
+    .detail-value { font-weight: 600; }
+    .important-box { background: #FEF3C7; border: 1px solid #F59E0B; padding: 15px; border-radius: 6px; margin: 20px 0; }
+    .footer { background-color: #1F2937; color: white; padding: 20px; text-align: center; font-size: 14px; border-radius: 0 0 10px 10px; }
+    .footer a { color: #60A5FA; text-decoration: none; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="header">
+      <h1>✓ Booking Confirmed!</h1>
+      <p style="margin: 10px 0 0 0; font-size: 18px;">Thank you for booking with React Fast Training</p>
+    </div>
+    
+    <div class="content">
+      <div class="booking-ref">
+        Booking Reference: ${booking.bookingReference}
+      </div>
+
       <p>Dear ${booking.contactDetails.firstName} ${booking.contactDetails.lastName},</p>
-      <p>Thank you for booking with React Fast Training. Your booking has been confirmed.</p>
-      
-      <h3>Booking Details:</h3>
-      <ul>
-        <li><strong>Booking Reference:</strong> ${booking.bookingReference}</li>
-        <li><strong>Course:</strong> ${session.courseId}</li>
-        <li><strong>Date:</strong> ${new Date(session.startDate).toLocaleDateString('en-GB')} - ${new Date(session.endDate).toLocaleDateString('en-GB')}</li>
-        <li><strong>Time:</strong> ${session.startTime} - ${session.endTime}</li>
-        <li><strong>Number of Participants:</strong> ${booking.numberOfParticipants}</li>
-        <li><strong>Total Amount:</strong> £${booking.finalAmount}</li>
-      </ul>
-      
-      <h3>Location Details:</h3>
-      <p>Full location details will be sent in a separate email closer to the course date.</p>
-      
-      <h3>What to Bring:</h3>
-      <ul>
-        <li>Photo ID (passport or driving license)</li>
-        <li>Pen and notepad</li>
-        <li>Comfortable clothing suitable for practical exercises</li>
-      </ul>
-      
-      <h3>Important Information:</h3>
-      <ul>
-        <li>Please arrive 15 minutes before the start time</li>
-        <li>Lunch and refreshments will be provided</li>
-        <li>Minimum age requirement: 16 years</li>
-        <li>English Level 2 requirement applies</li>
-      </ul>
-      
-      <p>If you have any questions, please don't hesitate to contact us.</p>
-      
-      <p>Best regards,<br>
-      React Fast Training Team<br>
-      Yorkshire's Premier First Aid Training Provider</p>
+      <p>Thank you for booking your first aid training with React Fast Training. Your place has been confirmed on the following course:</p>
+
+      <div class="booking-box">
+        <h2 style="margin-top: 0; color: #1F2937;">Course Details</h2>
+        <div class="detail-row">
+          <span class="detail-label">Course:</span>
+          <span class="detail-value">${session.courseName || session.courseId}</span>
+        </div>
+        <div class="detail-row">
+          <span class="detail-label">Date:</span>
+          <span class="detail-value">${formattedDate}</span>
+        </div>
+        <div class="detail-row">
+          <span class="detail-label">Time:</span>
+          <span class="detail-value">${session.startTime || '9:00 AM'} - ${session.endTime || '5:00 PM'}</span>
+        </div>
+        <div class="detail-row">
+          <span class="detail-label">Venue:</span>
+          <span class="detail-value">South Yorkshire (full address to be provided)</span>
+        </div>
+        <div class="detail-row">
+          <span class="detail-label">Number of Participants:</span>
+          <span class="detail-value">${booking.numberOfParticipants}</span>
+        </div>
+        <div class="detail-row" style="border-bottom: none;">
+          <span class="detail-label">Total Amount Paid:</span>
+          <span class="detail-value" style="color: #10B981;">£${booking.finalAmount || booking.totalAmount}</span>
+        </div>
+      </div>
+
+      <div class="important-box">
+        <h3 style="margin-top: 0;">📋 Important Information</h3>
+        <ul style="margin: 10px 0; padding-left: 20px;">
+          <li>Please arrive 15 minutes before the start time for registration</li>
+          <li>Bring photo ID (passport or driving license)</li>
+          <li>Wear comfortable clothing suitable for practical exercises</li>
+          <li>Lunch and refreshments will be provided</li>
+          <li>Free parking is available at the venue</li>
+          <li>Minimum age requirement: 16 years</li>
+        </ul>
+      </div>
+
+      <div class="booking-box">
+        <h3 style="margin-top: 0;">Venue Location</h3>
+        <p>The exact venue address and directions will be sent to you via email approximately 3-5 days before your course date.</p>
+        <p>The venue will be in <strong>South Yorkshire</strong> with easy access and free parking.</p>
+      </div>
+
+      ${booking.participantDetails && booking.participantDetails.length > 1 ? `
+      <div class="booking-box">
+        <h3 style="margin-top: 0;">Participant Details</h3>
+        <p>The following participants are registered for this course:</p>
+        <ol style="margin: 10px 0; padding-left: 20px;">
+          ${booking.participantDetails.map(p => `
+            <li>${p.firstName} ${p.lastName}${p.email ? ` (${p.email})` : ''}</li>
+          `).join('')}
+        </ol>
+      </div>
+      ` : ''}
+
+      ${booking.specialRequirements ? `
+      <div class="booking-box">
+        <h3 style="margin-top: 0;">Special Requirements</h3>
+        <p>${booking.specialRequirements}</p>
+        <p style="font-style: italic;">We have noted your requirements and will ensure appropriate arrangements are made.</p>
+      </div>
+      ` : ''}
+
+      <div class="booking-box">
+        <h3 style="margin-top: 0;">Need to Make Changes?</h3>
+        <p>If you need to reschedule or cancel your booking, please contact us as soon as possible:</p>
+        <ul style="margin: 10px 0; padding-left: 20px;">
+          <li>Email: <a href="mailto:bookings@reactfasttraining.co.uk">bookings@reactfasttraining.co.uk</a></li>
+          <li>Phone: 07447 485644</li>
+        </ul>
+        <p><small>Please note our cancellation policy applies. See our website for full terms and conditions.</small></p>
+      </div>
+    </div>
+
+    <div class="footer">
+      <p style="margin: 0 0 10px 0;"><strong>React Fast Training</strong></p>
+      <p style="margin: 0 0 10px 0;">Yorkshire's Premier First Aid Training Provider</p>
+      <p style="margin: 0 0 10px 0;">
+        📧 <a href="mailto:info@reactfasttraining.co.uk">info@reactfasttraining.co.uk</a> | 
+        📞 07447 485644 | 
+        🌐 <a href="https://reactfasttraining.co.uk">reactfasttraining.co.uk</a>
+      </p>
+      <p style="margin: 0; font-size: 12px; color: #9CA3AF;">
+        This email was sent to ${booking.contactDetails.email}. If you have any questions, please don't hesitate to contact us.
+      </p>
+    </div>
+  </div>
+</body>
+</html>
     `;
 
     await this.sendEmail({
       to: booking.contactDetails.email,
-      subject: `Booking Confirmation - ${booking.bookingReference}`,
+      subject: `Booking Confirmation - ${session.courseName || 'First Aid Course'} - ${booking.bookingReference}`,
       html,
     });
 
@@ -379,6 +476,124 @@ export class EmailService {
       to: user.email,
       subject: 'Password Reset Request - React Fast Training',
       html,
+    });
+  }
+
+  async sendVenueDetails(booking: Booking, session: CourseSession): Promise<void> {
+    const sessionDate = new Date(session.sessionDate || session.startDate);
+    const formattedDate = sessionDate.toLocaleDateString('en-GB', {
+      weekday: 'long',
+      day: 'numeric',
+      month: 'long',
+      year: 'numeric'
+    });
+
+    const html = `
+<!DOCTYPE html>
+<html>
+<head>
+  <style>
+    body { font-family: Arial, sans-serif; line-height: 1.6; color: #333; margin: 0; padding: 0; }
+    .container { max-width: 600px; margin: 0 auto; }
+    .header { background: linear-gradient(135deg, #0EA5E9 0%, #10B981 100%); color: white; padding: 30px 20px; text-align: center; }
+    .header h1 { margin: 0; font-size: 28px; }
+    .content { padding: 30px 20px; background-color: #f8f9fa; }
+    .venue-box { background: white; padding: 25px; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); margin-bottom: 20px; border-left: 4px solid #0EA5E9; }
+    .map-button { display: inline-block; padding: 12px 30px; background-color: #0EA5E9; color: white; text-decoration: none; border-radius: 6px; margin: 10px 5px; }
+    .detail-row { padding: 8px 0; }
+    .footer { background-color: #1F2937; color: white; padding: 20px; text-align: center; font-size: 14px; }
+    .footer a { color: #60A5FA; text-decoration: none; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="header">
+      <h1>📍 Venue Details for Your Course</h1>
+      <p style="margin: 10px 0 0 0; font-size: 16px;">${formattedDate}</p>
+    </div>
+    
+    <div class="content">
+      <p>Dear ${booking.contactDetails.firstName},</p>
+      <p>Your <strong>${session.courseName || 'First Aid'}</strong> course is coming up soon! Here are the venue details for your training:</p>
+
+      <div class="venue-box">
+        <h2 style="margin-top: 0; color: #1F2937;">Venue Information</h2>
+        <div class="detail-row">
+          <strong>Venue:</strong> React Fast Training Centre
+        </div>
+        <div class="detail-row">
+          <strong>Address:</strong> [Specific venue address will be provided here]
+        </div>
+        <div class="detail-row">
+          <strong>City:</strong> South Yorkshire
+        </div>
+        <div class="detail-row">
+          <strong>Postcode:</strong> [Postcode]
+        </div>
+        <div style="text-align: center; margin-top: 20px;">
+          <a href="https://maps.google.com/?q=[venue+address]" class="map-button">📍 Get Directions</a>
+        </div>
+      </div>
+
+      <div class="venue-box">
+        <h3 style="margin-top: 0;">Course Schedule</h3>
+        <div class="detail-row">
+          <strong>Date:</strong> ${formattedDate}
+        </div>
+        <div class="detail-row">
+          <strong>Time:</strong> ${session.startTime || '9:00 AM'} - ${session.endTime || '5:00 PM'}
+        </div>
+        <div class="detail-row">
+          <strong>Registration:</strong> Please arrive 15 minutes early
+        </div>
+      </div>
+
+      <div class="venue-box">
+        <h3 style="margin-top: 0;">Parking & Transport</h3>
+        <ul style="margin: 10px 0; padding-left: 20px;">
+          <li>Free parking available on-site</li>
+          <li>Accessible by public transport</li>
+          <li>Wheelchair accessible venue</li>
+        </ul>
+      </div>
+
+      <div class="venue-box">
+        <h3 style="margin-top: 0;">Remember to Bring</h3>
+        <ul style="margin: 10px 0; padding-left: 20px;">
+          <li>Photo ID (passport or driving license)</li>
+          <li>Comfortable clothing for practical exercises</li>
+          <li>Any medication you may need during the day</li>
+        </ul>
+      </div>
+
+      <div style="background: #E0F2FE; padding: 15px; border-radius: 6px; margin: 20px 0;">
+        <p style="margin: 0;"><strong>Need Help?</strong> If you have any questions or need assistance finding the venue, please call us on <strong>07447 485644</strong>.</p>
+      </div>
+    </div>
+
+    <div class="footer">
+      <p style="margin: 0 0 10px 0;"><strong>React Fast Training</strong></p>
+      <p style="margin: 0 0 10px 0;">
+        📧 <a href="mailto:info@reactfasttraining.co.uk">info@reactfasttraining.co.uk</a> | 
+        📞 07447 485644
+      </p>
+      <p style="margin: 0; font-size: 12px; color: #9CA3AF;">
+        Your booking reference: ${booking.bookingReference}
+      </p>
+    </div>
+  </div>
+</body>
+</html>
+    `;
+
+    await this.sendEmail({
+      to: booking.contactDetails.email,
+      subject: `Venue Details - ${session.courseName || 'First Aid Course'} - ${formattedDate}`,
+      html,
+    });
+
+    await this.bookingRepository.updateById(booking.id, {
+      venueDetailsSentAt: new Date(),
     });
   }
 

@@ -351,7 +351,7 @@ export class MonitoringService {
       successRate: number;
       activeUsers: number;
     };
-    health: ReturnType<typeof this.getHealthStatus>;
+    health: any;
     recentAlerts: MonitoringAlert[];
     performance: {
       slowestEndpoints: Array<{name: string; avgTime: number}>;

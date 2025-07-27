@@ -222,20 +222,13 @@ export class PaymentGuestController {
 
       // Send confirmation email
       console.log('Sending confirmation email...');
-      const emailData = {
-        to: bookingData.email,
-        name: `${bookingData.firstName} ${bookingData.lastName}`,
-        confirmationCode: confirmationCode,
-        courseName: courseSession.courseName,
-        sessionDate: courseSession.sessionDate,
-        venue: courseSession.venue,
-        venueName: courseSession.venueName || courseSession.venue,
-        numberOfParticipants: bookingData.numberOfParticipants,
-        totalAmount: bookingData.totalAmount,
-      };
-      console.log('Email data:', emailData);
-      
-      await this.emailService.sendBookingConfirmation(emailData);
+      try {
+        await this.emailService.sendBookingConfirmation(booking, courseSession);
+        console.log('Booking confirmation email sent to:', bookingData.email);
+      } catch (emailError) {
+        console.error('Failed to send confirmation email:', emailError);
+        // Don't fail the booking if email fails, but log the error
+      }
       console.log('Confirmation email sent successfully');
 
       console.log('Booking confirmed successfully!');

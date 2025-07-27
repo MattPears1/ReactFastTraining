@@ -34,7 +34,7 @@ export interface CourseSchedule {
 }
 
 export interface BookingFormData {
-  courseScheduleId: number;
+  courseSessionId: number;
   firstName: string;
   lastName: string;
   email: string;

@@ -110,11 +110,11 @@ const TrainingVenuePage: React.FC = () => {
             
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <Button
-                href="/contact"
+                href="/booking"
                 size="lg"
                 className="bg-gradient-to-r from-primary-500 to-primary-600 hover:from-primary-600 hover:to-primary-700 text-white"
               >
-                Book a Venue Visit
+                Book Your Course
               </Button>
               <Button
                 size="lg"
@@ -373,10 +373,10 @@ const TrainingVenuePage: React.FC = () => {
           >
             <MapPin className="w-16 h-16 mx-auto mb-6 text-white/90" />
             <h2 className="text-3xl md:text-4xl font-bold mb-4">
-              Visit Our Training Venues
+              Book Your Training Today
             </h2>
             <p className="text-xl mb-8 text-white/90 max-w-2xl mx-auto">
-              Book a venue visit or contact us for detailed directions to your nearest training location.
+              Secure your place on our next course. Full venue details will be provided upon booking confirmation.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <Button
@@ -385,7 +385,7 @@ const TrainingVenuePage: React.FC = () => {
                 className="bg-white text-primary-600 hover:bg-gray-100"
               >
                 <Mail className="w-5 h-5 mr-2" />
-                Get Directions
+                Contact Us
               </Button>
               <Button
                 href="tel:0800123456"

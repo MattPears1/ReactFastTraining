@@ -23,14 +23,14 @@ export async function up(knex: Knex): Promise<void> {
       table.index('role');
     });
   } else {
+    // Check columns first
+    const hasPhone = await knex.schema.hasColumn('users', 'phone');
+    const hasRole = await knex.schema.hasColumn('users', 'role');
+    const hasIsActive = await knex.schema.hasColumn('users', 'is_active');
+    const hasLastLogin = await knex.schema.hasColumn('users', 'last_login');
+    
     // Extend existing users table
     await knex.schema.alterTable('users', (table) => {
-      // Check and add columns if they don't exist
-      const hasPhone = await knex.schema.hasColumn('users', 'phone');
-      const hasRole = await knex.schema.hasColumn('users', 'role');
-      const hasIsActive = await knex.schema.hasColumn('users', 'is_active');
-      const hasLastLogin = await knex.schema.hasColumn('users', 'last_login');
-      
       if (!hasPhone) {
         table.string('phone', 20);
       }

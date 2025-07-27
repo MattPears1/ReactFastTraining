@@ -89,28 +89,23 @@ export const AdminLayout: React.FC<AdminLayoutProps> = ({ children }) => {
       {/* Sidebar */}
       <div
         className={cn(
-          "fixed inset-y-0 left-0 z-30 w-64 bg-white shadow-lg transform transition-transform lg:translate-x-0",
+          "fixed top-16 bottom-0 left-0 z-30 w-64 bg-white shadow-lg transform transition-transform lg:translate-x-0",
           sidebarOpen ? "translate-x-0" : "-translate-x-full"
         )}
       >
         <div className="flex h-full flex-col">
-          {/* Logo */}
-          <div className="flex h-16 items-center justify-between px-4 border-b">
-            <Link to="/admin" className="flex items-center">
-              <span className="text-xl font-bold text-primary-600">
-                React Fast Training
-              </span>
-            </Link>
+          {/* Mobile close button */}
+          <div className="flex justify-end px-4 py-2 lg:hidden">
             <button
               onClick={() => setSidebarOpen(false)}
-              className="lg:hidden"
+              className="p-2 text-gray-400 hover:text-gray-500"
             >
               <X className="h-6 w-6" />
             </button>
           </div>
 
           {/* Navigation */}
-          <nav className="flex-1 space-y-1 px-2 py-4">
+          <nav className="flex-1 space-y-1 px-2 py-4 pt-8">
             {navigationItems.map((item) => (
               <Link
                 key={item.href}
@@ -136,7 +131,7 @@ export const AdminLayout: React.FC<AdminLayoutProps> = ({ children }) => {
           </nav>
 
           {/* User section */}
-          <div className="border-t p-4">
+          <div className="border-t p-4 pb-8">
             <div className="flex items-center">
               <div className="flex-1">
                 <p className="text-sm font-medium text-gray-900">{user?.name}</p>
@@ -157,7 +152,7 @@ export const AdminLayout: React.FC<AdminLayoutProps> = ({ children }) => {
       {/* Main content */}
       <div className="lg:pl-64">
         {/* Top header */}
-        <header className="sticky top-0 z-10 bg-white shadow-sm">
+        <header className="sticky top-0 z-40 bg-white shadow-sm">
           <div className="flex h-16 items-center justify-between px-4 sm:px-6 lg:px-8">
             <button
               onClick={() => setSidebarOpen(true)}

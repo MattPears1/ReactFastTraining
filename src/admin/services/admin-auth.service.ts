@@ -35,8 +35,11 @@ class AdminAuthService {
   private api: AxiosInstance;
 
   constructor() {
+    const baseURL = import.meta.env.VITE_API_URL || 'http://localhost:3000';
+    console.log('🌐 [AdminAuthService] Initializing with baseURL:', baseURL);
+    
     this.api = axios.create({
-      baseURL: import.meta.env.VITE_API_URL || 'http://localhost:3000',
+      baseURL,
       withCredentials: true, // For cookies
     });
 
@@ -80,12 +83,33 @@ class AdminAuthService {
   }
 
   async login(email: string, password: string, captcha?: string): Promise<LoginResponse> {
-    const response = await this.api.post<LoginResponse>('/api/admin/auth/login', {
-      email,
-      password,
-      captcha,
-    });
-    return response.data;
+    console.log('🔐 [AdminAuthService] Attempting login...');
+    console.log('📧 [AdminAuthService] Email:', email);
+    console.log('🔗 [AdminAuthService] Endpoint: /api/admin/auth/login');
+    
+    try {
+      const response = await this.api.post<LoginResponse>('/api/admin/auth/login', {
+        email,
+        password,
+        captcha,
+      });
+      console.log('✅ [AdminAuthService] Login successful:', response.data);
+      return response.data;
+    } catch (error: any) {
+      console.error('❌ [AdminAuthService] Login failed:', error);
+      console.error('🔍 [AdminAuthService] Error details:', {
+        message: error.message,
+        code: error.code,
+        response: error.response?.data,
+        status: error.response?.status,
+        config: {
+          url: error.config?.url,
+          baseURL: error.config?.baseURL,
+          method: error.config?.method
+        }
+      });
+      throw error;
+    }
   }
 
   async logout(): Promise<void> {

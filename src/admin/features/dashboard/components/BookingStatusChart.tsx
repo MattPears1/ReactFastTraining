@@ -12,6 +12,10 @@ interface BookingStatusChartProps {
 }
 
 const COLORS = {
+  Confirmed: '#10B981',
+  Pending: '#F59E0B',
+  Cancelled: '#EF4444',
+  Completed: '#3B82F6',
   confirmed: '#10B981',
   pending: '#F59E0B',
   cancelled: '#EF4444',
@@ -19,16 +23,48 @@ const COLORS = {
 };
 
 export const BookingStatusChart: React.FC<BookingStatusChartProps> = ({ data }) => {
+  // Calculate total for percentage display
+  const total = data.reduce((sum, item) => sum + item.count, 0);
+  
+  // Custom label to show both count and percentage
+  const renderCustomLabel = (entry: any) => {
+    const percent = total > 0 ? ((entry.count / total) * 100).toFixed(0) : 0;
+    return `${percent}%`;
+  };
+
+  // Custom legend to show count alongside status
+  const renderLegend = (props: any) => {
+    const { payload } = props;
+    return (
+      <ul className="flex flex-col space-y-2 mt-4">
+        {payload.map((entry: any, index: number) => (
+          <li key={`item-${index}`} className="flex items-center justify-between text-sm">
+            <span className="flex items-center">
+              <span
+                className="w-3 h-3 rounded-full mr-2"
+                style={{ backgroundColor: entry.color }}
+              />
+              <span className="text-gray-600">{entry.value}</span>
+            </span>
+            <span className="font-medium text-gray-900">
+              {data[index]?.count || 0}
+            </span>
+          </li>
+        ))}
+      </ul>
+    );
+  };
+
   return (
-    <div className="h-80">
+    <div className="h-80 w-full">
       <ResponsiveContainer width="100%" height="100%">
         <PieChart>
           <Pie
             data={data}
             cx="50%"
-            cy="50%"
+            cy="45%"
             labelLine={false}
-            label={({ percentage }) => `${percentage.toFixed(0)}%`}
+            label={renderCustomLabel}
             outerRadius={80}
             fill="#8884d8"
             dataKey="count"
@@ -40,8 +76,19 @@ export const BookingStatusChart: React.FC<BookingStatusChartProps> = ({ data }) 
               />
             ))}
           </Pie>
-          <Tooltip />
-          <Legend />
+          <Tooltip 
+            formatter={(value: any) => [`${value} bookings`, '']}
+            contentStyle={{
+              backgroundColor: 'rgba(255, 255, 255, 0.95)',
+              border: '1px solid #e5e7eb',
+              borderRadius: '6px',
+            }}
+          />
+          <Legend 
+            content={renderLegend}
+            verticalAlign="bottom"
+            align="center"
+          />
         </PieChart>
       </ResponsiveContainer>
     </div>

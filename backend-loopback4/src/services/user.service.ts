@@ -186,7 +186,7 @@ export class UserService {
       .where(eq(users.id, userId));
   }
 
-  static isAccountLocked(user: User): boolean {
+  static isAccountLocked(user: any): boolean {
     return !!(user.accountLockedUntil && user.accountLockedUntil > new Date());
   }
 

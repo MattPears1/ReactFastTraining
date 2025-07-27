@@ -14,7 +14,6 @@ import {
   UserServiceBindings,
 } from '@loopback/authentication-jwt';
 import {AuthorizationComponent} from '@loopback/authorization';
-import {CronComponent} from '@loopback/cron';
 import path from 'path';
 import {MySequence} from './sequence';
 import {SECURITY_SCHEME_SPEC} from './utils/security-spec';
@@ -45,9 +44,6 @@ export class ReactFastTrainingApiApplication extends BootMixin(
     
     // Authorization
     this.component(AuthorizationComponent);
-    
-    // Cron jobs
-    this.component(CronComponent);
 
     // Bind services
     this.bind('services.CourseSessionCapacityService').toClass(

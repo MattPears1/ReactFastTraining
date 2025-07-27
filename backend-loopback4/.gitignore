@@ -56,9 +56,40 @@ typings/
 
 # dotenv environment variables file
 .env
+.env.local
+.env.production
 
 # Transpiled JavaScript files from Typescript
 /dist
 
 # Cache used by TypeScript's incremental build
 *.tsbuildinfo
+
+# Storage directories
+/storage
+/uploads
+
+# Database files
+*.sqlite
+*.sqlite3
+*.db
+
+# SSL certificates
+*.pem
+*.key
+*.crt
+
+# IDE files
+.idea
+.vscode
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Backup files
+*.backup
+*.bak
+
+# Heroku
+.heroku

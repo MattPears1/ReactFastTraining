@@ -1,0 +1,50 @@
+/* Dashboard Chart Styles */
+
+/* Ensure proper responsiveness for charts */
+@media (max-width: 640px) {
+  .recharts-responsive-container {
+    min-height: 250px !important;
+  }
+  
+  .recharts-cartesian-axis-tick-value {
+    font-size: 10px !important;
+  }
+}
+
+@media (min-width: 641px) and (max-width: 1024px) {
+  .recharts-responsive-container {
+    min-height: 280px !important;
+  }
+}
+
+/* Fix for narrow column issue */
+.recharts-default-legend {
+  display: flex !important;
+  justify-content: center !important;
+  flex-wrap: wrap !important;
+  gap: 1rem !important;
+}
+
+.recharts-legend-item {
+  display: flex !important;
+  align-items: center !important;
+  margin: 0 !important;
+}
+
+/* Tooltip styling */
+.recharts-default-tooltip {
+  background-color: rgba(255, 255, 255, 0.95) !important;
+  border: 1px solid #e5e7eb !important;
+  border-radius: 6px !important;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1) !important;
+}
+
+/* Ensure charts don't overflow on mobile */
+.recharts-wrapper {
+  width: 100% !important;
+}
+
+/* Fix Y-axis label spacing */
+.recharts-yAxis .recharts-cartesian-axis-tick-value {
+  text-anchor: end !important;
+}

@@ -15,6 +15,7 @@ import { BookingStatusChart } from './components/BookingStatusChart';
 import { UpcomingSchedules } from './components/UpcomingSchedules';
 import { RecentActivity } from './components/RecentActivity';
 import { LoadingSpinner } from '../../components/common/LoadingSpinner';
+import './dashboard.css';
 
 export const DashboardPage: React.FC = () => {
   const { data: dashboardData, isLoading, error } = useQuery({
@@ -90,30 +91,50 @@ export const DashboardPage: React.FC = () => {
       </div>
 
       {/* Charts row */}
-      <div className="grid grid-cols-1 gap-6 lg:grid-cols-2">
-        <div className="bg-white rounded-lg shadow p-6">
-          <h2 className="text-lg font-medium text-gray-900 mb-4">Revenue Trend</h2>
-          <RevenueChart data={dashboardData?.revenueData || []} />
+      <div className="grid grid-cols-1 gap-6 xl:grid-cols-2">
+        <div className="bg-white rounded-lg shadow overflow-hidden">
+          <div className="p-6">
+            <div className="flex items-center justify-between mb-4">
+              <h2 className="text-lg font-medium text-gray-900">Revenue Trend</h2>
+              <span className="text-sm text-gray-500">Last 6 months</span>
+            </div>
+            <RevenueChart data={dashboardData?.revenueData || []} />
+          </div>
         </div>
         
-        <div className="bg-white rounded-lg shadow p-6">
-          <h2 className="text-lg font-medium text-gray-900 mb-4">Booking Status</h2>
-          <BookingStatusChart data={dashboardData?.bookingStatus || []} />
+        <div className="bg-white rounded-lg shadow overflow-hidden">
+          <div className="p-6">
+            <div className="flex items-center justify-between mb-4">
+              <h2 className="text-lg font-medium text-gray-900">Booking Status</h2>
+              <span className="text-sm text-gray-500">Current distribution</span>
+            </div>
+            <BookingStatusChart data={dashboardData?.bookingStatus || []} />
+          </div>
         </div>
       </div>
 
       {/* Bottom row */}
-      <div className="grid grid-cols-1 gap-6 lg:grid-cols-2">
-        <div className="bg-white rounded-lg shadow">
+      <div className="grid grid-cols-1 gap-6 xl:grid-cols-2">
+        <div className="bg-white rounded-lg shadow overflow-hidden">
           <div className="p-6">
-            <h2 className="text-lg font-medium text-gray-900 mb-4">Upcoming Schedules</h2>
+            <div className="flex items-center justify-between mb-4">
+              <h2 className="text-lg font-medium text-gray-900">Upcoming Schedules</h2>
+              <a href="/admin/schedule" className="text-sm text-primary-600 hover:text-primary-700">
+                View all →
+              </a>
+            </div>
             <UpcomingSchedules schedules={dashboardData?.upcomingSchedules || []} />
           </div>
         </div>
         
-        <div className="bg-white rounded-lg shadow">
+        <div className="bg-white rounded-lg shadow overflow-hidden">
           <div className="p-6">
-            <h2 className="text-lg font-medium text-gray-900 mb-4">Recent Activity</h2>
+            <div className="flex items-center justify-between mb-4">
+              <h2 className="text-lg font-medium text-gray-900">Recent Activity</h2>
+              <a href="/admin/activity" className="text-sm text-primary-600 hover:text-primary-700">
+                View all →
+              </a>
+            </div>
             <RecentActivity activities={dashboardData?.recentActivity || []} />
           </div>
         </div>

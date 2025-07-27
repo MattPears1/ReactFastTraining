@@ -104,7 +104,7 @@ export class BookingController {
   @get('/api/bookings/reference/{reference}')
   async getBookingByReference(
     @param.path.string('reference') reference: string
-  ) {
+  ): Promise<any> {
     const booking = await BookingService.getBookingByReference(reference);
     
     if (!booking) {

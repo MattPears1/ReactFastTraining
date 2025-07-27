@@ -191,3 +191,4 @@ export class PDFService {
        .fillColor('#333333')
        .text(' ' + value, { width: 400 });
   }
+}

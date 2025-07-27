@@ -2,7 +2,6 @@ import React from 'react'
 import Header from './Header'
 import Footer from './Footer'
 import SkipLinks from '@components/common/SkipLinks'
-import SEOChecklist from '@components/common/SEOChecklist'
 import { motion } from 'framer-motion'
 import { SystemAlert } from '@components/ui/AlertBanner'
 import { useNotifications } from '@contexts/NotificationContext'
@@ -46,7 +45,6 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
         {children}
       </motion.main>
       <Footer />
-      <SEOChecklist />
     </div>
   )
 }
