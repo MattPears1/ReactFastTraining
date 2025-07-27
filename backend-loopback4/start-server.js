@@ -883,6 +883,73 @@ app.get('/api/admin/venues', authenticateToken, async (req, res) => {
   }
 });
 
+// TEMPORARY: Non-authenticated admin endpoints for testing
+app.get('/api/admin/courses-temp', async (req, res) => {
+  try {
+    console.log('🔧 TEMP: Get courses for admin (no auth)');
+    
+    const query = 'SELECT * FROM courses WHERE is_active = true ORDER BY name';
+    const result = await client.query(query);
+    
+    res.json(result.rows);
+  } catch (error) {
+    console.error('Error fetching courses:', error);
+    res.status(500).json({ error: 'Failed to fetch courses' });
+  }
+});
+
+app.get('/api/admin/bookings-temp', async (req, res) => {
+  try {
+    console.log('🔧 TEMP: Get bookings for admin (no auth)');
+    
+    const query = `
+      SELECT 
+        b.id, b.booking_reference, b.status as booking_status,
+        b.total_amount, b.created_at, b.updated_at,
+        cs.id as session_id, cs.start_datetime, cs.end_datetime,
+        c.name as course_name, c.course_type, c.price,
+        v.name as venue_name, v.address_line1, v.city,
+        u.first_name, u.last_name, u.email, u.phone
+      FROM bookings b
+      LEFT JOIN course_schedules cs ON b.course_session_id = cs.id
+      LEFT JOIN courses c ON cs.course_id = c.id
+      LEFT JOIN venues v ON cs.venue_id = v.id
+      LEFT JOIN users u ON b.user_id = u.id
+      ORDER BY b.created_at DESC
+      LIMIT 50
+    `;
+    const result = await client.query(query);
+    
+    const bookings = result.rows.map(row => ({
+      id: row.booking_reference || row.id.toString(),
+      courseId: row.session_id,
+      courseName: row.course_name || 'Unknown Course',
+      courseDate: row.start_datetime ? row.start_datetime.toISOString().split('T')[0] : 'TBD',
+      courseTime: row.start_datetime ? row.start_datetime.toTimeString().substring(0, 5) : 'TBD',
+      courseVenue: row.venue_name || 'Unknown Venue',
+      coursePrice: parseFloat(row.price) || 0,
+      customerName: `${row.first_name || ''} ${row.last_name || ''}`.trim() || 'Unknown',
+      customerEmail: row.email || 'unknown@example.com',
+      customerPhone: row.phone || '',
+      companyName: '',
+      bookingDate: row.created_at ? row.created_at.toISOString().split('T')[0] : 'Unknown',
+      bookingReference: row.booking_reference || row.id.toString(),
+      status: row.booking_status || 'confirmed',
+      paymentStatus: 'paid',
+      paymentMethod: 'card',
+      attendees: 1,
+      totalAmount: parseFloat(row.total_amount) || 0,
+      createdAt: row.created_at ? row.created_at.toISOString() : new Date().toISOString(),
+      updatedAt: row.updated_at ? row.updated_at.toISOString() : new Date().toISOString()
+    }));
+    
+    res.json(bookings);
+  } catch (error) {
+    console.error('Error fetching bookings:', error);
+    res.status(500).json({ error: 'Failed to fetch bookings' });
+  }
+});
+
 // Payment intent endpoint
 app.post('/api/bookings/create-payment-intent', async (req, res) => {
   try {

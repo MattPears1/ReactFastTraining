@@ -3,7 +3,9 @@
 **Completion Status: 90%** ✅
 
 ## Overview
-Interactive calendar interface for visualizing and managing course sessions, bookings, and capacity at a glance.please use ultra think to plan for this and you can createfiles withinthis folder if it helps like a CSV with tasks to keep track etc
+Interactive calendar interface for visualizing and managing course sessions, bookings, and capacity at a glance.
+
+**UPDATE (Jan 27, 2025)**: Session editing functionality has been unified with a comprehensive plan. See `/todays-tasks/06-session-edit-details-plan.md` for the complete implementation strategy that integrates calendar editing with the dashboard View Details functionality.
 
 ## Implementation Status
 - ✅ Calendar component with react-big-calendar - COMPLETE
@@ -709,7 +711,7 @@ export const SessionDetailModal: React.FC<{
           {activeTab === 'actions' && (
             <div className="space-y-4">
               <button
-                onClick={() => setShowEditModal(true)}
+                onClick={() => navigate(`/admin/schedule/${session.id}`)}
                 className="w-full flex items-center gap-3 px-4 py-3 border rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700"
               >
                 <Edit className="w-5 h-5" />

@@ -1,0 +1,31 @@
+Task ID,Task Description,Phase,Priority,Status,Dependencies,Estimated Hours,Assigned To,Notes
+SE-001,Fix routing configuration for /admin/schedule/:id,Phase 1,Critical,Not Started,None,1,TBD,Prevents infinite redirect loop
+SE-002,Create ScheduleDetailsPage component structure,Phase 1,High,Not Started,SE-001,2,TBD,Basic component with sections
+SE-003,Implement SessionInfoSection component,Phase 1,High,Not Started,SE-002,2,TBD,Display basic session information
+SE-004,Implement CapacityManagement component,Phase 1,High,Not Started,SE-002,3,TBD,Show capacity with visual indicators
+SE-005,Create AttendeesList component,Phase 1,High,Not Started,SE-002,3,TBD,List all bookings and attendees
+SE-006,Add FinancialSummary component,Phase 1,Medium,Not Started,SE-002,2,TBD,Revenue and payment tracking
+SE-007,Create API endpoint GET /api/admin/sessions/:id,Phase 1,High,Not Started,None,2,TBD,Fetch session details with bookings
+SE-008,Add loading states and error handling,Phase 1,Medium,Not Started,SE-002,2,TBD,Skeleton screens and error messages
+SE-009,Implement mobile responsive design,Phase 1,Medium,Not Started,SE-002,3,TBD,Stack layout for mobile devices
+SE-010,Add navigation breadcrumbs,Phase 1,Low,Not Started,SE-002,1,TBD,Show navigation path
+SE-011,Create inline editing for basic fields,Phase 2,High,Not Started,SE-003,3,TBD,Edit mode for simple fields
+SE-012,Implement date/time picker with validation,Phase 2,High,Not Started,SE-011,3,TBD,Business hours validation
+SE-013,Add conflict detection system,Phase 2,Critical,Not Started,SE-012,4,TBD,Check instructor/venue conflicts
+SE-014,Create notification system for changes,Phase 2,High,Not Started,SE-011,3,TBD,Email attendees on changes
+SE-015,Implement capacity validation,Phase 2,High,Not Started,SE-011,2,TBD,Prevent reducing below bookings
+SE-016,Add session cancellation workflow,Phase 2,High,Not Started,SE-011,4,TBD,Handle refunds and notifications
+SE-017,Create duplicate session feature,Phase 2,Medium,Not Started,SE-011,2,TBD,Copy session to new date
+SE-018,Implement email attendees modal,Phase 2,Medium,Not Started,SE-005,3,TBD,Bulk email functionality
+SE-019,Add change history/audit log,Phase 2,Medium,Not Started,SE-011,3,TBD,Track all modifications
+SE-020,Create API endpoint PUT /api/admin/sessions/:id,Phase 2,High,Not Started,SE-007,3,TBD,Update session details
+SE-021,Add optimistic updates,Phase 2,Medium,Not Started,SE-020,2,TBD,Immediate UI feedback
+SE-022,Implement permission checks,Phase 2,High,Not Started,SE-020,2,TBD,Role-based access control
+SE-023,Add bulk attendee operations,Phase 3,Low,Not Started,SE-005,3,TBD,Select multiple attendees
+SE-024,Create advanced analytics dashboard,Phase 3,Low,Not Started,SE-006,4,TBD,Session performance metrics
+SE-025,Implement automated scheduling suggestions,Phase 3,Low,Not Started,SE-013,5,TBD,AI-powered recommendations
+SE-026,Add resource management,Phase 3,Low,Not Started,SE-003,4,TBD,Track equipment and rooms
+SE-027,Create print layouts,Phase 3,Low,Not Started,SE-005,2,TBD,Attendee lists and sign-in sheets
+SE-028,Add calendar sync integration,Phase 3,Low,Not Started,SE-012,4,TBD,Google/Outlook calendar
+SE-029,Implement offline capability,Phase 3,Low,Not Started,All,5,TBD,Work without connection
+SE-030,Create comprehensive test suite,Phase 2,High,Not Started,SE-020,4,TBD,Unit and integration tests

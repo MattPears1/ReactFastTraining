@@ -19,6 +19,7 @@ import { CourseEditPage } from './features/courses/CourseEditPage';
 import { BookingsPage } from './features/bookings/BookingsPage';
 import { BookingDetailsPage } from './features/bookings/BookingDetailsPage';
 import { SchedulePage } from './features/schedule/SchedulePage';
+import { ScheduleDetailsPage } from './features/schedule/ScheduleDetailsPage';
 import { UsersPage } from './features/users/UsersPage';
 import { SettingsPage } from './features/settings/SettingsPage';
 import { ActivityLogPage } from './features/activity/ActivityLogPage';
@@ -68,7 +69,10 @@ export const AdminApp: React.FC = () => {
                       </Route>
                       
                       {/* Schedule Management */}
-                      <Route path="schedule" element={<SchedulePage />} />
+                      <Route path="schedule">
+                        <Route index element={<SchedulePage />} />
+                        <Route path=":id" element={<ScheduleDetailsPage />} />
+                      </Route>
                       
                       {/* User Management */}
                       <Route path="users" element={<UsersPage />} />

@@ -26,6 +26,7 @@ import { AdminEmptyState } from '../../components/ui/AdminEmptyState';
 import { BookingDetailsModal } from './components/BookingDetailsModal';
 import { CalendarView } from './components/CalendarView';
 import type { Booking, BookingFilters } from '../../../types/booking';
+import { adminApi } from '../../utils/api';
 import '../../styles/admin-design-system.css';
 
 export const BookingsPage: React.FC = () => {
@@ -47,7 +48,7 @@ export const BookingsPage: React.FC = () => {
       if (statusFilter !== 'all') params.append('status', statusFilter);
       if (paymentFilter !== 'all') params.append('paymentStatus', paymentFilter);
       
-      const response = await fetch(`/api/admin/bookings?${params}`);
+      const response = await adminApi.get(`/api/admin/bookings?${params}`);
       if (!response.ok) throw new Error('Failed to fetch bookings');
       return response.json() as Promise<Booking[]>;
     },
@@ -57,11 +58,7 @@ export const BookingsPage: React.FC = () => {
   // Update booking mutation
   const updateMutation = useMutation({
     mutationFn: async ({ id, data }: { id: string; data: Partial<Booking> }) => {
-      const response = await fetch(`/api/admin/bookings/${id}`, {
-        method: 'PUT',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(data),
-      });
+      const response = await adminApi.put(`/api/admin/bookings/${id}`, data);
       if (!response.ok) throw new Error('Failed to update booking');
       return response.json();
     },
@@ -74,9 +71,7 @@ export const BookingsPage: React.FC = () => {
   // Delete booking mutation
   const deleteMutation = useMutation({
     mutationFn: async (id: string) => {
-      const response = await fetch(`/api/admin/bookings/${id}`, {
-        method: 'DELETE',
-      });
+      const response = await adminApi.delete(`/api/admin/bookings/${id}`);
       if (!response.ok) throw new Error('Failed to delete booking');
       return response.json();
     },

@@ -20,6 +20,7 @@ import { LoadingSpinner } from '../../components/common/LoadingSpinner';
 import { AdminCard } from '../../components/ui/AdminCard';
 import { AdminBadge } from '../../components/ui/AdminBadge';
 import { AdminEmptyState } from '../../components/ui/AdminEmptyState';
+import { adminApi } from '../../utils/api';
 import '../../styles/admin-design-system.css';
 
 interface Course {
@@ -43,7 +44,7 @@ export const CoursesPage: React.FC = () => {
   const { data: courses, isLoading, error } = useQuery({
     queryKey: ['admin-courses'],
     queryFn: async () => {
-      const response = await fetch('/api/admin/courses');
+      const response = await adminApi.get('/api/admin/courses');
       if (!response.ok) {
         throw new Error('Failed to fetch courses');
       }
