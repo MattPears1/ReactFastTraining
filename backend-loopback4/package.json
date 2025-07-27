@@ -32,8 +32,7 @@
     "migrate": "node ./dist/migrate",
     "preopenapi-spec": "npm run build",
     "openapi-spec": "node ./dist/openapi-spec",
-    "prestart": "npm run rebuild",
-    "start": "node -r source-map-support/register .",
+    "start": "node index.js",
     "dev": "nodemon --watch src --ext ts --exec 'npm run build && node .'",
     "clean": "lb-clean dist *.tsbuildinfo .eslintcache",
     "rebuild": "npm run clean && npm run build",
@@ -44,7 +43,7 @@
     "migrate:make": "npx knex migrate:make",
     "seed:run": "npx knex seed:run",
     "setup:database": "node src/scripts/setup-database.js",
-    "heroku-postbuild": "npm install && npm run build"
+    "heroku-postbuild": "npm install"
   },
   "repository": {
     "type": "git",
