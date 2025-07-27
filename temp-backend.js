@@ -226,6 +226,281 @@ app.get('/api/admin/courses', (req, res) => {
   res.json(courses);
 });
 
+// Mock database for bookings
+let bookings = [
+  {
+    id: 'BK-2025-001',
+    courseId: 1,
+    courseName: 'Emergency First Aid at Work',
+    courseDate: '2025-02-10',
+    courseTime: '09:00',
+    courseVenue: 'Leeds Training Centre',
+    coursePrice: 100,
+    customerName: 'John Smith',
+    customerEmail: 'john.smith@example.com',
+    customerPhone: '07700 900123',
+    companyName: 'Smith & Co Ltd',
+    bookingDate: '2025-01-15',
+    bookingReference: 'BK-2025-001',
+    status: 'confirmed',
+    paymentStatus: 'paid',
+    paymentMethod: 'card',
+    paymentIntentId: 'pi_demo_123456',
+    attendees: 1,
+    totalAmount: 100,
+    createdAt: '2025-01-15T10:30:00Z',
+    updatedAt: '2025-01-15T10:35:00Z'
+  },
+  {
+    id: 'BK-2025-002',
+    courseId: 3,
+    courseName: 'Paediatric First Aid',
+    courseDate: '2025-02-12',
+    courseTime: '10:00',
+    courseVenue: 'Sheffield Hub',
+    coursePrice: 150,
+    customerName: 'Sarah Johnson',
+    customerEmail: 'sarah.j@nursery.co.uk',
+    customerPhone: '07700 900456',
+    companyName: 'Happy Days Nursery',
+    bookingDate: '2025-01-18',
+    bookingReference: 'BK-2025-002',
+    status: 'confirmed',
+    paymentStatus: 'paid',
+    paymentMethod: 'bank_transfer',
+    attendees: 3,
+    totalAmount: 450,
+    notes: 'Three staff members attending together',
+    createdAt: '2025-01-18T14:20:00Z',
+    updatedAt: '2025-01-18T14:20:00Z'
+  },
+  {
+    id: 'BK-2025-003',
+    courseId: 2,
+    courseName: 'First Aid at Work',
+    courseDate: '2025-02-15',
+    courseTime: '09:00',
+    courseVenue: 'Bradford Centre',
+    coursePrice: 200,
+    customerName: 'Mike Wilson',
+    customerEmail: 'mike@construction.com',
+    customerPhone: '07700 900789',
+    companyName: 'Wilson Construction',
+    bookingDate: '2025-01-20',
+    bookingReference: 'BK-2025-003',
+    status: 'pending',
+    paymentStatus: 'pending',
+    paymentMethod: 'card',
+    attendees: 2,
+    totalAmount: 400,
+    createdAt: '2025-01-20T09:15:00Z',
+    updatedAt: '2025-01-20T09:15:00Z'
+  }
+];
+
+// Mock course schedules
+const courseSchedules = [
+  {
+    id: 'SCH-001',
+    courseId: 1,
+    courseName: 'Emergency First Aid at Work',
+    date: '2025-02-10',
+    time: '09:00',
+    venue: 'Leeds Training Centre',
+    instructor: 'Lex Thompson',
+    maxCapacity: 12,
+    currentCapacity: 8,
+    price: 100,
+    status: 'scheduled'
+  },
+  {
+    id: 'SCH-002',
+    courseId: 3,
+    courseName: 'Paediatric First Aid',
+    date: '2025-02-12',
+    time: '10:00',
+    venue: 'Sheffield Hub',
+    instructor: 'Sarah Williams',
+    maxCapacity: 10,
+    currentCapacity: 10,
+    price: 150,
+    status: 'scheduled'
+  },
+  {
+    id: 'SCH-003',
+    courseId: 2,
+    courseName: 'First Aid at Work',
+    date: '2025-02-15',
+    time: '09:00',
+    venue: 'Bradford Centre',
+    instructor: 'Lex Thompson',
+    maxCapacity: 15,
+    currentCapacity: 5,
+    price: 200,
+    status: 'scheduled'
+  },
+  {
+    id: 'SCH-004',
+    courseId: 11,
+    courseName: 'CPR and AED',
+    date: '2025-02-18',
+    time: '14:00',
+    venue: 'York Training Room',
+    instructor: 'Mike Johnson',
+    maxCapacity: 20,
+    currentCapacity: 12,
+    price: 50,
+    status: 'scheduled'
+  },
+  {
+    id: 'SCH-005',
+    courseId: 4,
+    courseName: 'Emergency Paediatric First Aid',
+    date: '2025-02-20',
+    time: '09:30',
+    venue: 'Leeds Training Centre',
+    instructor: 'Sarah Williams',
+    maxCapacity: 10,
+    currentCapacity: 3,
+    price: 100,
+    status: 'scheduled'
+  }
+];
+
+// Admin bookings endpoints
+app.get('/api/admin/bookings', (req, res) => {
+  console.log('Bookings list request', req.query);
+  
+  let filteredBookings = [...bookings];
+  
+  // Apply filters
+  if (req.query.search) {
+    const search = req.query.search.toLowerCase();
+    filteredBookings = filteredBookings.filter(b => 
+      b.customerName.toLowerCase().includes(search) ||
+      b.customerEmail.toLowerCase().includes(search) ||
+      b.bookingReference.toLowerCase().includes(search) ||
+      b.courseName.toLowerCase().includes(search)
+    );
+  }
+  
+  if (req.query.status && req.query.status !== 'all') {
+    filteredBookings = filteredBookings.filter(b => b.status === req.query.status);
+  }
+  
+  if (req.query.paymentStatus && req.query.paymentStatus !== 'all') {
+    filteredBookings = filteredBookings.filter(b => b.paymentStatus === req.query.paymentStatus);
+  }
+  
+  if (req.query.courseId) {
+    filteredBookings = filteredBookings.filter(b => b.courseId === parseInt(req.query.courseId));
+  }
+  
+  if (req.query.dateFrom) {
+    filteredBookings = filteredBookings.filter(b => b.courseDate >= req.query.dateFrom);
+  }
+  
+  if (req.query.dateTo) {
+    filteredBookings = filteredBookings.filter(b => b.courseDate <= req.query.dateTo);
+  }
+  
+  res.json(filteredBookings);
+});
+
+// Get single booking
+app.get('/api/admin/bookings/:id', (req, res) => {
+  const booking = bookings.find(b => b.id === req.params.id);
+  if (booking) {
+    res.json(booking);
+  } else {
+    res.status(404).json({ error: 'Booking not found' });
+  }
+});
+
+// Update booking
+app.put('/api/admin/bookings/:id', (req, res) => {
+  const index = bookings.findIndex(b => b.id === req.params.id);
+  if (index !== -1) {
+    bookings[index] = {
+      ...bookings[index],
+      ...req.body,
+      updatedAt: new Date().toISOString()
+    };
+    res.json(bookings[index]);
+  } else {
+    res.status(404).json({ error: 'Booking not found' });
+  }
+});
+
+// Delete booking
+app.delete('/api/admin/bookings/:id', (req, res) => {
+  const index = bookings.findIndex(b => b.id === req.params.id);
+  if (index !== -1) {
+    bookings.splice(index, 1);
+    res.json({ success: true });
+  } else {
+    res.status(404).json({ error: 'Booking not found' });
+  }
+});
+
+// Course schedules endpoints
+app.get('/api/admin/schedules', (req, res) => {
+  console.log('Schedules list request', req.query);
+  
+  let filteredSchedules = [...courseSchedules];
+  
+  // Add bookings to each schedule
+  filteredSchedules = filteredSchedules.map(schedule => ({
+    ...schedule,
+    bookings: bookings.filter(b => 
+      b.courseId === schedule.courseId && 
+      b.courseDate === schedule.date &&
+      b.courseTime === schedule.time
+    )
+  }));
+  
+  if (req.query.dateFrom) {
+    filteredSchedules = filteredSchedules.filter(s => s.date >= req.query.dateFrom);
+  }
+  
+  if (req.query.dateTo) {
+    filteredSchedules = filteredSchedules.filter(s => s.date <= req.query.dateTo);
+  }
+  
+  res.json(filteredSchedules);
+});
+
+// Get schedule with bookings
+app.get('/api/admin/schedules/:id', (req, res) => {
+  const schedule = courseSchedules.find(s => s.id === req.params.id);
+  if (schedule) {
+    const scheduleBookings = bookings.filter(b => 
+      b.courseId === schedule.courseId && 
+      b.courseDate === schedule.date &&
+      b.courseTime === schedule.time
+    );
+    res.json({
+      ...schedule,
+      bookings: scheduleBookings
+    });
+  } else {
+    res.status(404).json({ error: 'Schedule not found' });
+  }
+});
+
+// Send email endpoint
+app.post('/api/admin/bookings/:id/email', (req, res) => {
+  console.log('Email booking confirmation:', req.params.id, req.body);
+  
+  // In production, this would send actual email
+  res.json({ 
+    success: true, 
+    message: 'Email sent successfully',
+    sentTo: req.body.to,
+    subject: req.body.subject
+  });
+});
+
 app.listen(PORT, () => {
   console.log(`🚀 Temporary backend running on port ${PORT}`);
   console.log(`✅ CORS enabled for frontend domains`);

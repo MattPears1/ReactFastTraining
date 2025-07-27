@@ -102,7 +102,12 @@ export class CourseSessionController {
   async find(
     @param.filter(CourseSession) filter?: Filter<CourseSession>,
   ): Promise<CourseSession[]> {
-    return this.courseSessionRepository.find(filter);
+    // Always include relations for the frontend
+    const enhancedFilter = {
+      ...filter,
+      include: filter?.include || ['course', 'trainer', 'location']
+    };
+    return this.courseSessionRepository.find(enhancedFilter);
   }
 
   @get('/course-sessions/upcoming')
@@ -152,7 +157,12 @@ export class CourseSessionController {
     @param.path.string('id') id: string,
     @param.filter(CourseSession, {exclude: 'where'}) filter?: FilterExcludingWhere<CourseSession>,
   ): Promise<CourseSession> {
-    return this.courseSessionRepository.findById(id, filter);
+    // Always include relations for the frontend
+    const enhancedFilter = {
+      ...filter,
+      include: filter?.include || ['course', 'trainer', 'location']
+    };
+    return this.courseSessionRepository.findById(id, enhancedFilter);
   }
 
   @patch('/course-sessions/{id}')

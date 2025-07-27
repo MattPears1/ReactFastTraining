@@ -14,8 +14,11 @@ import {
   Eye
 } from 'lucide-react';
 import { AdminCard } from '../../components/ui/AdminCard';
+import { AdminTable } from '../../components/ui/AdminTable';
+import { AdminBadge } from '../../components/ui/AdminBadge';
 import { Button } from '../../../components/ui/Button';
 import { LoadingSpinner } from '../../components/common/LoadingSpinner';
+import { adminCourseSessionService } from '../../services/course-session.service';
 
 interface CourseSchedule {
   id: string;
@@ -32,65 +35,6 @@ interface CourseSchedule {
   price: number;
 }
 
-const mockSchedules: CourseSchedule[] = [
-  {
-    id: '1',
-    courseName: 'Emergency First Aid at Work (EFAW)',
-    courseType: 'EFAW',
-    date: '2025-02-15',
-    startTime: '09:00',
-    endTime: '15:00',
-    location: 'Leeds Training Centre',
-    instructor: 'Lex Richardson',
-    maxParticipants: 12,
-    currentBookings: 8,
-    status: 'scheduled',
-    price: 75
-  },
-  {
-    id: '2',
-    courseName: 'First Aid at Work (FAW) - Day 1',
-    courseType: 'FAW',
-    date: '2025-02-20',
-    startTime: '09:00',
-    endTime: '17:00',
-    location: 'Sheffield Training Centre',
-    instructor: 'Lex Richardson',
-    maxParticipants: 12,
-    currentBookings: 12,
-    status: 'scheduled',
-    price: 150
-  },
-  {
-    id: '3',
-    courseName: 'Paediatric First Aid',
-    courseType: 'PAEDIATRIC',
-    date: '2025-02-25',
-    startTime: '09:00',
-    endTime: '15:00',
-    location: 'York Training Centre',
-    instructor: 'Lex Richardson',
-    maxParticipants: 10,
-    currentBookings: 6,
-    status: 'scheduled',
-    price: 85
-  },
-  {
-    id: '4',
-    courseName: 'Emergency First Aid at Work (EFAW)',
-    courseType: 'EFAW',
-    date: '2025-03-01',
-    startTime: '09:00',
-    endTime: '15:00',
-    location: 'Bradford Training Centre',
-    instructor: 'Lex Richardson',
-    maxParticipants: 12,
-    currentBookings: 4,
-    status: 'scheduled',
-    price: 75
-  }
-];
-
 export const SchedulePage: React.FC = () => {
   const [currentDate, setCurrentDate] = useState(new Date());
   const [viewMode, setViewMode] = useState<'calendar' | 'list'>('calendar');
@@ -100,16 +44,42 @@ export const SchedulePage: React.FC = () => {
   const { data: schedules, isLoading, error } = useQuery({
     queryKey: ['admin-schedules', currentDate.getMonth(), currentDate.getFullYear()],
     queryFn: async () => {
-      await new Promise(resolve => setTimeout(resolve, 500));
-      return mockSchedules;
+      const apiUrl = import.meta.env.VITE_API_URL || 'http://localhost:3000';
+      const token = localStorage.getItem('adminAccessToken');
+      
+      const response = await fetch(`${apiUrl}/course-sessions`, {
+        headers: {
+          'Authorization': `Bearer ${token}`,
+          'Content-Type': 'application/json'
+        }
+      });
+      
+      if (!response.ok) {
+        throw new Error('Failed to fetch course sessions');
+      }
+      
+      const courseSessions = await response.json();
+      
+      // Transform course sessions to match frontend interface
+      return courseSessions.map((session: any) => ({
+        id: session.id,
+        courseName: session.course?.name || 'Unknown Course',
+        courseType: session.course?.type || session.course?.name || 'Unknown',
+        date: session.startDate.split('T')[0], // Extract date part
+        startTime: session.startTime,
+        endTime: session.endTime,
+        location: session.location?.name || session.location?.address || 'Unknown Location',
+        instructor: session.trainer?.name || 'Lex Richardson',
+        maxParticipants: session.maxParticipants,
+        currentBookings: session.currentParticipants || 0,
+        status: session.status?.toLowerCase() || 'scheduled',
+        price: session.pricePerPerson || 0
+      }));
     },
   });
 
   const deleteScheduleMutation = useMutation({
-    mutationFn: async (scheduleId: string) => {
-      await new Promise(resolve => setTimeout(resolve, 1000));
-      console.log('Deleting schedule:', scheduleId);
-    },
+    mutationFn: (scheduleId: string) => adminCourseSessionService.deleteSession(scheduleId),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['admin-schedules'] });
     },
@@ -136,6 +106,21 @@ export const SchedulePage: React.FC = () => {
     if (percentage >= 100) return 'text-red-600';
     if (percentage >= 80) return 'text-yellow-600';
     return 'text-green-600';
+  };
+
+  const getStatusVariant = (status: string): 'success' | 'warning' | 'neutral' => {
+    switch (status) {
+      case 'scheduled':
+        return 'neutral';
+      case 'in_progress':
+        return 'warning';
+      case 'completed':
+        return 'success';
+      case 'cancelled':
+        return 'neutral';
+      default:
+        return 'neutral';
+    }
   };
 
   const getDaysInMonth = (date: Date) => {
