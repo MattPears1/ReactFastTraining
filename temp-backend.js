@@ -4,8 +4,23 @@ const cors = require('cors');
 const app = express();
 const PORT = 3000;
 
-// No CORS needed - frontend proxies through Vite in dev
-// In production, everything is served from same domain
+// CORS configuration for development
+const corsOptions = {
+  origin: [
+    'http://localhost:3003',
+    'http://localhost:5173',
+    'http://localhost:3000',
+    'http://127.0.0.1:3003',
+    'http://127.0.0.1:5173',
+    'http://127.0.0.1:3000',
+    'https://www.reactfasttraining.co.uk',
+    'https://reactfasttraining.co.uk'
+  ],
+  credentials: true,
+  optionsSuccessStatus: 200
+};
+
+app.use(cors(corsOptions));
 app.use(express.json());
 
 // Health check
@@ -181,8 +196,12 @@ app.post('/api/bookings/create-payment-intent', (req, res) => {
 });
 
 
+// Handle preflight requests
+app.options('*', cors(corsOptions));
+
 app.listen(PORT, () => {
   console.log(`🚀 Temporary backend running on port ${PORT}`);
-  console.log(`✅ Backend ready - no CORS needed`);
+  console.log(`✅ CORS enabled for frontend domains`);
   console.log(`🔐 Admin login endpoint: POST /api/admin/auth/login`);
+  console.log(`💳 Payment endpoint: POST /api/bookings/create-payment-intent`);
 });
