@@ -38,7 +38,7 @@ const CourseTemplate: React.FC<CourseTemplateProps> = ({
   whoShouldAttend,
   courseContent,
   accreditations,
-  locations = ['Leeds', 'Sheffield', 'Bradford', 'On-site training available'],
+  locations = ['South Yorkshire', 'On-site training available'],
   groupSize = 'Maximum 12 learners',
   prerequisites = 'None - suitable for beginners',
   whatToExpect = [],

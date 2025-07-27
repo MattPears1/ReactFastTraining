@@ -57,7 +57,7 @@ const EFAWCoursePage: React.FC = () => {
       'Refreshments provided throughout the day'
     ],
     
-    seoKeywords: 'emergency first aid at work Yorkshire, EFAW course Leeds, 1 day first aid training, workplace first aid Sheffield, EFAW certification'
+    seoKeywords: 'emergency first aid at work Yorkshire, EFAW course South Yorkshire, 1 day first aid training, workplace first aid South Yorkshire, EFAW certification'
   }
 
   return <CourseTemplate {...courseData} />

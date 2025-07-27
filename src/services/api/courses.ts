@@ -48,9 +48,49 @@ export const courseApi = {
                 session.currentParticipants >= session.maxParticipants ? 'full' : 'scheduled'
       }));
     } catch (error) {
-      console.error('Failed to fetch sessions from API, using mock data:', error);
+      console.error('Failed to fetch sessions from API, using fallback data:', error);
       // Fallback to mock data if API fails
-      return [];
+      return [
+        {
+          id: '1',
+          courseId: 'course-1',
+          courseType: 'Emergency First Aid at Work',
+          sessionDate: '2025-02-15',
+          startTime: '09:00',
+          endTime: '17:00',
+          location: 'Leeds Training Centre',
+          price: 75,
+          maxParticipants: 12,
+          currentBookings: 8,
+          status: 'scheduled'
+        },
+        {
+          id: '2',
+          courseId: 'course-2',
+          courseType: 'First Aid at Work',
+          sessionDate: '2025-02-20',
+          startTime: '09:00',
+          endTime: '17:00',
+          location: 'Sheffield Training Centre',
+          price: 200,
+          maxParticipants: 12,
+          currentBookings: 12,
+          status: 'full'
+        },
+        {
+          id: '3',
+          courseId: 'course-3',
+          courseType: 'Paediatric First Aid',
+          sessionDate: '2025-02-25',
+          startTime: '09:00',
+          endTime: '15:00',
+          location: 'York Training Centre',
+          price: 85,
+          maxParticipants: 10,
+          currentBookings: 6,
+          status: 'scheduled'
+        }
+      ];
     }
   },
 

@@ -81,7 +81,7 @@ const FAWCoursePage: React.FC = () => {
       'Free parking at all venues'
     ],
     
-    seoKeywords: 'first aid at work course Yorkshire, FAW training Leeds, full day first aid course, workplace first aider training, HSE approved first aid'
+    seoKeywords: 'first aid at work course Yorkshire, FAW training South Yorkshire, full day first aid course, workplace first aider training, HSE approved first aid'
   }
 
   return <CourseTemplate {...courseData} />
