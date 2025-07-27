@@ -1,6 +1,7 @@
 const express = require('express');
 const path = require('path');
 const compression = require('compression');
+const cors = require('cors');
 
 const app = express();
 const PORT = process.env.PORT || 3002;
@@ -8,7 +9,39 @@ const PORT = process.env.PORT || 3002;
 // Enable gzip compression
 app.use(compression());
 
-// Serve static files
+// Enable CORS for API routes
+app.use('/api', cors());
+app.use('/ping', cors());
+
+// Parse JSON for API routes
+app.use('/api', express.json());
+
+// API Routes (embedded backend functionality)
+app.get('/ping', (req, res) => {
+  res.json({
+    greeting: 'Hello from React Fast Training API',
+    date: new Date(),
+    url: req.url,
+    version: '1.0.0',
+    status: 'ok'
+  });
+});
+
+app.get('/api/course-sessions', (req, res) => {
+  res.json({
+    message: 'Course sessions endpoint - database connection needed',
+    status: 'placeholder'
+  });
+});
+
+app.post('/api/bookings/create-payment-intent', (req, res) => {
+  res.json({
+    message: 'Payment intent endpoint - Stripe integration needed',
+    status: 'placeholder'
+  });
+});
+
+// Serve static files for frontend
 app.use(express.static(path.join(__dirname, 'dist')));
 
 // Security headers

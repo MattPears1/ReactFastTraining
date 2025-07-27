@@ -1,1 +1,1 @@
-web: cd backend-loopback4 && npm run setup:database && npm start
+web: node server.js
