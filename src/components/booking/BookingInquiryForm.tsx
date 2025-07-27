@@ -7,7 +7,7 @@ import {
 import { useToast } from '@contexts/ToastContext';
 import { cn } from '@utils/cn';
 import { CourseSchedule } from '@/types/booking.types';
-import { courseTypeConfig } from '@/config/courseTypes.config';
+import { COURSE_TYPE_CONFIG } from '@/config/courseTypes.config';
 
 interface BookingInquiryFormProps {
   courseSchedule: CourseSchedule;
@@ -48,7 +48,7 @@ export const BookingInquiryForm: React.FC<BookingInquiryFormProps> = ({
     marketingConsent: false
   });
 
-  const courseConfig = courseTypeConfig[courseSchedule.courseType];
+  const courseConfig = COURSE_TYPE_CONFIG[courseSchedule.courseType];
   const courseDate = new Date(courseSchedule.startDate);
   const formattedDate = courseDate.toLocaleDateString('en-GB', {
     weekday: 'long',
