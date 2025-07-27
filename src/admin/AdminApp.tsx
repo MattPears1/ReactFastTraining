@@ -23,6 +23,7 @@ import { ScheduleDetailsPage } from './features/schedule/ScheduleDetailsPage';
 import { UsersPage } from './features/users/UsersPage';
 import { SettingsPage } from './features/settings/SettingsPage';
 import { ActivityLogPage } from './features/activity/ActivityLogPage';
+import { AlertsPage } from './features/alerts/AlertsPage';
 
 // Create a separate QueryClient for admin
 const queryClient = new QueryClient({
@@ -82,6 +83,9 @@ export const AdminApp: React.FC = () => {
                       
                       {/* Activity Log */}
                       <Route path="activity" element={<ActivityLogPage />} />
+                      
+                      {/* Admin Alerts */}
+                      <Route path="alerts" element={<AlertsPage />} />
                       
                       {/* Catch all */}
                       <Route path="*" element={<Navigate to="dashboard" replace />} />

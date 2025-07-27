@@ -1,193 +1,92 @@
 import React, { useState } from 'react';
-import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
+import { useQuery } from '@tanstack/react-query';
 import { 
-  Plus, 
   Search, 
-  Filter, 
-  Edit3, 
-  Trash2, 
+  Users, 
+  Phone, 
+  Building, 
+  Calendar, 
+  PoundSterling,
   Mail,
-  Phone,
-  Shield,
-  UserCheck,
-  UserX,
+  MapPin,
+  Activity,
   Download,
-  MoreVertical,
-  User
+  Eye,
+  Filter
 } from 'lucide-react';
-import { LoadingSpinner } from '../../components/common/LoadingSpinner';
+import { format } from 'date-fns';
 import { AdminCard } from '../../components/ui/AdminCard';
-import { AdminTable } from '../../components/ui/AdminTable';
 import { AdminBadge } from '../../components/ui/AdminBadge';
+import { LoadingSpinner } from '../../components/common/LoadingSpinner';
 import { AdminEmptyState } from '../../components/ui/AdminEmptyState';
+import { adminApi } from '../../utils/api';
+import type { User, UserListResponse } from '../../../types/user';
+import { useNavigate } from 'react-router-dom';
 import '../../styles/admin-design-system.css';
 
-interface UserData {
-  id: string;
-  name: string;
-  email: string;
-  phone: string;
-  role: 'admin' | 'instructor' | 'customer';
-  status: 'active' | 'inactive' | 'suspended';
-  totalBookings: number;
-  lastActive: string;
-  createdAt: string;
-  avatar?: string;
-}
-
-const mockUsers: UserData[] = [
-  {
-    id: '1',
-    name: 'Lex Richardson',
-    email: 'lex@reactfasttraining.co.uk',
-    phone: '07123456789',
-    role: 'admin',
-    status: 'active',
-    totalBookings: 0,
-    lastActive: '2025-01-27T10:30:00Z',
-    createdAt: '2025-01-01T00:00:00Z'
-  },
-  {
-    id: '2',
-    name: 'John Smith',
-    email: 'john.smith@example.com',
-    phone: '07987654321',
-    role: 'customer',
-    status: 'active',
-    totalBookings: 3,
-    lastActive: '2025-01-25T14:20:00Z',
-    createdAt: '2025-01-15T09:00:00Z'
-  },
-  {
-    id: '3',
-    name: 'Sarah Johnson',
-    email: 'sarah.j@company.co.uk',
-    phone: '07555123456',
-    role: 'customer',
-    status: 'active',
-    totalBookings: 5,
-    lastActive: '2025-01-26T16:45:00Z',
-    createdAt: '2025-01-10T11:30:00Z'
-  },
-  {
-    id: '4',
-    name: 'Michael Brown',
-    email: 'michael.brown@email.com',
-    phone: '07444987654',
-    role: 'instructor',
-    status: 'active',
-    totalBookings: 0,
-    lastActive: '2025-01-27T08:00:00Z',
-    createdAt: '2025-01-05T10:00:00Z'
-  },
-  {
-    id: '5',
-    name: 'Emma Wilson',
-    email: 'emma.wilson@nursery.com',
-    phone: '07333567890',
-    role: 'customer',
-    status: 'inactive',
-    totalBookings: 1,
-    lastActive: '2025-01-10T12:00:00Z',
-    createdAt: '2025-01-08T14:00:00Z'
-  }
-];
-
 export const UsersPage: React.FC = () => {
+  const navigate = useNavigate();
   const [searchTerm, setSearchTerm] = useState('');
   const [roleFilter, setRoleFilter] = useState<string>('all');
-  const [statusFilter, setStatusFilter] = useState<string>('all');
-  const [showCreateModal, setShowCreateModal] = useState(false);
-  const queryClient = useQueryClient();
-
-  const { data: users, isLoading, error } = useQuery({
-    queryKey: ['admin-users', searchTerm, roleFilter, statusFilter],
+  const [customerTypeFilter, setCustomerTypeFilter] = useState<string>('all');
+  const [hasBookingsFilter, setHasBookingsFilter] = useState<string>('all');
+  const [currentPage, setCurrentPage] = useState(0);
+  const pageSize = 50;
+  
+  const { data, isLoading, error } = useQuery({
+    queryKey: ['admin-users', searchTerm, roleFilter, customerTypeFilter, hasBookingsFilter, currentPage],
     queryFn: async () => {
-      await new Promise(resolve => setTimeout(resolve, 500));
+      const params = new URLSearchParams();
+      if (searchTerm) params.append('search', searchTerm);
+      if (roleFilter !== 'all') params.append('role', roleFilter);
+      if (customerTypeFilter !== 'all') params.append('customerType', customerTypeFilter);
+      if (hasBookingsFilter !== 'all') params.append('hasBookings', hasBookingsFilter);
+      params.append('limit', pageSize.toString());
+      params.append('offset', (currentPage * pageSize).toString());
       
-      let filtered = mockUsers;
-      
-      if (searchTerm) {
-        filtered = filtered.filter(user => 
-          user.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-          user.email.toLowerCase().includes(searchTerm.toLowerCase())
-        );
-      }
-      
-      if (roleFilter !== 'all') {
-        filtered = filtered.filter(user => user.role === roleFilter);
-      }
-      
-      if (statusFilter !== 'all') {
-        filtered = filtered.filter(user => user.status === statusFilter);
-      }
-      
-      return filtered;
+      const response = await adminApi.get(`/api/admin/users?${params}`);
+      if (!response.ok) throw new Error('Failed to fetch users');
+      return response.json() as Promise<UserListResponse>;
     },
+    staleTime: 5 * 60 * 1000,
   });
-
-  const updateStatusMutation = useMutation({
-    mutationFn: async ({ userId, status }: { userId: string; status: string }) => {
-      await new Promise(resolve => setTimeout(resolve, 1000));
-      console.log('Updating user status:', userId, status);
-    },
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['admin-users'] });
-    },
-  });
-
-  const getRoleVariant = (role: string): 'info' | 'success' | 'neutral' => {
+  
+  const getRoleBadgeVariant = (role: string): 'success' | 'warning' | 'error' | 'neutral' => {
     switch (role) {
-      case 'admin':
-        return 'info';
-      case 'instructor':
-        return 'success';
-      case 'customer':
-      default:
-        return 'neutral';
+      case 'admin': return 'error';
+      case 'instructor': return 'warning';
+      default: return 'success';
     }
   };
 
-  const getStatusVariant = (status: string): 'success' | 'warning' | 'danger' => {
-    switch (status) {
-      case 'active':
-        return 'success';
-      case 'inactive':
-        return 'warning';
-      case 'suspended':
-        return 'danger';
-      default:
-        return 'warning';
-    }
+  const formatCurrency = (amount: number | string) => {
+    const numAmount = typeof amount === 'string' ? parseFloat(amount) : amount;
+    return `£${numAmount.toFixed(2)}`;
   };
 
-  const getRoleIcon = (role: string) => {
-    switch (role) {
-      case 'admin':
-        return <Shield className="admin-icon-sm" />;
-      case 'instructor':
-        return <UserCheck className="admin-icon-sm" />;
-      default:
-        return <User className="admin-icon-sm" />;
+  const handleExport = async () => {
+    try {
+      const params = new URLSearchParams();
+      if (roleFilter !== 'all') params.append('role', roleFilter);
+      params.append('format', 'csv');
+      
+      const response = await adminApi.get(`/api/admin/users/export?${params}`);
+      const blob = await response.blob();
+      
+      // Create download link
+      const url = window.URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `users-${format(new Date(), 'yyyy-MM-dd')}.csv`;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      window.URL.revokeObjectURL(url);
+    } catch (error) {
+      console.error('Export failed:', error);
     }
   };
-
-  const formatLastActive = (date: string) => {
-    const now = new Date();
-    const lastActive = new Date(date);
-    const diffInHours = (now.getTime() - lastActive.getTime()) / (1000 * 60 * 60);
-    
-    if (diffInHours < 1) {
-      return 'Just now';
-    } else if (diffInHours < 24) {
-      return `${Math.floor(diffInHours)}h ago`;
-    } else if (diffInHours < 168) {
-      return `${Math.floor(diffInHours / 24)}d ago`;
-    } else {
-      return lastActive.toLocaleDateString();
-    }
-  };
-
+  
   if (isLoading) {
     return (
       <div className="admin-loading-container">
@@ -195,7 +94,7 @@ export const UsersPage: React.FC = () => {
       </div>
     );
   }
-
+  
   if (error) {
     return (
       <AdminCard className="admin-mt-8">
@@ -207,234 +106,297 @@ export const UsersPage: React.FC = () => {
     );
   }
 
+  const totalPages = Math.ceil((data?.total || 0) / pageSize);
+  
   return (
-    <div className="space-y-6">
+    <div className="space-y-6 admin-fade-in">
       {/* Header */}
-      <div className="admin-page-header admin-fade-in">
+      <div className="admin-page-header">
         <div className="sm:flex sm:items-center sm:justify-between">
           <div>
             <h1 className="admin-page-title">User Management</h1>
             <p className="admin-page-subtitle">
-              Manage users, roles, and permissions
+              Manage customers, administrators, and instructors
             </p>
           </div>
-          <div className="mt-4 sm:mt-0 flex gap-3">
-            <button className="admin-btn admin-btn-secondary">
+          <div className="mt-4 sm:mt-0">
+            <button 
+              onClick={handleExport}
+              className="admin-btn admin-btn-secondary"
+            >
               <Download className="admin-icon-sm" />
               Export
-            </button>
-            <button 
-              onClick={() => setShowCreateModal(true)}
-              className="admin-btn admin-btn-primary"
-            >
-              <Plus className="admin-icon-sm" />
-              Add User
             </button>
           </div>
         </div>
       </div>
 
-      {/* Stats Cards */}
+      {/* Summary Stats */}
       <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-        <AdminCard>
-          <div className="flex items-center justify-between">
-            <div>
-              <p className="admin-text-small admin-text-muted">Total Users</p>
-              <p className="text-2xl font-bold text-gray-900 admin-mt-1">
-                {mockUsers.length}
-              </p>
+        <AdminCard className="p-4">
+          <div className="flex items-center">
+            <div className="p-2 bg-blue-100 rounded-lg">
+              <Users className="w-5 h-5 text-blue-600" />
             </div>
-            <div className="text-primary-500">
-              <User className="admin-icon-lg" />
+            <div className="ml-4">
+              <p className="text-sm font-medium text-gray-600">Total Users</p>
+              <p className="text-2xl font-semibold text-gray-900">{data?.total || 0}</p>
             </div>
           </div>
         </AdminCard>
         
-        <AdminCard>
-          <div className="flex items-center justify-between">
-            <div>
-              <p className="admin-text-small admin-text-muted">Active Users</p>
-              <p className="text-2xl font-bold text-gray-900 admin-mt-1">
-                {mockUsers.filter(u => u.status === 'active').length}
-              </p>
+        <AdminCard className="p-4">
+          <div className="flex items-center">
+            <div className="p-2 bg-green-100 rounded-lg">
+              <Activity className="w-5 h-5 text-green-600" />
             </div>
-            <div className="text-green-500">
-              <UserCheck className="admin-icon-lg" />
+            <div className="ml-4">
+              <p className="text-sm font-medium text-gray-600">Active Customers</p>
+              <p className="text-2xl font-semibold text-gray-900">
+                {data?.data.filter(u => u.role === 'customer' && u.totalBookings > 0).length || 0}
+              </p>
             </div>
           </div>
         </AdminCard>
-        
-        <AdminCard>
-          <div className="flex items-center justify-between">
-            <div>
-              <p className="admin-text-small admin-text-muted">Instructors</p>
-              <p className="text-2xl font-bold text-gray-900 admin-mt-1">
-                {mockUsers.filter(u => u.role === 'instructor').length}
-              </p>
+
+        <AdminCard className="p-4">
+          <div className="flex items-center">
+            <div className="p-2 bg-purple-100 rounded-lg">
+              <Building className="w-5 h-5 text-purple-600" />
             </div>
-            <div className="text-secondary-500">
-              <Shield className="admin-icon-lg" />
+            <div className="ml-4">
+              <p className="text-sm font-medium text-gray-600">Corporate</p>
+              <p className="text-2xl font-semibold text-gray-900">
+                {data?.data.filter(u => u.customerType === 'corporate').length || 0}
+              </p>
             </div>
           </div>
         </AdminCard>
-        
-        <AdminCard>
-          <div className="flex items-center justify-between">
-            <div>
-              <p className="admin-text-small admin-text-muted">Customers</p>
-              <p className="text-2xl font-bold text-gray-900 admin-mt-1">
-                {mockUsers.filter(u => u.role === 'customer').length}
-              </p>
+
+        <AdminCard className="p-4">
+          <div className="flex items-center">
+            <div className="p-2 bg-yellow-100 rounded-lg">
+              <Mail className="w-5 h-5 text-yellow-600" />
             </div>
-            <div className="text-accent-500">
-              <User className="admin-icon-lg" />
+            <div className="ml-4">
+              <p className="text-sm font-medium text-gray-600">Subscribed</p>
+              <p className="text-2xl font-semibold text-gray-900">
+                {data?.data.filter(u => u.newsletterSubscribed).length || 0}
+              </p>
             </div>
           </div>
         </AdminCard>
       </div>
-
+      
       {/* Filters */}
       <AdminCard>
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-          <div>
-            <input
-              type="text"
-              value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
-              placeholder="Search users..."
-              className="admin-input"
-            />
+        <div className="grid grid-cols-1 md:grid-cols-5 gap-4">
+          <div className="md:col-span-2">
+            <div className="relative">
+              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4" />
+              <input
+                type="text"
+                value={searchTerm}
+                onChange={(e) => {
+                  setSearchTerm(e.target.value);
+                  setCurrentPage(0);
+                }}
+                placeholder="Search by name, email, phone, or company..."
+                className="admin-input pl-10"
+              />
+            </div>
           </div>
           <div>
             <select
               value={roleFilter}
-              onChange={(e) => setRoleFilter(e.target.value)}
+              onChange={(e) => {
+                setRoleFilter(e.target.value);
+                setCurrentPage(0);
+              }}
               className="admin-select"
             >
               <option value="all">All Roles</option>
-              <option value="admin">Admin</option>
-              <option value="instructor">Instructor</option>
-              <option value="customer">Customer</option>
+              <option value="customer">Customers</option>
+              <option value="admin">Administrators</option>
+              <option value="instructor">Instructors</option>
             </select>
           </div>
           <div>
             <select
-              value={statusFilter}
-              onChange={(e) => setStatusFilter(e.target.value)}
+              value={customerTypeFilter}
+              onChange={(e) => {
+                setCustomerTypeFilter(e.target.value);
+                setCurrentPage(0);
+              }}
               className="admin-select"
             >
-              <option value="all">All Status</option>
-              <option value="active">Active</option>
-              <option value="inactive">Inactive</option>
-              <option value="suspended">Suspended</option>
+              <option value="all">All Types</option>
+              <option value="individual">Individual</option>
+              <option value="corporate">Corporate</option>
             </select>
           </div>
-          <div className="flex justify-end">
-            <button className="admin-btn admin-btn-secondary">
-              <Filter className="admin-icon-sm" />
-              More Filters
-            </button>
+          <div>
+            <select
+              value={hasBookingsFilter}
+              onChange={(e) => {
+                setHasBookingsFilter(e.target.value);
+                setCurrentPage(0);
+              }}
+              className="admin-select"
+            >
+              <option value="all">All Users</option>
+              <option value="true">With Bookings</option>
+              <option value="false">No Bookings</option>
+            </select>
           </div>
         </div>
       </AdminCard>
-
+      
       {/* Users Table */}
-      <AdminTable
-        columns={[
-          {
-            key: 'user',
-            header: 'User',
-            render: (user: UserData) => (
-              <div className="flex items-center">
-                <div className="h-10 w-10 rounded-full bg-primary-100 flex items-center justify-center text-primary-700 font-medium">
-                  {user.name.split(' ').map(n => n[0]).join('').toUpperCase()}
-                </div>
-                <div className="ml-3">
-                  <div className="font-medium text-gray-900">{user.name}</div>
-                  <div className="admin-text-small admin-text-muted">{user.email}</div>
-                </div>
+      <AdminCard>
+        <div className="overflow-x-auto">
+          <table className="min-w-full divide-y divide-gray-200">
+            <thead className="bg-gray-50">
+              <tr>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  User
+                </th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  Contact
+                </th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  Role
+                </th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  Activity
+                </th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  Lifetime Value
+                </th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  Actions
+                </th>
+              </tr>
+            </thead>
+            <tbody className="bg-white divide-y divide-gray-200">
+              {data?.data.map((user) => (
+                <tr key={user.id} className="hover:bg-gray-50">
+                  <td className="px-6 py-4 whitespace-nowrap">
+                    <div>
+                      <div className="text-sm font-medium text-gray-900">
+                        {user.name}
+                      </div>
+                      <div className="text-sm text-gray-500">
+                        {user.email}
+                      </div>
+                      {user.companyName && (
+                        <div className="text-sm text-gray-500 flex items-center mt-1">
+                          <Building className="w-3 h-3 mr-1" />
+                          {user.companyName}
+                        </div>
+                      )}
+                    </div>
+                  </td>
+                  <td className="px-6 py-4 whitespace-nowrap">
+                    <div className="space-y-1">
+                      {user.phone && (
+                        <div className="text-sm text-gray-900 flex items-center">
+                          <Phone className="w-3 h-3 mr-1 text-gray-400" />
+                          {user.phone}
+                        </div>
+                      )}
+                      {user.city && (
+                        <div className="text-sm text-gray-500 flex items-center">
+                          <MapPin className="w-3 h-3 mr-1 text-gray-400" />
+                          {user.city}{user.postcode && `, ${user.postcode}`}
+                        </div>
+                      )}
+                    </div>
+                  </td>
+                  <td className="px-6 py-4 whitespace-nowrap">
+                    <AdminBadge variant={getRoleBadgeVariant(user.role)}>
+                      {user.role}
+                    </AdminBadge>
+                  </td>
+                  <td className="px-6 py-4 whitespace-nowrap">
+                    <div className="text-sm">
+                      <div className="text-gray-900 font-medium">
+                        {user.totalBookings} booking{user.totalBookings !== 1 ? 's' : ''}
+                      </div>
+                      {user.lastBookingDate && (
+                        <div className="text-gray-500 text-xs">
+                          Last: {format(new Date(user.lastBookingDate), 'dd MMM yyyy')}
+                        </div>
+                      )}
+                    </div>
+                  </td>
+                  <td className="px-6 py-4 whitespace-nowrap">
+                    <div className="text-sm">
+                      <div className="font-medium text-gray-900">
+                        {formatCurrency(user.totalSpent)}
+                      </div>
+                      {user.customerSince && (
+                        <div className="text-gray-500 text-xs">
+                          Since {format(new Date(user.customerSince), 'MMM yyyy')}
+                        </div>
+                      )}
+                    </div>
+                  </td>
+                  <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+                    <button
+                      onClick={() => navigate(`/admin/users/${user.id}`)}
+                      className="inline-flex items-center px-3 py-1.5 border border-blue-500 rounded-md text-blue-600 bg-blue-50 hover:bg-blue-100 transition-all duration-150"
+                    >
+                      <Eye className="w-4 h-4 mr-1" />
+                      View
+                    </button>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+
+        {/* Empty state */}
+        {data?.data.length === 0 && (
+          <AdminEmptyState
+            icon={Users}
+            title="No users found"
+            description={
+              searchTerm || roleFilter !== 'all' || customerTypeFilter !== 'all' || hasBookingsFilter !== 'all'
+                ? 'Try adjusting your filters' 
+                : 'Users will appear here as customers book courses'
+            }
+          />
+        )}
+
+        {/* Pagination */}
+        {totalPages > 1 && (
+          <div className="px-6 py-4 border-t border-gray-200">
+            <div className="flex items-center justify-between">
+              <div className="text-sm text-gray-700">
+                Showing {currentPage * pageSize + 1} to {Math.min((currentPage + 1) * pageSize, data?.total || 0)} of {data?.total || 0} users
               </div>
-            ),
-          },
-          {
-            key: 'contact',
-            header: 'Contact',
-            render: (user: UserData) => (
-              <div>
-                <div className="flex items-center admin-text-small">
-                  <Mail className="admin-icon-sm mr-1.5 text-gray-400" />
-                  {user.email}
-                </div>
-                <div className="flex items-center admin-text-small admin-text-muted admin-mt-1">
-                  <Phone className="admin-icon-sm mr-1.5 text-gray-400" />
-                  {user.phone}
-                </div>
-              </div>
-            ),
-          },
-          {
-            key: 'role',
-            header: 'Role',
-            render: (user: UserData) => (
-              <AdminBadge variant={getRoleVariant(user.role)} icon={() => getRoleIcon(user.role)}>
-                {user.role}
-              </AdminBadge>
-            ),
-          },
-          {
-            key: 'status',
-            header: 'Status',
-            render: (user: UserData) => (
-              <AdminBadge variant={getStatusVariant(user.status)}>
-                {user.status}
-              </AdminBadge>
-            ),
-          },
-          {
-            key: 'activity',
-            header: 'Activity',
-            render: (user: UserData) => (
-              <div className="admin-text-small">
-                <div className="text-gray-900">
-                  {user.totalBookings} bookings
-                </div>
-                <div className="admin-text-muted">
-                  Active {formatLastActive(user.lastActive)}
-                </div>
-              </div>
-            ),
-          },
-          {
-            key: 'joined',
-            header: 'Joined',
-            render: (user: UserData) => (
-              <div className="admin-text-small text-gray-600">
-                {new Date(user.createdAt).toLocaleDateString()}
-              </div>
-            ),
-          },
-          {
-            key: 'actions',
-            header: 'Actions',
-            align: 'right',
-            render: (user: UserData) => (
-              <div className="flex justify-end gap-1">
-                <button className="admin-btn admin-btn-secondary p-2" title="Edit">
-                  <Edit3 className="admin-icon-sm" />
+              <div className="flex gap-2">
+                <button
+                  onClick={() => setCurrentPage(Math.max(0, currentPage - 1))}
+                  disabled={currentPage === 0}
+                  className="admin-btn admin-btn-secondary disabled:opacity-50 disabled:cursor-not-allowed"
+                >
+                  Previous
                 </button>
-                <button className="admin-btn admin-btn-secondary p-2" title="More options">
-                  <MoreVertical className="admin-icon-sm" />
+                <button
+                  onClick={() => setCurrentPage(Math.min(totalPages - 1, currentPage + 1))}
+                  disabled={currentPage === totalPages - 1}
+                  className="admin-btn admin-btn-secondary disabled:opacity-50 disabled:cursor-not-allowed"
+                >
+                  Next
                 </button>
               </div>
-            ),
-          },
-        ]}
-        data={users || []}
-        keyExtractor={(user) => user.id}
-        loading={false}
-        emptyMessage="No users found"
-        emptyIcon={<User className="w-12 h-12" />}
-      />
+            </div>
+          </div>
+        )}
+      </AdminCard>
     </div>
   );
 };

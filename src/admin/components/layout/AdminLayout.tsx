@@ -11,7 +11,8 @@ import {
   X,
   LogOut,
   ChevronDown,
-  Activity
+  Activity,
+  AlertTriangle
 } from 'lucide-react';
 import { cn } from '@/utils/cn';
 import { useAdminAuth } from '../../contexts/AdminAuthContext';
@@ -59,6 +60,11 @@ const navigationItems: NavItem[] = [
     label: 'Activity Log',
     href: '/admin/activity',
     icon: Activity,
+  },
+  {
+    label: 'Alerts',
+    href: '/admin/alerts',
+    icon: AlertTriangle,
   },
   {
     label: 'Settings',

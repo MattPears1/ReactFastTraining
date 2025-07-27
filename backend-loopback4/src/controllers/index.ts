@@ -8,3 +8,8 @@ export * from './ping.controller';
 export * from './calendar.controller';
 export * from './payment-guest.controller';
 export * from './admin/auth-admin.controller';
+export * from './admin/users.controller';
+export * from './admin/payments.controller';
+export * from './admin/dashboard.controller';
+export * from './stripe-webhook.controller';
+export * from './test-availability.controller';

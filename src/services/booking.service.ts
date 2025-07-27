@@ -25,6 +25,7 @@ interface ConfirmBookingWithPaymentData extends BookingFormData {
 
 class BookingService {
   private mockSchedules: CourseSchedule[] = [];
+  private apiUrl = import.meta.env.VITE_API_URL || 'http://localhost:3000';
   
   constructor() {
     this.mockSchedules = generateMockSchedules();
@@ -34,45 +35,88 @@ class BookingService {
     console.log('=== BOOKING SERVICE: Get Available Courses ===');
     console.log('Parameters:', params);
     
-    // Simulate API delay
-    await new Promise(resolve => setTimeout(resolve, 300));
+    try {
+      // Try to fetch from the real API first
+      const response = await fetch(`${this.apiUrl}/api/courses/sessions/available`);
+      
+      if (response.ok) {
+        const sessions = await response.json();
+        console.log('Fetched sessions from API:', sessions.length);
+        
+        // Transform API response to match CourseSchedule interface
+        const schedules: CourseSchedule[] = sessions.map((session: any) => ({
+          id: session.id,
+          courseType: session.courseType || 'EFAW', // Default if not provided
+          courseDetails: {
+            courseId: session.courseId,
+            title: session.courseName,
+            description: session.courseDescription || '',
+            duration: '6 hours',
+            certificateValidity: '3 years',
+            accreditation: 'HSE'
+          },
+          courseName: session.courseName,
+          startDate: session.startDatetime,
+          endDate: session.endDatetime,
+          startTime: new Date(session.startDatetime).toTimeString().slice(0, 5),
+          endTime: new Date(session.endDatetime).toTimeString().slice(0, 5),
+          venue: session.venueCode || 'LEEDS_CITY',
+          venueName: session.venueName || 'Leeds City Centre',
+          venueAddress: session.venueAddress || '',
+          instructor: session.instructorId || 1,
+          instructorName: session.instructorName || 'Lex',
+          instructorTitle: 'Senior First Aid Trainer',
+          maxParticipants: session.maxCapacity,
+          availableSpots: session.availableSpots,
+          pricePerPerson: parseFloat(session.price),
+          groupDiscountAvailable: true,
+          isFull: session.isFull || session.availableSpots === 0,
+          status: session.status
+        }));
+        
+        // Apply client-side filters
+        let filteredSchedules = schedules;
+        
+        if (params.courseType) {
+          filteredSchedules = filteredSchedules.filter(s => s.courseType === params.courseType);
+        }
+        
+        if (params.venue) {
+          filteredSchedules = filteredSchedules.filter(s => s.venue === params.venue);
+        }
+        
+        if (!params.showFullCourses) {
+          filteredSchedules = filteredSchedules.filter(s => s.availableSpots > 0);
+        }
+        
+        return filteredSchedules;
+      }
+    } catch (error) {
+      console.error('Failed to fetch from API, falling back to mock data:', error);
+    }
     
+    // Fallback to mock data if API fails
     let schedules = [...this.mockSchedules];
-    console.log('Total mock schedules:', schedules.length);
+    console.log('Using mock schedules:', schedules.length);
     
     // Filter by course type
     if (params.courseType) {
       schedules = schedules.filter(s => s.courseType === params.courseType);
-      console.log(`After course type filter (${params.courseType}):`, schedules.length);
     }
     
     // Filter by venue
     if (params.venue) {
       schedules = schedules.filter(s => s.venue === params.venue);
-      console.log(`After venue filter (${params.venue}):`, schedules.length);
-    }
-    
-    // Filter by date range
-    if (params.dateFrom) {
-      schedules = schedules.filter(s => new Date(s.startDate) >= params.dateFrom!);
-      console.log(`After dateFrom filter:`, schedules.length);
-    }
-    
-    if (params.dateTo) {
-      schedules = schedules.filter(s => new Date(s.startDate) <= params.dateTo!);
-      console.log(`After dateTo filter:`, schedules.length);
     }
     
     // Filter out full courses unless specified
     if (!params.showFullCourses) {
       schedules = schedules.filter(s => s.availableSpots > 0);
-      console.log('After availability filter:', schedules.length);
     }
     
     // Sort by date
     schedules.sort((a, b) => new Date(a.startDate).getTime() - new Date(b.startDate).getTime());
     
-    console.log('Final schedules returned:', schedules.length);
     return schedules;
   }
   
@@ -80,14 +124,60 @@ class BookingService {
     console.log('=== BOOKING SERVICE: Get Course Schedule ===');
     console.log('Schedule ID:', id);
     
+    try {
+      // Try to fetch from the real API first
+      const response = await fetch(`${this.apiUrl}/api/courses/sessions/${id}/availability`);
+      
+      if (response.ok) {
+        const data = await response.json();
+        console.log('Fetched session from API:', data);
+        
+        // Get additional session details if needed
+        const sessionResponse = await fetch(`${this.apiUrl}/api/courses/sessions/${id}`);
+        const sessionData = sessionResponse.ok ? await sessionResponse.json() : {};
+        
+        // Transform API response to match CourseSchedule interface
+        const schedule: CourseSchedule = {
+          id: data.sessionId,
+          courseType: sessionData.courseType || 'EFAW',
+          courseDetails: {
+            courseId: sessionData.courseId || 1,
+            title: sessionData.courseName || 'Emergency First Aid at Work',
+            description: sessionData.courseDescription || '',
+            duration: '6 hours',
+            certificateValidity: '3 years',
+            accreditation: 'HSE'
+          },
+          courseName: sessionData.courseName || 'Emergency First Aid at Work',
+          startDate: sessionData.startDatetime || new Date().toISOString(),
+          endDate: sessionData.endDatetime || new Date().toISOString(),
+          startTime: sessionData.startDatetime ? new Date(sessionData.startDatetime).toTimeString().slice(0, 5) : '09:00',
+          endTime: sessionData.endDatetime ? new Date(sessionData.endDatetime).toTimeString().slice(0, 5) : '16:00',
+          venue: sessionData.venueCode || 'LEEDS_CITY',
+          venueName: sessionData.venueName || 'Leeds City Centre',
+          venueAddress: sessionData.venueAddress || '',
+          instructor: sessionData.instructorId || 1,
+          instructorName: sessionData.instructorName || 'Lex',
+          instructorTitle: 'Senior First Aid Trainer',
+          maxParticipants: data.maxCapacity,
+          availableSpots: data.availableSpots,
+          pricePerPerson: data.price,
+          groupDiscountAvailable: true,
+          isFull: data.isFull,
+          status: data.status
+        };
+        
+        return schedule;
+      }
+    } catch (error) {
+      console.error('Failed to fetch from API, falling back to mock data:', error);
+    }
+    
+    // Fallback to mock data
     await new Promise(resolve => setTimeout(resolve, 200));
     const schedule = this.mockSchedules.find(s => s.id === id) || null;
     
-    console.log('Schedule found:', !!schedule);
-    if (schedule) {
-      console.log('Schedule details:', schedule);
-    }
-    
+    console.log('Schedule found in mock data:', !!schedule);
     return schedule;
   }
   

@@ -24,6 +24,8 @@ import {authorize} from '@loopback/authorization';
 import {Booking, Certificate} from '../models';
 import {BookingRepository} from '../repositories';
 import {BookingService, CreateBookingData} from '../services';
+import {BookingServiceEnhanced, CreateBookingData as CreateBookingDataEnhanced} from '../services/booking-service-enhanced';
+import {BookingValidationService} from '../services/booking-validation.service';
 
 export class BookingController {
   constructor(
@@ -31,6 +33,10 @@ export class BookingController {
     public bookingRepository: BookingRepository,
     @inject('services.BookingService')
     private bookingService: BookingService,
+    @inject('services.BookingServiceEnhanced')
+    private bookingServiceEnhanced: BookingServiceEnhanced,
+    @inject('services.BookingValidationService')
+    private validationService: BookingValidationService,
   ) {}
 
   @post('/bookings')
@@ -44,13 +50,12 @@ export class BookingController {
         'application/json': {
           schema: {
             type: 'object',
-            required: ['sessionId', 'type', 'contactDetails', 'participants', 'confirmedTermsAndConditions'],
+            required: ['courseScheduleId', 'contactDetails', 'participants', 'numberOfParticipants', 'totalAmount', 'paymentMethod', 'confirmedTermsAndConditions'],
             properties: {
-              sessionId: {type: 'string'},
-              type: {type: 'string', enum: ['INDIVIDUAL', 'GROUP', 'CORPORATE']},
+              courseScheduleId: {type: 'number'},
               contactDetails: {
                 type: 'object',
-                required: ['firstName', 'lastName', 'email', 'phone'],
+                required: ['firstName', 'lastName', 'email'],
                 properties: {
                   firstName: {type: 'string'},
                   lastName: {type: 'string'},
@@ -63,7 +68,7 @@ export class BookingController {
                 type: 'array',
                 items: {
                   type: 'object',
-                  required: ['firstName', 'lastName', 'email', 'dateOfBirth'],
+                  required: ['firstName', 'lastName', 'email'],
                   properties: {
                     firstName: {type: 'string'},
                     lastName: {type: 'string'},
@@ -82,18 +87,10 @@ export class BookingController {
                   },
                 },
               },
-              paymentMethod: {type: 'string', enum: ['CARD', 'BANK_TRANSFER', 'INVOICE']},
-              invoiceDetails: {
-                type: 'object',
-                properties: {
-                  companyName: {type: 'string'},
-                  addressLine1: {type: 'string'},
-                  addressLine2: {type: 'string'},
-                  city: {type: 'string'},
-                  postcode: {type: 'string'},
-                  vatNumber: {type: 'string'},
-                },
-              },
+              numberOfParticipants: {type: 'number'},
+              totalAmount: {type: 'number'},
+              paymentMethod: {type: 'string'},
+              stripePaymentIntentId: {type: 'string'},
               specialRequirements: {type: 'string'},
               confirmedTermsAndConditions: {type: 'boolean'},
             },
@@ -101,12 +98,31 @@ export class BookingController {
         },
       },
     })
-    bookingData: CreateBookingData,
-  ): Promise<Booking> {
+    bookingData: CreateBookingDataEnhanced,
+  ): Promise<any> {
     if (!bookingData.confirmedTermsAndConditions) {
       throw new HttpErrors.BadRequest('Terms and conditions must be accepted');
     }
-    return this.bookingService.createBooking(bookingData);
+    
+    // Use the enhanced booking service with validation
+    const result = await this.bookingServiceEnhanced.createBooking(bookingData);
+    
+    // Convert the enhanced result to match the expected Booking model format
+    return {
+      id: result.booking.id.toString(),
+      bookingReference: result.booking.bookingReference,
+      sessionId: result.booking.courseScheduleId.toString(),
+      contactDetails: result.booking.contactDetails,
+      participants: result.booking.participants,
+      numberOfParticipants: result.booking.numberOfParticipants,
+      totalAmount: result.booking.totalAmount,
+      status: result.booking.status,
+      paymentStatus: result.booking.paymentStatus,
+      specialRequirements: result.booking.specialRequirements,
+      createdAt: result.booking.createdAt,
+      validationWarnings: result.validationWarnings,
+      user: result.user,
+    };
   }
 
   @get('/bookings/count')
