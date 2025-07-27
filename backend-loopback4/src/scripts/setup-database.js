@@ -19,12 +19,12 @@ console.log(`Working directory: ${process.cwd()}`);
 try {
   // Run migrations
   console.log('📦 Running database migrations...');
-  execSync('npx knex migrate:latest', { stdio: 'inherit' });
+  execSync('npm run migrate:latest', { stdio: 'inherit' });
   console.log('✅ Migrations completed successfully!\n');
 
   // Run seeds
   console.log('🌱 Seeding database with admin user...');
-  execSync('npx knex seed:run', { stdio: 'inherit' });
+  execSync('npm run seed:run', { stdio: 'inherit' });
   console.log('✅ Database seeded successfully!\n');
 
   console.log('🎉 Database setup complete!');
