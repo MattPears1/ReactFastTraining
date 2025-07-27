@@ -11,7 +11,7 @@
     "dev:host": "vite --host",
     "dev:network": "vite --host 0.0.0.0",
     "start:network": "./scripts/start-network.sh",
-    "start": "node server.js",
+    "start": "cd backend-loopback4 && node start-server.js",
     "version:bump": "node scripts/bump-version.js",
     "version:inject": "node scripts/inject-version.js",
     "prebuild": "npm run version:inject",

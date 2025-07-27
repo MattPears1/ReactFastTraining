@@ -1,5 +1,6 @@
 require('dotenv').config();
 const express = require('express');
+const path = require('path');
 const cors = require('cors');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
@@ -991,6 +992,32 @@ app.post('/api/bookings/confirm-with-payment', async (req, res) => {
 // Health check
 app.get('/ping', (req, res) => {
   res.json({ message: 'pong' });
+});
+
+// Serve static files from the built frontend
+console.log('📁 Setting up static file serving...');
+const staticPath = path.join(__dirname, '..', 'dist');
+console.log('📁 Static files path:', staticPath);
+app.use(express.static(staticPath));
+
+// Security headers for production
+app.use((req, res, next) => {
+  res.setHeader('X-Frame-Options', 'DENY');
+  res.setHeader('X-Content-Type-Options', 'nosniff');
+  res.setHeader('X-XSS-Protection', '1; mode=block');
+  res.setHeader('Referrer-Policy', 'strict-origin-when-cross-origin');
+  next();
+});
+
+// Handle React routing - serve index.html for all non-API routes
+app.get('*', (req, res) => {
+  // Don't serve index.html for API routes
+  if (req.path.startsWith('/api') || req.path.startsWith('/course-sessions') || req.path.startsWith('/ping')) {
+    return res.status(404).json({ error: 'API endpoint not found' });
+  }
+  
+  console.log('📄 Serving React app for route:', req.path);
+  res.sendFile(path.join(staticPath, 'index.html'));
 });
 
 // Start server

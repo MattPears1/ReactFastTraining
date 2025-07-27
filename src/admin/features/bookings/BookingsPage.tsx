@@ -324,33 +324,36 @@ export const BookingsPage: React.FC = () => {
                         </div>
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                        <div className="flex gap-1">
+                        <div className="flex gap-2">
                           <button 
                             onClick={() => {
                               setSelectedBooking(booking);
                               setShowDetailsModal(true);
                             }}
-                            className="admin-btn admin-btn-secondary p-2" 
+                            className="inline-flex items-center justify-center px-3 py-2 border border-blue-500 rounded-md text-blue-600 bg-blue-50 hover:bg-blue-100 hover:border-blue-600 hover:text-blue-700 transition-all duration-150" 
                             title="View Details"
                           >
-                            <Eye className="admin-icon-sm" />
+                            <Eye className="w-4 h-4 mr-1.5" />
+                            <span className="text-sm font-medium">View</span>
                           </button>
                           <button 
                             onClick={() => {
                               setSelectedBooking(booking);
                               setShowDetailsModal(true);
                             }}
-                            className="admin-btn admin-btn-secondary p-2" 
+                            className="inline-flex items-center justify-center px-3 py-2 border border-green-500 rounded-md text-green-600 bg-green-50 hover:bg-green-100 hover:border-green-600 hover:text-green-700 transition-all duration-150" 
                             title="Email Customer"
                           >
-                            <Mail className="admin-icon-sm" />
+                            <Mail className="w-4 h-4 mr-1.5" />
+                            <span className="text-sm font-medium">Email</span>
                           </button>
                           <button 
                             onClick={() => handleDelete(booking.id)}
-                            className="admin-btn admin-btn-secondary p-2 hover:bg-red-50 hover:text-red-600 hover:border-red-300"
-                            title="Delete"
+                            className="inline-flex items-center justify-center px-3 py-2 border border-red-500 rounded-md text-red-600 bg-red-50 hover:bg-red-100 hover:border-red-600 hover:text-red-700 transition-all duration-150"
+                            title="Delete Booking"
                           >
-                            <Trash2 className="admin-icon-sm" />
+                            <Trash2 className="w-4 h-4 mr-1.5" />
+                            <span className="text-sm font-medium">Delete</span>
                           </button>
                         </div>
                       </td>
