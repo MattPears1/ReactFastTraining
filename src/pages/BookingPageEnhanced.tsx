@@ -2,19 +2,19 @@ import React, { useState, useEffect } from 'react';
 import { useSearchParams, useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { ChevronLeft, BookOpen, Shield, Clock, Award } from 'lucide-react';
-import { CourseAvailabilityEnhanced } from '@components/booking/CourseAvailabilityEnhanced';
-import { BookingFormEnhanced } from '@components/booking/BookingFormEnhanced';
+import { CourseAvailability } from '@components/booking/CourseAvailability';
+import { BookingFormWithPayment } from '@components/booking/BookingFormWithPayment';
+import { BookingInquiryForm } from '@components/booking/BookingInquiryForm';
 import { BookingConfirmation } from '@components/booking/BookingConfirmation';
-import { BookingSteps, BookingStep } from '@components/booking/shared/BookingSteps';
-import { PricingSummary } from '@components/booking/shared/PricingSummary';
-import { BookingTestimonial } from '@components/booking/shared/BookingTestimonial';
-import { BookingFAQ } from '@components/booking/shared/BookingFAQ';
+import { BookingOptionsModal } from '@components/booking/BookingOptionsModal';
 import SEO from '@components/common/SEO';
 import { cn } from '@utils/cn';
 import { CourseSchedule, BookingStatus } from '@/types/booking.types';
 import { COURSE_TYPE_CONFIG } from '@/config/courseTypes.config';
 import { VENUE_CONFIG } from '@/config/venues.config';
 import { useToast } from '@contexts/ToastContext';
+
+type BookingStep = 'select-course' | 'details' | 'confirmation' | 'inquiry' | 'inquiry-sent';
 
 interface BookingDetails {
   confirmationCode: string;
@@ -41,10 +41,22 @@ const BookingPageEnhanced: React.FC = () => {
   const [selectedSchedule, setSelectedSchedule] = useState<CourseSchedule | null>(null);
   const [bookingDetails, setBookingDetails] = useState<BookingDetails | null>(null);
   const [completedSteps, setCompletedSteps] = useState<BookingStep[]>([]);
+  const [showOptionsModal, setShowOptionsModal] = useState(false);
   
   const handleCourseSelect = (schedule: CourseSchedule) => {
     setSelectedSchedule(schedule);
+    setShowOptionsModal(true);
+  };
+  
+  const handleSelectDirectBooking = () => {
+    setShowOptionsModal(false);
     setCurrentStep('details');
+    setCompletedSteps(['select-course']);
+  };
+  
+  const handleSelectInquiry = () => {
+    setShowOptionsModal(false);
+    setCurrentStep('inquiry');
     setCompletedSteps(['select-course']);
   };
   
@@ -68,10 +80,8 @@ const BookingPageEnhanced: React.FC = () => {
     setCompletedSteps(['select-course', 'details', 'payment']);
   };
   
-  const handleStepClick = (step: BookingStep) => {
-    if (step === 'select-course' || completedSteps.includes(step)) {
-      setCurrentStep(step);
-    }
+  const handleInquirySuccess = () => {
+    setCurrentStep('inquiry-sent');
   };
   
   const handleBack = () => {
@@ -146,12 +156,33 @@ const BookingPageEnhanced: React.FC = () => {
                 ))}
               </div>
               
-              {/* Progress Steps */}
-              <BookingSteps
-                currentStep={currentStep}
-                onStepClick={handleStepClick}
-                completedSteps={completedSteps}
-              />
+              {/* Progress Steps - Only show for booking flow, not inquiry */}
+              {currentStep !== 'inquiry' && currentStep !== 'inquiry-sent' && (
+                <div className="flex items-center justify-between relative">
+                  <div className="absolute left-0 right-0 top-1/2 -translate-y-1/2 h-0.5 bg-gray-200 dark:bg-gray-700" />
+                  
+                  {(['select-course', 'details', 'confirmation'] as BookingStep[]).map((step, index) => {
+                    const isActive = currentStep === step;
+                    const isCompleted = 
+                      (step === 'select-course' && (currentStep === 'details' || currentStep === 'confirmation')) ||
+                      (step === 'details' && currentStep === 'confirmation');
+                    
+                    return (
+                      <div
+                        key={step}
+                        className={cn(
+                          "relative z-10 flex items-center justify-center w-10 h-10 rounded-full text-sm font-medium transition-all",
+                          isActive && "bg-primary-600 text-white scale-110",
+                          isCompleted && "bg-green-500 text-white",
+                          !isActive && !isCompleted && "bg-gray-200 dark:bg-gray-700 text-gray-500 dark:text-gray-400"
+                        )}
+                      >
+                        {isCompleted ? '✓' : index + 1}
+                      </div>
+                    );
+                  })}
+                </div>
+              )}
             </div>
           </div>
         </div>
@@ -175,12 +206,9 @@ const BookingPageEnhanced: React.FC = () => {
                         Choose from our available training dates across Yorkshire
                       </p>
                       
-                      <CourseAvailabilityEnhanced
-                        courseType={courseTypeParam || undefined}
-                        venue={venueParam || undefined}
-                        onSelectCourse={(schedule) => {
-                          handleCourseSelect(schedule as CourseSchedule);
-                        }}
+                      <CourseAvailability
+                        courseType={courseTypeParam as any || undefined}
+                        onSelectCourse={handleCourseSelect}
                         selectedScheduleId={selectedSchedule?.id}
                       />
                     </motion.div>
@@ -198,7 +226,7 @@ const BookingPageEnhanced: React.FC = () => {
                         Please provide your contact information and participant details
                       </p>
                       
-                      <BookingFormEnhanced
+                      <BookingFormWithPayment
                         courseSchedule={selectedSchedule}
                         onSuccess={handleBookingSuccess}
                         onCancel={() => setCurrentStep('select-course')}
@@ -206,17 +234,84 @@ const BookingPageEnhanced: React.FC = () => {
                     </motion.div>
                   )}
                   
-                  {currentStep === 'payment' && (
+                  {currentStep === 'inquiry' && selectedSchedule && (
                     <motion.div
-                      key="payment"
+                      key="inquiry"
                       initial={{ opacity: 0, x: 20 }}
                       animate={{ opacity: 1, x: 0 }}
                       exit={{ opacity: 0, x: -20 }}
                     >
-                      <h1 className="text-3xl font-bold mb-6">Payment</h1>
-                      <p className="text-gray-600 dark:text-gray-400">
-                        Payment integration coming soon...
+                      <h1 className="text-3xl font-bold mb-2">Course Inquiry</h1>
+                      <p className="text-gray-600 dark:text-gray-400 mb-6">
+                        Send us your questions and reserve your spot for 24 hours
                       </p>
+                      
+                      <BookingInquiryForm
+                        courseSchedule={selectedSchedule}
+                        onSuccess={handleInquirySuccess}
+                        onCancel={() => setCurrentStep('select-course')}
+                      />
+                    </motion.div>
+                  )}
+                  
+                  {currentStep === 'inquiry-sent' && (
+                    <motion.div
+                      key="inquiry-sent"
+                      initial={{ opacity: 0, y: 20 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      className="text-center py-12"
+                    >
+                      <div className="max-w-2xl mx-auto">
+                        <div className="mb-8">
+                          <div className="w-20 h-20 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-6">
+                            <svg className="w-10 h-10 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                            </svg>
+                          </div>
+                          <h2 className="text-3xl font-bold text-gray-900 mb-4">Inquiry Sent Successfully!</h2>
+                          <p className="text-lg text-gray-600 mb-6">
+                            Thank you for your interest. Your spot has been reserved for 24 hours and we'll respond within that time.
+                          </p>
+                          <div className="bg-blue-50 border border-blue-200 rounded-lg p-6 text-left">
+                            <h3 className="font-semibold text-blue-900 mb-3">What happens next?</h3>
+                            <ul className="space-y-2 text-blue-800">
+                              <li className="flex items-start">
+                                <span className="text-blue-600 mr-2">1.</span>
+                                Your spot is now reserved for 24 hours
+                              </li>
+                              <li className="flex items-start">
+                                <span className="text-blue-600 mr-2">2.</span>
+                                Our instructor will review your inquiry and answer any questions
+                              </li>
+                              <li className="flex items-start">
+                                <span className="text-blue-600 mr-2">3.</span>
+                                You'll receive an email with a booking link to complete your reservation
+                              </li>
+                              <li className="flex items-start">
+                                <span className="text-blue-600 mr-2">4.</span>
+                                Complete payment to confirm your place on the course
+                              </li>
+                            </ul>
+                          </div>
+                          <p className="text-sm text-gray-600 mt-6">
+                            Check your email for a confirmation of your inquiry. If you don't see it, please check your spam folder.
+                          </p>
+                        </div>
+                        <div className="flex gap-4 justify-center">
+                          <button
+                            onClick={() => navigate('/')}
+                            className="px-6 py-3 bg-primary-600 text-white rounded-lg font-medium hover:bg-primary-700 transition-colors"
+                          >
+                            Return to Homepage
+                          </button>
+                          <button
+                            onClick={() => setCurrentStep('select-course')}
+                            className="px-6 py-3 border border-gray-300 rounded-lg font-medium text-gray-700 hover:bg-gray-50 transition-colors"
+                          >
+                            Browse More Courses
+                          </button>
+                        </div>
+                      </div>
                     </motion.div>
                   )}
                   
@@ -341,16 +436,20 @@ const BookingPageEnhanced: React.FC = () => {
               </div>
             </div>
             
-            {/* Testimonials and FAQ Section */}
-            {currentStep === 'select-course' && (
-              <div className="mt-12 space-y-8">
-                <BookingTestimonial />
-                <BookingFAQ />
-              </div>
-            )}
           </div>
         </div>
       </div>
+      
+      {/* Booking Options Modal */}
+      {selectedSchedule && (
+        <BookingOptionsModal
+          isOpen={showOptionsModal}
+          onClose={() => setShowOptionsModal(false)}
+          courseSchedule={selectedSchedule}
+          onSelectDirectBooking={handleSelectDirectBooking}
+          onSelectInquiry={handleSelectInquiry}
+        />
+      )}
     </>
   );
 };

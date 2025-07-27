@@ -4,34 +4,39 @@ import CourseTemplate from '@components/templates/CourseTemplate'
 const PaediatricRequalificationPage: React.FC = () => {
   return (
     <CourseTemplate
-      title="Paediatric First Aid Requalification"
-      subtitle="Refresh your paediatric first aid certification"
+      courseName="Paediatric First Aid Requalification"
+      courseAcronym="PFAR"
       duration="Half Day (4 hours)"
       price="£90"
-      certification="3 Years"
+      certificateValidity="3 Years"
       description="Maintain your paediatric first aid qualification with this comprehensive requalification course. Designed for those whose certificate is nearing expiry, this course refreshes all essential skills for providing first aid to infants and children."
-      highlights={[
+      learningOutcomes={[
         'Update your paediatric first aid skills',
         'Maintain Ofsted compliance',
         'Practice latest techniques',
         'Refresh emergency protocols'
       ]}
       courseContent={[
-        'Review of paediatric first aider responsibilities',
-        'Updated CPR techniques for infants and children',
-        'Latest choking procedures',
-        'Managing unconscious casualties',
-        'Treating wounds and bleeding',
-        'Burns and scalds in children',
-        'Managing seizures and febrile convulsions',
-        'Anaphylaxis and allergic reactions',
-        'Updated protocols for common childhood illnesses',
-        'Meningitis recognition',
-        'Head injuries in children',
-        'Fractures and sprains',
-        'Asthma and breathing difficulties',
-        'Poisoning and harmful substances',
-        'Record keeping requirements'
+        {
+          title: "Course Content Overview",
+          topics: [
+            'Review of paediatric first aider responsibilities',
+            'Updated CPR techniques for infants and children',
+            'Latest choking procedures',
+            'Managing unconscious casualties',
+            'Treating wounds and bleeding',
+            'Burns and scalds in children',
+            'Managing seizures and febrile convulsions',
+            'Anaphylaxis and allergic reactions',
+            'Updated protocols for common childhood illnesses',
+            'Meningitis recognition',
+            'Head injuries in children',
+            'Fractures and sprains',
+            'Asthma and breathing difficulties',
+            'Poisoning and harmful substances',
+            'Record keeping requirements'
+          ]
+        }
       ]}
       whoShouldAttend={[
         'Current paediatric first aid certificate holders',
@@ -40,7 +45,8 @@ const PaediatricRequalificationPage: React.FC = () => {
         'Nursery workers',
         'Childminders and nannies'
       ]}
-      whatYouGet={[
+      accreditations={['Ofsted Approved', 'HSE Compliant']}
+      whatToExpect={[
         'Half-day comprehensive refresher training',
         'New 3-year certificate',
         'Updated course materials',
@@ -49,8 +55,7 @@ const PaediatricRequalificationPage: React.FC = () => {
         'Ofsted compliant certification',
         'Experienced paediatric trainer'
       ]}
-      ctaTitle="Ready to Renew Your Certification?"
-      ctaDescription="Don't let your paediatric first aid certificate expire. Book your requalification course today."
+      seoKeywords="paediatric first aid requalification, childcare first aid renewal, ofsted approved training Yorkshire"
     />
   )
 }

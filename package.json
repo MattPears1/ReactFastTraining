@@ -1,6 +1,6 @@
 {
   "name": "lex-business-website",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "Flexible business website with e-commerce and service showcase capabilities",
   "main": "src/index.js",
   "scripts": {
@@ -41,6 +41,7 @@
     "@hookform/resolvers": "^5.2.0",
     "@sentry/react": "^7.100.0",
     "@sentry/tracing": "^7.100.0",
+    "@stripe/react-stripe-js": "^3.8.0",
     "@stripe/stripe-js": "^3.0.0",
     "@tailwindcss/aspect-ratio": "^0.4.2",
     "@tailwindcss/forms": "^0.5.10",

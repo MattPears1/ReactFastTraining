@@ -18,6 +18,11 @@ interface CreateBookingResponse {
   error?: string;
 }
 
+interface ConfirmBookingWithPaymentData extends BookingFormData {
+  paymentIntentId: string;
+  totalAmount: number;
+}
+
 class BookingService {
   private mockSchedules: CourseSchedule[] = [];
   
@@ -136,6 +141,67 @@ class BookingService {
     await new Promise(resolve => setTimeout(resolve, 500));
     // In a real implementation, this would update the booking status
     return true;
+  }
+  
+  async confirmBookingWithPayment(data: ConfirmBookingWithPaymentData): Promise<CreateBookingResponse> {
+    await new Promise(resolve => setTimeout(resolve, 500));
+    
+    // Find the course schedule
+    const schedule = this.mockSchedules.find(s => s.id === data.courseScheduleId);
+    if (!schedule) {
+      return {
+        success: false,
+        error: 'Course schedule not found'
+      };
+    }
+    
+    // Check availability again
+    if (schedule.availableSpots < data.numberOfParticipants) {
+      return {
+        success: false,
+        error: 'Not enough spots available'
+      };
+    }
+    
+    // Generate confirmation code
+    const confirmationCode = this.generateConfirmationCode();
+    
+    // Create booking object with confirmed payment
+    const booking: Booking = {
+      id: Math.random().toString(36).substr(2, 9),
+      bookingReference: confirmationCode,
+      courseSchedule: schedule,
+      primaryContact: {
+        firstName: data.firstName,
+        lastName: data.lastName,
+        email: data.email,
+        phone: data.phone,
+        companyName: data.companyName
+      },
+      participants: data.participantDetails || [{
+        firstName: data.firstName,
+        lastName: data.lastName,
+        email: data.email
+      }],
+      totalAmount: data.totalAmount,
+      bookingStatus: 'confirmed',
+      paymentStatus: 'paid',
+      paymentIntentId: data.paymentIntentId,
+      specialRequirements: data.specialRequirements,
+      createdAt: new Date().toISOString(),
+      updatedAt: new Date().toISOString()
+    };
+    
+    // Update available spots
+    schedule.availableSpots -= data.numberOfParticipants;
+    
+    return {
+      success: true,
+      data: {
+        booking,
+        confirmationCode
+      }
+    };
   }
   
   private generateConfirmationCode(): string {

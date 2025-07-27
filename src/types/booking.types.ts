@@ -69,6 +69,7 @@ export interface Booking {
   totalAmount: number;
   bookingStatus: BookingStatus;
   paymentStatus: PaymentStatus;
+  paymentIntentId?: string;
   specialRequirements?: string;
   createdAt: string;
   updatedAt: string;
