@@ -14,11 +14,17 @@ import {
   CheckCircle,
   XCircle,
   Clock,
-  AlertCircle
+  AlertCircle,
+  CalendarDays
 } from 'lucide-react';
 import { Button } from '../../../components/ui/Button';
 import { SearchInput } from '../../../components/ui/SearchInput';
 import { LoadingSpinner } from '../../components/common/LoadingSpinner';
+import { AdminCard } from '../../components/ui/AdminCard';
+import { AdminTable } from '../../components/ui/AdminTable';
+import { AdminBadge } from '../../components/ui/AdminBadge';
+import { AdminEmptyState } from '../../components/ui/AdminEmptyState';
+import '../../styles/admin-design-system.css';
 
 interface Booking {
   id: string;
@@ -134,37 +140,34 @@ export const BookingsPage: React.FC = () => {
     },
   });
 
-  const getStatusBadge = (status: string) => {
-    const baseClasses = "inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium";
+  const getStatusVariant = (status: string): 'success' | 'warning' | 'danger' | 'info' | 'neutral' => {
     switch (status) {
       case 'confirmed':
-        return `${baseClasses} bg-green-100 text-green-800`;
+        return 'success';
       case 'pending':
-        return `${baseClasses} bg-yellow-100 text-yellow-800`;
+        return 'warning';
       case 'cancelled':
-        return `${baseClasses} bg-red-100 text-red-800`;
+        return 'danger';
       case 'completed':
-        return `${baseClasses} bg-blue-100 text-blue-800`;
+        return 'info';
       case 'no_show':
-        return `${baseClasses} bg-gray-100 text-gray-800`;
       default:
-        return `${baseClasses} bg-gray-100 text-gray-800`;
+        return 'neutral';
     }
   };
 
-  const getPaymentStatusBadge = (status: string) => {
-    const baseClasses = "inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium";
+  const getPaymentVariant = (status: string): 'success' | 'warning' | 'danger' | 'info' | 'neutral' => {
     switch (status) {
       case 'paid':
-        return `${baseClasses} bg-green-100 text-green-800`;
+        return 'success';
       case 'pending':
-        return `${baseClasses} bg-yellow-100 text-yellow-800`;
+        return 'warning';
       case 'refunded':
-        return `${baseClasses} bg-blue-100 text-blue-800`;
+        return 'info';
       case 'failed':
-        return `${baseClasses} bg-red-100 text-red-800`;
+        return 'danger';
       default:
-        return `${baseClasses} bg-gray-100 text-gray-800`;
+        return 'neutral';
     }
   };
 
@@ -187,7 +190,7 @@ export const BookingsPage: React.FC = () => {
 
   if (isLoading) {
     return (
-      <div className="flex items-center justify-center h-64">
+      <div className="admin-loading-container">
         <LoadingSpinner size="lg" />
       </div>
     );
@@ -195,45 +198,52 @@ export const BookingsPage: React.FC = () => {
 
   if (error) {
     return (
-      <div className="text-center py-12">
-        <p className="text-red-600">Failed to load bookings</p>
-      </div>
+      <AdminCard className="admin-mt-8">
+        <div className="text-center">
+          <p className="text-red-600 font-medium">Failed to load bookings</p>
+          <p className="admin-text-small admin-text-muted admin-mt-2">Please try refreshing the page</p>
+        </div>
+      </AdminCard>
     );
   }
 
   return (
     <div className="space-y-6">
       {/* Header */}
-      <div className="sm:flex sm:items-center sm:justify-between">
-        <div>
-          <h1 className="text-2xl font-bold text-gray-900">Booking Management</h1>
-          <p className="mt-1 text-sm text-gray-500">
-            View and manage all course bookings
-          </p>
-        </div>
-        <div className="mt-4 sm:mt-0">
-          <Button variant="outline" className="inline-flex items-center">
-            <Download className="h-4 w-4 mr-2" />
-            Export Bookings
-          </Button>
+      <div className="admin-page-header admin-fade-in">
+        <div className="sm:flex sm:items-center sm:justify-between">
+          <div>
+            <h1 className="admin-page-title">Booking Management</h1>
+            <p className="admin-page-subtitle">
+              View and manage all course bookings
+            </p>
+          </div>
+          <div className="mt-4 sm:mt-0">
+            <button className="admin-btn admin-btn-secondary">
+              <Download className="admin-icon-sm" />
+              Export Bookings
+            </button>
+          </div>
         </div>
       </div>
 
       {/* Filters */}
-      <div className="bg-white shadow rounded-lg p-6">
+      <AdminCard>
         <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
           <div>
-            <SearchInput
+            <input
+              type="text"
               value={searchTerm}
-              onChange={setSearchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
               placeholder="Search bookings..."
+              className="admin-input"
             />
           </div>
           <div>
             <select
               value={statusFilter}
               onChange={(e) => setStatusFilter(e.target.value)}
-              className="w-full rounded-md border-gray-300 shadow-sm focus:border-primary-500 focus:ring-primary-500"
+              className="admin-select"
             >
               <option value="all">All Status</option>
               <option value="confirmed">Confirmed</option>
@@ -247,7 +257,7 @@ export const BookingsPage: React.FC = () => {
             <select
               value={paymentFilter}
               onChange={(e) => setPaymentFilter(e.target.value)}
-              className="w-full rounded-md border-gray-300 shadow-sm focus:border-primary-500 focus:ring-primary-500"
+              className="admin-select"
             >
               <option value="all">All Payments</option>
               <option value="paid">Paid</option>
@@ -257,139 +267,129 @@ export const BookingsPage: React.FC = () => {
             </select>
           </div>
           <div className="flex justify-end">
-            <Button variant="outline" size="sm">
-              <Filter className="h-4 w-4 mr-2" />
+            <button className="admin-btn admin-btn-secondary">
+              <Filter className="admin-icon-sm" />
               More Filters
-            </Button>
+            </button>
           </div>
         </div>
-      </div>
+      </AdminCard>
 
       {/* Bookings Table */}
-      <div className="bg-white shadow rounded-lg overflow-hidden">
-        <div className="overflow-x-auto">
-          <table className="min-w-full divide-y divide-gray-200">
-            <thead className="bg-gray-50">
-              <tr>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                  Booking
-                </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                  Customer
-                </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                  Course
-                </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                  Amount
-                </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                  Status
-                </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                  Payment
-                </th>
-                <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
-                  Actions
-                </th>
-              </tr>
-            </thead>
-            <tbody className="bg-white divide-y divide-gray-200">
-              {bookings?.map((booking) => (
-                <tr key={booking.id} className="hover:bg-gray-50">
-                  <td className="px-6 py-4 whitespace-nowrap">
-                    <div className="flex items-center">
-                      {getStatusIcon(booking.status)}
-                      <div className="ml-3">
-                        <div className="text-sm font-medium text-gray-900">
-                          {booking.bookingReference}
-                        </div>
-                        <div className="text-sm text-gray-500">
-                          {new Date(booking.createdAt).toLocaleDateString()}
-                        </div>
-                      </div>
-                    </div>
-                  </td>
-                  <td className="px-6 py-4 whitespace-nowrap">
-                    <div className="flex items-center">
-                      <User className="h-4 w-4 text-gray-400 mr-2" />
-                      <div>
-                        <div className="text-sm font-medium text-gray-900">
-                          {booking.customerName}
-                        </div>
-                        <div className="text-sm text-gray-500 flex items-center">
-                          <Mail className="h-3 w-3 mr-1" />
-                          {booking.customerEmail}
-                        </div>
-                        <div className="text-sm text-gray-500 flex items-center">
-                          <Phone className="h-3 w-3 mr-1" />
-                          {booking.customerPhone}
-                        </div>
-                      </div>
-                    </div>
-                  </td>
-                  <td className="px-6 py-4 whitespace-nowrap">
-                    <div>
-                      <div className="text-sm font-medium text-gray-900">
-                        {booking.courseName}
-                      </div>
-                      <div className="text-sm text-gray-500 flex items-center">
-                        <Calendar className="h-3 w-3 mr-1" />
-                        {new Date(booking.courseDate).toLocaleDateString()} at {booking.courseTime}
-                      </div>
-                      <div className="text-sm text-gray-500">
-                        {booking.participants} participant{booking.participants > 1 ? 's' : ''}
-                      </div>
-                    </div>
-                  </td>
-                  <td className="px-6 py-4 whitespace-nowrap">
-                    <div className="flex items-center text-sm font-medium text-gray-900">
-                      <PoundSterling className="h-4 w-4 mr-1" />
-                      {booking.totalAmount}
-                    </div>
-                  </td>
-                  <td className="px-6 py-4 whitespace-nowrap">
-                    <span className={getStatusBadge(booking.status)}>
-                      {booking.status}
-                    </span>
-                  </td>
-                  <td className="px-6 py-4 whitespace-nowrap">
-                    <span className={getPaymentStatusBadge(booking.paymentStatus)}>
-                      {booking.paymentStatus}
-                    </span>
-                  </td>
-                  <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                    <div className="flex justify-end space-x-2">
-                      <button className="text-gray-400 hover:text-gray-600">
-                        <Eye className="h-4 w-4" />
-                      </button>
-                      <button className="text-gray-400 hover:text-gray-600">
-                        <Edit3 className="h-4 w-4" />
-                      </button>
-                      <button className="text-gray-400 hover:text-primary-600">
-                        <Mail className="h-4 w-4" />
-                      </button>
-                    </div>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
-      </div>
+      <AdminTable
+        columns={[
+          {
+            key: 'booking',
+            header: 'Booking',
+            render: (booking: Booking) => (
+              <div className="flex items-center">
+                {getStatusIcon(booking.status)}
+                <div className="ml-3">
+                  <div className="font-medium text-gray-900">
+                    {booking.bookingReference}
+                  </div>
+                  <div className="admin-text-small admin-text-muted">
+                    {new Date(booking.createdAt).toLocaleDateString()}
+                  </div>
+                </div>
+              </div>
+            ),
+          },
+          {
+            key: 'customer',
+            header: 'Customer',
+            render: (booking: Booking) => (
+              <div className="flex items-center">
+                <User className="admin-icon-md text-gray-400 mr-2" />
+                <div>
+                  <div className="font-medium text-gray-900">
+                    {booking.customerName}
+                  </div>
+                  <div className="admin-text-small admin-text-muted flex items-center">
+                    <Mail className="admin-icon-sm mr-1" />
+                    {booking.customerEmail}
+                  </div>
+                  <div className="admin-text-small admin-text-muted flex items-center">
+                    <Phone className="admin-icon-sm mr-1" />
+                    {booking.customerPhone}
+                  </div>
+                </div>
+              </div>
+            ),
+          },
+          {
+            key: 'course',
+            header: 'Course',
+            render: (booking: Booking) => (
+              <div>
+                <div className="font-medium text-gray-900">
+                  {booking.courseName}
+                </div>
+                <div className="admin-text-small admin-text-muted flex items-center">
+                  <Calendar className="admin-icon-sm mr-1" />
+                  {new Date(booking.courseDate).toLocaleDateString()} at {booking.courseTime}
+                </div>
+                <div className="admin-text-small admin-text-muted">
+                  {booking.participants} participant{booking.participants > 1 ? 's' : ''}
+                </div>
+              </div>
+            ),
+          },
+          {
+            key: 'amount',
+            header: 'Amount',
+            render: (booking: Booking) => (
+              <div className="flex items-center font-medium text-gray-900">
+                <PoundSterling className="admin-icon-sm mr-1" />
+                {booking.totalAmount}
+              </div>
+            ),
+          },
+          {
+            key: 'status',
+            header: 'Status',
+            render: (booking: Booking) => (
+              <AdminBadge variant={getStatusVariant(booking.status)}>
+                {booking.status}
+              </AdminBadge>
+            ),
+          },
+          {
+            key: 'payment',
+            header: 'Payment',
+            render: (booking: Booking) => (
+              <AdminBadge variant={getPaymentVariant(booking.paymentStatus)}>
+                {booking.paymentStatus}
+              </AdminBadge>
+            ),
+          },
+          {
+            key: 'actions',
+            header: 'Actions',
+            align: 'right',
+            render: (booking: Booking) => (
+              <div className="flex justify-end gap-1">
+                <button className="admin-btn admin-btn-secondary p-2" title="View">
+                  <Eye className="admin-icon-sm" />
+                </button>
+                <button className="admin-btn admin-btn-secondary p-2" title="Edit">
+                  <Edit3 className="admin-icon-sm" />
+                </button>
+                <button className="admin-btn admin-btn-secondary p-2" title="Email">
+                  <Mail className="admin-icon-sm" />
+                </button>
+              </div>
+            ),
+          },
+        ]}
+        data={bookings || []}
+        keyExtractor={(booking) => booking.id}
+        loading={false}
+        emptyMessage="No bookings found"
+        emptyIcon={<CalendarDays className="w-12 h-12" />}
+      />
 
-      {/* Empty state */}
-      {bookings?.length === 0 && (
-        <div className="text-center py-12">
-          <Calendar className="mx-auto h-12 w-12 text-gray-400" />
-          <h3 className="mt-2 text-sm font-medium text-gray-900">No bookings found</h3>
-          <p className="mt-1 text-sm text-gray-500">
-            {searchTerm || statusFilter !== 'all' || paymentFilter !== 'all'
-              ? 'Try adjusting your filters'
-              : 'Bookings will appear here when customers make reservations'}
-          </p>
-        </div>
-      )}
+      {/* Empty state is handled by AdminTable */}
     </div>
   );
 };

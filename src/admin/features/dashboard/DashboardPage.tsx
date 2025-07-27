@@ -6,10 +6,12 @@ import {
   Calendar, 
   PoundSterling,
   ArrowUp,
-  ArrowDown
+  ArrowDown,
+  ArrowRight
 } from 'lucide-react';
 import { adminDashboardService } from '../../services/admin-dashboard.service';
 import { MetricCard } from '../../components/common/MetricCard';
+import { AdminCard } from '../../components/ui/AdminCard';
 import { RevenueChart } from './components/RevenueChart';
 import { BookingStatusChart } from './components/BookingStatusChart';
 import { UpcomingSchedules } from './components/UpcomingSchedules';
@@ -26,7 +28,7 @@ export const DashboardPage: React.FC = () => {
 
   if (isLoading) {
     return (
-      <div className="flex items-center justify-center h-64">
+      <div className="admin-loading-container">
         <LoadingSpinner size="lg" />
       </div>
     );
@@ -34,8 +36,11 @@ export const DashboardPage: React.FC = () => {
 
   if (error) {
     return (
-      <div className="text-center py-12">
-        <p className="text-red-600">Failed to load dashboard data</p>
+      <div className="admin-card admin-mt-8">
+        <div className="admin-card-body text-center">
+          <p className="text-red-600 font-medium">Failed to load dashboard data</p>
+          <p className="admin-text-small admin-text-muted admin-mt-2">Please try refreshing the page</p>
+        </div>
       </div>
     );
   }
@@ -50,9 +55,9 @@ export const DashboardPage: React.FC = () => {
   return (
     <div className="space-y-6">
       {/* Page header */}
-      <div>
-        <h1 className="text-2xl font-bold text-gray-900">Dashboard</h1>
-        <p className="mt-1 text-sm text-gray-500">
+      <div className="admin-page-header admin-fade-in">
+        <h1 className="admin-page-title">Dashboard</h1>
+        <p className="admin-page-subtitle">
           Welcome back! Here's what's happening with your business today.
         </p>
       </div>
@@ -92,52 +97,54 @@ export const DashboardPage: React.FC = () => {
 
       {/* Charts row */}
       <div className="grid grid-cols-1 gap-6 xl:grid-cols-2">
-        <div className="bg-white rounded-lg shadow overflow-hidden border border-primary-500">
-          <div className="p-6">
-            <div className="flex items-center justify-between mb-4">
-              <h2 className="text-lg font-medium text-gray-900">Revenue Trend</h2>
-              <span className="text-sm text-gray-500">Last 6 months</span>
-            </div>
-            <RevenueChart data={dashboardData?.revenueData || []} />
-          </div>
-        </div>
+        <AdminCard
+          title="Revenue Trend"
+          subtitle="Last 6 months"
+          icon={TrendingUp}
+          iconColor="success"
+        >
+          <RevenueChart data={dashboardData?.revenueData || []} />
+        </AdminCard>
         
-        <div className="bg-white rounded-lg shadow overflow-hidden border border-primary-500">
-          <div className="p-6">
-            <div className="flex items-center justify-between mb-4">
-              <h2 className="text-lg font-medium text-gray-900">Booking Status</h2>
-              <span className="text-sm text-gray-500">Current distribution</span>
-            </div>
-            <BookingStatusChart data={dashboardData?.bookingStatus || []} />
-          </div>
-        </div>
+        <AdminCard
+          title="Booking Status"
+          subtitle="Current distribution"
+          icon={PoundSterling}
+          iconColor="primary"
+        >
+          <BookingStatusChart data={dashboardData?.bookingStatus || []} />
+        </AdminCard>
       </div>
 
       {/* Bottom row */}
       <div className="grid grid-cols-1 gap-6 xl:grid-cols-2">
-        <div className="bg-white rounded-lg shadow overflow-hidden border border-primary-500">
-          <div className="p-6">
-            <div className="flex items-center justify-between mb-4">
-              <h2 className="text-lg font-medium text-gray-900">Upcoming Schedules</h2>
-              <a href="/admin/schedule" className="text-sm text-primary-600 hover:text-primary-700">
-                View all →
-              </a>
-            </div>
-            <UpcomingSchedules schedules={dashboardData?.upcomingSchedules || []} />
-          </div>
-        </div>
+        <AdminCard
+          title="Upcoming Schedules"
+          icon={Calendar}
+          iconColor="primary"
+          actions={
+            <a href="/admin/schedule" className="admin-btn admin-btn-secondary admin-btn-sm">
+              View all
+              <ArrowRight className="admin-icon-sm" />
+            </a>
+          }
+        >
+          <UpcomingSchedules schedules={dashboardData?.upcomingSchedules || []} />
+        </AdminCard>
         
-        <div className="bg-white rounded-lg shadow overflow-hidden border border-primary-500">
-          <div className="p-6">
-            <div className="flex items-center justify-between mb-4">
-              <h2 className="text-lg font-medium text-gray-900">Recent Activity</h2>
-              <a href="/admin/activity" className="text-sm text-primary-600 hover:text-primary-700">
-                View all →
-              </a>
-            </div>
-            <RecentActivity activities={dashboardData?.recentActivity || []} />
-          </div>
-        </div>
+        <AdminCard
+          title="Recent Activity"
+          icon={Users}
+          iconColor="accent"
+          actions={
+            <a href="/admin/activity" className="admin-btn admin-btn-secondary admin-btn-sm">
+              View all
+              <ArrowRight className="admin-icon-sm" />
+            </a>
+          }
+        >
+          <RecentActivity activities={dashboardData?.recentActivity || []} />
+        </AdminCard>
       </div>
     </div>
   );

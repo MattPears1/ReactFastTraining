@@ -1,6 +1,7 @@
 /* Dashboard Chart Styles */
+@import '../../styles/admin-design-system.css';
 
-/* Add thin blue borders to all dashboard boxes */
+/* Override for backward compatibility */
 .bg-white.rounded-lg.shadow {
   border: 1px solid rgb(14, 165, 233) !important; /* primary-500 blue */
 }

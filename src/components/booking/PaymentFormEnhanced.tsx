@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import {
-  PaymentElement,
+  CardElement,
   useStripe,
   useElements,
   Elements,
