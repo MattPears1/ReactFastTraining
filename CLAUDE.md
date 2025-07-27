@@ -291,6 +291,19 @@ DATABASE_URL=postgresql://...
 EMAIL_API_KEY=...
 ```
 
+### Email Addresses (CONFIGURED & ACTIVE)
+```
+info@reactfasttraining.co.uk       # General info, help & troubleshooting
+bookings@reactfasttraining.co.uk   # Booking queries & course administration  
+lex@reactfasttraining.co.uk        # Course content & instructor communication
+```
+
+**Email Routing Rules:**
+- **General Contact Forms** → info@reactfasttraining.co.uk
+- **Booking Inquiries** → bookings@reactfasttraining.co.uk  
+- **Course Content Questions** → lex@reactfasttraining.co.uk
+- **Technical Support/Help** → info@reactfasttraining.co.uk
+
 ---
 
 **REMEMBER**: This is a REAL business. Every decision should enhance the company's reputation and help save lives through quality first aid training.

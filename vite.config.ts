@@ -28,6 +28,24 @@ export default defineConfig({
     sourcemap: true,
     rollupOptions: {
       output: {
+        // Cache busting: Add timestamp to chunk names
+        chunkFileNames: (chunkInfo) => {
+          const timestamp = Date.now();
+          const facadeModuleId = chunkInfo.facadeModuleId ? chunkInfo.facadeModuleId.split('/').pop() : 'chunk';
+          return `assets/js/[name]-${timestamp}-[hash].js`;
+        },
+        entryFileNames: () => {
+          const timestamp = Date.now();
+          return `assets/js/[name]-${timestamp}-[hash].js`;
+        },
+        assetFileNames: (assetInfo) => {
+          const timestamp = Date.now();
+          const extType = assetInfo.name?.split('.').pop();
+          if (extType === 'css') {
+            return `assets/css/[name]-${timestamp}-[hash].css`;
+          }
+          return `assets/[ext]/[name]-${timestamp}-[hash].[ext]`;
+        },
         manualChunks(id) {
           if (id.includes('node_modules')) {
             // Core React dependencies

@@ -234,7 +234,7 @@ export const generateBookingConfirmationEmail = (data: BookingConfirmationEmailD
         <h3>Need to Make Changes?</h3>
         <p>If you need to cancel or reschedule your booking, please contact us at least 5 working days before the course date:</p>
         <ul>
-          <li>Email: <a href="mailto:booking@reactfasttraining.co.uk">booking@reactfasttraining.co.uk</a></li>
+          <li>Email: <a href="mailto:bookings@reactfasttraining.co.uk">bookings@reactfasttraining.co.uk</a></li>
           <li>Phone: <a href="tel:01234567890">01234 567890</a></li>
         </ul>
       </div>

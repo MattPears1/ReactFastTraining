@@ -138,10 +138,10 @@ const EmailVerificationPage: React.FC = () => {
           <p className="text-sm text-gray-600 dark:text-gray-400">
             Need help? Email us at{' '}
             <a
-              href="mailto:support@reactfasttraining.co.uk"
+              href="mailto:info@reactfasttraining.co.uk"
               className="text-primary-600 dark:text-primary-400 hover:underline"
             >
-              support@reactfasttraining.co.uk
+              info@reactfasttraining.co.uk
             </a>
           </p>
         </div>

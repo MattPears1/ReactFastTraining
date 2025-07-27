@@ -225,7 +225,7 @@ export const generateBookingReminderEmail = (data: BookingReminderEmailData): {
       
       ${data.daysUntilCourse > 5 ? `
       <div style="background-color: #EFF6FF; border: 1px solid #3B82F6; border-radius: 8px; padding: 15px; margin: 20px 0;">
-        <p style="margin: 0;"><strong>Need to reschedule?</strong> You can still make changes to your booking up to 5 working days before the course. Contact us at <a href="mailto:booking@reactfasttraining.co.uk">booking@reactfasttraining.co.uk</a></p>
+        <p style="margin: 0;"><strong>Need to reschedule?</strong> You can still make changes to your booking up to 5 working days before the course. Contact us at <a href="mailto:bookings@reactfasttraining.co.uk">bookings@reactfasttraining.co.uk</a></p>
       </div>
       ` : ''}
       

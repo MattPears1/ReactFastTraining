@@ -10,6 +10,7 @@ import { NotificationProvider } from '@contexts/NotificationContext'
 import { AuthProvider } from '@contexts/AuthContext'
 import { initPerformanceMonitoring, trackBundleSize } from '@utils/performance'
 import { AnalyticsProvider } from '@components/providers/AnalyticsProvider'
+import VersionInfo from '@components/common/VersionInfo'
 
 // Lazy load pages for better performance
 const HomePage = lazy(() => import('@pages/HomePage'))
@@ -134,6 +135,7 @@ function App() {
           </NotificationProvider>
         </ToastProvider>
       </ThemeProvider>
+      <VersionInfo />
     </ErrorBoundary>
   )
 }

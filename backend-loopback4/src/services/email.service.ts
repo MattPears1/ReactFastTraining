@@ -5,6 +5,13 @@ import {BookingRepository} from '../repositories';
 import * as nodemailer from 'nodemailer';
 import {User} from '../db/schema/users';
 
+/**
+ * Email Configuration & Routing:
+ * - info@reactfasttraining.co.uk: General info, help & troubleshooting (default sender)
+ * - bookings@reactfasttraining.co.uk: Booking queries & course administration
+ * - lex@reactfasttraining.co.uk: Course content & instructor communication
+ */
+
 export interface EmailOptions {
   to: string;
   subject: string;

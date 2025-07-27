@@ -97,7 +97,10 @@ export const CalendarView: React.FC<CalendarViewProps> = ({
   const handleDayClick = (day: DaySchedules) => {
     if (day.schedules.length > 0 && !isPastDate(day.date)) {
       setSelectedDaySchedules(day);
-      setShowMobileSheet(true);
+      // Only show mobile sheet on mobile devices
+      if (window.innerWidth < 1024) {
+        setShowMobileSheet(true);
+      }
     }
   };
 
@@ -184,6 +187,7 @@ export const CalendarView: React.FC<CalendarViewProps> = ({
                   className={cn(
                     'aspect-square border rounded-lg p-1 sm:p-2 transition-all relative',
                     isToday(day.date) && 'ring-2 ring-primary-500 border-primary-500',
+                    selectedDaySchedules?.date.toDateString() === day.date.toDateString() && 'bg-primary-50 dark:bg-primary-900/20 border-primary-500',
                     !isInCurrentMonth && 'opacity-40',
                     isPast && 'bg-gray-50 dark:bg-gray-900',
                     hasCourses && !isPast && 'cursor-pointer hover:shadow-md active:scale-95',
@@ -253,6 +257,97 @@ export const CalendarView: React.FC<CalendarViewProps> = ({
             </div>
           </div>
         </div>
+      </div>
+
+      {/* Desktop Sessions Display */}
+      <div className="hidden lg:block mt-6">
+        {selectedDaySchedules && selectedDaySchedules.schedules.length > 0 ? (
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          className="hidden lg:block mt-6"
+        >
+          <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm p-6">
+            <h3 className="text-xl font-bold mb-4">
+              Sessions for {selectedDaySchedules.date.toLocaleDateString('en-GB', { 
+                weekday: 'long', 
+                day: 'numeric', 
+                month: 'long' 
+              })}
+            </h3>
+            
+            <div className="grid gap-4 md:grid-cols-2">
+              {selectedDaySchedules.schedules.map(schedule => {
+                const config = COURSE_TYPE_CONFIG[schedule.courseType];
+                const isSelected = selectedScheduleId === schedule.id;
+                const isFull = schedule.availableSpots === 0;
+                
+                return (
+                  <motion.div
+                    key={schedule.id}
+                    initial={{ opacity: 0, scale: 0.95 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    whileHover={{ scale: 1.02 }}
+                    className={cn(
+                      'p-4 rounded-lg border-2 transition-all cursor-pointer',
+                      config.color.border,
+                      config.color.background,
+                      isSelected && 'ring-2 ring-primary-500',
+                      isFull && 'opacity-60 cursor-not-allowed',
+                      !isFull && 'hover:shadow-md'
+                    )}
+                    onClick={() => {
+                      if (!isFull) {
+                        setSelectedScheduleForBooking(schedule);
+                        setShowBookingOptions(true);
+                      }
+                    }}
+                  >
+                    <div className="flex items-start justify-between">
+                      <div className="flex-1">
+                        <h4 className="font-semibold mb-2">{schedule.courseName}</h4>
+                        <div className="space-y-1 text-sm text-gray-600 dark:text-gray-400">
+                          <div className="flex items-center gap-2">
+                            <Clock className="w-4 h-4" />
+                            <span>{formatTime(schedule.startDate)} - {formatTime(schedule.endDate)}</span>
+                          </div>
+                          <div className="flex items-center gap-2">
+                            <MapPin className="w-4 h-4" />
+                            <span>{schedule.venueName}</span>
+                          </div>
+                          <div className="flex items-center gap-2">
+                            <Users className="w-4 h-4" />
+                            <span>
+                              {isFull ? 'Fully booked' : `${schedule.availableSpots} spots available`}
+                            </span>
+                          </div>
+                        </div>
+                      </div>
+                      <div className="text-right">
+                        <p className="text-lg font-bold text-primary-600 dark:text-primary-400">
+                          £{schedule.pricePerPerson}
+                        </p>
+                        {!isFull && (
+                          <span className="text-sm text-green-600 dark:text-green-400">
+                            Book Now
+                          </span>
+                        )}
+                      </div>
+                    </div>
+                  </motion.div>
+                );
+              })}
+            </div>
+          </div>
+        </motion.div>
+      ) : (
+        <div className="bg-gray-50 dark:bg-gray-900 rounded-lg p-8 text-center">
+          <Calendar className="w-12 h-12 text-gray-400 mx-auto mb-3" />
+          <p className="text-gray-600 dark:text-gray-400 font-medium">
+            Click on a date with available sessions to view course details
+          </p>
+        </div>
+      )}
       </div>
 
       {/* Mobile Bottom Sheet for Course Details */}

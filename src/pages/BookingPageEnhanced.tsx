@@ -329,10 +329,10 @@ const BookingPageEnhanced: React.FC = () => {
                           📞 01234 567890
                         </a>
                         <a 
-                          href="mailto:booking@reactfasttraining.co.uk" 
+                          href="mailto:bookings@reactfasttraining.co.uk" 
                           className="block text-blue-600 dark:text-blue-400 hover:underline"
                         >
-                          ✉️ booking@reactfasttraining.co.uk
+                          ✉️ bookings@reactfasttraining.co.uk
                         </a>
                       </div>
                     </div>

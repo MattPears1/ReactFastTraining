@@ -104,10 +104,10 @@ const ServerErrorPage: React.FC = () => {
             <div className="flex items-center justify-center gap-2">
               <Mail className="w-4 h-4 text-gray-600 dark:text-gray-400" />
               <a
-                href="mailto:support@example.com"
+                href="mailto:info@reactfasttraining.co.uk"
                 className="text-primary-600 dark:text-primary-400 hover:underline"
               >
-                support@example.com
+                info@reactfasttraining.co.uk
               </a>
             </div>
           </motion.div>
