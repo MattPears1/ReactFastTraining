@@ -1,6 +1,6 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
-import { SEO } from '@components/common/SEO'
+import SEO from '@components/common/SEO'
 
 const TermsPage: React.FC = () => {
   return (
