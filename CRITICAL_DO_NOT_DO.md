@@ -112,3 +112,32 @@
 - **ONLY** Allowed durations: "3 Hours", "5 Hours", or "1 Day"
 - **NEVER** Mention "2 Days", "3 Days", "multi-day", or "half day"
 - **MAXIMUM** duration is 1 Day (which is approximately 5 hours of training)
+
+## 🗄️ DATABASE RESTRICTIONS
+
+### 12. Customer Data Management
+- **NO** Leads management table or system - we do not track potential customers
+- **NO** Marketing tracking or targeting features
+- **NO** Customer segmentation or profiling for marketing
+- **NO** Sales pipeline or conversion tracking
+- **NO** CRM marketing features
+- **ONLY** Store basic customer information (name, email, phone)
+- **ONLY** Track actual training history and certificates earned
+- **ALLOWED**: Customer training records for certificate management
+- **Remember**: Customers either need the course or they don't - it's their choice
+
+### 13. Scheduling & Availability
+- **NO** Trainer availability tracking tables
+- **NO** Automated availability checking systems
+- **NO** Conflict detection for trainer schedules
+- **NO** Calendar integration for availability
+- **REASON**: The instructor manually adds sessions through the admin scheduling system
+- **ALLOWED**: Manual session creation by the instructor only
+
+### 14. Course Booking Features
+- **NO** Waiting list functionality or tables
+- **NO** "Notify me when available" features
+- **NO** Overbooking with waitlist management
+- **REASON**: If a course is full, it simply doesn't show as available
+- **REASON**: Customers should look for alternative dates themselves
+- **ALLOWED**: Only show available courses with open spaces
