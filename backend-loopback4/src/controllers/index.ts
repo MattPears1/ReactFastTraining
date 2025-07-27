@@ -6,3 +6,4 @@ export * from './course-session.controller';
 export * from './enquiry.controller';
 export * from './ping.controller';
 export * from './calendar.controller';
+export * from './payment-guest.controller';

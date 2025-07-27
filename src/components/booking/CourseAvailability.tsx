@@ -6,6 +6,7 @@ import { CourseSchedule, CourseTypeCode } from '@/types/booking.types'
 import { COURSE_TYPE_CONFIG } from '@/config/courseTypes.config'
 import { bookingService } from '@/services/booking.service'
 import { formatDate, formatTime, formatCountdown } from '@/utils/dateFormatting'
+import { CalendarView } from './CalendarView'
 
 interface CourseAvailabilityProps {
   courseType?: CourseTypeCode
@@ -94,107 +95,21 @@ export const CourseAvailability: React.FC<CourseAvailabilityProps> = ({
   }
 
   return (
-    <div className="space-y-4">
-      {schedules.map((schedule) => {
-        const isSelected = selectedScheduleId === schedule.id
-        const isFull = schedule.availableSpots === 0
-        const courseConfig = COURSE_TYPE_CONFIG[schedule.courseType]
-        
-        return (
-          <motion.div
-            key={schedule.id}
-            initial={{ opacity: 0, y: 10 }}
-            animate={{ opacity: 1, y: 0 }}
-            className={cn(
-              'relative border-2 rounded-xl p-6 cursor-pointer transition-all',
-              courseConfig.color.border,
-              courseConfig.color.background,
-              isSelected && 'ring-2 ring-primary-500 ring-offset-2',
-              isFull && 'opacity-60 cursor-not-allowed',
-              !isFull && !isSelected && 'hover:shadow-lg hover:scale-[1.02]'
-            )}
-            onClick={() => !isFull && onSelectCourse(schedule)}
-          >
-            {isFull && (
-              <div className="absolute top-4 right-4 bg-red-500 text-white px-3 py-1 rounded-full text-sm font-semibold">
-                FULLY BOOKED
-              </div>
-            )}
-            
-            <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-4">
-              <div className="flex-1">
-                <h3 className="text-lg font-semibold mb-2">
-                  {schedule.courseName}
-                </h3>
-                
-                <div className="space-y-2 text-sm">
-                  <div className="flex items-center gap-2 text-gray-600 dark:text-gray-400">
-                    <Calendar className="w-4 h-4" />
-                    <span>
-                      {formatDate(schedule.startDate)}
-                      {schedule.startDate !== schedule.endDate && (
-                        <> - {formatDate(schedule.endDate)}</>
-                      )}
-                    </span>
-                  </div>
-                  
-                  <div className="flex items-center gap-2 text-gray-600 dark:text-gray-400">
-                    <Clock className="w-4 h-4" />
-                    <span>{formatTime(schedule.startDate)}</span>
-                  </div>
-                  
-                  <div className="flex items-center gap-2 text-gray-600 dark:text-gray-400">
-                    <MapPin className="w-4 h-4" />
-                    <span>{schedule.venueName}</span>
-                  </div>
-                  
-                  <div className="flex items-center gap-2 text-gray-600 dark:text-gray-400">
-                    <Users className="w-4 h-4" />
-                    <span>
-                      {schedule.availableSpots} of {schedule.maxParticipants} spots available
-                    </span>
-                  </div>
-                </div>
-                
-                <p className="text-xs text-gray-500 dark:text-gray-500 mt-2">
-                  Instructor: {schedule.instructorName}
-                </p>
-              </div>
-              
-              <div className="flex flex-col items-end justify-between h-full">
-                <div className="text-right">
-                  <p className="text-2xl font-bold text-primary-600 dark:text-primary-400">
-                    £{schedule.pricePerPerson}
-                  </p>
-                  <p className="text-sm text-gray-500">per person</p>
-                </div>
-                
-                {!isFull && (
-                  <motion.div
-                    className="mt-4"
-                    whileHover={{ scale: 1.05 }}
-                    whileTap={{ scale: 0.95 }}
-                  >
-                    <button
-                      className={cn(
-                        'btn btn-sm',
-                        isSelected ? 'btn-primary' : 'btn-outline'
-                      )}
-                      onClick={(e) => {
-                        e.stopPropagation()
-                        onSelectCourse(schedule)
-                      }}
-                    >
-                      {isSelected ? 'Selected' : 'Select'}
-                      <ChevronRight className="w-4 h-4 ml-1" />
-                    </button>
-                  </motion.div>
-                )}
-              </div>
-            </div>
-          </motion.div>
-        )
-      })}
+    <div className="space-y-6">
+      <div className="text-center">
+        <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-2">
+          Select Your Course Date
+        </h3>
+        <p className="text-gray-600 dark:text-gray-400">
+          Choose a date from the calendar below, then select your course from the available options on that day.
+        </p>
+      </div>
+      
+      <CalendarView
+        schedules={schedules}
+        onSelectCourse={onSelectCourse}
+        selectedScheduleId={selectedScheduleId}
+      />
     </div>
   )
 }
