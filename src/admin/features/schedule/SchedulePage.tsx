@@ -54,12 +54,18 @@ export const SchedulePage: React.FC = () => {
         const response = await fetch(`${apiUrl}/course-sessions`, {
           headers: {
             'Authorization': `Bearer ${token}`,
-            'Content-Type': 'application/json'
+            'Content-Type': 'application/json',
+            'Cache-Control': 'no-cache'
           }
         });
         
-        if (!response.ok) {
-          throw new Error('Failed to fetch course sessions');
+        if (!response.ok && response.status !== 304) {
+          throw new Error(`Failed to fetch course sessions: ${response.status} ${response.statusText}`);
+        }
+        
+        // Handle 304 Not Modified - return empty array as we can't get the body
+        if (response.status === 304) {
+          return [];
         }
         
         const courseSessions = await response.json();
@@ -69,7 +75,7 @@ export const SchedulePage: React.FC = () => {
           id: session.id,
           courseName: session.course?.name || 'Unknown Course',
           courseType: session.course?.type || session.course?.name || 'Unknown',
-          date: session.startDate.split('T')[0], // Extract date part
+          date: session.startDate ? session.startDate.split('T')[0] : new Date().toISOString().split('T')[0], // Extract date part
           startTime: session.startTime,
           endTime: session.endTime,
           location: session.location?.name || session.location?.address || 'Unknown Location',
