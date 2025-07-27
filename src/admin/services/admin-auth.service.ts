@@ -33,15 +33,17 @@ interface CurrentUserResponse {
 
 class AdminAuthService {
   private api: AxiosInstance;
+  private isRefreshing = false;
 
   constructor() {
-    // Use relative URLs - Vite will proxy to backend
-    const baseURL = '';
-    console.log('🌐 [AdminAuthService] Using relative URLs (proxied by Vite)');
+    // Use backend URL directly for admin auth
+    const baseURL = import.meta.env.VITE_API_URL || 'http://localhost:3000';
+    console.log('🌐 [AdminAuthService] Using backend URL:', baseURL);
     
     this.api = axios.create({
       baseURL,
       withCredentials: true, // For cookies
+      timeout: 10000, // 10 second timeout
     });
 
     // Request interceptor to add auth token
@@ -62,8 +64,9 @@ class AdminAuthService {
       async (error) => {
         const originalRequest = error.config;
 
-        if (error.response?.status === 401 && !originalRequest._retry) {
+        if (error.response?.status === 401 && !originalRequest._retry && !this.isRefreshing) {
           originalRequest._retry = true;
+          this.isRefreshing = true;
           
           try {
             const response = await this.refreshToken();
@@ -71,10 +74,14 @@ class AdminAuthService {
             originalRequest.headers.Authorization = `Bearer ${response.accessToken}`;
             return this.api(originalRequest);
           } catch (refreshError) {
-            // Refresh failed, redirect to login
+            // Refresh failed, clear tokens and redirect to login
+            console.log('🔄 Token refresh failed, clearing auth state');
             localStorage.removeItem('adminAccessToken');
+            localStorage.removeItem('adminRefreshToken');
             window.location.href = '/admin/login';
             return Promise.reject(refreshError);
+          } finally {
+            this.isRefreshing = false;
           }
         }
 
@@ -118,11 +125,30 @@ class AdminAuthService {
       await this.api.post('/api/admin/auth/logout');
     } catch (error) {
       console.error('Logout error:', error);
+    } finally {
+      this.clearAuthState();
     }
   }
 
+  clearAuthState(): void {
+    console.log('🧹 Clearing admin auth state');
+    localStorage.removeItem('adminAccessToken');
+    localStorage.removeItem('adminRefreshToken');
+    this.isRefreshing = false;
+  }
+
   async refreshToken(): Promise<RefreshResponse> {
-    const response = await this.api.post<RefreshResponse>('/api/admin/auth/refresh');
+    // Create a separate axios instance for refresh to avoid interceptor loops
+    const refreshApi = axios.create({
+      baseURL: import.meta.env.VITE_API_URL || 'http://localhost:3000',
+      withCredentials: true,
+      timeout: 10000,
+    });
+    
+    const token = localStorage.getItem('adminRefreshToken');
+    const response = await refreshApi.post<RefreshResponse>('/api/admin/auth/refresh', {}, {
+      headers: token ? { Authorization: `Bearer ${token}` } : {},
+    });
     return response.data;
   }
 
