@@ -19,6 +19,7 @@ import { AdminBadge } from '../../components/ui/AdminBadge';
 import { Button } from '../../../components/ui/Button';
 import { LoadingSpinner } from '../../components/common/LoadingSpinner';
 import { adminCourseSessionService } from '../../services/course-session.service';
+import { AddSessionModal } from '../../components/modals/AddSessionModal';
 
 interface CourseSchedule {
   id: string;
@@ -39,6 +40,7 @@ export const SchedulePage: React.FC = () => {
   const [currentDate, setCurrentDate] = useState(new Date());
   const [viewMode, setViewMode] = useState<'calendar' | 'list'>('calendar');
   const [selectedDate, setSelectedDate] = useState<Date | null>(null);
+  const [showAddModal, setShowAddModal] = useState(false);
   const queryClient = useQueryClient();
 
   const { data: schedules, isLoading, error } = useQuery({
@@ -224,7 +226,10 @@ export const SchedulePage: React.FC = () => {
               List
             </button>
           </div>
-          <Button className="inline-flex items-center">
+          <Button 
+            onClick={() => setShowAddModal(true)}
+            className="inline-flex items-center"
+          >
             <Plus className="h-4 w-4 mr-2" />
             Add Session
           </Button>
@@ -431,6 +436,12 @@ export const SchedulePage: React.FC = () => {
           emptyIcon={<CalendarIcon className="w-12 h-12" />}
         />
       )}
+      
+      {/* Add Session Modal */}
+      <AddSessionModal 
+        isOpen={showAddModal}
+        onClose={() => setShowAddModal(false)}
+      />
     </div>
   );
 };
