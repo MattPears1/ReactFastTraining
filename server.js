@@ -13,7 +13,7 @@ let courseSessions = [
     courseId: 1,
     courseName: 'Emergency First Aid at Work',
     venueId: 1,
-    venueName: 'Sheffield Location 1 - To Be Announced',
+    venueName: 'Location 1 - Sheffield',
     date: '2025-02-10',
     startTime: '09:00',
     endTime: '17:00',
@@ -25,8 +25,8 @@ let courseSessions = [
     id: '2',
     courseId: 3,
     courseName: 'Paediatric First Aid',
-    venueId: 3,
-    venueName: 'Leeds Location 1 - To Be Announced',
+    venueId: 2,
+    venueName: 'Location 2 - Sheffield',
     date: '2025-02-12',
     startTime: '10:00',
     endTime: '16:00',
@@ -185,23 +185,9 @@ app.get('/api/admin/schedules', (req, res) => {
 // Admin venues endpoint
 app.get('/api/admin/venues', (req, res) => {
   res.json([
-    { id: 1, name: 'Sheffield Location 1 - To Be Announced', address_line1: 'To Be Announced', city: 'Sheffield', capacity: 15 },
-    { id: 2, name: 'Sheffield Location 2 - To Be Announced', address_line1: 'To Be Announced', city: 'Sheffield', capacity: 15 },
-    { id: 3, name: 'Leeds Location 1 - To Be Announced', address_line1: 'To Be Announced', city: 'Leeds', capacity: 20 },
-    { id: 4, name: 'Leeds Location 2 - To Be Announced', address_line1: 'To Be Announced', city: 'Leeds', capacity: 20 },
-    { id: 5, name: 'Bradford Location 1 - To Be Announced', address_line1: 'To Be Announced', city: 'Bradford', capacity: 18 },
-    { id: 6, name: 'Bradford Location 2 - To Be Announced', address_line1: 'To Be Announced', city: 'Bradford', capacity: 18 },
-    { id: 7, name: 'York Location 1 - To Be Announced', address_line1: 'To Be Announced', city: 'York', capacity: 16 },
-    { id: 8, name: 'York Location 2 - To Be Announced', address_line1: 'To Be Announced', city: 'York', capacity: 16 },
-    { id: 9, name: 'Huddersfield Location 1 - To Be Announced', address_line1: 'To Be Announced', city: 'Huddersfield', capacity: 15 },
-    { id: 10, name: 'Huddersfield Location 2 - To Be Announced', address_line1: 'To Be Announced', city: 'Huddersfield', capacity: 15 },
-    { id: 11, name: 'Wakefield Location 1 - To Be Announced', address_line1: 'To Be Announced', city: 'Wakefield', capacity: 14 },
-    { id: 12, name: 'Wakefield Location 2 - To Be Announced', address_line1: 'To Be Announced', city: 'Wakefield', capacity: 14 },
-    { id: 13, name: 'Halifax Location 1 - To Be Announced', address_line1: 'To Be Announced', city: 'Halifax', capacity: 14 },
-    { id: 14, name: 'Halifax Location 2 - To Be Announced', address_line1: 'To Be Announced', city: 'Halifax', capacity: 14 },
-    { id: 15, name: 'Harrogate Location 1 - To Be Announced', address_line1: 'To Be Announced', city: 'Harrogate', capacity: 15 },
-    { id: 16, name: 'Harrogate Location 2 - To Be Announced', address_line1: 'To Be Announced', city: 'Harrogate', capacity: 15 },
-    { id: 17, name: 'Client On-Site Training', address_line1: 'Your Location', city: 'Yorkshire', capacity: 999 }
+    { id: 1, name: 'Location 1 - Sheffield', address_line1: 'Sheffield City Centre', city: 'Sheffield', capacity: 12 },
+    { id: 2, name: 'Location 2 - Sheffield', address_line1: 'Sheffield Business District', city: 'Sheffield', capacity: 12 },
+    { id: 3, name: 'Location 3 - Yorkshire', address_line1: 'To Be Confirmed', city: 'Yorkshire', capacity: 12 }
   ]);
 });
 
@@ -272,23 +258,9 @@ const getCourse = (courseId) => {
 
 const getVenue = (venueId) => {
   const venues = [
-    { id: 1, name: 'Sheffield Location 1 - To Be Announced', city: 'Sheffield' },
-    { id: 2, name: 'Sheffield Location 2 - To Be Announced', city: 'Sheffield' },
-    { id: 3, name: 'Leeds Location 1 - To Be Announced', city: 'Leeds' },
-    { id: 4, name: 'Leeds Location 2 - To Be Announced', city: 'Leeds' },
-    { id: 5, name: 'Bradford Location 1 - To Be Announced', city: 'Bradford' },
-    { id: 6, name: 'Bradford Location 2 - To Be Announced', city: 'Bradford' },
-    { id: 7, name: 'York Location 1 - To Be Announced', city: 'York' },
-    { id: 8, name: 'York Location 2 - To Be Announced', city: 'York' },
-    { id: 9, name: 'Huddersfield Location 1 - To Be Announced', city: 'Huddersfield' },
-    { id: 10, name: 'Huddersfield Location 2 - To Be Announced', city: 'Huddersfield' },
-    { id: 11, name: 'Wakefield Location 1 - To Be Announced', city: 'Wakefield' },
-    { id: 12, name: 'Wakefield Location 2 - To Be Announced', city: 'Wakefield' },
-    { id: 13, name: 'Halifax Location 1 - To Be Announced', city: 'Halifax' },
-    { id: 14, name: 'Halifax Location 2 - To Be Announced', city: 'Halifax' },
-    { id: 15, name: 'Harrogate Location 1 - To Be Announced', city: 'Harrogate' },
-    { id: 16, name: 'Harrogate Location 2 - To Be Announced', city: 'Harrogate' },
-    { id: 17, name: 'Client On-Site Training', city: 'Yorkshire' }
+    { id: 1, name: 'Location 1 - Sheffield', city: 'Sheffield' },
+    { id: 2, name: 'Location 2 - Sheffield', city: 'Sheffield' },
+    { id: 3, name: 'Location 3 - Yorkshire', city: 'Yorkshire' }
   ];
   return venues.find(v => v.id === parseInt(venueId));
 };

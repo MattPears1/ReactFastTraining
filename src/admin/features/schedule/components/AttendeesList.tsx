@@ -16,7 +16,9 @@ import {
   Send,
   UserX,
   ChevronDown,
-  ChevronUp
+  ChevronUp,
+  Calendar,
+  X
 } from 'lucide-react';
 import { format } from 'date-fns';
 import { AdminCard } from '../../../components/ui/AdminCard';
@@ -40,23 +42,24 @@ type SortField = 'name' | 'date' | 'status' | 'payment';
 export const AttendeesList: React.FC<AttendeesListProps> = ({
   bookings,
   onViewBooking,
-  onUpdateBooking,
+  onUpdateBooking: _onUpdateBooking,
   onCancelBooking,
   onEmailAttendees,
   onExportList,
-  onBulkAction
+  onBulkAction: _onBulkAction
 }) => {
   const [searchTerm, setSearchTerm] = useState('');
   const [filterStatus, setFilterStatus] = useState<FilterStatus>('all');
   const [selectedBookings, setSelectedBookings] = useState<string[]>([]);
-  const [expandedBooking, setExpandedBooking] = useState<string | null>(null);
+  const [expandedBooking, setExpandedBooking] = useState<string | null>(null); // eslint-disable-line @typescript-eslint/no-unused-vars
   const [sortField, setSortField] = useState<SortField>('date');
   const [sortAscending, setSortAscending] = useState(false);
   const [showActions, setShowActions] = useState<string | null>(null);
+  const [showMobileFilters, setShowMobileFilters] = useState(false);
 
   // Filter and sort bookings
   const filteredAndSortedBookings = useMemo(() => {
-    let filtered = bookings.filter(booking => {
+    const filtered = bookings.filter(booking => {
       // Search filter
       if (searchTerm) {
         const search = searchTerm.toLowerCase();
@@ -155,6 +158,95 @@ export const AttendeesList: React.FC<AttendeesListProps> = ({
     };
   }, [bookings]);
 
+  // Mobile Card Component
+  const AttendeeCard: React.FC<{ booking: BookingDetails }> = ({ booking }) => (
+    <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-4 space-y-3">
+      {/* Header with checkbox */}
+      <div className="flex justify-between items-start">
+        <div className="flex-1 pr-2">
+          <h3 className="font-medium text-base text-gray-900 break-words">{booking.userName}</h3>
+          <a 
+            href={`mailto:${booking.userEmail}`}
+            className="text-sm text-primary-600 hover:text-primary-700 break-all"
+          >
+            {booking.userEmail}
+          </a>
+          {booking.userPhone && (
+            <a 
+              href={`tel:${booking.userPhone}`}
+              className="text-sm text-gray-600 flex items-center mt-1"
+            >
+              <Phone className="h-3 w-3 mr-1 flex-shrink-0" />
+              {booking.userPhone}
+            </a>
+          )}
+        </div>
+        <input
+          type="checkbox"
+          checked={selectedBookings.includes(booking.id)}
+          onChange={() => handleSelectBooking(booking.id)}
+          className="h-5 w-5 text-primary-600 focus:ring-primary-500 border-gray-300 rounded flex-shrink-0"
+        />
+      </div>
+      
+      {/* Status badges */}
+      <div className="flex flex-wrap gap-2 text-sm">
+        <span className="flex items-center text-gray-600">
+          <Calendar className="h-4 w-4 mr-1" />
+          {format(new Date(booking.bookingDate), 'MMM d, yyyy')}
+        </span>
+        <div className="flex items-center">
+          {getStatusIcon(booking.status)}
+          <span className="ml-1 capitalize">{booking.status}</span>
+        </div>
+        <AdminBadge variant={getPaymentStatusVariant(booking.paymentStatus)}>
+          <DollarSign className="h-3 w-3 mr-1" />
+          {booking.paymentStatus}
+        </AdminBadge>
+      </div>
+
+      {/* Special requirements indicator */}
+      {booking.specialRequirements && (
+        <div className="flex items-center text-xs text-amber-600 bg-amber-50 px-2 py-1 rounded">
+          <AlertCircle className="h-3 w-3 mr-1" />
+          Special requirements
+        </div>
+      )}
+      
+      {/* Action buttons */}
+      <div className="flex gap-2 pt-2">
+        <Button 
+          size="sm" 
+          variant="secondary" 
+          className="flex-1 min-h-[44px]"
+          onClick={() => onEmailAttendees([booking.id])}
+        >
+          <Mail className="h-4 w-4 mr-1" />
+          Email
+        </Button>
+        <Button 
+          size="sm" 
+          variant="secondary" 
+          className="flex-1 min-h-[44px]"
+          onClick={() => onViewBooking(booking.id)}
+        >
+          <FileText className="h-4 w-4 mr-1" />
+          View
+        </Button>
+        {booking.status !== 'cancelled' && (
+          <Button 
+            size="sm" 
+            variant="secondary" 
+            className="text-red-600 hover:text-red-700 hover:bg-red-50 min-h-[44px] px-3"
+            onClick={() => onCancelBooking(booking.id)}
+          >
+            <UserX className="h-4 w-4" />
+          </Button>
+        )}
+      </div>
+    </div>
+  );
+
   return (
     <AdminCard 
       title="Attendees" 
@@ -162,21 +254,23 @@ export const AttendeesList: React.FC<AttendeesListProps> = ({
       icon={Users}
       iconColor="primary"
       action={
-        <div className="flex items-center space-x-2">
+        <div className="flex items-center flex-wrap gap-2">
           {selectedBookings.length > 0 && (
             <>
               <Button
                 size="sm"
                 variant="secondary"
                 onClick={handleBulkEmail}
+                className="min-h-[40px]"
               >
                 <Mail className="h-4 w-4 mr-1" />
-                Email ({selectedBookings.length})
+                <span className="hidden sm:inline">Email</span> ({selectedBookings.length})
               </Button>
               <Button
                 size="sm"
                 variant="secondary"
                 onClick={() => setSelectedBookings([])}
+                className="min-h-[40px]"
               >
                 Clear
               </Button>
@@ -186,27 +280,49 @@ export const AttendeesList: React.FC<AttendeesListProps> = ({
             size="sm"
             variant="secondary"
             onClick={onExportList}
+            className="min-h-[40px]"
           >
-            <Download className="h-4 w-4 mr-1" />
-            Export
+            <Download className="h-4 w-4 sm:mr-1" />
+            <span className="hidden sm:inline">Export</span>
           </Button>
         </div>
       }
     >
       <div className="space-y-4">
-        {/* Search and Filters */}
-        <div className="flex flex-col sm:flex-row gap-4">
-          <div className="flex-1 relative">
+        {/* Search and Filters - Mobile Optimized */}
+        <div className="space-y-3">
+          {/* Search Bar */}
+          <div className="relative">
             <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-gray-400" />
             <input
               type="text"
-              placeholder="Search by name, email, or phone..."
+              placeholder="Search attendees..."
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
-              className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+              className="w-full pl-10 pr-4 py-3 text-base border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent"
             />
           </div>
-          <div className="flex items-center space-x-2">
+
+          {/* Mobile Filter Toggle */}
+          <div className="sm:hidden">
+            <Button
+              size="sm"
+              variant="secondary"
+              onClick={() => setShowMobileFilters(!showMobileFilters)}
+              className="w-full min-h-[44px] flex items-center justify-center"
+            >
+              <Filter className="h-5 w-5 mr-2" />
+              Filters & Sort
+              {filterStatus !== 'all' && (
+                <span className="ml-2 bg-primary-100 text-primary-700 px-2 py-0.5 rounded-full text-xs">
+                  Active
+                </span>
+              )}
+            </Button>
+          </div>
+
+          {/* Desktop Filters */}
+          <div className="hidden sm:flex items-center gap-3">
             <Filter className="h-5 w-5 text-gray-400" />
             <select
               value={filterStatus}
@@ -218,11 +334,99 @@ export const AttendeesList: React.FC<AttendeesListProps> = ({
               <option value="pending">Pending ({statusCounts.pending})</option>
               <option value="cancelled">Cancelled ({statusCounts.cancelled})</option>
             </select>
+            <select
+              value={sortField}
+              onChange={(e) => setSortField(e.target.value as SortField)}
+              className="px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500"
+            >
+              <option value="date">Sort by Date</option>
+              <option value="name">Sort by Name</option>
+              <option value="status">Sort by Status</option>
+              <option value="payment">Sort by Payment</option>
+            </select>
           </div>
         </div>
 
-        {/* Attendees Table */}
-        <div className="overflow-x-auto">
+        {/* Mobile Filters Panel */}
+        {showMobileFilters && (
+          <div className="sm:hidden bg-gray-50 rounded-lg p-4 space-y-3 border border-gray-200">
+            <div className="flex justify-between items-center mb-2">
+              <h3 className="font-medium text-gray-900">Filters & Sort</h3>
+              <button
+                onClick={() => setShowMobileFilters(false)}
+                className="text-gray-400 hover:text-gray-600"
+              >
+                <X className="h-5 w-5" />
+              </button>
+            </div>
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">Status</label>
+              <select
+                value={filterStatus}
+                onChange={(e) => setFilterStatus(e.target.value as FilterStatus)}
+                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500"
+              >
+                <option value="all">All ({statusCounts.all})</option>
+                <option value="confirmed">Confirmed ({statusCounts.confirmed})</option>
+                <option value="pending">Pending ({statusCounts.pending})</option>
+                <option value="cancelled">Cancelled ({statusCounts.cancelled})</option>
+              </select>
+            </div>
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">Sort By</label>
+              <select
+                value={sortField}
+                onChange={(e) => setSortField(e.target.value as SortField)}
+                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500"
+              >
+                <option value="date">Booking Date</option>
+                <option value="name">Name</option>
+                <option value="status">Status</option>
+                <option value="payment">Payment Status</option>
+              </select>
+            </div>
+            <div className="flex items-center">
+              <input
+                type="checkbox"
+                id="sortOrder"
+                checked={sortAscending}
+                onChange={(e) => setSortAscending(e.target.checked)}
+                className="h-4 w-4 text-primary-600 focus:ring-primary-500 border-gray-300 rounded"
+              />
+              <label htmlFor="sortOrder" className="ml-2 text-sm text-gray-700">
+                Sort ascending
+              </label>
+            </div>
+          </div>
+        )}
+
+        {/* Select All for Mobile */}
+        {filteredAndSortedBookings.length > 0 && (
+          <div className="sm:hidden flex items-center justify-between py-2 px-1">
+            <label className="flex items-center">
+              <input
+                type="checkbox"
+                checked={selectedBookings.length === filteredAndSortedBookings.length}
+                onChange={handleSelectAll}
+                className="h-4 w-4 text-primary-600 focus:ring-primary-500 border-gray-300 rounded mr-2"
+              />
+              <span className="text-sm text-gray-700">Select all</span>
+            </label>
+            {selectedBookings.length > 0 && (
+              <span className="text-sm text-gray-500">{selectedBookings.length} selected</span>
+            )}
+          </div>
+        )}
+
+        {/* Mobile Card View */}
+        <div className="sm:hidden space-y-3">
+          {filteredAndSortedBookings.map((booking) => (
+            <AttendeeCard key={booking.id} booking={booking} />
+          ))}
+        </div>
+
+        {/* Desktop Table View */}
+        <div className="hidden sm:block overflow-x-auto -mx-6 sm:mx-0">
           <table className="min-w-full divide-y divide-gray-200">
             <thead className="bg-gray-50">
               <tr>
@@ -352,7 +556,7 @@ export const AttendeesList: React.FC<AttendeesListProps> = ({
                       <div className="relative">
                         <button
                           onClick={() => setShowActions(showActions === booking.id ? null : booking.id)}
-                          className="text-gray-400 hover:text-gray-600"
+                          className="text-gray-400 hover:text-gray-600 p-2"
                         >
                           <MoreVertical className="h-5 w-5" />
                         </button>
@@ -431,7 +635,18 @@ export const AttendeesList: React.FC<AttendeesListProps> = ({
         {filteredAndSortedBookings.length === 0 && (
           <div className="text-center py-12">
             <Users className="h-12 w-12 text-gray-400 mx-auto mb-4" />
-            <p className="text-gray-500">No attendees found</p>
+            <p className="text-gray-500 text-base">No attendees found</p>
+            {(searchTerm || filterStatus !== 'all') && (
+              <button
+                onClick={() => {
+                  setSearchTerm('');
+                  setFilterStatus('all');
+                }}
+                className="mt-3 text-sm text-primary-600 hover:text-primary-700"
+              >
+                Clear filters
+              </button>
+            )}
           </div>
         )}
       </div>

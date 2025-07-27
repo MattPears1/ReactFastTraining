@@ -10,10 +10,9 @@ import {
   Send,
   FileText,
   MoreVertical,
-  Trash2,
   Edit3,
-  RefreshCw,
-  CheckCircle
+  CheckCircle,
+  X
 } from 'lucide-react';
 import { AdminCard } from '../../../components/ui/AdminCard';
 import { Button } from '../../../../components/ui/Button';
@@ -55,16 +54,29 @@ const EmailModal: React.FC<EmailModalProps> = ({ isOpen, onClose, onSend, attend
         includeCalendarInvite: includeCalendar
       });
       onClose();
+      // Reset form
+      setSubject('');
+      setMessage('');
+      setIncludeCalendar(false);
     } finally {
       setIsSending(false);
     }
   };
 
   return (
-    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-      <div className="bg-white rounded-lg shadow-xl max-w-2xl w-full mx-4">
-        <div className="p-6">
-          <h3 className="text-lg font-semibold mb-4">Email Attendees</h3>
+    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
+      <div className="bg-white rounded-lg shadow-xl max-w-2xl w-full max-h-[90vh] overflow-y-auto">
+        <div className="p-4 sm:p-6">
+          <div className="flex items-center justify-between mb-4">
+            <h3 className="text-lg font-semibold">Email Attendees</h3>
+            <button
+              onClick={onClose}
+              className="text-gray-400 hover:text-gray-600 p-2"
+              disabled={isSending}
+            >
+              <X className="h-5 w-5" />
+            </button>
+          </div>
           <p className="text-sm text-gray-600 mb-4">
             Send an email to {attendeeCount} confirmed attendees
           </p>
@@ -78,7 +90,7 @@ const EmailModal: React.FC<EmailModalProps> = ({ isOpen, onClose, onSend, attend
                 type="text"
                 value={subject}
                 onChange={(e) => setSubject(e.target.value)}
-                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500"
+                className="w-full px-3 py-2 text-base sm:text-sm min-h-[44px] border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500"
                 placeholder="Important update about your upcoming training"
               />
             </div>
@@ -90,7 +102,7 @@ const EmailModal: React.FC<EmailModalProps> = ({ isOpen, onClose, onSend, attend
               <textarea
                 value={message}
                 onChange={(e) => setMessage(e.target.value)}
-                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500"
+                className="w-full px-3 py-2 text-base sm:text-sm border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500 resize-none"
                 rows={6}
                 placeholder="Type your message here..."
               />
@@ -102,7 +114,7 @@ const EmailModal: React.FC<EmailModalProps> = ({ isOpen, onClose, onSend, attend
                 id="includeCalendar"
                 checked={includeCalendar}
                 onChange={(e) => setIncludeCalendar(e.target.checked)}
-                className="h-4 w-4 text-primary-600 focus:ring-primary-500 border-gray-300 rounded"
+                className="h-5 w-5 text-primary-600 focus:ring-primary-500 border-gray-300 rounded"
               />
               <label htmlFor="includeCalendar" className="ml-2 text-sm text-gray-700">
                 Include calendar invite
@@ -110,17 +122,23 @@ const EmailModal: React.FC<EmailModalProps> = ({ isOpen, onClose, onSend, attend
             </div>
           </div>
           
-          <div className="flex justify-end space-x-3 mt-6">
-            <Button variant="secondary" onClick={onClose} disabled={isSending}>
+          <div className="flex flex-col-reverse sm:flex-row justify-end gap-3 mt-6">
+            <Button 
+              variant="secondary" 
+              onClick={onClose} 
+              disabled={isSending}
+              className="w-full sm:w-auto min-h-[44px]"
+            >
               Cancel
             </Button>
             <Button 
               variant="primary" 
               onClick={handleSend} 
               disabled={!subject || !message || isSending}
+              className="w-full sm:w-auto min-h-[44px]"
             >
               <Send className="h-4 w-4 mr-1" />
-              Send Email
+              {isSending ? 'Sending...' : 'Send Email'}
             </Button>
           </div>
         </div>
@@ -146,20 +164,30 @@ const CancelModal: React.FC<CancelModalProps> = ({ isOpen, onClose, onConfirm })
     try {
       await onConfirm(reason);
       onClose();
+      setReason('');
     } finally {
       setIsCancelling(false);
     }
   };
 
   return (
-    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-      <div className="bg-white rounded-lg shadow-xl max-w-md w-full mx-4">
-        <div className="p-6">
-          <div className="flex items-center space-x-3 mb-4">
-            <div className="p-2 bg-red-100 rounded-full">
-              <AlertCircle className="h-6 w-6 text-red-600" />
+    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
+      <div className="bg-white rounded-lg shadow-xl max-w-md w-full max-h-[90vh] overflow-y-auto">
+        <div className="p-4 sm:p-6">
+          <div className="flex items-center justify-between mb-4">
+            <div className="flex items-center space-x-3">
+              <div className="p-2 bg-red-100 rounded-full">
+                <AlertCircle className="h-6 w-6 text-red-600" />
+              </div>
+              <h3 className="text-lg font-semibold">Cancel Session</h3>
             </div>
-            <h3 className="text-lg font-semibold">Cancel Session</h3>
+            <button
+              onClick={onClose}
+              className="text-gray-400 hover:text-gray-600 p-2"
+              disabled={isCancelling}
+            >
+              <X className="h-5 w-5" />
+            </button>
           </div>
           
           <p className="text-sm text-gray-600 mb-4">
@@ -173,24 +201,111 @@ const CancelModal: React.FC<CancelModalProps> = ({ isOpen, onClose, onConfirm })
             <textarea
               value={reason}
               onChange={(e) => setReason(e.target.value)}
-              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500"
+              className="w-full px-3 py-2 text-base sm:text-sm border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500 resize-none"
               rows={3}
               placeholder="Please provide a reason for cancellation..."
               required
             />
           </div>
           
-          <div className="flex justify-end space-x-3">
-            <Button variant="secondary" onClick={onClose} disabled={isCancelling}>
+          <div className="flex flex-col-reverse sm:flex-row justify-end gap-3">
+            <Button 
+              variant="secondary" 
+              onClick={onClose} 
+              disabled={isCancelling}
+              className="w-full sm:w-auto min-h-[44px]"
+            >
               Keep Session
             </Button>
             <Button 
               variant="danger" 
               onClick={handleCancel} 
               disabled={!reason || isCancelling}
+              className="w-full sm:w-auto min-h-[44px]"
             >
               <XCircle className="h-4 w-4 mr-1" />
-              Cancel Session
+              {isCancelling ? 'Cancelling...' : 'Cancel Session'}
+            </Button>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+// Duplicate Session Modal
+interface DuplicateModalProps {
+  isOpen: boolean;
+  onClose: () => void;
+  onConfirm: (date: string) => Promise<void>;
+}
+
+const DuplicateModal: React.FC<DuplicateModalProps> = ({ isOpen, onClose, onConfirm }) => {
+  const [newDate, setNewDate] = useState('');
+  const [isDuplicating, setIsDuplicating] = useState(false);
+
+  if (!isOpen) return null;
+
+  const handleDuplicate = async () => {
+    setIsDuplicating(true);
+    try {
+      await onConfirm(newDate);
+      onClose();
+      setNewDate('');
+    } finally {
+      setIsDuplicating(false);
+    }
+  };
+
+  return (
+    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
+      <div className="bg-white rounded-lg shadow-xl max-w-md w-full">
+        <div className="p-4 sm:p-6">
+          <div className="flex items-center justify-between mb-4">
+            <h3 className="text-lg font-semibold">Duplicate Session</h3>
+            <button
+              onClick={onClose}
+              className="text-gray-400 hover:text-gray-600 p-2"
+              disabled={isDuplicating}
+            >
+              <X className="h-5 w-5" />
+            </button>
+          </div>
+          
+          <p className="text-sm text-gray-600 mb-4">
+            Create a copy of this session with a new date. All other details will be copied.
+          </p>
+          
+          <div className="mb-4">
+            <label className="block text-sm font-medium text-gray-700 mb-1">
+              New Session Date
+            </label>
+            <input
+              type="date"
+              value={newDate}
+              onChange={(e) => setNewDate(e.target.value)}
+              className="w-full px-3 py-2 text-base sm:text-sm min-h-[44px] border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500"
+              required
+            />
+          </div>
+          
+          <div className="flex flex-col-reverse sm:flex-row justify-end gap-3">
+            <Button 
+              variant="secondary" 
+              onClick={onClose} 
+              disabled={isDuplicating}
+              className="w-full sm:w-auto min-h-[44px]"
+            >
+              Cancel
+            </Button>
+            <Button 
+              variant="primary" 
+              onClick={handleDuplicate} 
+              disabled={!newDate || isDuplicating}
+              className="w-full sm:w-auto min-h-[44px]"
+            >
+              <Copy className="h-4 w-4 mr-1" />
+              {isDuplicating ? 'Duplicating...' : 'Duplicate Session'}
             </Button>
           </div>
         </div>
@@ -212,6 +327,7 @@ export const SessionActions: React.FC<SessionActionsProps> = ({
 }) => {
   const [showEmailModal, setShowEmailModal] = useState(false);
   const [showCancelModal, setShowCancelModal] = useState(false);
+  const [showDuplicateModal, setShowDuplicateModal] = useState(false);
   const [showMoreActions, setShowMoreActions] = useState(false);
 
   const confirmedAttendees = session.bookings?.filter(b => b.status === 'confirmed').length || 0;
@@ -221,21 +337,21 @@ export const SessionActions: React.FC<SessionActionsProps> = ({
 
   const primaryActions = [
     {
-      label: 'Edit Session',
+      label: 'Edit',
       icon: Edit3,
       onClick: onEditSession,
       variant: 'secondary' as const,
       disabled: session.status === 'CANCELLED' || session.status === 'COMPLETED'
     },
     {
-      label: `Email Attendees (${confirmedAttendees})`,
+      label: `Email (${confirmedAttendees})`,
       icon: Mail,
       onClick: () => setShowEmailModal(true),
       variant: 'secondary' as const,
       disabled: !canEmail
     },
     {
-      label: 'Cancel Session',
+      label: 'Cancel',
       icon: XCircle,
       onClick: () => setShowCancelModal(true),
       variant: 'danger' as const,
@@ -247,32 +363,32 @@ export const SessionActions: React.FC<SessionActionsProps> = ({
     {
       label: 'Duplicate Session',
       icon: Copy,
-      onClick: () => {
-        const newDate = prompt('Enter date for duplicated session (YYYY-MM-DD):');
-        if (newDate) {
-          onDuplicateSession(newDate);
-        }
-      }
+      onClick: () => setShowDuplicateModal(true),
+      disabled: false
     },
     {
       label: 'Export Attendees (CSV)',
       icon: Download,
-      onClick: () => onExportAttendees('csv')
+      onClick: () => onExportAttendees('csv'),
+      disabled: confirmedAttendees === 0
     },
     {
       label: 'Export Attendees (PDF)',
       icon: FileText,
-      onClick: () => onExportAttendees('pdf')
+      onClick: () => onExportAttendees('pdf'),
+      disabled: confirmedAttendees === 0
     },
     {
       label: 'Print Sign-in Sheet',
       icon: Printer,
-      onClick: onPrintSignInSheet
+      onClick: onPrintSignInSheet,
+      disabled: confirmedAttendees === 0
     },
     ...(isCompleted && onGenerateCertificates ? [{
       label: 'Generate Certificates',
       icon: CheckCircle,
-      onClick: onGenerateCertificates
+      onClick: onGenerateCertificates,
+      disabled: false
     }] : [])
   ];
 
@@ -284,44 +400,49 @@ export const SessionActions: React.FC<SessionActionsProps> = ({
         iconColor="primary"
       >
         <div className="space-y-4">
-          {/* Primary Actions */}
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+          {/* Primary Actions - Mobile Optimized Grid */}
+          <div className="grid grid-cols-3 gap-2 sm:gap-3">
             {primaryActions.map((action, index) => (
               <Button
                 key={index}
                 variant={action.variant}
                 onClick={action.onClick}
                 disabled={action.disabled || isLoading}
-                className="w-full"
+                className="w-full min-h-[44px] px-2 sm:px-4"
+                size="sm"
               >
-                <action.icon className="h-4 w-4 mr-2" />
-                {action.label}
+                <action.icon className="h-4 w-4 sm:mr-2" />
+                <span className="hidden sm:inline">{action.label}</span>
+                <span className="sm:hidden text-xs">{action.label.split(' ')[0]}</span>
               </Button>
             ))}
           </div>
 
-          {/* More Actions */}
+          {/* More Actions - Mobile Friendly Dropdown */}
           <div className="relative">
             <Button
               variant="secondary"
               onClick={() => setShowMoreActions(!showMoreActions)}
-              className="w-full"
+              className="w-full min-h-[44px]"
             >
               <MoreVertical className="h-4 w-4 mr-2" />
               More Actions
             </Button>
             
             {showMoreActions && (
-              <div className="absolute top-full mt-2 w-full bg-white rounded-lg shadow-lg border border-gray-200 z-10">
+              <div className="absolute bottom-full mb-2 sm:bottom-auto sm:top-full sm:mt-2 w-full bg-white rounded-lg shadow-lg border border-gray-200 z-10">
                 <div className="py-1">
                   {moreActions.map((action, index) => (
                     <button
                       key={index}
                       onClick={() => {
-                        action.onClick();
-                        setShowMoreActions(false);
+                        if (!action.disabled) {
+                          action.onClick();
+                          setShowMoreActions(false);
+                        }
                       }}
-                      className="flex items-center w-full px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                      disabled={action.disabled || isLoading}
+                      className="flex items-center w-full px-4 py-3 min-h-[44px] text-sm text-gray-700 hover:bg-gray-100 disabled:opacity-50 disabled:cursor-not-allowed"
                     >
                       <action.icon className="h-4 w-4 mr-3 text-gray-400" />
                       {action.label}
@@ -332,13 +453,13 @@ export const SessionActions: React.FC<SessionActionsProps> = ({
             )}
           </div>
 
-          {/* Session Status Info */}
+          {/* Session Status Info - Mobile Optimized */}
           {session.status === 'CANCELLED' && (
             <div className="flex items-start space-x-2 p-3 bg-red-50 rounded-lg">
               <XCircle className="h-5 w-5 text-red-600 flex-shrink-0 mt-0.5" />
               <div className="text-sm">
                 <p className="font-medium text-red-800">Session Cancelled</p>
-                <p className="text-red-700">
+                <p className="text-red-700 text-xs sm:text-sm">
                   This session has been cancelled. All attendees have been notified.
                 </p>
               </div>
@@ -350,7 +471,7 @@ export const SessionActions: React.FC<SessionActionsProps> = ({
               <CheckCircle className="h-5 w-5 text-green-600 flex-shrink-0 mt-0.5" />
               <div className="text-sm">
                 <p className="font-medium text-green-800">Session Completed</p>
-                <p className="text-green-700">
+                <p className="text-green-700 text-xs sm:text-sm">
                   This session has been completed. You can generate certificates for attendees.
                 </p>
               </div>
@@ -371,6 +492,12 @@ export const SessionActions: React.FC<SessionActionsProps> = ({
         isOpen={showCancelModal}
         onClose={() => setShowCancelModal(false)}
         onConfirm={onCancelSession}
+      />
+
+      <DuplicateModal
+        isOpen={showDuplicateModal}
+        onClose={() => setShowDuplicateModal(false)}
+        onConfirm={onDuplicateSession}
       />
     </>
   );
