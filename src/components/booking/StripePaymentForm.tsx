@@ -14,9 +14,17 @@ import { cn } from '@utils/cn';
 
 // Initialize Stripe
 console.log('=== STRIPE INITIALIZATION ===');
-console.log('Publishable Key:', import.meta.env.VITE_STRIPE_PUBLISHABLE_KEY ? 'Set' : 'Not Set');
-console.log('Key starts with:', import.meta.env.VITE_STRIPE_PUBLISHABLE_KEY?.substring(0, 7));
-const stripePromise = loadStripe(import.meta.env.VITE_STRIPE_PUBLISHABLE_KEY);
+const stripePublishableKey = import.meta.env.VITE_STRIPE_PUBLISHABLE_KEY || 'pk_test_51Qw5QyQSHAAMHn4tPbe31bwAtRb7qEAGms4h3kr8h8mu1nfyzzM1u9GHdnbtGtiuzJWH9NSqFoER4Wmhw3k91cKN00PQVbUU7I';
+console.log('Publishable Key:', stripePublishableKey ? 'Set' : 'Not Set');
+console.log('Key starts with:', stripePublishableKey?.substring(0, 7));
+console.log('Full key length:', stripePublishableKey?.length);
+
+if (!stripePublishableKey) {
+  console.error('❌ Stripe publishable key is missing!');
+  throw new Error('Stripe publishable key is required');
+}
+
+const stripePromise = loadStripe(stripePublishableKey);
 
 interface StripePaymentFormProps {
   courseSchedule: {

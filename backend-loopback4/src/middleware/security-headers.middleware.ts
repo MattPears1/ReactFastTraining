@@ -21,7 +21,7 @@ export const securityHeadersMiddleware: Middleware = async (
     `style-src 'self' 'unsafe-inline' https://fonts.googleapis.com`,
     `font-src 'self' https://fonts.gstatic.com`,
     `img-src 'self' data: https: blob:`,
-    `connect-src 'self' https://api.stripe.com https://www.google-analytics.com wss://*.reactfasttraining.co.uk`,
+    `connect-src 'self' http://localhost:3000 https://api.stripe.com https://www.google-analytics.com wss://*.reactfasttraining.co.uk`,
     `frame-src 'self' https://js.stripe.com https://hooks.stripe.com`,
     `object-src 'none'`,
     `base-uri 'self'`,

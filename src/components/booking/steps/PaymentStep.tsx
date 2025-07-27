@@ -11,7 +11,8 @@ import { BookingData } from '../BookingWizard';
 import { bookingApi } from '@/services/api/bookings';
 
 // Initialize Stripe
-const stripePromise = loadStripe(import.meta.env.VITE_STRIPE_PUBLISHABLE_KEY || '');
+const stripePublishableKey = import.meta.env.VITE_STRIPE_PUBLISHABLE_KEY || 'pk_test_51Qw5QyQSHAAMHn4tPbe31bwAtRb7qEAGms4h3kr8h8mu1nfyzzM1u9GHdnbtGtiuzJWH9NSqFoER4Wmhw3k91cKN00PQVbUU7I';
+const stripePromise = loadStripe(stripePublishableKey);
 
 interface PaymentStepProps {
   bookingData: BookingData;
