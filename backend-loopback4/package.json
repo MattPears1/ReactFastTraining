@@ -43,7 +43,7 @@
     "migrate:rollback": "knex migrate:rollback",
     "migrate:make": "knex migrate:make",
     "seed:run": "knex seed:run",
-    "setup:database": "ts-node src/scripts/setup-database.ts",
+    "setup:database": "node src/scripts/setup-database.js",
     "heroku-postbuild": "npm run build && npm run setup:database"
   },
   "repository": {
