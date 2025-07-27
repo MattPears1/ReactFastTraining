@@ -2,7 +2,13 @@ import * as Sentry from '@sentry/react';
 import { BrowserTracing } from '@sentry/tracing';
 
 export const initSentry = () => {
-  if (import.meta.env.VITE_SENTRY_DSN) {
+  // Skip Sentry initialization if no DSN provided to prevent errors
+  if (!import.meta.env.VITE_SENTRY_DSN) {
+    console.log('Sentry DSN not provided, skipping initialization');
+    return;
+  }
+
+  try {
     Sentry.init({
       dsn: import.meta.env.VITE_SENTRY_DSN,
       environment: import.meta.env.VITE_ENV || 'development',
@@ -35,6 +41,8 @@ export const initSentry = () => {
         return event;
       },
     });
+  } catch (error) {
+    console.error('Failed to initialize Sentry:', error);
   }
 };
 
