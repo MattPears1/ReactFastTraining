@@ -1,6 +1,12 @@
 #!/usr/bin/env node
 const { execSync } = require('child_process');
-require('dotenv').config();
+
+// Try to load dotenv, but continue if it's not available
+try {
+  require('dotenv').config();
+} catch (error) {
+  console.log('Note: dotenv not available, using environment variables directly');
+}
 
 console.log('🚀 Setting up database for React Fast Training Admin...\n');
 
