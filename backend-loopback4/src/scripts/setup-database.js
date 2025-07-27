@@ -1,5 +1,6 @@
 #!/usr/bin/env node
 const { execSync } = require('child_process');
+const path = require('path');
 
 // Try to load dotenv, but continue if it's not available
 try {
@@ -9,6 +10,11 @@ try {
 }
 
 console.log('🚀 Setting up database for React Fast Training Admin...\n');
+
+// Change to the backend directory
+const backendDir = path.join(__dirname, '../..');
+process.chdir(backendDir);
+console.log(`Working directory: ${process.cwd()}`);
 
 try {
   // Run migrations
