@@ -393,32 +393,7 @@ app.get('/api/admin/dashboard/overview', async (req, res) => {
   }
 });
 
-// Courses endpoints
-app.get('/api/admin/courses', async (req, res) => {
-  try {
-    const authHeader = req.headers.authorization;
-    if (!authHeader || !authHeader.startsWith('Bearer ')) {
-      return res.status(401).json({ error: 'Unauthorized' });
-    }
-
-    const token = authHeader.substring(7);
-    
-    try {
-      jwt.verify(token, process.env.JWT_SECRET);
-      
-      const courses = await client.query(`
-        SELECT * FROM courses ORDER BY created_at DESC
-      `);
-
-      res.json(courses.rows);
-    } catch (error) {
-      return res.status(401).json({ error: 'Invalid token' });
-    }
-  } catch (error) {
-    console.error('Courses error:', error);
-    res.status(500).json({ error: 'Internal server error' });
-  }
-});
+// Courses endpoints - REMOVED DUPLICATE (real endpoint is later with proper middleware)
 
 // Activity logs endpoint
 app.get('/api/admin/activity-logs', async (req, res) => {
@@ -461,39 +436,29 @@ app.get('/api/admin/activity-logs', async (req, res) => {
 });
 
 // Bookings endpoint
-app.get('/api/admin/bookings', async (req, res) => {
+app.get('/api/admin/bookings', authenticateToken, async (req, res) => {
   try {
-    const authHeader = req.headers.authorization;
-    if (!authHeader || !authHeader.startsWith('Bearer ')) {
-      return res.status(401).json({ error: 'Unauthorized' });
-    }
-
-    const token = authHeader.substring(7);
+    console.log('🔍 DEBUG: admin bookings endpoint called');
     
-    try {
-      jwt.verify(token, process.env.JWT_SECRET);
-      
-      const bookings = await client.query(`
-        SELECT b.*, u.first_name, u.last_name, u.email, u.phone,
-               c.name as course_name, 
-               DATE(cs.start_datetime) as session_date,
-               TO_CHAR(cs.start_datetime, 'HH24:MI') as start_time,
-               v.name as location_name
-        FROM bookings b
-        LEFT JOIN users u ON b.user_id = u.id
-        LEFT JOIN course_schedules cs ON b.course_schedule_id = cs.id
-        LEFT JOIN courses c ON cs.course_id = c.id
-        LEFT JOIN venues v ON cs.venue_id = v.id
-        ORDER BY b.created_at DESC
-      `);
+    const bookings = await client.query(`
+      SELECT b.*, u.first_name, u.last_name, u.email, u.phone,
+             c.name as course_name, 
+             DATE(cs.start_datetime) as session_date,
+             TO_CHAR(cs.start_datetime, 'HH24:MI') as start_time,
+             v.name as location_name
+      FROM bookings b
+      LEFT JOIN users u ON b.user_id = u.id
+      LEFT JOIN course_schedules cs ON b.course_schedule_id = cs.id
+      LEFT JOIN courses c ON cs.course_id = c.id
+      LEFT JOIN venues v ON cs.venue_id = v.id
+      ORDER BY b.created_at DESC
+    `);
 
-      res.json(bookings.rows);
-    } catch (error) {
-      return res.status(401).json({ error: 'Invalid token' });
-    }
+    console.log('🔍 DEBUG: Found', bookings.rows.length, 'bookings');
+    res.json(bookings.rows);
   } catch (error) {
-    console.error('Bookings error:', error);
-    res.status(500).json({ error: 'Internal server error' });
+    console.error('🔍 DEBUG: Bookings error:', error);
+    res.status(500).json({ error: 'Internal server error', details: error.message });
   }
 });
 
