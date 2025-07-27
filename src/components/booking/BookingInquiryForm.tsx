@@ -104,7 +104,7 @@ export const BookingInquiryForm: React.FC<BookingInquiryFormProps> = ({
         throw new Error('Failed to submit inquiry');
       }
 
-      showToast('success', 'Your inquiry has been sent! We\'ll respond within 24 hours.');
+      showToast('success', 'Your inquiry has been sent and your spot has been reserved for 24 hours! We\'ll respond within 24 hours.');
       onSuccess();
     } catch (error) {
       showToast('error', 'Failed to submit inquiry. Please try again.');
@@ -283,8 +283,11 @@ export const BookingInquiryForm: React.FC<BookingInquiryFormProps> = ({
 
         <div>
           <label className="block text-sm font-medium text-gray-700 mb-1">
-            Questions or Special Requirements
+            What is your inquiry?
           </label>
+          <p className="text-sm text-gray-600 mb-2">
+            Please write here any additional information or questions:
+          </p>
           <div className="relative">
             <MessageSquare className="absolute left-3 top-3 w-5 h-5 text-gray-400" />
             <textarea
@@ -339,12 +342,12 @@ export const BookingInquiryForm: React.FC<BookingInquiryFormProps> = ({
           <div className="flex items-start">
             <AlertCircle className="w-5 h-5 text-amber-600 mt-0.5 mr-2 flex-shrink-0" />
             <div className="text-sm text-amber-800">
-              <p className="font-medium mb-1">Important:</p>
+              <p className="font-medium mb-1">Important Information:</p>
               <ul className="list-disc list-inside space-y-1">
-                <li>This form sends an inquiry only - it does not book your place</li>
-                <li>We'll respond within 24 hours to confirm availability</li>
-                <li>Places are subject to availability at time of booking</li>
-                <li>You'll receive an inquiry reference number via email</li>
+                <li>When you send this message, this spot will be reserved for 24 hours</li>
+                <li>We will get back to you within 24 hours</li>
+                <li>Therefore you can book it if you still want</li>
+                <li>When the instructor responds, the link to the booking slot that is reserved will appear so that you can continue to book if necessary</li>
               </ul>
             </div>
           </div>
@@ -383,7 +386,7 @@ export const BookingInquiryForm: React.FC<BookingInquiryFormProps> = ({
             ) : (
               <>
                 <Send className="w-5 h-5" />
-                Send Inquiry
+                Send Inquiry & Reserve Spot
               </>
             )}
           </button>

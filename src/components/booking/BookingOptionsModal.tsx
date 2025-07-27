@@ -142,7 +142,7 @@ export const BookingOptionsModal: React.FC<BookingOptionsModalProps> = ({
                     <ul className="space-y-3 mb-6">
                       <li className="flex items-start">
                         <Clock className="w-5 h-5 text-blue-600 mr-2 flex-shrink-0 mt-0.5" />
-                        <span className="text-gray-700">Response within 24 hours</span>
+                        <span className="text-gray-700">Your spot will be reserved for 24 hours</span>
                       </li>
                       <li className="flex items-start">
                         <MessageSquare className="w-5 h-5 text-blue-600 mr-2 flex-shrink-0 mt-0.5" />
@@ -150,15 +150,15 @@ export const BookingOptionsModal: React.FC<BookingOptionsModalProps> = ({
                       </li>
                       <li className="flex items-start">
                         <CheckCircle className="w-5 h-5 text-blue-600 mr-2 flex-shrink-0 mt-0.5" />
+                        <span className="text-gray-700">Response within 24 hours with booking link</span>
+                      </li>
+                      <li className="flex items-start">
+                        <CheckCircle className="w-5 h-5 text-blue-600 mr-2 flex-shrink-0 mt-0.5" />
                         <span className="text-gray-700">Discuss special requirements</span>
                       </li>
                       <li className="flex items-start">
                         <CheckCircle className="w-5 h-5 text-blue-600 mr-2 flex-shrink-0 mt-0.5" />
-                        <span className="text-gray-700">Alternative payment options</span>
-                      </li>
-                      <li className="flex items-start">
-                        <CheckCircle className="w-5 h-5 text-blue-600 mr-2 flex-shrink-0 mt-0.5" />
-                        <span className="text-gray-700">Personal assistance from instructor</span>
+                        <span className="text-gray-700">Alternative payment options available</span>
                       </li>
                     </ul>
                     
@@ -166,19 +166,19 @@ export const BookingOptionsModal: React.FC<BookingOptionsModalProps> = ({
                       onClick={onSelectInquiry}
                       className="w-full bg-blue-600 text-white px-6 py-3 rounded-lg font-medium hover:bg-blue-700 transition-colors"
                     >
-                      Send Inquiry
+                      Send Inquiry & Reserve Spot
                     </button>
                     
                     <p className="text-xs text-gray-600 mt-3 text-center">
-                      Perfect for questions or alternative payment methods
+                      Your spot will be held for 24 hours while we respond
                     </p>
                   </motion.div>
                 </div>
 
                 <div className="mt-6 bg-amber-50 border border-amber-200 rounded-lg p-4">
                   <p className="text-sm text-amber-800">
-                    <strong>Note:</strong> Places are limited and allocated on a first-come, first-served basis. 
-                    Direct online booking guarantees your place immediately.
+                    <strong>Note:</strong> Places are limited. Direct online booking guarantees your place immediately. 
+                    Inquiries will reserve your spot for 24 hours while we respond.
                   </p>
                 </div>
               </div>
