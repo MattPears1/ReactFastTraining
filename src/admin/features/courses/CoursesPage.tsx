@@ -43,7 +43,8 @@ export const CoursesPage: React.FC = () => {
   const { data: courses, isLoading, error } = useQuery({
     queryKey: ['admin-courses'],
     queryFn: async () => {
-      const response = await fetch('/api/admin/courses');
+      const apiUrl = import.meta.env.VITE_API_URL || 'http://localhost:3000';
+      const response = await fetch(`${apiUrl}/api/admin/courses`);
       if (!response.ok) {
         throw new Error('Failed to fetch courses');
       }

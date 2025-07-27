@@ -13,6 +13,7 @@ import {
   Filter,
   Eye
 } from 'lucide-react';
+import { AdminCard } from '../../components/ui/AdminCard';
 import { Button } from '../../../components/ui/Button';
 import { LoadingSpinner } from '../../components/common/LoadingSpinner';
 

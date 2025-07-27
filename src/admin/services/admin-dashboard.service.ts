@@ -66,7 +66,7 @@ class AdminDashboardService {
 
   constructor() {
     this.api = axios.create({
-      baseURL: '', // Use relative URLs - Vite will proxy
+      baseURL: import.meta.env.VITE_API_URL || 'http://localhost:3000', // Use backend URL directly
     });
 
     // Add auth token to requests
