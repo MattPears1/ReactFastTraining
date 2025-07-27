@@ -77,52 +77,8 @@ export const SchedulePage: React.FC = () => {
           price: session.pricePerPerson || 0
         }));
       } catch (error) {
-        console.error('Course sessions API failed, using fallback data:', error);
-        // Fallback to mock data for immediate functionality
-        return [
-          {
-            id: '1',
-            courseName: 'Emergency First Aid at Work (EFAW)',
-            courseType: 'EFAW',
-            date: '2025-02-15',
-            startTime: '09:00',
-            endTime: '17:00',
-            location: 'Leeds Training Centre',
-            instructor: 'Lex Richardson',
-            maxParticipants: 12,
-            currentBookings: 8,
-            status: 'scheduled',
-            price: 75
-          },
-          {
-            id: '2',
-            courseName: 'First Aid at Work (FAW)',
-            courseType: 'FAW',
-            date: '2025-02-20',
-            startTime: '09:00',
-            endTime: '17:00',
-            location: 'Sheffield Training Centre',
-            instructor: 'Lex Richardson',
-            maxParticipants: 12,
-            currentBookings: 12,
-            status: 'scheduled',
-            price: 200
-          },
-          {
-            id: '3',
-            courseName: 'Paediatric First Aid',
-            courseType: 'PAEDIATRIC',
-            date: '2025-02-25',
-            startTime: '09:00',
-            endTime: '15:00',
-            location: 'York Training Centre',
-            instructor: 'Lex Richardson',
-            maxParticipants: 10,
-            currentBookings: 6,
-            status: 'scheduled',
-            price: 85
-          }
-        ];
+        console.error('Course sessions API failed:', error);
+        throw error; // Let React Query handle the error state
       }
     },
   });

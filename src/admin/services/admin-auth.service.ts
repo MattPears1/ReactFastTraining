@@ -36,9 +36,9 @@ class AdminAuthService {
   private isRefreshing = false;
 
   constructor() {
-    // Use backend URL directly for admin auth
-    const baseURL = import.meta.env.VITE_API_URL || 'http://localhost:3000';
-    console.log('🌐 [AdminAuthService] Using backend URL:', baseURL);
+    // Use relative URL in production, localhost in development
+    const baseURL = import.meta.env.PROD ? '' : (import.meta.env.VITE_API_URL || 'http://localhost:3000');
+    console.log('🌐 [AdminAuthService] Using backend URL:', baseURL || 'relative URLs');
     
     this.api = axios.create({
       baseURL,
@@ -140,7 +140,7 @@ class AdminAuthService {
   async refreshToken(): Promise<RefreshResponse> {
     // Create a separate axios instance for refresh to avoid interceptor loops
     const refreshApi = axios.create({
-      baseURL: import.meta.env.VITE_API_URL || 'http://localhost:3000',
+      baseURL: import.meta.env.PROD ? '' : (import.meta.env.VITE_API_URL || 'http://localhost:3000'),
       withCredentials: true,
       timeout: 10000,
     });

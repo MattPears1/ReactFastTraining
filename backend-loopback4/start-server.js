@@ -609,97 +609,274 @@ app.get('/api/admin/users', async (req, res) => {
   }
 });
 
-// Course Sessions endpoints for admin schedule synchronization
-const mockCourseSessions = [
-  {
-    id: '1',
-    courseId: 'course-1',
-    course: { name: 'Emergency First Aid at Work', type: 'EFAW' },
-    trainerId: 'trainer-1',
-    trainer: { name: 'Lex Richardson' },
-    locationId: 'location-1',
-    location: { name: 'Leeds Training Centre', address: 'Leeds City Centre' },
-    startDate: '2025-02-15T00:00:00.000Z',
-    endDate: '2025-02-15T00:00:00.000Z',
-    startTime: '09:00',
-    endTime: '17:00',
-    maxParticipants: 12,
-    currentParticipants: 8,
-    pricePerPerson: 75,
-    status: 'SCHEDULED'
-  },
-  {
-    id: '2',
-    courseId: 'course-2',
-    course: { name: 'First Aid at Work', type: 'FAW' },
-    trainerId: 'trainer-1',
-    trainer: { name: 'Lex Richardson' },
-    locationId: 'location-2',
-    location: { name: 'Sheffield Training Centre', address: 'Sheffield City Centre' },
-    startDate: '2025-02-20T00:00:00.000Z',
-    endDate: '2025-02-20T00:00:00.000Z',
-    startTime: '09:00',
-    endTime: '17:00',
-    maxParticipants: 12,
-    currentParticipants: 12,
-    pricePerPerson: 200,
-    status: 'SCHEDULED'
-  },
-  {
-    id: '3',
-    courseId: 'course-3',
-    course: { name: 'Paediatric First Aid', type: 'PAEDIATRIC' },
-    trainerId: 'trainer-1',
-    trainer: { name: 'Lex Richardson' },
-    locationId: 'location-3',
-    location: { name: 'York Training Centre', address: 'York City Centre' },
-    startDate: '2025-02-25T00:00:00.000Z',
-    endDate: '2025-02-25T00:00:00.000Z',
-    startTime: '09:00',
-    endTime: '15:00',
-    maxParticipants: 10,
-    currentParticipants: 6,
-    pricePerPerson: 85,
-    status: 'SCHEDULED'
-  }
-];
+// Course Sessions endpoints - Real database integration
 
 // Get all course sessions (admin only)
-app.get('/course-sessions', authenticateToken, (req, res) => {
-  console.log('Get course sessions');
-  res.json(mockCourseSessions);
+app.get('/course-sessions', authenticateToken, async (req, res) => {
+  try {
+    console.log('Get course sessions from database');
+    
+    const query = `
+      SELECT 
+        cs.id,
+        cs.course_id,
+        cs.venue_id,
+        cs.trainer_id,
+        cs.start_datetime,
+        cs.end_datetime,
+        cs.status,
+        cs.current_capacity,
+        cs.notes,
+        c.name as course_name,
+        c.course_type,
+        c.price,
+        c.max_capacity,
+        v.name as venue_name,
+        v.address_line1,
+        v.city
+      FROM course_schedules cs
+      LEFT JOIN courses c ON cs.course_id = c.id
+      LEFT JOIN venues v ON cs.venue_id = v.id
+      ORDER BY cs.start_datetime ASC
+    `;
+    
+    const result = await client.query(query);
+    
+    // Transform to match frontend format
+    const courseSessions = result.rows.map(row => ({
+      id: row.id.toString(),
+      courseId: row.course_id.toString(),
+      course: { 
+        name: row.course_name, 
+        type: row.course_type 
+      },
+      trainerId: row.trainer_id ? row.trainer_id.toString() : null,
+      trainer: { name: 'Lex Richardson' }, // Default trainer for now
+      locationId: row.venue_id.toString(),
+      location: { 
+        name: row.venue_name, 
+        address: `${row.address_line1}, ${row.city}` 
+      },
+      startDate: row.start_datetime,
+      endDate: row.end_datetime,
+      startTime: new Date(row.start_datetime).toTimeString().substring(0, 5),
+      endTime: new Date(row.end_datetime).toTimeString().substring(0, 5),
+      maxParticipants: row.max_capacity,
+      currentParticipants: row.current_capacity || 0,
+      pricePerPerson: parseFloat(row.price),
+      status: row.status?.toUpperCase() || 'SCHEDULED'
+    }));
+    
+    res.json(courseSessions);
+  } catch (error) {
+    console.error('Error fetching course sessions:', error);
+    res.status(500).json({ error: 'Failed to fetch course sessions' });
+  }
 });
 
 // Get course sessions available for booking (public endpoint)
-app.get('/course-sessions/available', (req, res) => {
-  console.log('Get available course sessions for booking');
-  const availableSessions = mockCourseSessions.filter(session => 
-    session.currentParticipants < session.maxParticipants && 
-    session.status === 'SCHEDULED'
-  );
-  res.json(availableSessions);
+app.get('/course-sessions/available', async (req, res) => {
+  try {
+    console.log('Get available course sessions for booking');
+    
+    const query = `
+      SELECT 
+        cs.id,
+        cs.course_id,
+        cs.venue_id,
+        cs.start_datetime,
+        cs.end_datetime,
+        cs.status,
+        cs.current_capacity,
+        c.name as course_name,
+        c.course_type,
+        c.price,
+        c.max_capacity,
+        v.name as venue_name,
+        v.address_line1,
+        v.city
+      FROM course_schedules cs
+      LEFT JOIN courses c ON cs.course_id = c.id
+      LEFT JOIN venues v ON cs.venue_id = v.id
+      WHERE cs.status IN ('published', 'draft')
+        AND cs.start_datetime > NOW()
+        AND cs.current_capacity < c.max_capacity
+      ORDER BY cs.start_datetime ASC
+    `;
+    
+    const result = await client.query(query);
+    
+    // Transform to match frontend format
+    const availableSessions = result.rows.map(row => ({
+      id: row.id.toString(),
+      courseId: row.course_id.toString(),
+      course: { 
+        name: row.course_name, 
+        type: row.course_type 
+      },
+      location: { 
+        name: row.venue_name, 
+        address: `${row.address_line1}, ${row.city}` 
+      },
+      startDate: row.start_datetime,
+      endDate: row.end_datetime,
+      startTime: new Date(row.start_datetime).toTimeString().substring(0, 5),
+      endTime: new Date(row.end_datetime).toTimeString().substring(0, 5),
+      maxParticipants: row.max_capacity,
+      currentParticipants: row.current_capacity || 0,
+      pricePerPerson: parseFloat(row.price),
+      status: row.status?.toUpperCase() || 'SCHEDULED'
+    }));
+    
+    res.json(availableSessions);
+  } catch (error) {
+    console.error('Error fetching available course sessions:', error);
+    res.status(500).json({ error: 'Failed to fetch available course sessions' });
+  }
 });
 
 // Get single course session
-app.get('/course-sessions/:id', (req, res) => {
-  console.log('Get course session:', req.params.id);
-  const session = mockCourseSessions.find(s => s.id === req.params.id);
-  if (session) {
+app.get('/course-sessions/:id', async (req, res) => {
+  try {
+    console.log('Get course session:', req.params.id);
+    
+    const query = `
+      SELECT 
+        cs.id,
+        cs.course_id,
+        cs.venue_id,
+        cs.trainer_id,
+        cs.start_datetime,
+        cs.end_datetime,
+        cs.status,
+        cs.current_capacity,
+        cs.notes,
+        c.name as course_name,
+        c.course_type,
+        c.price,
+        c.max_capacity,
+        v.name as venue_name,
+        v.address_line1,
+        v.city
+      FROM course_schedules cs
+      LEFT JOIN courses c ON cs.course_id = c.id
+      LEFT JOIN venues v ON cs.venue_id = v.id
+      WHERE cs.id = $1
+    `;
+    
+    const result = await client.query(query, [req.params.id]);
+    
+    if (result.rows.length === 0) {
+      return res.status(404).json({ error: 'Course session not found' });
+    }
+    
+    const row = result.rows[0];
+    const session = {
+      id: row.id.toString(),
+      courseId: row.course_id.toString(),
+      course: { 
+        name: row.course_name, 
+        type: row.course_type 
+      },
+      trainerId: row.trainer_id ? row.trainer_id.toString() : null,
+      trainer: { name: 'Lex Richardson' },
+      locationId: row.venue_id.toString(),
+      location: { 
+        name: row.venue_name, 
+        address: `${row.address_line1}, ${row.city}` 
+      },
+      startDate: row.start_datetime,
+      endDate: row.end_datetime,
+      startTime: new Date(row.start_datetime).toTimeString().substring(0, 5),
+      endTime: new Date(row.end_datetime).toTimeString().substring(0, 5),
+      maxParticipants: row.max_capacity,
+      currentParticipants: row.current_capacity || 0,
+      pricePerPerson: parseFloat(row.price),
+      status: row.status?.toUpperCase() || 'SCHEDULED'
+    };
+    
     res.json(session);
-  } else {
-    res.status(404).json({ error: 'Course session not found' });
+  } catch (error) {
+    console.error('Error fetching course session:', error);
+    res.status(500).json({ error: 'Failed to fetch course session' });
+  }
+});
+
+// Create new course session (admin only)
+app.post('/course-sessions', authenticateToken, async (req, res) => {
+  try {
+    console.log('Create new course session:', req.body);
+    
+    const { courseId, venueId, startDatetime, endDatetime, notes } = req.body;
+    
+    const query = `
+      INSERT INTO course_schedules (course_id, venue_id, start_datetime, end_datetime, status, current_capacity, notes, created_by)
+      VALUES ($1, $2, $3, $4, 'published', 0, $5, $6)
+      RETURNING *
+    `;
+    
+    const result = await client.query(query, [
+      courseId,
+      venueId, 
+      startDatetime,
+      endDatetime,
+      notes || null,
+      req.user.id
+    ]);
+    
+    res.status(201).json(result.rows[0]);
+  } catch (error) {
+    console.error('Error creating course session:', error);
+    res.status(500).json({ error: 'Failed to create course session' });
   }
 });
 
 // Delete course session (admin only)
-app.delete('/course-sessions/:id', authenticateToken, (req, res) => {
-  console.log('Delete course session:', req.params.id);
-  const index = mockCourseSessions.findIndex(s => s.id === req.params.id);
-  if (index !== -1) {
-    mockCourseSessions.splice(index, 1);
+app.delete('/course-sessions/:id', authenticateToken, async (req, res) => {
+  try {
+    console.log('Delete course session:', req.params.id);
+    
+    const query = 'DELETE FROM course_schedules WHERE id = $1 RETURNING *';
+    const result = await client.query(query, [req.params.id]);
+    
+    if (result.rows.length === 0) {
+      return res.status(404).json({ error: 'Course session not found' });
+    }
+    
     res.status(204).send();
-  } else {
-    res.status(404).json({ error: 'Course session not found' });
+  } catch (error) {
+    console.error('Error deleting course session:', error);
+    res.status(500).json({ error: 'Failed to delete course session' });
+  }
+});
+
+// Get courses for admin (admin only)
+app.get('/api/admin/courses', authenticateToken, async (req, res) => {
+  try {
+    console.log('Get courses for admin');
+    
+    const query = 'SELECT * FROM courses WHERE is_active = true ORDER BY name';
+    const result = await client.query(query);
+    
+    res.json(result.rows);
+  } catch (error) {
+    console.error('Error fetching courses:', error);
+    res.status(500).json({ error: 'Failed to fetch courses' });
+  }
+});
+
+// Get venues for admin (admin only)
+app.get('/api/admin/venues', authenticateToken, async (req, res) => {
+  try {
+    console.log('Get venues for admin');
+    
+    const query = 'SELECT * FROM venues WHERE is_active = true ORDER BY name';
+    const result = await client.query(query);
+    
+    res.json(result.rows);
+  } catch (error) {
+    console.error('Error fetching venues:', error);
+    res.status(500).json({ error: 'Failed to fetch venues' });
   }
 });
 
