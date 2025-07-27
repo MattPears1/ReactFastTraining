@@ -1,6 +1,6 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
-import { Facebook, Twitter, Instagram, Linkedin, Youtube, Mail, Phone, MapPin } from 'lucide-react'
+import { Facebook, Instagram, Linkedin, Youtube, Mail, Phone, MapPin } from 'lucide-react'
 import NewsletterForm from '@components/ui/NewsletterForm'
 
 const footerLinks = {
@@ -26,7 +26,10 @@ const footerLinks = {
     { label: 'Downloads', href: '/downloads' },
   ],
   company: [
+    { label: 'Home', href: '/' },
     { label: 'About Us', href: '/about' },
+    { label: 'Courses', href: '/courses' },
+    { label: 'Contact', href: '/contact' },
   ],
   legal: [
     { label: 'Privacy Policy', href: '/privacy' },
@@ -36,10 +39,17 @@ const footerLinks = {
   ],
 }
 
+const TikTokIcon = () => (
+  <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+    <path d="M12.525.02c1.31-.02 2.61-.01 3.91-.02.08 1.53.63 3.09 1.75 4.17 1.12 1.11 2.7 1.62 4.24 1.79v4.03c-1.44-.05-2.89-.35-4.2-.97-.57-.26-1.1-.59-1.62-.93-.01 2.92.01 5.84-.02 8.75-.08 1.4-.54 2.79-1.35 3.94-1.31 1.92-3.58 3.17-5.91 3.21-1.43.08-2.86-.31-4.08-1.03-2.02-1.19-3.44-3.37-3.65-5.71-.02-.5-.03-1-.01-1.49.18-1.9 1.12-3.72 2.58-4.96 1.66-1.44 3.98-2.13 6.15-1.72.02 1.48-.04 2.96-.04 4.44-.99-.32-2.15-.23-3.02.37-.63.41-1.11 1.04-1.36 1.75-.21.51-.15 1.07-.14 1.61.24 1.64 1.82 3.02 3.5 2.87 1.12-.01 2.19-.66 2.77-1.61.19-.33.4-.67.41-1.06.1-1.79.06-3.57.07-5.36.01-4.03-.01-8.05.02-12.07z"/>
+  </svg>
+)
+
 const socialLinks = [
   { icon: Facebook, href: 'https://facebook.com', label: 'Facebook' },
-  { icon: Twitter, href: 'https://twitter.com', label: 'Twitter' },
+  { icon: TikTokIcon, href: 'https://tiktok.com', label: 'TikTok' },
   { icon: Instagram, href: 'https://instagram.com', label: 'Instagram' },
+  { icon: Linkedin, href: 'https://linkedin.com', label: 'LinkedIn' },
 ]
 
 const Footer: React.FC = () => {
@@ -66,116 +76,75 @@ const Footer: React.FC = () => {
         </div>
       </div>
 
-      {/* Main Footer Content */}
-      <div className="container py-8 sm:py-10 md:py-12 lg:py-16">
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-6 sm:gap-8">
-          {/* Company Info */}
-          <div className="col-span-1 sm:col-span-2 md:col-span-3 lg:col-span-2 mb-6 sm:mb-0 text-center lg:text-left">
-            <Link to="/" className="inline-block mb-4 w-full">
+      {/* Main Footer Content - Compact Single Row */}
+      <div className="container py-6">
+        <div className="flex flex-col lg:flex-row items-center justify-between gap-6">
+          {/* Logo and Brand */}
+          <div className="flex items-center gap-4">
+            <Link to="/" className="flex items-center">
               <img 
                 src="/images/logos/fulllogo_transparent.png" 
                 alt="React Fast Training" 
-                className="h-16 w-auto mx-auto"
+                className="h-16 sm:h-20 md:h-24 lg:h-28 xl:h-32 w-auto"
               />
             </Link>
-            <p className="text-gray-600 dark:text-gray-400 mb-6 max-w-xs text-center mx-auto">
-              South Yorkshire's premier first aid training provider. Professional courses delivered by an experienced instructor with military and emergency services background.
-            </p>
-            
-            {/* Contact Info */}
-            <div className="space-y-3 mb-6 text-center lg:text-left">
-              <a
-                href="tel:07447485644"
-                className="flex items-center gap-3 text-gray-600 dark:text-gray-400 hover:text-primary-600 dark:hover:text-primary-400 transition-colors justify-center lg:justify-start"
-              >
-                <Phone className="w-5 h-5" />
-                <span>07447 485644</span>
-              </a>
-              <a
-                href="mailto:info@reactfasttraining.co.uk"
-                className="flex items-center gap-3 text-gray-600 dark:text-gray-400 hover:text-primary-600 dark:hover:text-primary-400 transition-colors justify-center lg:justify-start"
-              >
-                <Mail className="w-5 h-5" />
-                <span>info@reactfasttraining.co.uk</span>
-              </a>
-              <div className="flex items-start gap-3 text-gray-600 dark:text-gray-400 justify-center lg:justify-start">
-                <MapPin className="w-5 h-5 flex-shrink-0 mt-0.5" />
-                <span>Training venues across<br />Yorkshire</span>
-              </div>
-            </div>
+          </div>
 
-            {/* Social Links */}
-            <div className="flex items-center gap-2 sm:gap-3 md:gap-4 justify-center lg:justify-start">
-              {socialLinks.map((social) => (
-                <a
-                  key={social.label}
-                  href={social.href}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="p-2.5 sm:p-2 rounded-lg bg-gray-200 dark:bg-gray-800 text-gray-600 dark:text-gray-400 hover:bg-primary-600 hover:text-white dark:hover:bg-primary-600 transition-all duration-200 min-w-[44px] min-h-[44px] sm:min-w-0 sm:min-h-0 flex items-center justify-center"
-                  aria-label={social.label}
-                >
-                  <social.icon className="w-5 h-5" />
-                </a>
-              ))}
+          {/* Contact Info */}
+          <div className="flex flex-wrap items-center gap-6 text-sm">
+            <a
+              href="tel:07447485644"
+              className="flex items-center gap-2 text-gray-600 dark:text-gray-400 hover:text-primary-600 dark:hover:text-primary-400 transition-colors"
+            >
+              <Phone className="w-4 h-4" />
+              <span>07447 485644</span>
+            </a>
+            <a
+              href="mailto:info@reactfasttraining.co.uk"
+              className="flex items-center gap-2 text-gray-600 dark:text-gray-400 hover:text-primary-600 dark:hover:text-primary-400 transition-colors"
+            >
+              <Mail className="w-4 h-4" />
+              <span>info@reactfasttraining.co.uk</span>
+            </a>
+            <div className="flex items-center gap-2 text-gray-600 dark:text-gray-400">
+              <MapPin className="w-4 h-4" />
+              <span>South Yorkshire</span>
             </div>
           </div>
 
           {/* Quick Links */}
-          <div className="col-span-1">
-            <h4 className="font-semibold text-gray-900 dark:text-white mb-3 sm:mb-4 text-base sm:text-lg">
+          <div className="flex flex-wrap items-center gap-4 text-sm">
+            <Link to="/courses" className="text-gray-600 dark:text-gray-400 hover:text-primary-600 dark:hover:text-primary-400 transition-colors">
               Courses
-            </h4>
-            <ul className="space-y-2 sm:space-y-3">
-              {footerLinks.courses.map((link) => (
-                <li key={link.href}>
-                  <Link
-                    to={link.href}
-                    className="text-sm sm:text-base text-gray-600 dark:text-gray-400 hover:text-primary-600 dark:hover:text-primary-400 transition-colors inline-block py-1"
-                  >
-                    {link.label}
-                  </Link>
-                </li>
-              ))}
-            </ul>
+            </Link>
+            <Link to="/booking" className="text-gray-600 dark:text-gray-400 hover:text-primary-600 dark:hover:text-primary-400 transition-colors">
+              Book Now
+            </Link>
+            <Link to="/faq" className="text-gray-600 dark:text-gray-400 hover:text-primary-600 dark:hover:text-primary-400 transition-colors">
+              FAQ
+            </Link>
+            <Link to="/contact" className="text-gray-600 dark:text-gray-400 hover:text-primary-600 dark:hover:text-primary-400 transition-colors">
+              Contact
+            </Link>
           </div>
 
-          <div className="col-span-1">
-            <h4 className="font-semibold text-gray-900 dark:text-white mb-3 sm:mb-4 text-base sm:text-lg">
-              Company
-            </h4>
-            <ul className="space-y-2 sm:space-y-3">
-              {footerLinks.company.map((link) => (
-                <li key={link.href}>
-                  <Link
-                    to={link.href}
-                    className="text-sm sm:text-base text-gray-600 dark:text-gray-400 hover:text-primary-600 dark:hover:text-primary-400 transition-colors inline-block py-1"
-                  >
-                    {link.label}
-                  </Link>
-                </li>
-              ))}
-            </ul>
-          </div>
-
-          <div className="col-span-1">
-            <h4 className="font-semibold text-gray-900 dark:text-white mb-3 sm:mb-4 text-base sm:text-lg">
-              Support
-            </h4>
-            <ul className="space-y-2 sm:space-y-3">
-              {footerLinks.support.map((link) => (
-                <li key={link.href}>
-                  <Link
-                    to={link.href}
-                    className="text-sm sm:text-base text-gray-600 dark:text-gray-400 hover:text-primary-600 dark:hover:text-primary-400 transition-colors inline-block py-1"
-                  >
-                    {link.label}
-                  </Link>
-                </li>
-              ))}
-            </ul>
+          {/* Social Links */}
+          <div className="flex items-center gap-2">
+            {socialLinks.map((social) => (
+              <a
+                key={social.label}
+                href={social.href}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="p-2 rounded-lg bg-gray-200 dark:bg-gray-800 text-gray-600 dark:text-gray-400 hover:bg-primary-600 hover:text-white dark:hover:bg-primary-600 transition-all duration-200"
+                aria-label={social.label}
+              >
+                <social.icon className="w-4 h-4" />
+              </a>
+            ))}
           </div>
         </div>
+
       </div>
 
       {/* Bottom Bar */}

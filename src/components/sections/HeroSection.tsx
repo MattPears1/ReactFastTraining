@@ -1,140 +1,153 @@
-import React from 'react'
-import { motion } from 'framer-motion'
-import { ArrowRight, CheckCircle, BookOpen, Users, Award } from 'lucide-react'
-import MagneticButton from '@components/ui/MagneticButton'
-import { useKineticTypography } from '@hooks/useAnimation'
-import { FloatingIcons } from '@components/ui/FloatingIcons'
-import { AnimatedGradientText } from '@components/ui/AnimatedGradientText'
+import React from 'react';
+import { motion } from 'framer-motion';
+import { ArrowRight, CheckCircle, BookOpen, Users, Award, Phone } from 'lucide-react';
+import MagneticButton from '@components/ui/MagneticButton';
+import { useKineticTypography } from '@hooks/useAnimation';
+import { FloatingIcons } from '@components/ui/FloatingIcons';
+import { AnimatedGradientText } from '@components/ui/AnimatedGradientText';
 
 const HeroSection: React.FC = () => {
-  const { ref: titleRef, displayText } = useKineticTypography('Professional First Aid Training')
+  const { ref: titleRef, displayText } = useKineticTypography('Professional First Aid Training');
   
   return (
-    <section className="relative min-h-screen flex items-center overflow-hidden">
-      {/* Unique Diagonal Split Background */}
+    <section className="relative min-h-[100vh] flex items-center overflow-hidden">
+      {/* Simplified Background for Mobile Performance */}
       <div className="absolute inset-0">
         <div className="absolute inset-0 bg-gradient-to-br from-primary-50 via-white to-secondary-50 dark:from-gray-900 dark:via-gray-900 dark:to-gray-800" />
-        <svg className="absolute inset-0 w-full h-full" preserveAspectRatio="none">
-          <defs>
-            <pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse">
-              <path d="M 40 0 L 0 0 0 40" fill="none" stroke="rgba(14, 165, 233, 0.05)" strokeWidth="1"/>
-            </pattern>
-          </defs>
-          <rect width="100%" height="100%" fill="url(#grid)" />
-          <path d="M 0 0 L 100 0 L 100 70 L 0 100 Z" fill="rgba(16, 185, 129, 0.03)" />
-        </svg>
+        {/* Simplified pattern for mobile */}
+        <div className="absolute inset-0 opacity-5 bg-medical-pattern" />
       </div>
 
-      {/* Floating Medical Icons Background */}
-      <FloatingIcons />
+      {/* Reduced floating icons on mobile */}
+      <div className="hidden sm:block">
+        <FloatingIcons />
+      </div>
 
-      <div className="container relative z-10">
-        {/* Unique Asymmetric Layout */}
-        <div className="grid lg:grid-cols-12 gap-8 items-center">
-          {/* Main Content - Takes up 7 columns */}
+      <div className="container relative z-10 px-4 sm:px-6 lg:px-8">
+        <div className="grid lg:grid-cols-12 gap-6 lg:gap-8 items-center">
+          {/* Main Content - Mobile First */}
           <motion.div
-            initial={{ opacity: 0, x: -50 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.8 }}
-            className="lg:col-span-7"
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6 }}
+            className="lg:col-span-7 text-center lg:text-left"
           >
-            {/* Certification Badge */}
+            {/* Certification Badge - Smaller on Mobile */}
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.2 }}
-              className="inline-flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-primary-100 to-secondary-100 dark:from-primary-900/30 dark:to-secondary-900/30 text-primary-700 dark:text-primary-300 rounded-full text-sm font-medium mb-6"
+              className="inline-flex items-center gap-2 px-3 py-1.5 sm:px-4 sm:py-2 bg-gradient-to-r from-primary-100 to-secondary-100 dark:from-primary-900/30 dark:to-secondary-900/30 text-primary-700 dark:text-primary-300 rounded-full text-xs sm:text-sm font-medium mb-4 sm:mb-6"
             >
-              <Award className="w-4 h-4" />
-              Ofqual Regulated & HSE Approved
+              <Award className="w-3 h-3 sm:w-4 sm:h-4" />
+              <span className="whitespace-nowrap">HSE Approved</span>
             </motion.div>
 
-            {/* Title with Unique Typography */}
-            <div className="relative mb-8">
-              <h1 ref={titleRef} className="text-5xl md:text-6xl lg:text-7xl font-heading font-bold text-gray-900 dark:text-white leading-tight">
+            {/* Mobile-Optimized Title */}
+            <div className="relative mb-6 sm:mb-8">
+              <h1 ref={titleRef} className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-heading font-bold text-gray-900 dark:text-white leading-tight">
                 <span className="block">{displayText}</span>
-                <span className="block mt-2 text-transparent bg-clip-text bg-gradient-to-r from-primary-500 to-secondary-500">
-                  in South Yorkshire
+                <span className="block mt-2 text-2xl sm:text-3xl md:text-4xl lg:text-5xl text-transparent bg-clip-text bg-gradient-to-r from-primary-500 to-secondary-500">
+                  in Yorkshire
                 </span>
               </h1>
-              {/* Animated Slogan */}
-              <AnimatedGradientText 
-                text="Act Fast | Learn Skills" 
-                className="text-2xl md:text-3xl mt-4 font-semibold"
-              />
-              {/* Decorative Line */}
+              
+              {/* Slogan - Hidden on very small screens */}
+              <div className="hidden sm:block">
+                <AnimatedGradientText 
+                  text="Act Fast | Save Lives" 
+                  className="text-lg sm:text-xl md:text-2xl lg:text-3xl mt-3 sm:mt-4 font-semibold"
+                />
+              </div>
+              
+              {/* Decorative Line - Centered on Mobile */}
               <motion.div
                 initial={{ width: 0 }}
-                animate={{ width: '100px' }}
+                animate={{ width: '60px' }}
                 transition={{ delay: 0.5, duration: 0.8 }}
-                className="h-1 bg-gradient-to-r from-primary-500 to-secondary-500 rounded-full mt-4"
+                className="h-1 bg-gradient-to-r from-primary-500 to-secondary-500 rounded-full mt-3 sm:mt-4 mx-auto lg:mx-0"
               />
             </div>
 
-            <p className="text-lg md:text-xl text-gray-600 dark:text-gray-400 mb-8 max-w-xl">
+            <p className="text-base sm:text-lg md:text-xl text-gray-600 dark:text-gray-400 mb-6 sm:mb-8 max-w-xl mx-auto lg:mx-0 px-4 sm:px-0">
               Professional first aid training in Yorkshire. Learn life-saving skills from an experienced instructor.
             </p>
 
-            {/* CTA Buttons in Unique Layout */}
-            <div className="flex flex-wrap gap-4 mb-8">
+            {/* Mobile-Optimized CTA Buttons */}
+            <div className="flex flex-col sm:flex-row sm:flex-wrap gap-3 sm:gap-4 mb-6 sm:mb-8 px-4 sm:px-0">
+              {/* Primary CTA - Full Width on Mobile */}
               <MagneticButton
                 size="lg"
-                href="/courses"
-                className="bg-gradient-to-r from-primary-500 to-primary-600 hover:from-primary-600 hover:to-primary-700 text-white"
+                href="/booking"
+                className="w-full sm:w-auto bg-gradient-to-r from-primary-500 to-primary-600 hover:from-primary-600 hover:to-primary-700 text-white min-h-[48px] text-base sm:text-lg"
                 rightIcon={<ArrowRight className="w-5 h-5" />}
               >
-                View Courses
+                Book Now
               </MagneticButton>
-              <MagneticButton
-                variant="outline"
-                size="lg"
-                href="/contact"
-                className="border-2 border-secondary-500 text-secondary-600 hover:bg-secondary-50"
-              >
-                Get a Quote
-              </MagneticButton>
+              
+              {/* Secondary CTAs - Side by Side on Mobile */}
+              <div className="grid grid-cols-2 gap-3 w-full sm:w-auto sm:flex">
+                <MagneticButton
+                  variant="outline"
+                  size="md"
+                  href="/courses"
+                  className="border-2 border-secondary-500 text-secondary-600 hover:bg-secondary-50 min-h-[44px] text-sm sm:text-base"
+                >
+                  View Courses
+                </MagneticButton>
+                <MagneticButton
+                  variant="outline"
+                  size="md"
+                  href="tel:07447485644"
+                  className="border-2 border-accent-500 text-accent-600 hover:bg-accent-50 min-h-[44px] text-sm sm:text-base flex items-center justify-center gap-1"
+                >
+                  <Phone className="w-4 h-4" />
+                  <span className="hidden xs:inline">Call Now</span>
+                  <span className="xs:hidden">Call</span>
+                </MagneticButton>
+              </div>
             </div>
 
-            {/* Key Features Grid */}
-            <div className="grid grid-cols-3 gap-4">
+            {/* Key Features - Mobile Optimized Grid */}
+            <div className="grid grid-cols-3 gap-2 sm:gap-3 md:gap-4 px-4 sm:px-0">
               <motion.div
                 initial={{ opacity: 0, y: 20 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.3 }}
-                className="text-center p-4 rounded-lg bg-white/50 dark:bg-gray-800/50 backdrop-blur-sm"
+                className="text-center p-3 sm:p-4 rounded-lg bg-white/50 dark:bg-gray-800/50 backdrop-blur-sm"
               >
-                <BookOpen className="w-8 h-8 text-primary-500 mx-auto mb-2" />
-                <p className="text-sm font-medium text-gray-900 dark:text-white">From £75</p>
+                <BookOpen className="w-6 h-6 sm:w-8 sm:h-8 text-primary-500 mx-auto mb-1 sm:mb-2" />
+                <p className="text-xs sm:text-sm font-medium text-gray-900 dark:text-white">From £75</p>
               </motion.div>
               <motion.div
                 initial={{ opacity: 0, y: 20 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.4 }}
-                className="text-center p-4 rounded-lg bg-white/50 dark:bg-gray-800/50 backdrop-blur-sm"
+                className="text-center p-3 sm:p-4 rounded-lg bg-white/50 dark:bg-gray-800/50 backdrop-blur-sm"
               >
-                <Users className="w-8 h-8 text-secondary-500 mx-auto mb-2" />
-                <p className="text-sm font-medium text-gray-900 dark:text-white">Individual Groups</p>
+                <Users className="w-6 h-6 sm:w-8 sm:h-8 text-secondary-500 mx-auto mb-1 sm:mb-2" />
+                <p className="text-xs sm:text-sm font-medium text-gray-900 dark:text-white">Groups</p>
               </motion.div>
               <motion.div
                 initial={{ opacity: 0, y: 20 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.5 }}
-                className="text-center p-4 rounded-lg bg-white/50 dark:bg-gray-800/50 backdrop-blur-sm"
+                className="text-center p-3 sm:p-4 rounded-lg bg-white/50 dark:bg-gray-800/50 backdrop-blur-sm"
               >
-                <CheckCircle className="w-8 h-8 text-accent-500 mx-auto mb-2" />
-                <p className="text-sm font-medium text-gray-900 dark:text-white">Certified</p>
+                <CheckCircle className="w-6 h-6 sm:w-8 sm:h-8 text-accent-500 mx-auto mb-1 sm:mb-2" />
+                <p className="text-xs sm:text-sm font-medium text-gray-900 dark:text-white">Certified</p>
               </motion.div>
             </div>
           </motion.div>
 
-          {/* Visual Element - Takes up 5 columns */}
+          {/* Visual Element - Hidden on Mobile, Shown on Desktop */}
           <motion.div
             initial={{ opacity: 0, scale: 0.8 }}
             animate={{ opacity: 1, scale: 1 }}
             transition={{ duration: 1, delay: 0.3 }}
             className="lg:col-span-5 relative hidden lg:block"
           >
-            {/* Unique Card Stack Design */}
+            {/* Desktop Card Stack Design */}
             <div className="relative">
               {/* Back Card */}
               <motion.div
@@ -162,13 +175,14 @@ const HeroSection: React.FC = () => {
               />
               {/* Front Card with Logo */}
               <div className="relative rounded-3xl overflow-hidden shadow-2xl bg-white dark:bg-gray-800">
-                <div className="flex items-center justify-center h-full p-12">
+                <div className="flex items-center justify-center h-[400px] xl:h-[500px] p-8 lg:p-12">
                   <img 
                     src="/images/logos/fulllogo_transparent.png" 
                     alt="React Fast Training Logo"
-                    className="w-full h-auto max-w-md"
+                    className="w-full h-auto max-w-sm xl:max-w-md"
+                    loading="lazy"
                     onError={(e) => {
-                      e.currentTarget.src = '/images/placeholder-course.jpg'
+                      e.currentTarget.src = '/images/placeholder-course.jpg';
                     }}
                   />
                 </div>
@@ -176,18 +190,32 @@ const HeroSection: React.FC = () => {
             </div>
           </motion.div>
         </div>
+
+        {/* Mobile Logo - Shown only on Mobile */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.6 }}
+          className="mt-8 sm:mt-12 lg:hidden text-center"
+        >
+          <img 
+            src="/images/logos/fulllogo_transparent.png" 
+            alt="React Fast Training"
+            className="w-48 sm:w-64 h-auto mx-auto opacity-80"
+            loading="lazy"
+          />
+        </motion.div>
       </div>
 
-      {/* Bottom Wave */}
-      <div className="absolute bottom-0 left-0 right-0">
+      {/* Bottom Wave - Simplified for Mobile */}
+      <div className="absolute bottom-0 left-0 right-0 hidden sm:block">
         <svg viewBox="0 0 1440 100" fill="none" xmlns="http://www.w3.org/2000/svg" className="w-full">
           <path d="M0 50C240 20 480 80 720 50C960 20 1200 80 1440 50V100H0V50Z" fill="white" fillOpacity="0.1"/>
-          <path d="M0 60C240 30 480 90 720 60C960 30 1200 90 1440 60V100H0V60Z" fill="white" fillOpacity="0.2"/>
-          <path d="M0 70C240 40 480 100 720 70C960 40 1200 100 1440 70V100H0V70Z" fill="white" fillOpacity="0.3"/>
+          <path d="M0 70C240 40 480 100 720 70C960 40 1200 100 1440 70V100H0V70Z" fill="white" fillOpacity="0.2"/>
         </svg>
       </div>
     </section>
-  )
-}
+  );
+};
 
-export default HeroSection
+export default HeroSection;

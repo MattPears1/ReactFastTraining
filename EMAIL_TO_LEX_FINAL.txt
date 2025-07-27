@@ -1,0 +1,30 @@
+Subject: DNS Setup Instructions for reactfasttraining.co.uk - Ready to Go!
+
+Hi Lex,
+
+The new React Fast Training website is ready to go live on your .co.uk domain. 
+
+I've attached a Word document with simple step-by-step instructions to update your DNS settings in Wix. The whole process should take about 10 minutes.
+
+KEY INFORMATION:
+- Your new site is already live at: https://reactfasttraining.org (so you can see what it looks like)
+- DNS Target for Wix: react-fast-training-6fb9e7681eed.herokuapp.com
+- Your email will NOT be affected
+
+WHAT YOU'LL DO:
+1. Log into Wix
+2. Delete old A records
+3. Add a CNAME record for www
+4. Add a redirect for the root domain
+5. Save changes
+
+The site will be live at reactfasttraining.co.uk within 1-4 hours after you make the changes.
+
+Please open the attached Word document "LEX_DNS_SETUP_COMPLETE.docx" for the complete instructions with all the details you need to copy and paste.
+
+Let me know when you're ready to make the change, and I'll be available if you need any help.
+
+Best regards,
+[Your name]
+
+P.S. Remember - this is completely reversible if needed. You can always switch back to Wix by changing the DNS settings back.

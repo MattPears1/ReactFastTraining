@@ -38,10 +38,10 @@ const icons = {
 }
 
 const colors = {
-  success: 'bg-success-50 text-success-800 border-success-200',
-  error: 'bg-error-50 text-error-800 border-error-200',
-  warning: 'bg-warning-50 text-warning-800 border-warning-200',
-  info: 'bg-primary-50 text-primary-800 border-primary-200',
+  success: 'bg-green-50 text-green-800 border-green-200 dark:bg-green-900/20 dark:text-green-200 dark:border-green-800',
+  error: 'bg-red-50 text-red-800 border-red-200 dark:bg-red-900/20 dark:text-red-200 dark:border-red-800',
+  warning: 'bg-yellow-50 text-yellow-800 border-yellow-200 dark:bg-yellow-900/20 dark:text-yellow-200 dark:border-yellow-800',
+  info: 'bg-blue-50 text-blue-800 border-blue-200 dark:bg-blue-900/20 dark:text-blue-200 dark:border-blue-800',
 }
 
 export const ToastProvider: React.FC<ToastProviderProps> = ({ children }) => {
@@ -54,7 +54,9 @@ export const ToastProvider: React.FC<ToastProviderProps> = ({ children }) => {
     setToasts(prev => [...prev, toast])
     
     if (duration > 0) {
-      setTimeout(() => hideToast(id), duration)
+      setTimeout(() => {
+        setToasts(prev => prev.filter(t => t.id !== id))
+      }, duration)
     }
   }, [])
 

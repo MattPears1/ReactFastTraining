@@ -52,21 +52,21 @@ const AboutPage: React.FC = () => {
       
       
       {/* Hero Section */}
-      <section className="relative py-10 md:py-16 overflow-hidden">
+      <section className="relative py-12 sm:py-16 md:py-20 lg:py-24 overflow-hidden">
         <div className="absolute inset-0 bg-gradient-to-br from-primary-50 to-secondary-50 dark:from-gray-900 dark:to-gray-800">
           <div className="absolute inset-0 bg-dot-pattern opacity-5" />
         </div>
         
-        <div className="container relative z-10">
+        <div className="container px-4 sm:px-6 lg:px-8 relative z-10">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             className="max-w-4xl mx-auto text-center"
           >
-            <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-gray-900 dark:text-white mb-6">
+            <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold text-gray-900 dark:text-white mb-4 sm:mb-6">
               About <span className="text-gradient gradient-primary">React Fast Training</span>
             </h1>
-            <p className="text-lg md:text-xl text-gray-600 dark:text-gray-400">
+            <p className="text-base sm:text-lg md:text-xl text-gray-600 dark:text-gray-400 px-4 sm:px-0">
               South Yorkshire's newest first aid training provider. 
               Professional, practical, and personal - because every second counts.
             </p>
@@ -75,22 +75,22 @@ const AboutPage: React.FC = () => {
       </section>
 
       {/* Mission & Vision */}
-      <section className="section">
-        <div className="container">
-          <div className="grid md:grid-cols-2 gap-12 lg:gap-16">
+      <section className="py-12 sm:py-16 md:py-20">
+        <div className="container px-4 sm:px-6 lg:px-8">
+          <div className="grid lg:grid-cols-2 gap-8 sm:gap-12 lg:gap-16">
             <motion.div
               initial={{ opacity: 0, x: -30 }}
               whileInView={{ opacity: 1, x: 0 }}
               viewport={{ once: true }}
             >
-              <h2 className="text-3xl font-bold text-gray-900 dark:text-white mb-4">
+              <h2 className="text-2xl sm:text-3xl font-bold text-gray-900 dark:text-white mb-3 sm:mb-4">
                 Our Mission
               </h2>
-              <p className="text-gray-600 dark:text-gray-400 mb-6">
+              <p className="text-sm sm:text-base text-gray-600 dark:text-gray-400 mb-4 sm:mb-6">
                 To provide Yorkshire businesses and individuals with the highest quality first aid training, 
                 delivered by experienced professionals who understand that knowledge saves lives.
               </p>
-              <p className="text-gray-600 dark:text-gray-400">
+              <p className="text-sm sm:text-base text-gray-600 dark:text-gray-400">
                 We believe that everyone should have access to life-saving skills. Our mission is to make 
                 first aid training accessible, affordable, and engaging - because in an emergency, 
                 confidence and competence make all the difference.
@@ -101,16 +101,17 @@ const AboutPage: React.FC = () => {
               initial={{ opacity: 0, x: 30 }}
               whileInView={{ opacity: 1, x: 0 }}
               viewport={{ once: true }}
+              className="mt-8 lg:mt-0"
             >
-              <h2 className="text-3xl font-bold text-gray-900 dark:text-white mb-4">
+              <h2 className="text-2xl sm:text-3xl font-bold text-gray-900 dark:text-white mb-3 sm:mb-4">
                 Our Story
               </h2>
-              <p className="text-gray-600 dark:text-gray-400 mb-6">
+              <p className="text-sm sm:text-base text-gray-600 dark:text-gray-400 mb-4 sm:mb-6">
                 Founded by Lex, React Fast Training brings together the discipline from Royal Navy 
                 and policing service. This background shapes our approach to training - practical, 
                 no-nonsense, and focused on real-world application.
               </p>
-              <p className="text-gray-600 dark:text-gray-400">
+              <p className="text-sm sm:text-base text-gray-600 dark:text-gray-400">
                 We're not a faceless corporation - we're a small, personal operation that cares deeply about 
                 every student who walks through our doors. When you train with us, you're learning from someone 
                 who has faced real emergencies and understands the importance of being prepared.
@@ -121,16 +122,16 @@ const AboutPage: React.FC = () => {
       </section>
 
       {/* Statistics Section */}
-      <section className="section bg-primary-50 dark:bg-primary-900/20">
-        <div className="container">
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
+      <section className="py-12 sm:py-16 md:py-20 bg-primary-50 dark:bg-primary-900/20">
+        <div className="container px-4 sm:px-6 lg:px-8">
+          <div className="grid grid-cols-2 sm:grid-cols-4 gap-6 sm:gap-8 text-center">
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
             >
               <AnimatedCounter target={12} className="text-primary-600 dark:text-primary-400" />
-              <p className="text-gray-600 dark:text-gray-400 mt-2">Maximum Group Size</p>
+              <p className="text-xs sm:text-sm text-gray-600 dark:text-gray-400 mt-2">Maximum Group Size</p>
             </motion.div>
             <motion.div
               initial={{ opacity: 0, y: 20 }}
@@ -139,7 +140,7 @@ const AboutPage: React.FC = () => {
               transition={{ delay: 0.1 }}
             >
               <AnimatedCounter target={13} className="text-primary-600 dark:text-primary-400" />
-              <p className="text-gray-600 dark:text-gray-400 mt-2">Different Courses</p>
+              <p className="text-xs sm:text-sm text-gray-600 dark:text-gray-400 mt-2">Different Courses</p>
             </motion.div>
             <motion.div
               initial={{ opacity: 0, y: 20 }}
@@ -147,8 +148,8 @@ const AboutPage: React.FC = () => {
               viewport={{ once: true }}
               transition={{ delay: 0.2 }}
             >
-              <AnimatedCounter target={3} suffix="+" className="text-primary-600 dark:text-primary-400" />
-              <p className="text-gray-600 dark:text-gray-400 mt-2">Years Experience</p>
+              <AnimatedCounter target={18} suffix="+" className="text-primary-600 dark:text-primary-400" />
+              <p className="text-xs sm:text-sm text-gray-600 dark:text-gray-400 mt-2">Years Experience</p>
             </motion.div>
             <motion.div
               initial={{ opacity: 0, y: 20 }}
@@ -157,30 +158,30 @@ const AboutPage: React.FC = () => {
               transition={{ delay: 0.3 }}
             >
               <AnimatedCounter target={100} suffix="%" className="text-primary-600 dark:text-primary-400" />
-              <p className="text-gray-600 dark:text-gray-400 mt-2">Practical Focus</p>
+              <p className="text-xs sm:text-sm text-gray-600 dark:text-gray-400 mt-2">Practical Focus</p>
             </motion.div>
           </div>
         </div>
       </section>
 
       {/* Values */}
-      <section className="section bg-gray-50 dark:bg-gray-800">
-        <div className="container">
+      <section className="py-12 sm:py-16 md:py-20 bg-gray-50 dark:bg-gray-800">
+        <div className="container px-4 sm:px-6 lg:px-8">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            className="text-center mb-12"
+            className="text-center mb-8 sm:mb-10 md:mb-12"
           >
-            <h2 className="text-3xl md:text-4xl font-bold text-gray-900 dark:text-white mb-4">
+            <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-gray-900 dark:text-white mb-3 sm:mb-4">
               Our Core Values
             </h2>
-            <p className="text-lg text-gray-600 dark:text-gray-400 max-w-2xl mx-auto">
+            <p className="text-base sm:text-lg text-gray-600 dark:text-gray-400 max-w-2xl mx-auto px-4 sm:px-0">
               These principles guide everything we do and shape our company culture.
             </p>
           </motion.div>
 
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+          <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
             {values.map((value, index) => (
               <motion.div
                 key={value.title}
@@ -190,13 +191,13 @@ const AboutPage: React.FC = () => {
                 viewport={{ once: true }}
                 className="text-center"
               >
-                <div className="w-16 h-16 bg-primary-100 dark:bg-primary-900/30 rounded-2xl flex items-center justify-center mx-auto mb-4">
-                  <value.icon className="w-8 h-8 text-primary-600 dark:text-primary-400" />
+                <div className="w-14 h-14 sm:w-16 sm:h-16 bg-primary-100 dark:bg-primary-900/30 rounded-xl sm:rounded-2xl flex items-center justify-center mx-auto mb-3 sm:mb-4">
+                  <value.icon className="w-7 h-7 sm:w-8 sm:h-8 text-primary-600 dark:text-primary-400" />
                 </div>
-                <h3 className="text-xl font-semibold text-gray-900 dark:text-white mb-2">
+                <h3 className="text-lg sm:text-xl font-semibold text-gray-900 dark:text-white mb-2">
                   {value.title}
                 </h3>
-                <p className="text-gray-600 dark:text-gray-400">
+                <p className="text-sm sm:text-base text-gray-600 dark:text-gray-400 px-4 sm:px-0">
                   {value.description}
                 </p>
               </motion.div>

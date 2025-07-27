@@ -5,7 +5,7 @@ const FAWRequalificationPage: React.FC = () => {
   const courseData = {
     courseName: 'First Aid at Work Requalification',
     courseAcronym: 'FAW-R',
-    duration: '2 Days (12 hours)',
+    duration: 'Full Day (5 hours)',
     price: '£150',
     certificateValidity: 'Valid for 3 years',
     description: 'This course is for those who need to renew their FAW certificate. It serves as a comprehensive refresher of the three-day course content, ensuring that first aiders are up-to-date with any changes in protocols and maintain their competency.',
@@ -32,7 +32,7 @@ const FAWRequalificationPage: React.FC = () => {
     
     courseContent: [
       {
-        title: 'Day 1: Core Emergency Skills Refresher',
+        title: 'Core Emergency Skills Refresher',
         topics: [
           'Review of roles and responsibilities of a first aider',
           'Updated protocols for managing emergency situations',
@@ -46,7 +46,7 @@ const FAWRequalificationPage: React.FC = () => {
         ]
       },
       {
-        title: 'Day 2: Medical Conditions & Advanced Skills',
+        title: 'Medical Conditions & Advanced Skills',
         topics: [
           'Burns and scalds treatment updates',
           'Managing fractures and dislocations',

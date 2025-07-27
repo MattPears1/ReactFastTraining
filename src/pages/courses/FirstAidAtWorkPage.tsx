@@ -35,7 +35,7 @@ const FirstAidAtWorkPage: React.FC = () => {
   ]
 
   const whatYouGet = [
-    '3-day intensive training course',
+    'Full day intensive training course',
     'HSE approved certification valid for 3 years',
     'Comprehensive course manual',
     'Practical hands-on training',
@@ -47,9 +47,9 @@ const FirstAidAtWorkPage: React.FC = () => {
   return (
     <div className="relative bg-white dark:bg-gray-900">
       <SEO
-        title="First Aid at Work Course Yorkshire | 3-Day FAW Training"
-        description="Comprehensive 3-day First Aid at Work course in Yorkshire. HSE approved FAW training for designated workplace first aiders. Book your place today."
-        keywords="first aid at work course, FAW training Yorkshire, 3 day first aid course, HSE first aid training, workplace first aider"
+        title="First Aid at Work Course Yorkshire | Full Day FAW Training"
+        description="Comprehensive full day First Aid at Work course in Yorkshire. HSE approved FAW training for designated workplace first aiders. Book your place today."
+        keywords="first aid at work course, FAW training Yorkshire, full day first aid course, HSE first aid training, workplace first aider"
         canonical="/courses/first-aid-at-work"
       />
 
@@ -79,13 +79,13 @@ const FirstAidAtWorkPage: React.FC = () => {
             <h1 className="text-4xl md:text-5xl lg:text-6xl font-heading font-bold text-gray-900 dark:text-white mb-6">
               First Aid at Work
               <span className="block text-3xl md:text-4xl mt-2 text-transparent bg-clip-text bg-gradient-to-r from-secondary-500 to-primary-500">
-                3-Day Comprehensive Training
+                Full Day Comprehensive Training
               </span>
             </h1>
             
             <p className="text-xl text-gray-600 dark:text-gray-400 mb-8 max-w-3xl mx-auto">
               The most comprehensive first aid qualification for workplace first aiders. 
-              Learn life-saving skills over 3 days of intensive, practical training.
+              Learn life-saving skills in one intensive, practical training day.
             </p>
             
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
@@ -119,8 +119,8 @@ const FirstAidAtWorkPage: React.FC = () => {
             >
               <Clock className="w-12 h-12 text-secondary-500 mx-auto mb-4" />
               <h3 className="text-xl font-semibold text-gray-900 dark:text-white mb-2">Duration</h3>
-              <p className="text-gray-600 dark:text-gray-400">3 Days (18 hours)</p>
-              <p className="text-sm text-gray-500 dark:text-gray-500 mt-2">9:00 AM - 4:00 PM each day</p>
+              <p className="text-gray-600 dark:text-gray-400">Full Day (6 hours)</p>
+              <p className="text-sm text-gray-500 dark:text-gray-500 mt-2">9:00 AM - 3:00 PM</p>
             </motion.div>
             
             <motion.div

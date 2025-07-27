@@ -38,11 +38,7 @@ hostname -I | awk '{print $1}'
 ```powershell
 Get-NetIPAddress -AddressFamily IPv4 | Where-Object {$_.InterfaceAlias -notlike "*Loopback*"} | Select-Object IPAddress
 ```
-
-**On Mac/Linux:**
-```bash
-ifconfig | grep "inet " | grep -v 127.0.0.1
-```
+the dev pc is w1.
 
 ### 4. Troubleshooting
 

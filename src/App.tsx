@@ -7,6 +7,7 @@ import ErrorBoundary from '@components/common/ErrorBoundary'
 import { ThemeProvider } from '@contexts/ThemeContext'
 import { ToastProvider } from '@contexts/ToastContext'
 import { NotificationProvider } from '@contexts/NotificationContext'
+import { AuthProvider } from '@contexts/AuthContext'
 import { initPerformanceMonitoring, trackBundleSize } from '@utils/performance'
 import { AnalyticsProvider } from '@components/providers/AnalyticsProvider'
 
@@ -34,14 +35,25 @@ const ProductsPage = lazy(() => import('@pages/ProductsPage'))
 const NotFoundPage = lazy(() => import('@pages/NotFoundPage'))
 const LoginPage = lazy(() => import('@pages/LoginPage'))
 const RegisterPage = lazy(() => import('@pages/RegisterPage'))
+const EmailVerificationPage = lazy(() => import('@pages/EmailVerificationPage'))
+const ResetPasswordPage = lazy(() => import('@pages/ResetPasswordPage'))
+const ForgotPasswordPage = lazy(() => import('@pages/ForgotPasswordPage'))
 const ServerErrorPage = lazy(() => import('@pages/ServerErrorPage'))
 const ForbiddenPage = lazy(() => import('@pages/ForbiddenPage'))
 const MaintenancePage = lazy(() => import('@pages/MaintenancePage'))
-const OfflinePage = lazy(() => import('@pages/OfflinePage'))
 const SearchPage = lazy(() => import('@pages/SearchPage'))
 const ProfilePage = lazy(() => import('@pages/ProfilePage'))
 const TrainingVenuePage = lazy(() => import('@pages/TrainingVenuePage'))
-const BookingPage = lazy(() => import('@pages/BookingPage'))
+const BookingPage = lazy(() => import('@pages/BookingPageEnhanced'))
+const BookingSuccessPage = lazy(() => import('@pages/BookingSuccessPage'))
+
+// Client Portal Pages
+const ClientDashboardPage = lazy(() => import('@pages/client/DashboardPage'))
+const ClientBookingHistoryPage = lazy(() => import('@pages/client/BookingHistoryPage'))
+
+// Admin Pages
+const AdminPage = lazy(() => import('@pages/AdminPage'))
+const AdminRoutes = lazy(() => import('@/routes/AdminRoutes').then(module => ({ default: module.AdminRoutes })))
 
 function App() {
   const location = useLocation()
@@ -62,8 +74,9 @@ function App() {
       <ThemeProvider>
         <ToastProvider>
           <NotificationProvider>
-            <AnalyticsProvider>
-              <Layout>
+            <AuthProvider>
+              <AnalyticsProvider>
+                <Layout>
             <AnimatePresence mode="wait">
               <Suspense fallback={<LoadingScreen />}>
                 <Routes location={location} key={location.pathname}>
@@ -94,16 +107,30 @@ function App() {
                   <Route path="/profile" element={<ProfilePage />} />
                   <Route path="/login" element={<LoginPage />} />
                   <Route path="/register" element={<RegisterPage />} />
+                  <Route path="/verify-email" element={<EmailVerificationPage />} />
+                  <Route path="/reset-password" element={<ResetPasswordPage />} />
+                  <Route path="/forgot-password" element={<ForgotPasswordPage />} />
+                  
+                  {/* Client Portal Routes */}
+                  <Route path="/client" element={<ClientDashboardPage />} />
+                  <Route path="/client/dashboard" element={<ClientDashboardPage />} />
+                  <Route path="/client/bookings" element={<ClientBookingHistoryPage />} />
+                  <Route path="/client/bookings/:id" element={<ClientBookingHistoryPage />} />
+                  
+                  {/* Admin Routes */}
+                  <Route path="/admin/*" element={<AdminRoutes />} />
+                  <Route path="/admin-legacy" element={<AdminPage />} />
+                  
                   <Route path="/500" element={<ServerErrorPage />} />
                   <Route path="/403" element={<ForbiddenPage />} />
                   <Route path="/maintenance" element={<MaintenancePage />} />
-                  <Route path="/offline" element={<OfflinePage />} />
                   <Route path="*" element={<NotFoundPage />} />
                 </Routes>
               </Suspense>
             </AnimatePresence>
-          </Layout>
-            </AnalyticsProvider>
+                </Layout>
+              </AnalyticsProvider>
+            </AuthProvider>
           </NotificationProvider>
         </ToastProvider>
       </ThemeProvider>

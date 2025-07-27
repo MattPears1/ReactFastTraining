@@ -28,6 +28,7 @@
     "docker:build": "docker build -t react-fast-training-api .",
     "docker:run": "docker run -p 3000:3000 -d react-fast-training-api",
     "premigrate": "npm run build",
+    "sync-stripe-products": "ts-node src/scripts/sync-stripe-products.ts",
     "migrate": "node ./dist/migrate",
     "preopenapi-spec": "npm run build",
     "openapi-spec": "node ./dist/openapi-spec",

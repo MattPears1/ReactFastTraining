@@ -5,7 +5,7 @@ const FAWCoursePage: React.FC = () => {
   const courseData = {
     courseName: 'First Aid at Work',
     courseAcronym: 'FAW',
-    duration: '3 Days (18 hours)',
+    duration: 'Full Day (6 hours)',
     price: '£200',
     certificateValidity: 'Valid for 3 years',
     description: 'This is the most comprehensive workplace first aid course, designed for individuals in higher-risk environments such as factories, construction sites, and manufacturing facilities. It equips first aiders to handle a wide array of injuries and medical emergencies.',
@@ -33,7 +33,7 @@ const FAWCoursePage: React.FC = () => {
     
     courseContent: [
       {
-        title: 'Day 1: Emergency Response & Life Support',
+        title: 'Emergency Response & Life Support',
         topics: [
           'Roles and responsibilities of a first aider',
           'Assessing an incident and managing the scene safely',
@@ -44,7 +44,7 @@ const FAWCoursePage: React.FC = () => {
         ]
       },
       {
-        title: 'Day 2: Trauma & Injury Management',
+        title: 'Trauma & Injury Management',
         topics: [
           'Treating choking in conscious and unconscious casualties',
           'Managing bleeding including catastrophic bleeding',
@@ -55,7 +55,7 @@ const FAWCoursePage: React.FC = () => {
         ]
       },
       {
-        title: 'Day 3: Medical Conditions & Assessment',
+        title: 'Medical Conditions & Assessment',
         topics: [
           'Heart attacks, angina and cardiac emergencies',
           'Strokes - recognition using FAST protocol',
@@ -77,11 +77,11 @@ const FAWCoursePage: React.FC = () => {
       'Comprehensive course manual to keep',
       'Written and practical assessments',
       'Certificate issued on successful completion',
-      'Refreshments and lunch provided each day',
+      'Refreshments and lunch provided',
       'Free parking at all venues'
     ],
     
-    seoKeywords: 'first aid at work course Yorkshire, FAW training Leeds, 3 day first aid course, workplace first aider training, HSE approved first aid'
+    seoKeywords: 'first aid at work course Yorkshire, FAW training Leeds, full day first aid course, workplace first aider training, HSE approved first aid'
   }
 
   return <CourseTemplate {...courseData} />

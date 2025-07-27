@@ -1,0 +1,244 @@
+/* Responsive Touch Targets */
+@layer utilities {
+  /* Ensure minimum touch target size of 44x44px on mobile */
+  .touch-target {
+    @apply min-h-[44px] min-w-[44px];
+  }
+  
+  .touch-target-sm {
+    @apply min-h-[36px] min-w-[36px] sm:min-h-[44px] sm:min-w-[44px];
+  }
+  
+  .touch-target-lg {
+    @apply min-h-[48px] min-w-[48px] sm:min-h-[44px] sm:min-w-[44px];
+  }
+  
+  /* Responsive text truncation */
+  .truncate-mobile {
+    @apply truncate sm:text-clip sm:overflow-visible sm:whitespace-normal;
+  }
+  
+  /* Responsive spacing helpers */
+  .section-spacing {
+    @apply py-12 sm:py-16 md:py-20 lg:py-24;
+  }
+  
+  .section-spacing-sm {
+    @apply py-8 sm:py-12 md:py-16 lg:py-20;
+  }
+  
+  .card-spacing {
+    @apply p-4 sm:p-6 lg:p-8;
+  }
+  
+  .card-spacing-sm {
+    @apply p-3 sm:p-4 md:p-5 lg:p-6;
+  }
+  
+  .container-padding {
+    @apply px-4 sm:px-6 lg:px-8;
+  }
+  
+  /* Responsive grid helpers */
+  .responsive-grid-2 {
+    @apply grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6;
+  }
+  
+  .responsive-grid-3 {
+    @apply grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6;
+  }
+  
+  .responsive-grid-4 {
+    @apply grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6;
+  }
+  
+  .responsive-grid-auto {
+    @apply grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 sm:gap-6;
+  }
+  
+  /* Hide scrollbars on mobile for better UX */
+  @media (max-width: 640px) {
+    .hide-scrollbar-mobile {
+      -ms-overflow-style: none;
+      scrollbar-width: none;
+    }
+    
+    .hide-scrollbar-mobile::-webkit-scrollbar {
+      display: none;
+    }
+  }
+  
+  /* Stack elements on mobile */
+  .stack-mobile {
+    @apply flex flex-col sm:flex-row;
+  }
+  
+  .stack-mobile-reverse {
+    @apply flex flex-col-reverse sm:flex-row;
+  }
+  
+  .stack-mobile-center {
+    @apply flex flex-col sm:flex-row items-center;
+  }
+  
+  /* Responsive text sizing */
+  .text-responsive-sm {
+    @apply text-xs sm:text-sm;
+  }
+  
+  .text-responsive-base {
+    @apply text-sm sm:text-base;
+  }
+  
+  .text-responsive-lg {
+    @apply text-base sm:text-lg md:text-xl;
+  }
+  
+  .text-responsive-xl {
+    @apply text-lg sm:text-xl md:text-2xl;
+  }
+  
+  .text-responsive-2xl {
+    @apply text-xl sm:text-2xl md:text-3xl;
+  }
+  
+  .text-responsive-3xl {
+    @apply text-2xl sm:text-3xl md:text-4xl lg:text-5xl;
+  }
+  
+  .text-responsive-4xl {
+    @apply text-3xl sm:text-4xl md:text-5xl lg:text-6xl;
+  }
+  
+  /* Responsive margins */
+  .margin-responsive-sm {
+    @apply mb-3 sm:mb-4 md:mb-6;
+  }
+  
+  .margin-responsive-base {
+    @apply mb-4 sm:mb-6 md:mb-8;
+  }
+  
+  .margin-responsive-lg {
+    @apply mb-6 sm:mb-8 md:mb-12;
+  }
+  
+  /* Responsive padding */
+  .padding-responsive-sm {
+    @apply p-3 sm:p-4 md:p-6;
+  }
+  
+  .padding-responsive-base {
+    @apply p-4 sm:p-6 md:p-8;
+  }
+  
+  .padding-responsive-lg {
+    @apply p-6 sm:p-8 md:p-12;
+  }
+}
+
+/* Responsive table styles */
+@layer components {
+  .responsive-table {
+    @apply w-full;
+  }
+  
+  @media (max-width: 640px) {
+    .responsive-table thead {
+      @apply sr-only;
+    }
+    
+    .responsive-table tbody tr {
+      @apply block border-b border-gray-200 dark:border-gray-700 mb-3;
+    }
+    
+    .responsive-table tbody td {
+      @apply block text-right pl-8 py-2 relative;
+    }
+    
+    .responsive-table tbody td:before {
+      @apply absolute left-0 font-medium text-gray-600 dark:text-gray-400;
+      content: attr(data-label);
+    }
+  }
+}
+
+/* Collapsible sections for mobile */
+@layer components {
+  .collapsible-mobile {
+    @apply overflow-hidden transition-all duration-300;
+  }
+  
+  .collapsible-mobile.collapsed {
+    @apply max-h-0;
+  }
+  
+  .collapsible-mobile.expanded {
+    @apply max-h-[1000px];
+  }
+}
+
+/* Fix for horizontal scrolling issues */
+@layer base {
+  html,
+  body {
+    @apply overflow-x-hidden;
+  }
+  
+  * {
+    @apply max-w-full;
+  }
+  
+  /* Prevent text overflow on mobile */
+  p, h1, h2, h3, h4, h5, h6, span, a {
+    @apply break-words;
+  }
+  
+  /* Ensure images are responsive */
+  img {
+    @apply max-w-full h-auto;
+  }
+}
+
+/* Additional responsive helpers */
+@layer utilities {
+  /* Line clamp utilities for text truncation */
+  .line-clamp-1 {
+    @apply overflow-hidden;
+    display: -webkit-box;
+    -webkit-line-clamp: 1;
+    -webkit-box-orient: vertical;
+  }
+  
+  .line-clamp-2 {
+    @apply overflow-hidden;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+  }
+  
+  .line-clamp-3 {
+    @apply overflow-hidden;
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+  }
+  
+  /* Responsive border radius */
+  .rounded-responsive {
+    @apply rounded-lg sm:rounded-xl md:rounded-2xl;
+  }
+  
+  .rounded-responsive-sm {
+    @apply rounded sm:rounded-lg md:rounded-xl;
+  }
+  
+  /* Responsive shadows */
+  .shadow-responsive {
+    @apply shadow-md sm:shadow-lg md:shadow-xl;
+  }
+  
+  .shadow-responsive-sm {
+    @apply shadow sm:shadow-md md:shadow-lg;
+  }
+}

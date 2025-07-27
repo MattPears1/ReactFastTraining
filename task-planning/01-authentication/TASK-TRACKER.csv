@@ -1,0 +1,11 @@
+Task,File,Status,Completion %,Notes,Blockers
+"Set up Heroku PostgreSQL","01-heroku-postgresql-setup.md","Completed",100,"Database config and schemas created",""
+"Create user table schema","02-user-table-bcrypt.md","Completed",100,"Drizzle ORM schema created",""
+"Implement bcrypt password service","02-user-table-bcrypt.md","Completed",100,"Password service implemented",""
+"Create signup endpoint","03-account-signup-email-verification.md","Completed",100,"Signup endpoint created",""
+"Email verification system","03-account-signup-email-verification.md","Completed",100,"Email service updated with auth emails",""
+"Google OAuth setup","04-google-oauth-login.md","Not Started",0,"Blocked - needs Google Cloud Console","Need Google Cloud Console access"
+"Session management system","05-session-management.md","Completed",100,"Session service implemented",""
+"Account lockout logic","06-account-lockout.md","Completed",100,"Account lockout implemented",""
+"Password reset flow","07-password-reset.md","Completed",100,"Password reset endpoints created",""
+"Frontend auth components","Multiple","Completed",100,"All components updated and integrated",""

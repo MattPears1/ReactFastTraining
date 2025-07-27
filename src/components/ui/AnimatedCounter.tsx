@@ -52,7 +52,7 @@ export const AnimatedCounter: React.FC<AnimatedCounterProps> = ({
       animate={isInView ? { opacity: 1, y: 0 } : {}}
       transition={{ duration: 0.5 }}
     >
-      <span className="font-bold text-4xl md:text-5xl lg:text-6xl">
+      <span className="font-bold text-3xl sm:text-4xl md:text-5xl lg:text-6xl">
         {prefix}{count.toLocaleString()}{suffix}
       </span>
     </motion.div>

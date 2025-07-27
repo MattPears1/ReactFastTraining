@@ -19,6 +19,15 @@ interface BookingFormProps {
   courseDate: string
   pricePerPerson: number
   maxParticipants: number
+  inquiryData?: {
+    firstName: string
+    lastName: string
+    email: string
+    phone: string
+    companyName?: string
+    numberOfPeople: number
+    questions?: string
+  }
   onSuccess: (confirmationCode: string, totalPrice: number, email: string, phone: string, participants: number) => void
   onCancel: () => void
 }
@@ -29,21 +38,22 @@ export const BookingForm: React.FC<BookingFormProps> = ({
   courseDate,
   pricePerPerson,
   maxParticipants,
+  inquiryData,
   onSuccess,
   onCancel
 }) => {
   const { showToast } = useToast()
   const [loading, setLoading] = useState(false)
-  const [numberOfParticipants, setNumberOfParticipants] = useState(1)
+  const [numberOfParticipants, setNumberOfParticipants] = useState(inquiryData?.numberOfPeople || 1)
   const [showParticipantDetails, setShowParticipantDetails] = useState(false)
   
   const [formData, setFormData] = useState({
-    contactName: '',
-    contactEmail: '',
-    contactPhone: '',
-    companyName: '',
+    contactName: inquiryData ? `${inquiryData.firstName} ${inquiryData.lastName}` : '',
+    contactEmail: inquiryData?.email || '',
+    contactPhone: inquiryData?.phone || '',
+    companyName: inquiryData?.companyName || '',
     companyAddress: '',
-    specialRequirements: ''
+    specialRequirements: inquiryData?.questions || ''
   })
   
   const [participantDetails, setParticipantDetails] = useState<ParticipantDetail[]>([])
@@ -148,6 +158,20 @@ export const BookingForm: React.FC<BookingFormProps> = ({
   
   return (
     <form onSubmit={handleSubmit} className="space-y-6">
+      {/* Inquiry Notice */}
+      {inquiryData && (
+        <div className="bg-green-50 border border-green-200 rounded-lg p-4">
+          <div className="flex items-start">
+            <svg className="w-5 h-5 text-green-600 mt-0.5 mr-2 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+            </svg>
+            <div className="text-sm text-green-800">
+              <p className="font-medium mb-1">Your inquiry details have been loaded</p>
+              <p>We've pre-filled this form with the information from your inquiry. Your place is being held for 24 hours.</p>
+            </div>
+          </div>
+        </div>
+      )}
       {/* Progress Bar */}
       <div className="mb-6">
         <div className="flex justify-between text-sm text-gray-600 dark:text-gray-400 mb-2">

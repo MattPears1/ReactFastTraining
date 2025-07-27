@@ -1,0 +1,29 @@
+Task ID,File,Description,Status,Dependencies,Notes
+08-01,08-realtime-availability-calendar.md,Create course_sessions database migration,100%,None,Used existing LoopBack CourseSession model + attendance table
+08-02,08-realtime-availability-calendar.md,Implement CourseSessionService backend,100%,08-01,Created CourseSessionCapacityService with transaction support
+08-03,08-realtime-availability-calendar.md,Create Calendar API Controller,100%,08-02,CalendarController with all required endpoints
+08-04,08-realtime-availability-calendar.md,Setup WebSocket service,100%,None,WebSocketService with Socket.io integration
+08-05,08-realtime-availability-calendar.md,Build AvailabilityCalendar component,100%,08-03,React Big Calendar with real-time updates
+08-06,08-realtime-availability-calendar.md,Create MobileCalendar view,100%,08-05,Mobile-optimized calendar component
+08-07,08-realtime-availability-calendar.md,Implement real-time updates hook,100%,08-04,useWebSocket hook with automatic reconnection
+09-01,09-course-filters-capacity.md,Create COURSE_TYPES constants,100%,None,Used existing course constants
+09-02,09-course-filters-capacity.md,Implement CapacityService,100%,08-02,Integrated into CourseSessionCapacityService
+09-03,09-course-filters-capacity.md,Build CourseFilters component,100%,None,Full filter UI with date picker
+09-04,09-course-filters-capacity.md,Create CapacityIndicator component,100%,None,Enhanced existing component with 12-person limit
+09-05,09-course-filters-capacity.md,Build FilteredCourseList,100%,09-03/09-04,Complete course listing with real-time updates
+09-06,09-course-filters-capacity.md,Create MobileFilterSheet,100%,09-03,Bottom sheet pattern for mobile
+10-01,10-course-creation-management.md,Create attendance table migration,0%,None,Track session attendance
+10-02,10-course-creation-management.md,Implement CourseManagementService,0%,08-01,Admin session CRUD operations
+10-03,10-course-creation-management.md,Build AttendanceService,0%,10-01,Mark and track attendance
+10-04,10-course-creation-management.md,Create CourseCreationForm,0%,10-02,Admin UI for creating sessions
+10-05,10-course-creation-management.md,Build AttendanceMarking interface,0%,10-03,UI for marking attendance
+10-06,10-course-creation-management.md,Implement recurring sessions,0%,10-02,Bulk session creation
+10-07,10-course-creation-management.md,Add conflict detection,0%,10-02,Prevent double-booking
+INT-01,Integration,Connect to existing LoopBack models,0%,None,Leverage existing Course/CourseSession
+INT-02,Integration,API route registration,0%,All backend,Register all new controllers
+INT-03,Integration,Frontend service layer,0%,All backend,Create API service clients
+INT-04,Integration,State management setup,0%,None,Context/hooks for course data
+TEST-01,Testing,Unit tests for services,0%,All services,Test business logic
+TEST-02,Testing,Integration tests for APIs,0%,All APIs,Test endpoints
+TEST-03,Testing,Component tests,0%,All components,Test UI components
+TEST-04,Testing,E2E booking flow,0%,All,Test complete user journey

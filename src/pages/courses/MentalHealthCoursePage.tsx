@@ -5,7 +5,7 @@ const MentalHealthCoursePage: React.FC = () => {
   const courseData = {
     courseName: 'Mental Health First Aid',
     courseAcronym: 'MHFA',
-    duration: '2 Days (14 hours)',
+    duration: 'Full Day (6 hours)',
     price: 'From £200',
     certificateValidity: 'Valid for 3 years',
     description: 'Become a certified Mental Health First Aider and support wellbeing in your workplace. This MHFA England approved course teaches you to recognize signs of mental health issues and provide initial support.',

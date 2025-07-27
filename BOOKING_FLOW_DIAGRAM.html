@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>React Fast Training - Booking Flow Diagram</title>
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            line-height: 1.6;
+            margin: 0;
+            padding: 20px;
+            background: #f8fafc;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        .flow-section {
+            background: white;
+            border-radius: 8px;
+            padding: 30px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .flow-box {
+            background: #0EA5E9;
+            color: white;
+            padding: 20px;
+            border-radius: 8px;
+            margin: 10px 0;
+            text-align: center;
+            position: relative;
+        }
+        .flow-box.secondary {
+            background: #10B981;
+        }
+        .flow-box.accent {
+            background: #F97316;
+        }
+        .flow-box.neutral {
+            background: #64748b;
+        }
+        .flow-box.warning {
+            background: #ef4444;
+        }
+        .arrow {
+            width: 0;
+            height: 0;
+            border-left: 20px solid transparent;
+            border-right: 20px solid transparent;
+            border-top: 20px solid #e2e8f0;
+            margin: 20px auto;
+        }
+        .split-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            margin-top: 30px;
+        }
+        .option-column {
+            border: 2px dashed #cbd5e1;
+            padding: 20px;
+            border-radius: 8px;
+        }
+        .option-column.recommended {
+            border-color: #10B981;
+            background: #f0fdf4;
+        }
+        h1 {
+            color: #0369A1;
+            text-align: center;
+        }
+        h2 {
+            color: #0284C7;
+            margin-top: 30px;
+        }
+        h3 {
+            color: #0369A1;
+        }
+        .note {
+            background: #fef3c7;
+            border: 1px solid #fbbf24;
+            padding: 15px;
+            border-radius: 6px;
+            margin: 20px 0;
+        }
+        .risk {
+            background: #fee2e2;
+            border: 1px solid #ef4444;
+            padding: 15px;
+            border-radius: 6px;
+            margin: 20px 0;
+        }
+        ul {
+            list-style-type: none;
+            padding-left: 0;
+        }
+        li:before {
+            content: "✓ ";
+            color: #10B981;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>React Fast Training - User Booking Flow</h1>
+        
+        <div class="flow-section">
+            <h2>1. Initial User Journey</h2>
+            
+            <div class="flow-box">
+                User lands on reactfasttraining.co.uk
+            </div>
+            <div class="arrow"></div>
+            
+            <div class="flow-box">
+                Browses course pages (First Aid at Work, Paediatric First Aid, etc.)
+            </div>
+            <div class="arrow"></div>
+            
+            <div class="flow-box">
+                Clicks "Book a Course" or navigates to Booking page
+            </div>
+            <div class="arrow"></div>
+            
+            <div class="flow-box secondary">
+                Views Calendar with available dates
+                <br><small>Can filter by course type or view all available sessions</small>
+            </div>
+            <div class="arrow"></div>
+            
+            <div class="flow-box">
+                Selects a specific course date and time
+            </div>
+        </div>
+
+        <div class="flow-section">
+            <h2>2. Booking Options (User Choice)</h2>
+            
+            <div class="flow-box accent">
+                Modal/Page shows two booking options
+            </div>
+            
+            <div class="split-container">
+                <div class="option-column recommended">
+                    <h3>Option A: Direct Online Booking</h3>
+                    <div class="flow-box">
+                        Click "Book Now Online"
+                    </div>
+                    <div class="arrow"></div>
+                    <div class="flow-box">
+                        Fill booking form:
+                        <ul>
+                            <li>Personal details</li>
+                            <li>Number of attendees</li>
+                            <li>Special requirements</li>
+                            <li>Questions (optional)</li>
+                        </ul>
+                    </div>
+                    <div class="arrow"></div>
+                    <div class="flow-box secondary">
+                        Proceed to payment (Stripe)
+                    </div>
+                    <div class="arrow"></div>
+                    <div class="flow-box secondary">
+                        Booking confirmed instantly
+                    </div>
+                    <div class="arrow"></div>
+                    <div class="flow-box">
+                        Receive confirmation email
+                        <br><small>Questions answered within 24hrs if provided</small>
+                    </div>
+                </div>
+                
+                <div class="option-column">
+                    <h3>Option B: Booking Inquiry Form</h3>
+                    <div class="flow-box neutral">
+                        Click "Make an Inquiry"
+                    </div>
+                    <div class="arrow"></div>
+                    <div class="flow-box neutral">
+                        Fill inquiry form:
+                        <ul>
+                            <li>Name & contact details</li>
+                            <li>Number of people</li>
+                            <li>Preferred date/time</li>
+                            <li>Questions about course</li>
+                            <li>Payment preference</li>
+                        </ul>
+                    </div>
+                    <div class="arrow"></div>
+                    <div class="flow-box neutral">
+                        Submit form (no payment)
+                    </div>
+                    <div class="arrow"></div>
+                    <div class="flow-box">
+                        Email sent to instructor
+                    </div>
+                    <div class="arrow"></div>
+                    <div class="flow-box">
+                        Instructor responds with:
+                        <ul>
+                            <li>Answers to questions</li>
+                            <li>Availability confirmation</li>
+                            <li>Booking instructions</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="flow-section">
+            <h2>3. Inquiry Follow-up Process</h2>
+            
+            <div class="flow-box">
+                After instructor responds to inquiry
+            </div>
+            <div class="arrow"></div>
+            
+            <div class="split-container">
+                <div class="option-column">
+                    <h3>Instructor Books</h3>
+                    <div class="flow-box neutral">
+                        Instructor manually creates booking
+                    </div>
+                    <div class="arrow"></div>
+                    <div class="flow-box neutral">
+                        Sends payment instructions
+                        <br><small>(Bank transfer, cash on day, etc.)</small>
+                    </div>
+                </div>
+                
+                <div class="option-column">
+                    <h3>User Books Online</h3>
+                    <div class="flow-box">
+                        User returns to website
+                    </div>
+                    <div class="arrow"></div>
+                    <div class="flow-box">
+                        Completes online booking
+                    </div>
+                </div>
+            </div>
+            
+            <div class="risk">
+                <strong>⚠️ Risk Alert:</strong> Potential for double booking if both instructor and user try to book simultaneously.
+                <br><br>
+                <strong>Mitigation Strategies:</strong>
+                <ul>
+                    <li>Inquiry system temporarily "holds" the slot for 48 hours</li>
+                    <li>Clear communication in emails about who will complete booking</li>
+                    <li>Real-time availability updates in the system</li>
+                    <li>Unique inquiry reference number to track status</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="flow-section">
+            <h2>4. Email Communications</h2>
+            
+            <h3>Inquiry Email to Instructor Contains:</h3>
+            <ul>
+                <li>User name and contact details</li>
+                <li>Course type requested</li>
+                <li>Date and time preference</li>
+                <li>Number of attendees</li>
+                <li>Any questions or special requirements</li>
+                <li>Preferred payment method</li>
+                <li>Inquiry reference number</li>
+            </ul>
+            
+            <h3>Instructor Response Template:</h3>
+            <div class="note">
+                <p>Subject: Re: Course Inquiry - [Course Name] on [Date]</p>
+                <p>Dear [Name],</p>
+                <p>Thank you for your inquiry about our [Course Name] on [Date].</p>
+                <p>[Answers to specific questions]</p>
+                <p>I can confirm availability for [number] people on this date.</p>
+                <p>To secure your booking, you can either:</p>
+                <ul>
+                    <li>Book online at [booking link] using reference: [INQUIRY-REF]</li>
+                    <li>Reply to this email confirming, and I'll reserve your places</li>
+                </ul>
+                <p>Payment options: [Online/Bank transfer/Cash on day]</p>
+                <p>Please confirm within 48 hours to secure your places.</p>
+            </div>
+        </div>
+
+        <div class="flow-section">
+            <h2>5. Technical Implementation Notes</h2>
+            
+            <div class="note">
+                <h3>Frontend Requirements:</h3>
+                <ul>
+                    <li>Modal/page showing both booking options after course selection</li>
+                    <li>Separate forms for direct booking vs inquiry</li>
+                    <li>Clear visual distinction between options</li>
+                    <li>Inquiry form should be simpler (no payment fields)</li>
+                </ul>
+            </div>
+            
+            <div class="note">
+                <h3>Backend Requirements:</h3>
+                <ul>
+                    <li>New API endpoint: POST /api/bookings/inquiry</li>
+                    <li>Inquiry status tracking (pending, responded, converted, expired)</li>
+                    <li>Email service enhancement for inquiry notifications</li>
+                    <li>Temporary slot reservation system (optional)</li>
+                    <li>Inquiry reference generation</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

@@ -1,55 +1,84 @@
-# Lex Business Website
+# React Fast Training - Professional First Aid Training Platform
 
-A modern, responsive business website built with React, TypeScript, and Tailwind CSS. This flexible platform supports product-based businesses, service-based businesses, or hybrid models combining both. Features a comprehensive design selection system for easy customization.
+A comprehensive first aid training platform built with React, TypeScript, and LoopBack 4. This enterprise-grade solution features an advanced booking system, course management, and client portal specifically designed for first aid training providers in Yorkshire.
 
-## 🎯 Business Flexibility
+**Last updated: 2025-07-27**
 
-This website platform is designed to accommodate:
-- **Product-Based Businesses**: Full e-commerce capabilities with product catalogs, shopping cart, and payment processing
-- **Service-Based Businesses**: Service showcases, appointment booking, and consultation forms
-- **Hybrid Businesses**: Combine both products and services in one unified platform
+## 🏥 Project Overview
 
-## 🎨 Design Selection System
+React Fast Training is Yorkshire's premier first aid training provider, offering HSE-approved and Ofqual-regulated courses. This platform provides:
 
-The website includes an interactive showcase system that allows non-technical users to:
-1. **Browse Design Options**: View live previews of typography, colors, buttons, layouts, and more
-2. **Make Selections**: Use a simple form to choose preferred design elements
-3. **Share Preferences**: Generate a summary document of selections for easy communication
+- **Emergency First Aid at Work (EFAW)** - 1-day courses
+- **First Aid at Work (FAW)** - 3-day comprehensive training
+- **Paediatric First Aid** - Specialized child care training
+- **Requalification Courses** - Maintain certifications
+- **13 Total Course Types** - Comprehensive training offerings
 
-Access the showcase at `/showcase/index.html`
+## 🚀 Recent Major Enhancements (July 2025)
 
-**Documentation:**
-- [Showcase Guide](showcase/README.md) - Complete guide to using the selection system
-- [User Guide](docs/USER_GUIDE.md) - Understanding business types and features
-- [Implementation Guide](docs/IMPLEMENTATION_GUIDE.md) - Technical implementation details
+### Advanced Booking System
+- **Calendar View**: Interactive monthly calendar with course availability
+- **Dual View Modes**: Switch between calendar and list views
+- **Group Booking Support**: Book multiple participants with automatic 10% discount for 5+ attendees
+- **Advanced Filtering**: Filter by course type, location, month, and search
+- **Real-time Availability**: Live capacity updates via WebSocket
+- **Professional Email Templates**: Automated confirmations and reminders
+
+### Component Library
+The booking system now features a comprehensive reusable component library:
+- **CourseCard**: Display course information with availability
+- **PricingSummary**: Dynamic pricing with group discounts
+- **BookingSteps**: Visual progress indicator
+- **BookingConfirmation**: Success page with next steps
+- **CalendarView**: Interactive course calendar
+- **FilteredCourseList**: Advanced course filtering
+
+### Technical Architecture
+- **Centralized Configuration**: All course data in single source of truth
+- **Zod Validation**: Type-safe form validation throughout
+- **Responsive Design**: Mobile-first approach with enhanced tablet/desktop views
+- **Performance Optimized**: Lazy loading, code splitting, and optimized queries
+- **Accessibility**: WCAG 2.1 AA compliant components
 
 ## 🚀 Features
 
 ### Frontend
 - **React 18** with TypeScript for type-safe development
 - **Vite** for fast development and optimized builds
-- **Tailwind CSS** for utility-first styling
+- **Tailwind CSS** with custom medical/healthcare design system
 - **Framer Motion** for smooth animations
-- **Dark Mode** support with system preference detection
-- **Responsive Design** - Mobile-first approach
+- **Responsive Design** - Mobile-first with enhanced tablet/desktop views
 - **Accessibility** - WCAG 2.1 AA compliant
-- **SEO Optimized** with sitemap and meta tags
+- **SEO Optimized** for local Yorkshire searches
+- **Real-time Updates** via WebSocket connections
 
-### Backend
-- **Node.js & Express** REST API
-- **PostgreSQL** database with Sequelize ORM
-- **Redis** for caching and session management
-- **JWT Authentication** with refresh tokens
-- **Rate Limiting** and security middleware
-- **Email Service** integration
-- **File Upload** support
+### Backend (LoopBack 4)
+- **LoopBack 4** - Modern TypeScript API framework
+- **PostgreSQL** database with optimized indexes
+- **JWT Authentication** with MFA support
+- **Email Service** integration (SendGrid/Mailgun)
+- **WebSocket** for real-time availability updates
+- **Distributed Locking** for concurrent booking prevention
+- **Event Sourcing** for complete audit trails
+- **Field-level Encryption** for PII protection
+
+### Booking System Features
+- **Multi-step Booking Wizard** with progress tracking
+- **Calendar View** with monthly navigation
+- **List View** with advanced filtering
+- **Group Bookings** with automatic discounts
+- **Course Filtering** by type, location, date
+- **Real-time Availability** updates
+- **Email Confirmations** with professional templates
+- **Payment Integration** with Stripe
+- **Certificate Generation** upon completion
 
 ### Testing & Quality
 - **Vitest** for unit testing
 - **React Testing Library** for component testing
 - **Cypress** for E2E testing
 - **ESLint** & **Prettier** for code quality
-- **GitHub Actions** CI/CD pipeline
+- **95%+ Test Coverage** on critical paths
 
 ## 📦 Installation
 
@@ -140,34 +169,45 @@ npm run test:e2e:headless
 ## 📁 Project Structure
 
 ```
-lex-business-website/
-├── src/                    # Frontend source code
-│   ├── components/         # React components
-│   │   ├── common/        # Shared components
-│   │   ├── layout/        # Layout components
-│   │   ├── sections/      # Page sections
-│   │   └── ui/            # UI components
-│   ├── contexts/          # React contexts
-│   ├── hooks/             # Custom hooks
-│   ├── pages/             # Page components
-│   ├── services/          # API services
-│   ├── styles/            # Global styles
-│   ├── types/             # TypeScript types
-│   └── utils/             # Utility functions
-├── backend/               # Backend source code
+react-fast-training/
+├── src/                        # Frontend source code
+│   ├── components/            # React components
+│   │   ├── booking/          # Booking system components
+│   │   │   ├── shared/      # Reusable booking components
+│   │   │   ├── steps/       # Multi-step wizard components
+│   │   │   └── *.tsx        # Core booking components
+│   │   ├── common/          # Shared components
+│   │   ├── layout/          # Layout components
+│   │   ├── sections/        # Page sections
+│   │   └── ui/              # UI components
+│   ├── constants/           # Configuration and constants
+│   │   └── courses.ts      # Centralized course data
+│   ├── contexts/           # React contexts
+│   ├── hooks/              # Custom hooks
+│   ├── pages/              # Page components
+│   │   └── courses/        # Individual course pages
+│   ├── services/           # API services
+│   ├── styles/             # Global styles
+│   ├── types/              # TypeScript types
+│   └── utils/              # Utility functions
+├── backend-loopback4/          # LoopBack 4 API
 │   ├── src/
-│   │   ├── config/        # Configuration files
-│   │   ├── controllers/   # Route controllers
-│   │   ├── middleware/    # Express middleware
-│   │   ├── models/        # Database models
-│   │   ├── routes/        # API routes
-│   │   ├── services/      # Business logic
-│   │   └── utils/         # Utility functions
-│   └── tests/             # Backend tests
-├── public/                # Static assets
-├── cypress/               # E2E tests
-├── scripts/               # Build scripts
-└── docs/                  # Documentation
+│   │   ├── controllers/    # API controllers
+│   │   ├── models/         # Data models
+│   │   ├── repositories/   # Data repositories
+│   │   ├── services/       # Business logic
+│   │   └── datasources/    # Database connections
+│   └── dist/               # Compiled output
+├── task-planning/              # Implementation tracking
+│   ├── 01-authentication/  # Auth implementation docs
+│   ├── 02-course-management/ # Course system docs
+│   ├── 03-booking-system/  # Booking system docs
+│   ├── 04-payment-system/  # Payment integration docs
+│   ├── 05-client-portal/   # Client portal docs
+│   └── 06-admin-dashboard/ # Admin system docs
+├── docs/                       # Project documentation
+├── public/                     # Static assets
+└── scripts/                    # Build and deployment scripts
 ```
 
 ## 🚀 Deployment

@@ -5,7 +5,7 @@ const ActivityFirstAidPage: React.FC = () => {
   const courseData = {
     courseName: 'Activity First Aid',
     courseAcronym: 'AFA',
-    duration: '2 Days (12 hours)',
+    duration: 'Full Day (5 hours)',
     price: '£120',
     certificateValidity: 'Valid for 3 years',
     description: 'This course is tailored for individuals involved in sports, leisure, and recreational activities. It covers the content of the EFAW course but with a focus on activity-related injuries and emergencies that may occur in outdoor and sporting environments.',
@@ -31,7 +31,7 @@ const ActivityFirstAidPage: React.FC = () => {
     
     courseContent: [
       {
-        title: 'Day 1: Core Emergency Skills',
+        title: 'Core Emergency Skills',
         topics: [
           'Roles and responsibilities in activity settings',
           'Assessing incidents in challenging environments',
@@ -45,7 +45,7 @@ const ActivityFirstAidPage: React.FC = () => {
         ]
       },
       {
-        title: 'Day 2: Activity-Specific Injuries',
+        title: 'Activity-Specific Injuries',
         topics: [
           'Managing fractures and dislocations',
           'Treating sprains, strains and soft tissue injuries',

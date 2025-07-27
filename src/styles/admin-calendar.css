@@ -1,0 +1,94 @@
+/* Admin Calendar Custom Styles */
+
+/* Override react-big-calendar styles for admin theme */
+.admin-calendar {
+  font-family: inherit;
+}
+
+.admin-calendar .rbc-header {
+  @apply bg-gray-50 dark:bg-gray-700 border-gray-200 dark:border-gray-600 py-3 font-medium text-gray-700 dark:text-gray-300;
+}
+
+.admin-calendar .rbc-today {
+  @apply bg-primary-50 dark:bg-primary-900/20;
+}
+
+.admin-calendar .rbc-off-range-bg {
+  @apply bg-gray-50 dark:bg-gray-800;
+}
+
+.admin-calendar .rbc-date-cell {
+  @apply text-gray-700 dark:text-gray-300;
+}
+
+.admin-calendar .rbc-event {
+  @apply border-none;
+}
+
+.admin-calendar .rbc-event:focus {
+  @apply outline-none ring-2 ring-primary-500 ring-offset-2;
+}
+
+.admin-calendar .rbc-selected {
+  @apply bg-primary-100 dark:bg-primary-800/30;
+}
+
+.admin-calendar .rbc-time-view {
+  @apply border-gray-200 dark:border-gray-700;
+}
+
+.admin-calendar .rbc-time-header {
+  @apply border-gray-200 dark:border-gray-700;
+}
+
+.admin-calendar .rbc-time-content {
+  @apply border-gray-200 dark:border-gray-700;
+}
+
+.admin-calendar .rbc-day-slot .rbc-time-slot {
+  @apply border-gray-200 dark:border-gray-700;
+}
+
+.admin-calendar .rbc-timeslot-group {
+  @apply border-gray-200 dark:border-gray-700;
+}
+
+.admin-calendar .rbc-current-time-indicator {
+  @apply bg-red-500;
+}
+
+.admin-calendar .rbc-agenda-view table.rbc-agenda-table {
+  @apply border-gray-200 dark:border-gray-700;
+}
+
+.admin-calendar .rbc-agenda-view table.rbc-agenda-table tbody > tr > td {
+  @apply border-gray-200 dark:border-gray-700 py-2;
+}
+
+.admin-calendar .rbc-agenda-view table.rbc-agenda-table thead > tr > th {
+  @apply border-gray-200 dark:border-gray-700 text-gray-700 dark:text-gray-300 font-medium;
+}
+
+/* Drag and drop styles */
+.admin-calendar .rbc-addons-dnd-dragging {
+  @apply opacity-50;
+}
+
+.admin-calendar .rbc-addons-dnd-drag-preview {
+  @apply bg-primary-600 text-white rounded-lg shadow-lg;
+}
+
+/* Mobile responsive adjustments */
+@media (max-width: 768px) {
+  .admin-calendar .rbc-toolbar {
+    @apply flex-col gap-2;
+  }
+  
+  .admin-calendar .rbc-toolbar-label {
+    @apply text-base;
+  }
+  
+  .admin-calendar .rbc-event {
+    @apply text-xs;
+  }
+}

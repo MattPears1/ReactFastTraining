@@ -48,15 +48,15 @@ const HomePage: React.FC = () => {
     { title: 'Activity First Aid', duration: '2 Days', price: '£120', href: '/courses/activity-first-aid' },
     { title: 'Activity First Aid Requalification', duration: '1 Day', price: '£90', href: '/courses/activity-first-aid-requalification' },
     { title: 'CPR and AED', duration: 'Half Day', price: '£60', href: '/courses/cpr-aed' },
-    { title: 'Annual Skills Refresher', duration: 'Half Day', price: '£60', href: '/courses/annual-skills-refresher' },
-    { title: 'Oxygen Therapy Course', duration: 'Half Day', price: '£60', href: '/courses/oxygen-therapy' },
+    { title: 'Annual Skills Refresher', duration: '3 Hours', price: '£60', href: '/courses/annual-skills-refresher' },
+    { title: 'Oxygen Therapy Course', duration: '3 Hours', price: '£60', href: '/courses/oxygen-therapy' },
   ], [])
 
   const trainingApproach = useMemo(() => [
     {
       icon: MapPin,
-      title: 'On-Site Training',
-      description: 'We can come to your South Yorkshire workplace',
+      title: 'Onsite training',
+      description: 'With the option of onsite first aid training for your flexibility and convenience',
     },
     {
       icon: Users,
@@ -65,13 +65,8 @@ const HomePage: React.FC = () => {
     },
     {
       icon: Award,
-      title: 'Experienced Trainer',
-      description: 'Learn from a professional with military and emergency service background',
-    },
-    {
-      icon: Calendar,
-      title: 'Flexible Scheduling',
-      description: 'Weekend and evening courses available to fit your business needs',
+      title: 'Experienced trainer',
+      description: 'Learn from a professional with a military and emergency service background',
     },
   ], [])
 
@@ -87,25 +82,25 @@ const HomePage: React.FC = () => {
       <HeroSection />
       
       {/* Course Section - Simple 2-Column Grid */}
-      <section className="relative py-20 overflow-hidden">
+      <section className="relative py-12 sm:py-16 md:py-20 overflow-hidden">
         <div className="absolute inset-0 bg-gradient-to-b from-gray-50 to-white dark:from-gray-800 dark:to-gray-900" />
         
-        <div className="container relative z-10">
+        <div className="container px-4 sm:px-6 lg:px-8 relative z-10">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            className="text-center mb-12"
+            className="text-center mb-8 sm:mb-10 md:mb-12"
           >
-            <h2 className="text-4xl md:text-5xl font-heading font-bold text-gray-900 dark:text-white mb-4">
+            <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-heading font-bold text-gray-900 dark:text-white mb-3 sm:mb-4">
               Available Training Courses
             </h2>
-            <p className="text-lg text-gray-600 dark:text-gray-400 max-w-2xl mx-auto">
-              All courses are Ofqual regulated and HSE compliant, delivered by experienced professionals
+            <p className="text-base sm:text-lg text-gray-600 dark:text-gray-400 max-w-2xl mx-auto px-4 sm:px-0">
+              All courses are Ofqual regulated and HSE compliant, delivered by an experienced professional
             </p>
           </motion.div>
 
-          <div className="grid md:grid-cols-2 gap-4 max-w-5xl mx-auto">
+          <div className="grid sm:grid-cols-2 gap-3 sm:gap-4 max-w-5xl mx-auto">
             {courseCategories.slice(0, 12).map((course, index) => (
               <motion.div
                 key={course.title}
@@ -116,12 +111,12 @@ const HomePage: React.FC = () => {
               >
                 <Link
                   to={course.href}
-                  className="block bg-white dark:bg-gray-800 rounded-lg shadow hover:shadow-lg transition-all duration-300 border border-gray-100 dark:border-gray-700/50 p-6 hover:border-primary-300 dark:hover:border-primary-600"
+                  className="block bg-white dark:bg-gray-800 rounded-lg shadow hover:shadow-lg transition-all duration-300 border border-gray-100 dark:border-gray-700/50 p-4 sm:p-5 md:p-6 hover:border-primary-300 dark:hover:border-primary-600 min-h-[80px] sm:min-h-[90px] md:min-h-[100px] flex flex-col justify-between"
                 >
-                  <h3 className="text-lg font-bold text-gray-900 dark:text-white mb-2">
+                  <h3 className="text-base sm:text-lg font-bold text-gray-900 dark:text-white mb-2 line-clamp-2">
                     {course.title}
                   </h3>
-                  <div className="flex items-center justify-between text-sm">
+                  <div className="flex items-center justify-between text-xs sm:text-sm">
                     <span className="text-gray-600 dark:text-gray-400">
                       {course.duration}
                     </span>
@@ -135,22 +130,22 @@ const HomePage: React.FC = () => {
           </div>
           
           {/* Centered 13th course */}
-          <div className="flex justify-center mt-4">
+          <div className="flex justify-center mt-3 sm:mt-4">
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ delay: 0.6 }}
-              className="w-full md:w-1/2 max-w-md"
+              className="w-full sm:w-1/2 max-w-md px-0 sm:px-4"
             >
               <Link
                 to={courseCategories[12].href}
-                className="block bg-white dark:bg-gray-800 rounded-lg shadow hover:shadow-lg transition-all duration-300 border border-gray-100 dark:border-gray-700/50 p-6 hover:border-primary-300 dark:hover:border-primary-600"
+                className="block bg-white dark:bg-gray-800 rounded-lg shadow hover:shadow-lg transition-all duration-300 border border-gray-100 dark:border-gray-700/50 p-4 sm:p-5 md:p-6 hover:border-primary-300 dark:hover:border-primary-600 min-h-[80px] sm:min-h-[90px] md:min-h-[100px] flex flex-col justify-between"
               >
-                <h3 className="text-lg font-bold text-gray-900 dark:text-white mb-2">
+                <h3 className="text-base sm:text-lg font-bold text-gray-900 dark:text-white mb-2">
                   {courseCategories[12].title}
                 </h3>
-                <div className="flex items-center justify-between text-sm">
+                <div className="flex items-center justify-between text-xs sm:text-sm">
                   <span className="text-gray-600 dark:text-gray-400">
                     {courseCategories[12].duration}
                   </span>
@@ -165,23 +160,23 @@ const HomePage: React.FC = () => {
       </section>
 
       {/* Training Approach Section - Bento Box Layout */}
-      <section className="py-20 bg-gradient-to-b from-primary-50 via-white to-secondary-50 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900">
-        <div className="container">
+      <section className="py-12 sm:py-16 md:py-20 bg-gradient-to-b from-primary-50 via-white to-secondary-50 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900">
+        <div className="container px-4 sm:px-6 lg:px-8">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            className="text-center mb-12"
+            className="text-center mb-8 sm:mb-10 md:mb-12"
           >
-            <h2 className="text-4xl md:text-5xl font-heading font-bold text-gray-900 dark:text-white mb-4">
-              Our Training Approach
+            <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-heading font-bold text-gray-900 dark:text-white mb-3 sm:mb-4 px-4 sm:px-0">
+              Quality training delivered in a way that works for you
             </h2>
-            <p className="text-lg text-gray-600 dark:text-gray-400 max-w-2xl mx-auto">
-              Quality training delivered the way that works for you
+            <p className="text-base sm:text-lg text-gray-600 dark:text-gray-400 max-w-2xl mx-auto px-4 sm:px-0">
+              Professional and flexible first aid training solutions
             </p>
           </motion.div>
 
-          <div className="grid md:grid-cols-3 gap-6">
+          <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
             {trainingApproach.slice(0, 3).map((item, index) => (
               <motion.div
                 key={item.title}
@@ -189,7 +184,7 @@ const HomePage: React.FC = () => {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ delay: index * 0.1 }}
-                className="bg-white dark:bg-gray-800 rounded-2xl p-6 shadow-lg hover:shadow-xl transition-all duration-300"
+                className="bg-white dark:bg-gray-800 rounded-xl sm:rounded-2xl p-5 sm:p-6 shadow-lg hover:shadow-xl transition-all duration-300"
               >
                 <div className={`
                   w-12 h-12 rounded-lg flex items-center justify-center mb-4
@@ -206,71 +201,52 @@ const HomePage: React.FC = () => {
                     ${index === 3 ? 'text-info dark:text-info-light' : ''}
                   `} />
                 </div>
-                <h3 className="text-xl font-semibold text-gray-900 dark:text-white mb-2">
+                <h3 className="text-lg sm:text-xl font-semibold text-gray-900 dark:text-white mb-2">
                   {item.title}
                 </h3>
-                <p className="text-sm text-gray-600 dark:text-gray-400">
+                <p className="text-sm sm:text-base text-gray-600 dark:text-gray-400">
                   {item.description}
                 </p>
               </motion.div>
             ))}
           </div>
-          
-          {/* Flexible Scheduling - Full Width */}
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ delay: 0.3 }}
-            className="mt-6 bg-white dark:bg-gray-800 rounded-2xl p-6 shadow-lg hover:shadow-xl transition-all duration-300"
-          >
-            <div className="w-12 h-12 bg-info-light dark:bg-info-dark/30 rounded-lg flex items-center justify-center mb-4 mx-auto md:mx-0">
-              <Calendar className="w-6 h-6 text-info dark:text-info-light" />
-            </div>
-            <h3 className="text-xl font-semibold text-gray-900 dark:text-white mb-2 text-center md:text-left">
-              {trainingApproach[3].title}
-            </h3>
-            <p className="text-sm text-gray-600 dark:text-gray-400 text-center md:text-left">
-              {trainingApproach[3].description}
-            </p>
-          </motion.div>
         </div>
       </section>
 
       {/* Why Choose Section - Unique Cards */}
-      <section className="py-20 bg-white dark:bg-gray-900">
-        <div className="container">
+      <section className="py-12 sm:py-16 md:py-20 bg-white dark:bg-gray-900">
+        <div className="container px-4 sm:px-6 lg:px-8">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            className="text-center mb-12"
+            className="text-center mb-8 sm:mb-10 md:mb-12"
           >
-            <h2 className="text-4xl md:text-5xl font-heading font-bold text-gray-900 dark:text-white mb-4">
+            <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-heading font-bold text-gray-900 dark:text-white mb-3 sm:mb-4">
               Start Your First Aid Journey
             </h2>
-            <p className="text-lg text-gray-600 dark:text-gray-400 max-w-2xl mx-auto">
+            <p className="text-base sm:text-lg text-gray-600 dark:text-gray-400 max-w-2xl mx-auto px-4 sm:px-0">
               Join a growing community of trained first aiders across South Yorkshire
             </p>
           </motion.div>
 
-          <div className="grid md:grid-cols-3 gap-8 mb-12">
+          <div className="grid sm:grid-cols-3 gap-6 sm:gap-8 mb-8 sm:mb-10 md:mb-12">
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               className="text-center"
             >
-              <div className="relative inline-block mb-4">
-                <div className="w-24 h-24 bg-gradient-to-br from-primary-400 to-primary-600 rounded-full flex items-center justify-center">
-                  <BookOpen className="w-12 h-12 text-white" />
+              <div className="relative inline-block mb-3 sm:mb-4">
+                <div className="w-20 h-20 sm:w-24 sm:h-24 bg-gradient-to-br from-primary-400 to-primary-600 rounded-full flex items-center justify-center">
+                  <BookOpen className="w-10 h-10 sm:w-12 sm:h-12 text-white" />
                 </div>
-                <div className="absolute -top-2 -right-2 w-8 h-8 bg-accent-500 rounded-full flex items-center justify-center">
+                <div className="absolute -top-2 -right-2 w-7 h-7 sm:w-8 sm:h-8 bg-accent-500 rounded-full flex items-center justify-center">
                   <span className="text-white text-xs font-bold">1</span>
                 </div>
               </div>
-              <h3 className="text-xl font-semibold text-gray-900 dark:text-white mb-2">Choose Your Course</h3>
-              <p className="text-gray-600 dark:text-gray-400">
+              <h3 className="text-lg sm:text-xl font-semibold text-gray-900 dark:text-white mb-2">Choose Your Course</h3>
+              <p className="text-sm sm:text-base text-gray-600 dark:text-gray-400 px-4 sm:px-0">
                 Select from our range of accredited first aid courses
               </p>
             </motion.div>
@@ -282,17 +258,17 @@ const HomePage: React.FC = () => {
               transition={{ delay: 0.1 }}
               className="text-center"
             >
-              <div className="relative inline-block mb-4">
-                <div className="w-24 h-24 bg-gradient-to-br from-secondary-400 to-secondary-600 rounded-full flex items-center justify-center">
-                  <Calendar className="w-12 h-12 text-white" />
+              <div className="relative inline-block mb-3 sm:mb-4">
+                <div className="w-20 h-20 sm:w-24 sm:h-24 bg-gradient-to-br from-secondary-400 to-secondary-600 rounded-full flex items-center justify-center">
+                  <Calendar className="w-10 h-10 sm:w-12 sm:h-12 text-white" />
                 </div>
-                <div className="absolute -top-2 -right-2 w-8 h-8 bg-accent-500 rounded-full flex items-center justify-center">
+                <div className="absolute -top-2 -right-2 w-7 h-7 sm:w-8 sm:h-8 bg-accent-500 rounded-full flex items-center justify-center">
                   <span className="text-white text-xs font-bold">2</span>
                 </div>
               </div>
-              <h3 className="text-xl font-semibold text-gray-900 dark:text-white mb-2">Book Your Date</h3>
-              <p className="text-gray-600 dark:text-gray-400">
-                Flexible scheduling to suit your needs
+              <h3 className="text-lg sm:text-xl font-semibold text-gray-900 dark:text-white mb-2">Book Your Date</h3>
+              <p className="text-sm sm:text-base text-gray-600 dark:text-gray-400 px-4 sm:px-0">
+                Flexible scheduling to suit your needs, including evenings and weekends
               </p>
             </motion.div>
 
@@ -303,17 +279,17 @@ const HomePage: React.FC = () => {
               transition={{ delay: 0.2 }}
               className="text-center"
             >
-              <div className="relative inline-block mb-4">
-                <div className="w-24 h-24 bg-gradient-to-br from-accent-400 to-accent-600 rounded-full flex items-center justify-center">
-                  <Award className="w-12 h-12 text-white" />
+              <div className="relative inline-block mb-3 sm:mb-4">
+                <div className="w-20 h-20 sm:w-24 sm:h-24 bg-gradient-to-br from-accent-400 to-accent-600 rounded-full flex items-center justify-center">
+                  <Award className="w-10 h-10 sm:w-12 sm:h-12 text-white" />
                 </div>
-                <div className="absolute -top-2 -right-2 w-8 h-8 bg-primary-500 rounded-full flex items-center justify-center">
+                <div className="absolute -top-2 -right-2 w-7 h-7 sm:w-8 sm:h-8 bg-primary-500 rounded-full flex items-center justify-center">
                   <span className="text-white text-xs font-bold">3</span>
                 </div>
               </div>
-              <h3 className="text-xl font-semibold text-gray-900 dark:text-white mb-2">Get Certified</h3>
-              <p className="text-gray-600 dark:text-gray-400">
-                Receive your certificate on successful completion
+              <h3 className="text-lg sm:text-xl font-semibold text-gray-900 dark:text-white mb-2">Get Certified</h3>
+              <p className="text-sm sm:text-base text-gray-600 dark:text-gray-400 px-4 sm:px-0">
+                Receive your certificate upon successful completion
               </p>
             </motion.div>
           </div>
@@ -325,24 +301,24 @@ const HomePage: React.FC = () => {
             viewport={{ once: true }}
             className="max-w-4xl mx-auto"
           >
-            <div className="bg-gradient-to-r from-primary-500 to-secondary-500 rounded-3xl p-8 md:p-12 text-white text-center shadow-2xl">
-              <h3 className="text-3xl font-bold mb-4">Ready to Learn Life-Saving Skills?</h3>
-              <p className="text-xl mb-8 text-white/90">
+            <div className="bg-gradient-to-r from-primary-500 to-secondary-500 rounded-2xl sm:rounded-3xl p-6 sm:p-8 md:p-12 text-white text-center shadow-2xl">
+              <h3 className="text-2xl sm:text-3xl font-bold mb-3 sm:mb-4">Ready to Learn Life-Saving Skills?</h3>
+              <p className="text-base sm:text-lg md:text-xl mb-6 sm:mb-8 text-white/90">
                 Contact us today for a personalized quote for your team
               </p>
-              <div className="flex flex-col sm:flex-row gap-4 justify-center">
+              <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center">
                 <Button
                   href="/contact"
-                  size="lg"
-                  className="bg-primary-500 text-white hover:bg-primary-600 border-2 border-white"
+                  size="md"
+                  className="bg-white/20 text-white hover:bg-white/30 backdrop-blur border-2 border-white min-h-[48px]"
                 >
-                  <Phone className="w-5 h-5 mr-2" />
+                  <Phone className="w-4 h-4 sm:w-5 sm:h-5 mr-2" />
                   Get in Touch
                 </Button>
                 <Button
                   href="/courses"
-                  size="lg"
-                  className="bg-primary-500 text-white hover:bg-primary-600 border-2 border-white"
+                  size="md"
+                  className="bg-white/20 text-white hover:bg-white/30 backdrop-blur border-2 border-white min-h-[48px]"
                 >
                   View All Courses
                 </Button>
@@ -353,28 +329,28 @@ const HomePage: React.FC = () => {
       </section>
 
       {/* Trust Section */}
-      <section className="py-20 bg-gray-50 dark:bg-gray-800">
-        <div className="container">
-          <div className="text-center mb-12">
-            <h2 className="text-3xl font-heading font-bold text-gray-900 dark:text-white mb-4">
+      <section className="py-12 sm:py-16 md:py-20 bg-gray-50 dark:bg-gray-800">
+        <div className="container px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-8 sm:mb-10 md:mb-12">
+            <h2 className="text-2xl sm:text-3xl font-heading font-bold text-gray-900 dark:text-white mb-3 sm:mb-4">
               Fully Accredited Training
             </h2>
-            <p className="text-gray-600 dark:text-gray-400">
+            <p className="text-sm sm:text-base text-gray-600 dark:text-gray-400">
               Our certifications meet all regulatory requirements
             </p>
           </div>
           
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-8 max-w-4xl mx-auto">
+          <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 sm:gap-6 md:gap-8 max-w-4xl mx-auto">
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               className="text-center"
             >
-              <div className="w-20 h-20 sm:w-24 sm:h-24 bg-white dark:bg-gray-700 rounded-2xl shadow-lg flex items-center justify-center mb-3 mx-auto">
-                <Shield className="w-10 h-10 sm:w-12 sm:h-12 text-primary-600 dark:text-primary-400" />
+              <div className="w-16 h-16 sm:w-20 sm:h-20 md:w-24 md:h-24 bg-white dark:bg-gray-700 rounded-xl sm:rounded-2xl shadow-lg flex items-center justify-center mb-2 sm:mb-3 mx-auto">
+                <Shield className="w-8 h-8 sm:w-10 sm:h-10 md:w-12 md:h-12 text-primary-600 dark:text-primary-400" />
               </div>
-              <p className="text-sm font-medium text-gray-900 dark:text-white">Ofqual Regulated</p>
+              <p className="text-xs sm:text-sm font-medium text-gray-900 dark:text-white">Ofqual Regulated</p>
             </motion.div>
             
             <motion.div
@@ -384,10 +360,10 @@ const HomePage: React.FC = () => {
               transition={{ delay: 0.1 }}
               className="text-center"
             >
-              <div className="w-20 h-20 sm:w-24 sm:h-24 bg-white dark:bg-gray-700 rounded-2xl shadow-lg flex items-center justify-center mb-3 mx-auto">
-                <Award className="w-10 h-10 sm:w-12 sm:h-12 text-secondary-600 dark:text-secondary-400" />
+              <div className="w-16 h-16 sm:w-20 sm:h-20 md:w-24 md:h-24 bg-white dark:bg-gray-700 rounded-xl sm:rounded-2xl shadow-lg flex items-center justify-center mb-2 sm:mb-3 mx-auto">
+                <Award className="w-8 h-8 sm:w-10 sm:h-10 md:w-12 md:h-12 text-secondary-600 dark:text-secondary-400" />
               </div>
-              <p className="text-sm font-medium text-gray-900 dark:text-white">HSE Approved</p>
+              <p className="text-xs sm:text-sm font-medium text-gray-900 dark:text-white">HSE Approved</p>
             </motion.div>
             
             <motion.div
@@ -397,10 +373,10 @@ const HomePage: React.FC = () => {
               transition={{ delay: 0.2 }}
               className="text-center"
             >
-              <div className="w-20 h-20 sm:w-24 sm:h-24 bg-white dark:bg-gray-700 rounded-2xl shadow-lg flex items-center justify-center mb-3 mx-auto">
-                <CheckCircle className="w-10 h-10 sm:w-12 sm:h-12 text-accent-600 dark:text-accent-400" />
+              <div className="w-16 h-16 sm:w-20 sm:h-20 md:w-24 md:h-24 bg-white dark:bg-gray-700 rounded-xl sm:rounded-2xl shadow-lg flex items-center justify-center mb-2 sm:mb-3 mx-auto">
+                <CheckCircle className="w-8 h-8 sm:w-10 sm:h-10 md:w-12 md:h-12 text-accent-600 dark:text-accent-400" />
               </div>
-              <p className="text-sm font-medium text-gray-900 dark:text-white">CPD Certified</p>
+              <p className="text-xs sm:text-sm font-medium text-gray-900 dark:text-white">CPD Certified</p>
             </motion.div>
             
             <motion.div
@@ -410,29 +386,29 @@ const HomePage: React.FC = () => {
               transition={{ delay: 0.3 }}
               className="text-center"
             >
-              <div className="w-20 h-20 sm:w-24 sm:h-24 bg-white dark:bg-gray-700 rounded-2xl shadow-lg flex items-center justify-center mb-3 mx-auto">
-                <Star className="w-10 h-10 sm:w-12 sm:h-12 text-info dark:text-info-light" />
+              <div className="w-16 h-16 sm:w-20 sm:h-20 md:w-24 md:h-24 bg-white dark:bg-gray-700 rounded-xl sm:rounded-2xl shadow-lg flex items-center justify-center mb-2 sm:mb-3 mx-auto">
+                <Star className="w-8 h-8 sm:w-10 sm:h-10 md:w-12 md:h-12 text-info dark:text-info-light" />
               </div>
-              <p className="text-sm font-medium text-gray-900 dark:text-white">Quality Assured</p>
+              <p className="text-xs sm:text-sm font-medium text-gray-900 dark:text-white">Quality Assured</p>
             </motion.div>
           </div>
         </div>
       </section>
 
       {/* Yorkshire Locations Section */}
-      <section className="py-20 bg-white dark:bg-gray-900">
-        <div className="container">
+      <section className="py-12 sm:py-16 md:py-20 bg-white dark:bg-gray-900">
+        <div className="container px-4 sm:px-6 lg:px-8">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            className="text-center mb-12"
+            className="text-center mb-8 sm:mb-10 md:mb-12"
           >
-            <h2 className="text-3xl md:text-4xl font-heading font-bold text-gray-900 dark:text-white mb-4">
+            <h2 className="text-2xl sm:text-3xl md:text-4xl font-heading font-bold text-gray-900 dark:text-white mb-3 sm:mb-4 px-4 sm:px-0">
               Training Locations Across South Yorkshire
             </h2>
-            <p className="text-lg text-gray-600 dark:text-gray-400 max-w-2xl mx-auto">
-              We can come to your workplace anywhere in South Yorkshire, or training venues are available if needed.
+            <p className="text-base sm:text-lg text-gray-600 dark:text-gray-400 max-w-2xl mx-auto px-4 sm:px-0">
+              We can come to your workplace anywhere in South Yorkshire and surrounding areas, or training venues are available if needed.
             </p>
           </motion.div>
 
@@ -442,19 +418,13 @@ const HomePage: React.FC = () => {
             viewport={{ once: true }}
             className="text-center"
           >
-            <div className="flex flex-wrap justify-center gap-4 text-lg font-medium text-gray-700 dark:text-gray-300 mb-8">
-              <span>Barnsley</span>
-              <span className="text-gray-400">•</span>
-              <span>Doncaster</span>
-              <span className="text-gray-400">•</span>
-              <span>Rotherham</span>
-              <span className="text-gray-400">•</span>
-              <span>Sheffield</span>
-            </div>
-            
-            <p className="text-gray-600 dark:text-gray-400">
-              Also serving: Leeds, Bradford, York, Wakefield, and all of Yorkshire
-            </p>
+            <Button
+              href="/contact"
+              size="md"
+              className="bg-gradient-to-r from-primary-500 to-primary-600 hover:from-primary-600 hover:to-primary-700 text-white min-h-[48px] px-6 sm:px-8"
+            >
+              Contact Us for Your Location
+            </Button>
           </motion.div>
         </div>
       </section>

@@ -49,6 +49,11 @@ export class ReactFastTrainingApiApplication extends BootMixin(
     // Cron jobs
     this.component(CronComponent);
 
+    // Bind services
+    this.bind('services.CourseSessionCapacityService').toClass(
+      require('./services/course-session-capacity.service').CourseSessionCapacityService,
+    );
+
     // Configure JWT
     this.bind(TokenServiceBindings.TOKEN_SECRET).to(
       process.env.JWT_SECRET || 'react-fast-training-secret-key',

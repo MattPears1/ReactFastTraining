@@ -181,17 +181,17 @@ const CoursesPage: React.FC = () => {
       
       
       {/* Hero Section */}
-      <section className="relative py-20 md:py-32 overflow-hidden bg-gradient-to-br from-primary-50 to-secondary-50 dark:from-gray-900 dark:to-gray-800">
-        <div className="container relative z-10">
+      <section className="relative py-16 sm:py-20 md:py-28 lg:py-32 overflow-hidden bg-gradient-to-br from-primary-50 to-secondary-50 dark:from-gray-900 dark:to-gray-800">
+        <div className="container px-4 sm:px-6 lg:px-8 relative z-10">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             className="max-w-4xl mx-auto text-center"
           >
-            <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-gray-900 dark:text-white mb-6">
+            <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold text-gray-900 dark:text-white mb-4 sm:mb-6">
               Our <span className="text-gradient gradient-primary">First Aid Courses</span>
             </h1>
-            <p className="text-lg md:text-xl text-gray-600 dark:text-gray-400 max-w-2xl mx-auto">
+            <p className="text-base sm:text-lg md:text-xl text-gray-600 dark:text-gray-400 max-w-2xl mx-auto px-4 sm:px-0">
               Professional, accredited first aid training delivered across Yorkshire. 
               Choose from our range of HSE approved and Ofqual regulated courses.
             </p>
@@ -200,9 +200,9 @@ const CoursesPage: React.FC = () => {
       </section>
 
       {/* Courses Grid */}
-      <section className="section">
-        <div className="container">
-          <div className="grid md:grid-cols-2 gap-8">
+      <section className="py-12 sm:py-16 md:py-20">
+        <div className="container px-4 sm:px-6 lg:px-8">
+          <div className="grid sm:grid-cols-2 gap-4 sm:gap-6 md:gap-8">
             {courses.map((course, index) => (
               <motion.div
                 key={course.id}
@@ -211,47 +211,48 @@ const CoursesPage: React.FC = () => {
                 viewport={{ once: true }}
                 transition={{ delay: index * 0.1 }}
               >
-                <div className="h-full bg-white dark:bg-gray-800 rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 overflow-hidden group">
+                <div className="h-full bg-white dark:bg-gray-800 rounded-xl sm:rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 overflow-hidden group">
                   <div className={`h-2 bg-gradient-to-r from-${course.color}-500 to-${course.color}-600`} />
-                  <div className="p-8">
-                    <div className="flex items-start justify-between mb-6">
-                      <div className={`w-16 h-16 bg-${course.color}-100 dark:bg-${course.color}-900/30 rounded-xl flex items-center justify-center`}>
-                        <course.icon className={`w-8 h-8 text-${course.color}-600 dark:text-${course.color}-400`} />
+                  <div className="p-5 sm:p-6 md:p-8">
+                    <div className="flex items-start justify-between mb-4 sm:mb-6">
+                      <div className={`w-12 h-12 sm:w-14 sm:h-14 md:w-16 md:h-16 bg-${course.color}-100 dark:bg-${course.color}-900/30 rounded-lg sm:rounded-xl flex items-center justify-center`}>
+                        <course.icon className={`w-6 h-6 sm:w-7 sm:h-7 md:w-8 md:h-8 text-${course.color}-600 dark:text-${course.color}-400`} />
                       </div>
                       <div className="text-right">
-                        <p className="text-sm text-gray-500 dark:text-gray-400">Duration</p>
-                        <p className="font-semibold text-gray-900 dark:text-white">{course.duration}</p>
+                        <p className="text-xs sm:text-sm text-gray-500 dark:text-gray-400">Duration</p>
+                        <p className="text-sm sm:text-base font-semibold text-gray-900 dark:text-white">{course.duration}</p>
                       </div>
                     </div>
 
-                    <h3 className="text-2xl font-bold text-gray-900 dark:text-white mb-2">
+                    <h3 className="text-xl sm:text-2xl font-bold text-gray-900 dark:text-white mb-2">
                       {course.title}
                     </h3>
-                    <p className="text-sm font-medium text-gray-500 dark:text-gray-400 mb-4">
+                    <p className="text-xs sm:text-sm font-medium text-gray-500 dark:text-gray-400 mb-3 sm:mb-4">
                       {course.acronym}
                     </p>
-                    <p className="text-gray-600 dark:text-gray-400 mb-6">
+                    <p className="text-sm sm:text-base text-gray-600 dark:text-gray-400 mb-4 sm:mb-6">
                       {course.description}
                     </p>
 
-                    <div className="space-y-2 mb-6">
+                    <div className="space-y-2 mb-4 sm:mb-6">
                       {course.highlights.map((highlight, idx) => (
                         <div key={idx} className="flex items-center gap-2">
-                          <CheckCircle className={`w-4 h-4 text-${course.color}-600 dark:text-${course.color}-400`} />
-                          <span className="text-sm text-gray-600 dark:text-gray-400">{highlight}</span>
+                          <CheckCircle className={`w-3 h-3 sm:w-4 sm:h-4 text-${course.color}-600 dark:text-${course.color}-400 flex-shrink-0`} />
+                          <span className="text-xs sm:text-sm text-gray-600 dark:text-gray-400">{highlight}</span>
                         </div>
                       ))}
                     </div>
 
                     <div className="flex items-center justify-between">
-                      <p className="text-2xl font-bold text-primary-600 dark:text-primary-400">
+                      <p className="text-xl sm:text-2xl font-bold text-primary-600 dark:text-primary-400">
                         {course.price}
                       </p>
                       <Button
                         href={course.href}
                         variant="outline"
-                        rightIcon={<ArrowRight className="w-4 h-4" />}
-                        className={`border-${course.color}-500 text-${course.color}-600 hover:bg-${course.color}-50 dark:hover:bg-${course.color}-900/20 group-hover:scale-105 transition-transform`}
+                        size="sm"
+                        rightIcon={<ArrowRight className="w-3 h-3 sm:w-4 sm:h-4" />}
+                        className={`border-${course.color}-500 text-${course.color}-600 hover:bg-${course.color}-50 dark:hover:bg-${course.color}-900/20 group-hover:scale-105 transition-transform min-h-[40px] sm:min-h-[44px]`}
                       >
                         Learn More
                       </Button>
@@ -265,23 +266,23 @@ const CoursesPage: React.FC = () => {
       </section>
 
       {/* Additional Courses */}
-      <section className="section bg-gray-50 dark:bg-gray-900">
-        <div className="container">
+      <section className="py-12 sm:py-16 md:py-20 bg-gray-50 dark:bg-gray-900">
+        <div className="container px-4 sm:px-6 lg:px-8">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            className="text-center mb-12"
+            className="text-center mb-8 sm:mb-10 md:mb-12"
           >
-            <h2 className="text-3xl md:text-4xl font-bold text-gray-900 dark:text-white mb-4">
+            <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-gray-900 dark:text-white mb-3 sm:mb-4">
               Specialist & Refresher Courses
             </h2>
-            <p className="text-lg text-gray-600 dark:text-gray-400 max-w-2xl mx-auto">
+            <p className="text-base sm:text-lg text-gray-600 dark:text-gray-400 max-w-2xl mx-auto px-4 sm:px-0">
               Keep your skills current with our range of requalification and specialist courses
             </p>
           </motion.div>
 
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+          <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
             {additionalCourses.map((course, index) => (
               <motion.div
                 key={course.id}
@@ -290,28 +291,28 @@ const CoursesPage: React.FC = () => {
                 viewport={{ once: true }}
                 transition={{ delay: index * 0.05 }}
               >
-                <div className="h-full bg-white dark:bg-gray-800 rounded-xl shadow-md hover:shadow-lg transition-all duration-300 overflow-hidden group">
+                <div className="h-full bg-white dark:bg-gray-800 rounded-lg sm:rounded-xl shadow-md hover:shadow-lg transition-all duration-300 overflow-hidden group">
                   <div className={`h-1.5 bg-gradient-to-r from-${course.color}-500 to-${course.color}-600`} />
-                  <div className="p-6">
-                    <div className="flex items-start justify-between mb-4">
-                      <div className={`w-12 h-12 bg-${course.color}-100 dark:bg-${course.color}-900/30 rounded-lg flex items-center justify-center`}>
-                        <course.icon className={`w-6 h-6 text-${course.color}-600 dark:text-${course.color}-400`} />
+                  <div className="p-4 sm:p-5 md:p-6">
+                    <div className="flex items-start justify-between mb-3 sm:mb-4">
+                      <div className={`w-10 h-10 sm:w-12 sm:h-12 bg-${course.color}-100 dark:bg-${course.color}-900/30 rounded-lg flex items-center justify-center`}>
+                        <course.icon className={`w-5 h-5 sm:w-6 sm:h-6 text-${course.color}-600 dark:text-${course.color}-400`} />
                       </div>
-                      <span className="text-sm font-medium text-gray-500 dark:text-gray-400">{course.duration}</span>
+                      <span className="text-xs sm:text-sm font-medium text-gray-500 dark:text-gray-400">{course.duration}</span>
                     </div>
 
-                    <h3 className="text-lg font-bold text-gray-900 dark:text-white mb-1">
+                    <h3 className="text-base sm:text-lg font-bold text-gray-900 dark:text-white mb-1 line-clamp-2">
                       {course.title}
                     </h3>
-                    <p className="text-xs font-medium text-gray-500 dark:text-gray-400 mb-3">
+                    <p className="text-xs font-medium text-gray-500 dark:text-gray-400 mb-2 sm:mb-3">
                       {course.acronym}
                     </p>
-                    <p className="text-sm text-gray-600 dark:text-gray-400 mb-4">
+                    <p className="text-xs sm:text-sm text-gray-600 dark:text-gray-400 mb-3 sm:mb-4 line-clamp-3">
                       {course.description}
                     </p>
 
                     <div className="flex items-center justify-between">
-                      <p className="text-xl font-bold text-primary-600 dark:text-primary-400">
+                      <p className="text-lg sm:text-xl font-bold text-primary-600 dark:text-primary-400">
                         {course.price}
                       </p>
                       <Button
@@ -319,7 +320,7 @@ const CoursesPage: React.FC = () => {
                         size="sm"
                         variant="outline"
                         rightIcon={<ArrowRight className="w-3 h-3" />}
-                        className={`text-${course.color}-600 border-${course.color}-500 hover:bg-${course.color}-50 dark:hover:bg-${course.color}-900/20`}
+                        className={`text-${course.color}-600 border-${course.color}-500 hover:bg-${course.color}-50 dark:hover:bg-${course.color}-900/20 min-h-[36px] sm:min-h-[40px] text-xs sm:text-sm`}
                       >
                         Details
                       </Button>
@@ -333,36 +334,36 @@ const CoursesPage: React.FC = () => {
       </section>
 
       {/* Why Choose Us */}
-      <section className="section">
-        <div className="container">
+      <section className="py-12 sm:py-16 md:py-20">
+        <div className="container px-4 sm:px-6 lg:px-8">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            className="text-center mb-12"
+            className="text-center mb-8 sm:mb-10 md:mb-12"
           >
-            <h2 className="text-3xl md:text-4xl font-bold text-gray-900 dark:text-white mb-4">
+            <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-gray-900 dark:text-white mb-3 sm:mb-4">
               Why Choose React Fast Training?
             </h2>
-            <p className="text-lg text-gray-600 dark:text-gray-400 max-w-2xl mx-auto">
+            <p className="text-base sm:text-lg text-gray-600 dark:text-gray-400 max-w-2xl mx-auto px-4 sm:px-0">
               We're committed to delivering the highest quality first aid training in Yorkshire
             </p>
           </motion.div>
 
-          <div className="grid md:grid-cols-3 gap-8">
+          <div className="grid sm:grid-cols-3 gap-6 sm:gap-8">
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               className="text-center"
             >
-              <div className="w-16 h-16 bg-primary-100 dark:bg-primary-900/30 rounded-full flex items-center justify-center mx-auto mb-4">
-                <Award className="w-8 h-8 text-primary-600 dark:text-primary-400" />
+              <div className="w-14 h-14 sm:w-16 sm:h-16 bg-primary-100 dark:bg-primary-900/30 rounded-full flex items-center justify-center mx-auto mb-3 sm:mb-4">
+                <Award className="w-7 h-7 sm:w-8 sm:h-8 text-primary-600 dark:text-primary-400" />
               </div>
-              <h3 className="text-xl font-semibold text-gray-900 dark:text-white mb-2">
+              <h3 className="text-lg sm:text-xl font-semibold text-gray-900 dark:text-white mb-2">
                 Fully Accredited
               </h3>
-              <p className="text-gray-600 dark:text-gray-400">
+              <p className="text-sm sm:text-base text-gray-600 dark:text-gray-400 px-4 sm:px-0">
                 All courses are Ofqual regulated and HSE approved
               </p>
             </motion.div>
@@ -374,13 +375,13 @@ const CoursesPage: React.FC = () => {
               transition={{ delay: 0.1 }}
               className="text-center"
             >
-              <div className="w-16 h-16 bg-secondary-100 dark:bg-secondary-900/30 rounded-full flex items-center justify-center mx-auto mb-4">
-                <Users className="w-8 h-8 text-secondary-600 dark:text-secondary-400" />
+              <div className="w-14 h-14 sm:w-16 sm:h-16 bg-secondary-100 dark:bg-secondary-900/30 rounded-full flex items-center justify-center mx-auto mb-3 sm:mb-4">
+                <Users className="w-7 h-7 sm:w-8 sm:h-8 text-secondary-600 dark:text-secondary-400" />
               </div>
-              <h3 className="text-xl font-semibold text-gray-900 dark:text-white mb-2">
+              <h3 className="text-lg sm:text-xl font-semibold text-gray-900 dark:text-white mb-2">
                 Expert Trainers
               </h3>
-              <p className="text-gray-600 dark:text-gray-400">
+              <p className="text-sm sm:text-base text-gray-600 dark:text-gray-400 px-4 sm:px-0">
                 Learn from professionals with real emergency experience
               </p>
             </motion.div>
@@ -392,13 +393,13 @@ const CoursesPage: React.FC = () => {
               transition={{ delay: 0.2 }}
               className="text-center"
             >
-              <div className="w-16 h-16 bg-accent-100 dark:bg-accent-900/30 rounded-full flex items-center justify-center mx-auto mb-4">
-                <Clock className="w-8 h-8 text-accent-600 dark:text-accent-400" />
+              <div className="w-14 h-14 sm:w-16 sm:h-16 bg-accent-100 dark:bg-accent-900/30 rounded-full flex items-center justify-center mx-auto mb-3 sm:mb-4">
+                <Clock className="w-7 h-7 sm:w-8 sm:h-8 text-accent-600 dark:text-accent-400" />
               </div>
-              <h3 className="text-xl font-semibold text-gray-900 dark:text-white mb-2">
+              <h3 className="text-lg sm:text-xl font-semibold text-gray-900 dark:text-white mb-2">
                 Flexible Options
               </h3>
-              <p className="text-gray-600 dark:text-gray-400">
+              <p className="text-sm sm:text-base text-gray-600 dark:text-gray-400 px-4 sm:px-0">
                 On-site training and weekend courses available
               </p>
             </motion.div>
@@ -407,32 +408,33 @@ const CoursesPage: React.FC = () => {
       </section>
 
       {/* CTA Section */}
-      <section className="section bg-primary-600 dark:bg-primary-700">
-        <div className="container">
+      <section className="py-12 sm:py-16 md:py-20 bg-primary-600 dark:bg-primary-700">
+        <div className="container px-4 sm:px-6 lg:px-8">
           <motion.div
             initial={{ opacity: 0, scale: 0.95 }}
             whileInView={{ opacity: 1, scale: 1 }}
             viewport={{ once: true }}
             className="text-center"
           >
-            <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">
+            <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-white mb-3 sm:mb-4">
               Ready to Book Your Course?
             </h2>
-            <p className="text-xl text-white/90 mb-8 max-w-2xl mx-auto">
+            <p className="text-base sm:text-lg md:text-xl text-white/90 mb-6 sm:mb-8 max-w-2xl mx-auto px-4 sm:px-0">
               Contact us today to discuss your training needs or book your place on our next course
             </p>
-            <div className="flex flex-col sm:flex-row gap-4 justify-center">
+            <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center">
               <Button
-                size="lg"
+                size="md"
                 variant="secondary"
                 href="/contact"
+                className="min-h-[48px]"
               >
                 Get in Touch
               </Button>
               <Button
-                size="lg"
+                size="md"
                 variant="outline"
-                className="border-white text-white hover:bg-white/10"
+                className="border-white text-white hover:bg-white/10 min-h-[48px]"
                 href="tel:07447485644"
               >
                 Call 07447 485644

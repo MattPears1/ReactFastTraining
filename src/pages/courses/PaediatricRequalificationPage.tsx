@@ -6,7 +6,7 @@ const PaediatricRequalificationPage: React.FC = () => {
     <CourseTemplate
       title="Paediatric First Aid Requalification"
       subtitle="Refresh your paediatric first aid certification"
-      duration="2 Days"
+      duration="Half Day (4 hours)"
       price="£90"
       certification="3 Years"
       description="Maintain your paediatric first aid qualification with this comprehensive requalification course. Designed for those whose certificate is nearing expiry, this course refreshes all essential skills for providing first aid to infants and children."
@@ -41,7 +41,7 @@ const PaediatricRequalificationPage: React.FC = () => {
         'Childminders and nannies'
       ]}
       whatYouGet={[
-        '2-day comprehensive refresher training',
+        'Half-day comprehensive refresher training',
         'New 3-year certificate',
         'Updated course materials',
         'Practical hands-on sessions',

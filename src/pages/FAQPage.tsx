@@ -28,8 +28,8 @@ const faqData: FAQItem[] = [
   },
   {
     id: '3',
-    question: 'Where are your training venues located in Yorkshire?',
-    answer: 'We have training venues in Leeds city centre (near Leeds Station), Sheffield city centre, and Bradford city centre. All venues have excellent transport links and parking nearby. We also offer on-site training at your workplace anywhere in Yorkshire.',
+    question: 'Where are your training venues located?',
+    answer: 'We have training venues across South Yorkshire. Exact venue details will be provided in your booking confirmation. We also offer on-site training at your workplace anywhere in Yorkshire.',
     category: 'Locations',
   },
   {
@@ -83,12 +83,36 @@ const faqData: FAQItem[] = [
   {
     id: '12',
     question: 'Who is Lex, the founder of React Fast Training?',
-    answer: 'Lex Hancock is our founder and lead trainer. With extensive experience in the military and emergency services, Lex brings real-world first aid experience to every course. His practical, engaging teaching style makes learning both effective and enjoyable.',
+    answer: 'Lex is our founder and lead instructor. With extensive experience in the military and emergency services, Lex brings real-world first aid experience to every course. His practical, engaging teaching style makes learning both effective and enjoyable.',
     category: 'About Us',
+  },
+  {
+    id: '13',
+    question: 'How do I pay for my course booking?',
+    answer: 'We use Stripe for secure online payments, which accepts all major credit and debit cards. Stripe handles all payment processing securely. Payment is required at the time of booking to guarantee your place on the course.',
+    category: 'Booking',
+  },
+  {
+    id: '14',
+    question: 'Can I get a refund if I need to cancel?',
+    answer: 'Yes, we offer refunds according to our cancellation policy. Full refunds are available up to 7 days before the course date. Cancellations within 7 days may be subject to administration fees. Please see our terms and conditions for full details.',
+    category: 'Booking',
+  },
+  {
+    id: '15',
+    question: 'How will I know the exact training venue?',
+    answer: 'The exact venue details will be provided in your booking confirmation email. All our venues are easily accessible with good transport links. If you have any specific accessibility requirements, please let us know when booking.',
+    category: 'Booking',
+  },
+  {
+    id: '16',
+    question: 'Is my payment information secure?',
+    answer: 'Absolutely. We use Stripe, one of the world\'s most trusted payment processors, which is fully PCI DSS compliant. Your payment information is encrypted and never stored on our servers. All transactions are processed securely in the UK.',
+    category: 'Booking',
   },
 ]
 
-const categories = ['All', 'Courses', 'Pricing', 'Locations', 'Certification', 'Requirements', 'Business', 'Accreditation', 'Scheduling', 'About Us']
+const categories = ['All', 'Courses', 'Pricing', 'Booking', 'Locations', 'Certification', 'Requirements', 'Business', 'Accreditation', 'Scheduling', 'About Us']
 
 const FAQPage: React.FC = () => {
   const [searchTerm, setSearchTerm] = useState('')
@@ -240,7 +264,7 @@ const FAQPage: React.FC = () => {
               Still Have Questions?
             </h2>
             <p className="text-lg text-gray-600 dark:text-gray-400 mb-8">
-              Can't find the answer you're looking for? Our support team is here to help.
+              Can't find the answer you're looking for? Contact us for assistance.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <a

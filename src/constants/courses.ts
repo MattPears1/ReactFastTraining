@@ -51,19 +51,19 @@ export const COURSE_CATEGORIES = {
 } as const
 
 export const COURSE_DURATIONS: Record<CourseName, string> = {
-  'Emergency First Aid at Work': '1 Day',
-  'First Aid at Work': '3 Days',
-  'Paediatric First Aid': '2 Days',
-  'Emergency Paediatric First Aid': '1 Day',
-  'FAW Requalification': '2 Days',
-  'EFAW Requalification': '1 Day',
-  'Paediatric Requalification': '1 Day',
-  'Emergency Paediatric Requalification': '1 Day',
-  'Activity First Aid': '2 Days',
-  'Activity First Aid Requalification': '1 Day',
-  'CPR and AED': 'Half Day',
-  'Annual Skills Refresher': 'Half Day',
-  'Oxygen Therapy': 'Half Day'
+  'Emergency First Aid at Work': 'Full Day (6 hours)',
+  'First Aid at Work': 'Full Day (6 hours)',
+  'Paediatric First Aid': 'Full Day (6 hours)',
+  'Emergency Paediatric First Aid': 'Full Day (5 hours)',
+  'FAW Requalification': 'Full Day (5 hours)',
+  'EFAW Requalification': 'Half Day (4 hours)',
+  'Paediatric Requalification': 'Half Day (4 hours)',
+  'Emergency Paediatric Requalification': 'Half Day (3 hours)',
+  'Activity First Aid': 'Full Day (5 hours)',
+  'Activity First Aid Requalification': 'Half Day (3 hours)',
+  'CPR and AED': 'Half Day (3 hours)',
+  'Annual Skills Refresher': 'Half Day (3 hours)',
+  'Oxygen Therapy': 'Half Day (4 hours)'
 }
 
 export const COURSE_PRICES: Record<CourseName, number> = {

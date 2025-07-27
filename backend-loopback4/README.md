@@ -2,14 +2,25 @@
 
 Backend API for React Fast Training - First Aid Training Company in Yorkshire
 
+**Last updated: 2025-07-27**
+
 ## Features
 
-- Course management (EFAW, FAW, Requalification, Paediatric)
-- Session scheduling with trainer and location availability
-- Online booking system with group discounts
+### Core Functionality
+- Course management for 13 different first aid course types
+- Session scheduling with real-time availability tracking
+- Advanced booking system with group discounts (10% for 5+ participants)
 - Certificate generation and management
-- Email notifications
+- Professional email notifications with HTML templates
 - UK-specific compliance (Ofqual, HSE, QCF)
+
+### Recent Enhancements
+- WebSocket support for real-time availability updates
+- Distributed locking for concurrent booking prevention
+- Event sourcing for complete audit trails
+- Multi-factor authentication support
+- Field-level encryption for PII protection
+- Comprehensive monitoring and health checks
 
 ## Tech Stack
 
@@ -110,10 +121,21 @@ heroku run npm run migrate
 
 1. **Age Requirements**: Minimum age 16 for all courses
 2. **English Level**: Level 2 English required
-3. **Group Discounts**: Applied automatically based on participant count
+3. **Group Discounts**: 
+   - 5+ participants: 10% discount automatically applied
+   - Maximum 12 participants per session (hard limit)
 4. **Certificates**: Valid for 3 years, Ofqual regulated
-5. **Cancellation**: Not allowed within 48 hours of course start
-6. **Minimum Participants**: 4 for public courses, sessions auto-confirm when minimum reached
+5. **Cancellation**: 
+   - Full refund if cancelled 48+ hours before course
+   - No refund within 48 hours of course start
+6. **Course Locations**: 8 Yorkshire locations
+   - Leeds, Sheffield, Bradford, York
+   - Huddersfield, Wakefield, Halifax, Harrogate
+7. **Course Types**: 13 specialized courses including:
+   - Emergency First Aid at Work (1 day)
+   - First Aid at Work (3 days)
+   - Paediatric First Aid (2 days)
+   - Various requalification courses
 
 ## Development
 

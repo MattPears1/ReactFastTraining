@@ -2,6 +2,8 @@
 @import './themes.css';
 @import './animations.css';
 @import './yorkshire-enhancements.css';
+@import './admin-calendar.css';
+@import './responsive-utilities.css';
 
 @tailwind base;
 @tailwind components;

@@ -1,4 +1,4 @@
-import { useEffect, useRef } from 'react'
+import { useEffect, useRef, useCallback, useState } from 'react'
 import { useLocation } from 'react-router-dom'
 
 export const useFocusManagement = () => {
@@ -127,4 +127,77 @@ export const useTrapFocus = (ref: React.RefObject<HTMLElement>) => {
       element.removeEventListener('keydown', handleTabKey)
     }
   }, [ref])
+}
+
+/**
+ * Hook for reduced motion preference
+ */
+export const useReducedMotion = () => {
+  const [prefersReducedMotion, setPrefersReducedMotion] = useState(false)
+
+  useEffect(() => {
+    const mediaQuery = window.matchMedia('(prefers-reduced-motion: reduce)')
+    setPrefersReducedMotion(mediaQuery.matches)
+
+    const handleChange = (e: MediaQueryListEvent) => {
+      setPrefersReducedMotion(e.matches)
+    }
+
+    mediaQuery.addEventListener('change', handleChange)
+    return () => mediaQuery.removeEventListener('change', handleChange)
+  }, [])
+
+  return prefersReducedMotion
+}
+
+/**
+ * Hook for form field error announcements
+ */
+export const useFieldErrorAnnouncements = (errors: Record<string, any>) => {
+  const { announce } = useAnnouncement()
+  const previousErrorsRef = useRef<string[]>([])
+
+  useEffect(() => {
+    const currentErrors = Object.entries(errors)
+      .filter(([_, error]) => error)
+      .map(([field, error]) => {
+        const message = error?.message || error
+        return `${field.replace(/([A-Z])/g, ' $1').toLowerCase()}: ${message}`
+      })
+
+    const newErrors = currentErrors.filter(
+      error => !previousErrorsRef.current.includes(error)
+    )
+
+    if (newErrors.length > 0) {
+      const errorMessage = newErrors.length === 1
+        ? `Validation error: ${newErrors[0]}`
+        : `${newErrors.length} validation errors: ${newErrors.join('. ')}`
+      
+      announce(errorMessage, 'assertive')
+    }
+
+    previousErrorsRef.current = currentErrors
+  }, [errors, announce])
+}
+
+/**
+ * Hook for high contrast mode detection
+ */
+export const useHighContrast = () => {
+  const [isHighContrast, setIsHighContrast] = useState(false)
+
+  useEffect(() => {
+    const mediaQuery = window.matchMedia('(prefers-contrast: high)')
+    setIsHighContrast(mediaQuery.matches)
+
+    const handleChange = (e: MediaQueryListEvent) => {
+      setIsHighContrast(e.matches)
+    }
+
+    mediaQuery.addEventListener('change', handleChange)
+    return () => mediaQuery.removeEventListener('change', handleChange)
+  }, [])
+
+  return isHighContrast
 }

@@ -15,9 +15,9 @@
 **Founder**: Lex
 
 ### Business Model
-- Emergency First Aid at Work (EFAW) courses - 1 day - £75
-- First Aid at Work (FAW) courses - 3 days
-- Paediatric First Aid courses
+- Emergency First Aid at Work (EFAW) courses - Full day (6 hours) - £75
+- First Aid at Work (FAW) courses - Full day (6 hours)
+- Paediatric First Aid courses - Full day (6 hours)
 - HSE approved & Ofqual regulated training
 - Both on-site and public venue training
 

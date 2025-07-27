@@ -3,6 +3,7 @@ import { motion } from 'framer-motion'
 import { CheckCircle, Calendar, MapPin, Users, Mail, Phone, Download, Share2 } from 'lucide-react'
 import { Link } from 'react-router-dom'
 import { cn } from '@utils/cn'
+import { SuccessCheckmark } from '@components/ui/SuccessAnimation'
 
 interface BookingConfirmationProps {
   confirmationCode: string
@@ -20,10 +21,10 @@ export const BookingConfirmation: React.FC<BookingConfirmationProps> = ({
   courseName,
   courseDate,
   venue,
-  numberOfParticipants,
-  totalPrice,
-  contactEmail,
-  contactPhone
+  numberOfParticipants = 1,
+  totalPrice = 0,
+  contactEmail = '',
+  contactPhone = ''
 }) => {
   const handleShare = () => {
     if (navigator.share) {
@@ -45,7 +46,7 @@ Course: ${courseName}
 Date: ${courseDate}
 Venue: ${venue}
 Participants: ${numberOfParticipants}
-Total Price: £${totalPrice.toFixed(2)}
+Total Price: £${totalPrice?.toFixed(2) || '0.00'}
 
 Contact Email: ${contactEmail}
 Contact Phone: ${contactPhone}
@@ -130,7 +131,7 @@ For any queries, please call us on 07447 485644 or email info@reactfasttraining.
             <div className="flex justify-between items-center">
               <span className="font-medium">Total Price</span>
               <span className="text-xl font-bold text-primary-600 dark:text-primary-400">
-                £{totalPrice.toFixed(2)}
+                £{(totalPrice || 0).toFixed(2)}
               </span>
             </div>
           </div>

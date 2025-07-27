@@ -1,54 +1,16 @@
 import React, { useState, useEffect } from 'react'
 import { motion } from 'framer-motion'
-import { Calendar, MapPin, Users, Clock, ChevronRight } from 'lucide-react'
-import { bookingApi } from '@services/api.service'
+import { Calendar, MapPin, Users, Clock, ChevronRight, AlertCircle, RefreshCw } from 'lucide-react'
 import { cn } from '@utils/cn'
-import { mockCourseSchedules } from '@/mocks/bookingData'
-
-interface CourseSchedule {
-  id: number
-  courseType: string
-  courseName: string
-  startDate: string
-  endDate: string
-  venue: string
-  venueName: string
-  venueAddress: string
-  availableSpots: number
-  maxParticipants: number
-  pricePerPerson: number
-  instructorName: string
-}
+import { CourseSchedule, CourseTypeCode } from '@/types/booking.types'
+import { COURSE_TYPE_CONFIG } from '@/config/courseTypes.config'
+import { bookingService } from '@/services/booking.service'
+import { formatDate, formatTime, formatCountdown } from '@/utils/dateFormatting'
 
 interface CourseAvailabilityProps {
-  courseType?: string
+  courseType?: CourseTypeCode
   onSelectCourse: (schedule: CourseSchedule) => void
   selectedScheduleId?: number
-}
-
-const formatDate = (dateStr: string) => {
-  const date = new Date(dateStr)
-  return date.toLocaleDateString('en-GB', { 
-    weekday: 'short',
-    day: 'numeric',
-    month: 'short',
-    year: 'numeric'
-  })
-}
-
-const formatTime = (dateStr: string) => {
-  const date = new Date(dateStr)
-  return date.toLocaleTimeString('en-GB', { 
-    hour: '2-digit',
-    minute: '2-digit'
-  })
-}
-
-const courseColors = {
-  EFAW: 'border-blue-500 bg-blue-50 dark:bg-blue-900/20',
-  FAW: 'border-green-500 bg-green-50 dark:bg-green-900/20',
-  PAEDIATRIC: 'border-purple-500 bg-purple-50 dark:bg-purple-900/20',
-  MENTAL_HEALTH: 'border-orange-500 bg-orange-50 dark:bg-orange-900/20'
 }
 
 export const CourseAvailability: React.FC<CourseAvailabilityProps> = ({
@@ -59,6 +21,7 @@ export const CourseAvailability: React.FC<CourseAvailabilityProps> = ({
   const [schedules, setSchedules] = useState<CourseSchedule[]>([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
+  const [retryCount, setRetryCount] = useState(0)
 
   useEffect(() => {
     fetchAvailableCourses()
@@ -69,56 +32,47 @@ export const CourseAvailability: React.FC<CourseAvailabilityProps> = ({
       setLoading(true)
       setError(null)
       
-      // Use mock data for now
-      setTimeout(() => {
-        let filteredSchedules = mockCourseSchedules
-        if (courseType) {
-          filteredSchedules = mockCourseSchedules.filter(s => s.courseType === courseType)
-        }
-        setSchedules(filteredSchedules)
-        setLoading(false)
-      }, 500)
+      const schedules = await bookingService.getAvailableCourses({ 
+        courseType,
+        showFullCourses: false
+      })
       
-      // TODO: Replace with real API call when backend is ready
-      // const response = await bookingApi.getAvailableCourses({ 
-      //   courseType,
-      //   venue: undefined,
-      //   month: undefined
-      // })
-      
-      // if (response.success && response.data) {
-      //   setSchedules(response.data)
-      // }
+      setSchedules(schedules)
     } catch (err) {
       setError('Failed to load available courses. Please try again.')
       console.error('Error fetching courses:', err)
+    } finally {
       setLoading(false)
     }
   }
+  
+  const handleRetry = () => {
+    setRetryCount(prev => prev + 1)
+    fetchAvailableCourses()
+  }
 
   if (loading) {
-    return (
-      <div className="space-y-4">
-        {[1, 2, 3].map((i) => (
-          <div key={i} className="animate-pulse">
-            <div className="h-32 bg-gray-200 dark:bg-gray-700 rounded-xl"></div>
-          </div>
-        ))}
-      </div>
-    )
+    return <CourseAvailabilitySkeleton />
   }
 
   if (error) {
     return (
-      <div className="text-center py-8">
-        <p className="text-red-600 dark:text-red-400 mb-4">{error}</p>
+      <motion.div 
+        initial={{ opacity: 0, y: 10 }}
+        animate={{ opacity: 1, y: 0 }}
+        className="text-center py-12 px-6 bg-red-50 dark:bg-red-900/20 rounded-xl border border-red-200 dark:border-red-800"
+      >
+        <AlertCircle className="w-12 h-12 text-red-600 dark:text-red-400 mx-auto mb-4" />
+        <h3 className="text-lg font-semibold text-red-900 dark:text-red-100 mb-2">Unable to Load Courses</h3>
+        <p className="text-red-700 dark:text-red-300 mb-4">{error}</p>
         <button 
-          onClick={fetchAvailableCourses}
-          className="btn btn-outline"
+          onClick={handleRetry}
+          className="btn btn-outline btn-sm inline-flex items-center gap-2"
         >
+          <RefreshCw className={cn("w-4 h-4", retryCount > 0 && "animate-spin")} />
           Try Again
         </button>
-      </div>
+      </motion.div>
     )
   }
 
@@ -144,7 +98,7 @@ export const CourseAvailability: React.FC<CourseAvailabilityProps> = ({
       {schedules.map((schedule) => {
         const isSelected = selectedScheduleId === schedule.id
         const isFull = schedule.availableSpots === 0
-        const borderColor = courseColors[schedule.courseType as keyof typeof courseColors] || 'border-gray-300'
+        const courseConfig = COURSE_TYPE_CONFIG[schedule.courseType]
         
         return (
           <motion.div
@@ -153,10 +107,11 @@ export const CourseAvailability: React.FC<CourseAvailabilityProps> = ({
             animate={{ opacity: 1, y: 0 }}
             className={cn(
               'relative border-2 rounded-xl p-6 cursor-pointer transition-all',
-              borderColor,
+              courseConfig.color.border,
+              courseConfig.color.background,
               isSelected && 'ring-2 ring-primary-500 ring-offset-2',
               isFull && 'opacity-60 cursor-not-allowed',
-              !isFull && !isSelected && 'hover:shadow-lg'
+              !isFull && !isSelected && 'hover:shadow-lg hover:scale-[1.02]'
             )}
             onClick={() => !isFull && onSelectCourse(schedule)}
           >
@@ -240,6 +195,33 @@ export const CourseAvailability: React.FC<CourseAvailabilityProps> = ({
           </motion.div>
         )
       })}
+    </div>
+  )
+}
+
+const CourseAvailabilitySkeleton: React.FC = () => {
+  return (
+    <div className="space-y-4">
+      {[1, 2, 3].map((i) => (
+        <div key={i} className="animate-pulse">
+          <div className="border-2 border-gray-200 dark:border-gray-700 rounded-xl p-6">
+            <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-4">
+              <div className="flex-1 space-y-3">
+                <div className="h-6 bg-gray-200 dark:bg-gray-700 rounded w-3/4"></div>
+                <div className="space-y-2">
+                  <div className="h-4 bg-gray-200 dark:bg-gray-700 rounded w-1/2"></div>
+                  <div className="h-4 bg-gray-200 dark:bg-gray-700 rounded w-2/3"></div>
+                  <div className="h-4 bg-gray-200 dark:bg-gray-700 rounded w-1/3"></div>
+                </div>
+              </div>
+              <div className="space-y-2">
+                <div className="h-8 bg-gray-200 dark:bg-gray-700 rounded w-20"></div>
+                <div className="h-10 bg-gray-200 dark:bg-gray-700 rounded w-24"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      ))}
     </div>
   )
 }

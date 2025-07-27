@@ -37,7 +37,7 @@ const mockSearchData: SearchSuggestion[] = [
   {
     id: '5',
     title: 'Contact Support',
-    description: 'Get help from our support team',
+    description: 'Get help or ask questions',
     category: 'page',
     url: '/contact',
   },

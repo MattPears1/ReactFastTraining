@@ -3,11 +3,11 @@ import {CourseSession} from './course-session.model';
 import {Booking} from './booking.model';
 
 export enum CourseType {
-  EFAW = 'EFAW', // Emergency First Aid at Work (1 day)
-  FAW = 'FAW', // First Aid at Work (3 days)
-  FAW_REQUALIFICATION = 'FAW_REQUALIFICATION', // Requalification (2 days)
-  PAEDIATRIC = 'PAEDIATRIC', // Paediatric First Aid
-  BESPOKE = 'BESPOKE', // Custom courses
+  EFAW = 'EFAW', // Emergency First Aid at Work (Full day - 6 hours)
+  FAW = 'FAW', // First Aid at Work (Full day - 6 hours)
+  FAW_REQUALIFICATION = 'FAW_REQUALIFICATION', // Requalification (Full day - 5 hours)
+  PAEDIATRIC = 'PAEDIATRIC', // Paediatric First Aid (Full day - 6 hours)
+  BESPOKE = 'BESPOKE', // Custom courses (Half or Full day)
 }
 
 export enum CertificationBody {
@@ -61,8 +61,8 @@ export class Course extends Entity {
     type: 'number',
     required: true,
     jsonSchema: {
-      minimum: 1,
-      maximum: 5,
+      minimum: 0.5,
+      maximum: 1,
     },
   })
   durationDays: number;

@@ -116,8 +116,8 @@ const SEO: React.FC<SEOProps> = ({
     ],
     founder: {
       '@type': 'Person',
-      name: 'Lex Hancock',
-      jobTitle: 'Founder & Lead Trainer',
+      name: 'Lex',
+      jobTitle: 'Founder & Lead Instructor',
       description: 'Ex-military professional with over 20 years experience in emergency first aid and medical training.'
     },
     aggregateRating: {

@@ -96,7 +96,7 @@ const ContactForm: React.FC = () => {
         </div>
       </div>
 
-      <div className="grid md:grid-cols-2 gap-6">
+      <div className="grid sm:grid-cols-2 gap-4 sm:gap-6">
         <div>
           <label htmlFor="email" className="form-label">
             Email Address <span className="text-accent-600 dark:text-accent-400">*</span>

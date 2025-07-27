@@ -3,6 +3,7 @@ import {repository} from '@loopback/repository';
 import {Booking, Certificate, CourseSession} from '../models';
 import {BookingRepository} from '../repositories';
 import * as nodemailer from 'nodemailer';
+import {User} from '../db/schema/users';
 
 export interface EmailOptions {
   to: string;
@@ -190,6 +191,242 @@ export class EmailService {
     await this.sendEmail({
       to: process.env.ADMIN_EMAIL || 'admin@reactfasttraining.co.uk',
       subject: `New Onsite Training Enquiry - ${enquiry.company}`,
+      html,
+    });
+  }
+
+  async sendVerificationEmail(user: User): Promise<void> {
+    const verificationUrl = `${process.env.FRONTEND_URL}/verify-email?token=${user.verificationToken}`;
+    
+    const html = `
+      <!DOCTYPE html>
+      <html>
+        <head>
+          <style>
+            body { font-family: Arial, sans-serif; line-height: 1.6; color: #333; }
+            .container { max-width: 600px; margin: 0 auto; padding: 20px; }
+            .header { background-color: #0EA5E9; color: white; padding: 20px; text-align: center; }
+            .content { padding: 20px; background-color: #f4f4f4; }
+            .button { display: inline-block; padding: 12px 24px; background-color: #0EA5E9; 
+                     color: white; text-decoration: none; border-radius: 4px; margin: 20px 0; }
+            .footer { text-align: center; padding: 20px; font-size: 12px; color: #666; }
+          </style>
+        </head>
+        <body>
+          <div class="container">
+            <div class="header">
+              <h1>Welcome to React Fast Training</h1>
+            </div>
+            <div class="content">
+              <h2>Verify Your Email Address</h2>
+              <p>Hi ${user.name},</p>
+              <p>Thank you for signing up with React Fast Training. To complete your registration, 
+                 please verify your email address by clicking the button below:</p>
+              <center>
+                <a href="${verificationUrl}" class="button">Verify Email Address</a>
+              </center>
+              <p>Or copy and paste this link into your browser:</p>
+              <p style="word-break: break-all; font-size: 12px;">${verificationUrl}</p>
+              <p>This link will expire in 24 hours for security reasons.</p>
+              <p>If you didn't create an account with us, please ignore this email.</p>
+            </div>
+            <div class="footer">
+              <p>© 2024 React Fast Training. All rights reserved.</p>
+              <p>Yorkshire's Premier First Aid Training Provider</p>
+            </div>
+          </div>
+        </body>
+      </html>
+    `;
+
+    await this.sendEmail({
+      to: user.email,
+      subject: 'Verify Your Email - React Fast Training',
+      html,
+    });
+  }
+
+  async sendAccountLockedEmail(user: User): Promise<void> {
+    const resetUrl = `${process.env.FRONTEND_URL}/reset-password`;
+    
+    const html = `
+      <!DOCTYPE html>
+      <html>
+        <head>
+          <style>
+            body { font-family: Arial, sans-serif; line-height: 1.6; color: #333; }
+            .container { max-width: 600px; margin: 0 auto; padding: 20px; }
+            .header { background-color: #DC2626; color: white; padding: 20px; text-align: center; }
+            .content { padding: 20px; background-color: #f4f4f4; }
+            .button { display: inline-block; padding: 12px 24px; background-color: #0EA5E9; 
+                     color: white; text-decoration: none; border-radius: 4px; margin: 20px 0; }
+            .warning { background-color: #FEF3C7; border: 1px solid #F59E0B; 
+                      padding: 15px; border-radius: 4px; margin: 15px 0; }
+          </style>
+        </head>
+        <body>
+          <div class="container">
+            <div class="header">
+              <h1>Account Locked</h1>
+            </div>
+            <div class="content">
+              <h2>Your Account Has Been Locked</h2>
+              <p>Hi ${user.name},</p>
+              
+              <div class="warning">
+                <strong>⚠️ Security Alert:</strong> Your account has been locked due to 
+                multiple failed login attempts.
+              </div>
+              
+              <p>For your security, we've temporarily locked your account. This helps 
+                 protect your account from unauthorized access attempts.</p>
+              
+              <p>To unlock your account, you'll need to reset your password:</p>
+              
+              <center>
+                <a href="${resetUrl}" class="button">Reset Password</a>
+              </center>
+              
+              <p>If you didn't attempt to log in, please reset your password immediately 
+                 as someone may be trying to access your account.</p>
+              
+              <h3>Security Tips:</h3>
+              <ul>
+                <li>Use a strong, unique password</li>
+                <li>Never share your password with anyone</li>
+                <li>Be cautious of phishing emails</li>
+                <li>Consider using a password manager</li>
+              </ul>
+            </div>
+            <div class="footer">
+              <p>© 2024 React Fast Training. All rights reserved.</p>
+            </div>
+          </div>
+        </body>
+      </html>
+    `;
+
+    await this.sendEmail({
+      to: user.email,
+      subject: 'Account Locked - Action Required',
+      html,
+    });
+  }
+
+  async sendPasswordResetEmail(user: User, token: string): Promise<void> {
+    const resetUrl = `${process.env.FRONTEND_URL}/reset-password?token=${token}`;
+    
+    const html = `
+      <!DOCTYPE html>
+      <html>
+        <head>
+          <style>
+            body { font-family: Arial, sans-serif; line-height: 1.6; color: #333; }
+            .container { max-width: 600px; margin: 0 auto; padding: 20px; }
+            .header { background-color: #0EA5E9; color: white; padding: 20px; text-align: center; }
+            .content { padding: 20px; background-color: #f4f4f4; }
+            .button { display: inline-block; padding: 12px 24px; background-color: #0EA5E9; 
+                     color: white; text-decoration: none; border-radius: 4px; margin: 20px 0; }
+            .footer { text-align: center; padding: 20px; font-size: 12px; color: #666; }
+            .security-note { background-color: #FEF3C7; padding: 10px; border-radius: 4px; 
+                            margin: 15px 0; font-size: 14px; }
+          </style>
+        </head>
+        <body>
+          <div class="container">
+            <div class="header">
+              <h1>Password Reset Request</h1>
+            </div>
+            <div class="content">
+              <h2>Reset Your Password</h2>
+              <p>Hi ${user.name},</p>
+              <p>We received a request to reset your password. Click the button below to 
+                 create a new password:</p>
+              
+              <center>
+                <a href="${resetUrl}" class="button">Reset Password</a>
+              </center>
+              
+              <p>Or copy and paste this link into your browser:</p>
+              <p style="word-break: break-all; font-size: 12px;">${resetUrl}</p>
+              
+              <div class="security-note">
+                <strong>⏰ This link expires in 1 hour</strong> for security reasons.
+              </div>
+              
+              <p>If you didn't request this password reset, please ignore this email. 
+                 Your password won't be changed.</p>
+              
+              <p><strong>Note:</strong> If your account was locked due to failed login 
+                 attempts, it will be automatically unlocked when you reset your password.</p>
+            </div>
+            <div class="footer">
+              <p>© 2024 React Fast Training. All rights reserved.</p>
+            </div>
+          </div>
+        </body>
+      </html>
+    `;
+
+    await this.sendEmail({
+      to: user.email,
+      subject: 'Password Reset Request - React Fast Training',
+      html,
+    });
+  }
+
+  async sendPasswordChangedEmail(user: User): Promise<void> {
+    const html = `
+      <!DOCTYPE html>
+      <html>
+        <head>
+          <style>
+            body { font-family: Arial, sans-serif; line-height: 1.6; color: #333; }
+            .container { max-width: 600px; margin: 0 auto; padding: 20px; }
+            .header { background-color: #0EA5E9; color: white; padding: 20px; text-align: center; }
+            .content { padding: 20px; background-color: #f4f4f4; }
+            .footer { text-align: center; padding: 20px; font-size: 12px; color: #666; }
+            .security-note { background-color: #D1FAE5; border: 1px solid #10B981; 
+                            padding: 15px; border-radius: 4px; margin: 15px 0; }
+          </style>
+        </head>
+        <body>
+          <div class="container">
+            <div class="header">
+              <h1>Password Changed Successfully</h1>
+            </div>
+            <div class="content">
+              <h2>Your Password Has Been Reset</h2>
+              <p>Hi ${user.name},</p>
+              <p>This email confirms that your password has been successfully changed.</p>
+              
+              <div class="security-note">
+                <strong>🔓 Account Unlocked:</strong> If your account was previously 
+                locked, it has now been unlocked.
+              </div>
+              
+              <p>You can now log in with your new password.</p>
+              
+              <p>If you didn't make this change, please contact us immediately.</p>
+              
+              <h3>Security Tips:</h3>
+              <ul>
+                <li>Use a unique password for each account</li>
+                <li>Enable two-factor authentication when available</li>
+                <li>Never share your password</li>
+              </ul>
+            </div>
+            <div class="footer">
+              <p>© 2024 React Fast Training. All rights reserved.</p>
+            </div>
+          </div>
+        </body>
+      </html>
+    `;
+
+    await this.sendEmail({
+      to: user.email,
+      subject: 'Password Changed - React Fast Training',
       html,
     });
   }

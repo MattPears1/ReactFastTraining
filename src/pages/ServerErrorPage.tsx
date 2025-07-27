@@ -51,7 +51,7 @@ const ServerErrorPage: React.FC = () => {
               Internal Server Error
             </h2>
             <p className="text-lg text-gray-600 dark:text-gray-400 mb-8">
-              Oops! Something went wrong on our end. Our team has been notified and is working to fix the issue.
+              Oops! Something went wrong on our end. The issue has been logged and will be addressed promptly.
             </p>
           </motion.div>
 
@@ -99,7 +99,7 @@ const ServerErrorPage: React.FC = () => {
             className="mt-12"
           >
             <p className="text-sm text-gray-600 dark:text-gray-400 mb-4">
-              If the problem persists, please contact our support team:
+              If the problem persists, please contact us:
             </p>
             <div className="flex items-center justify-center gap-2">
               <Mail className="w-4 h-4 text-gray-600 dark:text-gray-400" />

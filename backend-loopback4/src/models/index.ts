@@ -4,3 +4,4 @@ export * from './location.model';
 export * from './course-session.model';
 export * from './booking.model';
 export * from './certificate.model';
+export * from './attendance.model';

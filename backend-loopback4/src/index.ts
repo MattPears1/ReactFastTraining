@@ -1,4 +1,5 @@
 import {ApplicationConfig, ReactFastTrainingApiApplication} from './application';
+import {websocketService} from './services/websocket.service';
 
 export * from './application';
 
@@ -6,6 +7,13 @@ export async function main(options: ApplicationConfig = {}) {
   const app = new ReactFastTrainingApiApplication(options);
   await app.boot();
   await app.start();
+
+  // Initialize WebSocket server
+  const server = app.restServer.httpServer?.server;
+  if (server) {
+    await websocketService.initialize(server);
+    console.log('WebSocket server initialized');
+  }
 
   const url = app.restServer.url;
   console.log(`Server is running at ${url}`);
