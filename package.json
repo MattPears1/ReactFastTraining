@@ -30,7 +30,7 @@
     "start:prod": "node server.js",
     "migrate:prod": "cd backend && npm run migrate:prod",
     "worker:prod": "cd backend && npm run worker:prod",
-    "heroku-prebuild": "echo This is the heroku prebuild step",
+    "heroku-prebuild": "echo Clearing cache and rebuilding dependencies && npm cache clean --force",
     "heroku-postbuild": "npm run build",
     "start:backend": "cd backend && npm start",
     "build:backend": "cd backend && npm run build"
