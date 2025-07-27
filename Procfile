@@ -1,1 +1,1 @@
-web: npm run build && npm run start:prod
+web: cd backend-loopback4 && npm start

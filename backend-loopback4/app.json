@@ -65,5 +65,8 @@
   },
   "scripts": {
     "postdeploy": "npm run setup:database"
+  },
+  "release": {
+    "command": "npm run setup:database"
   }
 }
