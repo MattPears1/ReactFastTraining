@@ -4,8 +4,7 @@ import {
   Elements,
   PaymentElement,
   useStripe,
-  useElements,
-  AddressElement
+  useElements
 } from '@stripe/react-stripe-js';
 import { motion } from 'framer-motion';
 import { CreditCard, Lock, AlertCircle, Loader2 } from 'lucide-react';
@@ -48,12 +47,17 @@ interface StripePaymentFormProps {
   onError: (error: string) => void;
 }
 
-const PaymentForm: React.FC<StripePaymentFormProps> = ({
+interface PaymentFormInternalProps extends StripePaymentFormProps {
+  clientSecret: string;
+}
+
+const PaymentForm: React.FC<PaymentFormInternalProps> = ({
   courseSchedule,
   bookingData,
   totalAmount,
   onSuccess,
-  onError
+  onError,
+  clientSecret
 }) => {
   const stripe = useStripe();
   const elements = useElements();
@@ -69,45 +73,44 @@ const PaymentForm: React.FC<StripePaymentFormProps> = ({
     console.log('Total Amount (pounds):', totalAmount / 100);
     console.log('Stripe loaded:', !!stripe);
     console.log('Elements loaded:', !!elements);
-  }, [courseSchedule, bookingData, totalAmount, stripe, elements]);
+    console.log('Client Secret provided:', !!clientSecret);
+  }, [courseSchedule, bookingData, totalAmount, stripe, elements, clientSecret]);
 
   const handleSubmit = async (event: React.FormEvent) => {
     event.preventDefault();
-    console.log('=== PAYMENT FORM SUBMIT ===');
+    console.log('=== REAL STRIPE PAYMENT SUBMISSION ===');
 
-    if (!stripe || !elements) {
-      console.error('Stripe or Elements not loaded!');
-      console.log('Stripe:', stripe);
-      console.log('Elements:', elements);
+    if (!stripe || !elements || !clientSecret) {
+      console.error('Stripe, Elements, or Client Secret not loaded!');
+      console.log('Stripe:', !!stripe);
+      console.log('Elements:', !!elements);
+      console.log('Client Secret:', !!clientSecret);
       return;
     }
 
-    console.log('Starting payment processing...');
+    console.log('Processing real Stripe payment...');
     setIsProcessing(true);
     setErrorMessage(null);
 
     try {
-      const confirmParams = {
-        return_url: `${window.location.origin}/booking-confirmation`,
-        receipt_email: bookingData.email,
-        payment_method_data: {
-          billing_details: {
-            name: `${bookingData.firstName} ${bookingData.lastName}`,
-            email: bookingData.email,
-            phone: bookingData.phone,
-          }
-        }
-      };
-      
-      console.log('Confirming payment with params:', confirmParams);
-      
+      // Use Stripe's real confirmPayment method
       const { error, paymentIntent } = await stripe.confirmPayment({
         elements,
-        confirmParams,
-        redirect: 'if_required'
+        clientSecret,
+        confirmParams: {
+          return_url: `${window.location.origin}/booking-success`,
+          payment_method_data: {
+            billing_details: {
+              name: `${bookingData.firstName} ${bookingData.lastName}`,
+              email: bookingData.email,
+              phone: bookingData.phone,
+            },
+          },
+        },
+        redirect: 'if_required',
       });
 
-      console.log('Payment confirmation response:');
+      console.log('=== REAL STRIPE PAYMENT RESPONSE ===');
       console.log('Error:', error);
       console.log('Payment Intent:', paymentIntent);
 
@@ -162,44 +165,32 @@ const PaymentForm: React.FC<StripePaymentFormProps> = ({
         </div>
       </div>
 
-      {/* Billing Address */}
-      <div className="space-y-4">
-        <h3 className="text-lg font-semibold flex items-center gap-2">
-          <CreditCard className="w-5 h-5" />
-          Billing Address
-        </h3>
-        <div className="border border-gray-300 rounded-lg p-4">
-          <AddressElement 
-            options={{
-              mode: 'billing',
-              defaultValues: {
-                name: `${bookingData.firstName} ${bookingData.lastName}`,
-                organization: bookingData.companyName || undefined,
-              }
-            }}
-          />
-        </div>
-      </div>
-
       {/* Payment Details */}
       <div className="space-y-4">
         <h3 className="text-lg font-semibold flex items-center gap-2">
-          <Lock className="w-5 h-5" />
-          Payment Details
+          <CreditCard className="w-5 h-5" />
+          Card Details
         </h3>
         <div className="border border-gray-300 rounded-lg p-4">
-          <PaymentElement 
-            options={{
-              layout: 'tabs',
-              defaultValues: {
-                billingDetails: {
-                  name: `${bookingData.firstName} ${bookingData.lastName}`,
-                  email: bookingData.email,
-                  phone: bookingData.phone,
-                }
-              }
-            }}
-          />
+          {clientSecret ? (
+            <PaymentElement 
+              options={{
+                layout: 'tabs',
+                paymentMethodOrder: ['card'],
+                fields: {
+                  billingDetails: 'never',
+                },
+                terms: {
+                  card: 'never',
+                },
+              }}
+            />
+          ) : (
+            <div className="flex items-center justify-center p-8">
+              <Loader2 className="w-6 h-6 animate-spin text-primary-500" />
+              <span className="ml-2 text-gray-600">Initializing payment...</span>
+            </div>
+          )}
         </div>
       </div>
 
@@ -263,15 +254,65 @@ const PaymentForm: React.FC<StripePaymentFormProps> = ({
 };
 
 // Wrapper component with Stripe Elements
-export const StripePaymentForm: React.FC<StripePaymentFormProps & { clientSecret: string }> = ({
-  clientSecret,
-  ...props
-}) => {
+export const StripePaymentForm: React.FC<StripePaymentFormProps> = (props) => {
+  const [clientSecret, setClientSecret] = useState<string | null>(null);
+  
   console.log('=== STRIPE PAYMENT FORM WRAPPER ===');
   console.log('Client Secret:', clientSecret ? 'Provided' : 'Missing');
-  console.log('Client Secret length:', clientSecret?.length);
   console.log('Props:', props);
+
+  // Create payment intent when wrapper mounts
+  useEffect(() => {
+    const createPaymentIntent = async () => {
+      try {
+        console.log('=== CREATING REAL STRIPE PAYMENT INTENT ===');
+        
+        const response = await fetch(`${import.meta.env.VITE_API_URL || 'http://localhost:3000'}/api/bookings/create-payment-intent`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            courseSessionId: props.courseSchedule.id,
+            amount: props.totalAmount,
+            bookingData: {
+              firstName: props.bookingData.firstName,
+              lastName: props.bookingData.lastName,
+              email: props.bookingData.email,
+              phone: props.bookingData.phone,
+              companyName: props.bookingData.companyName,
+              specialRequirements: props.bookingData.specialRequirements,
+            },
+          }),
+        });
+
+        const data = await response.json();
+        console.log('Payment intent response:', data);
+
+        if (data.success && data.paymentIntent?.client_secret) {
+          setClientSecret(data.paymentIntent.client_secret);
+          console.log('✅ Real Stripe payment intent created:', data.paymentIntent.id);
+        } else {
+          throw new Error(data.error || 'Failed to create payment intent');
+        }
+      } catch (error) {
+        console.error('❌ Payment intent creation failed:', error);
+        props.onError('Failed to initialize payment. Please try again.');
+      }
+    };
+
+    createPaymentIntent();
+  }, [props]);
   
+  if (!clientSecret) {
+    return (
+      <div className="flex items-center justify-center p-8">
+        <Loader2 className="w-8 h-8 animate-spin text-primary-500" />
+        <span className="ml-3 text-gray-600">Initializing secure payment...</span>
+      </div>
+    );
+  }
+
   const appearance = {
     theme: 'stripe' as const,
     variables: {
@@ -294,7 +335,7 @@ export const StripePaymentForm: React.FC<StripePaymentFormProps & { clientSecret
 
   return (
     <Elements stripe={stripePromise} options={options}>
-      <PaymentForm {...props} />
+      <PaymentForm {...props} clientSecret={clientSecret} />
     </Elements>
   );
 };

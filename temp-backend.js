@@ -186,12 +186,16 @@ app.get('/api/admin/analytics/revenue', (req, res) => {
 app.post('/api/bookings/create-payment-intent', (req, res) => {
   console.log('Payment intent request:', req.body);
   
-  // For demo purposes, return a mock payment intent
+  const timestamp = Date.now();
+  const amount = req.body.amount || 7500;
+  
+  // For demo purposes, return a mock payment intent with proper client secret format
   res.json({
-    clientSecret: 'pi_demo_client_secret_test',
-    paymentIntentId: 'pi_demo_test_' + Date.now(),
-    amount: req.body.amount || 7500, // £75.00 in pence
-    currency: 'gbp'
+    clientSecret: `pi_demo_${timestamp}_secret_demo`,
+    paymentIntentId: `pi_demo_${timestamp}`,
+    amount: amount,
+    currency: 'gbp',
+    status: 'requires_payment_method'
   });
 });
 
