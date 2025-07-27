@@ -148,8 +148,7 @@ export class StripeServiceEnhanced {
           ...data.metadata,
         },
         automatic_payment_methods: {
-          enabled: true,
-          allow_redirects: 'never', // Prevent redirect-based payment methods
+          enabled: false, // Disable to show only card payments
         },
       };
 

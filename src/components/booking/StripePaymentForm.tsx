@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { loadStripe } from '@stripe/stripe-js';
 import {
   Elements,
-  PaymentElement,
+  CardElement,
   useStripe,
   useElements
 } from '@stripe/react-stripe-js';
@@ -93,21 +93,25 @@ const PaymentForm: React.FC<PaymentFormInternalProps> = ({
     setErrorMessage(null);
 
     try {
-      // Use Stripe's real confirmPayment method
-      const { error, paymentIntent } = await stripe.confirmPayment({
-        elements,
-        clientSecret,
-        confirmParams: {
-          return_url: `${window.location.origin}/booking-success`,
-          payment_method_data: {
-            billing_details: {
-              name: `${bookingData.firstName} ${bookingData.lastName}`,
-              email: bookingData.email,
-              phone: bookingData.phone,
-            },
+      // Get card element for confirmation
+      const cardElement = elements.getElement(CardElement);
+      if (!cardElement) {
+        console.error('Card element not found');
+        setErrorMessage('Payment form not ready. Please refresh and try again.');
+        onError('Payment form not ready. Please refresh and try again.');
+        return;
+      }
+
+      // Use Stripe's confirmCardPayment method for CardElement
+      const { error, paymentIntent } = await stripe.confirmCardPayment(clientSecret, {
+        payment_method: {
+          card: cardElement,
+          billing_details: {
+            name: `${bookingData.firstName} ${bookingData.lastName}`,
+            email: bookingData.email,
+            phone: bookingData.phone,
           },
-        },
-        redirect: 'if_required',
+        }
       });
 
       console.log('=== REAL STRIPE PAYMENT RESPONSE ===');
@@ -173,16 +177,22 @@ const PaymentForm: React.FC<PaymentFormInternalProps> = ({
         </h3>
         <div className="border border-gray-300 rounded-lg p-4">
           {clientSecret ? (
-            <PaymentElement 
+            <CardElement 
               options={{
-                layout: 'tabs',
-                paymentMethodOrder: ['card'],
-                fields: {
-                  billingDetails: 'never',
+                style: {
+                  base: {
+                    fontSize: '16px',
+                    color: '#424770',
+                    '::placeholder': {
+                      color: '#aab7c4',
+                    },
+                  },
+                  invalid: {
+                    color: '#9e2146',
+                  },
                 },
-                terms: {
-                  card: 'never',
-                },
+                hidePostalCode: false,
+                disabled: false,
               }}
             />
           ) : (
@@ -332,7 +342,6 @@ export const StripePaymentForm: React.FC<StripePaymentFormProps> = (props) => {
   };
 
   const options = {
-    clientSecret,
     appearance,
     loader: 'auto' as const,
   };

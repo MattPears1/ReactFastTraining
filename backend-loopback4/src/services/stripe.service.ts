@@ -89,9 +89,9 @@ export class StripeService {
           customerEmail: data.customerEmail,
           ...data.metadata,
         },
-        // Enable automatic payment methods
+        // Disable automatic payment methods to show only cards
         automatic_payment_methods: {
-          enabled: true,
+          enabled: false,
         },
       }, {
         idempotencyKey,
