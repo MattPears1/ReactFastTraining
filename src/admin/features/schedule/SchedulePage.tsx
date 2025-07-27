@@ -46,12 +46,26 @@ export const SchedulePage: React.FC = () => {
   const { data: schedules, isLoading, error } = useQuery({
     queryKey: ['admin-schedules', currentDate.getMonth(), currentDate.getFullYear()],
     queryFn: async () => {
+      // DEBUG: Environment and configuration
+      console.log('🔍 DEBUG: Schedule page query starting');
+      console.log('🔍 DEBUG: import.meta.env.PROD:', import.meta.env.PROD);
+      console.log('🔍 DEBUG: import.meta.env.VITE_API_URL:', import.meta.env.VITE_API_URL);
+      console.log('🔍 DEBUG: window.location.origin:', window.location.origin);
+      
       // In production, use the same domain as the frontend
       const apiUrl = import.meta.env.PROD ? '' : (import.meta.env.VITE_API_URL || 'http://localhost:3000');
       const token = localStorage.getItem('adminAccessToken');
       
+      console.log('🔍 DEBUG: Calculated apiUrl:', apiUrl);
+      console.log('🔍 DEBUG: Token exists:', !!token);
+      console.log('🔍 DEBUG: Token preview:', token ? token.substring(0, 20) + '...' : 'null');
+      
+      const fullUrl = `${apiUrl}/course-sessions`;
+      console.log('🔍 DEBUG: Full request URL:', fullUrl);
+      
       try {
-        const response = await fetch(`${apiUrl}/course-sessions`, {
+        console.log('🔍 DEBUG: Making fetch request...');
+        const response = await fetch(fullUrl, {
           headers: {
             'Authorization': `Bearer ${token}`,
             'Content-Type': 'application/json',
@@ -59,34 +73,64 @@ export const SchedulePage: React.FC = () => {
           }
         });
         
+        console.log('🔍 DEBUG: Response received');
+        console.log('🔍 DEBUG: Response status:', response.status);
+        console.log('🔍 DEBUG: Response statusText:', response.statusText);
+        console.log('🔍 DEBUG: Response ok:', response.ok);
+        console.log('🔍 DEBUG: Response headers:', Object.fromEntries(response.headers.entries()));
+        
         if (!response.ok && response.status !== 304) {
-          throw new Error(`Failed to fetch course sessions: ${response.status} ${response.statusText}`);
+          const errorText = await response.text();
+          console.error('🔍 DEBUG: Error response body:', errorText);
+          throw new Error(`Failed to fetch course sessions: ${response.status} ${response.statusText} - ${errorText}`);
         }
         
         // Handle 304 Not Modified - return empty array as we can't get the body
         if (response.status === 304) {
+          console.log('🔍 DEBUG: 304 Not Modified response, returning empty array');
           return [];
         }
         
+        console.log('🔍 DEBUG: Parsing JSON response...');
         const courseSessions = await response.json();
+        console.log('🔍 DEBUG: Raw course sessions data:', courseSessions);
+        console.log('🔍 DEBUG: Number of sessions:', courseSessions?.length || 0);
+        
+        if (!Array.isArray(courseSessions)) {
+          console.error('🔍 DEBUG: Response is not an array:', typeof courseSessions);
+          throw new Error('Invalid response format: expected array');
+        }
         
         // Transform course sessions to match frontend interface
-        return courseSessions.map((session: any) => ({
-          id: session.id,
-          courseName: session.course?.name || 'Unknown Course',
-          courseType: session.course?.type || session.course?.name || 'Unknown',
-          date: session.startDate ? session.startDate.split('T')[0] : new Date().toISOString().split('T')[0], // Extract date part
-          startTime: session.startTime,
-          endTime: session.endTime,
-          location: session.location?.name || session.location?.address || 'Unknown Location',
-          instructor: session.trainer?.name || 'Lex Richardson',
-          maxParticipants: session.maxParticipants,
-          currentBookings: session.currentParticipants || 0,
-          status: session.status?.toLowerCase() || 'scheduled',
-          price: session.pricePerPerson || 0
-        }));
+        const transformedSessions = courseSessions.map((session: any, index: number) => {
+          console.log(`🔍 DEBUG: Transforming session ${index}:`, session);
+          
+          const transformed = {
+            id: session.id,
+            courseName: session.course?.name || 'Unknown Course',
+            courseType: session.course?.type || session.course?.name || 'Unknown',
+            date: session.startDate ? session.startDate.split('T')[0] : new Date().toISOString().split('T')[0],
+            startTime: session.startTime,
+            endTime: session.endTime,
+            location: session.location?.name || session.location?.address || 'Unknown Location',
+            instructor: session.trainer?.name || 'Lex Richardson',
+            maxParticipants: session.maxParticipants,
+            currentBookings: session.currentParticipants || 0,
+            status: session.status?.toLowerCase() || 'scheduled',
+            price: session.pricePerPerson || 0
+          };
+          
+          console.log(`🔍 DEBUG: Transformed session ${index}:`, transformed);
+          return transformed;
+        });
+        
+        console.log('🔍 DEBUG: Final transformed sessions:', transformedSessions);
+        return transformedSessions;
       } catch (error) {
-        console.error('Course sessions API failed:', error);
+        console.error('🔍 DEBUG: Course sessions API failed with error:', error);
+        console.error('🔍 DEBUG: Error name:', error.name);
+        console.error('🔍 DEBUG: Error message:', error.message);
+        console.error('🔍 DEBUG: Error stack:', error.stack);
         throw error; // Let React Query handle the error state
       }
     },

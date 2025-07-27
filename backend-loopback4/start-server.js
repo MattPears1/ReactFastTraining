@@ -34,19 +34,30 @@ client.connect()
 
 // Authentication middleware
 function authenticateToken(req, res, next) {
+  console.log('🔍 DEBUG: authenticateToken middleware called');
+  console.log('🔍 DEBUG: Request URL:', req.url);
+  console.log('🔍 DEBUG: Request method:', req.method);
+  
   const authHeader = req.headers.authorization;
+  console.log('🔍 DEBUG: Authorization header:', authHeader ? authHeader.substring(0, 20) + '...' : 'missing');
+  
   if (!authHeader || !authHeader.startsWith('Bearer ')) {
-    return res.status(401).json({ error: 'Unauthorized' });
+    console.log('🔍 DEBUG: Missing or invalid authorization header');
+    return res.status(401).json({ error: 'Unauthorized - missing or invalid authorization header' });
   }
 
   const token = authHeader.substring(7);
+  console.log('🔍 DEBUG: Extracted token length:', token.length);
+  console.log('🔍 DEBUG: JWT_SECRET exists:', !!process.env.JWT_SECRET);
   
   try {
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
+    console.log('🔍 DEBUG: Token decoded successfully:', decoded);
     req.user = decoded;
     next();
   } catch (error) {
-    return res.status(401).json({ error: 'Invalid token' });
+    console.error('🔍 DEBUG: Token verification failed:', error.message);
+    return res.status(401).json({ error: 'Invalid token', details: error.message });
   }
 }
 
@@ -620,7 +631,11 @@ app.get('/api/admin/users', async (req, res) => {
 // Get all course sessions (admin only)
 app.get('/course-sessions', authenticateToken, async (req, res) => {
   try {
-    console.log('Get course sessions from database');
+    console.log('🔍 DEBUG: course-sessions endpoint called');
+    console.log('🔍 DEBUG: User from token:', req.user);
+    console.log('🔍 DEBUG: Request headers:', req.headers);
+    
+    console.log('🔍 DEBUG: Connecting to database...');
     
     const query = `
       SELECT 
@@ -646,37 +661,53 @@ app.get('/course-sessions', authenticateToken, async (req, res) => {
       ORDER BY cs.start_datetime ASC
     `;
     
+    console.log('🔍 DEBUG: Executing query:', query);
     const result = await client.query(query);
+    console.log('🔍 DEBUG: Query result rows count:', result.rows.length);
+    console.log('🔍 DEBUG: Raw database rows:', result.rows);
     
     // Transform to match frontend format
-    const courseSessions = result.rows.map(row => ({
-      id: row.id.toString(),
-      courseId: row.course_id.toString(),
-      course: { 
-        name: row.course_name, 
-        type: row.course_type 
-      },
-      trainerId: row.trainer_id ? row.trainer_id.toString() : null,
-      trainer: { name: 'Lex Richardson' }, // Default trainer for now
-      locationId: row.venue_id.toString(),
-      location: { 
-        name: row.venue_name, 
-        address: `${row.address_line1}, ${row.city}` 
-      },
-      startDate: row.start_datetime,
-      endDate: row.end_datetime,
-      startTime: new Date(row.start_datetime).toTimeString().substring(0, 5),
-      endTime: new Date(row.end_datetime).toTimeString().substring(0, 5),
-      maxParticipants: row.max_capacity,
-      currentParticipants: row.current_capacity || 0,
-      pricePerPerson: parseFloat(row.price),
-      status: row.status?.toUpperCase() || 'SCHEDULED'
-    }));
+    const courseSessions = result.rows.map((row, index) => {
+      console.log(`🔍 DEBUG: Processing row ${index}:`, row);
+      
+      const session = {
+        id: row.id.toString(),
+        courseId: row.course_id.toString(),
+        course: { 
+          name: row.course_name, 
+          type: row.course_type 
+        },
+        trainerId: row.trainer_id ? row.trainer_id.toString() : null,
+        trainer: { name: 'Lex Richardson' }, // Default trainer for now
+        locationId: row.venue_id.toString(),
+        location: { 
+          name: row.venue_name, 
+          address: `${row.address_line1}, ${row.city}` 
+        },
+        startDate: row.start_datetime,
+        endDate: row.end_datetime,
+        startTime: new Date(row.start_datetime).toTimeString().substring(0, 5),
+        endTime: new Date(row.end_datetime).toTimeString().substring(0, 5),
+        maxParticipants: row.max_capacity,
+        currentParticipants: row.current_capacity || 0,
+        pricePerPerson: parseFloat(row.price),
+        status: row.status?.toUpperCase() || 'SCHEDULED'
+      };
+      
+      console.log(`🔍 DEBUG: Transformed session ${index}:`, session);
+      return session;
+    });
+    
+    console.log('🔍 DEBUG: Final course sessions to send:', courseSessions);
+    console.log('🔍 DEBUG: Sending response with', courseSessions.length, 'sessions');
     
     res.json(courseSessions);
   } catch (error) {
-    console.error('Error fetching course sessions:', error);
-    res.status(500).json({ error: 'Failed to fetch course sessions' });
+    console.error('🔍 DEBUG: Error in course-sessions endpoint:', error);
+    console.error('🔍 DEBUG: Error name:', error.name);
+    console.error('🔍 DEBUG: Error message:', error.message);
+    console.error('🔍 DEBUG: Error stack:', error.stack);
+    res.status(500).json({ error: 'Failed to fetch course sessions', details: error.message });
   }
 });
 
