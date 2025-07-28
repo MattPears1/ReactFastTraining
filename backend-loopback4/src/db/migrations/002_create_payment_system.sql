@@ -7,7 +7,7 @@ BEGIN;
 CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
 
 -- 1. Payments Table
-CREATE TABLE payments (
+CREATE TABLE IF NOT EXISTS payments (
   id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
   
   -- Relationships
@@ -59,7 +59,7 @@ CREATE INDEX idx_payments_stripe_ids ON payments(stripe_payment_intent_id, strip
 CREATE INDEX idx_payments_reference ON payments(payment_reference);
 
 -- 2. Refunds Table
-CREATE TABLE refunds (
+CREATE TABLE IF NOT EXISTS refunds (
   id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
   
   -- Relationships
@@ -99,7 +99,7 @@ CREATE INDEX idx_refunds_status ON refunds(status);
 CREATE INDEX idx_refunds_reference ON refunds(refund_reference);
 
 -- 3. Payment Methods Table
-CREATE TABLE payment_methods (
+CREATE TABLE IF NOT EXISTS payment_methods (
   id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
   user_id INTEGER REFERENCES users(id),
   
@@ -126,7 +126,7 @@ CREATE INDEX idx_payment_methods_user ON payment_methods(user_id);
 CREATE INDEX idx_payment_methods_active ON payment_methods(is_active);
 
 -- 4. Payment Reconciliations Table
-CREATE TABLE payment_reconciliations (
+CREATE TABLE IF NOT EXISTS payment_reconciliations (
   id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
   
   -- Period Information
@@ -163,7 +163,7 @@ CREATE INDEX idx_reconciliations_date ON payment_reconciliations(reconciliation_
 CREATE INDEX idx_reconciliations_status ON payment_reconciliations(status);
 
 -- 5. Payment Events Log
-CREATE TABLE payment_events (
+CREATE TABLE IF NOT EXISTS payment_events (
   id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
   
   -- Relationships
