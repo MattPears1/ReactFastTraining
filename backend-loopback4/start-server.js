@@ -11,6 +11,7 @@ const { csrfProtection, generateCSRFTokenMiddleware } = require('./middleware/cs
 const { apiLimiter, authLimiter, bookingLimiter } = require('./middleware/rate-limiter');
 const EmailService = require('./src/services/email.service');
 const RefundService = require('./src/services/refund.service');
+const { adminLogin, adminMe } = require('./src/controllers/admin-auth-bypass');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -143,138 +144,11 @@ function generateRefreshToken(user) {
   );
 }
 
-// Admin login endpoint - NO rate limiting for admin account
-app.post('/api/admin/auth/login', async (req, res) => {
-  try {
-    const { email, password } = req.body;
-    console.log(`🔐 Login attempt for: ${email}`);
+// Admin login endpoint - USING SIMPLE BYPASS
+app.post('/api/admin/auth/login', adminLogin);
 
-    // Special handling for admin account - NO LOCKING
-    if (email === 'lex@reactfasttraining.co.uk') {
-      console.log('🔓 Admin account detected - bypassing all lockout checks');
-    }
-    
-    // Find user
-    const result = await client.query(
-      "SELECT * FROM users WHERE email = $1 AND role IN ('admin', 'instructor')",
-      [email]
-    );
-
-    if (result.rows.length === 0) {
-      console.log('❌ User not found');
-      return res.status(401).json({ error: 'Invalid credentials' });
-    }
-
-    const user = result.rows[0];
-    console.log(`✅ User found: ${user.email}, role: ${user.role}, active: ${user.is_active}`);
-
-    // Verify password
-    const validPassword = await bcrypt.compare(password, user.password_hash);
-    
-    if (!validPassword) {
-      console.log('❌ Invalid password');
-      // Don't track failed attempts for admin
-      if (user.role !== 'admin') {
-        // Could track failed attempts here for non-admin users
-      }
-      return res.status(401).json({ error: 'Invalid credentials' });
-    }
-    
-    // Clear any existing lockout for admin accounts
-    if (user.role === 'admin') {
-      await client.query(
-        'UPDATE users SET failed_login_attempts = 0, account_locked_until = NULL WHERE id = $1',
-        [user.id]
-      );
-    }
-
-    // Generate tokens
-    const accessToken = generateAccessToken(user);
-    const refreshToken = generateRefreshToken(user);
-
-    // Update last login
-    await client.query(
-      'UPDATE users SET last_login = NOW() WHERE id = $1',
-      [user.id]
-    );
-
-    // Log activity
-    await client.query(
-      `INSERT INTO admin_activity_logs (admin_id, action, entity_type, new_values, created_at) 
-       VALUES ($1, $2, $3, $4, NOW())`,
-      [user.id, 'login', 'auth', JSON.stringify({ email })]
-    );
-
-    console.log('✅ Login successful');
-
-    // Send response
-    res.cookie('refreshToken', refreshToken, {
-      httpOnly: true,
-      secure: process.env.NODE_ENV === 'production',
-      sameSite: 'strict',
-      maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
-      domain: undefined // Let browser handle domain for same-origin
-    });
-
-    res.json({
-      accessToken,
-      user: {
-        id: user.id,
-        email: user.email,
-        name: `${user.first_name} ${user.last_name}`,
-        role: user.role
-      },
-      expiresIn: 900 // 15 minutes
-    });
-
-  } catch (error) {
-    console.error('❌ Login error:', error);
-    res.status(500).json({ error: 'Internal server error' });
-  }
-});
-
-// Get current user endpoint
-app.get('/api/admin/auth/me', async (req, res) => {
-  try {
-    const authHeader = req.headers.authorization;
-    if (!authHeader || !authHeader.startsWith('Bearer ')) {
-      return res.status(401).json({ error: 'Unauthorized' });
-    }
-
-    const token = authHeader.substring(7);
-    
-    try {
-      const decoded = jwt.verify(token, process.env.JWT_SECRET);
-      
-      const result = await client.query(
-        'SELECT id, email, first_name, last_name, role, last_login FROM users WHERE id = $1',
-        [decoded.id]
-      );
-
-      if (result.rows.length === 0) {
-        return res.status(404).json({ error: 'User not found' });
-      }
-
-      const user = result.rows[0];
-      
-      res.json({
-        id: user.id,
-        email: user.email,
-        name: `${user.first_name} ${user.last_name}`,
-        role: user.role,
-        lastLogin: user.last_login,
-        permissions: user.role === 'admin' 
-          ? ['courses.manage', 'bookings.manage', 'users.manage', 'analytics.view', 'settings.manage']
-          : ['courses.view', 'bookings.view', 'analytics.view']
-      });
-    } catch (error) {
-      return res.status(401).json({ error: 'Invalid token' });
-    }
-  } catch (error) {
-    console.error('Get user error:', error);
-    res.status(500).json({ error: 'Internal server error' });
-  }
-});
+// Get current user endpoint - USING SIMPLE BYPASS
+app.get('/api/admin/auth/me', adminMe);
 
 // Refresh token endpoint
 app.post('/api/admin/auth/refresh', async (req, res) => {
