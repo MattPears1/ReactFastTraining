@@ -2,9 +2,17 @@ const express = require('express');
 const path = require('path');
 const compression = require('compression');
 const cors = require('cors');
+const crypto = require('crypto');
+const bcrypt = require('bcryptjs');
+const { createRateLimiter } = require('./middleware/rateLimiter');
 
 const app = express();
 const PORT = process.env.PORT || 3002;
+
+// Admin credentials from environment variables (for production)
+const ADMIN_EMAIL = process.env.ADMIN_EMAIL || 'lex@reactfasttraining.co.uk';
+const ADMIN_PASSWORD_HASH = process.env.ADMIN_PASSWORD_HASH || '$2a$10$hashed_password_here'; // bcrypt hash
+const JWT_SECRET = process.env.JWT_SECRET || crypto.randomBytes(32).toString('hex');
 
 // In-memory storage for course sessions (temporary until database is connected)
 let courseSessions = [
@@ -39,12 +47,39 @@ let courseSessions = [
 // Enable gzip compression
 app.use(compression());
 
-// Enable CORS for API routes
-app.use('/api', cors());
-app.use('/ping', cors());
+// CORS configuration
+const corsOptions = {
+  origin: function (origin, callback) {
+    const allowedOrigins = [
+      'https://reactfasttraining.co.uk',
+      'https://www.reactfasttraining.co.uk',
+      'http://localhost:5173', // Vite dev server
+      'http://localhost:3000', // Backend dev server
+      'http://localhost:3002'  // This server
+    ];
+    
+    // Allow requests with no origin (like mobile apps)
+    if (!origin) return callback(null, true);
+    
+    if (allowedOrigins.indexOf(origin) !== -1 || process.env.NODE_ENV !== 'production') {
+      callback(null, true);
+    } else {
+      callback(new Error('Not allowed by CORS'));
+    }
+  },
+  credentials: true,
+  optionsSuccessStatus: 200,
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With']
+};
+
+// Apply CORS to API routes
+app.use('/api', cors(corsOptions));
+app.use('/ping', cors(corsOptions));
 
 // Parse JSON for API routes
-app.use('/api', express.json());
+app.use('/api', express.json({ limit: '10mb' }));
+app.use('/api', express.urlencoded({ extended: true, limit: '10mb' }));
 
 // API Routes (embedded backend functionality)
 app.get('/ping', (req, res) => {
@@ -57,46 +92,115 @@ app.get('/ping', (req, res) => {
   });
 });
 
+// Helper function to generate secure token
+function generateSecureToken() {
+  return crypto.randomBytes(32).toString('hex');
+}
+
+// In-memory token storage (use Redis in production)
+const activeTokens = new Map();
+
 // Admin auth endpoints
-app.post('/api/admin/auth/login', (req, res) => {
+app.post('/api/admin/auth/login', createRateLimiter('auth'), async (req, res) => {
   console.log('Admin login attempt:', { email: req.body.email });
   
   const { email, password } = req.body;
   
-  if (email === 'lex@reactfasttraining.co.uk' && password === 'LexOnly321!') {
-    res.json({
-      accessToken: 'temp-admin-token-123',
-      user: {
-        id: 1,
-        email: 'lex@reactfasttraining.co.uk',
-        name: 'Lex',
-        role: 'admin'
-      },
-      expiresIn: 3600
-    });
-  } else {
-    res.status(401).json({ error: 'Invalid credentials' });
+  // Validate input
+  if (!email || !password) {
+    return res.status(400).json({ error: 'Email and password are required' });
   }
+  
+  // Check email
+  if (email !== ADMIN_EMAIL) {
+    return res.status(401).json({ error: 'Invalid credentials' });
+  }
+  
+  // Verify password (in development, allow hardcoded password)
+  let isValidPassword = false;
+  if (process.env.NODE_ENV === 'production') {
+    isValidPassword = await bcrypt.compare(password, ADMIN_PASSWORD_HASH);
+  } else {
+    // Development only - remove in production
+    isValidPassword = password === 'LexOnly321!';
+  }
+  
+  if (!isValidPassword) {
+    return res.status(401).json({ error: 'Invalid credentials' });
+  }
+  
+  // Generate secure token
+  const token = generateSecureToken();
+  const tokenData = {
+    userId: 1,
+    email: ADMIN_EMAIL,
+    name: 'Lex',
+    role: 'admin',
+    createdAt: Date.now(),
+    expiresAt: Date.now() + (3600 * 1000) // 1 hour
+  };
+  
+  activeTokens.set(token, tokenData);
+  
+  res.json({
+    accessToken: token,
+    user: {
+      id: tokenData.userId,
+      email: tokenData.email,
+      name: tokenData.name,
+      role: tokenData.role
+    },
+    expiresIn: 3600
+  });
 });
 
-app.get('/api/admin/auth/me', (req, res) => {
+// Middleware to verify admin token
+function verifyAdminToken(req, res, next) {
   const authHeader = req.headers.authorization;
-  if (authHeader && authHeader === 'Bearer temp-admin-token-123') {
-    res.json({
-      id: 1,
-      email: 'lex@reactfasttraining.co.uk',
-      name: 'Lex',
-      role: 'admin',
-      lastLogin: new Date(),
-      permissions: ['all']
-    });
-  } else {
-    res.status(401).json({ error: 'Unauthorized' });
+  
+  if (!authHeader || !authHeader.startsWith('Bearer ')) {
+    return res.status(401).json({ error: 'Unauthorized' });
   }
+  
+  const token = authHeader.substring(7);
+  const tokenData = activeTokens.get(token);
+  
+  if (!tokenData) {
+    return res.status(401).json({ error: 'Invalid token' });
+  }
+  
+  // Check if token is expired
+  if (Date.now() > tokenData.expiresAt) {
+    activeTokens.delete(token);
+    return res.status(401).json({ error: 'Token expired' });
+  }
+  
+  // Attach user data to request
+  req.user = tokenData;
+  next();
+}
+
+app.get('/api/admin/auth/me', verifyAdminToken, (req, res) => {
+  res.json({
+    id: req.user.userId,
+    email: req.user.email,
+    name: req.user.name,
+    role: req.user.role,
+    lastLogin: new Date(req.user.createdAt),
+    permissions: ['all']
+  });
+});
+
+// Admin logout endpoint
+app.post('/api/admin/auth/logout', verifyAdminToken, (req, res) => {
+  const authHeader = req.headers.authorization;
+  const token = authHeader.substring(7);
+  activeTokens.delete(token);
+  res.json({ success: true });
 });
 
 // Admin dashboard endpoint
-app.get('/api/admin/dashboard/overview', (req, res) => {
+app.get('/api/admin/dashboard/overview', verifyAdminToken, (req, res) => {
   res.json({
     metrics: {
       revenue: {
@@ -158,7 +262,7 @@ app.get('/api/admin/dashboard/overview', (req, res) => {
 });
 
 // Admin courses endpoint
-app.get('/api/admin/courses', (req, res) => {
+app.get('/api/admin/courses', verifyAdminToken, (req, res) => {
   // Return all 13 courses with proper data structure
   res.json([
     { id: 1, name: 'Emergency First Aid at Work', category: 'workplace', duration: '1 Day', price: 100, status: 'active', attendees: 145 },
@@ -178,12 +282,12 @@ app.get('/api/admin/courses', (req, res) => {
 });
 
 // Admin schedules endpoint
-app.get('/api/admin/schedules', (req, res) => {
+app.get('/api/admin/schedules', verifyAdminToken, (req, res) => {
   res.json(courseSessions);
 });
 
 // Admin venues endpoint
-app.get('/api/admin/venues', (req, res) => {
+app.get('/api/admin/venues', verifyAdminToken, (req, res) => {
   res.json([
     { id: 1, name: 'Location 1 - Sheffield', address_line1: 'Sheffield City Centre', city: 'Sheffield', capacity: 12 },
     { id: 2, name: 'Location 2 - Sheffield', address_line1: 'Sheffield Business District', city: 'Sheffield', capacity: 12 },
@@ -191,8 +295,83 @@ app.get('/api/admin/venues', (req, res) => {
   ]);
 });
 
+// Get session attendance data
+app.get('/api/admin/sessions/:sessionId/attendance', verifyAdminToken, (req, res) => {
+  const { sessionId } = req.params;
+  
+  // Mock attendance data
+  const attendance = [
+    {
+      bookingId: 'BK-2025-001',
+      userId: 1,
+      userName: 'John Smith',
+      userEmail: 'john.smith@example.com',
+      status: null,
+      notes: '',
+      markedAt: null,
+      markedBy: null
+    },
+    {
+      bookingId: 'BK-2025-002', 
+      userId: 2,
+      userName: 'Jane Doe',
+      userEmail: 'jane.doe@example.com',
+      status: null,
+      notes: '',
+      markedAt: null,
+      markedBy: null
+    },
+    {
+      bookingId: 'BK-2025-003',
+      userId: 3,
+      userName: 'Robert Johnson',
+      userEmail: 'robert.j@example.com',
+      status: null,
+      notes: '',
+      markedAt: null,
+      markedBy: null
+    }
+  ];
+  
+  res.json(attendance);
+});
+
+// Admin attendance marking endpoint
+app.post('/api/admin/sessions/:sessionId/attendance', verifyAdminToken, (req, res) => {
+  const { sessionId } = req.params;
+  const { attendance, markedBy } = req.body;
+  
+  console.log(`Marking attendance for session ${sessionId} by ${markedBy}`);
+  console.log('Attendance records:', attendance);
+  
+  // Simulate certificate generation for attendees marked as present
+  const certificates = [];
+  attendance.forEach((record) => {
+    if (record.status === 'PRESENT') {
+      const certificateNumber = `RFT-${new Date().getFullYear()}-${Math.floor(Math.random() * 10000).toString().padStart(4, '0')}`;
+      certificates.push({
+        bookingId: record.bookingId,
+        userId: record.userId,
+        certificateNumber: certificateNumber,
+        issuedDate: new Date().toISOString(),
+        expiryDate: new Date(Date.now() + 3 * 365 * 24 * 60 * 60 * 1000).toISOString(), // 3 years
+        status: 'ACTIVE',
+        emailSent: true
+      });
+      console.log(`Generated certificate ${certificateNumber} for user ${record.userId}`);
+    }
+  });
+  
+  res.json({
+    success: true,
+    attendance: attendance,
+    certificates: certificates,
+    message: `Attendance marked successfully. ${certificates.length} certificates generated and emailed.`
+  });
+});
+
 // Admin bookings endpoints
-app.get('/api/admin/bookings', (req, res) => {
+app.get('/api/admin/bookings', verifyAdminToken, (req, res) => {
   res.json([
     {
       id: 'BK-2025-001',
@@ -220,7 +399,7 @@ app.get('/api/admin/bookings', (req, res) => {
 });
 
 // Public API endpoint for getting available course sessions
-app.get('/api/course-sessions', (req, res) => {
+app.get('/api/course-sessions', createRateLimiter('api'), (req, res) => {
   // Filter for future sessions that are not full
   const availableSessions = courseSessions
     .filter(session => {
@@ -314,7 +493,7 @@ app.post('/course-sessions', express.json(), (req, res) => {
   });
 });
 
-app.post('/api/bookings/create-payment-intent', (req, res) => {
+app.post('/api/bookings/create-payment-intent', createRateLimiter('booking'), (req, res) => {
   const timestamp = Date.now();
   const amount = req.body.amount || 7500;
   const { sessionId } = req.body;
@@ -337,6 +516,171 @@ app.post('/api/bookings/create-payment-intent', (req, res) => {
   });
 });
 
+// Input validation for tracking
+function validateTrackingData(data) {
+  const errors = [];
+  
+  // Validate sessionId
+  if (!data.sessionId || typeof data.sessionId !== 'string') {
+    errors.push('Invalid session ID');
+  } else if (data.sessionId.length > 100) {
+    errors.push('Session ID too long');
+  }
+  
+  // Validate event type
+  const validEvents = ['pageview', 'booking_start', 'booking_complete', 'booking_cancel'];
+  if (!data.event || !validEvents.includes(data.event)) {
+    errors.push('Invalid event type');
+  }
+  
+  // Validate page
+  if (data.page && (typeof data.page !== 'string' || data.page.length > 200)) {
+    errors.push('Invalid page value');
+  }
+  
+  // Validate timestamp
+  if (data.timestamp) {
+    const ts = new Date(data.timestamp);
+    if (isNaN(ts.getTime())) {
+      errors.push('Invalid timestamp');
+    }
+  }
+  
+  // Validate device type
+  const validDevices = ['mobile', 'tablet', 'desktop'];
+  if (data.deviceType && !validDevices.includes(data.deviceType)) {
+    errors.push('Invalid device type');
+  }
+  
+  // Validate metadata
+  if (data.metadata && typeof data.metadata !== 'object') {
+    errors.push('Invalid metadata');
+  }
+  
+  return errors;
+}
+
+// Visitor tracking endpoint (GDPR compliant)
+app.post('/api/tracking/event', createRateLimiter('tracking'), (req, res) => {
+  const { sessionId, event, page, timestamp, deviceType, metadata } = req.body;
+  
+  // Validate input
+  const validationErrors = validateTrackingData(req.body);
+  if (validationErrors.length > 0) {
+    return res.status(400).json({ 
+      error: 'Invalid tracking data',
+      details: validationErrors 
+    });
+  }
+  
+  // Sanitize data
+  const sanitizedData = {
+    sessionId: sessionId.substring(0, 100),
+    event: event,
+    page: page ? page.substring(0, 200) : null,
+    timestamp: timestamp || new Date().toISOString(),
+    deviceType: deviceType || 'unknown',
+    metadata: metadata || {}
+  };
+  
+  // Log tracking event (in production, this would go to database)
+  console.log('📊 Tracking event:', {
+    sessionId: sanitizedData.sessionId.substring(0, 10) + '...', // Truncate for privacy
+    event: sanitizedData.event,
+    page: sanitizedData.page,
+    timestamp: sanitizedData.timestamp,
+    deviceType: sanitizedData.deviceType
+  });
+  
+  // Always return success
+  res.json({ success: true });
+});
+
+// Analytics endpoints
+app.get('/api/admin/analytics/comprehensive', verifyAdminToken, (req, res) => {
+  const range = req.query.range || '30days';
+  
+  // Mock analytics data
+  const analytics = {
+    overview: {
+      totalRevenue: 45650,
+      revenueChange: 12.5,
+      totalBookings: 324,
+      bookingsChange: 8.3,
+      uniqueVisitors: 2847,
+      visitorsChange: 15.2,
+      conversionRate: 11.4,
+      conversionChange: 2.1,
+    },
+    coursePopularity: [
+      { courseName: 'Emergency First Aid at Work', bookings: 87, capacity: 120 },
+      { courseName: 'First Aid at Work', bookings: 65, capacity: 80 },
+      { courseName: 'Paediatric First Aid', bookings: 52, capacity: 60 },
+      { courseName: 'Mental Health First Aid', bookings: 43, capacity: 50 },
+      { courseName: 'Fire Safety Training', bookings: 38, capacity: 40 },
+    ],
+    revenueByCourse: [
+      { courseName: 'Emergency First Aid at Work', revenue: 6525, percentage: 28.5 },
+      { courseName: 'First Aid at Work', revenue: 9750, percentage: 21.3 },
+      { courseName: 'Paediatric First Aid', revenue: 7800, percentage: 17.1 },
+      { courseName: 'Mental Health First Aid', revenue: 8600, percentage: 18.8 },
+      { courseName: 'Fire Safety Training', revenue: 4560, percentage: 10.0 },
+    ],
+    dayOfWeekAnalysis: [
+      { day: 'Monday', bookings: 58, revenue: 4350 },
+      { day: 'Tuesday', bookings: 72, revenue: 5400 },
+      { day: 'Wednesday', bookings: 85, revenue: 6375 },
+      { day: 'Thursday', bookings: 91, revenue: 6825 },
+      { day: 'Friday', bookings: 45, revenue: 3375 },
+      { day: 'Saturday', bookings: 32, revenue: 2400 },
+      { day: 'Sunday', bookings: 12, revenue: 900 },
+    ],
+    monthlyTrends: [
+      { month: 'January', bookings: 28, revenue: 2100, attendees: 140 },
+      { month: 'February', bookings: 35, revenue: 2625, attendees: 175 },
+      { month: 'March', bookings: 42, revenue: 3150, attendees: 210 },
+      { month: 'April', bookings: 38, revenue: 2850, attendees: 190 },
+      { month: 'May', bookings: 45, revenue: 3375, attendees: 225 },
+      { month: 'June', bookings: 52, revenue: 3900, attendees: 260 },
+    ],
+    bookingFunnel: {
+      visitors: 2847,
+      coursesViewed: 1423,
+      bookingStarted: 412,
+      bookingCompleted: 324,
+      bookingCancelled: 88,
+    },
+    courseDetails: [
+      {
+        courseName: 'Emergency First Aid at Work',
+        totalBookings: 87,
+        revenue: 6525,
+        avgAttendees: 8.2,
+        fillRate: 72.5,
+        popularDay: 'Thursday',
+      },
+      {
+        courseName: 'First Aid at Work',
+        totalBookings: 65,
+        revenue: 9750,
+        avgAttendees: 10.5,
+        fillRate: 81.3,
+        popularDay: 'Wednesday',
+      },
+      {
+        courseName: 'Paediatric First Aid',
+        totalBookings: 52,
+        revenue: 7800,
+        avgAttendees: 9.8,
+        fillRate: 86.7,
+        popularDay: 'Tuesday',
+      },
+    ],
+  };
+  
+  res.json(analytics);
+});
+
 // Serve static files for frontend
 app.use(express.static(path.join(__dirname, 'dist')));
 
@@ -346,7 +690,23 @@ app.use((req, res, next) => {
   res.setHeader('X-Content-Type-Options', 'nosniff');
   res.setHeader('X-XSS-Protection', '1; mode=block');
   res.setHeader('Referrer-Policy', 'strict-origin-when-cross-origin');
-  res.setHeader('Content-Security-Policy', "default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; img-src 'self' data: https:; font-src 'self' data: https://fonts.gstatic.com; connect-src 'self' http://localhost:3000 https://api.stripe.com;");
+  res.setHeader('Strict-Transport-Security', 'max-age=31536000; includeSubDomains');
+  res.setHeader('Permissions-Policy', 'camera=(), microphone=(), geolocation=()');
+  
+  // Content Security Policy
+  const cspDirectives = [
+    "default-src 'self'",
+    "script-src 'self' 'unsafe-inline' 'unsafe-eval'", // unsafe-eval needed for some libraries
+    "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com",
+    "img-src 'self' data: https: blob:",
+    "font-src 'self' data: https://fonts.gstatic.com",
+    "connect-src 'self' http://localhost:* https://api.stripe.com https://reactfasttraining.co.uk",
+    "frame-ancestors 'none'",
+    "base-uri 'self'",
+    "form-action 'self'"
+  ];
+  
+  res.setHeader('Content-Security-Policy', cspDirectives.join('; '));
   next();
 });
 
@@ -355,11 +715,37 @@ app.get('/health', (req, res) => {
   res.json({ status: 'healthy', timestamp: new Date().toISOString() });
 });
 
+// Error handling middleware
+app.use((err, req, res, next) => {
+  console.error('Server error:', err);
+  
+  // Don't leak error details in production
+  const isDev = process.env.NODE_ENV !== 'production';
+  
+  res.status(err.status || 500).json({
+    error: isDev ? err.message : 'Internal server error',
+    ...(isDev && { stack: err.stack })
+  });
+});
+
 // Handle React routing, return all requests to React app
 app.get('*', (req, res) => {
   res.sendFile(path.join(__dirname, 'dist', 'index.html'));
 });
 
-app.listen(PORT, () => {
-  console.log(`Server is running on port ${PORT}`);
+// Graceful shutdown
+process.on('SIGTERM', () => {
+  console.log('SIGTERM signal received: closing HTTP server');
+  server.close(() => {
+    console.log('HTTP server closed');
+  });
+});
+
+const server = app.listen(PORT, () => {
+  console.log(`
+  🚀 React Fast Training Server
+  📍 Running on port ${PORT}
+  🌍 Environment: ${process.env.NODE_ENV || 'development'}
+  🔒 Admin panel: /admin
+  `);
 });

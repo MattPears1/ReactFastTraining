@@ -64,22 +64,24 @@ const EmailModal: React.FC<EmailModalProps> = ({ isOpen, onClose, onSend, attend
   };
 
   return (
-    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
-      <div className="bg-white rounded-lg shadow-xl max-w-2xl w-full max-h-[90vh] overflow-y-auto">
-        <div className="p-4 sm:p-6">
-          <div className="flex items-center justify-between mb-4">
-            <h3 className="text-lg font-semibold">Email Attendees</h3>
+    <div className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center z-50 p-4 animate-fadeIn">
+      <div className="bg-white rounded-xl shadow-2xl max-w-2xl w-full max-h-[90vh] overflow-y-auto transform transition-all duration-300 scale-100 animate-slideInUp">
+        <div className="p-6 sm:p-8">
+          <div className="flex items-center justify-between mb-6">
+            <div>
+              <h3 className="text-xl font-bold text-gray-900">Email Attendees</h3>
+              <p className="text-sm text-gray-600 mt-1">
+                Send an email to {attendeeCount} confirmed attendees
+              </p>
+            </div>
             <button
               onClick={onClose}
-              className="text-gray-400 hover:text-gray-600 p-2"
+              className="text-gray-400 hover:text-gray-600 hover:bg-gray-100 p-2 rounded-lg transition-all"
               disabled={isSending}
             >
               <X className="h-5 w-5" />
             </button>
           </div>
-          <p className="text-sm text-gray-600 mb-4">
-            Send an email to {attendeeCount} confirmed attendees
-          </p>
           
           <div className="space-y-4">
             <div>
@@ -400,20 +402,24 @@ export const SessionActions: React.FC<SessionActionsProps> = ({
         iconColor="primary"
       >
         <div className="space-y-4">
-          {/* Primary Actions - Mobile Optimized Grid */}
-          <div className="grid grid-cols-3 gap-2 sm:gap-3">
+          {/* Enhanced Primary Actions with hover effects */}
+          <div className="grid grid-cols-3 gap-3">
             {primaryActions.map((action, index) => (
               <Button
                 key={index}
                 variant={action.variant}
                 onClick={action.onClick}
                 disabled={action.disabled || isLoading}
-                className="w-full min-h-[44px] px-2 sm:px-4"
+                className={`w-full min-h-[48px] px-3 sm:px-4 group transition-all duration-200 ${
+                  action.variant === 'danger' 
+                    ? 'hover:bg-red-600 hover:shadow-lg hover:shadow-red-500/25' 
+                    : 'hover:shadow-md hover:transform hover:-translate-y-0.5'
+                }`}
                 size="sm"
               >
-                <action.icon className="h-4 w-4 sm:mr-2" />
-                <span className="hidden sm:inline">{action.label}</span>
-                <span className="sm:hidden text-xs">{action.label.split(' ')[0]}</span>
+                <action.icon className="h-4 w-4 sm:mr-2 group-hover:scale-110 transition-transform" />
+                <span className="hidden sm:inline font-medium">{action.label}</span>
+                <span className="sm:hidden text-xs font-medium">{action.label.split(' ')[0]}</span>
               </Button>
             ))}
           </div>
@@ -430,8 +436,8 @@ export const SessionActions: React.FC<SessionActionsProps> = ({
             </Button>
             
             {showMoreActions && (
-              <div className="absolute bottom-full mb-2 sm:bottom-auto sm:top-full sm:mt-2 w-full bg-white rounded-lg shadow-lg border border-gray-200 z-10">
-                <div className="py-1">
+              <div className="absolute bottom-full mb-2 sm:bottom-auto sm:top-full sm:mt-2 w-full bg-white rounded-xl shadow-2xl border border-gray-100 z-10 animate-slideInUp overflow-hidden">
+                <div className="py-2">
                   {moreActions.map((action, index) => (
                     <button
                       key={index}
@@ -442,10 +448,10 @@ export const SessionActions: React.FC<SessionActionsProps> = ({
                         }
                       }}
                       disabled={action.disabled || isLoading}
-                      className="flex items-center w-full px-4 py-3 min-h-[44px] text-sm text-gray-700 hover:bg-gray-100 disabled:opacity-50 disabled:cursor-not-allowed"
+                      className="flex items-center w-full px-4 py-3 min-h-[48px] text-sm text-gray-700 hover:bg-primary-50 hover:text-primary-700 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-150 group"
                     >
-                      <action.icon className="h-4 w-4 mr-3 text-gray-400" />
-                      {action.label}
+                      <action.icon className="h-4 w-4 mr-3 text-gray-500 group-hover:text-primary-600 group-hover:scale-110 transition-all" />
+                      <span className="font-medium">{action.label}</span>
                     </button>
                   ))}
                 </div>

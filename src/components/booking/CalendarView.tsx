@@ -182,7 +182,7 @@ export const CalendarView: React.FC<CalendarViewProps> = ({
                   animate={{ opacity: 1, scale: 1 }}
                   transition={{ delay: index * 0.005 }}
                   className={cn(
-                    'aspect-square border rounded-lg p-1 sm:p-2 transition-all relative',
+                    'aspect-square border rounded-lg p-0.5 sm:p-1 md:p-2 transition-all relative',
                     isToday(day.date) && 'ring-2 ring-primary-500 border-primary-500',
                     selectedDaySchedules?.date.toDateString() === day.date.toDateString() && 'bg-primary-50 dark:bg-primary-900/20 border-primary-500',
                     !isInCurrentMonth && 'opacity-40',
@@ -365,16 +365,16 @@ export const CalendarView: React.FC<CalendarViewProps> = ({
               animate={{ y: 0 }}
               exit={{ y: '100%' }}
               transition={{ type: 'spring', damping: 25 }}
-              className="fixed bottom-0 left-0 right-0 bg-white dark:bg-gray-800 rounded-t-2xl shadow-xl z-50 lg:hidden max-h-[80vh] overflow-hidden"
+              className="fixed bottom-0 left-0 right-0 bg-white dark:bg-gray-800 rounded-t-2xl shadow-xl z-50 lg:hidden max-h-[85vh] overflow-hidden"
             >
               {/* Handle */}
-              <div className="flex justify-center pt-3">
-                <div className="w-12 h-1 bg-gray-300 dark:bg-gray-600 rounded-full" />
+              <div className="flex justify-center pt-4 pb-2">
+                <div className="w-16 h-1.5 bg-gray-300 dark:bg-gray-600 rounded-full" />
               </div>
               
               {/* Header */}
-              <div className="flex items-center justify-between p-4 border-b dark:border-gray-700">
-                <h3 className="text-lg font-semibold">
+              <div className="flex items-center justify-between px-4 py-3 border-b dark:border-gray-700">
+                <h3 className="text-xl font-semibold">
                   {selectedDaySchedules.date.toLocaleDateString('en-GB', { 
                     weekday: 'long', 
                     day: 'numeric', 
@@ -383,14 +383,14 @@ export const CalendarView: React.FC<CalendarViewProps> = ({
                 </h3>
                 <button
                   onClick={() => setShowMobileSheet(false)}
-                  className="p-2 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg"
+                  className="p-3 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg min-w-[44px] min-h-[44px] flex items-center justify-center"
                 >
-                  <X className="w-5 h-5" />
+                  <X className="w-6 h-6" />
                 </button>
               </div>
               
               {/* Course List */}
-              <div className="p-4 space-y-3 overflow-y-auto max-h-[60vh]">
+              <div className="p-4 space-y-4 overflow-y-auto max-h-[65vh] -webkit-overflow-scrolling-touch">
                 {selectedDaySchedules.schedules.map(schedule => {
                   const config = COURSE_TYPE_CONFIG[schedule.courseType];
                   const isSelected = selectedScheduleId === schedule.id;
@@ -402,7 +402,7 @@ export const CalendarView: React.FC<CalendarViewProps> = ({
                       initial={{ opacity: 0, x: -20 }}
                       animate={{ opacity: 1, x: 0 }}
                       className={cn(
-                        'p-4 rounded-lg border-2 transition-all',
+                        'p-4 rounded-lg border-2 transition-all min-h-[120px] cursor-pointer',
                         config.color.border,
                         config.color.background,
                         isSelected && 'ring-2 ring-primary-500',
@@ -418,18 +418,18 @@ export const CalendarView: React.FC<CalendarViewProps> = ({
                     >
                       <div className="flex items-start justify-between">
                         <div className="flex-1">
-                          <h4 className="font-semibold mb-2">{schedule.courseName}</h4>
-                          <div className="space-y-1 text-sm text-gray-600 dark:text-gray-400">
+                          <h4 className="font-semibold text-base sm:text-lg mb-2">{schedule.courseName}</h4>
+                          <div className="space-y-2 text-base text-gray-600 dark:text-gray-400">
                             <div className="flex items-center gap-2">
-                              <Clock className="w-4 h-4" />
+                              <Clock className="w-5 h-5 flex-shrink-0" />
                               <span>{formatTime(schedule.startDate)} - {formatTime(schedule.endDate)}</span>
                             </div>
                             <div className="flex items-center gap-2">
-                              <MapPin className="w-4 h-4" />
+                              <MapPin className="w-5 h-5 flex-shrink-0" />
                               <span>{schedule.venueName}</span>
                             </div>
                             <div className="flex items-center gap-2">
-                              <Users className="w-4 h-4" />
+                              <Users className="w-5 h-5 flex-shrink-0" />
                               <span>
                                 {isFull ? 'Fully booked' : `${schedule.availableSpots} spots available`}
                               </span>
@@ -437,12 +437,12 @@ export const CalendarView: React.FC<CalendarViewProps> = ({
                           </div>
                         </div>
                         <div className="text-right">
-                          <p className="text-lg font-bold text-primary-600 dark:text-primary-400">
+                          <p className="text-xl font-bold text-primary-600 dark:text-primary-400">
                             £{schedule.pricePerPerson}
                           </p>
                           {!isFull && (
                             <button className={cn(
-                              'mt-2 px-3 py-1.5 rounded-lg text-sm font-medium transition-colors',
+                              'mt-2 px-4 py-2.5 rounded-lg text-base font-medium transition-colors min-h-[44px]',
                               isSelected 
                                 ? 'bg-primary-600 text-white' 
                                 : 'bg-gray-100 hover:bg-gray-200 dark:bg-gray-700 dark:hover:bg-gray-600'

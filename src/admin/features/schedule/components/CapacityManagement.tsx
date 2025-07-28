@@ -65,6 +65,7 @@ export const CapacityManagement: React.FC<CapacityManagementProps> = ({
       title="Capacity & Bookings" 
       icon={Users}
       iconColor="primary"
+      className="schedule-card"
       action={
         <div className="flex items-center space-x-2">
           {capacityInfo.availableSpots > 0 && (
@@ -72,9 +73,11 @@ export const CapacityManagement: React.FC<CapacityManagementProps> = ({
               size="sm"
               variant="primary"
               onClick={onAddBooking}
+              className="group hover:shadow-md transition-all"
             >
-              <UserPlus className="h-4 w-4 mr-1" />
-              Add Booking
+              <UserPlus className="h-4 w-4 mr-1 group-hover:scale-110 transition-transform" />
+              <span className="hidden sm:inline">Add Booking</span>
+              <span className="sm:hidden">Add</span>
             </Button>
           )}
           {capacityInfo.waitlistCount > 0 && onManageWaitlist && (
@@ -82,21 +85,22 @@ export const CapacityManagement: React.FC<CapacityManagementProps> = ({
               size="sm"
               variant="secondary"
               onClick={onManageWaitlist}
+              className="hover:bg-primary-50 hover:text-primary-700 transition-all"
             >
-              Manage Waitlist ({capacityInfo.waitlistCount})
+              Waitlist ({capacityInfo.waitlistCount})
             </Button>
           )}
         </div>
       }
     >
       <div className="space-y-6">
-        {/* Main Capacity Display */}
+        {/* Enhanced Main Capacity Display */}
         <div className="text-center">
-          <div className={`inline-flex items-center justify-center px-6 py-3 rounded-lg ${getCapacityColor()}`}>
-            <span className="text-3xl font-bold">
+          <div className={`inline-flex items-center justify-center px-8 py-4 rounded-xl shadow-inner transition-all duration-300 ${getCapacityColor()}`}>
+            <span className="text-4xl font-bold animate-fadeIn">
               {capacityInfo.currentBookings}
             </span>
-            <span className="text-xl mx-2">/</span>
+            <span className="text-2xl mx-3 opacity-50">/</span>
             {isEditingCapacity ? (
               <input
                 type="number"
@@ -104,58 +108,84 @@ export const CapacityManagement: React.FC<CapacityManagementProps> = ({
                 onChange={(e) => setNewCapacity(parseInt(e.target.value) || 0)}
                 onBlur={handleCapacityUpdate}
                 onKeyPress={(e) => e.key === 'Enter' && handleCapacityUpdate()}
-                className="w-16 text-xl font-bold bg-transparent border-b-2 border-current focus:outline-none"
+                className="w-20 text-2xl font-bold bg-transparent border-b-2 border-current focus:outline-none focus:ring-2 focus:ring-current focus:ring-offset-2 rounded"
                 min={capacityInfo.currentBookings}
+                autoFocus
               />
             ) : (
               <span 
-                className="text-xl cursor-pointer hover:underline"
+                className="text-2xl cursor-pointer hover:underline hover:scale-105 transition-transform"
                 onClick={() => setIsEditingCapacity(true)}
+                title="Click to edit capacity"
               >
                 {capacityInfo.maxCapacity}
               </span>
             )}
           </div>
-          <p className="mt-2 text-sm text-gray-600">
-            {capacityInfo.availableSpots} spots available
+          <p className="mt-3 text-sm text-gray-600 font-medium">
+            {capacityInfo.availableSpots === 0 ? (
+              <span className="text-red-600">No spots available</span>
+            ) : capacityInfo.availableSpots === 1 ? (
+              <span className="text-yellow-600">Only 1 spot remaining!</span>
+            ) : (
+              <span>{capacityInfo.availableSpots} spots available</span>
+            )}
           </p>
         </div>
 
-        {/* Progress Bar */}
+        {/* Enhanced Progress Bar */}
         <div>
-          <div className="flex justify-between text-sm text-gray-600 mb-2">
-            <span>Capacity</span>
-            <span>{capacityInfo.capacityPercentage.toFixed(1)}% full</span>
+          <div className="flex justify-between text-sm font-medium text-gray-700 mb-2">
+            <span>Capacity Usage</span>
+            <span className={`font-semibold ${
+              capacityInfo.capacityPercentage >= 100 ? 'text-red-600' :
+              capacityInfo.capacityPercentage >= 80 ? 'text-yellow-600' :
+              'text-green-600'
+            }`}>
+              {capacityInfo.capacityPercentage.toFixed(1)}% full
+            </span>
           </div>
-          <div className="w-full bg-gray-200 rounded-full h-4 overflow-hidden">
+          <div className="relative w-full bg-gray-100 rounded-full h-6 overflow-hidden shadow-inner">
             <div
-              className={`h-full transition-all duration-300 ${getProgressBarColor()}`}
+              className={`absolute top-0 left-0 h-full transition-all duration-500 ease-out rounded-full ${getProgressBarColor()}`}
               style={{ width: `${Math.min(capacityInfo.capacityPercentage, 100)}%` }}
-            />
+            >
+              <div className="absolute inset-0 bg-gradient-to-b from-white/20 to-transparent"></div>
+            </div>
+            {/* Milestone markers */}
+            <div className="absolute top-0 right-1/4 w-px h-full bg-gray-300 opacity-50"></div>
+            <div className="absolute top-0 right-1/2 w-px h-full bg-gray-300 opacity-50"></div>
+            <div className="absolute top-0 left-1/4 w-px h-full bg-gray-300 opacity-50"></div>
           </div>
         </div>
 
-        {/* Booking Breakdown */}
+        {/* Enhanced Booking Breakdown */}
         <div className="grid grid-cols-2 gap-4">
-          <div className="bg-gray-50 rounded-lg p-4">
-            <div className="flex items-center justify-between">
-              <div className="flex items-center space-x-2">
-                <UserCheck className="h-5 w-5 text-green-600" />
-                <span className="text-sm font-medium text-gray-700">Confirmed</span>
+          <div className="relative bg-gradient-to-br from-green-50 to-green-100 rounded-xl p-5 border border-green-200 hover:shadow-md transition-all group cursor-pointer">
+            <div className="absolute top-0 right-0 w-16 h-16 bg-green-500/10 rounded-full -mr-4 -mt-4 group-hover:scale-110 transition-transform"></div>
+            <div className="relative flex items-center justify-between">
+              <div className="flex items-center space-x-3">
+                <div className="p-2 bg-green-600 rounded-lg text-white shadow-sm">
+                  <UserCheck className="h-5 w-5" />
+                </div>
+                <span className="text-sm font-semibold text-green-900">Confirmed</span>
               </div>
-              <span className="text-xl font-bold text-green-600">
+              <span className="text-2xl font-bold text-green-700">
                 {capacityInfo.confirmedAttendees}
               </span>
             </div>
           </div>
           
-          <div className="bg-gray-50 rounded-lg p-4">
-            <div className="flex items-center justify-between">
-              <div className="flex items-center space-x-2">
-                <Clock className="h-5 w-5 text-yellow-600" />
-                <span className="text-sm font-medium text-gray-700">Pending</span>
+          <div className="relative bg-gradient-to-br from-yellow-50 to-yellow-100 rounded-xl p-5 border border-yellow-200 hover:shadow-md transition-all group cursor-pointer">
+            <div className="absolute top-0 right-0 w-16 h-16 bg-yellow-500/10 rounded-full -mr-4 -mt-4 group-hover:scale-110 transition-transform"></div>
+            <div className="relative flex items-center justify-between">
+              <div className="flex items-center space-x-3">
+                <div className="p-2 bg-yellow-600 rounded-lg text-white shadow-sm">
+                  <Clock className="h-5 w-5" />
+                </div>
+                <span className="text-sm font-semibold text-yellow-900">Pending</span>
               </div>
-              <span className="text-xl font-bold text-yellow-600">
+              <span className="text-2xl font-bold text-yellow-700">
                 {pendingBookings}
               </span>
             </div>
@@ -210,15 +240,15 @@ export const CapacityManagement: React.FC<CapacityManagementProps> = ({
           )}
         </div>
 
-        {/* Quick Actions */}
+        {/* Enhanced Quick Actions */}
         <div className="grid grid-cols-2 gap-3">
-          <button className="flex items-center justify-center space-x-2 p-3 bg-gray-50 hover:bg-gray-100 rounded-lg transition-colors">
-            <TrendingUp className="h-5 w-5 text-gray-600" />
-            <span className="text-sm font-medium">View Trends</span>
+          <button className="group flex items-center justify-center space-x-2 p-4 bg-gradient-to-br from-gray-50 to-gray-100 hover:from-primary-50 hover:to-primary-100 rounded-lg transition-all duration-200 border border-gray-200 hover:border-primary-300 hover:shadow-sm">
+            <TrendingUp className="h-5 w-5 text-gray-600 group-hover:text-primary-600 group-hover:scale-110 transition-all" />
+            <span className="text-sm font-semibold text-gray-700 group-hover:text-primary-700">View Trends</span>
           </button>
-          <button className="flex items-center justify-center space-x-2 p-3 bg-gray-50 hover:bg-gray-100 rounded-lg transition-colors">
-            <Users className="h-5 w-5 text-gray-600" />
-            <span className="text-sm font-medium">Suggest Capacity</span>
+          <button className="group flex items-center justify-center space-x-2 p-4 bg-gradient-to-br from-gray-50 to-gray-100 hover:from-primary-50 hover:to-primary-100 rounded-lg transition-all duration-200 border border-gray-200 hover:border-primary-300 hover:shadow-sm">
+            <Users className="h-5 w-5 text-gray-600 group-hover:text-primary-600 group-hover:scale-110 transition-all" />
+            <span className="text-sm font-semibold text-gray-700 group-hover:text-primary-700">AI Suggest</span>
           </button>
         </div>
       </div>

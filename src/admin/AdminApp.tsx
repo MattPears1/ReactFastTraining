@@ -21,9 +21,11 @@ import { BookingDetailsPage } from './features/bookings/BookingDetailsPage';
 import { SchedulePage } from './features/schedule/SchedulePage';
 import { ScheduleDetailsPage } from './features/schedule/ScheduleDetailsPage';
 import { UsersPage } from './features/users/UsersPage';
+import { UserDetailsPage } from './features/users/UserDetailsPage';
 import { SettingsPage } from './features/settings/SettingsPage';
 import { ActivityLogPage } from './features/activity/ActivityLogPage';
 import { AlertsPage } from './features/alerts/AlertsPage';
+import { AnalyticsPage } from './features/analytics/AnalyticsPage';
 
 // Create a separate QueryClient for admin
 const queryClient = new QueryClient({
@@ -76,7 +78,10 @@ export const AdminApp: React.FC = () => {
                       </Route>
                       
                       {/* User Management */}
-                      <Route path="users" element={<UsersPage />} />
+                      <Route path="users">
+                        <Route index element={<UsersPage />} />
+                        <Route path=":id" element={<UserDetailsPage />} />
+                      </Route>
                       
                       {/* Settings */}
                       <Route path="settings" element={<SettingsPage />} />
@@ -86,6 +91,9 @@ export const AdminApp: React.FC = () => {
                       
                       {/* Admin Alerts */}
                       <Route path="alerts" element={<AlertsPage />} />
+                      
+                      {/* Analytics */}
+                      <Route path="analytics" element={<AnalyticsPage />} />
                       
                       {/* Catch all */}
                       <Route path="*" element={<Navigate to="dashboard" replace />} />

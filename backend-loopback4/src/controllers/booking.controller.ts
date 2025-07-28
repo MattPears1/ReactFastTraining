@@ -73,6 +73,7 @@ export class BookingController {
                     firstName: {type: 'string'},
                     lastName: {type: 'string'},
                     email: {type: 'string', format: 'email'},
+                    certificateName: {type: 'string'},
                     dateOfBirth: {type: 'string', format: 'date'},
                     emergencyContact: {
                       type: 'object',

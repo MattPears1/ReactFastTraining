@@ -52,32 +52,43 @@ const EditableField: React.FC<EditableFieldProps> = ({
   required
 }) => {
   return (
-    <div className="space-y-1">
-      <p className="text-sm font-medium text-gray-500">{label}</p>
-      <div className="flex items-start sm:items-center space-x-2">
-        {icon && <span className="text-gray-400 flex-shrink-0 mt-2 sm:mt-0">{icon}</span>}
+    <div className="space-y-2 group">
+      <p className="text-sm font-semibold text-gray-700 flex items-center gap-2">
+        {label}
+        {required && <span className="text-red-500 text-xs">*</span>}
+      </p>
+      <div className="flex items-start sm:items-center space-x-3">
+        {icon && (
+          <span className="text-gray-400 flex-shrink-0 mt-2 sm:mt-0 transition-colors group-hover:text-primary-500">
+            {icon}
+          </span>
+        )}
         {isEditing ? (
           type === 'textarea' ? (
             <textarea
               value={editValue}
               onChange={(e) => onChange(e.target.value)}
-              className="flex-1 px-3 py-2 text-base sm:text-sm min-h-[44px] border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent resize-none"
+              className="flex-1 px-4 py-3 text-base sm:text-sm min-h-[80px] border-2 border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-500 resize-none transition-all duration-200 hover:border-gray-300"
               rows={3}
               required={required}
+              placeholder={`Enter ${label.toLowerCase()}`}
             />
           ) : (
             <input
               type={type}
               value={editValue}
               onChange={(e) => onChange(type === 'number' ? parseInt(e.target.value) || 0 : e.target.value)}
-              className="flex-1 px-3 py-2 text-base sm:text-sm min-h-[44px] border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+              className="flex-1 px-4 py-3 text-base sm:text-sm min-h-[44px] border-2 border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-500 transition-all duration-200 hover:border-gray-300"
               min={min}
               max={max}
               required={required}
+              placeholder={`Enter ${label.toLowerCase()}`}
             />
           )
         ) : (
-          <span className="text-gray-900 break-words text-base sm:text-sm">{value}</span>
+          <span className="text-gray-900 break-words text-base sm:text-sm font-medium py-3">
+            {value || <span className="text-gray-400 italic">Not set</span>}
+          </span>
         )}
       </div>
     </div>
@@ -143,6 +154,7 @@ export const SessionInfoSection: React.FC<SessionInfoSectionProps> = ({
       subtitle={session.course?.name}
       icon={FileText}
       iconColor="primary"
+      className="schedule-card overflow-hidden"
       action={
         <div className="flex items-center gap-2">
           {isEditing ? (
@@ -152,19 +164,23 @@ export const SessionInfoSection: React.FC<SessionInfoSectionProps> = ({
                 variant="primary"
                 onClick={handleSave}
                 disabled={isSaving}
-                className="min-h-[40px]"
+                className="min-h-[40px] shadow-sm hover:shadow-md transition-all group"
               >
-                <Check className="h-4 w-4 mr-1" />
-                <span className="hidden sm:inline">Save</span>
+                {isSaving ? (
+                  <div className="h-4 w-4 mr-2 border-2 border-white border-t-transparent rounded-full animate-spin" />
+                ) : (
+                  <Check className="h-4 w-4 mr-1.5 group-hover:scale-110 transition-transform" />
+                )}
+                <span className="hidden sm:inline">{isSaving ? 'Saving...' : 'Save Changes'}</span>
               </Button>
               <Button
                 size="sm"
                 variant="secondary"
                 onClick={onCancel}
                 disabled={isSaving}
-                className="min-h-[40px]"
+                className="min-h-[40px] hover:bg-gray-100 transition-all group"
               >
-                <X className="h-4 w-4 mr-1" />
+                <X className="h-4 w-4 mr-1.5 group-hover:rotate-90 transition-transform" />
                 <span className="hidden sm:inline">Cancel</span>
               </Button>
             </>
@@ -173,10 +189,10 @@ export const SessionInfoSection: React.FC<SessionInfoSectionProps> = ({
               size="sm"
               variant="secondary"
               onClick={onEdit}
-              className="min-h-[40px]"
+              className="min-h-[40px] hover:bg-primary-50 hover:text-primary-700 hover:border-primary-300 transition-all group"
             >
-              <Edit2 className="h-4 w-4 mr-1" />
-              <span className="hidden sm:inline">Edit</span>
+              <Edit2 className="h-4 w-4 mr-1.5 group-hover:scale-110 transition-transform" />
+              <span className="hidden sm:inline">Edit Details</span>
             </Button>
           )}
         </div>

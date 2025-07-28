@@ -62,6 +62,9 @@ export const AttendeeInformationStep: React.FC<AttendeeInformationStepProps> = (
       } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(attendee.email)) {
         newErrors[`email-${index}`] = 'Invalid email format';
       }
+      if (!attendee.certificateName?.trim()) {
+        newErrors[`certificateName-${index}`] = 'Certificate name is required';
+      }
     });
 
     // Check for duplicate emails
@@ -196,6 +199,31 @@ export const AttendeeInformationStep: React.FC<AttendeeInformationStepProps> = (
                   </p>
                 )}
               </div>
+            </div>
+
+            <div className="mt-4">
+              <label className="block text-sm font-medium text-gray-700 mb-1">
+                Name for Certificate <span className="text-red-500">*</span>
+              </label>
+              <input
+                type="text"
+                value={attendees[index]?.certificateName || ''}
+                onChange={(e) => updateAttendee(index, 'certificateName', e.target.value)}
+                className={`w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent ${
+                  errors[`certificateName-${index}`] ? 'border-red-500' : 'border-gray-300'
+                }`}
+                placeholder="Dr. John Smith" 
+              />
+              <p className="text-sm text-amber-600 mt-1 flex items-center gap-1">
+                <AlertCircle className="w-3 h-3" />
+                Please enter your name EXACTLY as you want it to appear on your certificate
+              </p>
+              {errors[`certificateName-${index}`] && (
+                <p className="text-red-500 text-sm mt-1">
+                  {errors[`certificateName-${index}`]}
+                </p>
+              )}
+            </div>
             </div>
           </div>
         ))}

@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
+import { useNavigate } from 'react-router-dom';
 import { 
   Plus, 
   Calendar as CalendarIcon, 
@@ -14,12 +15,13 @@ import {
   Eye
 } from 'lucide-react';
 import { AdminCard } from '../../components/ui/AdminCard';
-import { AdminTable } from '../../components/ui/AdminTable';
+import { AdminTable } from '../../components/ui/AdminTableMobile';
 import { AdminBadge } from '../../components/ui/AdminBadge';
 import { Button } from '../../../components/ui/Button';
 import { LoadingSpinner } from '../../components/common/LoadingSpinner';
 import { adminCourseSessionService } from '../../services/course-session.service';
 import { AddSessionModal } from '../../components/modals/AddSessionModal';
+import { SessionDetailModal } from './components/SessionDetailModal';
 
 interface CourseSchedule {
   id: string;
@@ -34,6 +36,9 @@ interface CourseSchedule {
   currentBookings: number;
   status: 'scheduled' | 'in_progress' | 'completed' | 'cancelled';
   price: number;
+  venueId?: number;
+  courseId?: number;
+  notes?: string;
 }
 
 export const SchedulePage: React.FC = () => {
@@ -41,7 +46,10 @@ export const SchedulePage: React.FC = () => {
   const [viewMode, setViewMode] = useState<'calendar' | 'list'>('calendar');
   const [selectedDate, setSelectedDate] = useState<Date | null>(null);
   const [showAddModal, setShowAddModal] = useState(false);
+  const [selectedSessionId, setSelectedSessionId] = useState<string | null>(null);
+  const [showSessionDetail, setShowSessionDetail] = useState(false);
   const queryClient = useQueryClient();
+  const navigate = useNavigate();
 
   const { data: schedules, isLoading, error } = useQuery({
     queryKey: ['admin-schedules', currentDate.getMonth(), currentDate.getFullYear()],
@@ -142,6 +150,25 @@ export const SchedulePage: React.FC = () => {
       queryClient.invalidateQueries({ queryKey: ['admin-schedules'] });
     },
   });
+
+  const handleView = (scheduleId: string) => {
+    setSelectedSessionId(scheduleId);
+    setShowSessionDetail(true);
+  };
+
+  const handleEdit = (scheduleId: string) => {
+    setSelectedSessionId(scheduleId);
+    setShowSessionDetail(true);
+  };
+
+  const handleCalendarClick = (date: Date) => {
+    const hasSchedules = getSchedulesForDate(date).length > 0;
+    if (!hasSchedules) {
+      // If no schedules on this date, open new session modal
+      setSelectedDate(date);
+      setShowAddModal(true);
+    }
+  };
 
   const getStatusBadge = (status: string) => {
     const baseClasses = "inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium";
@@ -245,20 +272,20 @@ export const SchedulePage: React.FC = () => {
   ];
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-4 sm:space-y-6">
       {/* Header */}
-      <div className="sm:flex sm:items-center sm:justify-between">
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
         <div>
-          <h1 className="text-2xl font-bold text-gray-900">Course Schedule</h1>
-          <p className="mt-1 text-sm text-gray-500">
+          <h1 className="text-xl sm:text-2xl font-bold text-gray-900">Course Schedule</h1>
+          <p className="mt-1 text-sm sm:text-base text-gray-500">
             Create and manage course schedules
           </p>
         </div>
-        <div className="mt-4 sm:mt-0 flex space-x-3">
-          <div className="flex rounded-md shadow-sm">
+        <div className="flex flex-col sm:flex-row gap-3 sm:gap-4">
+          <div className="flex rounded-md shadow-sm w-full sm:w-auto">
             <button
               onClick={() => setViewMode('calendar')}
-              className={`px-4 py-2 text-sm font-medium rounded-l-md border ${
+              className={`flex-1 sm:flex-none px-4 py-3 sm:py-2 text-base sm:text-sm font-medium rounded-l-md border min-h-[44px] ${
                 viewMode === 'calendar'
                   ? 'bg-primary-50 border-primary-500 text-primary-700'
                   : 'bg-white border-gray-300 text-gray-700 hover:bg-gray-50'
@@ -268,7 +295,7 @@ export const SchedulePage: React.FC = () => {
             </button>
             <button
               onClick={() => setViewMode('list')}
-              className={`px-4 py-2 text-sm font-medium rounded-r-md border-t border-r border-b ${
+              className={`flex-1 sm:flex-none px-4 py-3 sm:py-2 text-base sm:text-sm font-medium rounded-r-md border-t border-r border-b min-h-[44px] ${
                 viewMode === 'list'
                   ? 'bg-primary-50 border-primary-500 text-primary-700'
                   : 'bg-white border-gray-300 text-gray-700 hover:bg-gray-50'
@@ -279,9 +306,9 @@ export const SchedulePage: React.FC = () => {
           </div>
           <Button 
             onClick={() => setShowAddModal(true)}
-            className="inline-flex items-center"
+            className="inline-flex items-center justify-center w-full sm:w-auto min-h-[48px] text-base sm:text-sm"
           >
-            <Plus className="h-4 w-4 mr-2" />
+            <Plus className="h-5 w-5 sm:h-4 sm:w-4 mr-2" />
             Add Session
           </Button>
         </div>
@@ -339,9 +366,12 @@ export const SchedulePage: React.FC = () => {
               return (
                 <div
                   key={index}
+                  onClick={() => day && handleCalendarClick(day)}
                   className={`min-h-[120px] border-b border-l border-gray-200 p-1 ${
                     isCurrentMonth ? 'bg-white' : 'bg-gray-50'
-                  } ${isToday ? 'bg-blue-50' : ''}`}
+                  } ${isToday ? 'bg-blue-50' : ''} ${
+                    day && isCurrentMonth ? 'cursor-pointer hover:bg-gray-50' : ''
+                  }`}
                 >
                   {day && (
                     <>
@@ -352,6 +382,10 @@ export const SchedulePage: React.FC = () => {
                         {daySchedules.slice(0, 2).map(schedule => (
                           <div
                             key={schedule.id}
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              handleView(schedule.id);
+                            }}
                             className="text-xs p-1 rounded bg-primary-100 text-primary-800 cursor-pointer hover:bg-primary-200"
                             title={`${schedule.courseName} - ${schedule.startTime}`}
                           >
@@ -384,6 +418,7 @@ export const SchedulePage: React.FC = () => {
             {
               key: 'course',
               header: 'Course',
+              priority: 'high',
               render: (schedule: CourseSchedule) => (
                 <div>
                   <div className="font-medium text-gray-900">
@@ -398,6 +433,8 @@ export const SchedulePage: React.FC = () => {
             {
               key: 'datetime',
               header: 'Date & Time',
+              priority: 'high',
+              mobileLabel: 'When',
               render: (schedule: CourseSchedule) => (
                 <div className="flex items-center text-gray-900">
                   <CalendarIcon className="admin-icon-md mr-2 text-primary-500" />
@@ -414,6 +451,7 @@ export const SchedulePage: React.FC = () => {
             {
               key: 'location',
               header: 'Location',
+              priority: 'medium',
               render: (schedule: CourseSchedule) => (
                 <div className="flex items-center text-gray-900">
                   <MapPin className="admin-icon-md mr-2 text-primary-500" />
@@ -424,6 +462,8 @@ export const SchedulePage: React.FC = () => {
             {
               key: 'bookings',
               header: 'Bookings',
+              priority: 'high',
+              mobileLabel: 'Capacity',
               render: (schedule: CourseSchedule) => (
                 <div>
                   <div className="flex items-center">
@@ -450,6 +490,8 @@ export const SchedulePage: React.FC = () => {
             {
               key: 'status',
               header: 'Status',
+              priority: 'medium',
+              align: 'center',
               render: (schedule: CourseSchedule) => (
                 <AdminBadge variant={getStatusVariant(schedule.status)}>
                   {schedule.status}
@@ -460,17 +502,31 @@ export const SchedulePage: React.FC = () => {
               key: 'actions',
               header: 'Actions',
               align: 'right',
+              priority: 'low',
+              mobileLabel: '',
               render: (schedule: CourseSchedule) => (
-                <div className="flex justify-end gap-1">
-                  <button className="admin-btn admin-btn-secondary p-2" title="View">
+                <div className="flex justify-end gap-2 admin-actions">
+                  <button 
+                    onClick={() => handleView(schedule.id)}
+                    className="admin-btn admin-btn-secondary p-2 min-w-[44px] min-h-[44px]" 
+                    title="View"
+                  >
                     <Eye className="admin-icon-sm" />
                   </button>
-                  <button className="admin-btn admin-btn-secondary p-2" title="Edit">
+                  <button 
+                    onClick={() => handleEdit(schedule.id)}
+                    className="admin-btn admin-btn-secondary p-2 min-w-[44px] min-h-[44px]" 
+                    title="Edit"
+                  >
                     <Edit3 className="admin-icon-sm" />
                   </button>
                   <button 
-                    onClick={() => deleteScheduleMutation.mutate(schedule.id)}
-                    className="admin-btn admin-btn-secondary p-2 hover:bg-red-50 hover:text-red-600 hover:border-red-300"
+                    onClick={() => {
+                      if (window.confirm('Are you sure you want to delete this schedule?')) {
+                        deleteScheduleMutation.mutate(schedule.id);
+                      }
+                    }}
+                    className="admin-btn admin-btn-secondary p-2 hover:bg-red-50 hover:text-red-600 hover:border-red-300 min-w-[44px] min-h-[44px]"
                     disabled={deleteScheduleMutation.isPending}
                     title="Delete"
                   >
@@ -491,8 +547,37 @@ export const SchedulePage: React.FC = () => {
       {/* Add Session Modal */}
       <AddSessionModal 
         isOpen={showAddModal}
-        onClose={() => setShowAddModal(false)}
+        onClose={() => {
+          setShowAddModal(false);
+          setSelectedDate(null);
+        }}
       />
+
+      {/* Session Detail Modal */}
+      {showSessionDetail && selectedSessionId && (
+        <SessionDetailModal
+          isOpen={showSessionDetail}
+          onClose={() => {
+            setShowSessionDetail(false);
+            setSelectedSessionId(null);
+          }}
+          sessionId={selectedSessionId}
+        />
+      )}
+
+      {/* New Session Modal for calendar clicks */}
+      {showAddModal && selectedDate && (
+        <SessionDetailModal
+          isOpen={showAddModal}
+          onClose={() => {
+            setShowAddModal(false);
+            setSelectedDate(null);
+          }}
+          sessionId=""
+          date={selectedDate}
+          isNewSession={true}
+        />
+      )}
     </div>
   );
 };

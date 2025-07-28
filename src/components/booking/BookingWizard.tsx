@@ -1,10 +1,11 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { StepIndicator } from './StepIndicator';
 import { CourseSelectionStep } from './steps/CourseSelectionStep';
 import { AttendeeInformationStep } from './steps/AttendeeInformationStep';
 import { ReviewTermsStep } from './steps/ReviewTermsStep';
 import { PaymentStep } from './steps/PaymentStep';
+import { visitorTracker } from '@/utils/visitor-tracking';
 
 export interface CourseSession {
   id: string;
@@ -23,6 +24,7 @@ export interface CourseSession {
 export interface Attendee {
   name: string;
   email: string;
+  certificateName?: string;
   isPrimary?: boolean;
 }
 
@@ -38,6 +40,11 @@ export const BookingWizard: React.FC = () => {
   const navigate = useNavigate();
   const [currentStep, setCurrentStep] = useState(1);
   const [bookingData, setBookingData] = useState<Partial<BookingData>>({});
+  
+  // Track booking start
+  useEffect(() => {
+    visitorTracker.trackBookingEvent('start');
+  }, []);
   const [isLoading, setIsLoading] = useState(false);
 
   const steps = [
@@ -55,6 +62,12 @@ export const BookingWizard: React.FC = () => {
   const prevStep = () => setCurrentStep(prev => Math.max(prev - 1, 1));
 
   const handleComplete = (bookingReference: string) => {
+    // Track booking completion
+    visitorTracker.trackBookingEvent('complete', { 
+      bookingReference,
+      courseId: bookingData.courseDetails?.courseId,
+      courseType: bookingData.courseDetails?.courseType
+    });
     navigate(`/booking-confirmation/${bookingReference}`);
   };
 

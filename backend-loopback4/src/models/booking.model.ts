@@ -86,6 +86,7 @@ export class Booking extends Entity {
     firstName: string;
     lastName: string;
     email: string;
+    certificateName?: string;
     dateOfBirth: Date;
     emergencyContact?: {
       name: string;

@@ -2,7 +2,7 @@ import { apiService } from '../api.service';
 
 export interface CreateBookingRequest {
   sessionId: string;
-  attendees: Array<{ name: string; email: string; isPrimary?: boolean }>;
+  attendees: Array<{ name: string; email: string; certificateName?: string; isPrimary?: boolean }>;
   specialRequirements?: string;
   termsAccepted: boolean;
 }

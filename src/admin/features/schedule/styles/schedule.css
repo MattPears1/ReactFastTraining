@@ -1,0 +1,463 @@
+/* Schedule Components Enhanced Styling */
+
+/* Smooth fade-in animation */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Subtle pulse for loading states */
+@keyframes subtlePulse {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.7;
+  }
+}
+
+/* Smooth slide animations */
+@keyframes slideInRight {
+  from {
+    opacity: 0;
+    transform: translateX(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes slideInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Base animations */
+.schedule-fade-in {
+  animation: fadeIn 0.5s ease-out;
+}
+
+.schedule-slide-in {
+  animation: slideInRight 0.4s ease-out;
+}
+
+.schedule-slide-up {
+  animation: slideInUp 0.4s ease-out;
+}
+
+/* Enhanced card styling */
+.schedule-card {
+  @apply bg-white rounded-xl shadow-sm border border-gray-100;
+  @apply transition-all duration-300 ease-in-out;
+  @apply hover:shadow-lg hover:border-gray-200;
+  position: relative;
+  overflow: hidden;
+}
+
+.schedule-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: linear-gradient(90deg, rgb(var(--primary-500)), rgb(var(--secondary-500)));
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.3s ease;
+}
+
+.schedule-card:hover::before {
+  transform: scaleX(1);
+}
+
+/* Button enhancements */
+.schedule-btn {
+  @apply relative overflow-hidden;
+  @apply transition-all duration-200 ease-in-out;
+}
+
+.schedule-btn::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 0;
+  height: 0;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.2);
+  transform: translate(-50%, -50%);
+  transition: width 0.6s, height 0.6s;
+}
+
+.schedule-btn:active::after {
+  width: 300px;
+  height: 300px;
+}
+
+/* Form input enhancements */
+.schedule-input {
+  @apply transition-all duration-200 ease-in-out;
+  @apply border-gray-300 focus:border-primary-500;
+  @apply focus:ring-2 focus:ring-primary-500/20;
+}
+
+.schedule-input:hover:not(:focus) {
+  @apply border-gray-400;
+}
+
+/* Status badge animations */
+.status-badge {
+  @apply inline-flex items-center px-3 py-1 rounded-full text-xs font-medium;
+  @apply transition-all duration-200 ease-in-out;
+  animation: slideInUp 0.3s ease-out;
+}
+
+.status-badge:hover {
+  @apply transform scale-105;
+}
+
+/* Attendee card hover effects */
+.attendee-card {
+  @apply bg-white rounded-lg shadow-sm border border-gray-200 p-4;
+  @apply transition-all duration-200 ease-in-out;
+  @apply hover:shadow-md hover:border-gray-300;
+  @apply hover:transform hover:-translate-y-0.5;
+}
+
+/* Loading skeleton animation */
+.skeleton {
+  background: linear-gradient(
+    90deg,
+    #f0f0f0 25%,
+    #e0e0e0 50%,
+    #f0f0f0 75%
+  );
+  background-size: 200% 100%;
+  animation: loading 1.5s infinite;
+}
+
+@keyframes loading {
+  0% {
+    background-position: 200% 0;
+  }
+  100% {
+    background-position: -200% 0;
+  }
+}
+
+/* Enhanced modal backdrop */
+.modal-backdrop {
+  @apply fixed inset-0 bg-black/50 backdrop-blur-sm;
+  @apply transition-opacity duration-300 ease-in-out;
+  animation: fadeIn 0.2s ease-out;
+}
+
+.modal-content {
+  @apply bg-white rounded-xl shadow-2xl;
+  @apply transition-all duration-300 ease-out;
+  animation: slideInUp 0.3s ease-out;
+}
+
+/* Progress bars */
+.progress-bar {
+  @apply relative h-2 bg-gray-200 rounded-full overflow-hidden;
+}
+
+.progress-bar-fill {
+  @apply absolute top-0 left-0 h-full bg-gradient-to-r from-primary-500 to-primary-600;
+  @apply transition-all duration-500 ease-out;
+}
+
+/* Tooltip styling */
+.tooltip {
+  @apply absolute z-50 px-3 py-2 text-sm text-white bg-gray-900 rounded-lg;
+  @apply pointer-events-none opacity-0 transition-opacity duration-200;
+}
+
+.tooltip.show {
+  @apply opacity-100;
+}
+
+/* Enhanced table styling for desktop */
+@media (min-width: 640px) {
+  .schedule-table {
+    @apply border-separate;
+    border-spacing: 0;
+  }
+
+  .schedule-table th {
+    @apply bg-gray-50 font-semibold text-gray-700;
+    @apply sticky top-0 z-10;
+  }
+
+  .schedule-table tbody tr {
+    @apply transition-all duration-200 ease-in-out;
+  }
+
+  .schedule-table tbody tr:hover {
+    @apply bg-primary-50/50 transform scale-[1.01];
+  }
+}
+
+/* Responsive grid enhancements */
+.responsive-grid {
+  display: grid;
+  gap: 1.5rem;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+}
+
+@media (min-width: 768px) {
+  .responsive-grid {
+    gap: 2rem;
+  }
+}
+
+/* Empty state styling */
+.empty-state {
+  @apply text-center py-12 px-6;
+  animation: fadeIn 0.5s ease-out;
+}
+
+.empty-state-icon {
+  @apply w-16 h-16 mx-auto mb-4 text-gray-400;
+  animation: subtlePulse 2s infinite;
+}
+
+/* Focus visible enhancements */
+.schedule-focus:focus-visible {
+  @apply outline-none ring-2 ring-primary-500 ring-offset-2;
+}
+
+/* Print styles */
+@media print {
+  .no-print {
+    display: none !important;
+  }
+  
+  .schedule-card {
+    box-shadow: none !important;
+    border: 1px solid #e5e7eb !important;
+    page-break-inside: avoid;
+  }
+}
+
+/* Dark mode support (future enhancement) */
+@media (prefers-color-scheme: dark) {
+  /* Dark mode styles can be added here */
+}
+
+/* Smooth scroll behavior */
+html {
+  scroll-behavior: smooth;
+}
+
+/* Custom scrollbar styling */
+.custom-scrollbar::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-track {
+  @apply bg-gray-100 rounded-full;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  @apply bg-gray-400 rounded-full;
+  @apply hover:bg-gray-500;
+}
+
+/* Notification animations */
+.notification-enter {
+  animation: slideInRight 0.3s ease-out;
+}
+
+.notification-exit {
+  animation: slideOutRight 0.3s ease-in;
+}
+
+@keyframes slideOutRight {
+  to {
+    opacity: 0;
+    transform: translateX(100%);
+  }
+}
+
+/* ============================================
+   RESPONSIVE ENHANCEMENTS
+   ============================================ */
+
+/* Tablet breakpoint (640px - 1024px) */
+@media (min-width: 640px) and (max-width: 1023px) {
+  /* Enhanced card spacing */
+  .schedule-card {
+    @apply p-6;
+  }
+  
+  /* Better grid layouts */
+  .responsive-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1.5rem;
+  }
+  
+  /* Improved button sizes */
+  .schedule-btn {
+    @apply px-6 py-3 text-base;
+  }
+  
+  /* Better table view */
+  .schedule-table {
+    font-size: 0.875rem;
+  }
+}
+
+/* Desktop breakpoint (1024px - 1536px) */
+@media (min-width: 1024px) {
+  /* Enhanced hover effects */
+  .schedule-card {
+    @apply hover:shadow-xl;
+    transform-style: preserve-3d;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+  }
+  
+  .schedule-card:hover {
+    transform: translateY(-4px) rotateX(2deg);
+  }
+  
+  /* Larger touch targets for desktop */
+  .schedule-btn {
+    @apply min-h-[48px] px-8;
+  }
+  
+  /* Better spacing */
+  .responsive-grid {
+    gap: 2rem;
+  }
+  
+  /* Enhanced form inputs */
+  .schedule-input {
+    @apply text-base;
+  }
+  
+  /* Sidebar navigation enhancement */
+  .schedule-sidebar {
+    position: sticky;
+    top: 2rem;
+    max-height: calc(100vh - 4rem);
+    overflow-y: auto;
+  }
+}
+
+/* Large screen breakpoint (1536px+) */
+@media (min-width: 1536px) {
+  /* Maximum content width */
+  .schedule-container {
+    max-width: 1920px;
+    margin: 0 auto;
+  }
+  
+  /* Enhanced grid for large screens */
+  .responsive-grid {
+    grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+    gap: 2.5rem;
+  }
+  
+  /* Larger typography */
+  .schedule-card h2 {
+    @apply text-2xl;
+  }
+  
+  .schedule-card h3 {
+    @apply text-xl;
+  }
+  
+  /* Enhanced visual hierarchy */
+  .schedule-card {
+    @apply p-8;
+  }
+  
+  /* Better data visualization */
+  .progress-bar {
+    @apply h-3;
+  }
+  
+  /* Enhanced modals */
+  .modal-content {
+    max-width: 1024px;
+  }
+}
+
+/* Ultra-wide screens (2560px+) */
+@media (min-width: 2560px) {
+  /* 4K optimization */
+  .schedule-container {
+    max-width: 2400px;
+    padding: 0 3rem;
+  }
+  
+  /* Larger base font size */
+  .schedule-content {
+    font-size: 1.125rem;
+  }
+  
+  /* Enhanced grid columns */
+  .responsive-grid {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+
+/* Print optimizations */
+@media print {
+  .schedule-card {
+    break-inside: avoid;
+    page-break-inside: avoid;
+  }
+  
+  .no-print {
+    display: none !important;
+  }
+  
+  /* Remove animations for print */
+  * {
+    animation: none !important;
+    transition: none !important;
+  }
+}
+
+/* High contrast mode support */
+@media (prefers-contrast: high) {
+  .schedule-card {
+    border-width: 2px;
+  }
+  
+  .schedule-btn {
+    border-width: 2px;
+    font-weight: 600;
+  }
+  
+  .schedule-input {
+    border-width: 2px;
+  }
+}
+
+/* Reduced motion support */
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}

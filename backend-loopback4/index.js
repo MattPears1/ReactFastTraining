@@ -5,13 +5,11 @@ const path = require('path');
 
 // For now, let's create a minimal Express server until we can fix the TypeScript build
 const express = require('express');
-const cors = require('cors');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
 
-// Enable CORS
-app.use(cors());
+// CORS not needed - frontend and backend served from same domain
 
 // Parse JSON requests
 app.use(express.json());

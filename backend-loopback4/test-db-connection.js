@@ -40,13 +40,21 @@ async function testConnection() {
       console.log(`   - ${row.table_name}`);
     });
 
-    // Count records in key tables
+    // Count records in key tables (using safe query methods)
     console.log('\n📈 Record counts:');
     const tablesToCount = ['users', 'courses', 'locations', 'settings'];
     
     for (const table of tablesToCount) {
       try {
-        const count = await client.query(`SELECT COUNT(*) FROM ${table}`);
+        // Validate table name against whitelist to prevent SQL injection
+        if (!tablesToCount.includes(table)) {
+          console.log(`   - ${table}: Invalid table name`);
+          continue;
+        }
+        // Use parameterized query with format specifier
+        const count = await client.query(
+          `SELECT COUNT(*) FROM ${client.escapeIdentifier(table)}`
+        );
         console.log(`   - ${table}: ${count.rows[0].count} records`);
       } catch (e) {
         // Table might not exist

@@ -1,59 +1,28 @@
 import type { Knex } from "knex";
-import * as dotenv from "dotenv";
+import { getKnexConfig } from "./src/database/config";
 
-dotenv.config();
+// Use centralized configuration
+const baseConfig = getKnexConfig();
 
 const config: { [key: string]: Knex.Config } = {
-  development: {
-    client: "postgresql",
-    connection: {
-      connectionString: process.env.DATABASE_URL,
-      ssl: { rejectUnauthorized: false }
-    },
-    migrations: {
-      directory: "./src/database/migrations",
-      extension: "ts"
-    },
-    seeds: {
-      directory: "./src/database/seeds",
-      extension: "ts"
-    }
-  },
+  development: baseConfig,
   
   test: {
-    client: "postgresql",
+    ...baseConfig,
     connection: {
       host: "localhost",
       port: 5432,
       user: "postgres",
-      password: process.env.DB_PASSWORD,
+      password: process.env.DB_PASSWORD || "postgres",
       database: "reactfast_test"
     },
-    migrations: {
-      directory: "./src/database/migrations",
-      extension: "ts"
+    pool: {
+      min: 1,
+      max: 5
     }
   },
   
-  production: {
-    client: "postgresql",
-    connection: {
-      connectionString: process.env.DATABASE_URL,
-      ssl: process.env.NODE_ENV === 'production' ? { rejectUnauthorized: false } : false
-    },
-    migrations: {
-      directory: "./src/database/migrations",
-      extension: "ts"
-    },
-    seeds: {
-      directory: "./src/database/seeds",
-      extension: "ts"
-    },
-    pool: {
-      min: 2,
-      max: 10
-    }
-  }
+  production: baseConfig
 };
 
 export default config;

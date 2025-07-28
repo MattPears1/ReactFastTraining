@@ -42,6 +42,13 @@
     "migrate:rollback": "npx knex migrate:rollback",
     "migrate:make": "npx knex migrate:make",
     "seed:run": "npx knex seed:run",
+    "db:setup": "ts-node src/database/setup.ts setup",
+    "db:migrate": "ts-node src/database/setup.ts migrate",
+    "db:rollback": "ts-node src/database/setup.ts rollback",
+    "db:seed": "ts-node src/database/setup.ts seed",
+    "db:reset": "ts-node src/database/setup.ts reset",
+    "db:verify": "ts-node src/database/setup.ts verify",
+    "db:test": "ts-node src/database/config.ts",
     "setup:database": "node src/scripts/setup-database.js",
     "heroku-postbuild": "npm install"
   },
@@ -70,9 +77,14 @@
     "@types/validator": "^13.15.2",
     "bcryptjs": "^2.4.3",
     "cors": "^2.8.5",
+    "crypto": "^1.0.1",
+    "csurf": "^1.11.0",
     "date-fns": "^3.3.1",
-    "dotenv": "^16.4.5",
+    "dotenv": "^16.6.1",
     "drizzle-orm": "^0.44.3",
+    "express-rate-limit": "^8.0.1",
+    "express-session": "^1.18.2",
+    "helmet": "^8.1.0",
     "jsonwebtoken": "^9.0.2",
     "knex": "^3.1.0",
     "loopback-connector-postgresql": "^7.1.4",
@@ -97,6 +109,7 @@
     "eslint": "^8.57.0",
     "nodemon": "^3.0.3",
     "source-map-support": "^0.5.21",
+    "ts-node": "^10.9.2",
     "typescript": "~5.3.3"
   }
 }

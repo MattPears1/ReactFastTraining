@@ -158,49 +158,68 @@ export const AttendeesList: React.FC<AttendeesListProps> = ({
     };
   }, [bookings]);
 
-  // Mobile Card Component
+  // Enhanced Mobile Card Component
   const AttendeeCard: React.FC<{ booking: BookingDetails }> = ({ booking }) => (
-    <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-4 space-y-3">
+    <div className="attendee-card group relative overflow-hidden transition-all duration-300 hover:shadow-lg">
+      {/* Status indicator bar */}
+      <div className={`absolute top-0 left-0 right-0 h-1 transition-all duration-300 ${
+        booking.status === 'confirmed' ? 'bg-green-500' :
+        booking.status === 'pending' ? 'bg-yellow-500' :
+        booking.status === 'cancelled' ? 'bg-red-500' :
+        'bg-blue-500'
+      }`} />
+      
       {/* Header with checkbox */}
       <div className="flex justify-between items-start">
         <div className="flex-1 pr-2">
-          <h3 className="font-medium text-base text-gray-900 break-words">{booking.userName}</h3>
+          <h3 className="font-semibold text-base text-gray-900 break-words group-hover:text-primary-600 transition-colors">
+            {booking.userName}
+          </h3>
           <a 
             href={`mailto:${booking.userEmail}`}
-            className="text-sm text-primary-600 hover:text-primary-700 break-all"
+            className="text-sm text-gray-600 hover:text-primary-600 break-all transition-colors inline-flex items-center gap-1 mt-0.5"
           >
+            <Mail className="h-3.5 w-3.5 flex-shrink-0" />
             {booking.userEmail}
           </a>
           {booking.userPhone && (
             <a 
               href={`tel:${booking.userPhone}`}
-              className="text-sm text-gray-600 flex items-center mt-1"
+              className="text-sm text-gray-600 hover:text-primary-600 flex items-center mt-1 transition-colors"
             >
-              <Phone className="h-3 w-3 mr-1 flex-shrink-0" />
+              <Phone className="h-3.5 w-3.5 mr-1 flex-shrink-0" />
               {booking.userPhone}
             </a>
           )}
         </div>
-        <input
-          type="checkbox"
-          checked={selectedBookings.includes(booking.id)}
-          onChange={() => handleSelectBooking(booking.id)}
-          className="h-5 w-5 text-primary-600 focus:ring-primary-500 border-gray-300 rounded flex-shrink-0"
-        />
+        <label className="relative inline-flex items-center cursor-pointer">
+          <input
+            type="checkbox"
+            checked={selectedBookings.includes(booking.id)}
+            onChange={() => handleSelectBooking(booking.id)}
+            className="sr-only peer"
+          />
+          <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-primary-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-primary-600"></div>
+        </label>
       </div>
       
-      {/* Status badges */}
-      <div className="flex flex-wrap gap-2 text-sm">
-        <span className="flex items-center text-gray-600">
-          <Calendar className="h-4 w-4 mr-1" />
+      {/* Enhanced Status badges with animations */}
+      <div className="flex flex-wrap gap-2 text-sm mt-3">
+        <span className="inline-flex items-center px-2.5 py-1 rounded-full bg-gray-100 text-gray-700 transition-all hover:bg-gray-200">
+          <Calendar className="h-3.5 w-3.5 mr-1.5" />
           {format(new Date(booking.bookingDate), 'MMM d, yyyy')}
         </span>
-        <div className="flex items-center">
+        <span className={`inline-flex items-center px-2.5 py-1 rounded-full transition-all ${
+          booking.status === 'confirmed' ? 'bg-green-100 text-green-800 hover:bg-green-200' :
+          booking.status === 'pending' ? 'bg-yellow-100 text-yellow-800 hover:bg-yellow-200' :
+          booking.status === 'cancelled' ? 'bg-red-100 text-red-800 hover:bg-red-200' :
+          'bg-blue-100 text-blue-800 hover:bg-blue-200'
+        }`}>
           {getStatusIcon(booking.status)}
-          <span className="ml-1 capitalize">{booking.status}</span>
-        </div>
-        <AdminBadge variant={getPaymentStatusVariant(booking.paymentStatus)}>
-          <DollarSign className="h-3 w-3 mr-1" />
+          <span className="ml-1 capitalize font-medium">{booking.status}</span>
+        </span>
+        <AdminBadge variant={getPaymentStatusVariant(booking.paymentStatus)} className="transition-all hover:scale-105">
+          <DollarSign className="h-3.5 w-3.5 mr-1" />
           {booking.paymentStatus}
         </AdminBadge>
       </div>
@@ -213,34 +232,35 @@ export const AttendeesList: React.FC<AttendeesListProps> = ({
         </div>
       )}
       
-      {/* Action buttons */}
-      <div className="flex gap-2 pt-2">
+      {/* Enhanced Action buttons with hover effects */}
+      <div className="flex gap-2 pt-3 mt-3 border-t border-gray-100">
         <Button 
           size="sm" 
           variant="secondary" 
-          className="flex-1 min-h-[44px]"
+          className="flex-1 min-h-[44px] group hover:bg-primary-50 hover:text-primary-700 hover:border-primary-300 transition-all"
           onClick={() => onEmailAttendees([booking.id])}
         >
-          <Mail className="h-4 w-4 mr-1" />
+          <Mail className="h-4 w-4 mr-1.5 group-hover:scale-110 transition-transform" />
           Email
         </Button>
         <Button 
           size="sm" 
           variant="secondary" 
-          className="flex-1 min-h-[44px]"
+          className="flex-1 min-h-[44px] group hover:bg-primary-50 hover:text-primary-700 hover:border-primary-300 transition-all"
           onClick={() => onViewBooking(booking.id)}
         >
-          <FileText className="h-4 w-4 mr-1" />
+          <FileText className="h-4 w-4 mr-1.5 group-hover:scale-110 transition-transform" />
           View
         </Button>
         {booking.status !== 'cancelled' && (
           <Button 
             size="sm" 
             variant="secondary" 
-            className="text-red-600 hover:text-red-700 hover:bg-red-50 min-h-[44px] px-3"
+            className="min-h-[44px] px-3 group hover:bg-red-50 hover:text-red-700 hover:border-red-300 transition-all"
             onClick={() => onCancelBooking(booking.id)}
+            title="Cancel booking"
           >
-            <UserX className="h-4 w-4" />
+            <UserX className="h-4 w-4 group-hover:scale-110 transition-transform" />
           </Button>
         )}
       </div>

@@ -153,9 +153,9 @@ const Header: React.FC = () => {
               {/* Phone Number - visible on mobile and desktop */}
               <a 
                 href="tel:07447485644" 
-                className="flex items-center space-x-1 sm:space-x-2 text-primary-600 dark:text-primary-400 font-semibold hover:text-primary-700 dark:hover:text-primary-300 transition-colors text-xs sm:text-sm lg:text-base min-w-[44px] min-h-[44px] sm:min-w-0 sm:min-h-0 p-2 sm:p-0 justify-center sm:justify-start"
+                className="flex items-center space-x-1 sm:space-x-2 text-primary-600 dark:text-primary-400 font-semibold hover:text-primary-700 dark:hover:text-primary-300 transition-colors text-base sm:text-sm lg:text-base min-w-[44px] min-h-[44px] sm:min-w-0 sm:min-h-0 p-2 sm:p-0 justify-center sm:justify-start rounded-lg"
               >
-                <svg className="w-5 h-5 sm:w-4 sm:h-4 lg:w-5 lg:h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                <svg className="w-6 h-6 sm:w-4 sm:h-4 lg:w-5 lg:h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
                 </svg>
                 <span className="hidden sm:inline">07447 485644</span>
@@ -164,7 +164,7 @@ const Header: React.FC = () => {
               {/* Search */}
               <button
                 onClick={() => setShowSearch(true)}
-                className="p-2 rounded-lg text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors min-w-[44px] min-h-[44px] flex items-center justify-center"
+                className="p-3 sm:p-2 rounded-lg text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors min-w-[44px] min-h-[44px] flex items-center justify-center"
                 aria-label="Search"
               >
                 <Search className="w-5 h-5" />
@@ -173,7 +173,7 @@ const Header: React.FC = () => {
               {/* Theme Toggle */}
               <button
                 onClick={toggleTheme}
-                className="p-2 rounded-lg text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors min-w-[44px] min-h-[44px] flex items-center justify-center"
+                className="p-3 sm:p-2 rounded-lg text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors min-w-[44px] min-h-[44px] flex items-center justify-center"
                 aria-label="Toggle theme"
               >
                 {theme === 'light' ? (
@@ -194,7 +194,7 @@ const Header: React.FC = () => {
               {/* Mobile Menu Toggle */}
               <button
                 onClick={() => setIsOpen(!isOpen)}
-                className="lg:hidden p-2 rounded-lg text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors min-w-[44px] min-h-[44px] flex items-center justify-center"
+                className="lg:hidden p-3 rounded-lg text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors min-w-[48px] min-h-[48px] flex items-center justify-center"
                 aria-label="Toggle menu"
                 aria-expanded={isOpen}
               >
@@ -213,7 +213,7 @@ const Header: React.FC = () => {
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
-              className="fixed inset-0 bg-black/50 z-40 lg:hidden"
+              className="fixed inset-0 bg-black/50 z-40 lg:hidden mobile-menu-overlay"
               onClick={() => setIsOpen(false)}
             />
             <motion.nav
@@ -221,7 +221,7 @@ const Header: React.FC = () => {
               animate={{ x: 0 }}
               exit={{ x: '100%' }}
               transition={{ type: 'tween', duration: 0.3 }}
-              className="fixed top-0 right-0 bottom-0 w-full sm:w-80 bg-white dark:bg-gray-900 z-50 lg:hidden overflow-y-auto shadow-2xl"
+              className="fixed top-0 right-0 bottom-0 w-full sm:w-80 bg-white dark:bg-gray-900 z-50 lg:hidden overflow-y-auto shadow-2xl mobile-menu"
             >
               <div className="p-4 sm:p-6">
                 <div className="flex items-center justify-between mb-6 sm:mb-8">
@@ -230,7 +230,7 @@ const Header: React.FC = () => {
                   </span>
                   <button
                     onClick={() => setIsOpen(false)}
-                    className="p-2 rounded-lg text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors min-w-[44px] min-h-[44px] flex items-center justify-center"
+                    className="p-3 rounded-lg text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors min-w-[48px] min-h-[48px] flex items-center justify-center"
                     aria-label="Close menu"
                   >
                     <X className="w-6 h-6" />
@@ -247,7 +247,7 @@ const Header: React.FC = () => {
                             setShowCoursesModal(true)
                           }}
                           className={cn(
-                            'w-full flex items-center justify-between py-3 px-4 -mx-4 text-base sm:text-lg font-medium transition-colors rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 min-h-[48px]',
+                            'w-full flex items-center justify-between py-4 px-4 -mx-4 text-base sm:text-lg font-medium transition-colors rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 min-h-[56px] mobile-nav-item',
                             isActive(item.href)
                               ? 'text-primary-600 dark:text-primary-400'
                               : 'text-gray-700 dark:text-gray-300'
@@ -259,7 +259,7 @@ const Header: React.FC = () => {
                         <Link
                           to={item.href}
                           className={cn(
-                            'block py-3 px-4 -mx-4 text-base sm:text-lg font-medium transition-colors rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 min-h-[48px] flex items-center',
+                            'block py-4 px-4 -mx-4 text-base sm:text-lg font-medium transition-colors rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 min-h-[56px] flex items-center mobile-nav-item',
                             isActive(item.href)
                               ? 'text-primary-600 dark:text-primary-400'
                               : 'text-gray-700 dark:text-gray-300'
@@ -275,13 +275,13 @@ const Header: React.FC = () => {
                 <div className="mt-6 sm:mt-8 pt-6 sm:pt-8 border-t border-gray-200 dark:border-gray-700">
                   <Link
                     to="/booking"
-                    className="btn btn-primary w-full text-center mb-3 sm:mb-4 min-h-[48px] flex items-center justify-center"
+                    className="btn btn-primary w-full text-center mb-3 sm:mb-4 min-h-[52px] flex items-center justify-center text-lg font-semibold"
                   >
                     Book Course
                   </Link>
                   <a
                     href="tel:07447485644"
-                    className="btn btn-outline w-full text-center flex items-center justify-center gap-2 min-h-[48px]"
+                    className="btn btn-outline w-full text-center flex items-center justify-center gap-3 min-h-[52px] text-base font-medium"
                   >
                     <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />

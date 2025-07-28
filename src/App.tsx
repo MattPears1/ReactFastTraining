@@ -11,6 +11,7 @@ import { AuthProvider } from '@contexts/AuthContext'
 import { initPerformanceMonitoring, trackBundleSize } from '@utils/performance'
 import { AnalyticsProvider } from '@components/providers/AnalyticsProvider'
 import VersionInfo from '@components/common/VersionInfo'
+import { visitorTracker } from '@utils/visitor-tracking'
 
 // Lazy load pages for better performance
 const HomePage = lazy(() => import('@pages/HomePage'))

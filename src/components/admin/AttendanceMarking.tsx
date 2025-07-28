@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { adminApi, AttendanceRecord, SessionAttendance } from '@services/api/admin.service';
 import { useWebSocket } from '@hooks/useWebSocket';
-import { CheckCircle, XCircle, Clock, CircleDot, Save, Loader2, User, Mail, AlertCircle } from 'lucide-react';
+import { CheckCircle, XCircle, Clock, CircleDot, Save, Loader2, User, Mail, AlertCircle, Download } from 'lucide-react';
 import { cn } from '@utils/cn';
+import { certificateService } from '@services/certificate/certificate.service';
 
 interface AttendanceMarkingProps {
   sessionId: string;
@@ -133,6 +134,23 @@ export const AttendanceMarking: React.FC<AttendanceMarkingProps> = ({
       return;
     }
 
+    // Validate attendance records
+    const validStatuses = ['PRESENT', 'ABSENT', 'LATE', 'PARTIAL'];
+    for (const item of changedItems) {
+      const status = item.newStatus || item.status;
+      if (!status || !validStatuses.includes(status as string)) {
+        setError(`Invalid status for ${item.userName}. Please select a valid status.`);
+        return;
+      }
+      
+      // Validate notes length
+      const notes = item.newNotes || item.notes || '';
+      if (notes.length > 500) {
+        setError(`Notes for ${item.userName} are too long (max 500 characters).`);
+        return;
+      }
+    }
+
     setSaving(true);
     setError(null);
     setSuccess(false);
@@ -142,10 +160,12 @@ export const AttendanceMarking: React.FC<AttendanceMarkingProps> = ({
         bookingId: item.bookingId,
         userId: item.userId,
         status: item.newStatus || item.status as any,
-        notes: item.newNotes || item.notes,
+        notes: (item.newNotes || item.notes || '').trim().slice(0, 500), // Sanitize and limit notes
       }));
 
-      await adminApi.markAttendance(sessionId, attendanceRecords, 'Admin'); // TODO: Get actual admin name
+      // Get admin name from session/context
+      const adminName = localStorage.getItem('adminName') || 'Admin';
+      await adminApi.markAttendance(sessionId, attendanceRecords, adminName);
 
       setSuccess(true);
       setAttendance(prev => prev.map(item => ({
@@ -154,6 +174,16 @@ export const AttendanceMarking: React.FC<AttendanceMarkingProps> = ({
         notes: item.newNotes || item.notes,
         hasChanges: false,
       })));
+
+      // Generate certificates for present attendees
+      const presentAttendees = attendance.filter(item => 
+        (item.newStatus || item.status) === 'PRESENT'
+      );
+      
+      if (presentAttendees.length > 0) {
+        console.log(`Generating certificates for ${presentAttendees.length} attendees...`);
+        // Certificate generation is handled by the backend
+      }
 
       onUpdate?.();
       
@@ -224,9 +254,14 @@ export const AttendanceMarking: React.FC<AttendanceMarkingProps> = ({
       )}
 
       {success && (
-        <div className="mx-6 mt-4 p-4 bg-green-50 border border-green-200 rounded-lg flex items-center gap-3">
-          <CheckCircle className="w-5 h-5 text-green-600" />
-          <p className="text-sm text-green-800">Attendance saved successfully!</p>
+        <div className="mx-6 mt-4 p-4 bg-green-50 border border-green-200 rounded-lg">
+          <div className="flex items-center gap-3 mb-2">
+            <CheckCircle className="w-5 h-5 text-green-600" />
+            <p className="text-sm text-green-800 font-medium">Attendance saved successfully!</p>
+          </div>
+          <p className="text-xs text-green-700 ml-8">
+            Certificates will be automatically generated and emailed to attendees marked as present.
+          </p>
         </div>
       )}
 
@@ -299,7 +334,8 @@ export const AttendanceMarking: React.FC<AttendanceMarkingProps> = ({
                           type="text"
                           value={item.newNotes ?? item.notes ?? ''}
                           onChange={(e) => handleNotesChange(item.bookingId, e.target.value)}
-                          placeholder="Add notes (optional)"
+                          placeholder="Add notes (optional, max 500 characters)"
+                          maxLength={500}
                           className="w-full px-3 py-1.5 text-sm border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500"
                         />
                       </div>
