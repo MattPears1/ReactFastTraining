@@ -5,7 +5,6 @@ export const COURSE_LIST = [
   "Emergency Paediatric First Aid",
   "Activity First Aid",
   "CPR and AED",
-  "Annual Skills Refresher",
   "Oxygen Therapy",
 ] as const;
 
@@ -34,21 +33,19 @@ export const COURSE_CATEGORIES = {
     courses: [
       "Activity First Aid",
       "CPR and AED",
-      "Annual Skills Refresher",
       "Oxygen Therapy",
     ],
   },
 } as const;
 
 export const COURSE_DURATIONS: Record<CourseName, string> = {
-  "Emergency First Aid at Work": "Full Day (6 hours)",
-  "First Aid at Work": "Full Day (6 hours)",
-  "Paediatric First Aid": "Full Day (6 hours)",
-  "Emergency Paediatric First Aid": "Full Day (5 hours)",
-  "Activity First Aid": "Full Day (5 hours)",
+  "Emergency First Aid at Work": "1 Day",
+  "First Aid at Work": "3 Days",
+  "Paediatric First Aid": "2 Days",
+  "Emergency Paediatric First Aid": "1 Day",
+  "Activity First Aid": "1 Day",
   "CPR and AED": "3 Hours",
-  "Annual Skills Refresher": "3 Hours",
-  "Oxygen Therapy": "3 Hours",
+  "Oxygen Therapy": "1 Day",
 };
 
 export const COURSE_PRICES: Record<CourseName, number> = {
@@ -58,6 +55,5 @@ export const COURSE_PRICES: Record<CourseName, number> = {
   "Emergency Paediatric First Aid": 100,
   "Activity First Aid": 175,
   "CPR and AED": 50,
-  "Annual Skills Refresher": 50,
-  "Oxygen Therapy": 75,
+  "Oxygen Therapy": 60,
 };

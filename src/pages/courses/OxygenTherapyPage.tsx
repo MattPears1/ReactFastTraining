@@ -5,7 +5,7 @@ const OxygenTherapyPage: React.FC = () => {
   const courseData = {
     courseName: "Oxygen Therapy Course",
     courseAcronym: "O2",
-    duration: "3 Hours",
+    duration: "1 Day",
     price: "£60",
     certificateValidity: "Valid for 3 years",
     description:

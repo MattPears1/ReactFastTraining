@@ -129,15 +129,9 @@ const HomePage: React.FC = () => {
       },
       // Row 4
       {
-        title: "Annual Skills Refresher",
-        duration: "3 Hours",
-        price: "£60",
-        href: "/courses/annual-skills-refresher",
-      },
-      {
         title: "Oxygen Therapy Course",
-        duration: "3 Hours",
-        price: "£80",
+        duration: "1 Day",
+        price: "£60",
         href: "/courses/oxygen-therapy",
       },
     ],

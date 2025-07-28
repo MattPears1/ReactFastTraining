@@ -41,7 +41,7 @@ const courseCategories = [
       },
       {
         title: "First Aid at Work",
-        duration: "1 Day",
+        duration: "3 Days",
         price: "£200",
         href: "/courses/faw",
         features: [
@@ -61,7 +61,7 @@ const courseCategories = [
     courses: [
       {
         title: "Paediatric First Aid",
-        duration: "1 Day",
+        duration: "2 Days",
         price: "£120",
         href: "/courses/paediatric",
         features: [

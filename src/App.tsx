@@ -49,9 +49,6 @@ const ActivityFirstAidPage = lazy(
   () => import("@pages/courses/ActivityFirstAidPage"),
 );
 const CPRAEDPage = lazy(() => import("@pages/courses/CPRAEDPage"));
-const AnnualSkillsRefresherPage = lazy(
-  () => import("@pages/courses/AnnualSkillsRefresherPage"),
-);
 const OxygenTherapyPage = lazy(
   () => import("@pages/courses/OxygenTherapyPage"),
 );
@@ -213,10 +210,6 @@ function App() {
                         <Route
                           path="/courses/cpr-aed"
                           element={<CPRAEDPage />}
-                        />
-                        <Route
-                          path="/courses/annual-skills-refresher"
-                          element={<AnnualSkillsRefresherPage />}
                         />
                         <Route
                           path="/courses/oxygen-therapy"

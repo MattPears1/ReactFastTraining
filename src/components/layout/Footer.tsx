@@ -23,10 +23,6 @@ const footerLinks = {
     },
     { label: "Activity First Aid", href: "/courses/activity-first-aid" },
     { label: "CPR and AED", href: "/courses/cpr-aed" },
-    {
-      label: "Annual Skills Refresher",
-      href: "/courses/annual-skills-refresher",
-    },
     { label: "Oxygen Therapy Course", href: "/courses/oxygen-therapy" },
   ],
   support: [
@@ -140,7 +136,7 @@ const Footer: React.FC = () => {
               Courses
             </Link>
             <Link
-              to="/booking"
+              to="/contact"
               className="text-gray-600 dark:text-gray-400 hover:text-primary-600 dark:hover:text-primary-400 transition-colors"
             >
               Book Now

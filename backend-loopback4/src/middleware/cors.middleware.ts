@@ -15,8 +15,10 @@ export const corsMiddleware: Middleware = async (
     'https://reactfasttraining.co.uk',
     'http://localhost:5173', // Vite dev server
     'http://localhost:3000', // React dev server fallback
+    'http://localhost:3004', // Alternative dev server port
     'http://127.0.0.1:5173',
-    'http://127.0.0.1:3000'
+    'http://127.0.0.1:3000',
+    'http://127.0.0.1:3004'
   ];
   
   const origin = request.headers.origin as string;

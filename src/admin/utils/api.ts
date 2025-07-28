@@ -11,10 +11,8 @@ export async function adminFetch(
   url: string,
   options: FetchOptions = {},
 ): Promise<Response> {
-  // Get the API base URL - use relative in production
-  const apiUrl = import.meta.env.PROD
-    ? ""
-    : import.meta.env.VITE_API_URL || "http://localhost:3000";
+  // Always use relative URLs to leverage Vite proxy in development
+  const apiUrl = "";
 
   // Ensure URL starts with /
   const normalizedUrl = url.startsWith("/") ? url : `/${url}`;

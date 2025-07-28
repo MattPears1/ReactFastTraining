@@ -37,10 +37,8 @@ class AdminAuthService {
   private isRefreshing = false;
 
   constructor() {
-    // Use relative URL in production, localhost in development
-    const baseURL = import.meta.env.PROD
-      ? ""
-      : import.meta.env.VITE_API_URL || "http://localhost:3000";
+    // Always use relative URLs to leverage Vite proxy in development
+    const baseURL = "";
     console.log(
       "🌐 [AdminAuthService] Using backend URL:",
       baseURL || "relative URLs",

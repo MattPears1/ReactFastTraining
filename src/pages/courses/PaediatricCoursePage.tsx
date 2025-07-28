@@ -5,7 +5,7 @@ const PaediatricCoursePage: React.FC = () => {
   const courseData = {
     courseName: "Paediatric First Aid",
     courseAcronym: "PFA",
-    duration: "1 Day",
+    duration: "2 Days",
     price: "£120",
     certificateValidity: "Valid for 3 years",
     description:

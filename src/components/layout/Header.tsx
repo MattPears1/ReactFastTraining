@@ -32,10 +32,6 @@ const navItems: NavItem[] = [
       },
       { label: "Activity First Aid", href: "/courses/activity-first-aid" },
       { label: "CPR and AED", href: "/courses/cpr-aed" },
-      {
-        label: "Annual Skills Refresher",
-        href: "/courses/annual-skills-refresher",
-      },
       { label: "Oxygen Therapy", href: "/courses/oxygen-therapy" },
     ],
   },
@@ -127,17 +123,19 @@ const Header: React.FC = () => {
             </Link>
 
             {/* Desktop Navigation */}
-            <div className="hidden lg:flex items-center space-x-4 xl:space-x-6 2xl:space-x-8">
+            <div className="hidden lg:flex items-center space-x-2">
               {navItems.map((item) => (
                 <div key={item.label} className="relative">
                   {item.label === "Courses" ? (
                     <button
                       onClick={() => setShowCoursesModal(true)}
                       className={cn(
-                        "flex items-center space-x-1 text-sm font-medium transition-colors",
+                        "px-4 py-2 rounded-lg text-sm font-medium transition-all duration-300",
+                        "backdrop-blur-sm bg-white/10 dark:bg-gray-800/20",
+                        "border border-gray-200/30 dark:border-gray-700/30",
                         isActive(item.href)
-                          ? "text-primary-600 dark:text-primary-400"
-                          : "text-gray-700 dark:text-gray-300 hover:text-primary-600 dark:hover:text-primary-400",
+                          ? "bg-gradient-to-r from-secondary-500/20 to-accent-500/20 border-secondary-500/50 dark:border-accent-500/50 text-gray-900 dark:text-white shadow-lg"
+                          : "hover:bg-white/20 dark:hover:bg-gray-800/30 hover:border-gray-300/50 dark:hover:border-gray-600/50 text-gray-700 dark:text-gray-300",
                       )}
                       aria-label="View courses"
                     >
@@ -147,10 +145,12 @@ const Header: React.FC = () => {
                     <Link
                       to={item.href}
                       className={cn(
-                        "text-sm font-medium transition-colors",
+                        "inline-block px-4 py-2 rounded-lg text-sm font-medium transition-all duration-300",
+                        "backdrop-blur-sm bg-white/10 dark:bg-gray-800/20",
+                        "border border-gray-200/30 dark:border-gray-700/30",
                         isActive(item.href)
-                          ? "text-primary-600 dark:text-primary-400"
-                          : "text-gray-700 dark:text-gray-300 hover:text-primary-600 dark:hover:text-primary-400",
+                          ? "bg-gradient-to-r from-secondary-500/20 to-accent-500/20 border-secondary-500/50 dark:border-accent-500/50 text-gray-900 dark:text-white shadow-lg"
+                          : "hover:bg-white/20 dark:hover:bg-gray-800/30 hover:border-gray-300/50 dark:hover:border-gray-600/50 text-gray-700 dark:text-gray-300",
                       )}
                     >
                       {item.label}
@@ -184,13 +184,6 @@ const Header: React.FC = () => {
                 )}
               </button>
 
-              {/* CTA Button */}
-              <Link
-                to="/booking"
-                className="hidden sm:inline-flex btn btn-primary btn-yorkshire shadow-blue text-sm lg:text-base px-3 py-2 lg:px-4 lg:py-2.5"
-              >
-                Book Course
-              </Link>
 
               {/* Mobile Menu Toggle */}
               <button
@@ -252,10 +245,11 @@ const Header: React.FC = () => {
                             setShowCoursesModal(true);
                           }}
                           className={cn(
-                            "w-full flex items-center justify-between py-4 px-4 -mx-4 text-base sm:text-lg font-medium transition-colors rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 min-h-[56px] mobile-nav-item",
+                            "w-full flex items-center justify-between py-4 px-4 text-base sm:text-lg font-medium transition-all duration-300 rounded-lg min-h-[56px] mobile-nav-item",
+                            "backdrop-blur-sm border",
                             isActive(item.href)
-                              ? "text-primary-600 dark:text-primary-400"
-                              : "text-gray-700 dark:text-gray-300",
+                              ? "bg-gradient-to-r from-secondary-500/10 to-accent-500/10 border-secondary-500/30 dark:border-accent-500/30 text-gray-900 dark:text-white"
+                              : "bg-gray-50/50 dark:bg-gray-800/50 border-gray-200/50 dark:border-gray-700/50 hover:bg-gray-100/70 dark:hover:bg-gray-700/70 text-gray-700 dark:text-gray-300",
                           )}
                         >
                           <span>{item.label}</span>
@@ -264,10 +258,11 @@ const Header: React.FC = () => {
                         <Link
                           to={item.href}
                           className={cn(
-                            "block py-4 px-4 -mx-4 text-base sm:text-lg font-medium transition-colors rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 min-h-[56px] flex items-center mobile-nav-item",
+                            "block py-4 px-4 text-base sm:text-lg font-medium transition-all duration-300 rounded-lg min-h-[56px] flex items-center mobile-nav-item",
+                            "backdrop-blur-sm border",
                             isActive(item.href)
-                              ? "text-primary-600 dark:text-primary-400"
-                              : "text-gray-700 dark:text-gray-300",
+                              ? "bg-gradient-to-r from-secondary-500/10 to-accent-500/10 border-secondary-500/30 dark:border-accent-500/30 text-gray-900 dark:text-white"
+                              : "bg-gray-50/50 dark:bg-gray-800/50 border-gray-200/50 dark:border-gray-700/50 hover:bg-gray-100/70 dark:hover:bg-gray-700/70 text-gray-700 dark:text-gray-300",
                           )}
                         >
                           {item.label}
@@ -277,14 +272,6 @@ const Header: React.FC = () => {
                   ))}
                 </div>
 
-                <div className="mt-6 sm:mt-8 pt-6 sm:pt-8 border-t border-gray-200 dark:border-gray-700">
-                  <Link
-                    to="/booking"
-                    className="btn btn-primary w-full text-center min-h-[52px] flex items-center justify-center text-lg font-semibold"
-                  >
-                    Book Course
-                  </Link>
-                </div>
               </div>
             </motion.nav>
           </>

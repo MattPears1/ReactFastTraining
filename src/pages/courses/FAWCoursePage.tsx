@@ -5,7 +5,7 @@ const FAWCoursePage: React.FC = () => {
   const courseData = {
     courseName: "First Aid at Work",
     courseAcronym: "FAW",
-    duration: "1 Day",
+    duration: "3 Days",
     price: "£200",
     certificateValidity: "Valid for 3 years",
     description:

@@ -23,7 +23,7 @@ const courses: Course[] = [
   {
     label: "First Aid at Work",
     href: "/courses/faw",
-    duration: "1 Day",
+    duration: "3 Days",
     description:
       "Comprehensive first aid training for appointed workplace first aiders",
     icon: "🏥",
@@ -31,14 +31,14 @@ const courses: Course[] = [
   {
     label: "Paediatric First Aid",
     href: "/courses/paediatric",
-    duration: "1 Day",
+    duration: "2 Days",
     description: "Specialized first aid for those working with children",
     icon: "👶",
   },
   {
     label: "Emergency Paediatric First Aid",
     href: "/courses/emergency-paediatric",
-    duration: "5 Hours",
+    duration: "1 Day",
     description: "Emergency first aid skills for childcare settings",
     icon: "🧸",
   },
@@ -57,16 +57,9 @@ const courses: Course[] = [
     icon: "❤️",
   },
   {
-    label: "Annual Skills Refresher",
-    href: "/courses/annual-skills-refresher",
-    duration: "3 Hours",
-    description: "Keep your first aid skills sharp and up-to-date",
-    icon: "📚",
-  },
-  {
     label: "Oxygen Therapy",
     href: "/courses/oxygen-therapy",
-    duration: "3 Hours",
+    duration: "1 Day",
     description: "Safe administration of emergency oxygen",
     icon: "💨",
   },
