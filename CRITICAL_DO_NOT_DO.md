@@ -34,6 +34,8 @@
 - **NO** File uploads to cloud services (S3, Google Cloud Storage)
 - **NO** Third-party cloud storage services
 - **NO** Any caching mechanisms that could serve outdated content
+- **NO** CORS configuration needed - Frontend and backend are served from the same domain
+- **NO** Cross-origin requests - Everything runs on the same origin
 
 ### 5. Business Representation
 - **NO** References to multiple instructors or staff - This is a SINGLE instructor business
@@ -141,3 +143,58 @@
 - **REASON**: If a course is full, it simply doesn't show as available
 - **REASON**: Customers should look for alternative dates themselves
 - **ALLOWED**: Only show available courses with open spaces
+
+## 🚀 PROJECT DEPLOYMENT SETUP
+
+### 15. Deployment Architecture
+- **FRONTEND & BACKEND**: Both served from the same Express.js server
+- **NO CORS NEEDED**: Everything runs on the same domain (reactfasttraining.co.uk)
+- **PRODUCTION URL**: https://react-fast-training-6fb9e7681eed.herokuapp.com/
+- **DOMAIN**: reactfasttraining.co.uk (will be pointed to Heroku app)
+- **SERVER**: Single Node.js/Express server serves both API and static frontend files
+- **BUILD PROCESS**: Frontend is built with Vite and served as static files
+- **API ROUTES**: All API endpoints are under /api/* path
+- **STATIC FILES**: Frontend build files served from /dist directory
+- **NO SEPARATE SERVERS**: Do not create separate frontend/backend deployments
+- **NO MICROSERVICES**: Single monolithic application
+- **NO API GATEWAY**: Direct API access from same origin
+
+### 16. Security Configuration
+- **SESSION COOKIES**: Same-site strict, HTTP-only, secure in production
+- **CSRF PROTECTION**: Enabled for all state-changing routes
+- **RATE LIMITING**: Applied to all API endpoints
+- **HELMET.JS**: Security headers configured for same-origin
+- **NO CORS HEADERS**: Not needed for same-origin deployment
+- **JWT TOKENS**: Used for admin authentication only
+- **REFRESH TOKENS**: HTTP-only cookies for token refresh
+
+### 17. Database Configuration
+- **DATABASE**: PostgreSQL on Heroku (Postgres Mini plan)
+- **CONNECTION**: Direct PostgreSQL client connection (no ORM for main backend)
+- **MIGRATIONS**: Knex.js migrations in backend-loopback4/src/database/migrations
+- **MAIN BACKEND**: Uses direct SQL queries with pg client
+- **LOOPBACK BACKEND**: Being phased out, uses Drizzle ORM
+- **CONNECTION POOLING**: Min 5, Max 20 connections
+- **SSL**: Required for production database connections
+- **NO DATABASE CACHING**: Direct queries only
+- **NO CONNECTION BOUNCING**: Direct connections to Heroku Postgres
+
+### 18. Email Configuration
+- **EMAIL SERVICE**: Configured with Nodemailer (ready for SendGrid/Mailgun)
+- **EMAIL ADDRESSES**:
+  - info@reactfasttraining.co.uk - General inquiries
+  - bookings@reactfasttraining.co.uk - Booking confirmations
+  - lex@reactfasttraining.co.uk - Instructor communications
+- **EMAIL QUEUE**: Database-backed email queue with worker process
+- **NO SMS**: Email only for all communications
+- **NO MARKETING EMAILS**: Transactional emails only
+
+### 19. File Structure
+- **MAIN SERVER**: /backend-loopback4/start-server.js (production server)
+- **FRONTEND BUILD**: /dist (built by Vite)
+- **API ENDPOINTS**: All under /api/* paths
+- **ADMIN ENDPOINTS**: /api/admin/* (JWT protected)
+- **PUBLIC API**: /api/bookings/*, /api/course-sessions/*
+- **STATIC SERVING**: Express.static serves frontend from /dist
+- **NO NGINX**: Direct Express serving only
+- **NO REVERSE PROXY**: Single server handles everything
