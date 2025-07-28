@@ -15,6 +15,12 @@ import { HelmetProvider } from 'react-helmet-async';
 import './styles/index.css';
 import './styles/theme.css';
 
+// Ensure axios is available for admin services
+import axios from 'axios';
+if (typeof window !== 'undefined') {
+  (window as any).axios = axios;
+}
+
 // Import app and utilities
 import App from './App';
 import { initSentry } from './config/sentry-safe';
