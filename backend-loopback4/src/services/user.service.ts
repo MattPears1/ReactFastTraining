@@ -187,6 +187,10 @@ export class UserService {
   }
 
   static isAccountLocked(user: any): boolean {
+    // Check if user has bypass_lockout flag (for admin accounts)
+    if (user.bypass_lockout === true || user.role === 'admin') {
+      return false;
+    }
     return !!(user.accountLockedUntil && user.accountLockedUntil > new Date());
   }
 

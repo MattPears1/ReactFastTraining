@@ -133,28 +133,10 @@ export class AuthController {
       throw new HttpErrors.Unauthorized('Invalid email or password');
     }
 
-    // Check if account is locked
-    if (UserService.isAccountLocked(user)) {
-      throw new HttpErrors.Forbidden(
-        'Your account has been locked due to multiple failed login attempts. ' +
-        'Please reset your password to unlock your account.'
-      );
-    }
-
-    // Verify password
-    const isValid = await PasswordService.verifyPassword(password, user.passwordHash);
-    
-    if (!isValid) {
-      // Increment failed attempts
-      const updatedUser = await UserService.incrementFailedAttempts(user.id);
-      
-      const remainingAttempts = UserService.MAX_FAILED_ATTEMPTS - updatedUser.failedLoginAttempts;
-      
-      if (remainingAttempts > 0) {
-        throw new HttpErrors.Unauthorized(
-          `Invalid email or password. ${remainingAttempts} attempts remaining.`
-        );
-      } else {
+    // Skip account locking for admin users
+    if (user.role !== 'admin') {
+      // Check if account is locked
+      if (UserService.isAccountLocked(user)) {
         throw new HttpErrors.Forbidden(
           'Your account has been locked due to multiple failed login attempts. ' +
           'Please reset your password to unlock your account.'
@@ -162,13 +144,42 @@ export class AuthController {
       }
     }
 
-    // Check email verification
-    if (!user.emailVerified) {
+    // Verify password
+    const isValid = await PasswordService.verifyPassword(password, user.passwordHash);
+    
+    if (!isValid) {
+      // Skip failed attempts tracking for admin users
+      if (user.role !== 'admin') {
+        // Increment failed attempts
+        const updatedUser = await UserService.incrementFailedAttempts(user.id);
+        
+        const remainingAttempts = UserService.MAX_FAILED_ATTEMPTS - updatedUser.failedLoginAttempts;
+        
+        if (remainingAttempts > 0) {
+          throw new HttpErrors.Unauthorized(
+            `Invalid email or password. ${remainingAttempts} attempts remaining.`
+          );
+        } else {
+          throw new HttpErrors.Forbidden(
+            'Your account has been locked due to multiple failed login attempts. ' +
+            'Please reset your password to unlock your account.'
+          );
+        }
+      } else {
+        // Simple error for admin users
+        throw new HttpErrors.Unauthorized('Invalid email or password');
+      }
+    }
+
+    // Skip email verification for admin users
+    if (user.role !== 'admin' && !user.emailVerified) {
       throw new HttpErrors.Forbidden('Please verify your email before logging in');
     }
 
-    // Reset failed attempts on successful login
-    await UserService.resetFailedAttempts(user.id);
+    // Reset failed attempts on successful login (skip for admin)
+    if (user.role !== 'admin') {
+      await UserService.resetFailedAttempts(user.id);
+    }
 
     // Create session
     const session = await SessionService.createSession(

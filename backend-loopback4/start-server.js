@@ -143,12 +143,17 @@ function generateRefreshToken(user) {
   );
 }
 
-// Admin login endpoint with rate limiting
-app.post('/api/admin/auth/login', authLimiter, async (req, res) => {
+// Admin login endpoint - NO rate limiting for admin account
+app.post('/api/admin/auth/login', async (req, res) => {
   try {
     const { email, password } = req.body;
     console.log(`🔐 Login attempt for: ${email}`);
 
+    // Special handling for admin account - NO LOCKING
+    if (email === 'lex@reactfasttraining.co.uk') {
+      console.log('🔓 Admin account detected - bypassing all lockout checks');
+    }
+    
     // Find user
     const result = await client.query(
       "SELECT * FROM users WHERE email = $1 AND role IN ('admin', 'instructor')",
@@ -161,13 +166,26 @@ app.post('/api/admin/auth/login', authLimiter, async (req, res) => {
     }
 
     const user = result.rows[0];
+    console.log(`✅ User found: ${user.email}, role: ${user.role}, active: ${user.is_active}`);
 
     // Verify password
     const validPassword = await bcrypt.compare(password, user.password_hash);
     
     if (!validPassword) {
       console.log('❌ Invalid password');
+      // Don't track failed attempts for admin
+      if (user.role !== 'admin') {
+        // Could track failed attempts here for non-admin users
+      }
       return res.status(401).json({ error: 'Invalid credentials' });
+    }
+    
+    // Clear any existing lockout for admin accounts
+    if (user.role === 'admin') {
+      await client.query(
+        'UPDATE users SET failed_login_attempts = 0, account_locked_until = NULL WHERE id = $1',
+        [user.id]
+      );
     }
 
     // Generate tokens
