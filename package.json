@@ -42,7 +42,8 @@
     "migrate:prod": "cd backend && npm run migrate:prod",
     "worker:prod": "cd backend && npm run worker:prod",
     "heroku-prebuild": "echo Disabling Heroku cache && rm -rf node_modules && npm cache clean --force",
-    "heroku-postbuild": "npm run build:prod && cd backend-loopback4 && npm run heroku-postbuild",
+    "heroku-postbuild": "npm run build:simple && cd backend-loopback4 && npm run heroku-postbuild",
+    "build:simple": "npm run version:bump && npm run version:inject && vite build --config vite.config.simple.ts --mode production",
     "start:backend": "cd backend-loopback4 && npm start",
     "build:backend": "cd backend-loopback4 && npm run build"
   },
