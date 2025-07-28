@@ -63,8 +63,7 @@ export default defineConfig({
         manualChunks(id) {
           if (id.includes('node_modules')) {
             // Core React dependencies - keep react and react-dom together
-            if (id.includes('/react/') || id.includes('\\react\\') || 
-                id.includes('/react-dom/') || id.includes('\\react-dom\\')) {
+            if (id.includes('react') && !id.includes('react-router') && !id.includes('react-hook-form') && !id.includes('react-helmet')) {
               return 'react-vendor';
             }
             
@@ -112,7 +111,7 @@ export default defineConfig({
     minify: 'terser',
     terserOptions: {
       compress: {
-        drop_console: true,
+        drop_console: false, // Keep console logs for debugging
         drop_debugger: true,
       },
     },

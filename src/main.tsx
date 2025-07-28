@@ -1,3 +1,5 @@
+console.log("[main.tsx] Starting application...");
+
 import React from "react";
 import ReactDOM from "react-dom/client";
 import { BrowserRouter } from "react-router-dom";
@@ -6,11 +8,14 @@ import { HelmetProvider } from "react-helmet-async";
 import App from "./App";
 import "./styles/index.css";
 import "./styles/theme.css";
-import { initSentry } from "./config/sentry";
+import { initSentry } from "./config/sentry-safe";
+
+console.log("[main.tsx] Imports completed. React version:", React.version);
 
 // Initialize Sentry before rendering the app
-// Temporarily disabled to debug blank page issue
-// initSentry()
+initSentry();
+
+console.log("[main.tsx] Creating QueryClient...");
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -35,16 +40,22 @@ const queryClient = new QueryClient({
   },
 });
 
+console.log("[main.tsx] QueryClient created. Looking for root element...");
+
 const rootElement = document.getElementById("root");
-console.log("Root element:", rootElement);
+console.log("[main.tsx] Root element:", rootElement);
 
 if (!rootElement) {
-  console.error("Root element not found!");
+  console.error("[main.tsx] Root element not found!");
   document.body.innerHTML =
     '<div style="color: red; padding: 20px;">Error: Root element not found!</div>';
 } else {
   try {
-    ReactDOM.createRoot(rootElement).render(
+    console.log("[main.tsx] Creating React root...");
+    const root = ReactDOM.createRoot(rootElement);
+    console.log("[main.tsx] React root created. Rendering app...");
+    
+    root.render(
       <React.StrictMode>
         <HelmetProvider>
           <QueryClientProvider client={queryClient}>
@@ -60,9 +71,10 @@ if (!rootElement) {
         </HelmetProvider>
       </React.StrictMode>,
     );
-    console.log("React app rendered successfully");
+    console.log("[main.tsx] React app rendered successfully");
   } catch (error) {
-    console.error("Error rendering app:", error);
-    rootElement.innerHTML = `<div style="color: red; padding: 20px;">Error rendering app: ${error}</div>`;
+    console.error("[main.tsx] Error rendering app:", error);
+    console.error("[main.tsx] Error stack:", (error as Error).stack);
+    rootElement.innerHTML = `<div style="color: red; padding: 20px;">Error rendering app: ${error}<br><pre>${(error as Error).stack}</pre></div>`;
   }
 }

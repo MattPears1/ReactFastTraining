@@ -600,8 +600,15 @@ app.get('/api/testimonials/approved', (req, res) => {
     );
   }
   
-  // Apply sorting
-  if (req.query.sort === 'rating') {
+  // Check for featured filter
+  if (req.query.featured === 'true') {
+    // Prioritize featured testimonials, then highest rated
+    approvedTestimonials.sort((a, b) => {
+      if (a.status === 'featured' && b.status !== 'featured') return -1;
+      if (b.status === 'featured' && a.status !== 'featured') return 1;
+      return b.rating - a.rating;
+    });
+  } else if (req.query.sort === 'rating') {
     approvedTestimonials.sort((a, b) => b.rating - a.rating);
   } else {
     // Default to recent
@@ -610,7 +617,20 @@ app.get('/api/testimonials/approved', (req, res) => {
     );
   }
   
-  res.json({ testimonials: approvedTestimonials });
+  // Apply limit if specified
+  const limit = req.query.limit ? parseInt(req.query.limit) : approvedTestimonials.length;
+  const limitedTestimonials = approvedTestimonials.slice(0, limit);
+  
+  // Calculate average rating
+  const averageRating = approvedTestimonials.length > 0
+    ? approvedTestimonials.reduce((acc, t) => acc + t.rating, 0) / approvedTestimonials.length
+    : 0;
+  
+  res.json({ 
+    testimonials: limitedTestimonials,
+    averageRating: averageRating,
+    totalCount: approvedTestimonials.length
+  });
 });
 
 // Submit new testimonial

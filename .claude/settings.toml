@@ -161,6 +161,119 @@ command = """echo \"🔔 Claude Code Notification at $(date '+%H:%M:%S')\""""
 run_in_background = true
 description = "Notification timestamp"
 
+# Business Logic Validators
+[[hooks]]
+event = "PostToolUse"
+# GDPR compliance checker
+[hooks.matcher]
+tool_name = ["Edit", "MultiEdit", "Write"]
+file_paths = ["**/components/booking/**", "**/components/auth/**", "**/components/contact/**", "**/admin/features/users/**"]
+command = "$CLAUDE_PROJECT_DIR/.claude/hooks/gdpr-compliance-check.py"
+run_in_background = false
+timeout = 10000
+description = "GDPR compliance validation"
+
+[[hooks]]
+event = "PostToolUse"
+# Booking capacity validator
+[hooks.matcher]
+tool_name = ["Edit", "MultiEdit", "Write"]
+file_paths = ["**/booking/**", "**/session/**", "**/schedule/**", "**/capacity/**"]
+command = "$CLAUDE_PROJECT_DIR/.claude/hooks/booking-capacity-validator.sh"
+run_in_background = true
+timeout = 15000
+description = "Booking capacity and business rules validation"
+
+[[hooks]]
+event = "PostToolUse"
+# Certificate template validator
+[hooks.matcher]
+tool_name = ["Edit", "MultiEdit", "Write"]
+file_paths = ["**/certificate/**", "**/cert/**", "**/completion/**", "**/attendee/**"]
+command = "$CLAUDE_PROJECT_DIR/.claude/hooks/certificate-template-validator.py"
+run_in_background = false
+timeout = 10000
+description = "Certificate compliance validation"
+
+[[hooks]]
+event = "PreToolUse"
+# Database migration validator
+[hooks.matcher]
+tool_name = ["Edit", "MultiEdit", "Write"]
+file_paths = ["**/migrations/**", "**/migration/**", "**/*.migration.*", "**/schema.*"]
+command = "$CLAUDE_PROJECT_DIR/.claude/hooks/database-migration-validator.sh"
+run_in_background = false
+timeout = 15000
+description = "Database migration safety validation"
+
+# UI/UX Consistency Validators
+[[hooks]]
+event = "PostToolUse"
+# Design system enforcer
+[hooks.matcher]
+tool_name = ["Edit", "MultiEdit", "Write"]
+file_paths = ["**/*.tsx", "**/*.jsx", "**/*.css", "**/*.scss"]
+command = "$CLAUDE_PROJECT_DIR/.claude/hooks/design-system-enforcer.py"
+run_in_background = true
+timeout = 20000
+description = "Design system consistency enforcement"
+
+[[hooks]]
+event = "PostToolUse"
+# Mobile responsiveness checker
+[hooks.matcher]
+tool_name = ["Edit", "MultiEdit", "Write"]
+file_paths = ["**/*.tsx", "**/*.jsx", "**/*.css"]
+command = "$CLAUDE_PROJECT_DIR/.claude/hooks/mobile-responsiveness-checker.sh"
+run_in_background = true
+timeout = 15000
+description = "Mobile-first design validation"
+
+[[hooks]]
+event = "PostToolUse"
+# Loading state validator
+[hooks.matcher]
+tool_name = ["Edit", "MultiEdit", "Write"]
+file_paths = ["**/*.tsx", "**/*.jsx"]
+command = "$CLAUDE_PROJECT_DIR/.claude/hooks/loading-state-validator.py"
+run_in_background = true
+timeout = 10000
+description = "Async operation loading state validation"
+
+[[hooks]]
+event = "PostToolUse"
+# Form validation consistency
+[hooks.matcher]
+tool_name = ["Edit", "MultiEdit", "Write"]
+file_paths = ["**/form/**", "**/Form.tsx", "**/Form.jsx", "**/*Form.tsx", "**/*Form.jsx"]
+command = "$CLAUDE_PROJECT_DIR/.claude/hooks/form-validation-consistency.py"
+run_in_background = true
+timeout = 10000
+description = "Form validation pattern consistency"
+
+# Business Rules Validators
+[[hooks]]
+event = "PostToolUse"
+# Pricing and course duration validator
+[hooks.matcher]
+tool_name = ["Edit", "MultiEdit", "Write"]
+file_paths = ["**/*.ts", "**/*.tsx", "**/*.js", "**/*.jsx"]
+command = "$CLAUDE_PROJECT_DIR/.claude/hooks/pricing-course-validator.py"
+run_in_background = true
+timeout = 10000
+description = "Pricing consistency and course duration validation"
+
+[[hooks]]
+event = "PreToolUse"
+# Payment security validator
+[hooks.matcher]
+tool_name = ["Edit", "MultiEdit", "Write"]
+file_paths = ["**/payment/**", "**/checkout/**", "**/billing/**", "**/stripe/**", "**/card/**"]
+command = "$CLAUDE_PROJECT_DIR/.claude/hooks/payment-security-validator.py"
+run_in_background = false
+timeout = 10000
+description = "PCI DSS compliance and payment security"
+
 # Stop Hooks - Cleanup
 [[hooks]]
 event = "Stop"

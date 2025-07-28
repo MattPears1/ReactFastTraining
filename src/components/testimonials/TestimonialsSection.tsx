@@ -30,9 +30,10 @@ export const TestimonialsSection: React.FC<TestimonialsSectionProps> = ({
       );
       const data = await response.json();
 
-      setTestimonials(data.testimonials);
-      setAverageRating(data.averageRating);
-      setTotalCount(data.totalCount);
+      // Ensure testimonials is an array
+      setTestimonials(data.testimonials || []);
+      setAverageRating(data.averageRating || 0);
+      setTotalCount(data.totalCount || 0);
     } catch (error) {
       console.error("Failed to fetch testimonials:", error);
       // Use mock data in development
@@ -45,13 +46,17 @@ export const TestimonialsSection: React.FC<TestimonialsSectionProps> = ({
   };
 
   const nextTestimonial = () => {
-    setCurrentIndex((prev) => (prev + 1) % testimonials.length);
+    if (testimonials.length > 0) {
+      setCurrentIndex((prev) => (prev + 1) % testimonials.length);
+    }
   };
 
   const previousTestimonial = () => {
-    setCurrentIndex(
-      (prev) => (prev - 1 + testimonials.length) % testimonials.length,
-    );
+    if (testimonials.length > 0) {
+      setCurrentIndex(
+        (prev) => (prev - 1 + testimonials.length) % testimonials.length,
+      );
+    }
   };
 
   if (loading) {
