@@ -50,6 +50,31 @@ export class ReactFastTrainingApiApplication extends BootMixin(
       require('./services/course-session-capacity.service').CourseSessionCapacityService,
     );
     
+    // Bind EmailService
+    this.bind('services.EmailService').toClass(
+      require('./services/email.service').EmailService,
+    );
+    
+    // Bind UserManagementService
+    this.bind('services.UserManagementService').toClass(
+      require('./services/user-management.service').UserManagementService,
+    );
+    
+    // Bind ActivityLogService
+    this.bind('services.ActivityLogService').toClass(
+      require('./services/activity-log.service').ActivityLogService,
+    );
+    
+    // Bind PaymentManagementService
+    this.bind('services.PaymentManagementService').toClass(
+      require('./services/payment-management.service').PaymentManagementService,
+    );
+    
+    // Bind WebSocketService
+    this.bind('services.WebSocketService').toClass(
+      require('./services/websocket.service').WebSocketService,
+    );
+    
     // Bind admin services
     this.bind('services.JWTService').toClass(
       require('./services/jwt.service').JWTService,

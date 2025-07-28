@@ -12,8 +12,8 @@ import {
 import { adminDashboardService } from "../../services/admin-dashboard.service";
 import { MetricCard } from "../../components/common/MetricCard";
 import { AdminCard } from "../../components/ui/AdminCard";
-import { RevenueChart } from "./components/RevenueChart";
-import { BookingStatusChart } from "./components/BookingStatusChart";
+import { RevenueChartJS } from "./components/RevenueChartJS";
+import { BookingStatusChartJS } from "./components/BookingStatusChartJS";
 import { UpcomingSchedules } from "./components/UpcomingSchedules";
 import { RecentActivity } from "./components/RecentActivity";
 import { LoadingSpinner } from "../../components/common/LoadingSpinner";
@@ -111,7 +111,7 @@ export const DashboardPage: React.FC = () => {
           icon={TrendingUp}
           iconColor="success"
         >
-          <RevenueChart data={dashboardData?.revenueData || []} />
+          <RevenueChartJS data={dashboardData?.revenueData || []} />
         </AdminCard>
 
         <AdminCard
@@ -120,7 +120,7 @@ export const DashboardPage: React.FC = () => {
           icon={PoundSterling}
           iconColor="primary"
         >
-          <BookingStatusChart data={dashboardData?.bookingStatus || []} />
+          <BookingStatusChartJS data={dashboardData?.bookingStatus || []} />
         </AdminCard>
       </div>
 

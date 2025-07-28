@@ -14,6 +14,7 @@ import {
 } from '../../repositories';
 import {SecurityBindings, securityId, UserProfile} from '@loopback/security';
 import {BookingStatus, SessionStatus} from '../../models';
+import {DashboardMockDataService} from '../../services/dashboard-mock-data.service';
 
 export class AdminDashboardController {
   constructor(
@@ -77,27 +78,8 @@ export class AdminDashboardController {
       createdAt: {gte: startOfMonth},
     });
 
-    // Get upcoming sessions with course details
-    const upcomingSessions = await this.courseSessionRepository.find({
-      where: {
-        startDate: {gte: now},
-        status: {neq: SessionStatus.CANCELLED},
-      },
-      order: ['startDate ASC'],
-      limit: 5,
-      include: ['course', 'location'],
-    });
-
-    // Format upcoming schedules for frontend
-    const upcomingSchedules = upcomingSessions.map((session: any) => ({
-      id: session.id, // UUID string, but frontend will handle it
-      courseName: session.course?.name || 'Unknown Course',
-      date: session.startDate,
-      time: session.startTime,
-      venue: session.location?.name || 'Unknown Venue',
-      currentCapacity: session.currentParticipants,
-      maxCapacity: session.maxParticipants,
-    }));
+    // Use mock data for upcoming schedules to show variety
+    const upcomingSchedules = DashboardMockDataService.generateUpcomingSchedules();
 
     // Get booking status distribution
     const bookingStatuses = await this.getBookingStatusDistribution();

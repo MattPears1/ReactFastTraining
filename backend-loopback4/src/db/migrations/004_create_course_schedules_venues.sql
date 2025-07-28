@@ -27,10 +27,10 @@ CREATE TABLE IF NOT EXISTS course_schedules (
 
 -- Insert default venues
 INSERT INTO venues (name, code, address, city, postcode) VALUES 
-  ('Leeds City Centre', 'LEEDS_CITY', '123 Main Street, Leeds', 'Leeds', 'LS1 1AA'),
-  ('Sheffield Training Centre', 'SHEFFIELD', '456 High Street, Sheffield', 'Sheffield', 'S1 2BB'),
-  ('Bradford Business Park', 'BRADFORD', '789 Business Road, Bradford', 'Bradford', 'BD1 3CC'),
-  ('York Community Hall', 'YORK', '321 Market Square, York', 'York', 'YO1 4DD')
+  ('Location 1', 'LOCATION_1', 'Further location information to be announced', 'TBA', 'TBA'),
+  ('Location 2', 'LOCATION_2', 'Further location information to be announced', 'TBA', 'TBA'),
+  ('Location 3', 'LOCATION_3', 'Further location information to be announced', 'TBA', 'TBA'),
+  ('Location 4', 'LOCATION_4', 'Further location information to be announced', 'TBA', 'TBA')
 ON CONFLICT DO NOTHING;
 
 -- Create indexes
