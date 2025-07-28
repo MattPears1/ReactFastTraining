@@ -2215,6 +2215,23 @@ app.get('/api/admin/bookings-temp', async (req, res) => {
   }
 });
 
+// Testimonials endpoint (temporary mock)
+app.get('/api/testimonials/approved', async (req, res) => {
+  try {
+    const { limit = 10, featured } = req.query;
+    
+    // Return mock data for now
+    res.json({
+      testimonials: [],
+      averageRating: 4.8,
+      totalCount: 0
+    });
+  } catch (error) {
+    console.error('Testimonials error:', error);
+    res.status(500).json({ error: 'Failed to fetch testimonials' });
+  }
+});
+
 // Payment intent endpoint
 app.post('/api/bookings/create-payment-intent', async (req, res) => {
   try {

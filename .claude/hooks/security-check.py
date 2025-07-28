@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """
-Security checker for React Fast Training project
-Validates file modifications against security rules
+Enhanced security checker for React Fast Training project
+Validates file modifications against comprehensive security rules
 """
 
 import json
@@ -9,27 +9,46 @@ import sys
 import re
 import os
 
-# Security patterns to check
+# Enhanced security patterns with better detection
 SENSITIVE_PATTERNS = {
     'api_keys': [
         r'api[_-]?key\s*[:=]\s*["\']?[a-zA-Z0-9]{20,}',
         r'apiKey\s*[:=]\s*["\']?[a-zA-Z0-9]{20,}',
+        r'X-API-Key["\']?\s*[:=]\s*["\']?[a-zA-Z0-9]{20,}',
+        r'VITE_[A-Z_]*API_KEY\s*[:=]\s*["\']?[a-zA-Z0-9]{20,}',
     ],
     'secrets': [
         r'secret\s*[:=]\s*["\']?[a-zA-Z0-9]{20,}',
         r'password\s*[:=]\s*["\']?[^"\'\s]{8,}',
         r'token\s*[:=]\s*["\']?[a-zA-Z0-9]{20,}',
+        r'jwt[_-]?secret\s*[:=]\s*["\']?[a-zA-Z0-9]{20,}',
+        r'refresh[_-]?token\s*[:=]\s*["\']?[a-zA-Z0-9]{20,}',
     ],
     'private_keys': [
         r'-----BEGIN\s+(?:RSA\s+)?PRIVATE\s+KEY-----',
         r'-----BEGIN\s+OPENSSH\s+PRIVATE\s+KEY-----',
+        r'-----BEGIN\s+EC\s+PRIVATE\s+KEY-----',
+        r'-----BEGIN\s+PGP\s+PRIVATE\s+KEY-----',
     ],
-    'aws_credentials': [
+    'cloud_credentials': [
         r'aws_access_key_id\s*=\s*[A-Z0-9]{20}',
         r'aws_secret_access_key\s*=\s*[a-zA-Z0-9/+=]{40}',
+        r'GOOGLE_APPLICATION_CREDENTIALS\s*[:=]',
+        r'AZURE_[A-Z_]*_KEY\s*[:=]\s*["\']?[a-zA-Z0-9]{20,}',
     ],
     'database_urls': [
-        r'(?:mongodb|postgres|mysql|redis)://[^:]+:[^@]+@[^/]+',
+        r'(?:mongodb|postgres|postgresql|mysql|redis)://[^:]+:[^@]+@[^/\s]+',
+        r'DATABASE_URL\s*[:=]\s*["\']?(?:mongodb|postgres|mysql)://[^"\'\s]+',
+    ],
+    'email_credentials': [
+        r'SENDGRID_API_KEY\s*[:=]\s*["\']?[a-zA-Z0-9]{20,}',
+        r'MAILGUN_API_KEY\s*[:=]\s*["\']?[a-zA-Z0-9]{20,}',
+        r'smtp[_-]?password\s*[:=]\s*["\']?[^"\'\s]{8,}',
+    ],
+    'stripe_keys': [
+        r'sk_live_[a-zA-Z0-9]{24,}',
+        r'rk_live_[a-zA-Z0-9]{24,}',
+        r'STRIPE_SECRET_KEY\s*[:=]\s*["\']?sk_[a-zA-Z0-9]{24,}',
     ]
 }
 

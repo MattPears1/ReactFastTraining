@@ -1,0 +1,150 @@
+# Claude Code Settings - React Fast Training Project
+# Enhanced hooks configuration based on Claude Code best practices
+
+# Pre-Tool Use Hooks - Run before tools execute
+[[hooks]]
+event = "PreToolUse"
+# Enhanced security check for all file modifications
+[hooks.matcher]
+tool_name = ["Edit", "MultiEdit", "Write"]
+command = "$CLAUDE_PROJECT_DIR/.claude/hooks/security-check.py"
+timeout = 10000
+description = "Security validation for file modifications"
+
+[[hooks]]
+event = "PreToolUse"
+# Block modifications to critical files
+[hooks.matcher]
+tool_name = ["Edit", "MultiEdit", "Write"]
+file_paths = ["**/package-lock.json", "**/yarn.lock", "**/.env*", "**/secrets/**"]
+command = "echo '❌ BLOCKED: Cannot modify protected file' && exit 1"
+description = "Block protected file modifications"
+
+[[hooks]]
+event = "PreToolUse"
+# Validate TypeScript syntax before editing
+[hooks.matcher]
+tool_name = ["Edit", "MultiEdit", "Write"]
+file_paths = ["*.ts", "*.tsx"]
+command = "cd $CLAUDE_PROJECT_DIR && npx tsc --noEmit --skipLibCheck $CLAUDE_FILE_PATHS 2>&1 | head -10 || true"
+run_in_background = true
+timeout = 30000
+description = "TypeScript syntax validation"
+
+# Post-Tool Use Hooks - Run after tools complete
+[[hooks]]
+event = "PostToolUse"
+# Auto-format TypeScript/JavaScript files
+[hooks.matcher]
+tool_name = ["Edit", "MultiEdit", "Write"]
+file_paths = ["*.ts", "*.tsx", "*.js", "*.jsx"]
+command = "cd $CLAUDE_PROJECT_DIR && npx prettier --write $CLAUDE_FILE_PATHS --log-level error 2>/dev/null || true"
+run_in_background = true
+timeout = 15000
+description = "Prettier auto-formatting"
+
+[[hooks]]
+event = "PostToolUse"
+# Run ESLint with auto-fix
+[hooks.matcher]
+tool_name = ["Edit", "MultiEdit", "Write"]
+file_paths = ["src/**/*.ts", "src/**/*.tsx", "src/**/*.js", "src/**/*.jsx"]
+command = """cd $CLAUDE_PROJECT_DIR && \
+npx eslint $CLAUDE_FILE_PATHS --fix --quiet 2>&1 | \
+grep -E '(error|warning)' | head -10 || echo '✅ ESLint: No issues found'"""
+run_in_background = true
+timeout = 20000
+description = "ESLint validation and auto-fix"
+
+[[hooks]]
+event = "PostToolUse"
+# Run related tests for modified files
+[hooks.matcher]
+tool_name = ["Edit", "MultiEdit", "Write"]
+file_paths = ["src/**/*.ts", "src/**/*.tsx", "src/**/*.js", "src/**/*.jsx"]
+command = "$CLAUDE_PROJECT_DIR/.claude/hooks/test-runner.sh"
+run_in_background = true
+timeout = 60000
+description = "Automated test execution"
+
+[[hooks]]
+event = "PostToolUse"
+# CSS/Tailwind validation
+[hooks.matcher]
+tool_name = ["Edit", "MultiEdit", "Write"]
+file_paths = ["*.css", "*.scss", "*.tsx", "*.jsx"]
+command = """cd $CLAUDE_PROJECT_DIR && \
+npx tailwindcss --no-autoprefixer -i ./src/styles/globals.css -o /tmp/tailwind-check.css 2>&1 | \
+grep -E '(warn|error)' | head -5 || echo '✅ Tailwind: Valid'"""
+run_in_background = true
+timeout = 10000
+description = "Tailwind CSS validation"
+
+[[hooks]]
+event = "PostToolUse"
+# Backend TypeScript validation for LoopBack
+[hooks.matcher]
+tool_name = ["Edit", "MultiEdit", "Write"]
+file_paths = ["backend-loopback4/**/*.ts"]
+command = """cd $CLAUDE_PROJECT_DIR/backend-loopback4 && \
+npm run build:check 2>&1 | grep -E '(error|ERROR)' | head -10 || echo '✅ Backend: Build check passed'"""
+run_in_background = true
+timeout = 30000
+description = "LoopBack backend validation"
+
+[[hooks]]
+event = "PostToolUse"
+# Git status check for large changes
+[hooks.matcher]
+tool_name = ["Edit", "MultiEdit"]
+file_paths = ["src/**/*", "backend-loopback4/**/*"]
+command = """cd $CLAUDE_PROJECT_DIR && \
+changed=$(git diff --numstat | wc -l) && \
+if [ $changed -gt 10 ]; then \
+  echo \"📝 $changed files modified - Consider committing: git add -p && git commit\"; \
+fi"""
+run_in_background = true
+description = "Git change notification"
+
+# User Prompt Submit Hooks
+[[hooks]]
+event = "UserPromptSubmit"
+command = """echo \"[$(date '+%Y-%m-%d %H:%M:%S')] Prompt: $(echo $CLAUDE_USER_PROMPT | head -c 100)...\" >> $CLAUDE_PROJECT_DIR/.claude/activity.log"""
+run_in_background = true
+description = "Activity logging"
+
+# Post Response Hooks
+[[hooks]]
+event = "PostResponse"
+command = """cd $CLAUDE_PROJECT_DIR && \
+status=$(git status --porcelain | wc -l) && \
+if [ $status -gt 0 ]; then \
+  echo \"📋 Git Status: $status uncommitted changes\"; \
+  git status --short | head -5; \
+fi"""
+run_in_background = false
+description = "Git status summary"
+
+[[hooks]]
+event = "PostResponse"
+# Memory usage check
+command = """echo \"💾 Memory: $(free -h | grep Mem | awk '{print $3 \"/\" $2}') | ⚡ Load: $(uptime | awk -F'load average:' '{print $2}')\""""
+run_in_background = true
+description = "System resource check"
+
+# Notification Hooks
+[[hooks]]
+event = "Notification"
+command = """echo \"🔔 Claude Code Notification at $(date '+%H:%M:%S')\""""
+run_in_background = true
+description = "Notification timestamp"
+
+# Stop Hooks - Cleanup
+[[hooks]]
+event = "Stop"
+command = """cd $CLAUDE_PROJECT_DIR && \
+echo \"🏁 Session ended. Summary:\" && \
+echo \"   Files modified: $(git diff --name-only | wc -l)\" && \
+echo \"   Lines changed: +$(git diff --numstat | awk '{sum+=$1} END {print sum}') -$(git diff --numstat | awk '{sum+=$2} END {print sum}')\""""
+run_in_background = false
+description = "Session summary"
