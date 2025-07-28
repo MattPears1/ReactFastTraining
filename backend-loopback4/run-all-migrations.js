@@ -46,6 +46,7 @@ async function runAllMigrations() {
           // Special handling for migrations that are partially applied or have issues
           const skipMigrations = [
             '001_enhance_users_table.sql', // Has issues with existing data
+            '001_enhance_users_table_fixed.sql', // Skip old migrations
             '002_create_payment_system.sql',
             '002_enhance_payment_system.sql', 
             '003_booking_validation_system.sql', // Has schema mismatch issues
@@ -55,7 +56,9 @@ async function runAllMigrations() {
             '006_enhance_courses_system.sql', // May have conflicts
             '007_email_and_refund_system.sql', // Index already exists
             '007_add_audit_logging.sql', // Skip for now
+            '008_corporate_and_renewals.sql', // Index already exists
             '008_add_reporting_system.sql', // Skip for now
+            '009_instructor_availability.sql', // Skip for now
             '009_add_analytics_system.sql', // Skip for now
             '010_testimonials.sql' // May already exist
           ];
