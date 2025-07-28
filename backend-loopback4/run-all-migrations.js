@@ -53,6 +53,7 @@ async function runAllMigrations() {
             '005_activity_logs.sql', // Role 'authenticated' does not exist
             '005_create_enhanced_instructor_management.sql', // Skip for now
             '006_enhance_courses_system.sql', // May have conflicts
+            '007_email_and_refund_system.sql', // Index already exists
             '007_add_audit_logging.sql', // Skip for now
             '008_add_reporting_system.sql', // Skip for now
             '009_add_analytics_system.sql', // Skip for now
