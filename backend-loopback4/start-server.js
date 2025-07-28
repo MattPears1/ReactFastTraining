@@ -2129,6 +2129,168 @@ app.get('/api/admin/venues', authenticateToken, async (req, res) => {
   }
 });
 
+// Get testimonials for admin
+app.get('/api/admin/testimonials', authenticateToken, async (req, res) => {
+  try {
+    console.log('Get testimonials for admin');
+    const { status = 'all' } = req.query;
+    
+    let query = `
+      SELECT 
+        t.id,
+        t.author_name as "authorName",
+        t.course_taken as "courseTaken",
+        t.content,
+        t.rating,
+        t.photo_url as "photoUrl",
+        t.photo_consent as "photoConsent",
+        t.status,
+        t.show_on_homepage as "showOnHomepage",
+        t.verified_booking as "verifiedBooking",
+        t.booking_reference as "bookingReference",
+        t.created_at as "createdAt",
+        t.approved_at as "approvedAt",
+        u.name as "approvedBy"
+      FROM testimonials t
+      LEFT JOIN users u ON t.approved_by = u.id
+    `;
+    
+    if (status !== 'all') {
+      query += ` WHERE t.status = $1`;
+    }
+    
+    query += ` ORDER BY t.created_at DESC`;
+    
+    const result = status !== 'all' 
+      ? await client.query(query, [status])
+      : await client.query(query);
+    
+    res.json(result.rows);
+  } catch (error) {
+    console.error('Error fetching testimonials:', error);
+    res.status(500).json({ error: 'Failed to fetch testimonials' });
+  }
+});
+
+// Get testimonials stats for admin
+app.get('/api/admin/testimonials/stats', authenticateToken, async (req, res) => {
+  try {
+    console.log('Get testimonials stats for admin');
+    
+    const query = `
+      SELECT 
+        COUNT(*) as total,
+        COUNT(*) FILTER (WHERE status = 'pending') as pending,
+        COUNT(*) FILTER (WHERE status = 'approved') as approved,
+        COUNT(*) FILTER (WHERE status = 'rejected') as rejected,
+        COUNT(*) FILTER (WHERE status = 'featured') as featured,
+        COALESCE(AVG(rating), 0) as "averageRating"
+      FROM testimonials
+    `;
+    
+    const result = await client.query(query);
+    const stats = result.rows[0];
+    
+    // Convert string counts to numbers
+    res.json({
+      total: parseInt(stats.total),
+      pending: parseInt(stats.pending),
+      approved: parseInt(stats.approved),
+      rejected: parseInt(stats.rejected),
+      featured: parseInt(stats.featured),
+      averageRating: parseFloat(stats.averageRating).toFixed(1)
+    });
+  } catch (error) {
+    console.error('Error fetching testimonials stats:', error);
+    res.status(500).json({ error: 'Failed to fetch testimonials stats' });
+  }
+});
+
+// Update testimonial status
+app.put('/api/admin/testimonials/:id/status', authenticateToken, async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { status, rejectionReason } = req.body;
+    const adminId = req.userId;
+    
+    console.log('Update testimonial status:', id, status);
+    
+    const query = `
+      UPDATE testimonials
+      SET 
+        status = $1,
+        rejection_reason = $2,
+        approved_at = CASE WHEN $1 IN ('approved', 'featured') THEN NOW() ELSE NULL END,
+        approved_by = CASE WHEN $1 IN ('approved', 'featured') THEN $3 ELSE NULL END,
+        updated_at = NOW()
+      WHERE id = $4
+      RETURNING *
+    `;
+    
+    const result = await client.query(query, [status, rejectionReason || null, adminId, id]);
+    
+    if (result.rows.length === 0) {
+      return res.status(404).json({ error: 'Testimonial not found' });
+    }
+    
+    res.json({ success: true, testimonial: result.rows[0] });
+  } catch (error) {
+    console.error('Error updating testimonial status:', error);
+    res.status(500).json({ error: 'Failed to update testimonial status' });
+  }
+});
+
+// Toggle testimonial homepage display
+app.put('/api/admin/testimonials/:id/homepage', authenticateToken, async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { showOnHomepage } = req.body;
+    
+    console.log('Toggle testimonial homepage display:', id, showOnHomepage);
+    
+    const query = `
+      UPDATE testimonials
+      SET 
+        show_on_homepage = $1,
+        updated_at = NOW()
+      WHERE id = $2
+      RETURNING *
+    `;
+    
+    const result = await client.query(query, [showOnHomepage, id]);
+    
+    if (result.rows.length === 0) {
+      return res.status(404).json({ error: 'Testimonial not found' });
+    }
+    
+    res.json({ success: true, testimonial: result.rows[0] });
+  } catch (error) {
+    console.error('Error updating testimonial homepage display:', error);
+    res.status(500).json({ error: 'Failed to update testimonial homepage display' });
+  }
+});
+
+// Delete testimonial
+app.delete('/api/admin/testimonials/:id', authenticateToken, async (req, res) => {
+  try {
+    const { id } = req.params;
+    
+    console.log('Delete testimonial:', id);
+    
+    const query = 'DELETE FROM testimonials WHERE id = $1 RETURNING *';
+    const result = await client.query(query, [id]);
+    
+    if (result.rows.length === 0) {
+      return res.status(404).json({ error: 'Testimonial not found' });
+    }
+    
+    res.json({ success: true, message: 'Testimonial deleted successfully' });
+  } catch (error) {
+    console.error('Error deleting testimonial:', error);
+    res.status(500).json({ error: 'Failed to delete testimonial' });
+  }
+});
+
 // TEMPORARY: Non-authenticated admin endpoints for testing
 // WARNING: These endpoints are ONLY for development/testing and should NEVER be used in production
 // They bypass authentication and are a security risk

@@ -74,8 +74,22 @@ export const TestimonialsPage: React.FC = () => {
           },
         },
       );
+      
+      if (!response.ok) {
+        console.error("Failed to fetch testimonials:", response.status);
+        // Use mock data when API is not available
+        setTestimonials(getMockTestimonials());
+        return;
+      }
+      
       const data = await response.json();
-      setTestimonials(data);
+      // Ensure data is an array
+      if (Array.isArray(data)) {
+        setTestimonials(data);
+      } else {
+        console.error("Invalid testimonials data format:", data);
+        setTestimonials(getMockTestimonials());
+      }
     } catch (error) {
       console.error("Failed to fetch testimonials:", error);
       // Use mock data for development
