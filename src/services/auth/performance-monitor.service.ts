@@ -49,7 +49,7 @@ class PerformanceMonitor {
    */
   startMeasure(operation: string): () => void {
     const startTime = performance.now();
-    
+
     return () => {
       const duration = performance.now() - startTime;
       this.track(operation, duration);
@@ -59,12 +59,9 @@ class PerformanceMonitor {
   /**
    * Measure an async operation
    */
-  async measureAsync<T>(
-    operation: string,
-    fn: () => Promise<T>
-  ): Promise<T> {
+  async measureAsync<T>(operation: string, fn: () => Promise<T>): Promise<T> {
     const startTime = performance.now();
-    
+
     try {
       const result = await fn();
       const duration = performance.now() - startTime;
@@ -112,11 +109,11 @@ class PerformanceMonitor {
    */
   getAllStats(): Record<string, ReturnType<typeof this.getStats>> {
     const stats: Record<string, ReturnType<typeof this.getStats>> = {};
-    
+
     for (const [operation] of this.metrics) {
       stats[operation] = this.getStats(operation);
     }
-    
+
     return stats;
   }
 
@@ -125,12 +122,12 @@ class PerformanceMonitor {
    */
   private getSlowThreshold(operation: string): number {
     const thresholds: Record<string, number> = {
-      'auth:login': 2000,
-      'auth:signup': 3000,
-      'auth:token-refresh': 500,
-      'auth:session-check': 100,
-      'auth:logout': 1000,
-      'api:request': 2000,
+      "auth:login": 2000,
+      "auth:signup": 3000,
+      "auth:token-refresh": 500,
+      "auth:session-check": 100,
+      "auth:logout": 1000,
+      "api:request": 2000,
     };
 
     return thresholds[operation] || 1000;
@@ -141,18 +138,18 @@ class PerformanceMonitor {
    */
   private reportSlowOperation(operation: string, duration: number): void {
     // Report to analytics
-    if (typeof window !== 'undefined' && (window as any).gtag) {
-      (window as any).gtag('event', 'slow_operation', {
-        event_category: 'Performance',
+    if (typeof window !== "undefined" && (window as any).gtag) {
+      (window as any).gtag("event", "slow_operation", {
+        event_category: "Performance",
         event_label: operation,
         value: Math.round(duration),
       });
     }
 
     // Report to error tracking
-    if (typeof window !== 'undefined' && (window as any).Sentry) {
+    if (typeof window !== "undefined" && (window as any).Sentry) {
       (window as any).Sentry.captureMessage(`Slow operation: ${operation}`, {
-        level: 'warning',
+        level: "warning",
         extra: {
           operation,
           duration,
@@ -166,26 +163,26 @@ class PerformanceMonitor {
    * Setup Web Vitals monitoring
    */
   private setupWebVitals(): void {
-    if (typeof window === 'undefined') return;
+    if (typeof window === "undefined") return;
 
     // Track Largest Contentful Paint (LCP)
     new PerformanceObserver((list) => {
       for (const entry of list.getEntries()) {
-        if (entry.entryType === 'largest-contentful-paint') {
-          this.track('web-vitals:lcp', entry.startTime);
+        if (entry.entryType === "largest-contentful-paint") {
+          this.track("web-vitals:lcp", entry.startTime);
         }
       }
-    }).observe({ entryTypes: ['largest-contentful-paint'] });
+    }).observe({ entryTypes: ["largest-contentful-paint"] });
 
     // Track First Input Delay (FID)
     new PerformanceObserver((list) => {
       for (const entry of list.getEntries()) {
-        if (entry.entryType === 'first-input') {
+        if (entry.entryType === "first-input") {
           const fid = entry.processingStart - entry.startTime;
-          this.track('web-vitals:fid', fid);
+          this.track("web-vitals:fid", fid);
         }
       }
-    }).observe({ entryTypes: ['first-input'] });
+    }).observe({ entryTypes: ["first-input"] });
 
     // Track Cumulative Layout Shift (CLS)
     let clsValue = 0;
@@ -193,10 +190,10 @@ class PerformanceMonitor {
       for (const entry of list.getEntries()) {
         if (!entry.hadRecentInput) {
           clsValue += (entry as any).value;
-          this.track('web-vitals:cls', clsValue * 1000); // Convert to ms scale
+          this.track("web-vitals:cls", clsValue * 1000); // Convert to ms scale
         }
       }
-    }).observe({ entryTypes: ['layout-shift'] });
+    }).observe({ entryTypes: ["layout-shift"] });
   }
 
   /**
@@ -205,9 +202,9 @@ class PerformanceMonitor {
   private startReporting(): void {
     this.reportingTimer = setInterval(() => {
       const stats = this.getAllStats();
-      
+
       // Report to console in development
-      if (process.env.NODE_ENV === 'development') {
+      if (process.env.NODE_ENV === "development") {
         console.table(stats);
       }
 
@@ -220,16 +217,16 @@ class PerformanceMonitor {
    * Report aggregated metrics
    */
   private reportAggregatedMetrics(
-    stats: Record<string, ReturnType<typeof this.getStats>>
+    stats: Record<string, ReturnType<typeof this.getStats>>,
   ): void {
-    const authStats = stats['auth:login'];
+    const authStats = stats["auth:login"];
     if (!authStats) return;
 
     // Report to analytics
-    if (typeof window !== 'undefined' && (window as any).gtag) {
-      (window as any).gtag('event', 'performance_metrics', {
-        event_category: 'Performance',
-        event_label: 'auth_login_p95',
+    if (typeof window !== "undefined" && (window as any).gtag) {
+      (window as any).gtag("event", "performance_metrics", {
+        event_category: "Performance",
+        event_label: "auth_login_p95",
         value: Math.round(authStats.p95),
       });
     }
@@ -260,14 +257,15 @@ export function measurePerformance(operationName?: string) {
   return function (
     target: any,
     propertyKey: string,
-    descriptor: PropertyDescriptor
+    descriptor: PropertyDescriptor,
   ) {
     const originalMethod = descriptor.value;
-    const operation = operationName || `${target.constructor.name}.${propertyKey}`;
+    const operation =
+      operationName || `${target.constructor.name}.${propertyKey}`;
 
     descriptor.value = async function (...args: any[]) {
       return performanceMonitor.measureAsync(operation, () =>
-        originalMethod.apply(this, args)
+        originalMethod.apply(this, args),
       );
     };
 
@@ -283,12 +281,9 @@ export function usePerformance(componentName: string) {
 
   const measureAsync = async <T>(
     operation: string,
-    fn: () => Promise<T>
+    fn: () => Promise<T>,
   ): Promise<T> => {
-    return performanceMonitor.measureAsync(
-      `${componentName}:${operation}`,
-      fn
-    );
+    return performanceMonitor.measureAsync(`${componentName}:${operation}`, fn);
   };
 
   return { measure, measureAsync };

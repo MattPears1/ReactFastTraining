@@ -1,15 +1,15 @@
-import React, { useState, useEffect } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
-import { AttendanceMarking } from '@components/admin/AttendanceMarking';
-import { CapacityIndicator } from '@components/booking/CapacityIndicator';
-import apiClient from '@services/api/client';
-import { adminApi } from '@services/api/admin.service';
-import { 
-  ArrowLeft, 
-  Calendar, 
-  Clock, 
-  MapPin, 
-  Users, 
+import React, { useState, useEffect } from "react";
+import { useParams, useNavigate } from "react-router-dom";
+import { AttendanceMarking } from "@components/admin/AttendanceMarking";
+import { CapacityIndicator } from "@components/booking/CapacityIndicator";
+import apiClient from "@services/api/client";
+import { adminApi } from "@services/api/admin.service";
+import {
+  ArrowLeft,
+  Calendar,
+  Clock,
+  MapPin,
+  Users,
   DollarSign,
   AlertCircle,
   CheckCircle,
@@ -17,9 +17,9 @@ import {
   Edit,
   Trash2,
   Mail,
-  Download
-} from 'lucide-react';
-import { cn } from '@utils/cn';
+  Download,
+} from "lucide-react";
+import { cn } from "@utils/cn";
 
 interface SessionDetails {
   id: string;
@@ -56,7 +56,9 @@ const SessionDetailsPage: React.FC = () => {
   const navigate = useNavigate();
   const [session, setSession] = useState<SessionDetails | null>(null);
   const [loading, setLoading] = useState(true);
-  const [activeTab, setActiveTab] = useState<'details' | 'bookings' | 'attendance'>('details');
+  const [activeTab, setActiveTab] = useState<
+    "details" | "bookings" | "attendance"
+  >("details");
 
   useEffect(() => {
     if (id) {
@@ -70,37 +72,41 @@ const SessionDetailsPage: React.FC = () => {
       const response = await apiClient.get(`/courses/sessions/${id}`);
       setSession(response.data);
     } catch (error) {
-      console.error('Failed to load session details:', error);
+      console.error("Failed to load session details:", error);
     } finally {
       setLoading(false);
     }
   };
 
   const handleCancelSession = async () => {
-    if (!confirm('Are you sure you want to cancel this session? All attendees will be notified.')) {
+    if (
+      !confirm(
+        "Are you sure you want to cancel this session? All attendees will be notified.",
+      )
+    ) {
       return;
     }
 
     try {
-      await adminApi.cancelSession(id!, 'Admin cancelled');
-      navigate('/admin/calendar');
+      await adminApi.cancelSession(id!, "Admin cancelled");
+      navigate("/admin/calendar");
     } catch (error) {
-      console.error('Failed to cancel session:', error);
+      console.error("Failed to cancel session:", error);
     }
   };
 
   const handleExportAttendance = async () => {
     try {
       const csv = await adminApi.exportAttendanceCSV(id!);
-      const blob = new Blob([csv], { type: 'text/csv' });
+      const blob = new Blob([csv], { type: "text/csv" });
       const url = window.URL.createObjectURL(blob);
-      const a = document.createElement('a');
+      const a = document.createElement("a");
       a.href = url;
       a.download = `attendance-${id}.csv`;
       a.click();
       window.URL.revokeObjectURL(url);
     } catch (error) {
-      console.error('Failed to export attendance:', error);
+      console.error("Failed to export attendance:", error);
     }
   };
 
@@ -117,7 +123,7 @@ const SessionDetailsPage: React.FC = () => {
       <div className="text-center py-12">
         <p className="text-gray-500">Session not found</p>
         <button
-          onClick={() => navigate('/admin/calendar')}
+          onClick={() => navigate("/admin/calendar")}
           className="mt-4 text-primary-600 hover:text-primary-700"
         >
           Back to Calendar
@@ -150,11 +156,11 @@ const SessionDetailsPage: React.FC = () => {
             <div className="flex items-center gap-4 text-sm text-gray-600 dark:text-gray-400">
               <div className="flex items-center gap-1">
                 <Calendar className="w-4 h-4" />
-                {sessionDate.toLocaleDateString('en-GB', {
-                  weekday: 'long',
-                  day: 'numeric',
-                  month: 'long',
-                  year: 'numeric'
+                {sessionDate.toLocaleDateString("en-GB", {
+                  weekday: "long",
+                  day: "numeric",
+                  month: "long",
+                  year: "numeric",
                 })}
               </div>
               <div className="flex items-center gap-1">
@@ -185,19 +191,19 @@ const SessionDetailsPage: React.FC = () => {
 
       {/* Status Badge */}
       <div className="mb-6">
-        {session.status === 'SCHEDULED' && (
+        {session.status === "SCHEDULED" && (
           <span className="inline-flex items-center gap-1 px-3 py-1 rounded-full text-sm font-medium bg-blue-100 text-blue-800 dark:bg-blue-900/20 dark:text-blue-400">
             <Clock className="w-4 h-4" />
             Scheduled
           </span>
         )}
-        {session.status === 'COMPLETED' && (
+        {session.status === "COMPLETED" && (
           <span className="inline-flex items-center gap-1 px-3 py-1 rounded-full text-sm font-medium bg-green-100 text-green-800 dark:bg-green-900/20 dark:text-green-400">
             <CheckCircle className="w-4 h-4" />
             Completed
           </span>
         )}
-        {session.status === 'CANCELLED' && (
+        {session.status === "CANCELLED" && (
           <span className="inline-flex items-center gap-1 px-3 py-1 rounded-full text-sm font-medium bg-red-100 text-red-800 dark:bg-red-900/20 dark:text-red-400">
             <XCircle className="w-4 h-4" />
             Cancelled
@@ -209,35 +215,35 @@ const SessionDetailsPage: React.FC = () => {
       <div className="border-b border-gray-200 dark:border-gray-700 mb-6">
         <nav className="-mb-px flex space-x-8">
           <button
-            onClick={() => setActiveTab('details')}
+            onClick={() => setActiveTab("details")}
             className={cn(
-              'py-2 px-1 border-b-2 font-medium text-sm',
-              activeTab === 'details'
-                ? 'border-primary-600 text-primary-600'
-                : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
+              "py-2 px-1 border-b-2 font-medium text-sm",
+              activeTab === "details"
+                ? "border-primary-600 text-primary-600"
+                : "border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300",
             )}
           >
             Details
           </button>
           <button
-            onClick={() => setActiveTab('bookings')}
+            onClick={() => setActiveTab("bookings")}
             className={cn(
-              'py-2 px-1 border-b-2 font-medium text-sm',
-              activeTab === 'bookings'
-                ? 'border-primary-600 text-primary-600'
-                : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
+              "py-2 px-1 border-b-2 font-medium text-sm",
+              activeTab === "bookings"
+                ? "border-primary-600 text-primary-600"
+                : "border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300",
             )}
           >
             Bookings ({session.currentParticipants})
           </button>
           {isPastSession && (
             <button
-              onClick={() => setActiveTab('attendance')}
+              onClick={() => setActiveTab("attendance")}
               className={cn(
-                'py-2 px-1 border-b-2 font-medium text-sm',
-                activeTab === 'attendance'
-                  ? 'border-primary-600 text-primary-600'
-                  : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
+                "py-2 px-1 border-b-2 font-medium text-sm",
+                activeTab === "attendance"
+                  ? "border-primary-600 text-primary-600"
+                  : "border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300",
               )}
             >
               Attendance
@@ -247,7 +253,7 @@ const SessionDetailsPage: React.FC = () => {
       </div>
 
       {/* Tab Content */}
-      {activeTab === 'details' && (
+      {activeTab === "details" && (
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
           {/* Main Details */}
           <div className="lg:col-span-2 space-y-6">
@@ -258,26 +264,34 @@ const SessionDetailsPage: React.FC = () => {
               </h2>
               <dl className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div>
-                  <dt className="text-sm font-medium text-gray-500 dark:text-gray-400">Location</dt>
+                  <dt className="text-sm font-medium text-gray-500 dark:text-gray-400">
+                    Location
+                  </dt>
                   <dd className="mt-1 text-sm text-gray-900 dark:text-white flex items-center gap-1">
                     <MapPin className="w-4 h-4 text-gray-400" />
                     {session.locationName}
                   </dd>
                 </div>
                 <div>
-                  <dt className="text-sm font-medium text-gray-500 dark:text-gray-400">Trainer</dt>
+                  <dt className="text-sm font-medium text-gray-500 dark:text-gray-400">
+                    Trainer
+                  </dt>
                   <dd className="mt-1 text-sm text-gray-900 dark:text-white">
-                    {session.trainerName || 'Lex'}
+                    {session.trainerName || "Lex"}
                   </dd>
                 </div>
                 <div>
-                  <dt className="text-sm font-medium text-gray-500 dark:text-gray-400">Duration</dt>
+                  <dt className="text-sm font-medium text-gray-500 dark:text-gray-400">
+                    Duration
+                  </dt>
                   <dd className="mt-1 text-sm text-gray-900 dark:text-white">
                     Full Day (6 hours)
                   </dd>
                 </div>
                 <div>
-                  <dt className="text-sm font-medium text-gray-500 dark:text-gray-400">Price per Person</dt>
+                  <dt className="text-sm font-medium text-gray-500 dark:text-gray-400">
+                    Price per Person
+                  </dt>
                   <dd className="mt-1 text-sm text-gray-900 dark:text-white">
                     £{session.pricePerPerson}
                   </dd>
@@ -286,7 +300,9 @@ const SessionDetailsPage: React.FC = () => {
 
               {session.notes && (
                 <div className="mt-4 pt-4 border-t border-gray-200 dark:border-gray-700">
-                  <dt className="text-sm font-medium text-gray-500 dark:text-gray-400">Notes</dt>
+                  <dt className="text-sm font-medium text-gray-500 dark:text-gray-400">
+                    Notes
+                  </dt>
                   <dd className="mt-1 text-sm text-gray-900 dark:text-white">
                     {session.notes}
                   </dd>
@@ -317,20 +333,26 @@ const SessionDetailsPage: React.FC = () => {
               </h2>
               <div className="space-y-3">
                 <div className="flex items-center justify-between">
-                  <span className="text-sm text-gray-600 dark:text-gray-400">Participants</span>
+                  <span className="text-sm text-gray-600 dark:text-gray-400">
+                    Participants
+                  </span>
                   <span className="text-sm font-medium text-gray-900 dark:text-white">
                     {session.currentParticipants}
                   </span>
                 </div>
                 <div className="flex items-center justify-between">
-                  <span className="text-sm text-gray-600 dark:text-gray-400">Price per Person</span>
+                  <span className="text-sm text-gray-600 dark:text-gray-400">
+                    Price per Person
+                  </span>
                   <span className="text-sm font-medium text-gray-900 dark:text-white">
                     £{session.pricePerPerson}
                   </span>
                 </div>
                 <div className="pt-3 border-t border-gray-200 dark:border-gray-700">
                   <div className="flex items-center justify-between">
-                    <span className="text-base font-medium text-gray-900 dark:text-white">Total Revenue</span>
+                    <span className="text-base font-medium text-gray-900 dark:text-white">
+                      Total Revenue
+                    </span>
                     <span className="text-lg font-bold text-green-600">
                       £{revenue.toFixed(2)}
                     </span>
@@ -349,7 +371,7 @@ const SessionDetailsPage: React.FC = () => {
                   <Mail className="w-4 h-4" />
                   Email Attendees
                 </button>
-                <button 
+                <button
                   onClick={handleExportAttendance}
                   className="w-full px-4 py-2 text-left text-sm border border-gray-300 dark:border-gray-600 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 flex items-center gap-2"
                 >
@@ -362,7 +384,7 @@ const SessionDetailsPage: React.FC = () => {
         </div>
       )}
 
-      {activeTab === 'bookings' && (
+      {activeTab === "bookings" && (
         <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700">
           <div className="p-6">
             <h2 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">
@@ -401,8 +423,12 @@ const SessionDetailsPage: React.FC = () => {
                         </td>
                         <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-400">
                           <div>
-                            <div className="text-gray-900 dark:text-white">{booking.contactName}</div>
-                            <div className="text-gray-500">{booking.contactEmail}</div>
+                            <div className="text-gray-900 dark:text-white">
+                              {booking.contactName}
+                            </div>
+                            <div className="text-gray-500">
+                              {booking.contactEmail}
+                            </div>
                           </div>
                         </td>
                         <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-white">
@@ -412,17 +438,24 @@ const SessionDetailsPage: React.FC = () => {
                           £{booking.totalAmount.toFixed(2)}
                         </td>
                         <td className="px-6 py-4 whitespace-nowrap">
-                          <span className={cn(
-                            'inline-flex px-2 py-1 text-xs font-medium rounded-full',
-                            booking.status === 'CONFIRMED' && 'bg-green-100 text-green-800 dark:bg-green-900/20 dark:text-green-400',
-                            booking.status === 'PENDING' && 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900/20 dark:text-yellow-400',
-                            booking.status === 'CANCELLED' && 'bg-red-100 text-red-800 dark:bg-red-900/20 dark:text-red-400'
-                          )}>
+                          <span
+                            className={cn(
+                              "inline-flex px-2 py-1 text-xs font-medium rounded-full",
+                              booking.status === "CONFIRMED" &&
+                                "bg-green-100 text-green-800 dark:bg-green-900/20 dark:text-green-400",
+                              booking.status === "PENDING" &&
+                                "bg-yellow-100 text-yellow-800 dark:bg-yellow-900/20 dark:text-yellow-400",
+                              booking.status === "CANCELLED" &&
+                                "bg-red-100 text-red-800 dark:bg-red-900/20 dark:text-red-400",
+                            )}
+                          >
                             {booking.status}
                           </span>
                         </td>
                         <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-400">
-                          {new Date(booking.createdAt).toLocaleDateString('en-GB')}
+                          {new Date(booking.createdAt).toLocaleDateString(
+                            "en-GB",
+                          )}
                         </td>
                       </tr>
                     ))}
@@ -438,7 +471,7 @@ const SessionDetailsPage: React.FC = () => {
         </div>
       )}
 
-      {activeTab === 'attendance' && isPastSession && (
+      {activeTab === "attendance" && isPastSession && (
         <AttendanceMarking
           sessionId={session.id}
           sessionDate={sessionDate}

@@ -1,11 +1,11 @@
-import React, { useState, useEffect } from 'react';
-import { useMutation, useQueryClient, useQuery } from '@tanstack/react-query';
-import { 
-  X, 
-  Calendar, 
-  Clock, 
-  MapPin, 
-  Users, 
+import React, { useState, useEffect } from "react";
+import { useMutation, useQueryClient, useQuery } from "@tanstack/react-query";
+import {
+  X,
+  Calendar,
+  Clock,
+  MapPin,
+  Users,
   PoundSterling,
   AlertTriangle,
   Edit3,
@@ -14,14 +14,14 @@ import {
   Copy,
   RefreshCw,
   UserPlus,
-  Ban
-} from 'lucide-react';
-import { format } from 'date-fns';
-import { Button } from '../../../../components/ui/Button';
-import { AdminBadge } from '../../../components/ui/AdminBadge';
-import { useNotifications } from '../../../contexts/NotificationContext';
-import { adminApi } from '../../../utils/api';
-import { EmailAttendeesModal } from './EmailAttendeesModal';
+  Ban,
+} from "lucide-react";
+import { format } from "date-fns";
+import { Button } from "../../../../components/ui/Button";
+import { AdminBadge } from "../../../components/ui/AdminBadge";
+import { useNotifications } from "../../../contexts/NotificationContext";
+import { adminApi } from "../../../utils/api";
+import { EmailAttendeesModal } from "./EmailAttendeesModal";
 
 interface SessionDetailModalProps {
   isOpen: boolean;
@@ -41,12 +41,12 @@ interface Attendee {
   bookingId: number;
 }
 
-export const SessionDetailModal: React.FC<SessionDetailModalProps> = ({ 
-  isOpen, 
-  onClose, 
+export const SessionDetailModal: React.FC<SessionDetailModalProps> = ({
+  isOpen,
+  onClose,
   sessionId,
   date,
-  isNewSession = false
+  isNewSession = false,
 }) => {
   const [editMode, setEditMode] = useState(isNewSession);
   const [showCancelModal, setShowCancelModal] = useState(false);
@@ -57,59 +57,59 @@ export const SessionDetailModal: React.FC<SessionDetailModalProps> = ({
 
   // Form state for editing
   const [formData, setFormData] = useState({
-    courseId: '',
-    venueId: '',
-    date: date ? format(date, 'yyyy-MM-dd') : '',
-    startTime: '09:00',
-    endTime: '17:00',
+    courseId: "",
+    venueId: "",
+    date: date ? format(date, "yyyy-MM-dd") : "",
+    startTime: "09:00",
+    endTime: "17:00",
     maxCapacity: 12,
-    notes: ''
+    notes: "",
   });
 
   // Fetch session details
   const { data: session, isLoading } = useQuery({
-    queryKey: ['admin-session-details', sessionId],
+    queryKey: ["admin-session-details", sessionId],
     queryFn: async () => {
       if (isNewSession) return null;
       const response = await adminApi.get(`/api/admin/schedules/${sessionId}`);
-      if (!response.ok) throw new Error('Failed to fetch session details');
+      if (!response.ok) throw new Error("Failed to fetch session details");
       return response.json();
     },
-    enabled: isOpen && !isNewSession
+    enabled: isOpen && !isNewSession,
   });
 
   // Fetch courses and venues for dropdowns
   const { data: courses } = useQuery({
-    queryKey: ['admin-courses-list'],
+    queryKey: ["admin-courses-list"],
     queryFn: async () => {
-      const response = await adminApi.get('/api/admin/courses');
-      if (!response.ok) throw new Error('Failed to fetch courses');
+      const response = await adminApi.get("/api/admin/courses");
+      if (!response.ok) throw new Error("Failed to fetch courses");
       return response.json();
     },
-    enabled: isOpen && editMode
+    enabled: isOpen && editMode,
   });
 
   const { data: venues } = useQuery({
-    queryKey: ['admin-venues'],
+    queryKey: ["admin-venues"],
     queryFn: async () => {
-      const response = await adminApi.get('/api/admin/venues');
-      if (!response.ok) throw new Error('Failed to fetch venues');
+      const response = await adminApi.get("/api/admin/venues");
+      if (!response.ok) throw new Error("Failed to fetch venues");
       return response.json();
     },
-    enabled: isOpen && editMode
+    enabled: isOpen && editMode,
   });
 
   // Update form when session loads
   useEffect(() => {
     if (session && !isNewSession) {
       setFormData({
-        courseId: session.course_id || '',
-        venueId: session.venue_id || '',
-        date: session.date || '',
-        startTime: session.startTime || '09:00',
-        endTime: session.endTime || '17:00',
+        courseId: session.course_id || "",
+        venueId: session.venue_id || "",
+        date: session.date || "",
+        startTime: session.startTime || "09:00",
+        endTime: session.endTime || "17:00",
         maxCapacity: session.maxParticipants || 12,
-        notes: session.notes || ''
+        notes: session.notes || "",
       });
     }
   }, [session, isNewSession]);
@@ -117,91 +117,107 @@ export const SessionDetailModal: React.FC<SessionDetailModalProps> = ({
   // Save/Update session
   const saveMutation = useMutation({
     mutationFn: async (data: typeof formData) => {
-      const endpoint = isNewSession 
-        ? '/course-sessions'
+      const endpoint = isNewSession
+        ? "/course-sessions"
         : `/api/admin/schedules/${sessionId}`;
-      
-      const method = isNewSession ? 'POST' : 'PUT';
-      
+
+      const method = isNewSession ? "POST" : "PUT";
+
       const response = await adminApi.fetch(endpoint, {
         method,
         body: JSON.stringify({
           ...data,
           startDatetime: `${data.date} ${data.startTime}:00`,
-          endDatetime: `${data.date} ${data.endTime}:00`
-        })
+          endDatetime: `${data.date} ${data.endTime}:00`,
+        }),
       });
-      
-      if (!response.ok) throw new Error('Failed to save session');
+
+      if (!response.ok) throw new Error("Failed to save session");
       return response.json();
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['admin-schedules'] });
-      addNotification({ 
-        type: 'success', 
-        title: isNewSession ? 'Session created successfully' : 'Session updated successfully' 
+      queryClient.invalidateQueries({ queryKey: ["admin-schedules"] });
+      addNotification({
+        type: "success",
+        title: isNewSession
+          ? "Session created successfully"
+          : "Session updated successfully",
       });
       setEditMode(false);
       if (isNewSession) onClose();
     },
     onError: (error: Error) => {
-      addNotification({ 
-        type: 'error', 
-        title: 'Failed to save session',
-        message: error.message
+      addNotification({
+        type: "error",
+        title: "Failed to save session",
+        message: error.message,
       });
-    }
+    },
   });
 
   // Delete session
   const deleteMutation = useMutation({
     mutationFn: async () => {
-      const response = await adminApi.delete(`/api/admin/schedules/${sessionId}`);
+      const response = await adminApi.delete(
+        `/api/admin/schedules/${sessionId}`,
+      );
       if (!response.ok) {
         const error = await response.json();
-        throw new Error(error.message || 'Failed to delete session');
+        throw new Error(error.message || "Failed to delete session");
       }
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['admin-schedules'] });
-      addNotification({ type: 'success', title: 'Session deleted successfully' });
+      queryClient.invalidateQueries({ queryKey: ["admin-schedules"] });
+      addNotification({
+        type: "success",
+        title: "Session deleted successfully",
+      });
       onClose();
     },
     onError: (error: Error) => {
-      addNotification({ 
-        type: 'error', 
-        title: 'Failed to delete session',
-        message: error.message
+      addNotification({
+        type: "error",
+        title: "Failed to delete session",
+        message: error.message,
       });
-    }
+    },
   });
 
   // Send reminder emails
   const sendRemindersMutation = useMutation({
     mutationFn: async () => {
-      const response = await adminApi.post(`/api/admin/schedules/${sessionId}/send-reminders`);
-      if (!response.ok) throw new Error('Failed to send reminders');
+      const response = await adminApi.post(
+        `/api/admin/schedules/${sessionId}/send-reminders`,
+      );
+      if (!response.ok) throw new Error("Failed to send reminders");
       return response.json();
     },
     onSuccess: (data) => {
-      addNotification({ 
-        type: 'success', 
-        title: `Reminders sent to ${data.sent} attendees` 
+      addNotification({
+        type: "success",
+        title: `Reminders sent to ${data.sent} attendees`,
       });
-    }
+    },
   });
 
   // Email selected attendees
   const emailAttendeesMutation = useMutation({
-    mutationFn: async (data: { attendeeIds: number[], subject: string, message: string }) => {
-      const response = await adminApi.post(`/api/admin/schedules/${sessionId}/email-attendees`, data);
-      if (!response.ok) throw new Error('Failed to send emails');
+    mutationFn: async (data: {
+      attendeeIds: number[];
+      subject: string;
+      message: string;
+    }) => {
+      const response = await adminApi.post(
+        `/api/admin/schedules/${sessionId}/email-attendees`,
+        data,
+      );
+      if (!response.ok) throw new Error("Failed to send emails");
       return response.json();
     },
     onSuccess: () => {
-      addNotification({ type: 'success', title: 'Emails sent successfully' });
+      addNotification({ type: "success", title: "Emails sent successfully" });
       setSelectedAttendees([]);
-    }
+    },
   });
 
   const handleSubmit = (e: React.FormEvent) => {
@@ -210,22 +226,25 @@ export const SessionDetailModal: React.FC<SessionDetailModalProps> = ({
   };
 
   const getStatusBadge = (status: string) => {
-    const variants: Record<string, 'success' | 'warning' | 'error' | 'neutral'> = {
-      scheduled: 'neutral',
-      in_progress: 'warning',
-      completed: 'success',
-      cancelled: 'error'
+    const variants: Record<
+      string,
+      "success" | "warning" | "error" | "neutral"
+    > = {
+      scheduled: "neutral",
+      in_progress: "warning",
+      completed: "success",
+      cancelled: "error",
     };
-    return variants[status] || 'neutral';
+    return variants[status] || "neutral";
   };
 
   const getPaymentBadge = (status: string) => {
-    const variants: Record<string, 'success' | 'warning' | 'error'> = {
-      completed: 'success',
-      pending: 'warning',
-      failed: 'error'
+    const variants: Record<string, "success" | "warning" | "error"> = {
+      completed: "success",
+      pending: "warning",
+      failed: "error",
     };
-    return variants[status] || 'neutral';
+    return variants[status] || "neutral";
   };
 
   if (!isOpen) return null;
@@ -237,11 +256,16 @@ export const SessionDetailModal: React.FC<SessionDetailModalProps> = ({
         <div className="flex items-center justify-between p-6 border-b">
           <div>
             <h2 className="text-2xl font-bold text-gray-900">
-              {isNewSession ? 'Create New Session' : editMode ? 'Edit Session' : 'Session Details'}
+              {isNewSession
+                ? "Create New Session"
+                : editMode
+                  ? "Edit Session"
+                  : "Session Details"}
             </h2>
             {session && !editMode && (
               <p className="text-sm text-gray-500 mt-1">
-                {session.courseName} • {format(new Date(session.date), 'dd MMM yyyy')}
+                {session.courseName} •{" "}
+                {format(new Date(session.date), "dd MMM yyyy")}
               </p>
             )}
           </div>
@@ -265,7 +289,9 @@ export const SessionDetailModal: React.FC<SessionDetailModalProps> = ({
                   </label>
                   <select
                     value={formData.courseId}
-                    onChange={(e) => setFormData({ ...formData, courseId: e.target.value })}
+                    onChange={(e) =>
+                      setFormData({ ...formData, courseId: e.target.value })
+                    }
                     className="admin-select"
                     required
                   >
@@ -284,7 +310,9 @@ export const SessionDetailModal: React.FC<SessionDetailModalProps> = ({
                   </label>
                   <select
                     value={formData.venueId}
-                    onChange={(e) => setFormData({ ...formData, venueId: e.target.value })}
+                    onChange={(e) =>
+                      setFormData({ ...formData, venueId: e.target.value })
+                    }
                     className="admin-select"
                     required
                   >
@@ -304,10 +332,12 @@ export const SessionDetailModal: React.FC<SessionDetailModalProps> = ({
                   <input
                     type="date"
                     value={formData.date}
-                    onChange={(e) => setFormData({ ...formData, date: e.target.value })}
+                    onChange={(e) =>
+                      setFormData({ ...formData, date: e.target.value })
+                    }
                     className="admin-input"
                     required
-                    min={new Date().toISOString().split('T')[0]}
+                    min={new Date().toISOString().split("T")[0]}
                   />
                 </div>
 
@@ -318,7 +348,12 @@ export const SessionDetailModal: React.FC<SessionDetailModalProps> = ({
                   <input
                     type="number"
                     value={formData.maxCapacity}
-                    onChange={(e) => setFormData({ ...formData, maxCapacity: parseInt(e.target.value) || 12 })}
+                    onChange={(e) =>
+                      setFormData({
+                        ...formData,
+                        maxCapacity: parseInt(e.target.value) || 12,
+                      })
+                    }
                     className="admin-input"
                     required
                     min="1"
@@ -333,7 +368,9 @@ export const SessionDetailModal: React.FC<SessionDetailModalProps> = ({
                   <input
                     type="time"
                     value={formData.startTime}
-                    onChange={(e) => setFormData({ ...formData, startTime: e.target.value })}
+                    onChange={(e) =>
+                      setFormData({ ...formData, startTime: e.target.value })
+                    }
                     className="admin-input"
                     required
                   />
@@ -346,7 +383,9 @@ export const SessionDetailModal: React.FC<SessionDetailModalProps> = ({
                   <input
                     type="time"
                     value={formData.endTime}
-                    onChange={(e) => setFormData({ ...formData, endTime: e.target.value })}
+                    onChange={(e) =>
+                      setFormData({ ...formData, endTime: e.target.value })
+                    }
                     className="admin-input"
                     required
                   />
@@ -359,7 +398,9 @@ export const SessionDetailModal: React.FC<SessionDetailModalProps> = ({
                 </label>
                 <textarea
                   value={formData.notes}
-                  onChange={(e) => setFormData({ ...formData, notes: e.target.value })}
+                  onChange={(e) =>
+                    setFormData({ ...formData, notes: e.target.value })
+                  }
                   className="admin-input h-24"
                   placeholder="Any additional notes..."
                 />
@@ -374,9 +415,11 @@ export const SessionDetailModal: React.FC<SessionDetailModalProps> = ({
                   <div className="flex items-start gap-3">
                     <Calendar className="w-5 h-5 text-gray-400 mt-0.5" />
                     <div>
-                      <p className="text-sm font-medium text-gray-600">Date & Time</p>
+                      <p className="text-sm font-medium text-gray-600">
+                        Date & Time
+                      </p>
                       <p className="text-sm text-gray-900">
-                        {format(new Date(session.date), 'EEEE, dd MMMM yyyy')}
+                        {format(new Date(session.date), "EEEE, dd MMMM yyyy")}
                       </p>
                       <p className="text-sm text-gray-900">
                         {session.startTime} - {session.endTime}
@@ -388,9 +431,12 @@ export const SessionDetailModal: React.FC<SessionDetailModalProps> = ({
                     <MapPin className="w-5 h-5 text-gray-400 mt-0.5" />
                     <div>
                       <p className="text-sm font-medium text-gray-600">Venue</p>
-                      <p className="text-sm text-gray-900">{session.venueName}</p>
+                      <p className="text-sm text-gray-900">
+                        {session.venueName}
+                      </p>
                       <p className="text-sm text-gray-500">
-                        {session.venueAddress}, {session.venueCity} {session.venuePostcode}
+                        {session.venueAddress}, {session.venueCity}{" "}
+                        {session.venuePostcode}
                       </p>
                     </div>
                   </div>
@@ -400,7 +446,9 @@ export const SessionDetailModal: React.FC<SessionDetailModalProps> = ({
                   <div className="flex items-start gap-3">
                     <Users className="w-5 h-5 text-gray-400 mt-0.5" />
                     <div>
-                      <p className="text-sm font-medium text-gray-600">Capacity</p>
+                      <p className="text-sm font-medium text-gray-600">
+                        Capacity
+                      </p>
                       <p className="text-lg font-semibold text-gray-900">
                         {session.currentBookings} / {session.maxParticipants}
                       </p>
@@ -408,12 +456,15 @@ export const SessionDetailModal: React.FC<SessionDetailModalProps> = ({
                         <div
                           className={`h-2 rounded-full transition-all ${
                             session.currentBookings >= session.maxParticipants
-                              ? 'bg-red-500'
-                              : session.currentBookings >= session.maxParticipants * 0.8
-                              ? 'bg-yellow-500'
-                              : 'bg-green-500'
+                              ? "bg-red-500"
+                              : session.currentBookings >=
+                                  session.maxParticipants * 0.8
+                                ? "bg-yellow-500"
+                                : "bg-green-500"
                           }`}
-                          style={{ width: `${Math.min((session.currentBookings / session.maxParticipants) * 100, 100)}%` }}
+                          style={{
+                            width: `${Math.min((session.currentBookings / session.maxParticipants) * 100, 100)}%`,
+                          }}
                         />
                       </div>
                     </div>
@@ -422,7 +473,9 @@ export const SessionDetailModal: React.FC<SessionDetailModalProps> = ({
                   <div className="flex items-start gap-3">
                     <PoundSterling className="w-5 h-5 text-gray-400 mt-0.5" />
                     <div>
-                      <p className="text-sm font-medium text-gray-600">Revenue</p>
+                      <p className="text-sm font-medium text-gray-600">
+                        Revenue
+                      </p>
                       <p className="text-lg font-semibold text-gray-900">
                         £{(session.price * session.currentBookings).toFixed(2)}
                       </p>
@@ -437,7 +490,9 @@ export const SessionDetailModal: React.FC<SessionDetailModalProps> = ({
               {/* Status and Actions */}
               <div className="flex items-center justify-between py-4 border-y">
                 <div className="flex items-center gap-4">
-                  <span className="text-sm font-medium text-gray-600">Status:</span>
+                  <span className="text-sm font-medium text-gray-600">
+                    Status:
+                  </span>
                   <AdminBadge variant={getStatusBadge(session.status)}>
                     {session.status}
                   </AdminBadge>
@@ -455,7 +510,9 @@ export const SessionDetailModal: React.FC<SessionDetailModalProps> = ({
                   <Button
                     variant="secondary"
                     size="sm"
-                    onClick={() => {/* TODO: Implement duplicate */}}
+                    onClick={() => {
+                      /* TODO: Implement duplicate */
+                    }}
                   >
                     <Copy className="w-4 h-4 mr-1" />
                     Duplicate
@@ -467,7 +524,9 @@ export const SessionDetailModal: React.FC<SessionDetailModalProps> = ({
               {session.bookings && session.bookings.length > 0 && (
                 <div>
                   <div className="flex items-center justify-between mb-4">
-                    <h3 className="text-lg font-semibold">Attendees ({session.bookings.length})</h3>
+                    <h3 className="text-lg font-semibold">
+                      Attendees ({session.bookings.length})
+                    </h3>
                     {selectedAttendees.length > 0 && (
                       <Button
                         variant="primary"
@@ -478,7 +537,7 @@ export const SessionDetailModal: React.FC<SessionDetailModalProps> = ({
                       </Button>
                     )}
                   </div>
-                  
+
                   <div className="space-y-2">
                     {session.bookings.map((booking: any) => (
                       <div
@@ -491,23 +550,38 @@ export const SessionDetailModal: React.FC<SessionDetailModalProps> = ({
                             checked={selectedAttendees.includes(booking.id)}
                             onChange={(e) => {
                               if (e.target.checked) {
-                                setSelectedAttendees([...selectedAttendees, booking.id]);
+                                setSelectedAttendees([
+                                  ...selectedAttendees,
+                                  booking.id,
+                                ]);
                               } else {
-                                setSelectedAttendees(selectedAttendees.filter(id => id !== booking.id));
+                                setSelectedAttendees(
+                                  selectedAttendees.filter(
+                                    (id) => id !== booking.id,
+                                  ),
+                                );
                               }
                             }}
                             className="w-4 h-4 text-primary-600 rounded"
                           />
                           <div>
-                            <p className="font-medium text-gray-900">{booking.userName}</p>
-                            <p className="text-sm text-gray-500">{booking.userEmail}</p>
+                            <p className="font-medium text-gray-900">
+                              {booking.userName}
+                            </p>
+                            <p className="text-sm text-gray-500">
+                              {booking.userEmail}
+                            </p>
                           </div>
                         </div>
                         <div className="flex items-center gap-4">
-                          <AdminBadge variant={getPaymentBadge(booking.payment_status)}>
+                          <AdminBadge
+                            variant={getPaymentBadge(booking.payment_status)}
+                          >
                             {booking.payment_status}
                           </AdminBadge>
-                          <p className="text-sm text-gray-900">£{booking.payment_amount}</p>
+                          <p className="text-sm text-gray-900">
+                            £{booking.payment_amount}
+                          </p>
                         </div>
                       </div>
                     ))}
@@ -518,7 +592,9 @@ export const SessionDetailModal: React.FC<SessionDetailModalProps> = ({
               {/* Notes */}
               {session.notes && (
                 <div>
-                  <h3 className="text-sm font-medium text-gray-600 mb-2">Notes</h3>
+                  <h3 className="text-sm font-medium text-gray-600 mb-2">
+                    Notes
+                  </h3>
                   <p className="text-sm text-gray-900 p-3 bg-gray-50 rounded-lg">
                     {session.notes}
                   </p>
@@ -546,7 +622,11 @@ export const SessionDetailModal: React.FC<SessionDetailModalProps> = ({
                 <Button
                   variant="secondary"
                   onClick={() => {
-                    if (window.confirm('Are you sure you want to delete this session?')) {
+                    if (
+                      window.confirm(
+                        "Are you sure you want to delete this session?",
+                      )
+                    ) {
                       deleteMutation.mutate();
                     }
                   }}
@@ -558,7 +638,7 @@ export const SessionDetailModal: React.FC<SessionDetailModalProps> = ({
               </>
             )}
           </div>
-          
+
           <div className="flex gap-3">
             <Button
               variant="secondary"
@@ -568,13 +648,13 @@ export const SessionDetailModal: React.FC<SessionDetailModalProps> = ({
                   // Reset form data
                   if (session) {
                     setFormData({
-                      courseId: session.course_id || '',
-                      venueId: session.venue_id || '',
-                      date: session.date || '',
-                      startTime: session.startTime || '09:00',
-                      endTime: session.endTime || '17:00',
+                      courseId: session.course_id || "",
+                      venueId: session.venue_id || "",
+                      date: session.date || "",
+                      startTime: session.startTime || "09:00",
+                      endTime: session.endTime || "17:00",
                       maxCapacity: session.maxParticipants || 12,
-                      notes: session.notes || ''
+                      notes: session.notes || "",
                     });
                   }
                 } else {
@@ -582,25 +662,24 @@ export const SessionDetailModal: React.FC<SessionDetailModalProps> = ({
                 }
               }}
             >
-              {editMode ? 'Cancel' : 'Close'}
+              {editMode ? "Cancel" : "Close"}
             </Button>
-            
+
             {editMode ? (
               <Button
                 variant="primary"
                 onClick={handleSubmit}
                 disabled={saveMutation.isPending}
               >
-                {saveMutation.isPending ? 'Saving...' : 'Save Changes'}
+                {saveMutation.isPending ? "Saving..." : "Save Changes"}
               </Button>
-            ) : !isNewSession && (
-              <Button
-                variant="primary"
-                onClick={() => setEditMode(true)}
-              >
-                <Edit3 className="w-4 h-4 mr-2" />
-                Edit Session
-              </Button>
+            ) : (
+              !isNewSession && (
+                <Button variant="primary" onClick={() => setEditMode(true)}>
+                  <Edit3 className="w-4 h-4 mr-2" />
+                  Edit Session
+                </Button>
+              )
             )}
           </div>
         </div>
@@ -614,7 +693,7 @@ export const SessionDetailModal: React.FC<SessionDetailModalProps> = ({
           onClose={() => setShowCancelModal(false)}
           onSuccess={() => {
             onClose();
-            queryClient.invalidateQueries({ queryKey: ['admin-schedules'] });
+            queryClient.invalidateQueries({ queryKey: ["admin-schedules"] });
           }}
         />
       )}
@@ -645,49 +724,54 @@ const CancelSessionModal: React.FC<{
   onClose: () => void;
   onSuccess: () => void;
 }> = ({ sessionId, attendeeCount, onClose, onSuccess }) => {
-  const [cancellationReasonId, setCancellationReasonId] = useState('');
-  const [reasonDetails, setReasonDetails] = useState('');
+  const [cancellationReasonId, setCancellationReasonId] = useState("");
+  const [reasonDetails, setReasonDetails] = useState("");
   const { addNotification } = useNotifications();
 
   // Fetch cancellation reasons
   const { data: reasons } = useQuery({
-    queryKey: ['cancellation-reasons'],
+    queryKey: ["cancellation-reasons"],
     queryFn: async () => {
-      const response = await adminApi.get('/api/admin/cancellation-reasons');
-      if (!response.ok) throw new Error('Failed to fetch reasons');
+      const response = await adminApi.get("/api/admin/cancellation-reasons");
+      if (!response.ok) throw new Error("Failed to fetch reasons");
       return response.json();
-    }
+    },
   });
 
   const cancelMutation = useMutation({
     mutationFn: async () => {
-      const response = await adminApi.post(`/api/admin/schedules/${sessionId}/cancel`, {
-        cancellationReasonId,
-        reasonDetails,
-        sendNotifications: true,
-        processRefunds: true
-      });
-      if (!response.ok) throw new Error('Failed to cancel session');
+      const response = await adminApi.post(
+        `/api/admin/schedules/${sessionId}/cancel`,
+        {
+          cancellationReasonId,
+          reasonDetails,
+          sendNotifications: true,
+          processRefunds: true,
+        },
+      );
+      if (!response.ok) throw new Error("Failed to cancel session");
       return response.json();
     },
     onSuccess: (data) => {
-      addNotification({ 
-        type: 'success', 
-        title: 'Session cancelled successfully',
-        message: `${data.emailsSent} notifications sent, ${data.refundsProcessed} refunds initiated`
+      addNotification({
+        type: "success",
+        title: "Session cancelled successfully",
+        message: `${data.emailsSent} notifications sent, ${data.refundsProcessed} refunds initiated`,
       });
       onSuccess();
     },
     onError: (error: Error) => {
-      addNotification({ 
-        type: 'error', 
-        title: 'Failed to cancel session',
-        message: error.message
+      addNotification({
+        type: "error",
+        title: "Failed to cancel session",
+        message: error.message,
       });
-    }
+    },
   });
 
-  const selectedReason = reasons?.find((r: any) => r.id === parseInt(cancellationReasonId));
+  const selectedReason = reasons?.find(
+    (r: any) => r.id === parseInt(cancellationReasonId),
+  );
 
   return (
     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-[60] p-4">
@@ -697,9 +781,13 @@ const CancelSessionModal: React.FC<{
             <AlertTriangle className="w-6 h-6 text-red-600" />
           </div>
           <div>
-            <h3 className="text-lg font-semibold text-gray-900">Cancel Session</h3>
+            <h3 className="text-lg font-semibold text-gray-900">
+              Cancel Session
+            </h3>
             <p className="text-sm text-gray-500 mt-1">
-              This will notify {attendeeCount} attendee{attendeeCount !== 1 ? 's' : ''} and process refunds automatically.
+              This will notify {attendeeCount} attendee
+              {attendeeCount !== 1 ? "s" : ""} and process refunds
+              automatically.
             </p>
           </div>
         </div>
@@ -753,20 +841,22 @@ const CancelSessionModal: React.FC<{
         </div>
 
         <div className="flex gap-3 mt-6">
-          <Button
-            variant="secondary"
-            onClick={onClose}
-            className="flex-1"
-          >
+          <Button variant="secondary" onClick={onClose} className="flex-1">
             Cancel
           </Button>
           <Button
             variant="primary"
             onClick={() => cancelMutation.mutate()}
-            disabled={!cancellationReasonId || cancelMutation.isPending || (selectedReason?.requires_details && !reasonDetails)}
+            disabled={
+              !cancellationReasonId ||
+              cancelMutation.isPending ||
+              (selectedReason?.requires_details && !reasonDetails)
+            }
             className="flex-1 bg-red-600 hover:bg-red-700"
           >
-            {cancelMutation.isPending ? 'Processing...' : 'Confirm Cancellation'}
+            {cancelMutation.isPending
+              ? "Processing..."
+              : "Confirm Cancellation"}
           </Button>
         </div>
       </div>

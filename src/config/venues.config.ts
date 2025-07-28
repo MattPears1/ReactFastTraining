@@ -1,81 +1,82 @@
-import { VenueConfig, VenueCode } from '@/types/booking.types';
+import { VenueConfig, VenueCode } from "@/types/booking.types";
 
 export const VENUE_CONFIG: Record<VenueCode, VenueConfig> = {
   SHEFFIELD: {
-    code: 'SHEFFIELD',
-    name: 'South Yorkshire',
-    address: 'Venue TBC',
-    city: 'Sheffield',
-    postcode: 'S1 1AA',
+    code: "SHEFFIELD",
+    name: "South Yorkshire",
+    address: "Venue TBC",
+    city: "Sheffield",
+    postcode: "S1 1AA",
     facilities: [
-      'Free parking nearby',
-      'Wheelchair accessible',
-      'Refreshments provided',
-      'Air conditioning'
+      "Free parking nearby",
+      "Wheelchair accessible",
+      "Refreshments provided",
+      "Air conditioning",
     ],
-    parkingInfo: 'Multi-storey car park 2 minutes walk',
-    publicTransport: 'Sheffield station 10 minute walk, multiple bus routes nearby'
+    parkingInfo: "Multi-storey car park 2 minutes walk",
+    publicTransport:
+      "Sheffield station 10 minute walk, multiple bus routes nearby",
   },
   LEEDS: {
-    code: 'LEEDS',
-    name: 'South Yorkshire',
-    address: 'Venue TBC',
-    city: 'Leeds',
-    postcode: 'LS1 1AA',
+    code: "LEEDS",
+    name: "South Yorkshire",
+    address: "Venue TBC",
+    city: "Leeds",
+    postcode: "LS1 1AA",
     facilities: [
-      'City centre location',
-      'Wheelchair accessible',
-      'Refreshments provided',
-      'Modern facilities'
+      "City centre location",
+      "Wheelchair accessible",
+      "Refreshments provided",
+      "Modern facilities",
     ],
-    parkingInfo: 'Several city centre car parks within 5 minutes',
-    publicTransport: 'Leeds station 15 minute walk, excellent bus connections'
+    parkingInfo: "Several city centre car parks within 5 minutes",
+    publicTransport: "Leeds station 15 minute walk, excellent bus connections",
   },
   BARNSLEY: {
-    code: 'BARNSLEY',
-    name: 'South Yorkshire',
-    address: 'Venue TBC',
-    city: 'Barnsley',
-    postcode: 'S70 1AA',
+    code: "BARNSLEY",
+    name: "South Yorkshire",
+    address: "Venue TBC",
+    city: "Barnsley",
+    postcode: "S70 1AA",
     facilities: [
-      'Free parking',
-      'Ground floor access',
-      'Refreshments provided',
-      'Break out areas'
+      "Free parking",
+      "Ground floor access",
+      "Refreshments provided",
+      "Break out areas",
     ],
-    parkingInfo: 'Free on-site parking available',
-    publicTransport: 'Barnsley Interchange 5 minute walk'
+    parkingInfo: "Free on-site parking available",
+    publicTransport: "Barnsley Interchange 5 minute walk",
   },
   DONCASTER: {
-    code: 'DONCASTER',
-    name: 'South Yorkshire',
-    address: 'Venue TBC',
-    city: 'Doncaster',
-    postcode: 'DN1 1AA',
+    code: "DONCASTER",
+    name: "South Yorkshire",
+    address: "Venue TBC",
+    city: "Doncaster",
+    postcode: "DN1 1AA",
     facilities: [
-      'Easy access location',
-      'Wheelchair accessible',
-      'Refreshments provided',
-      'Comfortable training rooms'
+      "Easy access location",
+      "Wheelchair accessible",
+      "Refreshments provided",
+      "Comfortable training rooms",
     ],
-    parkingInfo: 'Town centre parking available',
-    publicTransport: 'Doncaster station 10 minute walk'
+    parkingInfo: "Town centre parking available",
+    publicTransport: "Doncaster station 10 minute walk",
   },
   ROTHERHAM: {
-    code: 'ROTHERHAM',
-    name: 'South Yorkshire',
-    address: 'Venue TBC',
-    city: 'Rotherham',
-    postcode: 'S60 1AA',
+    code: "ROTHERHAM",
+    name: "South Yorkshire",
+    address: "Venue TBC",
+    city: "Rotherham",
+    postcode: "S60 1AA",
     facilities: [
-      'Central location',
-      'Accessible facilities',
-      'Refreshments provided',
-      'Modern equipment'
+      "Central location",
+      "Accessible facilities",
+      "Refreshments provided",
+      "Modern equipment",
     ],
-    parkingInfo: 'Public parking nearby',
-    publicTransport: 'Rotherham Central station nearby'
-  }
+    parkingInfo: "Public parking nearby",
+    publicTransport: "Rotherham Central station nearby",
+  },
 };
 
 export const getVenueConfig = (code: VenueCode): VenueConfig => {

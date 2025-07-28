@@ -1,13 +1,13 @@
-import React, { useEffect, useState } from 'react';
-import { useSearchParams } from 'react-router-dom';
-import { motion } from 'framer-motion';
-import { SearchBar } from '@components/ui/SearchBar';
-import { SearchResults } from '@components/ui/SearchResults';
-import { useSearch } from '@hooks/useSearch';
+import React, { useEffect, useState } from "react";
+import { useSearchParams } from "react-router-dom";
+import { motion } from "framer-motion";
+import { SearchBar } from "@components/ui/SearchBar";
+import { SearchResults } from "@components/ui/SearchResults";
+import { useSearch } from "@hooks/useSearch";
 
 const SearchPage: React.FC = () => {
   const [searchParams, setSearchParams] = useSearchParams();
-  const query = searchParams.get('q') || '';
+  const query = searchParams.get("q") || "";
   const [searchQuery, setSearchQuery] = useState(query);
   const { suggestions, loading, search } = useSearch();
 
@@ -63,20 +63,30 @@ const SearchPage: React.FC = () => {
               </h3>
               <ul className="space-y-2 text-gray-600 dark:text-gray-400">
                 <li className="flex items-start gap-2">
-                  <span className="text-primary-600 dark:text-primary-400">•</span>
+                  <span className="text-primary-600 dark:text-primary-400">
+                    •
+                  </span>
                   <span>Use specific keywords for better results</span>
                 </li>
                 <li className="flex items-start gap-2">
-                  <span className="text-primary-600 dark:text-primary-400">•</span>
+                  <span className="text-primary-600 dark:text-primary-400">
+                    •
+                  </span>
                   <span>Try different spellings or synonyms</span>
                 </li>
                 <li className="flex items-start gap-2">
-                  <span className="text-primary-600 dark:text-primary-400">•</span>
+                  <span className="text-primary-600 dark:text-primary-400">
+                    •
+                  </span>
                   <span>Use quotes for exact phrases</span>
                 </li>
                 <li className="flex items-start gap-2">
-                  <span className="text-primary-600 dark:text-primary-400">•</span>
-                  <span>Browse categories if you're not sure what to search for</span>
+                  <span className="text-primary-600 dark:text-primary-400">
+                    •
+                  </span>
+                  <span>
+                    Browse categories if you're not sure what to search for
+                  </span>
                 </li>
               </ul>
             </div>
@@ -90,14 +100,14 @@ const SearchPage: React.FC = () => {
               </h3>
               <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
                 {[
-                  { name: 'Products', href: '/products' },
-                  { name: 'Services', href: '/services' },
-                  { name: 'About Us', href: '/about' },
-                  { name: 'FAQ', href: '/faq' },
-                  { name: 'Support', href: '/contact' },
-                  { name: 'Blog', href: '/blog' },
-                  { name: 'Careers', href: '/careers' },
-                  { name: 'Partners', href: '/partners' },
+                  { name: "Products", href: "/products" },
+                  { name: "Services", href: "/services" },
+                  { name: "About Us", href: "/about" },
+                  { name: "FAQ", href: "/faq" },
+                  { name: "Support", href: "/contact" },
+                  { name: "Blog", href: "/blog" },
+                  { name: "Careers", href: "/careers" },
+                  { name: "Partners", href: "/partners" },
                 ].map((category) => (
                   <a
                     key={category.name}

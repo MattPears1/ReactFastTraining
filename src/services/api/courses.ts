@@ -1,4 +1,4 @@
-import { api } from '../api.service';
+import { api } from "../api.service";
 
 export interface CourseSession {
   id: string;
@@ -11,7 +11,7 @@ export interface CourseSession {
   price: number;
   maxParticipants: number;
   currentBookings: number;
-  status: 'scheduled' | 'full' | 'cancelled';
+  status: "scheduled" | "full" | "cancelled";
 }
 
 export interface SessionFilters {
@@ -22,60 +22,81 @@ export interface SessionFilters {
 }
 
 export const courseApi = {
-  async getAvailableSessions(filters: SessionFilters): Promise<CourseSession[]> {
+  async getAvailableSessions(
+    filters: SessionFilters,
+  ): Promise<CourseSession[]> {
     const params = new URLSearchParams();
-    if (filters.courseType) params.append('courseType', filters.courseType);
-    if (filters.month !== undefined) params.append('month', filters.month.toString());
-    if (filters.year) params.append('year', filters.year.toString());
-    if (filters.location) params.append('location', filters.location);
+    if (filters.courseType) params.append("courseType", filters.courseType);
+    if (filters.month !== undefined)
+      params.append("month", filters.month.toString());
+    if (filters.year) params.append("year", filters.year.toString());
+    if (filters.location) params.append("location", filters.location);
 
     try {
-      const response = await api.get(`/course-sessions/available?${params.toString()}`);
-      
+      const response = await api.get(
+        `/course-sessions/available?${params.toString()}`,
+      );
+
       // Transform backend data to frontend format
       return response.data.map((session: any) => ({
         id: session.id,
         courseId: session.courseId,
-        courseType: session.course?.name || session.course?.type || 'Unknown Course',
-        sessionDate: session.startDate.split('T')[0], // Extract date part
+        courseType:
+          session.course?.name || session.course?.type || "Unknown Course",
+        sessionDate: session.startDate.split("T")[0], // Extract date part
         startTime: session.startTime,
         endTime: session.endTime,
-        location: session.location?.name || session.location?.address || 'Unknown Location',
+        location:
+          session.location?.name ||
+          session.location?.address ||
+          "Unknown Location",
         price: session.pricePerPerson || 0,
         maxParticipants: session.maxParticipants,
         currentBookings: session.currentParticipants || 0,
-        status: session.status?.toLowerCase() === 'cancelled' ? 'cancelled' : 
-                session.currentParticipants >= session.maxParticipants ? 'full' : 'scheduled'
+        status:
+          session.status?.toLowerCase() === "cancelled"
+            ? "cancelled"
+            : session.currentParticipants >= session.maxParticipants
+              ? "full"
+              : "scheduled",
       }));
     } catch (error) {
-      console.error('Failed to fetch sessions from API:', error);
+      console.error("Failed to fetch sessions from API:", error);
       throw error; // Let the calling component handle the error
     }
   },
 
   async getSession(sessionId: string): Promise<CourseSession> {
     const response = await api.get(`/course-sessions/${sessionId}`);
-    
+
     // Transform backend data to frontend format
     const session = response.data;
     return {
       id: session.id,
       courseId: session.courseId,
-      courseType: session.course?.name || session.course?.type || 'Unknown Course',
-      sessionDate: session.startDate.split('T')[0],
+      courseType:
+        session.course?.name || session.course?.type || "Unknown Course",
+      sessionDate: session.startDate.split("T")[0],
       startTime: session.startTime,
       endTime: session.endTime,
-      location: session.location?.name || session.location?.address || 'Unknown Location',
+      location:
+        session.location?.name ||
+        session.location?.address ||
+        "Unknown Location",
       price: session.pricePerPerson || 0,
       maxParticipants: session.maxParticipants,
       currentBookings: session.currentParticipants || 0,
-      status: session.status?.toLowerCase() === 'cancelled' ? 'cancelled' : 
-              session.currentParticipants >= session.maxParticipants ? 'full' : 'scheduled'
+      status:
+        session.status?.toLowerCase() === "cancelled"
+          ? "cancelled"
+          : session.currentParticipants >= session.maxParticipants
+            ? "full"
+            : "scheduled",
     };
   },
 
   async checkAvailability(sessionId: string, attendeeCount: number) {
-    const response = await api.post('/api/bookings/validate-session', {
+    const response = await api.post("/api/bookings/validate-session", {
       sessionId,
       attendeeCount,
     });

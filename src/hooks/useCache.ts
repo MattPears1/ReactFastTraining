@@ -1,5 +1,5 @@
-import { useCallback, useEffect, useState } from 'react';
-import { DataCache } from '@utils/cache';
+import { useCallback, useEffect, useState } from "react";
+import { DataCache } from "@utils/cache";
 
 interface UseCacheOptions<T> {
   cache: DataCache<T>;
@@ -63,12 +63,12 @@ export function useCache<T>({
       }
 
       // Fetch fresh data
-      setState(prev => ({ ...prev, isLoading: true, error: null }));
+      setState((prev) => ({ ...prev, isLoading: true, error: null }));
 
       try {
         const data = await fetcher();
         cache.set(key, data, ttl);
-        
+
         setState({
           data,
           error: null,
@@ -76,11 +76,11 @@ export function useCache<T>({
           isStale: false,
           lastFetch: Date.now(),
         });
-        
+
         return data;
       } catch (error) {
         const err = error as Error;
-        setState(prev => ({
+        setState((prev) => ({
           ...prev,
           error: err,
           isLoading: false,
@@ -89,7 +89,7 @@ export function useCache<T>({
         throw err;
       }
     },
-    [cache, key, fetcher, ttl, enabled, checkStaleness, onError]
+    [cache, key, fetcher, ttl, enabled, checkStaleness, onError],
   );
 
   // Initial fetch
@@ -104,7 +104,7 @@ export function useCache<T>({
     if (!staleTime || !state.data) return;
 
     const interval = setInterval(() => {
-      setState(prev => ({
+      setState((prev) => ({
         ...prev,
         isStale: checkStaleness(),
       }));
@@ -119,21 +119,21 @@ export function useCache<T>({
 
   const mutate = useCallback(
     (data: T | ((prev: T | null) => T)) => {
-      const newData = typeof data === 'function' ? data(state.data) : data;
+      const newData = typeof data === "function" ? data(state.data) : data;
       cache.set(key, newData, ttl);
-      setState(prev => ({
+      setState((prev) => ({
         ...prev,
         data: newData,
         lastFetch: Date.now(),
         isStale: false,
       }));
     },
-    [cache, key, ttl, state.data]
+    [cache, key, ttl, state.data],
   );
 
   const invalidate = useCallback(() => {
     cache.delete(key);
-    setState(prev => ({
+    setState((prev) => ({
       ...prev,
       data: null,
       isStale: false,
@@ -158,19 +158,19 @@ export function useCachedApi<T>(
   options?: Partial<UseCacheOptions<T>> & {
     params?: Record<string, any>;
     headers?: Record<string, string>;
-  }
+  },
 ) {
   const { params, headers, ...cacheOptions } = options || {};
-  
+
   // Generate cache key from endpoint and params
-  const cacheKey = params 
+  const cacheKey = params
     ? `${endpoint}?${new URLSearchParams(params).toString()}`
     : endpoint;
 
   const fetcher = useCallback(async () => {
     const response = await fetch(endpoint, {
       headers: {
-        'Content-Type': 'application/json',
+        "Content-Type": "application/json",
         ...headers,
       },
     });

@@ -1,5 +1,5 @@
-import React from 'react';
-import { Check } from 'lucide-react';
+import React from "react";
+import { Check } from "lucide-react";
 
 interface Step {
   number: number;
@@ -11,7 +11,10 @@ interface StepIndicatorProps {
   currentStep: number;
 }
 
-export const StepIndicator: React.FC<StepIndicatorProps> = ({ steps, currentStep }) => {
+export const StepIndicator: React.FC<StepIndicatorProps> = ({
+  steps,
+  currentStep,
+}) => {
   return (
     <div className="w-full">
       {/* Desktop Step Indicator */}
@@ -24,11 +27,12 @@ export const StepIndicator: React.FC<StepIndicatorProps> = ({ steps, currentStep
                   className={`
                     w-10 h-10 rounded-full flex items-center justify-center font-semibold
                     transition-all duration-300
-                    ${step.number < currentStep
-                      ? 'bg-green-500 text-white'
-                      : step.number === currentStep
-                      ? 'bg-primary-600 text-white ring-4 ring-primary-100'
-                      : 'bg-gray-200 text-gray-500'
+                    ${
+                      step.number < currentStep
+                        ? "bg-green-500 text-white"
+                        : step.number === currentStep
+                          ? "bg-primary-600 text-white ring-4 ring-primary-100"
+                          : "bg-gray-200 text-gray-500"
                     }
                   `}
                 >
@@ -41,7 +45,7 @@ export const StepIndicator: React.FC<StepIndicatorProps> = ({ steps, currentStep
                 <span
                   className={`
                     ml-3 text-sm font-medium
-                    ${step.number === currentStep ? 'text-gray-900' : 'text-gray-500'}
+                    ${step.number === currentStep ? "text-gray-900" : "text-gray-500"}
                   `}
                 >
                   {step.title}
@@ -51,7 +55,7 @@ export const StepIndicator: React.FC<StepIndicatorProps> = ({ steps, currentStep
                 <div
                   className={`
                     flex-1 h-0.5 mx-4
-                    ${step.number < currentStep ? 'bg-green-500' : 'bg-gray-200'}
+                    ${step.number < currentStep ? "bg-green-500" : "bg-gray-200"}
                   `}
                 />
               )}

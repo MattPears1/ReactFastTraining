@@ -1,68 +1,97 @@
-import React from 'react'
-import { motion } from 'framer-motion'
-import { MapPin, Car, Train, Bus, Coffee, Wifi, Users, Clock, Shield, CheckCircle, Phone, Mail } from 'lucide-react'
-import Button from '@components/ui/Button'
-import SEO from '@components/common/SEO'
-import { Link } from 'react-router-dom'
+import React from "react";
+import { motion } from "framer-motion";
+import {
+  MapPin,
+  Car,
+  Train,
+  Bus,
+  Coffee,
+  Wifi,
+  Users,
+  Clock,
+  Shield,
+  CheckCircle,
+  Phone,
+  Mail,
+} from "lucide-react";
+import Button from "@components/ui/Button";
+import SEO from "@components/common/SEO";
+import { Link } from "react-router-dom";
 
 const TrainingVenuePage: React.FC = () => {
   const facilities = [
-    { icon: Wifi, name: 'Free WiFi', description: 'High-speed internet throughout' },
-    { icon: Coffee, name: 'Refreshments', description: 'Tea, coffee & biscuits provided' },
-    { icon: Car, name: 'Free Parking', description: 'Ample parking spaces available' },
-    { icon: Users, name: 'Spacious Rooms', description: 'Comfortable training environment' }
-  ]
+    {
+      icon: Wifi,
+      name: "Free WiFi",
+      description: "High-speed internet throughout",
+    },
+    {
+      icon: Coffee,
+      name: "Refreshments",
+      description: "Tea, coffee & biscuits provided",
+    },
+    {
+      icon: Car,
+      name: "Free Parking",
+      description: "Ample parking spaces available",
+    },
+    {
+      icon: Users,
+      name: "Spacious Rooms",
+      description: "Comfortable training environment",
+    },
+  ];
 
   const accessibility = [
-    'Wheelchair accessible entrance and facilities',
-    'Hearing loop system available',
-    'Ground floor training rooms',
-    'Accessible parking spaces',
-    'Clear signage throughout',
-    'Adjustable seating arrangements'
-  ]
+    "Wheelchair accessible entrance and facilities",
+    "Hearing loop system available",
+    "Ground floor training rooms",
+    "Accessible parking spaces",
+    "Clear signage throughout",
+    "Adjustable seating arrangements",
+  ];
 
   const nearbyAmenities = [
-    'City centre location near transport links',
-    'Multiple restaurants and cafes within 5 minutes',
-    'Hotels and B&Bs for overnight stays',
-    'Shopping centres nearby',
-    'Banks and ATMs close by',
-    'Pharmacy and medical centre adjacent'
-  ]
+    "City centre location near transport links",
+    "Multiple restaurants and cafes within 5 minutes",
+    "Hotels and B&Bs for overnight stays",
+    "Shopping centres nearby",
+    "Banks and ATMs close by",
+    "Pharmacy and medical centre adjacent",
+  ];
 
   const transportOptions = [
     {
       icon: Train,
-      mode: 'By Train',
+      mode: "By Train",
       details: [
-        'Sheffield Station: 15 minute walk',
-        'Meadowhall Interchange: 20 minutes by tram',
-        'Direct trains from major Yorkshire cities',
-        'Supertram stops nearby'
-      ]
+        "Sheffield Station: 15 minute walk",
+        "Meadowhall Interchange: 20 minutes by tram",
+        "Direct trains from major Yorkshire cities",
+        "Supertram stops nearby",
+      ],
     },
     {
       icon: Bus,
-      mode: 'By Bus',
+      mode: "By Bus",
       details: [
-        'Multiple bus routes stop nearby',
-        'Direct buses from all Sheffield areas',
-        'Park & Ride services available',
-        'Night bus services for evening courses'
-      ]
+        "Multiple bus routes stop nearby",
+        "Direct buses from all Sheffield areas",
+        "Park & Ride services available",
+        "Night bus services for evening courses",
+      ],
     },
     {
       icon: Car,
-      mode: 'By Car',
+      mode: "By Car",
       details: [
-        'Free on-site parking',
-        'Easy access from M1 and Sheffield Parkway',
-        'Sat Nav: Postcode provided upon booking',
-        'Electric vehicle charging points'
-      ]
-    }
-  ]
+        "Free on-site parking",
+        "Easy access from M1 and Sheffield Parkway",
+        "Sat Nav: Postcode provided upon booking",
+        "Electric vehicle charging points",
+      ],
+    },
+  ];
 
   return (
     <div className="relative bg-white dark:bg-gray-900">
@@ -73,15 +102,27 @@ const TrainingVenuePage: React.FC = () => {
         canonical="/venue"
       />
 
-
       {/* Hero Section */}
       <section className="relative py-20 bg-gradient-to-br from-primary-50 via-white to-secondary-50 dark:from-gray-900 dark:via-gray-900 dark:to-gray-800 overflow-hidden">
         <div className="absolute inset-0">
-          <svg className="absolute inset-0 w-full h-full" preserveAspectRatio="none">
-            <pattern id="grid-venue" width="40" height="40" patternUnits="userSpaceOnUse">
-              <path d="M 40 0 L 0 0 0 40" fill="none" stroke="rgba(14, 165, 233, 0.05)" strokeWidth="1"/>
+          <svg
+            className="absolute inset-0 w-full h-full"
+            preserveAspectRatio="none"
+          >
+            <pattern
+              id="grid-venue"
+              width="40"
+              height="40"
+              patternUnits="userSpaceOnUse"
+            >
+              <path
+                d="M 40 0 L 0 0 0 40"
+                fill="none"
+                stroke="rgba(14, 165, 233, 0.05)"
+                strokeWidth="1"
+              />
             </pattern>
-            <rect width="100%" height="100%"  fill="url(#grid-venue)" />
+            <rect width="100%" height="100%" fill="url(#grid-venue)" />
           </svg>
         </div>
 
@@ -95,19 +136,20 @@ const TrainingVenuePage: React.FC = () => {
               <MapPin className="w-4 h-4" />
               Sheffield Centre & North Sheffield
             </div>
-            
+
             <h1 className="text-4xl md:text-5xl lg:text-6xl font-heading font-bold text-gray-900 dark:text-white mb-6">
               Our Training Venue
               <span className="block text-3xl md:text-4xl mt-2 text-transparent bg-clip-text bg-gradient-to-r from-primary-500 to-secondary-500">
                 Professional & Accessible Facilities
               </span>
             </h1>
-            
+
             <p className="text-xl text-gray-600 dark:text-gray-400 mb-8 max-w-3xl mx-auto">
-              Modern, comfortable training facilities designed for effective learning. 
-              Convenient location in Sheffield Centre and North Sheffield with excellent transport links.
+              Modern, comfortable training facilities designed for effective
+              learning. Convenient location in Sheffield Centre and North
+              Sheffield with excellent transport links.
             </p>
-            
+
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <Button
                 href="/booking"
@@ -142,7 +184,8 @@ const TrainingVenuePage: React.FC = () => {
               Training Venue Location
             </h2>
             <p className="text-lg text-gray-600 dark:text-gray-400 max-w-2xl mx-auto">
-              Our training venue is located in Sheffield Centre and North Sheffield
+              Our training venue is located in Sheffield Centre and North
+              Sheffield
             </p>
           </motion.div>
 
@@ -162,17 +205,22 @@ const TrainingVenuePage: React.FC = () => {
                   Venue Address & Security
                 </h3>
                 <p className="text-gray-700 dark:text-gray-300 mb-4">
-                  For the security and privacy of our participants, the exact training venue address 
-                  will be provided upon booking confirmation.
+                  For the security and privacy of our participants, the exact
+                  training venue address will be provided upon booking
+                  confirmation.
                 </p>
                 <p className="text-gray-600 dark:text-gray-400 mb-6">
-                  <strong>Location:</strong> Sheffield Centre and North Sheffield<br />
-                  Full address and directions will be included in your booking confirmation email.
+                  <strong>Location:</strong> Sheffield Centre and North
+                  Sheffield
+                  <br />
+                  Full address and directions will be included in your booking
+                  confirmation email.
                 </p>
                 <div className="bg-blue-50 dark:bg-blue-900/20 rounded-lg p-4 mb-6">
                   <p className="text-sm text-blue-800 dark:text-blue-300">
-                    <strong>Note:</strong> Our venue is easily accessible from all areas of Sheffield and 
-                    surrounding regions, with excellent transport links and parking facilities.
+                    <strong>Note:</strong> Our venue is easily accessible from
+                    all areas of Sheffield and surrounding regions, with
+                    excellent transport links and parking facilities.
                   </p>
                 </div>
                 <Link to="/contact">
@@ -195,7 +243,8 @@ const TrainingVenuePage: React.FC = () => {
               On-Site Training Available
             </h3>
             <p className="text-gray-600 dark:text-gray-400 mb-6 max-w-2xl mx-auto">
-              We also deliver training at your workplace anywhere in Sheffield and surrounding areas.
+              We also deliver training at your workplace anywhere in Sheffield
+              and surrounding areas.
             </p>
             <Link to="/contact">
               <Button variant="secondary">
@@ -260,8 +309,8 @@ const TrainingVenuePage: React.FC = () => {
                 </h3>
               </div>
               <p className="text-gray-600 dark:text-gray-400 mb-6">
-                All our training venues are designed to be fully accessible, ensuring everyone 
-                can participate comfortably in our courses.
+                All our training venues are designed to be fully accessible,
+                ensuring everyone can participate comfortably in our courses.
               </p>
               <ul className="space-y-3">
                 {accessibility.map((item, index) => (
@@ -274,7 +323,9 @@ const TrainingVenuePage: React.FC = () => {
                     className="flex items-start gap-3"
                   >
                     <CheckCircle className="w-5 h-5 text-secondary-500 flex-shrink-0 mt-0.5" />
-                    <span className="text-gray-700 dark:text-gray-300">{item}</span>
+                    <span className="text-gray-700 dark:text-gray-300">
+                      {item}
+                    </span>
                   </motion.li>
                 ))}
               </ul>
@@ -292,7 +343,8 @@ const TrainingVenuePage: React.FC = () => {
                 </h3>
               </div>
               <p className="text-gray-600 dark:text-gray-400 mb-6">
-                Our venues are strategically located near essential amenities for your convenience.
+                Our venues are strategically located near essential amenities
+                for your convenience.
               </p>
               <ul className="space-y-3">
                 {nearbyAmenities.map((item, index) => (
@@ -305,7 +357,9 @@ const TrainingVenuePage: React.FC = () => {
                     className="flex items-start gap-3"
                   >
                     <CheckCircle className="w-5 h-5 text-accent-500 flex-shrink-0 mt-0.5" />
-                    <span className="text-gray-700 dark:text-gray-300">{item}</span>
+                    <span className="text-gray-700 dark:text-gray-300">
+                      {item}
+                    </span>
                   </motion.li>
                 ))}
               </ul>
@@ -351,7 +405,10 @@ const TrainingVenuePage: React.FC = () => {
                 </div>
                 <ul className="space-y-2">
                   {option.details.map((detail, idx) => (
-                    <li key={idx} className="text-gray-600 dark:text-gray-400 text-sm">
+                    <li
+                      key={idx}
+                      className="text-gray-600 dark:text-gray-400 text-sm"
+                    >
                       • {detail}
                     </li>
                   ))}
@@ -376,7 +433,8 @@ const TrainingVenuePage: React.FC = () => {
               Book Your Training Today
             </h2>
             <p className="text-xl mb-8 text-white/90 max-w-2xl mx-auto">
-              Secure your place on our next course. Full venue details will be provided upon booking confirmation.
+              Secure your place on our next course. Full venue details will be
+              provided upon booking confirmation.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <Button
@@ -398,14 +456,14 @@ const TrainingVenuePage: React.FC = () => {
               </Button>
             </div>
             <p className="mt-6 text-white/80">
-              Professional venues • Free parking • Fully accessible • Refreshments included
+              Professional venues • Free parking • Fully accessible •
+              Refreshments included
             </p>
           </motion.div>
         </div>
       </section>
-
     </div>
-  )
-}
+  );
+};
 
-export default TrainingVenuePage
+export default TrainingVenuePage;

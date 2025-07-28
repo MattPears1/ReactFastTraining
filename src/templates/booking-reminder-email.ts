@@ -1,6 +1,10 @@
-import { CourseSchedule } from '@/types/booking.types';
-import { VENUE_CONFIG } from '@/config/venues.config';
-import { formatDate, formatTime, formatCountdown } from '@/utils/dateFormatting';
+import { CourseSchedule } from "@/types/booking.types";
+import { VENUE_CONFIG } from "@/config/venues.config";
+import {
+  formatDate,
+  formatTime,
+  formatCountdown,
+} from "@/utils/dateFormatting";
 
 interface BookingReminderEmailData {
   confirmationCode: string;
@@ -12,18 +16,22 @@ interface BookingReminderEmailData {
   daysUntilCourse: number;
 }
 
-export const generateBookingReminderEmail = (data: BookingReminderEmailData): {
+export const generateBookingReminderEmail = (
+  data: BookingReminderEmailData,
+): {
   subject: string;
   htmlContent: string;
   textContent: string;
 } => {
-  const venue = VENUE_CONFIG[data.courseSchedule.venue as keyof typeof VENUE_CONFIG];
+  const venue =
+    VENUE_CONFIG[data.courseSchedule.venue as keyof typeof VENUE_CONFIG];
   const courseDate = formatDate(data.courseSchedule.startDate);
   const courseTime = `${formatTime(data.courseSchedule.startDate)} - ${formatTime(data.courseSchedule.endDate)}`;
-  
-  const reminderType = data.daysUntilCourse === 1 ? 'Tomorrow' : `${data.daysUntilCourse} Days`;
+
+  const reminderType =
+    data.daysUntilCourse === 1 ? "Tomorrow" : `${data.daysUntilCourse} Days`;
   const subject = `Course Reminder: ${data.courseSchedule.courseName} - ${reminderType}`;
-  
+
   const htmlContent = `
 <!DOCTYPE html>
 <html>
@@ -151,7 +159,7 @@ export const generateBookingReminderEmail = (data: BookingReminderEmailData): {
     
     <div class="countdown-banner">
       <p style="margin: 0; font-size: 18px;">Your course is in</p>
-      <div class="countdown-number">${data.daysUntilCourse === 1 ? 'TOMORROW' : `${data.daysUntilCourse} DAYS`}</div>
+      <div class="countdown-number">${data.daysUntilCourse === 1 ? "TOMORROW" : `${data.daysUntilCourse} DAYS`}</div>
     </div>
     
     <div class="content">
@@ -177,15 +185,19 @@ export const generateBookingReminderEmail = (data: BookingReminderEmailData): {
           <span class="detail-label">Venue:</span>
           <span class="detail-value">${data.courseSchedule.venueName}</span>
         </div>
-        ${venue ? `
+        ${
+          venue
+            ? `
         <div class="detail-row">
           <span class="detail-label">Address:</span>
           <span class="detail-value">${venue.address}</span>
         </div>
-        ` : ''}
+        `
+            : ""
+        }
         <div class="detail-row">
           <span class="detail-label">Participants:</span>
-          <span class="detail-value">${data.numberOfParticipants} ${data.numberOfParticipants === 1 ? 'person' : 'people'}</span>
+          <span class="detail-value">${data.numberOfParticipants} ${data.numberOfParticipants === 1 ? "person" : "people"}</span>
         </div>
         <div class="detail-row">
           <span class="detail-label">Confirmation Code:</span>
@@ -193,13 +205,17 @@ export const generateBookingReminderEmail = (data: BookingReminderEmailData): {
         </div>
       </div>
       
-      ${venue && venue.mapUrl ? `
+      ${
+        venue && venue.mapUrl
+          ? `
       <div style="text-align: center;">
         <a href="${venue.mapUrl}" class="map-button">
           📍 Get Directions
         </a>
       </div>
-      ` : ''}
+      `
+          : ""
+      }
       
       <div class="checklist">
         <h3>Before You Arrive</h3>
@@ -223,11 +239,15 @@ export const generateBookingReminderEmail = (data: BookingReminderEmailData): {
         </ul>
       </div>
       
-      ${data.daysUntilCourse > 5 ? `
+      ${
+        data.daysUntilCourse > 5
+          ? `
       <div style="background-color: #EFF6FF; border: 1px solid #3B82F6; border-radius: 8px; padding: 15px; margin: 20px 0;">
         <p style="margin: 0;"><strong>Need to reschedule?</strong> You can still make changes to your booking up to 5 working days before the course. Contact us at <a href="mailto:bookings@reactfasttraining.co.uk">bookings@reactfasttraining.co.uk</a></p>
       </div>
-      ` : ''}
+      `
+          : ""
+      }
       
       <p>We're looking forward to seeing you on the course! If you have any questions, please don't hesitate to contact us.</p>
       
@@ -246,21 +266,21 @@ export const generateBookingReminderEmail = (data: BookingReminderEmailData): {
 </body>
 </html>
   `.trim();
-  
+
   const textContent = `
 Course Reminder - React Fast Training
 
 Hi ${data.firstName},
 
-Your first aid training course is ${data.daysUntilCourse === 1 ? 'TOMORROW' : `in ${data.daysUntilCourse} days`}!
+Your first aid training course is ${data.daysUntilCourse === 1 ? "TOMORROW" : `in ${data.daysUntilCourse} days`}!
 
 COURSE DETAILS:
 - Course: ${data.courseSchedule.courseName}
 - Date: ${courseDate}
 - Time: ${courseTime}
 - Venue: ${data.courseSchedule.venueName}
-${venue ? `- Address: ${venue.address}` : ''}
-- Participants: ${data.numberOfParticipants} ${data.numberOfParticipants === 1 ? 'person' : 'people'}
+${venue ? `- Address: ${venue.address}` : ""}
+- Participants: ${data.numberOfParticipants} ${data.numberOfParticipants === 1 ? "person" : "people"}
 - Confirmation Code: ${data.confirmationCode}
 
 BEFORE YOU ARRIVE:
@@ -277,9 +297,9 @@ WHAT WE'LL PROVIDE:
 ✓ Certificate upon successful completion
 ✓ Access to online resources
 
-${venue && venue.mapUrl ? `GET DIRECTIONS: ${venue.mapUrl}` : ''}
+${venue && venue.mapUrl ? `GET DIRECTIONS: ${venue.mapUrl}` : ""}
 
-${data.daysUntilCourse > 5 ? `Need to reschedule? You can still make changes to your booking up to 5 working days before the course. Contact us at booking@reactfasttraining.co.uk` : ''}
+${data.daysUntilCourse > 5 ? `Need to reschedule? You can still make changes to your booking up to 5 working days before the course. Contact us at booking@reactfasttraining.co.uk` : ""}
 
 We're looking forward to seeing you on the course! If you have any questions, please don't hesitate to contact us.
 
@@ -295,10 +315,10 @@ Phone: 01234 567890
 This reminder was sent to ${data.email}
 © ${new Date().getFullYear()} React Fast Training. All rights reserved.
   `.trim();
-  
+
   return {
     subject,
     htmlContent,
-    textContent
+    textContent,
   };
 };

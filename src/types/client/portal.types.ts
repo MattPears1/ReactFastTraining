@@ -9,7 +9,7 @@ export interface NextCourse {
   booking: {
     id: string;
     bookingReference: string;
-    status: 'confirmed' | 'pending' | 'cancelled';
+    status: "confirmed" | "pending" | "cancelled";
     createdAt: string;
   };
   session: {
@@ -19,7 +19,7 @@ export interface NextCourse {
     startTime: string;
     endTime: string;
     location: string;
-    status: 'scheduled' | 'in-progress' | 'completed' | 'cancelled';
+    status: "scheduled" | "in-progress" | "completed" | "cancelled";
   };
   attendeeCount: number;
   specialRequirements?: SpecialRequirement[];
@@ -34,7 +34,7 @@ export interface UpcomingCourse {
   booking: {
     id: string;
     bookingReference: string;
-    status: 'confirmed' | 'pending' | 'cancelled';
+    status: "confirmed" | "pending" | "cancelled";
   };
   session: {
     id: string;

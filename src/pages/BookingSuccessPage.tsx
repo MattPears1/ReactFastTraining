@@ -1,11 +1,11 @@
-import React, { useEffect, useState } from 'react';
-import { useParams, Link } from 'react-router-dom';
-import { CheckCircle, Download, Calendar, Mail, Home } from 'lucide-react';
-import { format } from 'date-fns';
-import confetti from 'canvas-confetti';
-import { bookingApi, BookingDetails } from '@/services/api/bookings';
-import SEO from '@/components/common/SEO';
-import Button from '@/components/ui/Button';
+import React, { useEffect, useState } from "react";
+import { useParams, Link } from "react-router-dom";
+import { CheckCircle, Download, Calendar, Mail, Home } from "lucide-react";
+import { format } from "date-fns";
+import confetti from "canvas-confetti";
+import { bookingApi, BookingDetails } from "@/services/api/bookings";
+import SEO from "@/components/common/SEO";
+import Button from "@/components/ui/Button";
 
 export const BookingSuccessPage: React.FC = () => {
   const { bookingReference } = useParams();
@@ -20,7 +20,7 @@ export const BookingSuccessPage: React.FC = () => {
       particleCount: 100,
       spread: 70,
       origin: { y: 0.6 },
-      colors: ['#0EA5E9', '#10B981', '#F97316'],
+      colors: ["#0EA5E9", "#10B981", "#F97316"],
     });
 
     // Load booking details
@@ -34,7 +34,7 @@ export const BookingSuccessPage: React.FC = () => {
       const data = await bookingApi.getBookingByReference(bookingReference!);
       setBooking(data);
     } catch (error) {
-      console.error('Failed to load booking:', error);
+      console.error("Failed to load booking:", error);
     } finally {
       setLoading(false);
     }
@@ -42,18 +42,18 @@ export const BookingSuccessPage: React.FC = () => {
 
   const downloadConfirmation = async () => {
     if (!booking) return;
-    
+
     setDownloadingPDF(true);
     try {
       const blob = await bookingApi.downloadPDF(booking.id);
       const url = window.URL.createObjectURL(blob);
-      const a = document.createElement('a');
+      const a = document.createElement("a");
       a.href = url;
       a.download = `booking-${bookingReference}.pdf`;
       a.click();
       window.URL.revokeObjectURL(url);
     } catch (error) {
-      console.error('Failed to download PDF:', error);
+      console.error("Failed to download PDF:", error);
     } finally {
       setDownloadingPDF(false);
     }
@@ -61,18 +61,18 @@ export const BookingSuccessPage: React.FC = () => {
 
   const downloadCalendar = async () => {
     if (!booking) return;
-    
+
     setDownloadingICS(true);
     try {
       const blob = await bookingApi.downloadICS(booking.id);
       const url = window.URL.createObjectURL(blob);
-      const a = document.createElement('a');
+      const a = document.createElement("a");
       a.href = url;
-      a.download = 'course-booking.ics';
+      a.download = "course-booking.ics";
       a.click();
       window.URL.revokeObjectURL(url);
     } catch (error) {
-      console.error('Failed to download calendar file:', error);
+      console.error("Failed to download calendar file:", error);
     } finally {
       setDownloadingICS(false);
     }
@@ -90,7 +90,9 @@ export const BookingSuccessPage: React.FC = () => {
     return (
       <div className="min-h-screen flex items-center justify-center">
         <div className="text-center">
-          <h2 className="text-2xl font-bold text-gray-900 mb-4">Booking Not Found</h2>
+          <h2 className="text-2xl font-bold text-gray-900 mb-4">
+            Booking Not Found
+          </h2>
           <Link to="/" className="text-primary-600 hover:underline">
             Return to Home
           </Link>
@@ -103,7 +105,7 @@ export const BookingSuccessPage: React.FC = () => {
 
   return (
     <>
-      <SEO 
+      <SEO
         title="Booking Confirmed"
         description="Your first aid training course booking has been confirmed"
         noIndex={true}
@@ -124,7 +126,9 @@ export const BookingSuccessPage: React.FC = () => {
             {/* Booking Reference */}
             <div className="p-8">
               <div className="bg-blue-50 rounded-lg p-6 text-center mb-8">
-                <p className="text-sm text-gray-600 mb-2">Your Booking Reference</p>
+                <p className="text-sm text-gray-600 mb-2">
+                  Your Booking Reference
+                </p>
                 <p className="text-3xl font-bold text-primary-600">
                   {booking.bookingReference}
                 </p>
@@ -132,7 +136,9 @@ export const BookingSuccessPage: React.FC = () => {
 
               {/* Next Steps */}
               <div className="mb-8">
-                <h2 className="text-xl font-semibold mb-4">What Happens Next?</h2>
+                <h2 className="text-xl font-semibold mb-4">
+                  What Happens Next?
+                </h2>
                 <div className="space-y-3">
                   <div className="flex items-start gap-3">
                     <Mail className="w-5 h-5 text-gray-400 mt-0.5" />
@@ -148,7 +154,7 @@ export const BookingSuccessPage: React.FC = () => {
                     <div>
                       <p className="font-medium">Mark Your Calendar</p>
                       <p className="text-sm text-gray-600">
-                        {format(sessionDate, 'EEEE, d MMMM yyyy')}
+                        {format(sessionDate, "EEEE, d MMMM yyyy")}
                         at {booking.courseDetails.startTime}
                       </p>
                     </div>
@@ -162,11 +168,15 @@ export const BookingSuccessPage: React.FC = () => {
                 <dl className="space-y-2 text-sm">
                   <div className="flex justify-between">
                     <dt className="text-gray-600">Course:</dt>
-                    <dd className="font-medium">{booking.courseDetails.courseType}</dd>
+                    <dd className="font-medium">
+                      {booking.courseDetails.courseType}
+                    </dd>
                   </div>
                   <div className="flex justify-between">
                     <dt className="text-gray-600">Location:</dt>
-                    <dd className="font-medium">{booking.courseDetails.location}</dd>
+                    <dd className="font-medium">
+                      {booking.courseDetails.location}
+                    </dd>
                   </div>
                   <div className="flex justify-between">
                     <dt className="text-gray-600">Attendees:</dt>
@@ -174,7 +184,9 @@ export const BookingSuccessPage: React.FC = () => {
                   </div>
                   <div className="flex justify-between">
                     <dt className="text-gray-600">Total Paid:</dt>
-                    <dd className="font-medium text-green-600">£{booking.totalAmount}</dd>
+                    <dd className="font-medium text-green-600">
+                      £{booking.totalAmount}
+                    </dd>
                   </div>
                 </dl>
               </div>
@@ -188,7 +200,7 @@ export const BookingSuccessPage: React.FC = () => {
                   className="flex-1"
                 >
                   <Download className="w-5 h-5 mr-2" />
-                  {downloadingPDF ? 'Downloading...' : 'Download Confirmation'}
+                  {downloadingPDF ? "Downloading..." : "Download Confirmation"}
                 </Button>
                 <Button
                   onClick={downloadCalendar}
@@ -197,7 +209,7 @@ export const BookingSuccessPage: React.FC = () => {
                   className="flex-1"
                 >
                   <Calendar className="w-5 h-5 mr-2" />
-                  {downloadingICS ? 'Downloading...' : 'Add to Calendar'}
+                  {downloadingICS ? "Downloading..." : "Add to Calendar"}
                 </Button>
               </div>
 
@@ -229,11 +241,15 @@ export const BookingSuccessPage: React.FC = () => {
 
           {/* Important Information */}
           <div className="mt-6 bg-yellow-50 border border-yellow-200 rounded-lg p-6">
-            <h3 className="font-semibold text-yellow-800 mb-2">Important Reminders</h3>
+            <h3 className="font-semibold text-yellow-800 mb-2">
+              Important Reminders
+            </h3>
             <ul className="space-y-1 text-sm text-yellow-700">
               <li>• Please arrive 15 minutes before the start time</li>
               <li>• Bring photo ID for registration</li>
-              <li>• Wear comfortable clothing suitable for practical exercises</li>
+              <li>
+                • Wear comfortable clothing suitable for practical exercises
+              </li>
               <li>• We'll send a reminder email 24 hours before your course</li>
             </ul>
           </div>

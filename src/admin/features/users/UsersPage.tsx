@@ -1,92 +1,106 @@
-import React, { useState } from 'react';
-import { useQuery } from '@tanstack/react-query';
-import { 
-  Search, 
-  Users, 
-  Phone, 
-  Building, 
-  Calendar, 
+import React, { useState } from "react";
+import { useQuery } from "@tanstack/react-query";
+import {
+  Search,
+  Users,
+  Phone,
+  Building,
+  Calendar,
   PoundSterling,
   Mail,
   MapPin,
   Activity,
   Download,
   Eye,
-  Filter
-} from 'lucide-react';
-import { format } from 'date-fns';
-import { AdminCard } from '../../components/ui/AdminCard';
-import { AdminBadge } from '../../components/ui/AdminBadge';
-import { LoadingSpinner } from '../../components/common/LoadingSpinner';
-import { AdminEmptyState } from '../../components/ui/AdminEmptyState';
-import { adminApi } from '../../utils/api';
-import type { User, UserListResponse } from '../../../types/user';
-import { useNavigate } from 'react-router-dom';
-import '../../styles/admin-design-system.css';
+  Filter,
+} from "lucide-react";
+import { format } from "date-fns";
+import { AdminCard } from "../../components/ui/AdminCard";
+import { AdminBadge } from "../../components/ui/AdminBadge";
+import { LoadingSpinner } from "../../components/common/LoadingSpinner";
+import { AdminEmptyState } from "../../components/ui/AdminEmptyState";
+import { adminApi } from "../../utils/api";
+import type { User, UserListResponse } from "../../../types/user";
+import { useNavigate } from "react-router-dom";
+import "../../styles/admin-design-system.css";
 
 export const UsersPage: React.FC = () => {
   const navigate = useNavigate();
-  const [searchTerm, setSearchTerm] = useState('');
-  const [roleFilter, setRoleFilter] = useState<string>('all');
-  const [customerTypeFilter, setCustomerTypeFilter] = useState<string>('all');
-  const [hasBookingsFilter, setHasBookingsFilter] = useState<string>('all');
+  const [searchTerm, setSearchTerm] = useState("");
+  const [roleFilter, setRoleFilter] = useState<string>("all");
+  const [customerTypeFilter, setCustomerTypeFilter] = useState<string>("all");
+  const [hasBookingsFilter, setHasBookingsFilter] = useState<string>("all");
   const [currentPage, setCurrentPage] = useState(0);
   const pageSize = 50;
-  
+
   const { data, isLoading, error } = useQuery({
-    queryKey: ['admin-users', searchTerm, roleFilter, customerTypeFilter, hasBookingsFilter, currentPage],
+    queryKey: [
+      "admin-users",
+      searchTerm,
+      roleFilter,
+      customerTypeFilter,
+      hasBookingsFilter,
+      currentPage,
+    ],
     queryFn: async () => {
       const params = new URLSearchParams();
-      if (searchTerm) params.append('search', searchTerm);
-      if (roleFilter !== 'all') params.append('role', roleFilter);
-      if (customerTypeFilter !== 'all') params.append('customerType', customerTypeFilter);
-      if (hasBookingsFilter !== 'all') params.append('hasBookings', hasBookingsFilter);
-      params.append('limit', pageSize.toString());
-      params.append('offset', (currentPage * pageSize).toString());
-      
+      if (searchTerm) params.append("search", searchTerm);
+      if (roleFilter !== "all") params.append("role", roleFilter);
+      if (customerTypeFilter !== "all")
+        params.append("customerType", customerTypeFilter);
+      if (hasBookingsFilter !== "all")
+        params.append("hasBookings", hasBookingsFilter);
+      params.append("limit", pageSize.toString());
+      params.append("offset", (currentPage * pageSize).toString());
+
       const response = await adminApi.get(`/api/admin/users?${params}`);
-      if (!response.ok) throw new Error('Failed to fetch users');
+      if (!response.ok) throw new Error("Failed to fetch users");
       return response.json() as Promise<UserListResponse>;
     },
     staleTime: 5 * 60 * 1000,
   });
-  
-  const getRoleBadgeVariant = (role: string): 'success' | 'warning' | 'error' | 'neutral' => {
+
+  const getRoleBadgeVariant = (
+    role: string,
+  ): "success" | "warning" | "error" | "neutral" => {
     switch (role) {
-      case 'admin': return 'error';
-      case 'instructor': return 'warning';
-      default: return 'success';
+      case "admin":
+        return "error";
+      case "instructor":
+        return "warning";
+      default:
+        return "success";
     }
   };
 
   const formatCurrency = (amount: number | string) => {
-    const numAmount = typeof amount === 'string' ? parseFloat(amount) : amount;
+    const numAmount = typeof amount === "string" ? parseFloat(amount) : amount;
     return `£${numAmount.toFixed(2)}`;
   };
 
   const handleExport = async () => {
     try {
       const params = new URLSearchParams();
-      if (roleFilter !== 'all') params.append('role', roleFilter);
-      params.append('format', 'csv');
-      
+      if (roleFilter !== "all") params.append("role", roleFilter);
+      params.append("format", "csv");
+
       const response = await adminApi.get(`/api/admin/users/export?${params}`);
       const blob = await response.blob();
-      
+
       // Create download link
       const url = window.URL.createObjectURL(blob);
-      const a = document.createElement('a');
+      const a = document.createElement("a");
       a.href = url;
-      a.download = `users-${format(new Date(), 'yyyy-MM-dd')}.csv`;
+      a.download = `users-${format(new Date(), "yyyy-MM-dd")}.csv`;
       document.body.appendChild(a);
       a.click();
       document.body.removeChild(a);
       window.URL.revokeObjectURL(url);
     } catch (error) {
-      console.error('Export failed:', error);
+      console.error("Export failed:", error);
     }
   };
-  
+
   if (isLoading) {
     return (
       <div className="admin-loading-container">
@@ -94,20 +108,22 @@ export const UsersPage: React.FC = () => {
       </div>
     );
   }
-  
+
   if (error) {
     return (
       <AdminCard className="admin-mt-8">
         <div className="text-center">
           <p className="text-red-600 font-medium">Failed to load users</p>
-          <p className="admin-text-small admin-text-muted admin-mt-2">Please try refreshing the page</p>
+          <p className="admin-text-small admin-text-muted admin-mt-2">
+            Please try refreshing the page
+          </p>
         </div>
       </AdminCard>
     );
   }
 
   const totalPages = Math.ceil((data?.total || 0) / pageSize);
-  
+
   return (
     <div className="space-y-6 admin-fade-in">
       {/* Header */}
@@ -120,7 +136,7 @@ export const UsersPage: React.FC = () => {
             </p>
           </div>
           <div className="mt-4 sm:mt-0">
-            <button 
+            <button
               onClick={handleExport}
               className="admin-btn admin-btn-secondary"
             >
@@ -140,20 +156,26 @@ export const UsersPage: React.FC = () => {
             </div>
             <div className="ml-4">
               <p className="text-sm font-medium text-gray-600">Total Users</p>
-              <p className="text-2xl font-semibold text-gray-900">{data?.total || 0}</p>
+              <p className="text-2xl font-semibold text-gray-900">
+                {data?.total || 0}
+              </p>
             </div>
           </div>
         </AdminCard>
-        
+
         <AdminCard className="p-4">
           <div className="flex items-center">
             <div className="p-2 bg-green-100 rounded-lg">
               <Activity className="w-5 h-5 text-green-600" />
             </div>
             <div className="ml-4">
-              <p className="text-sm font-medium text-gray-600">Active Customers</p>
+              <p className="text-sm font-medium text-gray-600">
+                Active Customers
+              </p>
               <p className="text-2xl font-semibold text-gray-900">
-                {data?.data.filter(u => u.role === 'customer' && u.totalBookings > 0).length || 0}
+                {data?.data.filter(
+                  (u) => u.role === "customer" && u.totalBookings > 0,
+                ).length || 0}
               </p>
             </div>
           </div>
@@ -167,7 +189,8 @@ export const UsersPage: React.FC = () => {
             <div className="ml-4">
               <p className="text-sm font-medium text-gray-600">Corporate</p>
               <p className="text-2xl font-semibold text-gray-900">
-                {data?.data.filter(u => u.customerType === 'corporate').length || 0}
+                {data?.data.filter((u) => u.customerType === "corporate")
+                  .length || 0}
               </p>
             </div>
           </div>
@@ -181,13 +204,13 @@ export const UsersPage: React.FC = () => {
             <div className="ml-4">
               <p className="text-sm font-medium text-gray-600">Subscribed</p>
               <p className="text-2xl font-semibold text-gray-900">
-                {data?.data.filter(u => u.newsletterSubscribed).length || 0}
+                {data?.data.filter((u) => u.newsletterSubscribed).length || 0}
               </p>
             </div>
           </div>
         </AdminCard>
       </div>
-      
+
       {/* Filters */}
       <AdminCard>
         <div className="grid grid-cols-1 md:grid-cols-5 gap-4">
@@ -251,7 +274,7 @@ export const UsersPage: React.FC = () => {
           </div>
         </div>
       </AdminCard>
-      
+
       {/* Users Table */}
       <AdminCard>
         <div className="overflow-x-auto">
@@ -286,9 +309,7 @@ export const UsersPage: React.FC = () => {
                       <div className="text-sm font-medium text-gray-900">
                         {user.name}
                       </div>
-                      <div className="text-sm text-gray-500">
-                        {user.email}
-                      </div>
+                      <div className="text-sm text-gray-500">{user.email}</div>
                       {user.companyName && (
                         <div className="text-sm text-gray-500 flex items-center mt-1">
                           <Building className="w-3 h-3 mr-1" />
@@ -308,7 +329,8 @@ export const UsersPage: React.FC = () => {
                       {user.city && (
                         <div className="text-sm text-gray-500 flex items-center">
                           <MapPin className="w-3 h-3 mr-1 text-gray-400" />
-                          {user.city}{user.postcode && `, ${user.postcode}`}
+                          {user.city}
+                          {user.postcode && `, ${user.postcode}`}
                         </div>
                       )}
                     </div>
@@ -321,11 +343,16 @@ export const UsersPage: React.FC = () => {
                   <td className="px-6 py-4 whitespace-nowrap">
                     <div className="text-sm">
                       <div className="text-gray-900 font-medium">
-                        {user.totalBookings} booking{user.totalBookings !== 1 ? 's' : ''}
+                        {user.totalBookings} booking
+                        {user.totalBookings !== 1 ? "s" : ""}
                       </div>
                       {user.lastBookingDate && (
                         <div className="text-gray-500 text-xs">
-                          Last: {format(new Date(user.lastBookingDate), 'dd MMM yyyy')}
+                          Last:{" "}
+                          {format(
+                            new Date(user.lastBookingDate),
+                            "dd MMM yyyy",
+                          )}
                         </div>
                       )}
                     </div>
@@ -337,7 +364,8 @@ export const UsersPage: React.FC = () => {
                       </div>
                       {user.customerSince && (
                         <div className="text-gray-500 text-xs">
-                          Since {format(new Date(user.customerSince), 'MMM yyyy')}
+                          Since{" "}
+                          {format(new Date(user.customerSince), "MMM yyyy")}
                         </div>
                       )}
                     </div>
@@ -363,9 +391,12 @@ export const UsersPage: React.FC = () => {
             icon={Users}
             title="No users found"
             description={
-              searchTerm || roleFilter !== 'all' || customerTypeFilter !== 'all' || hasBookingsFilter !== 'all'
-                ? 'Try adjusting your filters' 
-                : 'Users will appear here as customers book courses'
+              searchTerm ||
+              roleFilter !== "all" ||
+              customerTypeFilter !== "all" ||
+              hasBookingsFilter !== "all"
+                ? "Try adjusting your filters"
+                : "Users will appear here as customers book courses"
             }
           />
         )}
@@ -375,7 +406,9 @@ export const UsersPage: React.FC = () => {
           <div className="px-6 py-4 border-t border-gray-200">
             <div className="flex items-center justify-between">
               <div className="text-sm text-gray-700">
-                Showing {currentPage * pageSize + 1} to {Math.min((currentPage + 1) * pageSize, data?.total || 0)} of {data?.total || 0} users
+                Showing {currentPage * pageSize + 1} to{" "}
+                {Math.min((currentPage + 1) * pageSize, data?.total || 0)} of{" "}
+                {data?.total || 0} users
               </div>
               <div className="flex gap-2">
                 <button
@@ -386,7 +419,9 @@ export const UsersPage: React.FC = () => {
                   Previous
                 </button>
                 <button
-                  onClick={() => setCurrentPage(Math.min(totalPages - 1, currentPage + 1))}
+                  onClick={() =>
+                    setCurrentPage(Math.min(totalPages - 1, currentPage + 1))
+                  }
                   disabled={currentPage === totalPages - 1}
                   className="admin-btn admin-btn-secondary disabled:opacity-50 disabled:cursor-not-allowed"
                 >

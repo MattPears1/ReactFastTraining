@@ -1,9 +1,9 @@
-import React, { useState } from 'react';
-import { useMutation } from '@tanstack/react-query';
-import { X, Mail, Send } from 'lucide-react';
-import { Button } from '../../../../components/ui/Button';
-import { useNotifications } from '../../../contexts/NotificationContext';
-import { adminApi } from '../../../utils/api';
+import React, { useState } from "react";
+import { useMutation } from "@tanstack/react-query";
+import { X, Mail, Send } from "lucide-react";
+import { Button } from "../../../../components/ui/Button";
+import { useNotifications } from "../../../contexts/NotificationContext";
+import { adminApi } from "../../../utils/api";
 
 interface EmailAttendeesModalProps {
   isOpen: boolean;
@@ -18,44 +18,47 @@ export const EmailAttendeesModal: React.FC<EmailAttendeesModalProps> = ({
   onClose,
   sessionId,
   attendeeIds,
-  attendeeNames
+  attendeeNames,
 }) => {
-  const [subject, setSubject] = useState('');
-  const [message, setMessage] = useState('');
+  const [subject, setSubject] = useState("");
+  const [message, setMessage] = useState("");
   const { addNotification } = useNotifications();
 
   const sendEmailMutation = useMutation({
     mutationFn: async (data: { subject: string; message: string }) => {
-      const response = await adminApi.post(`/api/admin/schedules/${sessionId}/email-attendees`, {
-        attendeeIds,
-        subject: data.subject,
-        message: data.message
-      });
-      if (!response.ok) throw new Error('Failed to send emails');
+      const response = await adminApi.post(
+        `/api/admin/schedules/${sessionId}/email-attendees`,
+        {
+          attendeeIds,
+          subject: data.subject,
+          message: data.message,
+        },
+      );
+      if (!response.ok) throw new Error("Failed to send emails");
       return response.json();
     },
     onSuccess: (data) => {
       addNotification({
-        type: 'success',
-        title: `Emails sent to ${data.emailsSent} attendees`
+        type: "success",
+        title: `Emails sent to ${data.emailsSent} attendees`,
       });
       onClose();
     },
     onError: (error: Error) => {
       addNotification({
-        type: 'error',
-        title: 'Failed to send emails',
-        message: error.message
+        type: "error",
+        title: "Failed to send emails",
+        message: error.message,
       });
-    }
+    },
   });
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (!subject.trim() || !message.trim()) {
       addNotification({
-        type: 'error',
-        title: 'Please fill in all fields'
+        type: "error",
+        title: "Please fill in all fields",
       });
       return;
     }
@@ -74,9 +77,12 @@ export const EmailAttendeesModal: React.FC<EmailAttendeesModalProps> = ({
               <Mail className="w-5 h-5 text-primary-600" />
             </div>
             <div>
-              <h2 className="text-xl font-bold text-gray-900">Email Attendees</h2>
+              <h2 className="text-xl font-bold text-gray-900">
+                Email Attendees
+              </h2>
               <p className="text-sm text-gray-500 mt-1">
-                Send email to {attendeeIds.length} selected attendee{attendeeIds.length !== 1 ? 's' : ''}
+                Send email to {attendeeIds.length} selected attendee
+                {attendeeIds.length !== 1 ? "s" : ""}
               </p>
             </div>
           </div>
@@ -97,8 +103,9 @@ export const EmailAttendeesModal: React.FC<EmailAttendeesModalProps> = ({
             </label>
             <div className="p-3 bg-gray-50 rounded-lg max-h-24 overflow-y-auto">
               <p className="text-sm text-gray-600">
-                {attendeeNames.slice(0, 3).join(', ')}
-                {attendeeNames.length > 3 && ` and ${attendeeNames.length - 3} more`}
+                {attendeeNames.slice(0, 3).join(", ")}
+                {attendeeNames.length > 3 &&
+                  ` and ${attendeeNames.length - 3} more`}
               </p>
             </div>
           </div>
@@ -140,14 +147,16 @@ export const EmailAttendeesModal: React.FC<EmailAttendeesModalProps> = ({
             <div className="border rounded-lg p-4 bg-gray-50">
               <p className="text-xs font-medium text-gray-600 mb-2">Preview</p>
               <div className="bg-white rounded border p-3 text-sm">
-                <p className="font-medium text-gray-900 mb-2">{subject || '(No subject)'}</p>
+                <p className="font-medium text-gray-900 mb-2">
+                  {subject || "(No subject)"}
+                </p>
                 <p className="text-gray-700 whitespace-pre-wrap">
                   Dear [Attendee Name],
-                  {'\n\n'}
-                  {message || '(No message)'}
-                  {'\n\n'}
+                  {"\n\n"}
+                  {message || "(No message)"}
+                  {"\n\n"}
                   Best regards,
-                  {'\n'}
+                  {"\n"}
                   React Fast Training Team
                 </p>
               </div>
@@ -167,7 +176,9 @@ export const EmailAttendeesModal: React.FC<EmailAttendeesModalProps> = ({
           <Button
             variant="primary"
             onClick={handleSubmit}
-            disabled={sendEmailMutation.isPending || !subject.trim() || !message.trim()}
+            disabled={
+              sendEmailMutation.isPending || !subject.trim() || !message.trim()
+            }
           >
             {sendEmailMutation.isPending ? (
               <>Sending...</>

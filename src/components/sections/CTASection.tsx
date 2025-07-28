@@ -1,14 +1,14 @@
-import React from 'react'
-import { motion } from 'framer-motion'
-import { ArrowRight, CheckCircle } from 'lucide-react'
-import Button from '@components/ui/Button'
+import React from "react";
+import { motion } from "framer-motion";
+import { ArrowRight, CheckCircle } from "lucide-react";
+import Button from "@components/ui/Button";
 
 interface CTASectionProps {
-  title?: string
-  description?: string
-  primaryButtonText?: string
-  secondaryButtonText?: string
-  features?: string[]
+  title?: string;
+  description?: string;
+  primaryButtonText?: string;
+  secondaryButtonText?: string;
+  features?: string[];
 }
 
 const CTASection: React.FC<CTASectionProps> = ({
@@ -16,11 +16,7 @@ const CTASection: React.FC<CTASectionProps> = ({
   description = "Start your first aid training journey with React Fast Training.",
   primaryButtonText = "Book Your Course",
   secondaryButtonText = "Call 07447 485644",
-  features = [
-    "Ofqual Regulated",
-    "HSE Approved",
-    "CPD Certified",
-  ]
+  features = ["Ofqual Regulated", "HSE Approved", "CPD Certified"],
 }) => {
   return (
     <section className="py-12 sm:py-16 md:py-20 bg-gradient-to-br from-primary-600 to-primary-800 dark:from-primary-700 dark:to-primary-900 relative overflow-hidden">
@@ -122,19 +118,27 @@ const CTASection: React.FC<CTASectionProps> = ({
               Available for training across South Yorkshire
             </p>
             <div className="flex flex-wrap justify-center items-center gap-x-4 gap-y-2 sm:gap-6 text-white/80">
-              <span className="text-sm sm:text-base font-semibold">Sheffield</span>
+              <span className="text-sm sm:text-base font-semibold">
+                Sheffield
+              </span>
               <span className="text-white/40 hidden sm:inline">•</span>
-              <span className="text-sm sm:text-base font-semibold">Rotherham</span>
+              <span className="text-sm sm:text-base font-semibold">
+                Rotherham
+              </span>
               <span className="text-white/40 hidden sm:inline">•</span>
-              <span className="text-sm sm:text-base font-semibold">Barnsley</span>
+              <span className="text-sm sm:text-base font-semibold">
+                Barnsley
+              </span>
               <span className="text-white/40 hidden sm:inline">•</span>
-              <span className="text-sm sm:text-base font-semibold">Doncaster</span>
+              <span className="text-sm sm:text-base font-semibold">
+                Doncaster
+              </span>
             </div>
           </motion.div>
         </div>
       </div>
     </section>
-  )
-}
+  );
+};
 
-export default CTASection
+export default CTASection;

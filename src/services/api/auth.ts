@@ -1,5 +1,5 @@
-import apiClient from './client';
-import { retryWithBackoff } from '@/services/auth/error.service';
+import apiClient from "./client";
+import { retryWithBackoff } from "@/services/auth/error.service";
 import {
   SignupData,
   LoginCredentials,
@@ -8,7 +8,7 @@ import {
   PasswordResetRequest,
   PasswordResetData,
   ValidateTokenResponse,
-} from '@/types/auth.types';
+} from "@/types/auth.types";
 
 /**
  * Authentication API service
@@ -20,7 +20,7 @@ export const authApi = {
    */
   async signup(data: SignupData): Promise<ApiResponse> {
     return retryWithBackoff(async () => {
-      const response = await apiClient.post<ApiResponse>('/auth/signup', {
+      const response = await apiClient.post<ApiResponse>("/auth/signup", {
         ...data,
         email: data.email.toLowerCase().trim(), // Normalize email
       });
@@ -33,7 +33,7 @@ export const authApi = {
    */
   async verifyEmail(token: string): Promise<ApiResponse> {
     const response = await apiClient.get<ApiResponse>(
-      `/auth/verify-email?token=${encodeURIComponent(token)}`
+      `/auth/verify-email?token=${encodeURIComponent(token)}`,
     );
     return response.data;
   },
@@ -42,7 +42,7 @@ export const authApi = {
    * Login with email and password
    */
   async login(credentials: LoginCredentials): Promise<AuthResponse> {
-    const response = await apiClient.post<AuthResponse>('/auth/login', {
+    const response = await apiClient.post<AuthResponse>("/auth/login", {
       ...credentials,
       email: credentials.email.toLowerCase().trim(), // Normalize email
     });
@@ -54,7 +54,9 @@ export const authApi = {
    */
   async logout(): Promise<{ success: boolean }> {
     try {
-      const response = await apiClient.post<{ success: boolean }>('/auth/logout');
+      const response = await apiClient.post<{ success: boolean }>(
+        "/auth/logout",
+      );
       return response.data;
     } catch (error) {
       // Always return success for logout to ensure local state is cleared
@@ -67,9 +69,12 @@ export const authApi = {
    */
   async forgotPassword(data: PasswordResetRequest): Promise<ApiResponse> {
     return retryWithBackoff(async () => {
-      const response = await apiClient.post<ApiResponse>('/auth/forgot-password', {
-        email: data.email.toLowerCase().trim(), // Normalize email
-      });
+      const response = await apiClient.post<ApiResponse>(
+        "/auth/forgot-password",
+        {
+          email: data.email.toLowerCase().trim(), // Normalize email
+        },
+      );
       return response.data;
     });
   },
@@ -79,7 +84,7 @@ export const authApi = {
    */
   async validateResetToken(token: string): Promise<ValidateTokenResponse> {
     const response = await apiClient.get<ValidateTokenResponse>(
-      `/auth/validate-reset-token?token=${encodeURIComponent(token)}`
+      `/auth/validate-reset-token?token=${encodeURIComponent(token)}`,
     );
     return response.data;
   },
@@ -88,7 +93,10 @@ export const authApi = {
    * Reset password with valid token
    */
   async resetPassword(data: PasswordResetData): Promise<ApiResponse> {
-    const response = await apiClient.post<ApiResponse>('/auth/reset-password', data);
+    const response = await apiClient.post<ApiResponse>(
+      "/auth/reset-password",
+      data,
+    );
     return response.data;
   },
 
@@ -97,7 +105,7 @@ export const authApi = {
    */
   async refreshToken(): Promise<AuthResponse> {
     // TODO: Implement when backend supports refresh tokens
-    throw new Error('Refresh token not implemented');
+    throw new Error("Refresh token not implemented");
   },
 
   /**
@@ -105,7 +113,9 @@ export const authApi = {
    */
   async validateSession(): Promise<{ valid: boolean; user?: User }> {
     // TODO: Implement session validation endpoint
-    const response = await apiClient.get<{ valid: boolean; user?: User }>('/auth/session');
+    const response = await apiClient.get<{ valid: boolean; user?: User }>(
+      "/auth/session",
+    );
     return response.data;
   },
 };

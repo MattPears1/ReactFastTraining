@@ -1,7 +1,13 @@
-import React, { Component, ErrorInfo, ReactNode } from 'react';
-import { AlertTriangle, RefreshCw, Home } from 'lucide-react';
-import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import React, { Component, ErrorInfo, ReactNode } from "react";
+import { AlertTriangle, RefreshCw, Home } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 
 interface Props {
   children: ReactNode;
@@ -41,8 +47,8 @@ export class AuthErrorBoundary extends Component<Props, State> {
     const { errorCount } = this.state;
 
     // Log to console in development
-    if (process.env.NODE_ENV === 'development') {
-      console.error('Auth Error Boundary caught:', error, errorInfo);
+    if (process.env.NODE_ENV === "development") {
+      console.error("Auth Error Boundary caught:", error, errorInfo);
     }
 
     // Call custom error handler
@@ -73,18 +79,18 @@ export class AuthErrorBoundary extends Component<Props, State> {
 
   private reportError(error: Error, errorInfo: ErrorInfo) {
     // Report to Sentry or other error tracking service
-    if (typeof window !== 'undefined' && (window as any).Sentry) {
+    if (typeof window !== "undefined" && (window as any).Sentry) {
       (window as any).Sentry.withScope((scope: any) => {
-        scope.setContext('errorBoundary', {
+        scope.setContext("errorBoundary", {
           componentStack: errorInfo.componentStack,
-          errorBoundary: 'AuthErrorBoundary',
+          errorBoundary: "AuthErrorBoundary",
         });
         (window as any).Sentry.captureException(error);
       });
     }
 
     // Log to audit service
-    const event = new CustomEvent('auth:error-boundary', {
+    const event = new CustomEvent("auth:error-boundary", {
       detail: {
         error: error.message,
         stack: error.stack,
@@ -115,13 +121,13 @@ export class AuthErrorBoundary extends Component<Props, State> {
   };
 
   private handleGoHome = () => {
-    window.location.href = '/';
+    window.location.href = "/";
   };
 
   private renderErrorDetails() {
     const { error, errorInfo } = this.state;
-    
-    if (process.env.NODE_ENV !== 'development' || !error || !errorInfo) {
+
+    if (process.env.NODE_ENV !== "development" || !error || !errorInfo) {
       return null;
     }
 
@@ -165,9 +171,10 @@ export class AuthErrorBoundary extends Component<Props, State> {
               </div>
               <CardTitle>Authentication Error</CardTitle>
               <CardDescription>
-                {error?.message === 'ChunkLoadError' || error?.message?.includes('Loading chunk')
-                  ? 'There was a problem loading the authentication module. This might be due to a network issue.'
-                  : 'Something went wrong with the authentication process. Please try again.'}
+                {error?.message === "ChunkLoadError" ||
+                error?.message?.includes("Loading chunk")
+                  ? "There was a problem loading the authentication module. This might be due to a network issue."
+                  : "Something went wrong with the authentication process. Please try again."}
               </CardDescription>
             </CardHeader>
             <CardContent className="space-y-4">
@@ -194,7 +201,8 @@ export class AuthErrorBoundary extends Component<Props, State> {
 
               {errorCount > 2 && (
                 <div className="text-sm text-amber-600 bg-amber-50 p-3 rounded-md">
-                  Multiple errors detected. The page will automatically reset in a few seconds.
+                  Multiple errors detected. The page will automatically reset in
+                  a few seconds.
                 </div>
               )}
 
@@ -212,7 +220,7 @@ export class AuthErrorBoundary extends Component<Props, State> {
 // Higher-order component for wrapping auth components
 export function withAuthErrorBoundary<P extends object>(
   Component: React.ComponentType<P>,
-  fallback?: ReactNode
+  fallback?: ReactNode,
 ) {
   return (props: P) => (
     <AuthErrorBoundary fallback={fallback}>
@@ -225,10 +233,10 @@ export function withAuthErrorBoundary<P extends object>(
 export function useAuthErrorHandler() {
   return (error: Error, errorInfo?: ErrorInfo) => {
     // Log error
-    console.error('Auth error:', error, errorInfo);
+    console.error("Auth error:", error, errorInfo);
 
     // Report to error tracking
-    if (typeof window !== 'undefined' && (window as any).Sentry) {
+    if (typeof window !== "undefined" && (window as any).Sentry) {
       (window as any).Sentry.captureException(error, {
         contexts: {
           react: errorInfo,
@@ -237,7 +245,7 @@ export function useAuthErrorHandler() {
     }
 
     // Dispatch error event
-    const event = new CustomEvent('auth:error', {
+    const event = new CustomEvent("auth:error", {
       detail: { error, errorInfo },
     });
     window.dispatchEvent(event);

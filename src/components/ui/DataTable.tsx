@@ -1,15 +1,15 @@
-import React, { useState, useMemo } from 'react';
-import { 
-  ChevronUp, 
-  ChevronDown, 
+import React, { useState, useMemo } from "react";
+import {
+  ChevronUp,
+  ChevronDown,
   ChevronsUpDown,
   ArrowUpDown,
-  MoreHorizontal 
-} from 'lucide-react';
-import { cn } from '@utils/cn';
-import { Pagination } from './Pagination';
-import { EmptyState } from './EmptyState';
-import { LoadingState } from './LoadingState';
+  MoreHorizontal,
+} from "lucide-react";
+import { cn } from "@utils/cn";
+import { Pagination } from "./Pagination";
+import { EmptyState } from "./EmptyState";
+import { LoadingState } from "./LoadingState";
 
 // Types
 export interface Column<T> {
@@ -18,7 +18,7 @@ export interface Column<T> {
   accessor?: (row: T) => React.ReactNode;
   sortable?: boolean;
   width?: string;
-  align?: 'left' | 'center' | 'right';
+  align?: "left" | "center" | "right";
   className?: string;
   headerClassName?: string;
   mobileLabel?: string; // Label for mobile card view
@@ -27,7 +27,7 @@ export interface Column<T> {
 
 export interface SortState {
   column: string;
-  direction: 'asc' | 'desc';
+  direction: "asc" | "desc";
 }
 
 interface DataTableProps<T> {
@@ -60,9 +60,9 @@ interface DataTableProps<T> {
 }
 
 const alignClasses = {
-  left: 'text-left',
-  center: 'text-center',
-  right: 'text-right'
+  left: "text-left",
+  center: "text-center",
+  right: "text-right",
 };
 
 export function DataTable<T>({
@@ -70,7 +70,7 @@ export function DataTable<T>({
   columns,
   loading = false,
   error,
-  emptyMessage = 'No data available',
+  emptyMessage = "No data available",
   emptyIcon,
   sortState,
   onSort,
@@ -86,9 +86,11 @@ export function DataTable<T>({
   compact = false,
   responsive = true,
   pagination,
-  className
+  className,
 }: DataTableProps<T>) {
-  const [expandedRows, setExpandedRows] = useState<Set<string | number>>(new Set());
+  const [expandedRows, setExpandedRows] = useState<Set<string | number>>(
+    new Set(),
+  );
 
   // Paginated data
   const paginatedData = useMemo(() => {
@@ -99,8 +101,14 @@ export function DataTable<T>({
   }, [data, pagination]);
 
   // Check if all rows are selected
-  const allSelected = selectable && selectedRows.length === paginatedData.length && paginatedData.length > 0;
-  const someSelected = selectable && selectedRows.length > 0 && selectedRows.length < paginatedData.length;
+  const allSelected =
+    selectable &&
+    selectedRows.length === paginatedData.length &&
+    paginatedData.length > 0;
+  const someSelected =
+    selectable &&
+    selectedRows.length > 0 &&
+    selectedRows.length < paginatedData.length;
 
   // Toggle row expansion (for mobile)
   const toggleRowExpansion = (rowId: string | number) => {
@@ -118,55 +126,63 @@ export function DataTable<T>({
     if (!sortState || sortState.column !== column) {
       return <ChevronsUpDown className="h-4 w-4 text-gray-400" />;
     }
-    return sortState.direction === 'asc' 
-      ? <ChevronUp className="h-4 w-4" />
-      : <ChevronDown className="h-4 w-4" />;
+    return sortState.direction === "asc" ? (
+      <ChevronUp className="h-4 w-4" />
+    ) : (
+      <ChevronDown className="h-4 w-4" />
+    );
   };
 
   // Mobile card view
   const MobileCard = ({ row }: { row: T }) => {
     const id = rowKey(row);
     const isExpanded = expandedRows.has(id);
-    const isSelected = selectedRows.some(r => rowKey(r) === id);
+    const isSelected = selectedRows.some((r) => rowKey(r) === id);
 
     return (
-      <div className={cn(
-        'bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 mb-3',
-        isSelected && 'ring-2 ring-primary-500',
-        onRowClick && 'cursor-pointer hover:shadow-md transition-shadow'
-      )}>
-        <div 
-          className="p-4"
-          onClick={() => onRowClick && onRowClick(row)}
-        >
+      <div
+        className={cn(
+          "bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 mb-3",
+          isSelected && "ring-2 ring-primary-500",
+          onRowClick && "cursor-pointer hover:shadow-md transition-shadow",
+        )}
+      >
+        <div className="p-4" onClick={() => onRowClick && onRowClick(row)}>
           {/* Primary content */}
           <div className="flex items-start justify-between">
             <div className="flex-1 space-y-2">
-              {columns.filter(col => !col.hideOnMobile).map((column, idx) => {
-                const value = column.accessor 
-                  ? column.accessor(row) 
-                  : (row[column.key as keyof T] as React.ReactNode);
-                
-                if (idx === 0) {
-                  // First column as title
+              {columns
+                .filter((col) => !col.hideOnMobile)
+                .map((column, idx) => {
+                  const value = column.accessor
+                    ? column.accessor(row)
+                    : (row[column.key as keyof T] as React.ReactNode);
+
+                  if (idx === 0) {
+                    // First column as title
+                    return (
+                      <div
+                        key={column.key as string}
+                        className="font-semibold text-gray-900 dark:text-white"
+                      >
+                        {value}
+                      </div>
+                    );
+                  }
+
                   return (
-                    <div key={column.key as string} className="font-semibold text-gray-900 dark:text-white">
-                      {value}
+                    <div key={column.key as string} className="text-sm">
+                      <span className="text-gray-500 dark:text-gray-400">
+                        {column.mobileLabel || column.header}:
+                      </span>
+                      <span className="ml-2 text-gray-900 dark:text-white">
+                        {value}
+                      </span>
                     </div>
                   );
-                }
-                
-                return (
-                  <div key={column.key as string} className="text-sm">
-                    <span className="text-gray-500 dark:text-gray-400">
-                      {column.mobileLabel || column.header}: 
-                    </span>
-                    <span className="ml-2 text-gray-900 dark:text-white">{value}</span>
-                  </div>
-                );
-              })}
+                })}
             </div>
-            
+
             {/* Actions */}
             <div className="flex items-center gap-2 ml-4">
               {selectable && onRowSelect && (
@@ -181,14 +197,12 @@ export function DataTable<T>({
                   onClick={(e) => e.stopPropagation()}
                 />
               )}
-              
+
               {actions && (
-                <div onClick={(e) => e.stopPropagation()}>
-                  {actions(row)}
-                </div>
+                <div onClick={(e) => e.stopPropagation()}>{actions(row)}</div>
               )}
-              
-              {columns.some(col => col.hideOnMobile) && (
+
+              {columns.some((col) => col.hideOnMobile) && (
                 <button
                   onClick={(e) => {
                     e.stopPropagation();
@@ -196,32 +210,38 @@ export function DataTable<T>({
                   }}
                   className="p-1 hover:bg-gray-100 dark:hover:bg-gray-700 rounded"
                 >
-                  <ChevronDown className={cn(
-                    'h-4 w-4 transition-transform',
-                    isExpanded && 'rotate-180'
-                  )} />
+                  <ChevronDown
+                    className={cn(
+                      "h-4 w-4 transition-transform",
+                      isExpanded && "rotate-180",
+                    )}
+                  />
                 </button>
               )}
             </div>
           </div>
-          
+
           {/* Expanded content */}
-          {isExpanded && columns.some(col => col.hideOnMobile) && (
+          {isExpanded && columns.some((col) => col.hideOnMobile) && (
             <div className="mt-4 pt-4 border-t border-gray-200 dark:border-gray-700 space-y-2">
-              {columns.filter(col => col.hideOnMobile).map(column => {
-                const value = column.accessor 
-                  ? column.accessor(row) 
-                  : (row[column.key as keyof T] as React.ReactNode);
-                
-                return (
-                  <div key={column.key as string} className="text-sm">
-                    <span className="text-gray-500 dark:text-gray-400">
-                      {column.mobileLabel || column.header}: 
-                    </span>
-                    <span className="ml-2 text-gray-900 dark:text-white">{value}</span>
-                  </div>
-                );
-              })}
+              {columns
+                .filter((col) => col.hideOnMobile)
+                .map((column) => {
+                  const value = column.accessor
+                    ? column.accessor(row)
+                    : (row[column.key as keyof T] as React.ReactNode);
+
+                  return (
+                    <div key={column.key as string} className="text-sm">
+                      <span className="text-gray-500 dark:text-gray-400">
+                        {column.mobileLabel || column.header}:
+                      </span>
+                      <span className="ml-2 text-gray-900 dark:text-white">
+                        {value}
+                      </span>
+                    </div>
+                  );
+                })}
             </div>
           )}
         </div>
@@ -240,10 +260,7 @@ export function DataTable<T>({
   if (error) {
     return (
       <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm p-8">
-        <EmptyState
-          type="error"
-          description={error}
-        />
+        <EmptyState type="error" description={error} />
       </div>
     );
   }
@@ -261,19 +278,21 @@ export function DataTable<T>({
   }
 
   return (
-    <div className={cn('w-full', className)}>
+    <div className={cn("w-full", className)}>
       {/* Mobile view */}
       {responsive && (
         <div className="block md:hidden">
-          {paginatedData.map(row => (
+          {paginatedData.map((row) => (
             <MobileCard key={rowKey(row)} row={row} />
           ))}
-          
+
           {pagination && (
             <div className="mt-4">
               <Pagination
                 currentPage={pagination.currentPage}
-                totalPages={Math.ceil(pagination.totalItems / pagination.itemsPerPage)}
+                totalPages={Math.ceil(
+                  pagination.totalItems / pagination.itemsPerPage,
+                )}
                 totalItems={pagination.totalItems}
                 itemsPerPage={pagination.itemsPerPage}
                 onPageChange={pagination.onPageChange}
@@ -285,16 +304,20 @@ export function DataTable<T>({
       )}
 
       {/* Desktop view */}
-      <div className={cn(
-        'hidden md:block bg-white dark:bg-gray-800 rounded-lg shadow-sm overflow-hidden',
-        responsive && 'md:block'
-      )}>
+      <div
+        className={cn(
+          "hidden md:block bg-white dark:bg-gray-800 rounded-lg shadow-sm overflow-hidden",
+          responsive && "md:block",
+        )}
+      >
         <div className="overflow-x-auto">
           <table className="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
-            <thead className={cn(
-              'bg-gray-50 dark:bg-gray-900',
-              stickyHeader && 'sticky top-0 z-10'
-            )}>
+            <thead
+              className={cn(
+                "bg-gray-50 dark:bg-gray-900",
+                stickyHeader && "sticky top-0 z-10",
+              )}
+            >
               <tr>
                 {selectable && (
                   <th className="px-6 py-3 w-12">
@@ -302,35 +325,45 @@ export function DataTable<T>({
                       type="checkbox"
                       checked={allSelected}
                       indeterminate={someSelected}
-                      onChange={(e) => onSelectAll && onSelectAll(e.target.checked)}
+                      onChange={(e) =>
+                        onSelectAll && onSelectAll(e.target.checked)
+                      }
                       className="h-4 w-4 text-primary-600 focus:ring-primary-500 border-gray-300 rounded"
                     />
                   </th>
                 )}
-                
-                {columns.map(column => (
+
+                {columns.map((column) => (
                   <th
                     key={column.key as string}
                     className={cn(
-                      'px-6 py-3 text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider',
-                      alignClasses[column.align || 'left'],
+                      "px-6 py-3 text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider",
+                      alignClasses[column.align || "left"],
                       column.width,
                       column.headerClassName,
-                      column.sortable && onSort && 'cursor-pointer select-none hover:text-gray-700 dark:hover:text-gray-200'
+                      column.sortable &&
+                        onSort &&
+                        "cursor-pointer select-none hover:text-gray-700 dark:hover:text-gray-200",
                     )}
-                    onClick={() => column.sortable && onSort && onSort(column.key as string)}
+                    onClick={() =>
+                      column.sortable && onSort && onSort(column.key as string)
+                    }
                   >
-                    <div className={cn(
-                      'flex items-center gap-1',
-                      column.align === 'center' && 'justify-center',
-                      column.align === 'right' && 'justify-end'
-                    )}>
+                    <div
+                      className={cn(
+                        "flex items-center gap-1",
+                        column.align === "center" && "justify-center",
+                        column.align === "right" && "justify-end",
+                      )}
+                    >
                       {column.header}
-                      {column.sortable && onSort && renderSortIcon(column.key as string)}
+                      {column.sortable &&
+                        onSort &&
+                        renderSortIcon(column.key as string)}
                     </div>
                   </th>
                 ))}
-                
+
                 {actions && (
                   <th className="relative px-6 py-3 w-20">
                     <span className="sr-only">Actions</span>
@@ -338,18 +371,23 @@ export function DataTable<T>({
                 )}
               </tr>
             </thead>
-            
+
             <tbody className="bg-white dark:bg-gray-800 divide-y divide-gray-200 dark:divide-gray-700">
               {paginatedData.map((row, rowIndex) => {
-                const isSelected = selectedRows.some(r => rowKey(r) === rowKey(row));
-                
+                const isSelected = selectedRows.some(
+                  (r) => rowKey(r) === rowKey(row),
+                );
+
                 return (
                   <tr
                     key={rowKey(row)}
                     className={cn(
-                      striped && rowIndex % 2 === 0 && 'bg-gray-50 dark:bg-gray-900/50',
-                      isSelected && 'bg-primary-50 dark:bg-primary-900/20',
-                      onRowClick && 'cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-700'
+                      striped &&
+                        rowIndex % 2 === 0 &&
+                        "bg-gray-50 dark:bg-gray-900/50",
+                      isSelected && "bg-primary-50 dark:bg-primary-900/20",
+                      onRowClick &&
+                        "cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-700",
                     )}
                     onClick={() => onRowClick && onRowClick(row)}
                   >
@@ -367,27 +405,27 @@ export function DataTable<T>({
                         />
                       </td>
                     )}
-                    
-                    {columns.map(column => {
-                      const value = column.accessor 
-                        ? column.accessor(row) 
+
+                    {columns.map((column) => {
+                      const value = column.accessor
+                        ? column.accessor(row)
                         : (row[column.key as keyof T] as React.ReactNode);
-                      
+
                       return (
                         <td
                           key={column.key as string}
                           className={cn(
-                            compact ? 'px-6 py-2' : 'px-6 py-4',
-                            'whitespace-nowrap text-sm text-gray-900 dark:text-gray-100',
-                            alignClasses[column.align || 'left'],
-                            column.className
+                            compact ? "px-6 py-2" : "px-6 py-4",
+                            "whitespace-nowrap text-sm text-gray-900 dark:text-gray-100",
+                            alignClasses[column.align || "left"],
+                            column.className,
                           )}
                         >
                           {value}
                         </td>
                       );
                     })}
-                    
+
                     {actions && (
                       <td className="px-6 py-4 text-right text-sm font-medium">
                         <div onClick={(e) => e.stopPropagation()}>
@@ -401,12 +439,14 @@ export function DataTable<T>({
             </tbody>
           </table>
         </div>
-        
+
         {pagination && (
           <div className="px-6 py-4 border-t border-gray-200 dark:border-gray-700">
             <Pagination
               currentPage={pagination.currentPage}
-              totalPages={Math.ceil(pagination.totalItems / pagination.itemsPerPage)}
+              totalPages={Math.ceil(
+                pagination.totalItems / pagination.itemsPerPage,
+              )}
               totalItems={pagination.totalItems}
               itemsPerPage={pagination.itemsPerPage}
               onPageChange={pagination.onPageChange}

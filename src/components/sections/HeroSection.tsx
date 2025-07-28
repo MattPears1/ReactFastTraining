@@ -1,14 +1,16 @@
-import React from 'react';
-import { motion } from 'framer-motion';
-import { ArrowRight, Award, Phone } from 'lucide-react';
-import MagneticButton from '@components/ui/MagneticButton';
-import { useKineticTypography } from '@hooks/useAnimation';
-import { FloatingIcons } from '@components/ui/FloatingIcons';
-import { AnimatedGradientText } from '@components/ui/AnimatedGradientText';
+import React from "react";
+import { motion } from "framer-motion";
+import { ArrowRight, Award, Phone } from "lucide-react";
+import MagneticButton from "@components/ui/MagneticButton";
+import { useKineticTypography } from "@hooks/useAnimation";
+import { FloatingIcons } from "@components/ui/FloatingIcons";
+import { AnimatedGradientText } from "@components/ui/AnimatedGradientText";
 
 const HeroSection: React.FC = () => {
-  const { ref: titleRef, displayText } = useKineticTypography('Professional First Aid Training');
-  
+  const { ref: titleRef, displayText } = useKineticTypography(
+    "Professional First Aid Training",
+  );
+
   return (
     <section className="relative min-h-[100vh] flex items-center overflow-hidden">
       {/* Simplified Background for Mobile Performance */}
@@ -45,32 +47,36 @@ const HeroSection: React.FC = () => {
 
             {/* Mobile-Optimized Title */}
             <div className="relative mb-6 sm:mb-8">
-              <h1 ref={titleRef} className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-heading font-bold text-gray-900 dark:text-white leading-tight">
+              <h1
+                ref={titleRef}
+                className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-heading font-bold text-gray-900 dark:text-white leading-tight"
+              >
                 <span className="block">{displayText}</span>
                 <span className="block mt-2 text-2xl sm:text-3xl md:text-4xl lg:text-5xl text-transparent bg-clip-text bg-gradient-to-r from-primary-500 to-secondary-500">
                   in Yorkshire
                 </span>
               </h1>
-              
+
               {/* Slogan - Hidden on very small screens */}
               <div className="hidden sm:block">
-                <AnimatedGradientText 
-                  text="Act Fast | Save Lives" 
+                <AnimatedGradientText
+                  text="Act Fast | Save Lives"
                   className="text-lg sm:text-xl md:text-2xl lg:text-3xl mt-3 sm:mt-4 font-semibold"
                 />
               </div>
-              
+
               {/* Decorative Line - Centered on Mobile */}
               <motion.div
                 initial={{ width: 0 }}
-                animate={{ width: '60px' }}
+                animate={{ width: "60px" }}
                 transition={{ delay: 0.5, duration: 0.8 }}
                 className="h-1 bg-gradient-to-r from-primary-500 to-secondary-500 rounded-full mt-3 sm:mt-4 mx-auto lg:mx-0"
               />
             </div>
 
             <p className="text-base sm:text-lg md:text-xl text-gray-600 dark:text-gray-400 mb-6 sm:mb-8 max-w-xl mx-auto lg:mx-0 px-4 sm:px-0">
-              Learn life-saving skills from an experienced professional. For businesses and individuals.
+              Learn life-saving skills from an experienced professional. For
+              businesses and individuals.
             </p>
 
             {/* Mobile-Optimized CTA Buttons */}
@@ -84,7 +90,7 @@ const HeroSection: React.FC = () => {
               >
                 Book Now
               </MagneticButton>
-              
+
               {/* Secondary CTAs - Side by Side on Mobile */}
               <div className="grid grid-cols-2 gap-3 w-full sm:w-auto sm:flex">
                 <MagneticButton
@@ -107,7 +113,6 @@ const HeroSection: React.FC = () => {
                 </MagneticButton>
               </div>
             </div>
-
           </motion.div>
 
           {/* Visual Element - Hidden on Mobile, Shown on Desktop */}
@@ -146,13 +151,13 @@ const HeroSection: React.FC = () => {
               {/* Front Card with Logo */}
               <div className="relative rounded-3xl overflow-hidden shadow-2xl bg-white dark:bg-gray-800">
                 <div className="flex items-center justify-center h-[400px] xl:h-[500px] p-8 lg:p-12">
-                  <img 
-                    src="/images/logos/fulllogo_transparent.png" 
+                  <img
+                    src="/images/logos/fulllogo_transparent.png"
                     alt="React Fast Training Logo"
                     className="w-full h-auto max-w-sm xl:max-w-md"
                     loading="lazy"
                     onError={(e) => {
-                      e.currentTarget.src = '/images/placeholder-course.jpg';
+                      e.currentTarget.src = "/images/placeholder-course.jpg";
                     }}
                   />
                 </div>
@@ -168,8 +173,8 @@ const HeroSection: React.FC = () => {
           transition={{ delay: 0.6 }}
           className="mt-8 sm:mt-12 lg:hidden text-center"
         >
-          <img 
-            src="/images/logos/fulllogo_transparent.png" 
+          <img
+            src="/images/logos/fulllogo_transparent.png"
             alt="React Fast Training"
             className="w-48 sm:w-64 h-auto mx-auto opacity-80"
             loading="lazy"
@@ -179,9 +184,22 @@ const HeroSection: React.FC = () => {
 
       {/* Bottom Wave - Simplified for Mobile */}
       <div className="absolute bottom-0 left-0 right-0 hidden sm:block">
-        <svg viewBox="0 0 1440 100" fill="none" xmlns="http://www.w3.org/2000/svg" className="w-full">
-          <path d="M0 50C240 20 480 80 720 50C960 20 1200 80 1440 50V100H0V50Z" fill="white" fillOpacity="0.1"/>
-          <path d="M0 70C240 40 480 100 720 70C960 40 1200 100 1440 70V100H0V70Z" fill="white" fillOpacity="0.2"/>
+        <svg
+          viewBox="0 0 1440 100"
+          fill="none"
+          xmlns="http://www.w3.org/2000/svg"
+          className="w-full"
+        >
+          <path
+            d="M0 50C240 20 480 80 720 50C960 20 1200 80 1440 50V100H0V50Z"
+            fill="white"
+            fillOpacity="0.1"
+          />
+          <path
+            d="M0 70C240 40 480 100 720 70C960 40 1200 100 1440 70V100H0V70Z"
+            fill="white"
+            fillOpacity="0.2"
+          />
         </svg>
       </div>
     </section>

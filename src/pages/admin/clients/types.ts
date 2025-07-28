@@ -24,6 +24,6 @@ export interface FilterState {
 }
 
 export interface SortState {
-  field: 'name' | 'created' | 'lastBooking' | 'totalSpend' | 'bookingCount';
-  direction: 'asc' | 'desc';
+  field: "name" | "created" | "lastBooking" | "totalSpend" | "bookingCount";
+  direction: "asc" | "desc";
 }

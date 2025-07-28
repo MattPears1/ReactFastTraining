@@ -1,16 +1,16 @@
-import React from 'react';
-import { motion } from 'framer-motion';
+import React from "react";
+import { motion } from "framer-motion";
 
 interface GoogleAuthButtonProps {
   onClick: () => void;
-  variant: 'login' | 'signup';
+  variant: "login" | "signup";
   disabled?: boolean;
 }
 
-export const GoogleAuthButton: React.FC<GoogleAuthButtonProps> = ({ 
-  onClick, 
+export const GoogleAuthButton: React.FC<GoogleAuthButtonProps> = ({
+  onClick,
   variant,
-  disabled = false 
+  disabled = false,
 }) => {
   return (
     <motion.button
@@ -20,7 +20,7 @@ export const GoogleAuthButton: React.FC<GoogleAuthButtonProps> = ({
       whileHover={{ scale: 1.02 }}
       whileTap={{ scale: 0.98 }}
       className="w-full flex items-center justify-center px-4 py-3 border border-gray-300 dark:border-gray-700 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors gap-3 disabled:opacity-50 disabled:cursor-not-allowed"
-      aria-label={`${variant === 'login' ? 'Sign in' : 'Sign up'} with Google`}
+      aria-label={`${variant === "login" ? "Sign in" : "Sign up"} with Google`}
     >
       <svg className="w-5 h-5" viewBox="0 0 24 24" aria-hidden="true">
         <path
@@ -41,7 +41,7 @@ export const GoogleAuthButton: React.FC<GoogleAuthButtonProps> = ({
         />
       </svg>
       <span className="text-gray-700 dark:text-gray-300">
-        {variant === 'login' ? 'Continue with Google' : 'Sign up with Google'}
+        {variant === "login" ? "Continue with Google" : "Sign up with Google"}
       </span>
     </motion.button>
   );

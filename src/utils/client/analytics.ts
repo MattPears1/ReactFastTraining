@@ -1,5 +1,5 @@
-import React from 'react';
-import { performanceMonitor } from './performance';
+import React from "react";
+import { performanceMonitor } from "./performance";
 
 interface AnalyticsEvent {
   category: string;
@@ -55,8 +55,8 @@ export class Analytics {
   trackPageView(page: string, metadata?: Record<string, any>): void {
     this.userBehavior.pageViews++;
     this.track({
-      category: 'Navigation',
-      action: 'Page View',
+      category: "Navigation",
+      action: "Page View",
       label: page,
       metadata,
     });
@@ -65,7 +65,7 @@ export class Analytics {
   trackError(error: Error, context?: Record<string, any>): void {
     this.userBehavior.errors++;
     this.track({
-      category: 'Error',
+      category: "Error",
       action: error.name,
       label: error.message,
       metadata: {
@@ -77,17 +77,17 @@ export class Analytics {
 
   trackPerformance(metric: string, value: number): void {
     this.track({
-      category: 'Performance',
+      category: "Performance",
       action: metric,
       value,
     });
 
     // Update performance metrics
-    if (metric === 'page-load') {
+    if (metric === "page-load") {
       this.userBehavior.performance.loadTime = value;
-    } else if (metric === 'render-time') {
+    } else if (metric === "render-time") {
       this.userBehavior.performance.renderTime = value;
-    } else if (metric === 'api-response') {
+    } else if (metric === "api-response") {
       this.userBehavior.performance.apiResponseTime = value;
     }
   }
@@ -96,10 +96,10 @@ export class Analytics {
     action: string,
     target: string,
     value?: number,
-    metadata?: Record<string, any>
+    metadata?: Record<string, any>,
   ): void {
     this.track({
-      category: 'User Action',
+      category: "User Action",
       action,
       label: target,
       value,
@@ -115,16 +115,16 @@ export class Analytics {
   }
 
   private getSessionId(): string {
-    let sessionId = sessionStorage.getItem('analytics-session-id');
+    let sessionId = sessionStorage.getItem("analytics-session-id");
     if (!sessionId) {
       sessionId = Math.random().toString(36).substr(2, 9);
-      sessionStorage.setItem('analytics-session-id', sessionId);
+      sessionStorage.setItem("analytics-session-id", sessionId);
     }
     return sessionId;
   }
 
   private getUserId(): string | null {
-    return localStorage.getItem('analytics-user-id');
+    return localStorage.getItem("analytics-user-id");
   }
 
   private scheduleBatchSend(): void {
@@ -146,27 +146,27 @@ export class Analytics {
 
     try {
       // In production, send to analytics endpoint
-      console.log('Analytics batch:', batch);
-      
+      console.log("Analytics batch:", batch);
+
       // Store failed batches for retry
       const failedBatches = JSON.parse(
-        localStorage.getItem('analytics-failed-batches') || '[]'
+        localStorage.getItem("analytics-failed-batches") || "[]",
       );
-      
+
       // Try to send failed batches
       if (failedBatches.length > 0) {
         // Attempt to send failed batches
-        localStorage.setItem('analytics-failed-batches', '[]');
+        localStorage.setItem("analytics-failed-batches", "[]");
       }
     } catch (error) {
       // Store failed batch for later retry
       const failedBatches = JSON.parse(
-        localStorage.getItem('analytics-failed-batches') || '[]'
+        localStorage.getItem("analytics-failed-batches") || "[]",
       );
       failedBatches.push(batch);
       localStorage.setItem(
-        'analytics-failed-batches',
-        JSON.stringify(failedBatches.slice(-10)) // Keep last 10 batches
+        "analytics-failed-batches",
+        JSON.stringify(failedBatches.slice(-10)), // Keep last 10 batches
       );
     }
   }
@@ -185,11 +185,19 @@ export const usePageTracking = () => {
     });
 
     // Track performance metrics
-    if ('performance' in window) {
-      const perfData = performance.getEntriesByType('navigation')[0] as PerformanceNavigationTiming;
+    if ("performance" in window) {
+      const perfData = performance.getEntriesByType(
+        "navigation",
+      )[0] as PerformanceNavigationTiming;
       if (perfData) {
-        analytics.trackPerformance('page-load', perfData.loadEventEnd - perfData.fetchStart);
-        analytics.trackPerformance('dom-ready', perfData.domContentLoadedEventEnd - perfData.fetchStart);
+        analytics.trackPerformance(
+          "page-load",
+          perfData.loadEventEnd - perfData.fetchStart,
+        );
+        analytics.trackPerformance(
+          "dom-ready",
+          perfData.domContentLoadedEventEnd - perfData.fetchStart,
+        );
       }
     }
   }, []);
@@ -207,29 +215,32 @@ export const useErrorTracking = () => {
 
     const handleRejection = (event: PromiseRejectionEvent) => {
       analytics.trackError(new Error(event.reason), {
-        type: 'unhandled-promise-rejection',
+        type: "unhandled-promise-rejection",
       });
     };
 
-    window.addEventListener('error', handleError);
-    window.addEventListener('unhandledrejection', handleRejection);
+    window.addEventListener("error", handleError);
+    window.addEventListener("unhandledrejection", handleRejection);
 
     return () => {
-      window.removeEventListener('error', handleError);
-      window.removeEventListener('unhandledrejection', handleRejection);
+      window.removeEventListener("error", handleError);
+      window.removeEventListener("unhandledrejection", handleRejection);
     };
   }, []);
 };
 
-export const useClickTracking = (category: string = 'UI') => {
-  const trackClick = React.useCallback((action: string, label?: string, value?: number) => {
-    analytics.track({
-      category,
-      action: `Click: ${action}`,
-      label,
-      value,
-    });
-  }, [category]);
+export const useClickTracking = (category: string = "UI") => {
+  const trackClick = React.useCallback(
+    (action: string, label?: string, value?: number) => {
+      analytics.track({
+        category,
+        action: `Click: ${action}`,
+        label,
+        value,
+      });
+    },
+    [category],
+  );
 
   return trackClick;
 };
@@ -237,7 +248,10 @@ export const useClickTracking = (category: string = 'UI') => {
 // Monitoring utilities
 export class Monitor {
   private metrics = new Map<string, number[]>();
-  private alerts = new Map<string, { threshold: number; callback: (value: number) => void }>();
+  private alerts = new Map<
+    string,
+    { threshold: number; callback: (value: number) => void }
+  >();
 
   record(metric: string, value: number): void {
     if (!this.metrics.has(metric)) {
@@ -259,7 +273,11 @@ export class Monitor {
     }
   }
 
-  setAlert(metric: string, threshold: number, callback: (value: number) => void): void {
+  setAlert(
+    metric: string,
+    threshold: number,
+    callback: (value: number) => void,
+  ): void {
     this.alerts.set(metric, { threshold, callback });
   }
 
@@ -288,11 +306,11 @@ export class Monitor {
 
   getAllMetrics(): Record<string, ReturnType<typeof this.getStats>> {
     const result: Record<string, ReturnType<typeof this.getStats>> = {};
-    
+
     for (const [metric] of this.metrics) {
       result[metric] = this.getStats(metric);
     }
-    
+
     return result;
   }
 }
@@ -300,18 +318,18 @@ export class Monitor {
 export const monitor = new Monitor();
 
 // Set up common alerts
-monitor.setAlert('api-response-time', 3000, (value) => {
+monitor.setAlert("api-response-time", 3000, (value) => {
   console.warn(`Slow API response: ${value}ms`);
 });
 
-monitor.setAlert('memory-usage', 100 * 1024 * 1024, (value) => {
+monitor.setAlert("memory-usage", 100 * 1024 * 1024, (value) => {
   console.warn(`High memory usage: ${(value / 1024 / 1024).toFixed(2)}MB`);
 });
 
 // Memory monitoring
-if ('performance' in window && 'memory' in performance) {
+if ("performance" in window && "memory" in performance) {
   setInterval(() => {
     const memory = (performance as any).memory;
-    monitor.record('memory-usage', memory.usedJSHeapSize);
+    monitor.record("memory-usage", memory.usedJSHeapSize);
   }, 10000);
 }

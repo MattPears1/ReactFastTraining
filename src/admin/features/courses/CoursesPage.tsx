@@ -1,12 +1,12 @@
-import React, { useState } from 'react';
-import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
-import { 
-  Plus, 
-  Search, 
-  Filter, 
-  Edit3, 
-  Trash2, 
-  Eye, 
+import React, { useState } from "react";
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import {
+  Plus,
+  Search,
+  Filter,
+  Edit3,
+  Trash2,
+  Eye,
   Users,
   Clock,
   PoundSterling,
@@ -17,19 +17,19 @@ import {
   Award,
   AlertCircle,
   Star,
-  FileText
-} from 'lucide-react';
-import { Button } from '../../../components/ui/Button';
-import { SearchInput } from '../../../components/ui/SearchInput';
-import { LoadingSpinner } from '../../components/common/LoadingSpinner';
-import { AdminCard } from '../../components/ui/AdminCard';
-import { AdminBadge } from '../../components/ui/AdminBadge';
-import { AdminEmptyState } from '../../components/ui/AdminEmptyState';
-import { adminApi } from '../../utils/api';
-import { CourseModal } from './components/CourseModal';
-import { useNotifications } from '../../contexts/NotificationContext';
-import { format } from 'date-fns';
-import '../../styles/admin-design-system.css';
+  FileText,
+} from "lucide-react";
+import { Button } from "../../../components/ui/Button";
+import { SearchInput } from "../../../components/ui/SearchInput";
+import { LoadingSpinner } from "../../components/common/LoadingSpinner";
+import { AdminCard } from "../../components/ui/AdminCard";
+import { AdminBadge } from "../../components/ui/AdminBadge";
+import { AdminEmptyState } from "../../components/ui/AdminEmptyState";
+import { adminApi } from "../../utils/api";
+import { CourseModal } from "./components/CourseModal";
+import { useNotifications } from "../../contexts/NotificationContext";
+import { format } from "date-fns";
+import "../../styles/admin-design-system.css";
 
 interface Course {
   id: number;
@@ -73,23 +73,26 @@ interface Course {
   lastSessionDate?: string;
 }
 
-
 export const CoursesPage: React.FC = () => {
-  const [searchTerm, setSearchTerm] = useState('');
-  const [statusFilter, setStatusFilter] = useState<string>('all');
-  const [categoryFilter, setCategoryFilter] = useState<string>('all');
+  const [searchTerm, setSearchTerm] = useState("");
+  const [statusFilter, setStatusFilter] = useState<string>("all");
+  const [categoryFilter, setCategoryFilter] = useState<string>("all");
   const [showCreateModal, setShowCreateModal] = useState(false);
   const [editingCourse, setEditingCourse] = useState<Course | null>(null);
   const queryClient = useQueryClient();
   const { addNotification } = useNotifications();
 
   // Fetch courses from API
-  const { data: courses, isLoading, error } = useQuery({
-    queryKey: ['admin-courses'],
+  const {
+    data: courses,
+    isLoading,
+    error,
+  } = useQuery({
+    queryKey: ["admin-courses"],
     queryFn: async () => {
-      const response = await adminApi.get('/api/admin/courses');
+      const response = await adminApi.get("/api/admin/courses");
       if (!response.ok) {
-        throw new Error('Failed to fetch courses');
+        throw new Error("Failed to fetch courses");
       }
       const data = await response.json();
       return data as Course[];
@@ -100,28 +103,33 @@ export const CoursesPage: React.FC = () => {
   // Filter courses locally
   const filteredCourses = React.useMemo(() => {
     if (!courses) return [];
-    
+
     let filtered = courses;
-    
+
     if (searchTerm) {
-      filtered = filtered.filter(course => 
-        course.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        course.category?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        course.courseType?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        course.accreditationBody?.toLowerCase().includes(searchTerm.toLowerCase())
+      filtered = filtered.filter(
+        (course) =>
+          course.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+          course.category?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+          course.courseType?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+          course.accreditationBody
+            ?.toLowerCase()
+            .includes(searchTerm.toLowerCase()),
       );
     }
-    
-    if (statusFilter !== 'all') {
-      filtered = filtered.filter(course => 
-        statusFilter === 'active' ? course.isActive : !course.isActive
+
+    if (statusFilter !== "all") {
+      filtered = filtered.filter((course) =>
+        statusFilter === "active" ? course.isActive : !course.isActive,
       );
     }
-    
-    if (categoryFilter !== 'all') {
-      filtered = filtered.filter(course => course.category === categoryFilter);
+
+    if (categoryFilter !== "all") {
+      filtered = filtered.filter(
+        (course) => course.category === categoryFilter,
+      );
     }
-    
+
     return filtered;
   }, [courses, searchTerm, statusFilter, categoryFilter]);
 
@@ -130,27 +138,31 @@ export const CoursesPage: React.FC = () => {
       const response = await adminApi.delete(`/api/admin/courses/${courseId}`);
       if (!response.ok) {
         const error = await response.json();
-        throw new Error(error.message || 'Failed to delete course');
+        throw new Error(error.message || "Failed to delete course");
       }
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['admin-courses'] });
-      addNotification({ type: 'success', title: 'Course deleted successfully' });
+      queryClient.invalidateQueries({ queryKey: ["admin-courses"] });
+      addNotification({
+        type: "success",
+        title: "Course deleted successfully",
+      });
     },
     onError: (error: Error) => {
-      addNotification({ 
-        type: 'error', 
-        title: 'Failed to delete course',
-        message: error.message 
+      addNotification({
+        type: "error",
+        title: "Failed to delete course",
+        message: error.message,
       });
-    }
+    },
   });
 
   const handleDelete = (course: Course) => {
-    const confirmMessage = course.upcomingSessions && course.upcomingSessions > 0
-      ? `This course has ${course.upcomingSessions} upcoming sessions. Are you sure you want to delete it?`
-      : 'Are you sure you want to delete this course?';
-    
+    const confirmMessage =
+      course.upcomingSessions && course.upcomingSessions > 0
+        ? `This course has ${course.upcomingSessions} upcoming sessions. Are you sure you want to delete it?`
+        : "Are you sure you want to delete this course?";
+
     if (window.confirm(confirmMessage)) {
       deleteMutation.mutate(course.id);
     }
@@ -167,45 +179,52 @@ export const CoursesPage: React.FC = () => {
   };
 
   const handleModalSave = () => {
-    queryClient.invalidateQueries({ queryKey: ['admin-courses'] });
-    addNotification({ 
-      type: 'success', 
-      title: editingCourse ? 'Course updated successfully' : 'Course created successfully' 
+    queryClient.invalidateQueries({ queryKey: ["admin-courses"] });
+    addNotification({
+      type: "success",
+      title: editingCourse
+        ? "Course updated successfully"
+        : "Course created successfully",
     });
     handleModalClose();
   };
 
   const handleExport = async () => {
     try {
-      const response = await adminApi.get('/api/admin/courses/export');
-      if (!response.ok) throw new Error('Export failed');
-      
+      const response = await adminApi.get("/api/admin/courses/export");
+      if (!response.ok) throw new Error("Export failed");
+
       const blob = await response.blob();
       const url = window.URL.createObjectURL(blob);
-      const a = document.createElement('a');
+      const a = document.createElement("a");
       a.href = url;
-      a.download = `courses_export_${format(new Date(), 'yyyy-MM-dd')}.csv`;
+      a.download = `courses_export_${format(new Date(), "yyyy-MM-dd")}.csv`;
       document.body.appendChild(a);
       a.click();
       window.URL.revokeObjectURL(url);
       document.body.removeChild(a);
-      
-      addNotification({ type: 'success', title: 'Courses exported successfully' });
+
+      addNotification({
+        type: "success",
+        title: "Courses exported successfully",
+      });
     } catch (error) {
-      addNotification({ type: 'error', title: 'Export failed' });
+      addNotification({ type: "error", title: "Export failed" });
     }
   };
 
-  const getCategoryVariant = (category: string): 'primary' | 'secondary' | 'neutral' => {
+  const getCategoryVariant = (
+    category: string,
+  ): "primary" | "secondary" | "neutral" => {
     switch (category) {
-      case 'workplace':
-        return 'primary';
-      case 'paediatric':
-        return 'secondary';
-      case 'requalification':
-        return 'neutral';
+      case "workplace":
+        return "primary";
+      case "paediatric":
+        return "secondary";
+      case "requalification":
+        return "neutral";
       default:
-        return 'neutral';
+        return "neutral";
     }
   };
 
@@ -222,7 +241,9 @@ export const CoursesPage: React.FC = () => {
       <AdminCard className="admin-mt-8">
         <div className="text-center">
           <p className="text-red-600 font-medium">Failed to load courses</p>
-          <p className="admin-text-small admin-text-muted admin-mt-2">Please try refreshing the page</p>
+          <p className="admin-text-small admin-text-muted admin-mt-2">
+            Please try refreshing the page
+          </p>
         </div>
       </AdminCard>
     );
@@ -240,7 +261,7 @@ export const CoursesPage: React.FC = () => {
             </p>
           </div>
           <div className="mt-4 sm:mt-0">
-            <button 
+            <button
               onClick={() => setShowCreateModal(true)}
               className="admin-btn admin-btn-primary"
             >
@@ -288,7 +309,7 @@ export const CoursesPage: React.FC = () => {
             </select>
           </div>
           <div className="flex justify-end">
-            <button 
+            <button
               onClick={handleExport}
               className="admin-btn admin-btn-secondary"
             >
@@ -308,7 +329,7 @@ export const CoursesPage: React.FC = () => {
                 Featured
               </div>
             )}
-            
+
             <div className="flex items-start justify-between admin-mb-3">
               <div className="flex-1 min-w-0">
                 <h3 className="text-lg font-semibold text-gray-900">
@@ -326,15 +347,19 @@ export const CoursesPage: React.FC = () => {
                   )}
                 </div>
               </div>
-              <AdminBadge variant={course.isActive ? 'success' : 'neutral'}>
-                {course.isActive ? 'Active' : 'Inactive'}
+              <AdminBadge variant={course.isActive ? "success" : "neutral"}>
+                {course.isActive ? "Active" : "Inactive"}
               </AdminBadge>
             </div>
 
             {/* Course Type and Duration */}
             <div className="admin-mb-4">
-              <p className="admin-text-small font-medium text-gray-700">{course.courseType}</p>
-              <p className="admin-text-small admin-text-muted">{course.duration} • {course.durationHours} hours</p>
+              <p className="admin-text-small font-medium text-gray-700">
+                {course.courseType}
+              </p>
+              <p className="admin-text-small admin-text-muted">
+                {course.duration} • {course.durationHours} hours
+              </p>
             </div>
 
             {/* Statistics Grid */}
@@ -351,7 +376,9 @@ export const CoursesPage: React.FC = () => {
                   <Users className="admin-icon-sm mr-1.5 text-primary-500" />
                   Students
                 </div>
-                <p className="font-semibold text-lg">{course.uniqueStudents || 0}</p>
+                <p className="font-semibold text-lg">
+                  {course.uniqueStudents || 0}
+                </p>
               </div>
               <div className="bg-gray-50 rounded-lg p-3">
                 <div className="flex items-center admin-text-small admin-text-muted">
@@ -359,7 +386,9 @@ export const CoursesPage: React.FC = () => {
                   Fill Rate
                 </div>
                 <p className="font-semibold text-lg">
-                  {course.averageFillRate ? `${Math.round(course.averageFillRate)}%` : 'N/A'}
+                  {course.averageFillRate
+                    ? `${Math.round(course.averageFillRate)}%`
+                    : "N/A"}
                 </p>
               </div>
               <div className="bg-gray-50 rounded-lg p-3">
@@ -378,14 +407,15 @@ export const CoursesPage: React.FC = () => {
               <div className="flex items-center admin-mb-4">
                 <div className="flex items-center mr-2">
                   {[...Array(5)].map((_, i) => (
-                    <Star 
-                      key={i} 
-                      className={`w-4 h-4 ${i < Math.round(course.averageRating || 0) ? 'text-yellow-400 fill-current' : 'text-gray-300'}`} 
+                    <Star
+                      key={i}
+                      className={`w-4 h-4 ${i < Math.round(course.averageRating || 0) ? "text-yellow-400 fill-current" : "text-gray-300"}`}
                     />
                   ))}
                 </div>
                 <span className="admin-text-small admin-text-muted">
-                  {course.averageRating?.toFixed(1)} ({course.totalReviews} reviews)
+                  {course.averageRating?.toFixed(1)} ({course.totalReviews}{" "}
+                  reviews)
                 </span>
               </div>
             )}
@@ -399,17 +429,22 @@ export const CoursesPage: React.FC = () => {
                 </div>
                 <div>
                   <p className="admin-text-small admin-text-muted">Completed</p>
-                  <p className="font-semibold text-green-600">{course.completedSessions || 0}</p>
+                  <p className="font-semibold text-green-600">
+                    {course.completedSessions || 0}
+                  </p>
                 </div>
                 <div>
                   <p className="admin-text-small admin-text-muted">Upcoming</p>
-                  <p className="font-semibold text-blue-600">{course.upcomingSessions || 0}</p>
+                  <p className="font-semibold text-blue-600">
+                    {course.upcomingSessions || 0}
+                  </p>
                 </div>
               </div>
             </div>
 
             {/* Discounts */}
-            {(course.earlyBirdDiscountPercentage || course.groupDiscountPercentage) && (
+            {(course.earlyBirdDiscountPercentage ||
+              course.groupDiscountPercentage) && (
               <div className="flex gap-2 admin-mb-4">
                 {course.earlyBirdDiscountPercentage > 0 && (
                   <span className="admin-text-small bg-green-100 text-green-800 px-2 py-1 rounded">
@@ -429,18 +464,21 @@ export const CoursesPage: React.FC = () => {
               <div className="flex items-center justify-between">
                 <div>
                   <p className="admin-text-small admin-text-muted">
-                    Last booking: {course.lastBookingDate ? format(new Date(course.lastBookingDate), 'dd MMM yyyy') : 'Never'}
+                    Last booking:{" "}
+                    {course.lastBookingDate
+                      ? format(new Date(course.lastBookingDate), "dd MMM yyyy")
+                      : "Never"}
                   </p>
                 </div>
                 <div className="flex gap-1">
-                  <button 
+                  <button
                     onClick={() => handleEdit(course)}
-                    className="admin-btn admin-btn-secondary p-2" 
+                    className="admin-btn admin-btn-secondary p-2"
                     title="Edit"
                   >
                     <Edit3 className="admin-icon-sm" />
                   </button>
-                  <button 
+                  <button
                     onClick={() => handleDelete(course)}
                     className="admin-btn admin-btn-secondary p-2 hover:bg-red-50 hover:text-red-600 hover:border-red-300"
                     disabled={deleteMutation.isPending}
@@ -462,13 +500,14 @@ export const CoursesPage: React.FC = () => {
             icon={BookOpen}
             title="No courses found"
             description={
-              searchTerm || statusFilter !== 'all' 
-                ? 'Try adjusting your filters' 
-                : 'Get started by creating your first course'
+              searchTerm || statusFilter !== "all"
+                ? "Try adjusting your filters"
+                : "Get started by creating your first course"
             }
             action={
-              !searchTerm && statusFilter === 'all' && (
-                <button 
+              !searchTerm &&
+              statusFilter === "all" && (
+                <button
                   onClick={() => setShowCreateModal(true)}
                   className="admin-btn admin-btn-primary"
                 >
@@ -488,7 +527,7 @@ export const CoursesPage: React.FC = () => {
           onClose={handleModalClose}
           onSave={handleModalSave}
           course={editingCourse}
-          mode={editingCourse ? 'edit' : 'create'}
+          mode={editingCourse ? "edit" : "create"}
         />
       )}
     </div>

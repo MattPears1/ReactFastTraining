@@ -1,23 +1,23 @@
-import React from 'react'
-import { motion } from 'framer-motion'
-import RegisterForm from '@components/auth/RegisterForm'
-import { useNavigate } from 'react-router-dom'
+import React from "react";
+import { motion } from "framer-motion";
+import RegisterForm from "@components/auth/RegisterForm";
+import { useNavigate } from "react-router-dom";
 
 const RegisterPage: React.FC = () => {
-  const navigate = useNavigate()
+  const navigate = useNavigate();
 
   const handleRegister = async (data: any) => {
     // Simulate API call
-    console.log('Register data:', data)
-    await new Promise(resolve => setTimeout(resolve, 2000))
+    console.log("Register data:", data);
+    await new Promise((resolve) => setTimeout(resolve, 2000));
     // Navigate to login or dashboard after successful registration
-    navigate('/login')
-  }
+    navigate("/login");
+  };
 
   const handleSocialSignup = (provider: string) => {
-    console.log('Social signup with:', provider)
+    console.log("Social signup with:", provider);
     // Implement social signup logic
-  }
+  };
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-50 dark:bg-gray-900 py-12 px-4 sm:px-6 lg:px-8">
@@ -48,7 +48,7 @@ const RegisterPage: React.FC = () => {
         </motion.div>
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default RegisterPage
+export default RegisterPage;

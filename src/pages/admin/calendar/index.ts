@@ -1,3 +1,3 @@
 // Re-export for backward compatibility
-export { default } from './CalendarPage';
-export * from './types';
+export { default } from "./CalendarPage";
+export * from "./types";

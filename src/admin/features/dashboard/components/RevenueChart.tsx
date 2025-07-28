@@ -1,4 +1,4 @@
-import React from 'react';
+import React from "react";
 import {
   LineChart,
   Line,
@@ -11,8 +11,8 @@ import {
   BarChart,
   Bar,
   ComposedChart,
-} from 'recharts';
-import { format, parseISO } from 'date-fns';
+} from "recharts";
+import { format, parseISO } from "date-fns";
 
 interface RevenueData {
   date: string;
@@ -29,9 +29,9 @@ export const RevenueChart: React.FC<RevenueChartProps> = ({ data }) => {
     try {
       // Handle YYYY-MM format from backend
       if (dateStr && dateStr.match(/^\d{4}-\d{2}$/)) {
-        return format(new Date(dateStr + '-01'), 'MMM yyyy');
+        return format(new Date(dateStr + "-01"), "MMM yyyy");
       }
-      return format(parseISO(dateStr), 'MMM d');
+      return format(parseISO(dateStr), "MMM d");
     } catch {
       return dateStr;
     }
@@ -42,17 +42,20 @@ export const RevenueChart: React.FC<RevenueChartProps> = ({ data }) => {
   };
 
   // If no data, show empty chart with axes
-  const chartData = data && data.length > 0 ? data : [
-    { date: 'Jan', revenue: 0, bookings: 0 },
-    { date: 'Feb', revenue: 0, bookings: 0 },
-    { date: 'Mar', revenue: 0, bookings: 0 },
-    { date: 'Apr', revenue: 0, bookings: 0 },
-    { date: 'May', revenue: 0, bookings: 0 },
-    { date: 'Jun', revenue: 0, bookings: 0 },
-  ];
+  const chartData =
+    data && data.length > 0
+      ? data
+      : [
+          { date: "Jan", revenue: 0, bookings: 0 },
+          { date: "Feb", revenue: 0, bookings: 0 },
+          { date: "Mar", revenue: 0, bookings: 0 },
+          { date: "Apr", revenue: 0, bookings: 0 },
+          { date: "May", revenue: 0, bookings: 0 },
+          { date: "Jun", revenue: 0, bookings: 0 },
+        ];
 
   // Prepare data with proper formatting
-  const formattedData = chartData.map(item => ({
+  const formattedData = chartData.map((item) => ({
     ...item,
     formattedDate: data && data.length > 0 ? formatDate(item.date) : item.date,
   }));
@@ -91,27 +94,27 @@ export const RevenueChart: React.FC<RevenueChartProps> = ({ data }) => {
           />
           <Tooltip
             formatter={(value: any, name: string) => {
-              if (name === 'Revenue') {
-                return [formatCurrency(value), 'Revenue'];
+              if (name === "Revenue") {
+                return [formatCurrency(value), "Revenue"];
               }
               return [value, name];
             }}
             labelFormatter={(index) => {
               const item = formattedData[index];
-              return item ? `Month: ${item.formattedDate}` : '';
+              return item ? `Month: ${item.formattedDate}` : "";
             }}
             contentStyle={{
-              backgroundColor: 'rgba(255, 255, 255, 0.95)',
-              border: '1px solid #e5e7eb',
-              borderRadius: '6px',
+              backgroundColor: "rgba(255, 255, 255, 0.95)",
+              border: "1px solid #e5e7eb",
+              borderRadius: "6px",
             }}
           />
-          <Legend 
+          <Legend
             verticalAlign="top"
             height={36}
             iconType="rect"
             wrapperStyle={{
-              paddingBottom: '10px',
+              paddingBottom: "10px",
             }}
           />
           <Bar
@@ -129,7 +132,7 @@ export const RevenueChart: React.FC<RevenueChartProps> = ({ data }) => {
             stroke="#10B981"
             strokeWidth={3}
             name="Bookings"
-            dot={{ fill: '#10B981', r: 5 }}
+            dot={{ fill: "#10B981", r: 5 }}
             activeDot={{ r: 7 }}
           />
         </ComposedChart>

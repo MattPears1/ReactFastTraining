@@ -1,4 +1,4 @@
-import axios from 'axios';
+import axios from "axios";
 
 interface InvoiceListResponse {
   invoices: Array<{
@@ -61,16 +61,16 @@ interface ResendInvoiceResponse {
 
 class InvoiceApi {
   private api = axios.create({
-    baseURL: import.meta.env.VITE_API_URL || 'http://localhost:3000',
+    baseURL: import.meta.env.VITE_API_URL || "http://localhost:3000",
     headers: {
-      'Content-Type': 'application/json',
+      "Content-Type": "application/json",
     },
   });
 
   constructor() {
     // Add auth token to requests
     this.api.interceptors.request.use((config) => {
-      const token = localStorage.getItem('authToken');
+      const token = localStorage.getItem("authToken");
       if (token) {
         config.headers.Authorization = `Bearer ${token}`;
       }
@@ -80,7 +80,7 @@ class InvoiceApi {
 
   // Customer endpoints
   async getUserInvoices(limit = 10, offset = 0): Promise<InvoiceListResponse> {
-    const response = await this.api.get('/api/invoices', {
+    const response = await this.api.get("/api/invoices", {
       params: { limit, offset },
     });
     return response.data;
@@ -93,7 +93,7 @@ class InvoiceApi {
 
   async downloadInvoice(invoiceId: string): Promise<Blob> {
     const response = await this.api.get(`/api/invoices/${invoiceId}/download`, {
-      responseType: 'blob',
+      responseType: "blob",
     });
     return response.data;
   }
@@ -116,7 +116,9 @@ class InvoiceApi {
     issueDate: string;
     pdfUrl?: string;
   }> {
-    const response = await this.api.get(`/api/invoices/number/${invoiceNumber}`);
+    const response = await this.api.get(
+      `/api/invoices/number/${invoiceNumber}`,
+    );
     return response.data;
   }
 
@@ -129,11 +131,11 @@ class InvoiceApi {
     offset?: number;
   }): Promise<InvoiceListResponse> {
     const params = new URLSearchParams();
-    if (filters?.status) params.append('status', filters.status);
-    if (filters?.startDate) params.append('startDate', filters.startDate);
-    if (filters?.endDate) params.append('endDate', filters.endDate);
-    if (filters?.limit) params.append('limit', filters.limit.toString());
-    if (filters?.offset) params.append('offset', filters.offset.toString());
+    if (filters?.status) params.append("status", filters.status);
+    if (filters?.startDate) params.append("startDate", filters.startDate);
+    if (filters?.endDate) params.append("endDate", filters.endDate);
+    if (filters?.limit) params.append("limit", filters.limit.toString());
+    if (filters?.offset) params.append("offset", filters.offset.toString());
 
     const response = await this.api.get(`/api/admin/invoices?${params}`);
     return response.data;
@@ -145,22 +147,30 @@ class InvoiceApi {
     thisMonth: number;
     thisMonthAmount: number;
   }> {
-    const response = await this.api.get('/api/admin/invoices/stats');
+    const response = await this.api.get("/api/admin/invoices/stats");
     return response.data;
   }
 
-  async voidInvoice(invoiceId: string, reason: string): Promise<{
+  async voidInvoice(
+    invoiceId: string,
+    reason: string,
+  ): Promise<{
     success: boolean;
     message: string;
   }> {
-    const response = await this.api.patch(`/api/admin/invoices/${invoiceId}/void`, {
-      reason,
-    });
+    const response = await this.api.patch(
+      `/api/admin/invoices/${invoiceId}/void`,
+      {
+        reason,
+      },
+    );
     return response.data;
   }
 
   async regenerateInvoice(bookingId: string): Promise<GenerateInvoiceResponse> {
-    const response = await this.api.post(`/api/admin/invoices/${bookingId}/regenerate`);
+    const response = await this.api.post(
+      `/api/admin/invoices/${bookingId}/regenerate`,
+    );
     return response.data;
   }
 }

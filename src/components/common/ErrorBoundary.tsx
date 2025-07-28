@@ -1,126 +1,132 @@
-import React, { Component, ErrorInfo, ReactNode } from 'react'
-import { AlertTriangle, RefreshCw, Home } from 'lucide-react'
-import * as Sentry from '@sentry/react'
+import React, { Component, ErrorInfo, ReactNode } from "react";
+import { AlertTriangle, RefreshCw, Home } from "lucide-react";
+import * as Sentry from "@sentry/react";
 
 interface Props {
-  children: ReactNode
-  fallback?: ReactNode
-  onError?: (error: Error, errorInfo: ErrorInfo) => void
-  resetKeys?: Array<string | number>
-  resetOnPropsChange?: boolean
-  isolate?: boolean
+  children: ReactNode;
+  fallback?: ReactNode;
+  onError?: (error: Error, errorInfo: ErrorInfo) => void;
+  resetKeys?: Array<string | number>;
+  resetOnPropsChange?: boolean;
+  isolate?: boolean;
 }
 
 interface State {
-  hasError: boolean
-  error: Error | null
-  errorInfo: ErrorInfo | null
-  errorCount: number
-  errorId: string
+  hasError: boolean;
+  error: Error | null;
+  errorInfo: ErrorInfo | null;
+  errorCount: number;
+  errorId: string;
 }
 
 class ErrorBoundary extends Component<Props, State> {
-  private resetTimeoutId: NodeJS.Timeout | null = null
-  private previousResetKeys: Array<string | number> = []
+  private resetTimeoutId: NodeJS.Timeout | null = null;
+  private previousResetKeys: Array<string | number> = [];
 
   public state: State = {
     hasError: false,
     error: null,
     errorInfo: null,
     errorCount: 0,
-    errorId: '',
-  }
+    errorId: "",
+  };
 
   public static getDerivedStateFromError(error: Error): Partial<State> {
-    const errorId = `error-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`
-    return { 
-      hasError: true, 
+    const errorId = `error-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
+    return {
+      hasError: true,
       error,
       errorId,
-    }
+    };
   }
 
   public componentDidUpdate(prevProps: Props) {
-    const { resetKeys = [], resetOnPropsChange = false } = this.props
+    const { resetKeys = [], resetOnPropsChange = false } = this.props;
     const hasResetKeysChanged = resetKeys.some(
-      (key, idx) => key !== this.previousResetKeys[idx]
-    )
-    
+      (key, idx) => key !== this.previousResetKeys[idx],
+    );
+
     if (hasResetKeysChanged && this.state.hasError) {
-      this.resetErrorBoundary()
+      this.resetErrorBoundary();
     }
-    
-    this.previousResetKeys = resetKeys
+
+    this.previousResetKeys = resetKeys;
   }
 
   public componentDidCatch(error: Error, errorInfo: ErrorInfo) {
-    console.error('ErrorBoundary caught error:', error, errorInfo)
-    
+    console.error("ErrorBoundary caught error:", error, errorInfo);
+
     // Update state with error info
-    this.setState(prevState => ({
+    this.setState((prevState) => ({
       errorInfo,
       errorCount: prevState.errorCount + 1,
-    }))
-    
-    // Report to Sentry with enhanced context
-    Sentry.withScope((scope) => {
-      scope.setContext('errorBoundary', {
-        componentStack: errorInfo.componentStack,
-        errorId: this.state.errorId,
-        errorCount: this.state.errorCount + 1,
-        isolate: this.props.isolate,
-      })
-      scope.setTag('error.boundary', true)
-      Sentry.captureException(error)
-    })
-    
+    }));
+
+    // Report to Sentry with enhanced context (only if Sentry is configured)
+    if (typeof Sentry !== 'undefined' && Sentry.getCurrentHub) {
+      try {
+        Sentry.withScope((scope) => {
+          scope.setContext("errorBoundary", {
+            componentStack: errorInfo.componentStack,
+            errorId: this.state.errorId,
+            errorCount: this.state.errorCount + 1,
+            isolate: this.props.isolate,
+          });
+          scope.setTag("error.boundary", true);
+          Sentry.captureException(error);
+        });
+      } catch (sentryError) {
+        console.warn("Failed to report error to Sentry:", sentryError);
+      }
+    }
+
     // Call custom error handler if provided
     if (this.props.onError) {
-      this.props.onError(error, errorInfo)
+      this.props.onError(error, errorInfo);
     }
-    
+
     // Auto-reset after 3 consecutive errors to prevent infinite loops
     if (this.state.errorCount >= 2) {
-      this.scheduleAutoReset()
+      this.scheduleAutoReset();
     }
   }
 
   private scheduleAutoReset = () => {
     if (this.resetTimeoutId) {
-      clearTimeout(this.resetTimeoutId)
+      clearTimeout(this.resetTimeoutId);
     }
-    
+
     this.resetTimeoutId = setTimeout(() => {
-      this.resetErrorBoundary()
-    }, 5000)
-  }
+      this.resetErrorBoundary();
+    }, 5000);
+  };
 
   private resetErrorBoundary = () => {
     if (this.resetTimeoutId) {
-      clearTimeout(this.resetTimeoutId)
-      this.resetTimeoutId = null
+      clearTimeout(this.resetTimeoutId);
+      this.resetTimeoutId = null;
     }
-    
+
     this.setState({
       hasError: false,
       error: null,
       errorInfo: null,
       errorCount: 0,
-      errorId: '',
-    })
-  }
+      errorId: "",
+    });
+  };
 
   private handleReload = () => {
-    window.location.reload()
-  }
+    window.location.reload();
+  };
 
   private handleGoHome = () => {
-    window.location.href = '/'
-  }
+    window.location.href = "/";
+  };
 
   public componentWillUnmount() {
     if (this.resetTimeoutId) {
-      clearTimeout(this.resetTimeoutId)
+      clearTimeout(this.resetTimeoutId);
     }
   }
 
@@ -128,7 +134,7 @@ class ErrorBoundary extends Component<Props, State> {
     if (this.state.hasError) {
       // Use custom fallback if provided
       if (this.props.fallback) {
-        return <>{this.props.fallback}</>
+        return <>{this.props.fallback}</>;
       }
 
       // Isolated error boundary for component-level errors
@@ -144,7 +150,7 @@ class ErrorBoundary extends Component<Props, State> {
                 <p className="text-sm text-red-700 dark:text-red-300 mt-1">
                   This component encountered an error and cannot be displayed.
                 </p>
-                {process.env.NODE_ENV === 'development' && this.state.error && (
+                {process.env.NODE_ENV === "development" && this.state.error && (
                   <details className="mt-2">
                     <summary className="text-xs text-red-600 dark:text-red-400 cursor-pointer hover:underline">
                       Show details
@@ -163,7 +169,7 @@ class ErrorBoundary extends Component<Props, State> {
               </div>
             </div>
           </div>
-        )
+        );
       }
 
       // Full page error boundary
@@ -173,17 +179,18 @@ class ErrorBoundary extends Component<Props, State> {
             <div className="flex items-center justify-center w-16 h-16 mx-auto bg-red-100 dark:bg-red-900/30 rounded-full mb-6">
               <AlertTriangle className="w-8 h-8 text-red-600 dark:text-red-400" />
             </div>
-            
+
             <h1 className="text-2xl font-bold text-gray-900 dark:text-white text-center mb-2">
               Something went wrong
             </h1>
-            
+
             <p className="text-gray-600 dark:text-gray-400 text-center mb-6">
-              We encountered an unexpected error. Please try refreshing the page or contact support if the problem persists.
+              We encountered an unexpected error. Please try refreshing the page
+              or contact support if the problem persists.
             </p>
 
             {/* Error details in development */}
-            {process.env.NODE_ENV === 'development' && this.state.error && (
+            {process.env.NODE_ENV === "development" && this.state.error && (
               <div className="mb-6 p-4 bg-gray-100 dark:bg-gray-700 rounded-lg">
                 <p className="text-sm font-mono text-gray-700 dark:text-gray-300 mb-2">
                   {this.state.error.toString()}
@@ -212,7 +219,7 @@ class ErrorBoundary extends Component<Props, State> {
                 <RefreshCw className="w-4 h-4" />
                 Refresh Page
               </button>
-              
+
               <button
                 onClick={this.handleGoHome}
                 className="flex-1 flex items-center justify-center gap-2 px-4 py-2 border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors"
@@ -225,32 +232,32 @@ class ErrorBoundary extends Component<Props, State> {
             {this.state.errorCount > 1 && (
               <p className="text-xs text-gray-500 dark:text-gray-500 text-center mt-4">
                 Error occurred {this.state.errorCount} times
-                {this.state.errorCount >= 3 && ' - Auto-reset in 5 seconds'}
+                {this.state.errorCount >= 3 && " - Auto-reset in 5 seconds"}
               </p>
             )}
           </div>
         </div>
-      )
+      );
     }
 
-    return this.props.children
+    return this.props.children;
   }
 }
 
-export default ErrorBoundary
+export default ErrorBoundary;
 
 // HOC for easier usage
 export function withErrorBoundary<P extends object>(
   Component: React.ComponentType<P>,
-  errorBoundaryProps?: Omit<Props, 'children'>
+  errorBoundaryProps?: Omit<Props, "children">,
 ) {
   const WrappedComponent = (props: P) => (
     <ErrorBoundary {...errorBoundaryProps}>
       <Component {...props} />
     </ErrorBoundary>
-  )
+  );
 
-  WrappedComponent.displayName = `withErrorBoundary(${Component.displayName || Component.name})`
+  WrappedComponent.displayName = `withErrorBoundary(${Component.displayName || Component.name})`;
 
-  return WrappedComponent
+  return WrappedComponent;
 }

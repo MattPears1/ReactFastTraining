@@ -1,6 +1,6 @@
-import React, { Component, ErrorInfo, ReactNode } from 'react';
-import { AlertTriangle, RefreshCw, Home } from 'lucide-react';
-import { Link } from 'react-router-dom';
+import React, { Component, ErrorInfo, ReactNode } from "react";
+import { AlertTriangle, RefreshCw, Home } from "lucide-react";
+import { Link } from "react-router-dom";
 
 interface Props {
   children: ReactNode;
@@ -26,14 +26,14 @@ export class ClientPortalErrorBoundary extends Component<Props, State> {
   }
 
   public componentDidCatch(error: Error, errorInfo: ErrorInfo) {
-    console.error('Client Portal Error:', error, errorInfo);
+    console.error("Client Portal Error:", error, errorInfo);
     this.setState({ errorInfo });
-    
+
     // Call custom error handler if provided
     this.props.onError?.(error, errorInfo);
-    
+
     // Log to monitoring service
-    if (typeof window !== 'undefined' && window.Sentry) {
+    if (typeof window !== "undefined" && window.Sentry) {
       window.Sentry.captureException(error, {
         contexts: {
           react: {
@@ -70,17 +70,18 @@ export class ClientPortalErrorBoundary extends Component<Props, State> {
               <div className="mx-auto flex items-center justify-center h-16 w-16 rounded-full bg-red-100 dark:bg-red-900/30 mb-4">
                 <AlertTriangle className="h-8 w-8 text-red-600 dark:text-red-400" />
               </div>
-              
+
               {/* Error Message */}
               <h2 className="text-2xl font-semibold text-gray-900 dark:text-white mb-2">
                 Something went wrong
               </h2>
               <p className="text-gray-600 dark:text-gray-400 mb-6">
-                We encountered an error while loading the client portal. This has been reported to our team.
+                We encountered an error while loading the client portal. This
+                has been reported to our team.
               </p>
-              
+
               {/* Error Details (Development Only) */}
-              {process.env.NODE_ENV === 'development' && this.state.error && (
+              {process.env.NODE_ENV === "development" && this.state.error && (
                 <details className="mb-6 text-left">
                   <summary className="cursor-pointer text-sm text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300">
                     Error Details
@@ -97,7 +98,7 @@ export class ClientPortalErrorBoundary extends Component<Props, State> {
                   </div>
                 </details>
               )}
-              
+
               {/* Actions */}
               <div className="flex flex-col sm:flex-row gap-3 justify-center">
                 <button
@@ -107,14 +108,14 @@ export class ClientPortalErrorBoundary extends Component<Props, State> {
                   <RefreshCw className="w-4 h-4" />
                   Try Again
                 </button>
-                
+
                 <button
                   onClick={this.handleReload}
                   className="inline-flex items-center justify-center gap-2 px-4 py-2 border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors"
                 >
                   Reload Page
                 </button>
-                
+
                 <Link
                   to="/client/dashboard"
                   className="inline-flex items-center justify-center gap-2 px-4 py-2 border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors"

@@ -1,5 +1,5 @@
-import React from 'react';
-import { CreditCard, AlertCircle } from 'lucide-react';
+import React from "react";
+import { CreditCard, AlertCircle } from "lucide-react";
 
 const RefundsPage: React.FC = () => {
   return (
@@ -20,7 +20,8 @@ const RefundsPage: React.FC = () => {
             Refund Management Coming Soon
           </h3>
           <p className="text-gray-500 dark:text-gray-400">
-            This feature will allow you to process refunds and manage cancellation requests.
+            This feature will allow you to process refunds and manage
+            cancellation requests.
           </p>
         </div>
       </div>
@@ -34,10 +35,12 @@ const RefundsPage: React.FC = () => {
               Refund Policy
             </h3>
             <p className="text-sm text-blue-800 dark:text-blue-300">
-              • Full refund if cancelled 7+ days before course<br />
-              • 50% refund if cancelled 3-6 days before course<br />
-              • No refund if cancelled less than 3 days before course<br />
-              • Medical emergencies considered on case-by-case basis
+              • Full refund if cancelled 7+ days before course
+              <br />
+              • 50% refund if cancelled 3-6 days before course
+              <br />
+              • No refund if cancelled less than 3 days before course
+              <br />• Medical emergencies considered on case-by-case basis
             </p>
           </div>
         </div>

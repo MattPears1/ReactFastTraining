@@ -1,41 +1,49 @@
-import DOMPurify from 'isomorphic-dompurify';
-import { z } from 'zod';
-import { ClientPortalError } from '@/types/client/enhanced.types';
+import DOMPurify from "isomorphic-dompurify";
+import { z } from "zod";
+import { ClientPortalError } from "@/types/client/enhanced.types";
 
 // Input validation schemas
-export const bookingIdSchema = z.string().uuid('Invalid booking ID format');
-export const emailSchema = z.string().email('Invalid email format');
-export const phoneSchema = z.string().regex(/^[+]?[(]?[0-9]{3}[)]?[-\s.]?[0-9]{3}[-\s.]?[0-9]{4,6}$/, 'Invalid phone number');
-export const dateSchema = z.string().datetime('Invalid date format');
-export const searchSchema = z.string().max(100, 'Search query too long').regex(/^[a-zA-Z0-9\s\-._@]+$/, 'Invalid characters in search');
+export const bookingIdSchema = z.string().uuid("Invalid booking ID format");
+export const emailSchema = z.string().email("Invalid email format");
+export const phoneSchema = z
+  .string()
+  .regex(
+    /^[+]?[(]?[0-9]{3}[)]?[-\s.]?[0-9]{3}[-\s.]?[0-9]{4,6}$/,
+    "Invalid phone number",
+  );
+export const dateSchema = z.string().datetime("Invalid date format");
+export const searchSchema = z
+  .string()
+  .max(100, "Search query too long")
+  .regex(/^[a-zA-Z0-9\s\-._@]+$/, "Invalid characters in search");
 
 // Sanitization functions
 export const sanitizeHtml = (html: string): string => {
   return DOMPurify.sanitize(html, {
-    ALLOWED_TAGS: ['b', 'i', 'em', 'strong', 'a', 'p', 'br', 'ul', 'ol', 'li'],
-    ALLOWED_ATTR: ['href', 'target', 'rel'],
+    ALLOWED_TAGS: ["b", "i", "em", "strong", "a", "p", "br", "ul", "ol", "li"],
+    ALLOWED_ATTR: ["href", "target", "rel"],
   });
 };
 
 export const sanitizeInput = (input: string): string => {
   return input
     .trim()
-    .replace(/[<>]/g, '') // Remove potential HTML tags
-    .replace(/[\u0000-\u001F\u007F-\u009F]/g, ''); // Remove control characters
+    .replace(/[<>]/g, "") // Remove potential HTML tags
+    .replace(/[\u0000-\u001F\u007F-\u009F]/g, ""); // Remove control characters
 };
 
 export const sanitizeFilename = (filename: string): string => {
   return filename
-    .replace(/[^a-zA-Z0-9._-]/g, '_')
-    .replace(/_{2,}/g, '_')
+    .replace(/[^a-zA-Z0-9._-]/g, "_")
+    .replace(/_{2,}/g, "_")
     .substring(0, 255);
 };
 
 // Security headers for downloads
 export const getSecureDownloadHeaders = (): HeadersInit => ({
-  'X-Content-Type-Options': 'nosniff',
-  'Content-Security-Policy': "default-src 'none'; style-src 'unsafe-inline'",
-  'X-Frame-Options': 'DENY',
+  "X-Content-Type-Options": "nosniff",
+  "Content-Security-Policy": "default-src 'none'; style-src 'unsafe-inline'",
+  "X-Frame-Options": "DENY",
 });
 
 // Rate limiting
@@ -87,12 +95,14 @@ export const apiRateLimiter = new RateLimiter({
 
 // CSRF token management
 class CSRFManager {
-  private tokenKey = 'client-portal-csrf';
+  private tokenKey = "client-portal-csrf";
 
   generateToken(): string {
     const array = new Uint8Array(32);
     crypto.getRandomValues(array);
-    const token = Array.from(array, byte => byte.toString(16).padStart(2, '0')).join('');
+    const token = Array.from(array, (byte) =>
+      byte.toString(16).padStart(2, "0"),
+    ).join("");
     sessionStorage.setItem(this.tokenKey, token);
     return token;
   }
@@ -125,7 +135,7 @@ export const getCSPHeader = (): string => {
     "frame-ancestors 'none'",
     "base-uri 'self'",
     "form-action 'self'",
-  ].join('; ');
+  ].join("; ");
 };
 
 // Secure storage wrapper
@@ -140,7 +150,7 @@ export class SecureStorage {
     try {
       return decodeURIComponent(atob(data));
     } catch {
-      throw new ClientPortalError('Failed to decrypt data');
+      throw new ClientPortalError("Failed to decrypt data");
     }
   }
 
@@ -169,8 +179,8 @@ export class SecureStorage {
 
   clear(): void {
     Object.keys(localStorage)
-      .filter(key => key.startsWith('secure_'))
-      .forEach(key => localStorage.removeItem(key));
+      .filter((key) => key.startsWith("secure_"))
+      .forEach((key) => localStorage.removeItem(key));
   }
 }
 
@@ -179,29 +189,33 @@ export const secureStorage = new SecureStorage();
 // XSS prevention utilities
 export const escapeHtml = (unsafe: string): string => {
   return unsafe
-    .replace(/&/g, '&amp;')
-    .replace(/</g, '&lt;')
-    .replace(/>/g, '&gt;')
-    .replace(/"/g, '&quot;')
-    .replace(/'/g, '&#039;');
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#039;");
 };
 
 // SQL injection prevention (for search queries)
 export const escapeSqlLike = (unsafe: string): string => {
-  return unsafe
-    .replace(/[%_]/g, '\\$&')
-    .replace(/'/g, "''");
+  return unsafe.replace(/[%_]/g, "\\$&").replace(/'/g, "''");
 };
 
 // Validate file uploads
-export const validateFileUpload = (file: File, options: {
-  maxSize?: number;
-  allowedTypes?: string[];
-} = {}): void => {
-  const { maxSize = 5 * 1024 * 1024, allowedTypes = ['application/pdf'] } = options;
+export const validateFileUpload = (
+  file: File,
+  options: {
+    maxSize?: number;
+    allowedTypes?: string[];
+  } = {},
+): void => {
+  const { maxSize = 5 * 1024 * 1024, allowedTypes = ["application/pdf"] } =
+    options;
 
   if (file.size > maxSize) {
-    throw new ClientPortalError(`File size exceeds ${maxSize / 1024 / 1024}MB limit`);
+    throw new ClientPortalError(
+      `File size exceeds ${maxSize / 1024 / 1024}MB limit`,
+    );
   }
 
   if (!allowedTypes.includes(file.type)) {
@@ -209,15 +223,17 @@ export const validateFileUpload = (file: File, options: {
   }
 
   // Check file extension
-  const extension = file.name.split('.').pop()?.toLowerCase();
+  const extension = file.name.split(".").pop()?.toLowerCase();
   const expectedExtensions = {
-    'application/pdf': ['pdf'],
-    'image/jpeg': ['jpg', 'jpeg'],
-    'image/png': ['png'],
+    "application/pdf": ["pdf"],
+    "image/jpeg": ["jpg", "jpeg"],
+    "image/png": ["png"],
   };
 
-  const validExtensions = allowedTypes.flatMap(type => expectedExtensions[type] || []);
+  const validExtensions = allowedTypes.flatMap(
+    (type) => expectedExtensions[type] || [],
+  );
   if (!extension || !validExtensions.includes(extension)) {
-    throw new ClientPortalError('Invalid file extension');
+    throw new ClientPortalError("Invalid file extension");
   }
 };

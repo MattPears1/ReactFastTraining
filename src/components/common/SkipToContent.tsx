@@ -1,4 +1,4 @@
-import React from 'react'
+import React from "react";
 
 const SkipToContent: React.FC = () => {
   return (
@@ -8,7 +8,7 @@ const SkipToContent: React.FC = () => {
     >
       Skip to main content
     </a>
-  )
-}
+  );
+};
 
-export default SkipToContent
+export default SkipToContent;

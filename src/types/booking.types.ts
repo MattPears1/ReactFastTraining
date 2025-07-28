@@ -1,22 +1,27 @@
-export type CourseTypeCode = 
-  | 'EFAW' 
-  | 'FAW' 
-  | 'PAEDIATRIC' 
-  | 'EMERGENCY_PAEDIATRIC'
-  | 'FAW_REQUALIFICATION'
-  | 'EFAW_REQUALIFICATION'
-  | 'PAEDIATRIC_REQUALIFICATION'
-  | 'EMERGENCY_PAEDIATRIC_REQUALIFICATION'
-  | 'ACTIVITY_FIRST_AID'
-  | 'ACTIVITY_FIRST_AID_REQUALIFICATION'
-  | 'CPR_AED'
-  | 'ANNUAL_SKILLS_REFRESHER'
-  | 'OXYGEN_THERAPY';
+export type CourseTypeCode =
+  | "EFAW"
+  | "FAW"
+  | "PAEDIATRIC"
+  | "EMERGENCY_PAEDIATRIC"
+  | "FAW_REQUALIFICATION"
+  | "EFAW_REQUALIFICATION"
+  | "PAEDIATRIC_REQUALIFICATION"
+  | "EMERGENCY_PAEDIATRIC_REQUALIFICATION"
+  | "ACTIVITY_FIRST_AID"
+  | "ACTIVITY_FIRST_AID_REQUALIFICATION"
+  | "CPR_AED"
+  | "ANNUAL_SKILLS_REFRESHER"
+  | "OXYGEN_THERAPY";
 
-export type VenueCode = 'SHEFFIELD' | 'LEEDS' | 'BARNSLEY' | 'DONCASTER' | 'ROTHERHAM';
+export type VenueCode =
+  | "SHEFFIELD"
+  | "LEEDS"
+  | "BARNSLEY"
+  | "DONCASTER"
+  | "ROTHERHAM";
 
-export type BookingStatus = 'pending' | 'confirmed' | 'cancelled' | 'completed';
-export type PaymentStatus = 'pending' | 'paid' | 'refunded' | 'partial_refund';
+export type BookingStatus = "pending" | "confirmed" | "cancelled" | "completed";
+export type PaymentStatus = "pending" | "paid" | "refunded" | "partial_refund";
 
 export interface CourseSchedule {
   id: number;
@@ -86,7 +91,7 @@ export interface CourseTypeConfig {
     background: string;
     dot: string;
   };
-  category: 'workplace' | 'paediatric' | 'specialist';
+  category: "workplace" | "paediatric" | "specialist";
   description: string;
 }
 

@@ -1,18 +1,18 @@
-import React, { useRef, useEffect } from 'react'
-import { motion, AnimatePresence } from 'framer-motion'
-import { X } from 'lucide-react'
-import { cn } from '@utils/cn'
-import { useTrapFocus, useEscapeKey } from '@hooks/useAccessibility'
-import Button from './Button'
+import React, { useRef, useEffect } from "react";
+import { motion, AnimatePresence } from "framer-motion";
+import { X } from "lucide-react";
+import { cn } from "@utils/cn";
+import { useTrapFocus, useEscapeKey } from "@hooks/useAccessibility";
+import Button from "./Button";
 
 interface ModalProps {
-  isOpen: boolean
-  onClose: () => void
-  title: string
-  description?: string
-  children: React.ReactNode
-  size?: 'sm' | 'md' | 'lg' | 'xl'
-  closeOnOverlayClick?: boolean
+  isOpen: boolean;
+  onClose: () => void;
+  title: string;
+  description?: string;
+  children: React.ReactNode;
+  size?: "sm" | "md" | "lg" | "xl";
+  closeOnOverlayClick?: boolean;
 }
 
 const Modal: React.FC<ModalProps> = ({
@@ -21,47 +21,47 @@ const Modal: React.FC<ModalProps> = ({
   title,
   description,
   children,
-  size = 'md',
+  size = "md",
   closeOnOverlayClick = true,
 }) => {
-  const modalRef = useRef<HTMLDivElement>(null)
-  const previousActiveElement = useRef<HTMLElement | null>(null)
+  const modalRef = useRef<HTMLDivElement>(null);
+  const previousActiveElement = useRef<HTMLElement | null>(null);
 
   // Store the element that had focus before opening
   useEffect(() => {
     if (isOpen) {
-      previousActiveElement.current = document.activeElement as HTMLElement
+      previousActiveElement.current = document.activeElement as HTMLElement;
     } else {
       // Return focus to the element that opened the modal
-      previousActiveElement.current?.focus()
+      previousActiveElement.current?.focus();
     }
-  }, [isOpen])
+  }, [isOpen]);
 
   // Trap focus within modal
-  useTrapFocus(modalRef)
+  useTrapFocus(modalRef);
 
   // Close on escape key
-  useEscapeKey(onClose)
+  useEscapeKey(onClose);
 
   // Prevent body scroll when modal is open
   useEffect(() => {
     if (isOpen) {
-      document.body.style.overflow = 'hidden'
+      document.body.style.overflow = "hidden";
     } else {
-      document.body.style.overflow = ''
+      document.body.style.overflow = "";
     }
 
     return () => {
-      document.body.style.overflow = ''
-    }
-  }, [isOpen])
+      document.body.style.overflow = "";
+    };
+  }, [isOpen]);
 
   const sizes = {
-    sm: 'max-w-sm sm:max-w-md',
-    md: 'max-w-md sm:max-w-lg',
-    lg: 'max-w-lg sm:max-w-xl md:max-w-2xl',
-    xl: 'max-w-xl sm:max-w-2xl md:max-w-4xl',
-  }
+    sm: "max-w-sm sm:max-w-md",
+    md: "max-w-md sm:max-w-lg",
+    lg: "max-w-lg sm:max-w-xl md:max-w-2xl",
+    xl: "max-w-xl sm:max-w-2xl md:max-w-4xl",
+  };
 
   return (
     <AnimatePresence>
@@ -86,15 +86,15 @@ const Modal: React.FC<ModalProps> = ({
             className="fixed inset-0 z-50 flex items-end sm:items-center justify-center sm:p-4"
             aria-modal="true"
             aria-labelledby="modal-title"
-            aria-describedby={description ? 'modal-description' : undefined}
+            aria-describedby={description ? "modal-description" : undefined}
           >
             <div
               ref={modalRef}
               className={cn(
-                'w-full bg-white dark:bg-gray-800 shadow-2xl',
-                'rounded-t-2xl sm:rounded-xl',
-                'max-h-[90vh] sm:max-h-[85vh] overflow-hidden flex flex-col',
-                sizes[size]
+                "w-full bg-white dark:bg-gray-800 shadow-2xl",
+                "rounded-t-2xl sm:rounded-xl",
+                "max-h-[90vh] sm:max-h-[85vh] overflow-hidden flex flex-col",
+                sizes[size],
               )}
               role="dialog"
             >
@@ -136,7 +136,7 @@ const Modal: React.FC<ModalProps> = ({
         </>
       )}
     </AnimatePresence>
-  )
-}
+  );
+};
 
-export default Modal
+export default Modal;

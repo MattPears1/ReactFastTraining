@@ -1,4 +1,4 @@
-import axios, { AxiosInstance } from 'axios';
+import axios, { AxiosInstance } from "axios";
 
 export interface CreateCourseSessionData {
   courseId: string;
@@ -15,16 +15,24 @@ export interface CreateCourseSessionData {
   notes?: string;
 }
 
-export interface UpdateCourseSessionData extends Partial<CreateCourseSessionData> {
-  status?: 'SCHEDULED' | 'CONFIRMED' | 'IN_PROGRESS' | 'COMPLETED' | 'CANCELLED';
+export interface UpdateCourseSessionData
+  extends Partial<CreateCourseSessionData> {
+  status?:
+    | "SCHEDULED"
+    | "CONFIRMED"
+    | "IN_PROGRESS"
+    | "COMPLETED"
+    | "CANCELLED";
 }
 
 class AdminCourseSessionService {
   private api: AxiosInstance;
 
   constructor() {
-    const baseURL = import.meta.env.PROD ? '' : (import.meta.env.VITE_API_URL || 'http://localhost:3000');
-    
+    const baseURL = import.meta.env.PROD
+      ? ""
+      : import.meta.env.VITE_API_URL || "http://localhost:3000";
+
     this.api = axios.create({
       baseURL,
       withCredentials: true,
@@ -33,7 +41,7 @@ class AdminCourseSessionService {
 
     // Add auth token to requests
     this.api.interceptors.request.use((config) => {
-      const token = localStorage.getItem('adminAccessToken');
+      const token = localStorage.getItem("adminAccessToken");
       if (token) {
         config.headers.Authorization = `Bearer ${token}`;
       }
@@ -42,12 +50,15 @@ class AdminCourseSessionService {
   }
 
   async createSession(data: CreateCourseSessionData) {
-    const response = await this.api.post('/course-sessions', data);
+    const response = await this.api.post("/course-sessions", data);
     return response.data;
   }
 
   async updateSession(sessionId: string, data: UpdateCourseSessionData) {
-    const response = await this.api.patch(`/course-sessions/${sessionId}`, data);
+    const response = await this.api.patch(
+      `/course-sessions/${sessionId}`,
+      data,
+    );
     return response.data;
   }
 
@@ -57,17 +68,23 @@ class AdminCourseSessionService {
   }
 
   async cancelSession(sessionId: string) {
-    const response = await this.api.post(`/course-sessions/${sessionId}/cancel`);
+    const response = await this.api.post(
+      `/course-sessions/${sessionId}/cancel`,
+    );
     return response.data;
   }
 
   async getSessionBookings(sessionId: string) {
-    const response = await this.api.get(`/course-sessions/${sessionId}/bookings`);
+    const response = await this.api.get(
+      `/course-sessions/${sessionId}/bookings`,
+    );
     return response.data;
   }
 
   async getSessionAvailability(sessionId: string) {
-    const response = await this.api.get(`/course-sessions/${sessionId}/availability`);
+    const response = await this.api.get(
+      `/course-sessions/${sessionId}/availability`,
+    );
     return response.data;
   }
 
@@ -78,7 +95,10 @@ class AdminCourseSessionService {
     preferredStartDate: string;
     durationDays: number;
   }) {
-    const response = await this.api.post('/course-sessions/suggest-dates', data);
+    const response = await this.api.post(
+      "/course-sessions/suggest-dates",
+      data,
+    );
     return response.data;
   }
 }

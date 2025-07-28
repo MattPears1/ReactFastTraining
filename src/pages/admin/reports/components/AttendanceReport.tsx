@@ -1,61 +1,64 @@
-import React from 'react';
+import React from "react";
 import {
   Users,
   UserCheck,
   UserX,
   TrendingUp,
   Award,
-  Activity
-} from 'lucide-react';
-import { ReportData } from '../types';
-import { cn } from '@utils/cn';
+  Activity,
+} from "lucide-react";
+import { ReportData } from "../types";
+import { cn } from "@utils/cn";
 
 interface AttendanceReportProps {
   data: ReportData;
   dateRangeLabel: string;
 }
 
-export const AttendanceReport: React.FC<AttendanceReportProps> = ({ data, dateRangeLabel }) => {
+export const AttendanceReport: React.FC<AttendanceReportProps> = ({
+  data,
+  dateRangeLabel,
+}) => {
   const attendanceRate = 100 - data.attendance.noShowRate;
-  
+
   const attendanceMetrics = [
     {
-      label: 'Completion Rate',
+      label: "Completion Rate",
       value: data.attendance.completionRate,
-      color: 'green',
-      icon: UserCheck
+      color: "green",
+      icon: UserCheck,
     },
     {
-      label: 'Attendance Rate',
+      label: "Attendance Rate",
       value: attendanceRate,
-      color: 'blue',
-      icon: Users
+      color: "blue",
+      icon: Users,
     },
     {
-      label: 'No-Show Rate',
+      label: "No-Show Rate",
       value: data.attendance.noShowRate,
-      color: 'red',
-      icon: UserX
-    }
+      color: "red",
+      icon: UserX,
+    },
   ];
 
-  const getColorClasses = (color: string, type: 'bg' | 'text' | 'border') => {
+  const getColorClasses = (color: string, type: "bg" | "text" | "border") => {
     const colorMap = {
       green: {
-        bg: 'bg-green-100',
-        text: 'text-green-600',
-        border: 'border-green-600'
+        bg: "bg-green-100",
+        text: "text-green-600",
+        border: "border-green-600",
       },
       blue: {
-        bg: 'bg-blue-100',
-        text: 'text-blue-600',
-        border: 'border-blue-600'
+        bg: "bg-blue-100",
+        text: "text-blue-600",
+        border: "border-blue-600",
       },
       red: {
-        bg: 'bg-red-100',
-        text: 'text-red-600',
-        border: 'border-red-600'
-      }
+        bg: "bg-red-100",
+        text: "text-red-600",
+        border: "border-red-600",
+      },
     };
     return colorMap[color as keyof typeof colorMap][type];
   };
@@ -67,7 +70,9 @@ export const AttendanceReport: React.FC<AttendanceReportProps> = ({ data, dateRa
         <div className="bg-white rounded-lg border border-gray-200 p-6">
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-sm font-medium text-gray-600">Total Attendees</p>
+              <p className="text-sm font-medium text-gray-600">
+                Total Attendees
+              </p>
               <p className="text-2xl font-bold text-gray-900 mt-1">
                 {data.attendance.totalAttendees}
               </p>
@@ -82,7 +87,9 @@ export const AttendanceReport: React.FC<AttendanceReportProps> = ({ data, dateRa
         <div className="bg-white rounded-lg border border-gray-200 p-6">
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-sm font-medium text-gray-600">Avg per Session</p>
+              <p className="text-sm font-medium text-gray-600">
+                Avg per Session
+              </p>
               <p className="text-2xl font-bold text-gray-900 mt-1">
                 {data.attendance.averagePerSession.toFixed(1)}
               </p>
@@ -97,7 +104,9 @@ export const AttendanceReport: React.FC<AttendanceReportProps> = ({ data, dateRa
         <div className="bg-white rounded-lg border border-gray-200 p-6">
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-sm font-medium text-gray-600">Completion Rate</p>
+              <p className="text-sm font-medium text-gray-600">
+                Completion Rate
+              </p>
               <p className="text-2xl font-bold text-green-600 mt-1">
                 {data.attendance.completionRate}%
               </p>
@@ -127,7 +136,9 @@ export const AttendanceReport: React.FC<AttendanceReportProps> = ({ data, dateRa
 
       {/* Attendance Metrics */}
       <div className="bg-white rounded-lg border border-gray-200 p-6">
-        <h3 className="text-lg font-medium text-gray-900 mb-6">Attendance Performance</h3>
+        <h3 className="text-lg font-medium text-gray-900 mb-6">
+          Attendance Performance
+        </h3>
         <div className="space-y-6">
           {attendanceMetrics.map((metric) => {
             const Icon = metric.icon;
@@ -135,20 +146,35 @@ export const AttendanceReport: React.FC<AttendanceReportProps> = ({ data, dateRa
               <div key={metric.label}>
                 <div className="flex items-center justify-between mb-2">
                   <div className="flex items-center gap-2">
-                    <Icon className={cn("h-5 w-5", getColorClasses(metric.color, 'text'))} />
-                    <span className="text-sm font-medium text-gray-700">{metric.label}</span>
+                    <Icon
+                      className={cn(
+                        "h-5 w-5",
+                        getColorClasses(metric.color, "text"),
+                      )}
+                    />
+                    <span className="text-sm font-medium text-gray-700">
+                      {metric.label}
+                    </span>
                   </div>
-                  <span className={cn("text-lg font-bold", getColorClasses(metric.color, 'text'))}>
+                  <span
+                    className={cn(
+                      "text-lg font-bold",
+                      getColorClasses(metric.color, "text"),
+                    )}
+                  >
                     {metric.value}%
                   </span>
                 </div>
                 <div className="relative">
                   <div className="w-full bg-gray-200 rounded-full h-3 overflow-hidden">
-                    <div 
-                      className={cn("h-full rounded-full transition-all duration-500", 
-                        metric.color === 'green' ? 'bg-green-500' :
-                        metric.color === 'blue' ? 'bg-blue-500' :
-                        'bg-red-500'
+                    <div
+                      className={cn(
+                        "h-full rounded-full transition-all duration-500",
+                        metric.color === "green"
+                          ? "bg-green-500"
+                          : metric.color === "blue"
+                            ? "bg-blue-500"
+                            : "bg-red-500",
                       )}
                       style={{ width: `${metric.value}%` }}
                     />
@@ -168,22 +194,38 @@ export const AttendanceReport: React.FC<AttendanceReportProps> = ({ data, dateRa
       {/* Insights and Recommendations */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         <div className="bg-white rounded-lg border border-gray-200 p-6">
-          <h3 className="text-lg font-medium text-gray-900 mb-4">Key Insights</h3>
+          <h3 className="text-lg font-medium text-gray-900 mb-4">
+            Key Insights
+          </h3>
           <div className="space-y-4">
             <div className="flex items-start gap-3">
-              <div className={cn(
-                "p-2 rounded-lg flex-shrink-0",
-                attendanceRate >= 90 ? "bg-green-100" : attendanceRate >= 80 ? "bg-yellow-100" : "bg-red-100"
-              )}>
-                <TrendingUp className={cn(
-                  "h-5 w-5",
-                  attendanceRate >= 90 ? "text-green-600" : attendanceRate >= 80 ? "text-yellow-600" : "text-red-600"
-                )} />
+              <div
+                className={cn(
+                  "p-2 rounded-lg flex-shrink-0",
+                  attendanceRate >= 90
+                    ? "bg-green-100"
+                    : attendanceRate >= 80
+                      ? "bg-yellow-100"
+                      : "bg-red-100",
+                )}
+              >
+                <TrendingUp
+                  className={cn(
+                    "h-5 w-5",
+                    attendanceRate >= 90
+                      ? "text-green-600"
+                      : attendanceRate >= 80
+                        ? "text-yellow-600"
+                        : "text-red-600",
+                  )}
+                />
               </div>
               <div>
-                <p className="font-medium text-gray-900">Attendance Performance</p>
+                <p className="font-medium text-gray-900">
+                  Attendance Performance
+                </p>
                 <p className="text-sm text-gray-600 mt-1">
-                  {attendanceRate >= 90 
+                  {attendanceRate >= 90
                     ? "Excellent attendance rate indicates strong engagement and course value."
                     : attendanceRate >= 80
                       ? "Good attendance rate, but there's room for improvement."
@@ -193,19 +235,27 @@ export const AttendanceReport: React.FC<AttendanceReportProps> = ({ data, dateRa
             </div>
 
             <div className="flex items-start gap-3">
-              <div className={cn(
-                "p-2 rounded-lg flex-shrink-0",
-                data.attendance.completionRate >= 95 ? "bg-green-100" : "bg-yellow-100"
-              )}>
-                <Award className={cn(
-                  "h-5 w-5",
-                  data.attendance.completionRate >= 95 ? "text-green-600" : "text-yellow-600"
-                )} />
+              <div
+                className={cn(
+                  "p-2 rounded-lg flex-shrink-0",
+                  data.attendance.completionRate >= 95
+                    ? "bg-green-100"
+                    : "bg-yellow-100",
+                )}
+              >
+                <Award
+                  className={cn(
+                    "h-5 w-5",
+                    data.attendance.completionRate >= 95
+                      ? "text-green-600"
+                      : "text-yellow-600",
+                  )}
+                />
               </div>
               <div>
                 <p className="font-medium text-gray-900">Completion Success</p>
                 <p className="text-sm text-gray-600 mt-1">
-                  {data.attendance.completionRate >= 95 
+                  {data.attendance.completionRate >= 95
                     ? "Outstanding completion rate shows effective training delivery."
                     : "Completion rate could be improved. Review assessment difficulty and support."}
                 </p>
@@ -215,13 +265,16 @@ export const AttendanceReport: React.FC<AttendanceReportProps> = ({ data, dateRa
         </div>
 
         <div className="bg-white rounded-lg border border-gray-200 p-6">
-          <h3 className="text-lg font-medium text-gray-900 mb-4">Recommendations</h3>
+          <h3 className="text-lg font-medium text-gray-900 mb-4">
+            Recommendations
+          </h3>
           <ul className="space-y-3">
             {data.attendance.noShowRate > 10 && (
               <li className="flex items-start gap-2">
                 <span className="text-primary-600 font-bold">•</span>
                 <span className="text-sm text-gray-700">
-                  Implement SMS reminders 24 hours before sessions to reduce no-shows
+                  Implement SMS reminders 24 hours before sessions to reduce
+                  no-shows
                 </span>
               </li>
             )}
@@ -237,7 +290,8 @@ export const AttendanceReport: React.FC<AttendanceReportProps> = ({ data, dateRa
               <li className="flex items-start gap-2">
                 <span className="text-primary-600 font-bold">•</span>
                 <span className="text-sm text-gray-700">
-                  Review training materials and provide additional support resources
+                  Review training materials and provide additional support
+                  resources
                 </span>
               </li>
             )}

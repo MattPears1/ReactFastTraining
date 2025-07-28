@@ -1,7 +1,14 @@
-import React, { useState, useEffect } from 'react';
-import { AlertTriangle, Info, CheckCircle, Download, RefreshCw, Mail } from 'lucide-react';
-import { api } from '@/services/api.service';
-import { Button } from '@/components/ui/Button';
+import React, { useState, useEffect } from "react";
+import {
+  AlertTriangle,
+  Info,
+  CheckCircle,
+  Download,
+  RefreshCw,
+  Mail,
+} from "lucide-react";
+import { api } from "@/services/api.service";
+import { Button } from "@/components/ui/Button";
 
 interface RequirementWithBooking {
   requirement: {
@@ -9,7 +16,7 @@ interface RequirementWithBooking {
     category: string;
     requirementType: string;
     details: string;
-    priority: 'critical' | 'high' | 'standard';
+    priority: "critical" | "high" | "standard";
     instructorNotified: boolean;
   };
   booking: {
@@ -32,8 +39,12 @@ interface RequirementsDashboardProps {
   sessionId: string;
 }
 
-export const RequirementsDashboard: React.FC<RequirementsDashboardProps> = ({ sessionId }) => {
-  const [requirements, setRequirements] = useState<SessionRequirements | null>(null);
+export const RequirementsDashboard: React.FC<RequirementsDashboardProps> = ({
+  sessionId,
+}) => {
+  const [requirements, setRequirements] = useState<SessionRequirements | null>(
+    null,
+  );
   const [loading, setLoading] = useState(true);
   const [notifying, setNotifying] = useState(false);
 
@@ -44,10 +55,12 @@ export const RequirementsDashboard: React.FC<RequirementsDashboardProps> = ({ se
   const loadRequirements = async () => {
     setLoading(true);
     try {
-      const response = await api.get(`/api/admin/sessions/${sessionId}/requirements`);
+      const response = await api.get(
+        `/api/admin/sessions/${sessionId}/requirements`,
+      );
       setRequirements(response.data);
     } catch (error) {
-      console.error('Failed to load requirements:', error);
+      console.error("Failed to load requirements:", error);
     } finally {
       setLoading(false);
     }
@@ -60,7 +73,7 @@ export const RequirementsDashboard: React.FC<RequirementsDashboardProps> = ({ se
       // Refresh to update notification status
       await loadRequirements();
     } catch (error) {
-      console.error('Failed to notify instructor:', error);
+      console.error("Failed to notify instructor:", error);
     } finally {
       setNotifying(false);
     }
@@ -68,18 +81,21 @@ export const RequirementsDashboard: React.FC<RequirementsDashboardProps> = ({ se
 
   const exportReport = async () => {
     try {
-      const response = await api.get(`/api/admin/sessions/${sessionId}/requirements-report`, {
-        responseType: 'blob',
-      });
-      const blob = new Blob([response.data], { type: 'application/pdf' });
+      const response = await api.get(
+        `/api/admin/sessions/${sessionId}/requirements-report`,
+        {
+          responseType: "blob",
+        },
+      );
+      const blob = new Blob([response.data], { type: "application/pdf" });
       const url = window.URL.createObjectURL(blob);
-      const a = document.createElement('a');
+      const a = document.createElement("a");
       a.href = url;
       a.download = `requirements-${sessionId}.pdf`;
       a.click();
       window.URL.revokeObjectURL(url);
     } catch (error) {
-      console.error('Failed to export report:', error);
+      console.error("Failed to export report:", error);
     }
   };
 
@@ -99,9 +115,9 @@ export const RequirementsDashboard: React.FC<RequirementsDashboardProps> = ({ se
     );
   }
 
-  const totalCount = 
-    requirements.critical.length + 
-    requirements.high.length + 
+  const totalCount =
+    requirements.critical.length +
+    requirements.high.length +
     requirements.standard.length;
 
   if (totalCount === 0) {
@@ -130,20 +146,18 @@ export const RequirementsDashboard: React.FC<RequirementsDashboardProps> = ({ se
               size="sm"
               disabled={loading}
             >
-              <RefreshCw className={`w-4 h-4 mr-2 ${loading ? 'animate-spin' : ''}`} />
+              <RefreshCw
+                className={`w-4 h-4 mr-2 ${loading ? "animate-spin" : ""}`}
+              />
               Refresh
             </Button>
-            <Button
-              onClick={exportReport}
-              variant="secondary"
-              size="sm"
-            >
+            <Button onClick={exportReport} variant="secondary" size="sm">
               <Download className="w-4 h-4 mr-2" />
               Export Report
             </Button>
           </div>
         </div>
-        
+
         <div className="grid grid-cols-3 gap-4 mb-6">
           <div className="text-center p-4 bg-red-50 rounded-lg">
             <div className="text-3xl font-bold text-red-600">
@@ -170,8 +184,12 @@ export const RequirementsDashboard: React.FC<RequirementsDashboardProps> = ({ se
           <div className="mb-6">
             <div className="flex items-center gap-2 mb-3">
               <AlertTriangle className="w-5 h-5 text-red-600" />
-              <h4 className="font-semibold text-red-900">Critical Requirements</h4>
-              {requirements.critical.some(r => !r.requirement.instructorNotified) && (
+              <h4 className="font-semibold text-red-900">
+                Critical Requirements
+              </h4>
+              {requirements.critical.some(
+                (r) => !r.requirement.instructorNotified,
+              ) && (
                 <Button
                   onClick={notifyInstructor}
                   variant="danger"
@@ -179,13 +197,17 @@ export const RequirementsDashboard: React.FC<RequirementsDashboardProps> = ({ se
                   disabled={notifying}
                 >
                   <Mail className="w-4 h-4 mr-2" />
-                  {notifying ? 'Notifying...' : 'Notify Instructor'}
+                  {notifying ? "Notifying..." : "Notify Instructor"}
                 </Button>
               )}
             </div>
             <div className="space-y-3">
-              {requirements.critical.map(req => (
-                <RequirementCard key={req.requirement.id} requirement={req} priority="critical" />
+              {requirements.critical.map((req) => (
+                <RequirementCard
+                  key={req.requirement.id}
+                  requirement={req}
+                  priority="critical"
+                />
               ))}
             </div>
           </div>
@@ -199,8 +221,12 @@ export const RequirementsDashboard: React.FC<RequirementsDashboardProps> = ({ se
               <h4 className="font-semibold text-yellow-900">High Priority</h4>
             </div>
             <div className="space-y-3">
-              {requirements.high.map(req => (
-                <RequirementCard key={req.requirement.id} requirement={req} priority="high" />
+              {requirements.high.map((req) => (
+                <RequirementCard
+                  key={req.requirement.id}
+                  requirement={req}
+                  priority="high"
+                />
               ))}
             </div>
           </div>
@@ -211,8 +237,12 @@ export const RequirementsDashboard: React.FC<RequirementsDashboardProps> = ({ se
           <div>
             <h4 className="font-semibold mb-3">Standard Requirements</h4>
             <div className="space-y-3">
-              {requirements.standard.map(req => (
-                <RequirementCard key={req.requirement.id} requirement={req} priority="standard" />
+              {requirements.standard.map((req) => (
+                <RequirementCard
+                  key={req.requirement.id}
+                  requirement={req}
+                  priority="standard"
+                />
               ))}
             </div>
           </div>
@@ -221,27 +251,39 @@ export const RequirementsDashboard: React.FC<RequirementsDashboardProps> = ({ se
 
       {/* Action Items Checklist */}
       <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
-        <h4 className="font-semibold text-blue-900 mb-2">Preparation Checklist</h4>
+        <h4 className="font-semibold text-blue-900 mb-2">
+          Preparation Checklist
+        </h4>
         <ul className="space-y-1 text-sm text-blue-800">
           <li className="flex items-center gap-2">
             <input type="checkbox" id="check-1" />
-            <label htmlFor="check-1">Ensure venue accessibility for wheelchair users</label>
+            <label htmlFor="check-1">
+              Ensure venue accessibility for wheelchair users
+            </label>
           </li>
           <li className="flex items-center gap-2">
             <input type="checkbox" id="check-2" />
-            <label htmlFor="check-2">Prepare dietary-appropriate refreshments</label>
+            <label htmlFor="check-2">
+              Prepare dietary-appropriate refreshments
+            </label>
           </li>
           <li className="flex items-center gap-2">
             <input type="checkbox" id="check-3" />
-            <label htmlFor="check-3">Have emergency protocols ready for medical needs</label>
+            <label htmlFor="check-3">
+              Have emergency protocols ready for medical needs
+            </label>
           </li>
           <li className="flex items-center gap-2">
             <input type="checkbox" id="check-4" />
-            <label htmlFor="check-4">Brief any assistants on special requirements</label>
+            <label htmlFor="check-4">
+              Brief any assistants on special requirements
+            </label>
           </li>
           <li className="flex items-center gap-2">
             <input type="checkbox" id="check-5" />
-            <label htmlFor="check-5">Check hearing loop and accessibility equipment</label>
+            <label htmlFor="check-5">
+              Check hearing loop and accessibility equipment
+            </label>
           </li>
         </ul>
       </div>
@@ -249,21 +291,21 @@ export const RequirementsDashboard: React.FC<RequirementsDashboardProps> = ({ se
   );
 };
 
-const RequirementCard: React.FC<{ 
-  requirement: RequirementWithBooking; 
-  priority: 'critical' | 'high' | 'standard';
+const RequirementCard: React.FC<{
+  requirement: RequirementWithBooking;
+  priority: "critical" | "high" | "standard";
 }> = ({ requirement, priority }) => {
   const priorityColors = {
-    critical: 'border-red-300 bg-red-50',
-    high: 'border-yellow-300 bg-yellow-50',
-    standard: 'border-gray-300 bg-gray-50',
+    critical: "border-red-300 bg-red-50",
+    high: "border-yellow-300 bg-yellow-50",
+    standard: "border-gray-300 bg-gray-50",
   };
 
   const categoryIcons = {
-    accessibility: '♿',
-    dietary: '🍽️',
-    medical: '🏥',
-    other: '📋',
+    accessibility: "♿",
+    dietary: "🍽️",
+    medical: "🏥",
+    other: "📋",
   };
 
   return (
@@ -271,7 +313,9 @@ const RequirementCard: React.FC<{
       <div className="flex justify-between items-start mb-2">
         <div>
           <p className="font-medium flex items-center gap-2">
-            <span className="text-xl">{categoryIcons[requirement.requirement.category] || '📋'}</span>
+            <span className="text-xl">
+              {categoryIcons[requirement.requirement.category] || "📋"}
+            </span>
             {requirement.attendee.name}
           </p>
           <p className="text-sm text-gray-600">
@@ -284,19 +328,25 @@ const RequirementCard: React.FC<{
               Notified
             </span>
           )}
-          <span className={`text-xs px-2 py-1 rounded-full ${
-            priority === 'critical' ? 'bg-red-100 text-red-800' :
-            priority === 'high' ? 'bg-yellow-100 text-yellow-800' :
-            'bg-gray-100 text-gray-800'
-          }`}>
+          <span
+            className={`text-xs px-2 py-1 rounded-full ${
+              priority === "critical"
+                ? "bg-red-100 text-red-800"
+                : priority === "high"
+                  ? "bg-yellow-100 text-yellow-800"
+                  : "bg-gray-100 text-gray-800"
+            }`}
+          >
             {priority.charAt(0).toUpperCase() + priority.slice(1)}
           </span>
         </div>
       </div>
       <div className="space-y-1">
         <p className="text-sm">
-          <strong className="capitalize">{requirement.requirement.category}:</strong>{' '}
-          {requirement.requirement.requirementType.replace(/_/g, ' ')}
+          <strong className="capitalize">
+            {requirement.requirement.category}:
+          </strong>{" "}
+          {requirement.requirement.requirementType.replace(/_/g, " ")}
         </p>
         {requirement.requirement.details && (
           <p className="text-sm text-gray-700 italic bg-white bg-opacity-50 p-2 rounded">

@@ -1,28 +1,42 @@
-import React, { useState, useEffect } from 'react';
-import { useForm, Controller } from 'react-hook-form';
-import { zodResolver } from '@hookform/resolvers/zod';
-import { z } from 'zod';
-import DatePicker from 'react-datepicker';
-import { adminApi } from '@services/api/admin.service';
-import { Calendar, Clock, MapPin, Users, Plus, Loader2, CheckCircle } from 'lucide-react';
-import { cn } from '@utils/cn';
+import React, { useState, useEffect } from "react";
+import { useForm, Controller } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { z } from "zod";
+import DatePicker from "react-datepicker";
+import { adminApi } from "@services/api/admin.service";
+import {
+  Calendar,
+  Clock,
+  MapPin,
+  Users,
+  Plus,
+  Loader2,
+  CheckCircle,
+} from "lucide-react";
+import { cn } from "@utils/cn";
 import "react-datepicker/dist/react-datepicker.css";
 
 const courseSchema = z.object({
-  courseId: z.string().min(1, 'Course is required'),
-  trainerId: z.string().min(1, 'Trainer is required'),
-  locationId: z.string().min(1, 'Location is required'),
+  courseId: z.string().min(1, "Course is required"),
+  trainerId: z.string().min(1, "Trainer is required"),
+  locationId: z.string().min(1, "Location is required"),
   sessionDate: z.date(),
-  startTime: z.string().regex(/^([0-1]?[0-9]|2[0-3]):[0-5][0-9]$/, 'Invalid time format (HH:MM)'),
-  endTime: z.string().regex(/^([0-1]?[0-9]|2[0-3]):[0-5][0-9]$/, 'Invalid time format (HH:MM)'),
-  maxParticipants: z.number().min(1).max(12, 'Maximum 12 participants allowed'),
-  pricePerPerson: z.number().min(0, 'Price must be positive'),
+  startTime: z
+    .string()
+    .regex(/^([0-1]?[0-9]|2[0-3]):[0-5][0-9]$/, "Invalid time format (HH:MM)"),
+  endTime: z
+    .string()
+    .regex(/^([0-1]?[0-9]|2[0-3]):[0-5][0-9]$/, "Invalid time format (HH:MM)"),
+  maxParticipants: z.number().min(1).max(12, "Maximum 12 participants allowed"),
+  pricePerPerson: z.number().min(0, "Price must be positive"),
   notes: z.string().optional(),
   isRecurring: z.boolean(),
-  recurrence: z.object({
-    endDate: z.date().optional(),
-    daysOfWeek: z.array(z.number()).optional(),
-  }).optional(),
+  recurrence: z
+    .object({
+      endDate: z.date().optional(),
+      daysOfWeek: z.array(z.number()).optional(),
+    })
+    .optional(),
 });
 
 type CourseFormData = z.infer<typeof courseSchema>;
@@ -34,15 +48,28 @@ interface CourseCreationFormProps {
 
 export const CourseCreationForm: React.FC<CourseCreationFormProps> = ({
   onSuccess,
-  className = '',
+  className = "",
 }) => {
   const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState(false);
-  const [courses, setCourses] = useState<Array<{id: string; name: string; duration: string}>>([]);
-  const [trainers, setTrainers] = useState<Array<{id: string; name: string}>>([]);
-  const [locations, setLocations] = useState<Array<{id: string; name: string}>>([]);
+  const [courses, setCourses] = useState<
+    Array<{ id: string; name: string; duration: string }>
+  >([]);
+  const [trainers, setTrainers] = useState<Array<{ id: string; name: string }>>(
+    [],
+  );
+  const [locations, setLocations] = useState<
+    Array<{ id: string; name: string }>
+  >([]);
 
-  const { register, control, handleSubmit, watch, reset, formState: { errors } } = useForm<CourseFormData>({
+  const {
+    register,
+    control,
+    handleSubmit,
+    watch,
+    reset,
+    formState: { errors },
+  } = useForm<CourseFormData>({
     resolver: zodResolver(courseSchema),
     defaultValues: {
       maxParticipants: 12,
@@ -53,8 +80,8 @@ export const CourseCreationForm: React.FC<CourseCreationFormProps> = ({
     },
   });
 
-  const isRecurring = watch('isRecurring');
-  const selectedCourseId = watch('courseId');
+  const isRecurring = watch("isRecurring");
+  const selectedCourseId = watch("courseId");
 
   useEffect(() => {
     loadFormData();
@@ -72,7 +99,7 @@ export const CourseCreationForm: React.FC<CourseCreationFormProps> = ({
       setTrainers(trainersData);
       setLocations(locationsData);
     } catch (error) {
-      console.error('Failed to load form data:', error);
+      console.error("Failed to load form data:", error);
     }
   };
 
@@ -94,7 +121,11 @@ export const CourseCreationForm: React.FC<CourseCreationFormProps> = ({
         notes: data.notes,
       };
 
-      if (data.isRecurring && data.recurrence?.endDate && data.recurrence?.daysOfWeek?.length) {
+      if (
+        data.isRecurring &&
+        data.recurrence?.endDate &&
+        data.recurrence?.daysOfWeek?.length
+      ) {
         await adminApi.createRecurringSessions({
           ...sessionData,
           recurrenceEndDate: data.recurrence.endDate,
@@ -107,21 +138,24 @@ export const CourseCreationForm: React.FC<CourseCreationFormProps> = ({
       setSuccess(true);
       reset();
       onSuccess?.();
-      
+
       // Hide success message after 3 seconds
       setTimeout(() => setSuccess(false), 3000);
     } catch (error: any) {
-      console.error('Failed to create session:', error);
-      alert(error.response?.data?.error?.message || 'Failed to create session');
+      console.error("Failed to create session:", error);
+      alert(error.response?.data?.error?.message || "Failed to create session");
     } finally {
       setLoading(false);
     }
   };
 
-  const daysOfWeek = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+  const daysOfWeek = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)} className={cn('space-y-6', className)}>
+    <form
+      onSubmit={handleSubmit(onSubmit)}
+      className={cn("space-y-6", className)}
+    >
       {/* Success Message */}
       {success && (
         <div className="bg-green-50 border border-green-200 rounded-lg p-4 flex items-center gap-3">
@@ -136,12 +170,12 @@ export const CourseCreationForm: React.FC<CourseCreationFormProps> = ({
           Course Type
         </label>
         <select
-          {...register('courseId')}
+          {...register("courseId")}
           className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500"
           disabled={loading}
         >
           <option value="">Select a course</option>
-          {courses.map(course => (
+          {courses.map((course) => (
             <option key={course.id} value={course.id}>
               {course.name} ({course.duration})
             </option>
@@ -159,19 +193,21 @@ export const CourseCreationForm: React.FC<CourseCreationFormProps> = ({
             Trainer
           </label>
           <select
-            {...register('trainerId')}
+            {...register("trainerId")}
             className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500"
             disabled={loading}
           >
             <option value="">Select trainer</option>
-            {trainers.map(trainer => (
+            {trainers.map((trainer) => (
               <option key={trainer.id} value={trainer.id}>
                 {trainer.name}
               </option>
             ))}
           </select>
           {errors.trainerId && (
-            <p className="text-red-600 text-sm mt-1">{errors.trainerId.message}</p>
+            <p className="text-red-600 text-sm mt-1">
+              {errors.trainerId.message}
+            </p>
           )}
         </div>
 
@@ -181,19 +217,21 @@ export const CourseCreationForm: React.FC<CourseCreationFormProps> = ({
             Location
           </label>
           <select
-            {...register('locationId')}
+            {...register("locationId")}
             className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500"
             disabled={loading}
           >
             <option value="">Select location</option>
-            {locations.map(location => (
+            {locations.map((location) => (
               <option key={location.id} value={location.id}>
                 {location.name}
               </option>
             ))}
           </select>
           {errors.locationId && (
-            <p className="text-red-600 text-sm mt-1">{errors.locationId.message}</p>
+            <p className="text-red-600 text-sm mt-1">
+              {errors.locationId.message}
+            </p>
           )}
         </div>
       </div>
@@ -219,7 +257,9 @@ export const CourseCreationForm: React.FC<CourseCreationFormProps> = ({
           )}
         />
         {errors.sessionDate && (
-          <p className="text-red-600 text-sm mt-1">{errors.sessionDate.message}</p>
+          <p className="text-red-600 text-sm mt-1">
+            {errors.sessionDate.message}
+          </p>
         )}
       </div>
 
@@ -231,12 +271,14 @@ export const CourseCreationForm: React.FC<CourseCreationFormProps> = ({
           </label>
           <input
             type="time"
-            {...register('startTime')}
+            {...register("startTime")}
             className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500"
             disabled={loading}
           />
           {errors.startTime && (
-            <p className="text-red-600 text-sm mt-1">{errors.startTime.message}</p>
+            <p className="text-red-600 text-sm mt-1">
+              {errors.startTime.message}
+            </p>
           )}
         </div>
         <div>
@@ -245,12 +287,14 @@ export const CourseCreationForm: React.FC<CourseCreationFormProps> = ({
           </label>
           <input
             type="time"
-            {...register('endTime')}
+            {...register("endTime")}
             className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500"
             disabled={loading}
           />
           {errors.endTime && (
-            <p className="text-red-600 text-sm mt-1">{errors.endTime.message}</p>
+            <p className="text-red-600 text-sm mt-1">
+              {errors.endTime.message}
+            </p>
           )}
         </div>
       </div>
@@ -263,14 +307,16 @@ export const CourseCreationForm: React.FC<CourseCreationFormProps> = ({
           </label>
           <input
             type="number"
-            {...register('maxParticipants', { valueAsNumber: true })}
+            {...register("maxParticipants", { valueAsNumber: true })}
             min="1"
             max="12"
             className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500"
             disabled={loading}
           />
           {errors.maxParticipants && (
-            <p className="text-red-600 text-sm mt-1">{errors.maxParticipants.message}</p>
+            <p className="text-red-600 text-sm mt-1">
+              {errors.maxParticipants.message}
+            </p>
           )}
         </div>
         <div>
@@ -279,14 +325,16 @@ export const CourseCreationForm: React.FC<CourseCreationFormProps> = ({
           </label>
           <input
             type="number"
-            {...register('pricePerPerson', { valueAsNumber: true })}
+            {...register("pricePerPerson", { valueAsNumber: true })}
             min="0"
             step="0.01"
             className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500"
             disabled={loading}
           />
           {errors.pricePerPerson && (
-            <p className="text-red-600 text-sm mt-1">{errors.pricePerPerson.message}</p>
+            <p className="text-red-600 text-sm mt-1">
+              {errors.pricePerPerson.message}
+            </p>
           )}
         </div>
       </div>
@@ -297,7 +345,7 @@ export const CourseCreationForm: React.FC<CourseCreationFormProps> = ({
           Notes (Optional)
         </label>
         <textarea
-          {...register('notes')}
+          {...register("notes")}
           rows={3}
           className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500"
           placeholder="Any special notes for this session..."
@@ -310,11 +358,13 @@ export const CourseCreationForm: React.FC<CourseCreationFormProps> = ({
         <label className="flex items-center">
           <input
             type="checkbox"
-            {...register('isRecurring')}
+            {...register("isRecurring")}
             className="mr-2 rounded text-primary-600"
             disabled={loading}
           />
-          <span className="text-sm font-medium text-gray-700">Create recurring sessions</span>
+          <span className="text-sm font-medium text-gray-700">
+            Create recurring sessions
+          </span>
         </label>
 
         {isRecurring && (
@@ -373,10 +423,10 @@ export const CourseCreationForm: React.FC<CourseCreationFormProps> = ({
         type="submit"
         disabled={loading}
         className={cn(
-          'w-full py-3 px-4 rounded-lg font-medium transition-colors flex items-center justify-center gap-2',
+          "w-full py-3 px-4 rounded-lg font-medium transition-colors flex items-center justify-center gap-2",
           loading
-            ? 'bg-gray-300 text-gray-500 cursor-not-allowed'
-            : 'bg-primary-600 text-white hover:bg-primary-700'
+            ? "bg-gray-300 text-gray-500 cursor-not-allowed"
+            : "bg-primary-600 text-white hover:bg-primary-700",
         )}
       >
         {loading ? (

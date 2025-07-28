@@ -1,50 +1,51 @@
-import React, { useEffect, useState } from 'react'
-import { motion } from 'framer-motion'
-import { cn } from '@utils/cn'
+import React, { useEffect, useState } from "react";
+import { motion } from "framer-motion";
+import { cn } from "@utils/cn";
 
 interface RetroFilterProps {
-  variant?: 'vhs' | 'crt' | 'grain' | 'scanlines' | 'glitch'
-  intensity?: 'light' | 'medium' | 'heavy'
-  children: React.ReactNode
-  className?: string
+  variant?: "vhs" | "crt" | "grain" | "scanlines" | "glitch";
+  intensity?: "light" | "medium" | "heavy";
+  children: React.ReactNode;
+  className?: string;
 }
 
 const RetroFilter: React.FC<RetroFilterProps> = ({
-  variant = 'grain',
-  intensity = 'medium',
+  variant = "grain",
+  intensity = "medium",
   children,
   className,
 }) => {
-  const [glitchActive, setGlitchActive] = useState(false)
-  
+  const [glitchActive, setGlitchActive] = useState(false);
+
   useEffect(() => {
-    if (variant !== 'glitch') return
-    
-    const glitchInterval = setInterval(() => {
-      setGlitchActive(true)
-      setTimeout(() => setGlitchActive(false), 200)
-    }, 3000 + Math.random() * 4000)
-    
-    return () => clearInterval(glitchInterval)
-  }, [variant])
-  
+    if (variant !== "glitch") return;
+
+    const glitchInterval = setInterval(
+      () => {
+        setGlitchActive(true);
+        setTimeout(() => setGlitchActive(false), 200);
+      },
+      3000 + Math.random() * 4000,
+    );
+
+    return () => clearInterval(glitchInterval);
+  }, [variant]);
+
   const intensityOpacity = {
     light: 0.3,
     medium: 0.5,
     heavy: 0.8,
-  }
-  
+  };
+
   return (
-    <div className={cn('relative overflow-hidden', className)}>
+    <div className={cn("relative overflow-hidden", className)}>
       {/* Main content */}
-      <div className="relative z-10">
-        {children}
-      </div>
-      
+      <div className="relative z-10">{children}</div>
+
       {/* VHS Effect */}
-      {variant === 'vhs' && (
+      {variant === "vhs" && (
         <>
-          <div 
+          <div
             className="absolute inset-0 pointer-events-none z-20"
             style={{
               background: `
@@ -62,12 +63,12 @@ const RetroFilter: React.FC<RetroFilterProps> = ({
           <motion.div
             className="absolute inset-0 pointer-events-none z-20"
             animate={{
-              backgroundPosition: ['0% 0%', '0% 100%'],
+              backgroundPosition: ["0% 0%", "0% 100%"],
             }}
             transition={{
               duration: 0.1,
               repeat: Infinity,
-              ease: 'linear',
+              ease: "linear",
             }}
             style={{
               background: `
@@ -78,7 +79,7 @@ const RetroFilter: React.FC<RetroFilterProps> = ({
                   transparent 100%
                 )
               `,
-              backgroundSize: '100% 10px',
+              backgroundSize: "100% 10px",
               opacity: intensityOpacity[intensity] * 0.5,
             }}
           />
@@ -87,20 +88,20 @@ const RetroFilter: React.FC<RetroFilterProps> = ({
           </div>
         </>
       )}
-      
+
       {/* CRT Effect */}
-      {variant === 'crt' && (
+      {variant === "crt" && (
         <>
           {/* Curved screen effect */}
-          <div 
+          <div
             className="absolute inset-0 pointer-events-none z-30"
             style={{
-              boxShadow: 'inset 0 0 100px rgba(0, 0, 0, 0.5)',
-              borderRadius: '2%',
+              boxShadow: "inset 0 0 100px rgba(0, 0, 0, 0.5)",
+              borderRadius: "2%",
             }}
           />
           {/* Scanlines */}
-          <div 
+          <div
             className="absolute inset-0 pointer-events-none z-20"
             style={{
               backgroundImage: `
@@ -135,10 +136,10 @@ const RetroFilter: React.FC<RetroFilterProps> = ({
           />
         </>
       )}
-      
+
       {/* Grain Effect */}
-      {variant === 'grain' && (
-        <div 
+      {variant === "grain" && (
+        <div
           className="absolute inset-0 pointer-events-none z-20"
           style={{
             backgroundImage: `url("data:image/svg+xml,%3Csvg width='200' height='200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='grain'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' /%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23grain)' opacity='0.5'/%3E%3C/svg%3E")`,
@@ -146,18 +147,18 @@ const RetroFilter: React.FC<RetroFilterProps> = ({
           }}
         />
       )}
-      
+
       {/* Scanlines Effect */}
-      {variant === 'scanlines' && (
+      {variant === "scanlines" && (
         <motion.div
           className="absolute inset-0 pointer-events-none z-20"
           animate={{
-            backgroundPosition: ['0px 0px', '0px 10px'],
+            backgroundPosition: ["0px 0px", "0px 10px"],
           }}
           transition={{
             duration: 0.5,
             repeat: Infinity,
-            ease: 'linear',
+            ease: "linear",
           }}
           style={{
             backgroundImage: `
@@ -173,9 +174,9 @@ const RetroFilter: React.FC<RetroFilterProps> = ({
           }}
         />
       )}
-      
+
       {/* Glitch Effect */}
-      {variant === 'glitch' && glitchActive && (
+      {variant === "glitch" && glitchActive && (
         <>
           <motion.div
             className="absolute inset-0 pointer-events-none z-20"
@@ -216,8 +217,8 @@ const RetroFilter: React.FC<RetroFilterProps> = ({
         </>
       )}
     </div>
-  )
-}
+  );
+};
 
 // Pre-built retro effects
 export const RetroEffects = {
@@ -243,15 +244,13 @@ export const RetroEffects = {
       </div>
     </RetroFilter>
   ),
-  
+
   // Old computer monitor
   oldMonitor: (children: React.ReactNode) => (
     <div className="relative p-8 bg-gray-800 rounded-lg">
       <div className="relative bg-black rounded overflow-hidden">
         <RetroFilter variant="crt" intensity="heavy">
-          <div className="p-8">
-            {children}
-          </div>
+          <div className="p-8">{children}</div>
         </RetroFilter>
       </div>
       {/* Monitor frame */}
@@ -259,7 +258,7 @@ export const RetroEffects = {
       <div className="absolute -bottom-2 left-1/2 -translate-x-1/2 w-32 h-2 bg-gray-700 rounded" />
     </div>
   ),
-  
+
   // Film grain overlay
   filmGrain: (children: React.ReactNode) => (
     <RetroFilter variant="grain" intensity="light">
@@ -273,6 +272,6 @@ export const RetroEffects = {
       </div>
     </RetroFilter>
   ),
-}
+};
 
-export default RetroFilter
+export default RetroFilter;

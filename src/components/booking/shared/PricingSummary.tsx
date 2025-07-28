@@ -1,7 +1,7 @@
-import React from 'react';
-import { motion } from 'framer-motion';
-import { Info, Tag } from 'lucide-react';
-import { cn } from '@utils/cn';
+import React from "react";
+import { motion } from "framer-motion";
+import { Info, Tag } from "lucide-react";
+import { cn } from "@utils/cn";
 
 interface PricingSummaryProps {
   pricePerPerson: number;
@@ -18,24 +18,24 @@ export const PricingSummary: React.FC<PricingSummaryProps> = ({
   discountPercentage = 0,
   additionalFees = [],
   showBreakdown = true,
-  className
+  className,
 }) => {
   const subtotal = pricePerPerson * numberOfParticipants;
   const discountAmount = subtotal * (discountPercentage / 100);
   const feesTotal = additionalFees.reduce((sum, fee) => sum + fee.amount, 0);
   const total = subtotal - discountAmount + feesTotal;
-  
+
   return (
     <motion.div
       initial={{ opacity: 0, y: 10 }}
       animate={{ opacity: 1, y: 0 }}
       className={cn(
-        'bg-gray-50 dark:bg-gray-800 rounded-lg p-6 space-y-3',
-        className
+        "bg-gray-50 dark:bg-gray-800 rounded-lg p-6 space-y-3",
+        className,
       )}
     >
       <h3 className="font-semibold text-lg mb-4">Pricing Summary</h3>
-      
+
       {showBreakdown && (
         <div className="space-y-2 text-sm">
           <div className="flex justify-between">
@@ -44,19 +44,19 @@ export const PricingSummary: React.FC<PricingSummaryProps> = ({
             </span>
             <span className="font-medium">£{pricePerPerson.toFixed(2)}</span>
           </div>
-          
+
           <div className="flex justify-between">
             <span className="text-gray-600 dark:text-gray-400">
               Number of participants:
             </span>
             <span className="font-medium">{numberOfParticipants}</span>
           </div>
-          
+
           <div className="flex justify-between">
             <span className="text-gray-600 dark:text-gray-400">Subtotal:</span>
             <span className="font-medium">£{subtotal.toFixed(2)}</span>
           </div>
-          
+
           {discountPercentage > 0 && (
             <motion.div
               initial={{ opacity: 0, x: -10 }}
@@ -70,20 +70,18 @@ export const PricingSummary: React.FC<PricingSummaryProps> = ({
               <span className="font-medium">-£{discountAmount.toFixed(2)}</span>
             </motion.div>
           )}
-          
+
           {additionalFees.map((fee, index) => (
             <div key={index} className="flex justify-between">
               <span className="text-gray-600 dark:text-gray-400">
                 {fee.label}:
               </span>
-              <span className="font-medium">
-                £{fee.amount.toFixed(2)}
-              </span>
+              <span className="font-medium">£{fee.amount.toFixed(2)}</span>
             </div>
           ))}
         </div>
       )}
-      
+
       <div className="border-t dark:border-gray-700 pt-3">
         <div className="flex justify-between items-center">
           <span className="text-lg font-semibold">Total:</span>
@@ -97,7 +95,7 @@ export const PricingSummary: React.FC<PricingSummaryProps> = ({
           </motion.span>
         </div>
       </div>
-      
+
       {discountPercentage > 0 && (
         <div className="mt-4 p-3 bg-green-100 dark:bg-green-900/30 rounded-lg">
           <div className="flex items-start gap-2">
@@ -105,7 +103,8 @@ export const PricingSummary: React.FC<PricingSummaryProps> = ({
             <div className="text-sm text-green-800 dark:text-green-200">
               <p className="font-medium">Group Booking Discount Applied!</p>
               <p className="mt-1">
-                You're saving £{discountAmount.toFixed(2)} with our group booking discount.
+                You're saving £{discountAmount.toFixed(2)} with our group
+                booking discount.
               </p>
             </div>
           </div>

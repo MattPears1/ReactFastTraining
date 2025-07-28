@@ -1,4 +1,4 @@
-import { EventEmitter } from 'events';
+import { EventEmitter } from "events";
 
 interface TokenInfo {
   accessToken: string;
@@ -40,16 +40,16 @@ class SecureTokenService extends EventEmitter {
 
   private setupEventListeners(): void {
     // Listen for storage events to sync across tabs
-    if (typeof window !== 'undefined') {
-      window.addEventListener('storage', this.handleStorageChange.bind(this));
+    if (typeof window !== "undefined") {
+      window.addEventListener("storage", this.handleStorageChange.bind(this));
     }
   }
 
   private handleStorageChange(event: StorageEvent): void {
-    if (event.key === 'auth:logout' && event.newValue === 'true') {
+    if (event.key === "auth:logout" && event.newValue === "true") {
       // Another tab logged out, clear our tokens
       this.clearTokens();
-      this.emit('logout');
+      this.emit("logout");
     }
   }
 
@@ -58,11 +58,11 @@ class SecureTokenService extends EventEmitter {
    */
   private decodeToken(token: string): JWTPayload | null {
     try {
-      const parts = token.split('.');
+      const parts = token.split(".");
       if (parts.length !== 3) return null;
-      
+
       const payload = parts[1];
-      const decoded = atob(payload.replace(/-/g, '+').replace(/_/g, '/'));
+      const decoded = atob(payload.replace(/-/g, "+").replace(/_/g, "/"));
       return JSON.parse(decoded);
     } catch {
       return null;
@@ -72,24 +72,28 @@ class SecureTokenService extends EventEmitter {
   /**
    * Store tokens securely
    */
-  setTokens(accessToken: string, expiresAt: string, refreshToken?: string): void {
+  setTokens(
+    accessToken: string,
+    expiresAt: string,
+    refreshToken?: string,
+  ): void {
     const payload = this.decodeToken(accessToken);
     if (!payload) {
-      throw new Error('Invalid access token');
+      throw new Error("Invalid access token");
     }
 
     this.tokenInfo = {
       accessToken,
       expiresAt: new Date(expiresAt),
       refreshToken,
-      tokenType: 'Bearer',
+      tokenType: "Bearer",
     };
 
     // Schedule token refresh
     this.scheduleTokenRefresh();
 
     // Emit login event
-    this.emit('login', { user: payload });
+    this.emit("login", { user: payload });
 
     // If refresh token provided, signal backend to set HTTP-only cookie
     if (refreshToken) {
@@ -161,7 +165,7 @@ class SecureTokenService extends EventEmitter {
 
     if (refreshTime > 0) {
       this.refreshTimer = setTimeout(() => {
-        this.emit('token:refresh-needed');
+        this.emit("token:refresh-needed");
       }, refreshTime);
     }
   }
@@ -178,13 +182,13 @@ class SecureTokenService extends EventEmitter {
     }
 
     // Signal logout across tabs
-    if (typeof window !== 'undefined') {
-      localStorage.setItem('auth:logout', 'true');
+    if (typeof window !== "undefined") {
+      localStorage.setItem("auth:logout", "true");
       // Remove the flag after a short delay
-      setTimeout(() => localStorage.removeItem('auth:logout'), 100);
+      setTimeout(() => localStorage.removeItem("auth:logout"), 100);
     }
 
-    this.emit('logout');
+    this.emit("logout");
   }
 
   /**
@@ -194,26 +198,26 @@ class SecureTokenService extends EventEmitter {
     try {
       // The refresh token is in an HTTP-only cookie, so the backend
       // will handle it automatically
-      const response = await fetch('/api/auth/refresh', {
-        method: 'POST',
-        credentials: 'include', // Include cookies
+      const response = await fetch("/api/auth/refresh", {
+        method: "POST",
+        credentials: "include", // Include cookies
         headers: {
-          'Content-Type': 'application/json',
+          "Content-Type": "application/json",
         },
       });
 
       if (!response.ok) {
-        throw new Error('Token refresh failed');
+        throw new Error("Token refresh failed");
       }
 
       const data = await response.json();
       this.setTokens(data.accessToken, data.expiresAt);
-      
-      this.emit('token:refreshed');
+
+      this.emit("token:refreshed");
       return true;
     } catch (error) {
       this.clearTokens();
-      this.emit('token:refresh-failed', error);
+      this.emit("token:refresh-failed", error);
       return false;
     }
   }
@@ -237,9 +241,9 @@ export const secureTokenService = SecureTokenService.getInstance();
 
 // Token service events
 export type TokenServiceEvents = {
-  'login': { user: Partial<JWTPayload> };
-  'logout': void;
-  'token:refresh-needed': void;
-  'token:refreshed': void;
-  'token:refresh-failed': Error;
+  login: { user: Partial<JWTPayload> };
+  logout: void;
+  "token:refresh-needed": void;
+  "token:refreshed": void;
+  "token:refresh-failed": Error;
 };

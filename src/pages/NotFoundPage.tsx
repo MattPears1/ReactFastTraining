@@ -1,59 +1,80 @@
-import React, { useState, useEffect } from 'react'
-import { motion } from 'framer-motion'
-import { Home, Search, ArrowLeft, TrendingUp } from 'lucide-react'
-import { Link, useNavigate } from 'react-router-dom'
-import Button from '@components/ui/Button'
+import React, { useState, useEffect } from "react";
+import { motion } from "framer-motion";
+import { Home, Search, ArrowLeft, TrendingUp } from "lucide-react";
+import { Link, useNavigate } from "react-router-dom";
+import Button from "@components/ui/Button";
 
 const NotFoundPage: React.FC = () => {
-  const navigate = useNavigate()
-  const [searchQuery, setSearchQuery] = useState('')
-  const [suggestions, setSuggestions] = useState<string[]>([])
+  const navigate = useNavigate();
+  const [searchQuery, setSearchQuery] = useState("");
+  const [suggestions, setSuggestions] = useState<string[]>([]);
 
   // Popular pages that users might be looking for
   const popularPages = [
-    { name: 'Products', path: '/products', keywords: ['product', 'shop', 'buy'] },
-    { name: 'Services', path: '/services', keywords: ['service', 'solution', 'help'] },
-    { name: 'About Us', path: '/about', keywords: ['about', 'company', 'team'] },
-    { name: 'Contact', path: '/contact', keywords: ['contact', 'support', 'help'] },
-    { name: 'FAQ', path: '/faq', keywords: ['faq', 'question', 'help'] },
-    { name: 'Blog', path: '/blog', keywords: ['blog', 'article', 'news'] },
-    { name: 'Pricing', path: '/pricing', keywords: ['price', 'cost', 'plan'] },
-    { name: 'Documentation', path: '/docs', keywords: ['docs', 'guide', 'tutorial'] },
-  ]
+    {
+      name: "Products",
+      path: "/products",
+      keywords: ["product", "shop", "buy"],
+    },
+    {
+      name: "Services",
+      path: "/services",
+      keywords: ["service", "solution", "help"],
+    },
+    {
+      name: "About Us",
+      path: "/about",
+      keywords: ["about", "company", "team"],
+    },
+    {
+      name: "Contact",
+      path: "/contact",
+      keywords: ["contact", "support", "help"],
+    },
+    { name: "FAQ", path: "/faq", keywords: ["faq", "question", "help"] },
+    { name: "Blog", path: "/blog", keywords: ["blog", "article", "news"] },
+    { name: "Pricing", path: "/pricing", keywords: ["price", "cost", "plan"] },
+    {
+      name: "Documentation",
+      path: "/docs",
+      keywords: ["docs", "guide", "tutorial"],
+    },
+  ];
 
   useEffect(() => {
     // Extract possible search terms from the current URL
-    const pathname = window.location.pathname
-    const terms = pathname.split('/').filter(term => term.length > 2)
+    const pathname = window.location.pathname;
+    const terms = pathname.split("/").filter((term) => term.length > 2);
     if (terms.length > 0) {
-      const searchTerm = terms.join(' ')
-      setSearchQuery(searchTerm)
-      handleSearch(searchTerm)
+      const searchTerm = terms.join(" ");
+      setSearchQuery(searchTerm);
+      handleSearch(searchTerm);
     }
-  }, [])
+  }, []);
 
   const handleSearch = (query: string) => {
     if (!query) {
-      setSuggestions([])
-      return
+      setSuggestions([]);
+      return;
     }
 
-    const lowercaseQuery = query.toLowerCase()
-    const matches = popularPages.filter(page => 
-      page.name.toLowerCase().includes(lowercaseQuery) ||
-      page.keywords.some(keyword => keyword.includes(lowercaseQuery))
-    )
+    const lowercaseQuery = query.toLowerCase();
+    const matches = popularPages.filter(
+      (page) =>
+        page.name.toLowerCase().includes(lowercaseQuery) ||
+        page.keywords.some((keyword) => keyword.includes(lowercaseQuery)),
+    );
 
-    setSuggestions(matches.map(match => match.path))
-  }
+    setSuggestions(matches.map((match) => match.path));
+  };
 
   const handleSearchSubmit = (e: React.FormEvent) => {
-    e.preventDefault()
+    e.preventDefault();
     if (searchQuery) {
       // In a real app, this would navigate to a search results page
-      navigate(`/search?q=${encodeURIComponent(searchQuery)}`)
+      navigate(`/search?q=${encodeURIComponent(searchQuery)}`);
     }
-  }
+  };
 
   return (
     <div className="min-h-[70vh] flex items-center justify-center">
@@ -80,7 +101,8 @@ const NotFoundPage: React.FC = () => {
               Page Not Found
             </h2>
             <p className="text-lg text-gray-600 dark:text-gray-400 mb-8">
-              Oops! The page you're looking for doesn't exist. It might have been moved or deleted.
+              Oops! The page you're looking for doesn't exist. It might have
+              been moved or deleted.
             </p>
           </motion.div>
 
@@ -97,8 +119,8 @@ const NotFoundPage: React.FC = () => {
                   type="text"
                   value={searchQuery}
                   onChange={(e) => {
-                    setSearchQuery(e.target.value)
-                    handleSearch(e.target.value)
+                    setSearchQuery(e.target.value);
+                    handleSearch(e.target.value);
                   }}
                   placeholder="Search for what you're looking for..."
                   className="w-full px-4 py-3 pl-12 pr-12 border border-gray-300 dark:border-gray-700 rounded-lg bg-white dark:bg-gray-800 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-primary-500"
@@ -120,10 +142,14 @@ const NotFoundPage: React.FC = () => {
                 animate={{ opacity: 1, y: 0 }}
                 className="mt-4"
               >
-                <p className="text-sm text-gray-600 dark:text-gray-400 mb-2">Did you mean:</p>
+                <p className="text-sm text-gray-600 dark:text-gray-400 mb-2">
+                  Did you mean:
+                </p>
                 <div className="flex flex-wrap gap-2 justify-center">
                   {suggestions.map((suggestion) => {
-                    const page = popularPages.find(p => p.path === suggestion)
+                    const page = popularPages.find(
+                      (p) => p.path === suggestion,
+                    );
                     return (
                       <Link
                         key={suggestion}
@@ -132,7 +158,7 @@ const NotFoundPage: React.FC = () => {
                       >
                         {page?.name}
                       </Link>
-                    )
+                    );
                   })}
                 </div>
               </motion.div>
@@ -152,10 +178,7 @@ const NotFoundPage: React.FC = () => {
             >
               Go Back
             </Button>
-            <Button
-              href="/"
-              leftIcon={<Home />}
-            >
+            <Button href="/" leftIcon={<Home />}>
               Go to Homepage
             </Button>
           </motion.div>
@@ -233,7 +256,7 @@ const NotFoundPage: React.FC = () => {
         </div>
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default NotFoundPage
+export default NotFoundPage;

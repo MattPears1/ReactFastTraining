@@ -1,6 +1,6 @@
-import React, { useState, useRef, useEffect } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
-import { motion, AnimatePresence } from 'framer-motion';
+import React, { useState, useRef, useEffect } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import { motion, AnimatePresence } from "framer-motion";
 import {
   User,
   Settings,
@@ -13,9 +13,9 @@ import {
   Shield,
   CreditCard,
   FileText,
-} from 'lucide-react';
-import { UserAvatar } from './UserAvatar';
-import { clsx } from 'clsx';
+} from "lucide-react";
+import { UserAvatar } from "./UserAvatar";
+import { clsx } from "clsx";
 
 export interface UserMenuProps {
   user: {
@@ -50,51 +50,51 @@ export const UserMenu: React.FC<UserMenuProps> = ({
   const menuItems: MenuItem[] = [
     {
       icon: User,
-      label: 'My Profile',
-      href: '/profile',
+      label: "My Profile",
+      href: "/profile",
     },
     {
       icon: ShoppingBag,
-      label: 'My Orders',
-      href: '/orders',
+      label: "My Orders",
+      href: "/orders",
       badge: 2,
     },
     {
       icon: Heart,
-      label: 'Wishlist',
-      href: '/wishlist',
+      label: "Wishlist",
+      href: "/wishlist",
     },
     {
       icon: Bell,
-      label: 'Notifications',
-      href: '/notifications',
+      label: "Notifications",
+      href: "/notifications",
       badge: 5,
     },
     {
       icon: CreditCard,
-      label: 'Payment Methods',
-      href: '/payment-methods',
+      label: "Payment Methods",
+      href: "/payment-methods",
     },
     {
       icon: Settings,
-      label: 'Settings',
-      href: '/settings',
+      label: "Settings",
+      href: "/settings",
       divider: true,
     },
     {
       icon: HelpCircle,
-      label: 'Help & Support',
-      href: '/support',
+      label: "Help & Support",
+      href: "/support",
     },
     {
       icon: FileText,
-      label: 'Terms & Privacy',
-      href: '/terms',
+      label: "Terms & Privacy",
+      href: "/terms",
       divider: true,
     },
     {
       icon: LogOut,
-      label: 'Log Out',
+      label: "Log Out",
       onClick: () => {
         setIsOpen(false);
         onLogout?.();
@@ -111,11 +111,11 @@ export const UserMenu: React.FC<UserMenuProps> = ({
     };
 
     if (isOpen) {
-      document.addEventListener('mousedown', handleClickOutside);
+      document.addEventListener("mousedown", handleClickOutside);
     }
 
     return () => {
-      document.removeEventListener('mousedown', handleClickOutside);
+      document.removeEventListener("mousedown", handleClickOutside);
     };
   }, [isOpen]);
 
@@ -129,18 +129,14 @@ export const UserMenu: React.FC<UserMenuProps> = ({
   };
 
   return (
-    <div ref={menuRef} className={clsx('relative', className)}>
+    <div ref={menuRef} className={clsx("relative", className)}>
       {/* Trigger Button */}
       <button
         onClick={() => setIsOpen(!isOpen)}
         className="flex items-center gap-3 p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
         aria-label="User menu"
       >
-        <UserAvatar
-          src={user.avatar}
-          name={user.name}
-          size="sm"
-        />
+        <UserAvatar src={user.avatar} name={user.name} size="sm" />
         <div className="hidden md:block text-left">
           <p className="text-sm font-medium text-gray-900 dark:text-white">
             {user.name}
@@ -151,8 +147,8 @@ export const UserMenu: React.FC<UserMenuProps> = ({
         </div>
         <ChevronRight
           className={clsx(
-            'w-4 h-4 text-gray-400 transition-transform hidden md:block',
-            isOpen && 'rotate-90'
+            "w-4 h-4 text-gray-400 transition-transform hidden md:block",
+            isOpen && "rotate-90",
           )}
         />
       </button>
@@ -170,11 +166,7 @@ export const UserMenu: React.FC<UserMenuProps> = ({
             {/* User Info Header */}
             <div className="p-4 bg-gray-50 dark:bg-gray-700/50">
               <div className="flex items-center gap-3">
-                <UserAvatar
-                  src={user.avatar}
-                  name={user.name}
-                  size="md"
-                />
+                <UserAvatar src={user.avatar} name={user.name} size="md" />
                 <div className="flex-1">
                   <div className="flex items-center gap-2">
                     <p className="font-medium text-gray-900 dark:text-white">
@@ -231,24 +223,25 @@ export const CompactUserMenu: React.FC<UserMenuProps> = ({
   const navigate = useNavigate();
 
   const quickActions = [
-    { icon: ShoppingBag, label: 'Orders', href: '/orders', badge: 2 },
-    { icon: Heart, label: 'Wishlist', href: '/wishlist' },
-    { icon: Bell, label: 'Alerts', href: '/notifications', badge: 5 },
-    { icon: Settings, label: 'Settings', href: '/settings' },
+    { icon: ShoppingBag, label: "Orders", href: "/orders", badge: 2 },
+    { icon: Heart, label: "Wishlist", href: "/wishlist" },
+    { icon: Bell, label: "Alerts", href: "/notifications", badge: 5 },
+    { icon: Settings, label: "Settings", href: "/settings" },
   ];
 
   return (
-    <div className={clsx('bg-white dark:bg-gray-800 rounded-xl shadow-sm p-4', className)}>
+    <div
+      className={clsx(
+        "bg-white dark:bg-gray-800 rounded-xl shadow-sm p-4",
+        className,
+      )}
+    >
       {/* User Info */}
       <Link
         to="/profile"
         className="flex items-center gap-3 p-3 mb-4 bg-gray-50 dark:bg-gray-700/50 rounded-lg"
       >
-        <UserAvatar
-          src={user.avatar}
-          name={user.name}
-          size="lg"
-        />
+        <UserAvatar src={user.avatar} name={user.name} size="lg" />
         <div className="flex-1">
           <p className="font-medium text-gray-900 dark:text-white">
             {user.name}

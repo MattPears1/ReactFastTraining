@@ -1,4 +1,4 @@
-import apiClient from './client';
+import apiClient from "./client";
 
 export interface CalendarEvent {
   id: string;
@@ -27,7 +27,7 @@ export interface SessionAvailability {
   currentBookings: number;
   maxCapacity: number;
   availableSpots: number;
-  status: 'AVAILABLE' | 'ALMOST_FULL' | 'FULL';
+  status: "AVAILABLE" | "ALMOST_FULL" | "FULL";
 }
 
 export interface SessionFilters {
@@ -66,29 +66,34 @@ export const calendarApi = {
     });
 
     if (params.courseType) {
-      queryParams.append('courseType', params.courseType);
+      queryParams.append("courseType", params.courseType);
     }
     if (params.location) {
-      queryParams.append('location', params.location);
+      queryParams.append("location", params.location);
     }
 
-    const response = await apiClient.get(`/calendar/availability?${queryParams}`);
+    const response = await apiClient.get(
+      `/calendar/availability?${queryParams}`,
+    );
     return response.data;
   },
 
   /**
    * Get filtered sessions with capacity information
    */
-  async getFilteredSessions(filters: SessionFilters): Promise<SessionAvailability[]> {
+  async getFilteredSessions(
+    filters: SessionFilters,
+  ): Promise<SessionAvailability[]> {
     const params: any = {};
-    
+
     if (filters.startDate) params.startDate = filters.startDate.toISOString();
     if (filters.endDate) params.endDate = filters.endDate.toISOString();
     if (filters.courseType) params.courseType = filters.courseType;
     if (filters.location) params.location = filters.location;
-    if (filters.showOnlyAvailable !== undefined) params.showOnlyAvailable = filters.showOnlyAvailable;
+    if (filters.showOnlyAvailable !== undefined)
+      params.showOnlyAvailable = filters.showOnlyAvailable;
 
-    const response = await apiClient.get('/calendar/sessions', { params });
+    const response = await apiClient.get("/calendar/sessions", { params });
     return response.data;
   },
 
@@ -100,7 +105,9 @@ export const calendarApi = {
     currentCount: number;
     remainingSpots: number;
   }> {
-    const response = await apiClient.get(`/calendar/sessions/${sessionId}/availability`);
+    const response = await apiClient.get(
+      `/calendar/sessions/${sessionId}/availability`,
+    );
     return response.data;
   },
 
@@ -108,7 +115,7 @@ export const calendarApi = {
    * Get available course types
    */
   async getCourseTypes(): Promise<CourseType[]> {
-    const response = await apiClient.get('/calendar/course-types');
+    const response = await apiClient.get("/calendar/course-types");
     return response.data;
   },
 
@@ -116,7 +123,7 @@ export const calendarApi = {
    * Get available locations
    */
   async getLocations(): Promise<Location[]> {
-    const response = await apiClient.get('/calendar/locations');
+    const response = await apiClient.get("/calendar/locations");
     return response.data;
   },
 };

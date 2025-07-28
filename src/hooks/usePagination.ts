@@ -1,4 +1,4 @@
-import { useState, useCallback, useMemo } from 'react';
+import { useState, useCallback, useMemo } from "react";
 
 interface UsePaginationOptions {
   totalItems: number;
@@ -8,7 +8,7 @@ interface UsePaginationOptions {
 }
 
 interface PaginationRange {
-  type: 'page' | 'dots';
+  type: "page" | "dots";
   value?: number;
   key: string;
 }
@@ -35,7 +35,7 @@ export function usePagination({
       const newPage = Math.min(Math.max(1, page), totalPages);
       setCurrentPage(newPage);
     },
-    [totalPages]
+    [totalPages],
   );
 
   const nextPage = useCallback(() => {
@@ -61,7 +61,7 @@ export function usePagination({
       setPageSize(newPageSize);
       setCurrentPage(newPage);
     },
-    [currentPage, pageSize]
+    [currentPage, pageSize],
   );
 
   // Generate pagination range
@@ -71,7 +71,7 @@ export function usePagination({
     // If total pages is less than the page numbers we want to show
     if (totalPageNumbers >= totalPages) {
       return Array.from({ length: totalPages }, (_, i) => ({
-        type: 'page' as const,
+        type: "page" as const,
         value: i + 1,
         key: `page-${i + 1}`,
       }));
@@ -80,7 +80,7 @@ export function usePagination({
     const leftSiblingIndex = Math.max(validCurrentPage - siblingCount, 1);
     const rightSiblingIndex = Math.min(
       validCurrentPage + siblingCount,
-      totalPages
+      totalPages,
     );
 
     const shouldShowLeftDots = leftSiblingIndex > 2;
@@ -89,28 +89,28 @@ export function usePagination({
     const range: PaginationRange[] = [];
 
     // Always show first page
-    range.push({ type: 'page', value: 1, key: 'page-1' });
+    range.push({ type: "page", value: 1, key: "page-1" });
 
     // Show left dots
     if (shouldShowLeftDots) {
-      range.push({ type: 'dots', key: 'dots-left' });
+      range.push({ type: "dots", key: "dots-left" });
     }
 
     // Show sibling pages
     for (let i = leftSiblingIndex; i <= rightSiblingIndex; i++) {
       if (i === 1 || i === totalPages) continue;
-      range.push({ type: 'page', value: i, key: `page-${i}` });
+      range.push({ type: "page", value: i, key: `page-${i}` });
     }
 
     // Show right dots
     if (shouldShowRightDots) {
-      range.push({ type: 'dots', key: 'dots-right' });
+      range.push({ type: "dots", key: "dots-right" });
     }
 
     // Always show last page
     if (totalPages > 1) {
       range.push({
-        type: 'page',
+        type: "page",
         value: totalPages,
         key: `page-${totalPages}`,
       });
@@ -140,7 +140,7 @@ export function usePagination({
 // Hook for paginating array data
 export function usePaginatedData<T>(
   data: T[],
-  options: Omit<UsePaginationOptions, 'totalItems'>
+  options: Omit<UsePaginationOptions, "totalItems">,
 ) {
   const pagination = usePagination({
     ...options,
@@ -149,7 +149,7 @@ export function usePaginatedData<T>(
 
   const paginatedData = useMemo(
     () => data.slice(pagination.startIndex, pagination.endIndex),
-    [data, pagination.startIndex, pagination.endIndex]
+    [data, pagination.startIndex, pagination.endIndex],
   );
 
   return {

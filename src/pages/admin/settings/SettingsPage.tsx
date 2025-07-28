@@ -1,75 +1,82 @@
-import React, { useState, useEffect } from 'react';
-import { Settings, Save, Edit2, X, Check, AlertCircle } from 'lucide-react';
-import { useAuth } from '@contexts/AuthContext';
-import { useToast } from '@contexts/ToastContext';
-import { adminDashboardApi } from '@services/api/admin-dashboard.service';
-import { cn } from '@utils/cn';
+import React, { useState, useEffect } from "react";
+import { Settings, Save, Edit2, X, Check, AlertCircle } from "lucide-react";
+import { useAuth } from "@contexts/AuthContext";
+import { useToast } from "@contexts/ToastContext";
+import { adminDashboardApi } from "@services/api/admin-dashboard.service";
+import { cn } from "@utils/cn";
 import {
   BusinessSettings,
   CourseSettings,
   NotificationSettings,
   PaymentSettings,
   SecuritySettings,
-  SettingsSection
-} from './types';
-import { SettingsSidebar } from './components/SettingsSidebar';
-import { BusinessSettingsForm } from './components/BusinessSettingsForm';
-import { CourseSettingsForm } from './components/CourseSettingsForm';
-import { NotificationSettingsForm } from './components/NotificationSettingsForm';
+  SettingsSection,
+} from "./types";
+import { SettingsSidebar } from "./components/SettingsSidebar";
+import { BusinessSettingsForm } from "./components/BusinessSettingsForm";
+import { CourseSettingsForm } from "./components/CourseSettingsForm";
+import { NotificationSettingsForm } from "./components/NotificationSettingsForm";
 
 const AdminSettingsPage: React.FC = () => {
   const { user } = useAuth();
   const { showToast } = useToast();
-  
+
   // State for different sections
-  const [activeSection, setActiveSection] = useState<SettingsSection>('business');
+  const [activeSection, setActiveSection] =
+    useState<SettingsSection>("business");
   const [editMode, setEditMode] = useState(false);
   const [loading, setLoading] = useState(false);
   const [hasChanges, setHasChanges] = useState(false);
-  
+
   // Settings state
   const [businessSettings, setBusinessSettings] = useState<BusinessSettings>({
-    businessName: 'React Fast Training',
-    email: 'info@reactfasttraining.co.uk',
-    phone: '0113 123 4567',
-    address: 'Leeds Training Centre, Leeds, West Yorkshire, LS1 1AA',
-    website: 'https://reactfasttraining.co.uk',
-    registrationNumber: 'REG12345678'
+    businessName: "React Fast Training",
+    email: "info@reactfasttraining.co.uk",
+    phone: "0113 123 4567",
+    address: "Leeds Training Centre, Leeds, West Yorkshire, LS1 1AA",
+    website: "https://reactfasttraining.co.uk",
+    registrationNumber: "REG12345678",
   });
-  
+
   const [courseSettings, setCourseSettings] = useState<CourseSettings>({
     maxParticipants: 12,
     minParticipants: 4,
     bookingDeadlineDays: 2,
     cancellationDeadlineDays: 3,
-    locations: ['Leeds Training Centre', 'Sheffield Venue', 'Bradford Office', 'Client Site'],
-    defaultInstructor: 'Lex',
-    sessionDuration: 6
+    locations: [
+      "Leeds Training Centre",
+      "Sheffield Venue",
+      "Bradford Office",
+      "Client Site",
+    ],
+    defaultInstructor: "Lex",
+    sessionDuration: 6,
   });
-  
-  const [notificationSettings, setNotificationSettings] = useState<NotificationSettings>({
-    bookingConfirmation: true,
-    bookingReminder: true,
-    reminderHoursBefore: 24,
-    cancellationNotice: true,
-    marketingEmails: false,
-    adminAlerts: true,
-    lowCapacityAlert: true,
-    lowCapacityThreshold: 50
-  });
+
+  const [notificationSettings, setNotificationSettings] =
+    useState<NotificationSettings>({
+      bookingConfirmation: true,
+      bookingReminder: true,
+      reminderHoursBefore: 24,
+      cancellationNotice: true,
+      marketingEmails: false,
+      adminAlerts: true,
+      lowCapacityAlert: true,
+      lowCapacityThreshold: 50,
+    });
 
   // Save settings
   const saveSettings = async () => {
     try {
       setLoading(true);
       // Simulate API call
-      await new Promise(resolve => setTimeout(resolve, 1000));
-      
-      showToast('Settings saved successfully', 'success');
+      await new Promise((resolve) => setTimeout(resolve, 1000));
+
+      showToast("Settings saved successfully", "success");
       setEditMode(false);
       setHasChanges(false);
     } catch (error) {
-      showToast('Failed to save settings', 'error');
+      showToast("Failed to save settings", "error");
     } finally {
       setLoading(false);
     }
@@ -80,7 +87,7 @@ const AdminSettingsPage: React.FC = () => {
     // Reset to original values (would need to store original values)
     setEditMode(false);
     setHasChanges(false);
-    showToast('Changes discarded', 'info');
+    showToast("Changes discarded", "info");
   };
 
   // Track changes
@@ -95,17 +102,17 @@ const AdminSettingsPage: React.FC = () => {
     const handleBeforeUnload = (e: BeforeUnloadEvent) => {
       if (hasChanges) {
         e.preventDefault();
-        e.returnValue = '';
+        e.returnValue = "";
       }
     };
 
-    window.addEventListener('beforeunload', handleBeforeUnload);
-    return () => window.removeEventListener('beforeunload', handleBeforeUnload);
+    window.addEventListener("beforeunload", handleBeforeUnload);
+    return () => window.removeEventListener("beforeunload", handleBeforeUnload);
   }, [hasChanges]);
 
   const renderSectionContent = () => {
     switch (activeSection) {
-      case 'business':
+      case "business":
         return (
           <BusinessSettingsForm
             settings={businessSettings}
@@ -113,7 +120,7 @@ const AdminSettingsPage: React.FC = () => {
             editMode={editMode}
           />
         );
-      case 'course':
+      case "course":
         return (
           <CourseSettingsForm
             settings={courseSettings}
@@ -121,7 +128,7 @@ const AdminSettingsPage: React.FC = () => {
             editMode={editMode}
           />
         );
-      case 'notifications':
+      case "notifications":
         return (
           <NotificationSettingsForm
             settings={notificationSettings}
@@ -129,13 +136,13 @@ const AdminSettingsPage: React.FC = () => {
             editMode={editMode}
           />
         );
-      case 'security':
+      case "security":
         return (
           <div className="text-center py-12 text-gray-500">
             Security settings coming soon
           </div>
         );
-      case 'payment':
+      case "payment":
         return (
           <div className="text-center py-12 text-gray-500">
             Payment settings coming soon
@@ -156,9 +163,11 @@ const AdminSettingsPage: React.FC = () => {
               <Settings className="h-7 w-7" />
               Settings
             </h1>
-            <p className="text-gray-600 mt-1">Manage your business settings and preferences</p>
+            <p className="text-gray-600 mt-1">
+              Manage your business settings and preferences
+            </p>
           </div>
-          
+
           <div className="flex items-center gap-3">
             {!editMode ? (
               <button
@@ -185,7 +194,7 @@ const AdminSettingsPage: React.FC = () => {
                     "flex items-center gap-2 px-4 py-2 text-white rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2",
                     hasChanges
                       ? "bg-primary-600 hover:bg-primary-700"
-                      : "bg-gray-400 cursor-not-allowed"
+                      : "bg-gray-400 cursor-not-allowed",
                   )}
                 >
                   {loading ? (
@@ -212,7 +221,8 @@ const AdminSettingsPage: React.FC = () => {
           <div className="flex items-center gap-2">
             <AlertCircle className="h-5 w-5 text-yellow-600" />
             <p className="text-sm text-yellow-800">
-              You have unsaved changes. Don't forget to save before leaving this page.
+              You have unsaved changes. Don't forget to save before leaving this
+              page.
             </p>
           </div>
         </div>
@@ -226,7 +236,7 @@ const AdminSettingsPage: React.FC = () => {
           onSectionChange={setActiveSection}
           hasChanges={hasChanges}
         />
-        
+
         {/* Main Content */}
         <div className="flex-1 bg-white rounded-lg border border-gray-200 p-6">
           {renderSectionContent()}

@@ -20,7 +20,7 @@ class TokenService {
   setTokens(accessToken: string, expiresAt: string): void {
     this.accessToken = accessToken;
     this.tokenExpiry = new Date(expiresAt);
-    
+
     // Set up auto-refresh timer
     this.scheduleTokenRefresh();
   }
@@ -37,7 +37,7 @@ class TokenService {
   clearTokens(): void {
     this.accessToken = null;
     this.tokenExpiry = null;
-    
+
     if (this.refreshTimer) {
       clearTimeout(this.refreshTimer);
       this.refreshTimer = null;
@@ -45,7 +45,11 @@ class TokenService {
   }
 
   isAuthenticated(): boolean {
-    return !!(this.accessToken && this.tokenExpiry && new Date() < this.tokenExpiry);
+    return !!(
+      this.accessToken &&
+      this.tokenExpiry &&
+      new Date() < this.tokenExpiry
+    );
   }
 
   getTokenExpiry(): Date | null {
@@ -63,12 +67,12 @@ class TokenService {
     // Calculate when to refresh (5 minutes before expiry)
     const now = new Date().getTime();
     const expiry = this.tokenExpiry.getTime();
-    const refreshTime = expiry - now - (5 * 60 * 1000); // 5 minutes before expiry
+    const refreshTime = expiry - now - 5 * 60 * 1000; // 5 minutes before expiry
 
     if (refreshTime > 0) {
       this.refreshTimer = setTimeout(() => {
         // Trigger token refresh event
-        window.dispatchEvent(new CustomEvent('auth:token-refresh-needed'));
+        window.dispatchEvent(new CustomEvent("auth:token-refresh-needed"));
       }, refreshTime);
     }
   }

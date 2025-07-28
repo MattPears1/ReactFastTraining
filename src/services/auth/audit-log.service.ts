@@ -1,8 +1,8 @@
-import { User } from '@/types/auth.types';
+import { User } from "@/types/auth.types";
 
 interface LogEntry {
   timestamp: Date;
-  level: 'info' | 'warn' | 'error' | 'security';
+  level: "info" | "warn" | "error" | "security";
   action: AuthAction;
   userId?: string;
   email?: string;
@@ -14,25 +14,25 @@ interface LogEntry {
   errorMessage?: string;
 }
 
-type AuthAction = 
-  | 'login_attempt'
-  | 'login_success'
-  | 'login_failed'
-  | 'logout'
-  | 'signup_attempt'
-  | 'signup_success'
-  | 'signup_failed'
-  | 'password_reset_request'
-  | 'password_reset_success'
-  | 'password_reset_failed'
-  | 'email_verification_success'
-  | 'email_verification_failed'
-  | 'session_expired'
-  | 'session_refresh'
-  | 'account_locked'
-  | 'rate_limit_exceeded'
-  | 'unauthorized_access'
-  | 'csrf_token_mismatch';
+type AuthAction =
+  | "login_attempt"
+  | "login_success"
+  | "login_failed"
+  | "logout"
+  | "signup_attempt"
+  | "signup_success"
+  | "signup_failed"
+  | "password_reset_request"
+  | "password_reset_success"
+  | "password_reset_failed"
+  | "email_verification_success"
+  | "email_verification_failed"
+  | "session_expired"
+  | "session_refresh"
+  | "account_locked"
+  | "rate_limit_exceeded"
+  | "unauthorized_access"
+  | "csrf_token_mismatch";
 
 /**
  * Authentication audit logging service
@@ -49,10 +49,10 @@ class AuditLogService {
   private constructor() {
     // Set up periodic batch sending
     this.setupBatchProcessing();
-    
+
     // Set up unload handler to send pending logs
-    if (typeof window !== 'undefined') {
-      window.addEventListener('beforeunload', this.flushLogs.bind(this));
+    if (typeof window !== "undefined") {
+      window.addEventListener("beforeunload", this.flushLogs.bind(this));
     }
   }
 
@@ -73,7 +73,7 @@ class AuditLogService {
   /**
    * Log an authentication event
    */
-  log(entry: Omit<LogEntry, 'timestamp'>): void {
+  log(entry: Omit<LogEntry, "timestamp">): void {
     const logEntry: LogEntry = {
       ...entry,
       timestamp: new Date(),
@@ -93,16 +93,25 @@ class AuditLogService {
     // Send immediately if batch is full or it's a security event
     if (
       this.pendingLogs.length >= this.LOG_BATCH_SIZE ||
-      entry.level === 'security' ||
-      entry.level === 'error'
+      entry.level === "security" ||
+      entry.level === "error"
     ) {
       this.flushLogs();
     }
 
     // Also log to console in development
-    if (process.env.NODE_ENV === 'development') {
-      const consoleMethod = entry.level === 'error' ? 'error' : entry.level === 'warn' ? 'warn' : 'log';
-      console[consoleMethod](`[AUTH-${entry.level.toUpperCase()}]`, entry.action, entry);
+    if (process.env.NODE_ENV === "development") {
+      const consoleMethod =
+        entry.level === "error"
+          ? "error"
+          : entry.level === "warn"
+            ? "warn"
+            : "log";
+      console[consoleMethod](
+        `[AUTH-${entry.level.toUpperCase()}]`,
+        entry.action,
+        entry,
+      );
     }
   }
 
@@ -111,8 +120,8 @@ class AuditLogService {
    */
   logLogin(user: User, metadata?: Record<string, any>): void {
     this.log({
-      level: 'info',
-      action: 'login_success',
+      level: "info",
+      action: "login_success",
       userId: user.id,
       email: user.email,
       success: true,
@@ -123,10 +132,14 @@ class AuditLogService {
   /**
    * Log failed login attempt
    */
-  logFailedLogin(email: string, errorCode: string, metadata?: Record<string, any>): void {
+  logFailedLogin(
+    email: string,
+    errorCode: string,
+    metadata?: Record<string, any>,
+  ): void {
     this.log({
-      level: 'warn',
-      action: 'login_failed',
+      level: "warn",
+      action: "login_failed",
       email,
       success: false,
       errorCode,
@@ -147,10 +160,10 @@ class AuditLogService {
       email?: string;
       errorCode?: string;
       metadata?: Record<string, any>;
-    }
+    },
   ): void {
     this.log({
-      level: 'security',
+      level: "security",
       action,
       ...details,
       success: false,
@@ -163,7 +176,7 @@ class AuditLogService {
   private getIpAddress(): string {
     // In production, this would come from the server
     // For now, return a placeholder
-    return 'client-ip';
+    return "client-ip";
   }
 
   /**
@@ -177,10 +190,10 @@ class AuditLogService {
 
     try {
       // Send logs to server
-      await fetch('/api/auth/audit-logs', {
-        method: 'POST',
+      await fetch("/api/auth/audit-logs", {
+        method: "POST",
         headers: {
-          'Content-Type': 'application/json',
+          "Content-Type": "application/json",
         },
         body: JSON.stringify({ logs: logsToSend }),
         // Use keepalive for unload events
@@ -189,7 +202,7 @@ class AuditLogService {
     } catch (error) {
       // Re-add logs to pending if send failed
       this.pendingLogs.unshift(...logsToSend);
-      console.error('Failed to send audit logs:', error);
+      console.error("Failed to send audit logs:", error);
     }
   }
 
@@ -204,9 +217,7 @@ class AuditLogService {
    * Get logs by action
    */
   getLogsByAction(action: AuthAction, limit = 100): LogEntry[] {
-    return this.logs
-      .filter(log => log.action === action)
-      .slice(-limit);
+    return this.logs.filter((log) => log.action === action).slice(-limit);
   }
 
   /**
@@ -215,10 +226,10 @@ class AuditLogService {
   getFailedLoginAttempts(email: string, sinceMinutes = 15): number {
     const since = new Date(Date.now() - sinceMinutes * 60 * 1000);
     return this.logs.filter(
-      log =>
-        log.action === 'login_failed' &&
+      (log) =>
+        log.action === "login_failed" &&
         log.email === email &&
-        log.timestamp > since
+        log.timestamp > since,
     ).length;
   }
 
@@ -254,57 +265,56 @@ export const auditLog = AuditLogService.getInstance();
 export const logAuthEvent = {
   loginAttempt: (email: string) =>
     auditLog.log({
-      level: 'info',
-      action: 'login_attempt',
+      level: "info",
+      action: "login_attempt",
       email,
       success: false,
     }),
 
-  loginSuccess: (user: User) =>
-    auditLog.logLogin(user),
+  loginSuccess: (user: User) => auditLog.logLogin(user),
 
   loginFailed: (email: string, reason: string) =>
     auditLog.logFailedLogin(email, reason),
 
   logout: (userId: string) =>
     auditLog.log({
-      level: 'info',
-      action: 'logout',
+      level: "info",
+      action: "logout",
       userId,
       success: true,
     }),
 
   signupAttempt: (email: string) =>
     auditLog.log({
-      level: 'info',
-      action: 'signup_attempt',
+      level: "info",
+      action: "signup_attempt",
       email,
       success: false,
     }),
 
   signupSuccess: (user: User) =>
     auditLog.log({
-      level: 'info',
-      action: 'signup_success',
+      level: "info",
+      action: "signup_success",
       userId: user.id,
       email: user.email,
       success: true,
     }),
 
   accountLocked: (email: string, attempts: number) =>
-    auditLog.logSecurityEvent('account_locked', {
+    auditLog.logSecurityEvent("account_locked", {
       email,
       metadata: { failedAttempts: attempts },
     }),
 
   rateLimitExceeded: (email: string, endpoint: string) =>
-    auditLog.logSecurityEvent('rate_limit_exceeded', {
+    auditLog.logSecurityEvent("rate_limit_exceeded", {
       email,
       metadata: { endpoint },
     }),
 
   unauthorizedAccess: (path: string, userId?: string) =>
-    auditLog.logSecurityEvent('unauthorized_access', {
+    auditLog.logSecurityEvent("unauthorized_access", {
       userId,
       metadata: { attemptedPath: path },
     }),

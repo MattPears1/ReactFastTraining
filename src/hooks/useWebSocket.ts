@@ -1,5 +1,5 @@
-import { useEffect, useRef, useCallback } from 'react';
-import { io, Socket } from 'socket.io-client';
+import { useEffect, useRef, useCallback } from "react";
+import { io, Socket } from "socket.io-client";
 
 interface UseWebSocketOptions {
   url?: string;
@@ -8,7 +8,7 @@ interface UseWebSocketOptions {
 
 export const useWebSocket = (options: UseWebSocketOptions = {}) => {
   const {
-    url = import.meta.env.VITE_WS_URL || 'http://localhost:3000',
+    url = import.meta.env.VITE_WS_URL || "http://localhost:3000",
     autoConnect = true,
   } = options;
 
@@ -20,7 +20,7 @@ export const useWebSocket = (options: UseWebSocketOptions = {}) => {
 
     // Create socket connection
     socketRef.current = io(url, {
-      transports: ['websocket', 'polling'], // Fallback to polling if WebSocket fails
+      transports: ["websocket", "polling"], // Fallback to polling if WebSocket fails
       reconnection: true,
       reconnectionAttempts: 5,
       reconnectionDelay: 1000,
@@ -29,27 +29,30 @@ export const useWebSocket = (options: UseWebSocketOptions = {}) => {
     const socket = socketRef.current;
 
     // Connection event handlers
-    socket.on('connect', () => {
-      console.log('WebSocket connected');
+    socket.on("connect", () => {
+      console.log("WebSocket connected");
     });
 
-    socket.on('disconnect', (reason) => {
-      console.log('WebSocket disconnected:', reason);
+    socket.on("disconnect", (reason) => {
+      console.log("WebSocket disconnected:", reason);
     });
 
-    socket.on('connect_error', (error) => {
-      console.error('WebSocket connection error:', error);
+    socket.on("connect_error", (error) => {
+      console.error("WebSocket connection error:", error);
     });
 
     // Handle incoming messages
     socket.onAny((eventName, ...args) => {
       const handlers = listenersRef.current.get(eventName);
       if (handlers) {
-        handlers.forEach(handler => {
+        handlers.forEach((handler) => {
           try {
             handler(...args);
           } catch (error) {
-            console.error(`Error in WebSocket handler for ${eventName}:`, error);
+            console.error(
+              `Error in WebSocket handler for ${eventName}:`,
+              error,
+            );
           }
         });
       }
@@ -68,7 +71,7 @@ export const useWebSocket = (options: UseWebSocketOptions = {}) => {
     listenersRef.current.get(event)!.add(handler);
 
     // Join room on server
-    socketRef.current?.emit('subscribe', event);
+    socketRef.current?.emit("subscribe", event);
 
     // Return unsubscribe function
     return () => {
@@ -77,7 +80,7 @@ export const useWebSocket = (options: UseWebSocketOptions = {}) => {
         handlers.delete(handler);
         if (handlers.size === 0) {
           listenersRef.current.delete(event);
-          socketRef.current?.emit('unsubscribe', event);
+          socketRef.current?.emit("unsubscribe", event);
         }
       }
     };
@@ -89,7 +92,7 @@ export const useWebSocket = (options: UseWebSocketOptions = {}) => {
       handlers.delete(handler);
       if (handlers.size === 0) {
         listenersRef.current.delete(event);
-        socketRef.current?.emit('unsubscribe', event);
+        socketRef.current?.emit("unsubscribe", event);
       }
     }
   }, []);
@@ -98,7 +101,7 @@ export const useWebSocket = (options: UseWebSocketOptions = {}) => {
     if (socketRef.current?.connected) {
       socketRef.current.emit(event, data);
     } else {
-      console.warn('WebSocket not connected, cannot emit event:', event);
+      console.warn("WebSocket not connected, cannot emit event:", event);
     }
   }, []);
 
@@ -117,7 +120,7 @@ export const useWebSocket = (options: UseWebSocketOptions = {}) => {
 
 // Export specific event types for type safety
 export type SessionUpdateEvent = {
-  type: 'session-update';
+  type: "session-update";
   sessionId: string;
   currentBookings: number;
   availableSpots: number;
@@ -125,20 +128,20 @@ export type SessionUpdateEvent = {
 };
 
 export type SessionCreatedEvent = {
-  type: 'session-created';
+  type: "session-created";
   session: any;
   timestamp: string;
 };
 
 export type SessionCancelledEvent = {
-  type: 'session-cancelled';
+  type: "session-cancelled";
   sessionId: string;
   reason?: string;
   timestamp: string;
 };
 
 export type BookingConfirmedEvent = {
-  type: 'booking-confirmed';
+  type: "booking-confirmed";
   sessionId: string;
   bookingId: string;
   timestamp: string;

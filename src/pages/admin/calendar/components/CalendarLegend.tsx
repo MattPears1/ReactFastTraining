@@ -1,13 +1,13 @@
-import React from 'react';
+import React from "react";
 
 export const CalendarLegend: React.FC = () => {
   const legendItems = [
-    { color: 'bg-green-500', label: 'Available' },
-    { color: 'bg-blue-500', label: 'Filling Up' },
-    { color: 'bg-amber-500', label: 'Nearly Full' },
-    { color: 'bg-red-500', label: 'Full' },
-    { color: 'bg-purple-500', label: 'Completed' },
-    { color: 'bg-gray-500', label: 'Cancelled' }
+    { color: "bg-green-500", label: "Available" },
+    { color: "bg-blue-500", label: "Filling Up" },
+    { color: "bg-amber-500", label: "Nearly Full" },
+    { color: "bg-red-500", label: "Full" },
+    { color: "bg-purple-500", label: "Completed" },
+    { color: "bg-gray-500", label: "Cancelled" },
   ];
 
   return (

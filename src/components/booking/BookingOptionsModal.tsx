@@ -1,8 +1,15 @@
-import React from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
-import { X, CreditCard, MessageSquare, CheckCircle, Clock, Shield } from 'lucide-react';
-import { CourseSchedule } from '@/types/booking.types';
-import { COURSE_TYPE_CONFIG } from '@/config/courseTypes.config';
+import React from "react";
+import { motion, AnimatePresence } from "framer-motion";
+import {
+  X,
+  CreditCard,
+  MessageSquare,
+  CheckCircle,
+  Clock,
+  Shield,
+} from "lucide-react";
+import { CourseSchedule } from "@/types/booking.types";
+import { COURSE_TYPE_CONFIG } from "@/config/courseTypes.config";
 
 interface BookingOptionsModalProps {
   isOpen: boolean;
@@ -17,15 +24,15 @@ export const BookingOptionsModal: React.FC<BookingOptionsModalProps> = ({
   onClose,
   courseSchedule,
   onSelectDirectBooking,
-  onSelectInquiry
+  onSelectInquiry,
 }) => {
   const courseConfig = COURSE_TYPE_CONFIG[courseSchedule.courseType];
   const courseDate = new Date(courseSchedule.startDate);
-  const formattedDate = courseDate.toLocaleDateString('en-GB', {
-    weekday: 'long',
-    day: 'numeric',
-    month: 'long',
-    year: 'numeric'
+  const formattedDate = courseDate.toLocaleDateString("en-GB", {
+    weekday: "long",
+    day: "numeric",
+    month: "long",
+    year: "numeric",
   });
 
   return (
@@ -39,7 +46,7 @@ export const BookingOptionsModal: React.FC<BookingOptionsModalProps> = ({
             className="fixed inset-0 bg-black bg-opacity-50 z-50"
             onClick={onClose}
           />
-          
+
           <motion.div
             initial={{ opacity: 0, scale: 0.95 }}
             animate={{ opacity: 1, scale: 1 }}
@@ -52,7 +59,9 @@ export const BookingOptionsModal: React.FC<BookingOptionsModalProps> = ({
               onClick={(e) => e.stopPropagation()}
             >
               <div className="sticky top-0 bg-white border-b border-gray-200 px-6 py-4 flex items-center justify-between">
-                <h2 className="text-2xl font-bold text-gray-900">Choose Your Booking Method</h2>
+                <h2 className="text-2xl font-bold text-gray-900">
+                  Choose Your Booking Method
+                </h2>
                 <button
                   onClick={onClose}
                   className="text-gray-400 hover:text-gray-600 transition-colors"
@@ -64,17 +73,37 @@ export const BookingOptionsModal: React.FC<BookingOptionsModalProps> = ({
 
               <div className="p-6">
                 <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 mb-6">
-                  <h3 className="font-semibold text-blue-900 mb-2">Selected Course</h3>
+                  <h3 className="font-semibold text-blue-900 mb-2">
+                    Selected Course
+                  </h3>
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm text-blue-800">
                     <div>
-                      <p><span className="font-medium">Course:</span> {courseConfig.name}</p>
-                      <p><span className="font-medium">Date:</span> {formattedDate}</p>
-                      <p><span className="font-medium">Time:</span> {courseSchedule.startTime} - {courseSchedule.endTime}</p>
+                      <p>
+                        <span className="font-medium">Course:</span>{" "}
+                        {courseConfig.name}
+                      </p>
+                      <p>
+                        <span className="font-medium">Date:</span>{" "}
+                        {formattedDate}
+                      </p>
+                      <p>
+                        <span className="font-medium">Time:</span>{" "}
+                        {courseSchedule.startTime} - {courseSchedule.endTime}
+                      </p>
                     </div>
                     <div>
-                      <p><span className="font-medium">Venue:</span> {courseSchedule.venue.name}</p>
-                      <p><span className="font-medium">Price:</span> £{courseSchedule.pricePerPerson} per person</p>
-                      <p><span className="font-medium">Available Spaces:</span> {courseSchedule.availableSpaces}</p>
+                      <p>
+                        <span className="font-medium">Venue:</span>{" "}
+                        {courseSchedule.venue.name}
+                      </p>
+                      <p>
+                        <span className="font-medium">Price:</span> £
+                        {courseSchedule.pricePerPerson} per person
+                      </p>
+                      <p>
+                        <span className="font-medium">Available Spaces:</span>{" "}
+                        {courseSchedule.availableSpaces}
+                      </p>
                     </div>
                   </div>
                 </div>
@@ -88,42 +117,54 @@ export const BookingOptionsModal: React.FC<BookingOptionsModalProps> = ({
                     <div className="absolute -top-3 left-4 bg-green-500 text-white px-3 py-1 rounded-full text-sm font-medium">
                       Recommended
                     </div>
-                    
+
                     <div className="flex items-center mb-4">
                       <CreditCard className="w-8 h-8 text-green-600 mr-3" />
-                      <h3 className="text-xl font-bold text-gray-900">Book Now Online</h3>
+                      <h3 className="text-xl font-bold text-gray-900">
+                        Book Now Online
+                      </h3>
                     </div>
-                    
+
                     <ul className="space-y-3 mb-6">
                       <li className="flex items-start">
                         <CheckCircle className="w-5 h-5 text-green-600 mr-2 flex-shrink-0 mt-0.5" />
-                        <span className="text-gray-700">Instant confirmation</span>
+                        <span className="text-gray-700">
+                          Instant confirmation
+                        </span>
                       </li>
                       <li className="flex items-start">
                         <CheckCircle className="w-5 h-5 text-green-600 mr-2 flex-shrink-0 mt-0.5" />
-                        <span className="text-gray-700">Secure online payment</span>
+                        <span className="text-gray-700">
+                          Secure online payment
+                        </span>
                       </li>
                       <li className="flex items-start">
                         <CheckCircle className="w-5 h-5 text-green-600 mr-2 flex-shrink-0 mt-0.5" />
-                        <span className="text-gray-700">Immediate email confirmation</span>
+                        <span className="text-gray-700">
+                          Immediate email confirmation
+                        </span>
                       </li>
                       <li className="flex items-start">
                         <CheckCircle className="w-5 h-5 text-green-600 mr-2 flex-shrink-0 mt-0.5" />
-                        <span className="text-gray-700">Guaranteed place on course</span>
+                        <span className="text-gray-700">
+                          Guaranteed place on course
+                        </span>
                       </li>
                       <li className="flex items-start">
                         <Shield className="w-5 h-5 text-green-600 mr-2 flex-shrink-0 mt-0.5" />
-                        <span className="text-gray-700">Protected by our refund policy</span>
+                        <span className="text-gray-700">
+                          Protected by our refund policy
+                        </span>
                       </li>
                     </ul>
-                    
+
                     <button
                       onClick={onSelectDirectBooking}
                       className="w-full bg-green-600 text-white px-6 py-3 rounded-lg font-medium hover:bg-green-700 transition-colors"
                     >
                       Book Now & Pay Online
                     </button>
-                    
+
                     <p className="text-xs text-gray-600 mt-3 text-center">
                       No booking fees • Questions? Add them to your booking
                     </p>
@@ -136,39 +177,51 @@ export const BookingOptionsModal: React.FC<BookingOptionsModalProps> = ({
                   >
                     <div className="flex items-center mb-4">
                       <MessageSquare className="w-8 h-8 text-blue-600 mr-3" />
-                      <h3 className="text-xl font-bold text-gray-900">Make an Inquiry</h3>
+                      <h3 className="text-xl font-bold text-gray-900">
+                        Make an Inquiry
+                      </h3>
                     </div>
-                    
+
                     <ul className="space-y-3 mb-6">
                       <li className="flex items-start">
                         <Clock className="w-5 h-5 text-blue-600 mr-2 flex-shrink-0 mt-0.5" />
-                        <span className="text-gray-700">Your spot will be reserved for 24 hours</span>
+                        <span className="text-gray-700">
+                          Your spot will be reserved for 24 hours
+                        </span>
                       </li>
                       <li className="flex items-start">
                         <MessageSquare className="w-5 h-5 text-blue-600 mr-2 flex-shrink-0 mt-0.5" />
-                        <span className="text-gray-700">Ask questions before booking</span>
+                        <span className="text-gray-700">
+                          Ask questions before booking
+                        </span>
                       </li>
                       <li className="flex items-start">
                         <CheckCircle className="w-5 h-5 text-blue-600 mr-2 flex-shrink-0 mt-0.5" />
-                        <span className="text-gray-700">Response within 24 hours with booking link</span>
+                        <span className="text-gray-700">
+                          Response within 24 hours with booking link
+                        </span>
                       </li>
                       <li className="flex items-start">
                         <CheckCircle className="w-5 h-5 text-blue-600 mr-2 flex-shrink-0 mt-0.5" />
-                        <span className="text-gray-700">Discuss special requirements</span>
+                        <span className="text-gray-700">
+                          Discuss special requirements
+                        </span>
                       </li>
                       <li className="flex items-start">
                         <CheckCircle className="w-5 h-5 text-blue-600 mr-2 flex-shrink-0 mt-0.5" />
-                        <span className="text-gray-700">Alternative payment options available</span>
+                        <span className="text-gray-700">
+                          Alternative payment options available
+                        </span>
                       </li>
                     </ul>
-                    
+
                     <button
                       onClick={onSelectInquiry}
                       className="w-full bg-blue-600 text-white px-6 py-3 rounded-lg font-medium hover:bg-blue-700 transition-colors"
                     >
                       Send Inquiry & Reserve Spot
                     </button>
-                    
+
                     <p className="text-xs text-gray-600 mt-3 text-center">
                       Your spot will be held for 24 hours while we respond
                     </p>
@@ -177,8 +230,9 @@ export const BookingOptionsModal: React.FC<BookingOptionsModalProps> = ({
 
                 <div className="mt-6 bg-amber-50 border border-amber-200 rounded-lg p-4">
                   <p className="text-sm text-amber-800">
-                    <strong>Note:</strong> Places are limited. Direct online booking guarantees your place immediately. 
-                    Inquiries will reserve your spot for 24 hours while we respond.
+                    <strong>Note:</strong> Places are limited. Direct online
+                    booking guarantees your place immediately. Inquiries will
+                    reserve your spot for 24 hours while we respond.
                   </p>
                 </div>
               </div>

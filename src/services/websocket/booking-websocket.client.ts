@@ -1,4 +1,4 @@
-import { io, Socket } from 'socket.io-client';
+import { io, Socket } from "socket.io-client";
 
 export interface AvailabilityUpdate {
   sessionId: string;
@@ -30,13 +30,14 @@ export class BookingWebSocketClient {
   private connectionPromise: Promise<void> | null = null;
 
   constructor(
-    private url: string = process.env.REACT_APP_WS_URL || 'http://localhost:3000',
+    private url: string = process.env.REACT_APP_WS_URL ||
+      "http://localhost:3000",
     private options: {
       autoConnect?: boolean;
       reconnection?: boolean;
       reconnectionDelay?: number;
       reconnectionAttempts?: number;
-    } = {}
+    } = {},
   ) {
     if (options.autoConnect !== false) {
       this.connect();
@@ -51,29 +52,31 @@ export class BookingWebSocketClient {
     this.connectionPromise = new Promise((resolve, reject) => {
       try {
         this.socket = io(this.url, {
-          path: '/ws/booking',
-          transports: ['websocket', 'polling'],
+          path: "/ws/booking",
+          transports: ["websocket", "polling"],
           reconnection: this.options.reconnection !== false,
-          reconnectionDelay: this.options.reconnectionDelay || this.reconnectDelay,
-          reconnectionAttempts: this.options.reconnectionAttempts || this.maxReconnectAttempts,
+          reconnectionDelay:
+            this.options.reconnectionDelay || this.reconnectDelay,
+          reconnectionAttempts:
+            this.options.reconnectionAttempts || this.maxReconnectAttempts,
         });
 
         this.setupEventHandlers();
-        
-        this.socket.once('connected', () => {
-          console.log('WebSocket connected');
+
+        this.socket.once("connected", () => {
+          console.log("WebSocket connected");
           this.reconnectAttempts = 0;
-          
+
           // Re-subscribe to sessions after reconnection
           if (this.subscribedSessions.size > 0) {
             this.subscribeToSessions(Array.from(this.subscribedSessions));
           }
-          
+
           resolve();
         });
 
-        this.socket.once('connect_error', (error) => {
-          console.error('WebSocket connection error:', error);
+        this.socket.once("connect_error", (error) => {
+          console.error("WebSocket connection error:", error);
           this.connectionPromise = null;
           reject(error);
         });
@@ -90,184 +93,187 @@ export class BookingWebSocketClient {
     if (!this.socket) return;
 
     // Connection events
-    this.socket.on('connect', () => {
-      this.emit('connection:established', { timestamp: new Date() });
+    this.socket.on("connect", () => {
+      this.emit("connection:established", { timestamp: new Date() });
     });
 
-    this.socket.on('disconnect', (reason) => {
-      console.log('WebSocket disconnected:', reason);
-      this.emit('connection:lost', { reason, timestamp: new Date() });
+    this.socket.on("disconnect", (reason) => {
+      console.log("WebSocket disconnected:", reason);
+      this.emit("connection:lost", { reason, timestamp: new Date() });
     });
 
-    this.socket.on('reconnect', (attemptNumber) => {
-      console.log('WebSocket reconnected after', attemptNumber, 'attempts');
-      this.emit('connection:reconnected', { attempts: attemptNumber });
+    this.socket.on("reconnect", (attemptNumber) => {
+      console.log("WebSocket reconnected after", attemptNumber, "attempts");
+      this.emit("connection:reconnected", { attempts: attemptNumber });
     });
 
     // Availability events
-    this.socket.on('availability:update', (data: AvailabilityUpdate) => {
-      this.emit('availability:update', data);
+    this.socket.on("availability:update", (data: AvailabilityUpdate) => {
+      this.emit("availability:update", data);
       this.emit(`availability:${data.sessionId}`, data);
     });
 
-    this.socket.on('availability:changed', (data: any) => {
-      this.emit('availability:changed', data);
+    this.socket.on("availability:changed", (data: any) => {
+      this.emit("availability:changed", data);
     });
 
-    this.socket.on('availability:urgent', (data: any) => {
-      this.emit('availability:urgent', data);
+    this.socket.on("availability:urgent", (data: any) => {
+      this.emit("availability:urgent", data);
     });
 
-    this.socket.on('availability:low', (data: any) => {
-      this.emit('availability:low', data);
+    this.socket.on("availability:low", (data: any) => {
+      this.emit("availability:low", data);
     });
 
-    this.socket.on('availability:full', (data: any) => {
-      this.emit('availability:full', data);
+    this.socket.on("availability:full", (data: any) => {
+      this.emit("availability:full", data);
     });
 
     // Booking intent events
-    this.socket.on('booking:intent:active', (data: BookingIntent) => {
-      this.emit('booking:intent:active', data);
+    this.socket.on("booking:intent:active", (data: BookingIntent) => {
+      this.emit("booking:intent:active", data);
     });
 
-    this.socket.on('booking:intent:cancelled', (data: any) => {
-      this.emit('booking:intent:cancelled', data);
+    this.socket.on("booking:intent:cancelled", (data: any) => {
+      this.emit("booking:intent:cancelled", data);
     });
 
     // Subscription events
-    this.socket.on('subscribed:session', (data: any) => {
+    this.socket.on("subscribed:session", (data: any) => {
       this.subscribedSessions.add(data.sessionId);
-      this.emit('subscription:confirmed', data);
+      this.emit("subscription:confirmed", data);
     });
 
-    this.socket.on('unsubscribed:session', (data: any) => {
+    this.socket.on("unsubscribed:session", (data: any) => {
       this.subscribedSessions.delete(data.sessionId);
-      this.emit('subscription:removed', data);
+      this.emit("subscription:removed", data);
     });
 
     // Error handling
-    this.socket.on('error', (error: any) => {
-      console.error('WebSocket error:', error);
-      this.emit('error', error);
+    this.socket.on("error", (error: any) => {
+      console.error("WebSocket error:", error);
+      this.emit("error", error);
     });
   }
 
   async subscribeToSession(sessionId: string): Promise<void> {
     await this.ensureConnected();
-    
+
     if (!this.socket) {
-      throw new Error('WebSocket not connected');
+      throw new Error("WebSocket not connected");
     }
 
     return new Promise((resolve, reject) => {
       const timeout = setTimeout(() => {
-        reject(new Error('Subscription timeout'));
+        reject(new Error("Subscription timeout"));
       }, 5000);
 
-      this.socket!.once('subscribed:session', (data) => {
+      this.socket!.once("subscribed:session", (data) => {
         if (data.sessionId === sessionId) {
           clearTimeout(timeout);
           resolve();
         }
       });
 
-      this.socket!.once('error', (error) => {
+      this.socket!.once("error", (error) => {
         clearTimeout(timeout);
         reject(error);
       });
 
-      this.socket!.emit('subscribe:session', { sessionId });
+      this.socket!.emit("subscribe:session", { sessionId });
     });
   }
 
   async unsubscribeFromSession(sessionId: string): Promise<void> {
     await this.ensureConnected();
-    
+
     if (!this.socket) {
-      throw new Error('WebSocket not connected');
+      throw new Error("WebSocket not connected");
     }
 
-    this.socket.emit('unsubscribe:session', { sessionId });
+    this.socket.emit("unsubscribe:session", { sessionId });
     this.subscribedSessions.delete(sessionId);
   }
 
   async subscribeToSessions(sessionIds: string[]): Promise<void> {
     await this.ensureConnected();
-    
+
     if (!this.socket) {
-      throw new Error('WebSocket not connected');
+      throw new Error("WebSocket not connected");
     }
 
     return new Promise((resolve, reject) => {
       const timeout = setTimeout(() => {
-        reject(new Error('Subscription timeout'));
+        reject(new Error("Subscription timeout"));
       }, 10000);
 
-      this.socket!.once('subscribed:sessions', (data) => {
+      this.socket!.once("subscribed:sessions", (data) => {
         clearTimeout(timeout);
-        sessionIds.forEach(id => this.subscribedSessions.add(id));
+        sessionIds.forEach((id) => this.subscribedSessions.add(id));
         resolve();
       });
 
-      this.socket!.once('error', (error) => {
+      this.socket!.once("error", (error) => {
         clearTimeout(timeout);
         reject(error);
       });
 
-      this.socket!.emit('subscribe:sessions', { sessionIds });
+      this.socket!.emit("subscribe:sessions", { sessionIds });
     });
   }
 
   async getAvailability(sessionId: string): Promise<AvailabilityUpdate> {
     await this.ensureConnected();
-    
+
     if (!this.socket) {
-      throw new Error('WebSocket not connected');
+      throw new Error("WebSocket not connected");
     }
 
     return new Promise((resolve, reject) => {
       const timeout = setTimeout(() => {
-        reject(new Error('Availability request timeout'));
+        reject(new Error("Availability request timeout"));
       }, 5000);
 
-      this.socket!.once(`availability:${sessionId}`, (data: AvailabilityUpdate) => {
-        clearTimeout(timeout);
-        resolve(data);
-      });
+      this.socket!.once(
+        `availability:${sessionId}`,
+        (data: AvailabilityUpdate) => {
+          clearTimeout(timeout);
+          resolve(data);
+        },
+      );
 
-      this.socket!.once('error', (error) => {
+      this.socket!.once("error", (error) => {
         clearTimeout(timeout);
         reject(error);
       });
 
-      this.socket!.emit('get:availability', { sessionId });
+      this.socket!.emit("get:availability", { sessionId });
     });
   }
 
   sendBookingIntent(sessionId: string, spots: number): void {
     if (!this.socket || !this.socket.connected) {
-      console.warn('Cannot send booking intent - WebSocket not connected');
+      console.warn("Cannot send booking intent - WebSocket not connected");
       return;
     }
 
-    this.socket.emit('booking:intent', { sessionId, spots });
+    this.socket.emit("booking:intent", { sessionId, spots });
   }
 
   cancelBookingIntent(sessionId: string, spots: number): void {
     if (!this.socket || !this.socket.connected) {
-      console.warn('Cannot cancel booking intent - WebSocket not connected');
+      console.warn("Cannot cancel booking intent - WebSocket not connected");
       return;
     }
 
-    this.socket.emit('booking:cancel-intent', { sessionId, spots });
+    this.socket.emit("booking:cancel-intent", { sessionId, spots });
   }
 
   on<T = any>(event: string, callback: WebSocketEventCallback<T>): () => void {
     if (!this.eventListeners.has(event)) {
       this.eventListeners.set(event, new Set());
     }
-    
+
     this.eventListeners.get(event)!.add(callback);
 
     // Return unsubscribe function
@@ -299,7 +305,7 @@ export class BookingWebSocketClient {
   private emit(event: string, data: any): void {
     const listeners = this.eventListeners.get(event);
     if (listeners) {
-      listeners.forEach(callback => {
+      listeners.forEach((callback) => {
         try {
           callback(data);
         } catch (error) {

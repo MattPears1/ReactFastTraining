@@ -1,4 +1,4 @@
-import React from 'react';
+import React from "react";
 import {
   MoreVertical,
   CheckCircle,
@@ -6,10 +6,10 @@ import {
   X,
   FileText,
   Phone,
-  Mail
-} from 'lucide-react';
-import { cn } from '@utils/cn';
-import { Client, SortState } from '../types';
+  Mail,
+} from "lucide-react";
+import { cn } from "@utils/cn";
+import { Client, SortState } from "../types";
 
 interface ClientsTableProps {
   clients: Client[];
@@ -18,29 +18,31 @@ interface ClientsTableProps {
   onSelectAll: () => void;
   onClientClick: (client: Client) => void;
   sort: SortState;
-  onSort: (field: SortState['field']) => void;
+  onSort: (field: SortState["field"]) => void;
   loading?: boolean;
 }
 
-const SortHeader: React.FC<{ 
-  field: SortState['field']; 
+const SortHeader: React.FC<{
+  field: SortState["field"];
   children: React.ReactNode;
   sort: SortState;
-  onSort: (field: SortState['field']) => void;
+  onSort: (field: SortState["field"]) => void;
 }> = ({ field, children, sort, onSort }) => {
   const isActive = sort.field === field;
-  
+
   return (
     <button
       onClick={() => onSort(field)}
       className="flex items-center gap-1 hover:text-gray-900 transition-colors group"
     >
       {children}
-      <span className={cn(
-        "text-gray-400 transition-opacity",
-        isActive ? "opacity-100" : "opacity-0 group-hover:opacity-50"
-      )}>
-        {sort.direction === 'asc' ? '↑' : '↓'}
+      <span
+        className={cn(
+          "text-gray-400 transition-opacity",
+          isActive ? "opacity-100" : "opacity-0 group-hover:opacity-50",
+        )}
+      >
+        {sort.direction === "asc" ? "↑" : "↓"}
       </span>
     </button>
   );
@@ -54,10 +56,12 @@ export const ClientsTable: React.FC<ClientsTableProps> = ({
   onClientClick,
   sort,
   onSort,
-  loading = false
+  loading = false,
 }) => {
-  const allSelected = clients.length > 0 && selectedClients.length === clients.length;
-  const someSelected = selectedClients.length > 0 && selectedClients.length < clients.length;
+  const allSelected =
+    clients.length > 0 && selectedClients.length === clients.length;
+  const someSelected =
+    selectedClients.length > 0 && selectedClients.length < clients.length;
 
   if (loading) {
     return (
@@ -123,12 +127,15 @@ export const ClientsTable: React.FC<ClientsTableProps> = ({
         </thead>
         <tbody className="bg-white divide-y divide-gray-200">
           {clients.map((client) => (
-            <tr 
+            <tr
               key={client.id}
               className="hover:bg-gray-50 cursor-pointer transition-colors"
               onClick={() => onClientClick(client)}
             >
-              <td className="px-6 py-4 whitespace-nowrap" onClick={(e) => e.stopPropagation()}>
+              <td
+                className="px-6 py-4 whitespace-nowrap"
+                onClick={(e) => e.stopPropagation()}
+              >
                 <input
                   type="checkbox"
                   checked={selectedClients.includes(client.id)}
@@ -141,19 +148,23 @@ export const ClientsTable: React.FC<ClientsTableProps> = ({
                   <div className="text-sm font-medium text-gray-900">
                     {client.name}
                   </div>
-                  <div className="text-sm text-gray-500">
-                    ID: {client.id}
-                  </div>
+                  <div className="text-sm text-gray-500">ID: {client.id}</div>
                 </div>
               </td>
               <td className="px-6 py-4 whitespace-nowrap">
                 <div className="space-y-1">
-                  <a href={`mailto:${client.email}`} className="text-sm text-primary-600 hover:text-primary-900 flex items-center gap-1">
+                  <a
+                    href={`mailto:${client.email}`}
+                    className="text-sm text-primary-600 hover:text-primary-900 flex items-center gap-1"
+                  >
                     <Mail className="h-3 w-3" />
                     {client.email}
                   </a>
                   {client.phone && (
-                    <a href={`tel:${client.phone}`} className="text-sm text-gray-600 hover:text-gray-900 flex items-center gap-1">
+                    <a
+                      href={`tel:${client.phone}`}
+                      className="text-sm text-gray-600 hover:text-gray-900 flex items-center gap-1"
+                    >
                       <Phone className="h-3 w-3" />
                       {client.phone}
                     </a>
@@ -175,21 +186,24 @@ export const ClientsTable: React.FC<ClientsTableProps> = ({
               </td>
               <td className="px-6 py-4 whitespace-nowrap">
                 <div className="text-sm text-gray-900">
-                  {client.stats.lastBookingDate ? 
-                    new Date(client.stats.lastBookingDate).toLocaleDateString('en-GB') : 
-                    'Never'
-                  }
+                  {client.stats.lastBookingDate
+                    ? new Date(client.stats.lastBookingDate).toLocaleDateString(
+                        "en-GB",
+                      )
+                    : "Never"}
                 </div>
               </td>
               <td className="px-6 py-4 whitespace-nowrap">
-                <span className={cn(
-                  "inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium",
-                  client.stats.upcomingBookings > 0 
-                    ? "bg-green-100 text-green-800"
-                    : client.stats.bookingCount > 0
-                      ? "bg-gray-100 text-gray-800"
-                      : "bg-yellow-100 text-yellow-800"
-                )}>
+                <span
+                  className={cn(
+                    "inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium",
+                    client.stats.upcomingBookings > 0
+                      ? "bg-green-100 text-green-800"
+                      : client.stats.bookingCount > 0
+                        ? "bg-gray-100 text-gray-800"
+                        : "bg-yellow-100 text-yellow-800",
+                  )}
+                >
                   {client.stats.upcomingBookings > 0 ? (
                     <>
                       <CheckCircle className="h-3 w-3 mr-1" />
@@ -208,7 +222,10 @@ export const ClientsTable: React.FC<ClientsTableProps> = ({
                   )}
                 </span>
               </td>
-              <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium" onClick={(e) => e.stopPropagation()}>
+              <td
+                className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium"
+                onClick={(e) => e.stopPropagation()}
+              >
                 <button className="text-gray-400 hover:text-gray-500">
                   <MoreVertical className="h-5 w-5" />
                 </button>

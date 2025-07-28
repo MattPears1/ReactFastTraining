@@ -1,5 +1,5 @@
-import React from 'react';
-import { cn } from '@utils/cn';
+import React from "react";
+import { cn } from "@utils/cn";
 
 export const DashboardSkeleton: React.FC = () => {
   return (
@@ -16,7 +16,10 @@ export const DashboardSkeleton: React.FC = () => {
           <div className="h-6 w-32 bg-gray-200 dark:bg-gray-700 rounded animate-pulse mb-4" />
           <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
             {[...Array(6)].map((_, i) => (
-              <div key={i} className="h-24 bg-gray-200 dark:bg-gray-700 rounded-lg animate-pulse" />
+              <div
+                key={i}
+                className="h-24 bg-gray-200 dark:bg-gray-700 rounded-lg animate-pulse"
+              />
             ))}
           </div>
         </div>
@@ -24,7 +27,10 @@ export const DashboardSkeleton: React.FC = () => {
         {/* Stats Grid Skeleton */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
           {[...Array(4)].map((_, i) => (
-            <div key={i} className="bg-white dark:bg-gray-800 rounded-lg shadow p-6">
+            <div
+              key={i}
+              className="bg-white dark:bg-gray-800 rounded-lg shadow p-6"
+            >
               <div className="flex items-center justify-between">
                 <div>
                   <div className="h-4 w-24 bg-gray-200 dark:bg-gray-700 rounded animate-pulse mb-2" />
@@ -52,7 +58,10 @@ export const DashboardSkeleton: React.FC = () => {
               <div className="h-6 w-32 bg-gray-200 dark:bg-gray-700 rounded animate-pulse mb-4" />
               <div className="space-y-3">
                 {[...Array(4)].map((_, i) => (
-                  <div key={i} className="p-4 bg-gray-50 dark:bg-gray-700/50 rounded-lg">
+                  <div
+                    key={i}
+                    className="p-4 bg-gray-50 dark:bg-gray-700/50 rounded-lg"
+                  >
                     <div className="h-4 w-3/4 bg-gray-200 dark:bg-gray-600 rounded animate-pulse mb-2" />
                     <div className="h-3 w-1/2 bg-gray-200 dark:bg-gray-600 rounded animate-pulse" />
                   </div>
@@ -102,8 +111,12 @@ export const TableRowSkeleton: React.FC = () => (
   </tr>
 );
 
-export const CardSkeleton: React.FC<{ className?: string }> = ({ className }) => (
-  <div className={cn("bg-white dark:bg-gray-800 rounded-lg shadow p-6", className)}>
+export const CardSkeleton: React.FC<{ className?: string }> = ({
+  className,
+}) => (
+  <div
+    className={cn("bg-white dark:bg-gray-800 rounded-lg shadow p-6", className)}
+  >
     <div className="h-6 w-32 bg-gray-200 dark:bg-gray-700 rounded animate-pulse mb-4" />
     <div className="space-y-3">
       <div className="h-4 w-full bg-gray-200 dark:bg-gray-700 rounded animate-pulse" />

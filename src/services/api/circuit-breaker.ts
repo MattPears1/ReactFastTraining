@@ -11,9 +11,9 @@ interface CircuitBreakerOptions {
 }
 
 enum CircuitState {
-  CLOSED = 'CLOSED',
-  OPEN = 'OPEN',
-  HALF_OPEN = 'HALF_OPEN',
+  CLOSED = "CLOSED",
+  OPEN = "OPEN",
+  HALF_OPEN = "HALF_OPEN",
 }
 
 class CircuitBreaker {
@@ -36,7 +36,7 @@ class CircuitBreaker {
 
   async execute<T>(
     operation: () => Promise<T>,
-    fallback?: () => T | Promise<T>
+    fallback?: () => T | Promise<T>,
   ): Promise<T> {
     if (this.state === CircuitState.OPEN) {
       if (this.canAttemptReset()) {
@@ -46,7 +46,7 @@ class CircuitBreaker {
         if (fallback) {
           return fallback();
         }
-        throw new Error('Circuit breaker is OPEN');
+        throw new Error("Circuit breaker is OPEN");
       }
     }
 
@@ -56,21 +56,21 @@ class CircuitBreaker {
       return result;
     } catch (error) {
       this.onFailure();
-      
+
       if (fallback && this.state === CircuitState.OPEN) {
         return fallback();
       }
-      
+
       throw error;
     }
   }
 
   private onSuccess(): void {
     this.failureCount = 0;
-    
+
     if (this.state === CircuitState.HALF_OPEN) {
       this.successCount++;
-      
+
       if (this.successCount >= this.options.halfOpenRetries) {
         this.state = CircuitState.CLOSED;
         this.successCount = 0;
@@ -82,10 +82,10 @@ class CircuitBreaker {
   private onFailure(): void {
     this.failureCount++;
     this.lastFailureTime = new Date();
-    
+
     if (this.state === CircuitState.HALF_OPEN) {
       this.halfOpenAttempts++;
-      
+
       if (this.halfOpenAttempts >= this.options.halfOpenRetries) {
         this.trip();
       }
@@ -97,7 +97,7 @@ class CircuitBreaker {
   private trip(): void {
     this.state = CircuitState.OPEN;
     this.successCount = 0;
-    
+
     // Set timer to attempt reset
     this.resetTimer = setTimeout(() => {
       this.state = CircuitState.HALF_OPEN;
@@ -107,7 +107,7 @@ class CircuitBreaker {
 
   private canAttemptReset(): boolean {
     if (!this.lastFailureTime) return true;
-    
+
     const timeSinceLastFailure = Date.now() - this.lastFailureTime.getTime();
     return timeSinceLastFailure >= this.options.resetTimeout;
   }
@@ -147,14 +147,17 @@ const circuitBreakers = new Map<string, CircuitBreaker>();
 
 export function getCircuitBreaker(endpoint: string): CircuitBreaker {
   if (!circuitBreakers.has(endpoint)) {
-    circuitBreakers.set(endpoint, new CircuitBreaker({
-      failureThreshold: 5,
-      resetTimeout: 60000,
-      monitoringPeriod: 10000,
-      halfOpenRetries: 3,
-    }));
+    circuitBreakers.set(
+      endpoint,
+      new CircuitBreaker({
+        failureThreshold: 5,
+        resetTimeout: 60000,
+        monitoringPeriod: 10000,
+        halfOpenRetries: 3,
+      }),
+    );
   }
-  
+
   return circuitBreakers.get(endpoint)!;
 }
 
@@ -189,7 +192,8 @@ class RequestQueue {
 
       this.activeRequests++;
 
-      item.request()
+      item
+        .request()
         .then(item.resolve)
         .catch(item.reject)
         .finally(() => {
@@ -206,8 +210,8 @@ class RequestQueue {
   }
 
   clear(): void {
-    this.queue.forEach(item => {
-      item.reject(new Error('Queue cleared'));
+    this.queue.forEach((item) => {
+      item.reject(new Error("Queue cleared"));
     });
     this.queue = [];
   }
@@ -224,10 +228,10 @@ export async function resilientApiCall<T>(
     fallback?: () => T | Promise<T>;
     useQueue?: boolean;
     retries?: number;
-  } = {}
+  } = {},
 ): Promise<T> {
   const circuitBreaker = getCircuitBreaker(endpoint);
-  
+
   const executeRequest = async (): Promise<T> => {
     return circuitBreaker.execute(request, options.fallback);
   };
@@ -242,10 +246,10 @@ export async function resilientApiCall<T>(
 // Health check for circuit breakers
 export function getCircuitBreakerHealth(): Record<string, any> {
   const health: Record<string, any> = {};
-  
+
   circuitBreakers.forEach((breaker, endpoint) => {
     health[endpoint] = breaker.getStats();
   });
-  
+
   return health;
 }

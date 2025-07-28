@@ -1,8 +1,8 @@
-import { useCallback, useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { useAdminStore } from '@store/adminStore';
-import { useAuditTrail } from './useAuditTrail';
-import { useToast } from '@contexts/ToastContext';
+import { useCallback, useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { useAdminStore } from "@store/adminStore";
+import { useAuditTrail } from "./useAuditTrail";
+import { useToast } from "@contexts/ToastContext";
 
 interface SecurityConfig {
   maxLoginAttempts: number;
@@ -34,8 +34,8 @@ const DEFAULT_SECURITY_CONFIG: SecurityConfig = {
     requireLowercase: true,
     requireNumbers: true,
     requireSpecialChars: true,
-    expiryDays: 90
-  }
+    expiryDays: 90,
+  },
 };
 
 export const useAdminSecurity = () => {
@@ -48,9 +48,9 @@ export const useAdminSecurity = () => {
     sessionExpiresAt,
     updateSession,
     clearUser,
-    addNotification
+    addNotification,
   } = useAdminStore();
-  
+
   const [lastActivity, setLastActivity] = useState(Date.now());
   const [idleWarningShown, setIdleWarningShown] = useState(false);
   const [sessionWarningShown, setSessionWarningShown] = useState(false);
@@ -63,11 +63,13 @@ export const useAdminSecurity = () => {
       setIdleWarningShown(false);
     };
 
-    const events = ['mousedown', 'keydown', 'scroll', 'touchstart', 'click'];
-    events.forEach(event => window.addEventListener(event, updateActivity));
+    const events = ["mousedown", "keydown", "scroll", "touchstart", "click"];
+    events.forEach((event) => window.addEventListener(event, updateActivity));
 
     return () => {
-      events.forEach(event => window.removeEventListener(event, updateActivity));
+      events.forEach((event) =>
+        window.removeEventListener(event, updateActivity),
+      );
     };
   }, []);
 
@@ -108,90 +110,111 @@ export const useAdminSecurity = () => {
   }, [sessionExpiresAt, sessionWarningShown]);
 
   const handleIdleTimeout = useCallback(async () => {
-    await logSecurityEvent('idle_timeout', 'warning', {
+    await logSecurityEvent("idle_timeout", "warning", {
       idleDuration: Date.now() - lastActivity,
-      threshold: securityConfig.idleTimeout
+      threshold: securityConfig.idleTimeout,
     });
-    
+
     clearUser();
-    showToast('Session expired due to inactivity', 'warning');
-    navigate('/login');
-  }, [lastActivity, securityConfig.idleTimeout, clearUser, navigate, showToast, logSecurityEvent]);
+    showToast("Session expired due to inactivity", "warning");
+    navigate("/login");
+  }, [
+    lastActivity,
+    securityConfig.idleTimeout,
+    clearUser,
+    navigate,
+    showToast,
+    logSecurityEvent,
+  ]);
 
   const handleSessionExpiry = useCallback(async () => {
-    await logSecurityEvent('session_expired', 'info');
-    
+    await logSecurityEvent("session_expired", "info");
+
     clearUser();
-    showToast('Session expired. Please login again.', 'info');
-    navigate('/login');
+    showToast("Session expired. Please login again.", "info");
+    navigate("/login");
   }, [clearUser, navigate, showToast, logSecurityEvent]);
 
   const showIdleWarning = useCallback(() => {
     setIdleWarningShown(true);
     addNotification({
-      type: 'warning',
-      title: 'Idle Warning',
-      message: 'You will be logged out in 5 minutes due to inactivity.'
+      type: "warning",
+      title: "Idle Warning",
+      message: "You will be logged out in 5 minutes due to inactivity.",
     });
   }, [addNotification]);
 
-  const showSessionWarning = useCallback((timeRemaining: number) => {
-    setSessionWarningShown(true);
-    const minutes = Math.ceil(timeRemaining / 60000);
-    
-    addNotification({
-      type: 'warning',
-      title: 'Session Expiring',
-      message: `Your session will expire in ${minutes} minute${minutes > 1 ? 's' : ''}.`
-    });
-  }, [addNotification]);
+  const showSessionWarning = useCallback(
+    (timeRemaining: number) => {
+      setSessionWarningShown(true);
+      const minutes = Math.ceil(timeRemaining / 60000);
+
+      addNotification({
+        type: "warning",
+        title: "Session Expiring",
+        message: `Your session will expire in ${minutes} minute${minutes > 1 ? "s" : ""}.`,
+      });
+    },
+    [addNotification],
+  );
 
   // Validate password strength
-  const validatePassword = useCallback((password: string): { valid: boolean; errors: string[] } => {
-    const errors: string[] = [];
-    const { passwordPolicy } = securityConfig;
+  const validatePassword = useCallback(
+    (password: string): { valid: boolean; errors: string[] } => {
+      const errors: string[] = [];
+      const { passwordPolicy } = securityConfig;
 
-    if (password.length < passwordPolicy.minLength) {
-      errors.push(`Password must be at least ${passwordPolicy.minLength} characters`);
-    }
+      if (password.length < passwordPolicy.minLength) {
+        errors.push(
+          `Password must be at least ${passwordPolicy.minLength} characters`,
+        );
+      }
 
-    if (passwordPolicy.requireUppercase && !/[A-Z]/.test(password)) {
-      errors.push('Password must contain uppercase letters');
-    }
+      if (passwordPolicy.requireUppercase && !/[A-Z]/.test(password)) {
+        errors.push("Password must contain uppercase letters");
+      }
 
-    if (passwordPolicy.requireLowercase && !/[a-z]/.test(password)) {
-      errors.push('Password must contain lowercase letters');
-    }
+      if (passwordPolicy.requireLowercase && !/[a-z]/.test(password)) {
+        errors.push("Password must contain lowercase letters");
+      }
 
-    if (passwordPolicy.requireNumbers && !/\d/.test(password)) {
-      errors.push('Password must contain numbers');
-    }
+      if (passwordPolicy.requireNumbers && !/\d/.test(password)) {
+        errors.push("Password must contain numbers");
+      }
 
-    if (passwordPolicy.requireSpecialChars && !/[!@#$%^&*(),.?":{}|<>]/.test(password)) {
-      errors.push('Password must contain special characters');
-    }
+      if (
+        passwordPolicy.requireSpecialChars &&
+        !/[!@#$%^&*(),.?":{}|<>]/.test(password)
+      ) {
+        errors.push("Password must contain special characters");
+      }
 
-    return {
-      valid: errors.length === 0,
-      errors
-    };
-  }, [securityConfig]);
+      return {
+        valid: errors.length === 0,
+        errors,
+      };
+    },
+    [securityConfig],
+  );
 
   // Check IP whitelist
-  const checkIPWhitelist = useCallback(async (ip: string): Promise<boolean> => {
-    if (securityConfig.ipWhitelist.length === 0) return true;
-    
-    const isWhitelisted = securityConfig.ipWhitelist.includes(ip);
-    
-    if (!isWhitelisted) {
-      await logSecurityEvent('ip_blocked', 'error', { 
-        blockedIP: ip,
-        whitelist: securityConfig.ipWhitelist 
-      });
-    }
-    
-    return isWhitelisted;
-  }, [securityConfig.ipWhitelist, logSecurityEvent]);
+  const checkIPWhitelist = useCallback(
+    async (ip: string): Promise<boolean> => {
+      if (securityConfig.ipWhitelist.length === 0) return true;
+
+      const isWhitelisted = securityConfig.ipWhitelist.includes(ip);
+
+      if (!isWhitelisted) {
+        await logSecurityEvent("ip_blocked", "error", {
+          blockedIP: ip,
+          whitelist: securityConfig.ipWhitelist,
+        });
+      }
+
+      return isWhitelisted;
+    },
+    [securityConfig.ipWhitelist, logSecurityEvent],
+  );
 
   // Refresh session token
   const refreshSession = useCallback(async () => {
@@ -199,35 +222,44 @@ export const useAdminSecurity = () => {
 
     try {
       // In production, this would call the API to refresh the token
-      const newExpiryTime = new Date(Date.now() + securityConfig.sessionTimeout * 60 * 1000);
-      
+      const newExpiryTime = new Date(
+        Date.now() + securityConfig.sessionTimeout * 60 * 1000,
+      );
+
       updateSession(
         sessionToken, // In production, this would be a new token
         sessionToken, // In production, this would be a new refresh token
-        newExpiryTime.toISOString()
+        newExpiryTime.toISOString(),
       );
-      
+
       setSessionWarningShown(false);
-      
-      await logSecurityEvent('session_refreshed', 'info');
+
+      await logSecurityEvent("session_refreshed", "info");
     } catch (error) {
-      console.error('Failed to refresh session:', error);
+      console.error("Failed to refresh session:", error);
       handleSessionExpiry();
     }
-  }, [sessionToken, currentUser, securityConfig.sessionTimeout, updateSession, logSecurityEvent, handleSessionExpiry]);
+  }, [
+    sessionToken,
+    currentUser,
+    securityConfig.sessionTimeout,
+    updateSession,
+    logSecurityEvent,
+    handleSessionExpiry,
+  ]);
 
   // Validate CSRF token
   const validateCSRFToken = useCallback((token: string): boolean => {
-    const storedToken = sessionStorage.getItem('csrfToken');
+    const storedToken = sessionStorage.getItem("csrfToken");
     return token === storedToken;
   }, []);
 
   // Generate CSRF token
   const generateCSRFToken = useCallback((): string => {
     const token = Array.from(crypto.getRandomValues(new Uint8Array(32)))
-      .map(b => b.toString(16).padStart(2, '0'))
-      .join('');
-    sessionStorage.setItem('csrfToken', token);
+      .map((b) => b.toString(16).padStart(2, "0"))
+      .join("");
+    sessionStorage.setItem("csrfToken", token);
     return token;
   }, []);
 
@@ -239,22 +271,26 @@ export const useAdminSecurity = () => {
     generateCSRFToken,
     securityConfig,
     isSessionExpiring: sessionWarningShown,
-    isIdle: idleWarningShown
+    isIdle: idleWarningShown,
   };
 };
 
 // Rate limiting hook
-export const useRateLimit = (key: string, maxAttempts: number, windowMs: number) => {
+export const useRateLimit = (
+  key: string,
+  maxAttempts: number,
+  windowMs: number,
+) => {
   const [attempts, setAttempts] = useState<number[]>([]);
 
   const checkRateLimit = useCallback((): boolean => {
     const now = Date.now();
-    const recentAttempts = attempts.filter(time => now - time < windowMs);
-    
+    const recentAttempts = attempts.filter((time) => now - time < windowMs);
+
     if (recentAttempts.length >= maxAttempts) {
       return false;
     }
-    
+
     setAttempts([...recentAttempts, now]);
     return true;
   }, [attempts, maxAttempts, windowMs]);

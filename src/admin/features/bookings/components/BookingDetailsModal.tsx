@@ -1,8 +1,8 @@
-import React, { useState } from 'react';
-import { 
-  X, 
-  Mail, 
-  Phone, 
+import React, { useState } from "react";
+import {
+  X,
+  Mail,
+  Phone,
   Building,
   Calendar,
   Clock,
@@ -12,13 +12,13 @@ import {
   Edit3,
   Send,
   FileText,
-  CheckCircle
-} from 'lucide-react';
-import { format, parseISO } from 'date-fns';
-import { AdminCard } from '../../../components/ui/AdminCard';
-import { AdminBadge } from '../../../components/ui/AdminBadge';
-import { Button } from '../../../../components/ui/Button';
-import type { Booking } from '../../../../types/booking';
+  CheckCircle,
+} from "lucide-react";
+import { format, parseISO } from "date-fns";
+import { AdminCard } from "../../../components/ui/AdminCard";
+import { AdminBadge } from "../../../components/ui/AdminBadge";
+import { Button } from "../../../../components/ui/Button";
+import type { Booking } from "../../../../types/booking";
 
 interface BookingDetailsModalProps {
   booking: Booking;
@@ -31,7 +31,7 @@ export const BookingDetailsModal: React.FC<BookingDetailsModalProps> = ({
   booking,
   onClose,
   onUpdate,
-  isUpdating
+  isUpdating,
 }) => {
   const [isEditing, setIsEditing] = useState(false);
   const [showEmailForm, setShowEmailForm] = useState(false);
@@ -44,7 +44,7 @@ Thank you for your booking with React Fast Training.
 
 Course Details:
 - Course: ${booking.courseName}
-- Date: ${format(parseISO(booking.courseDate), 'dd MMMM yyyy')}
+- Date: ${format(parseISO(booking.courseDate), "dd MMMM yyyy")}
 - Time: ${booking.courseTime}
 - Venue: ${booking.courseVenue}
 - Number of Attendees: ${booking.attendees}
@@ -55,7 +55,7 @@ Total Amount: £${booking.totalAmount}
 If you have any questions, please don't hesitate to contact us.
 
 Best regards,
-React Fast Training Team`
+React Fast Training Team`,
   });
 
   const handleUpdate = () => {
@@ -66,48 +66,52 @@ React Fast Training Team`
   const handleSendEmail = async () => {
     try {
       const response = await fetch(`/api/admin/bookings/${booking.id}/email`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           to: booking.customerEmail,
           subject: emailData.subject,
-          message: emailData.message
-        })
+          message: emailData.message,
+        }),
       });
-      
+
       if (response.ok) {
-        alert('Email sent successfully!');
+        alert("Email sent successfully!");
         setShowEmailForm(false);
       }
     } catch (error) {
-      alert('Failed to send email');
+      alert("Failed to send email");
     }
   };
 
-  const getStatusVariant = (status: string): 'success' | 'warning' | 'error' | 'neutral' => {
+  const getStatusVariant = (
+    status: string,
+  ): "success" | "warning" | "error" | "neutral" => {
     switch (status) {
-      case 'confirmed':
-      case 'completed':
-        return 'success';
-      case 'pending':
-        return 'warning';
-      case 'cancelled':
-        return 'error';
+      case "confirmed":
+      case "completed":
+        return "success";
+      case "pending":
+        return "warning";
+      case "cancelled":
+        return "error";
       default:
-        return 'neutral';
+        return "neutral";
     }
   };
 
-  const getPaymentVariant = (status: string): 'success' | 'warning' | 'error' => {
+  const getPaymentVariant = (
+    status: string,
+  ): "success" | "warning" | "error" => {
     switch (status) {
-      case 'paid':
-        return 'success';
-      case 'pending':
-        return 'warning';
-      case 'refunded':
-        return 'error';
+      case "paid":
+        return "success";
+      case "pending":
+        return "warning";
+      case "refunded":
+        return "error";
       default:
-        return 'warning';
+        return "warning";
     }
   };
 
@@ -184,7 +188,9 @@ React Fast Training Team`
                   <input
                     type="text"
                     value={emailData.subject}
-                    onChange={(e) => setEmailData({ ...emailData, subject: e.target.value })}
+                    onChange={(e) =>
+                      setEmailData({ ...emailData, subject: e.target.value })
+                    }
                     className="admin-input"
                   />
                 </div>
@@ -194,7 +200,9 @@ React Fast Training Team`
                   </label>
                   <textarea
                     value={emailData.message}
-                    onChange={(e) => setEmailData({ ...emailData, message: e.target.value })}
+                    onChange={(e) =>
+                      setEmailData({ ...emailData, message: e.target.value })
+                    }
                     rows={10}
                     className="admin-input"
                   />
@@ -228,7 +236,12 @@ React Fast Training Team`
                   <input
                     type="text"
                     value={editedBooking.customerName}
-                    onChange={(e) => setEditedBooking({ ...editedBooking, customerName: e.target.value })}
+                    onChange={(e) =>
+                      setEditedBooking({
+                        ...editedBooking,
+                        customerName: e.target.value,
+                      })
+                    }
                     className="admin-input mt-1"
                   />
                 ) : (
@@ -241,7 +254,12 @@ React Fast Training Team`
                   <input
                     type="email"
                     value={editedBooking.customerEmail}
-                    onChange={(e) => setEditedBooking({ ...editedBooking, customerEmail: e.target.value })}
+                    onChange={(e) =>
+                      setEditedBooking({
+                        ...editedBooking,
+                        customerEmail: e.target.value,
+                      })
+                    }
                     className="admin-input mt-1"
                   />
                 ) : (
@@ -254,7 +272,12 @@ React Fast Training Team`
                   <input
                     type="tel"
                     value={editedBooking.customerPhone}
-                    onChange={(e) => setEditedBooking({ ...editedBooking, customerPhone: e.target.value })}
+                    onChange={(e) =>
+                      setEditedBooking({
+                        ...editedBooking,
+                        customerPhone: e.target.value,
+                      })
+                    }
                     className="admin-input mt-1"
                   />
                 ) : (
@@ -266,12 +289,17 @@ React Fast Training Team`
                 {isEditing ? (
                   <input
                     type="text"
-                    value={editedBooking.companyName || ''}
-                    onChange={(e) => setEditedBooking({ ...editedBooking, companyName: e.target.value })}
+                    value={editedBooking.companyName || ""}
+                    onChange={(e) =>
+                      setEditedBooking({
+                        ...editedBooking,
+                        companyName: e.target.value,
+                      })
+                    }
                     className="admin-input mt-1"
                   />
                 ) : (
-                  <p className="font-medium">{booking.companyName || 'N/A'}</p>
+                  <p className="font-medium">{booking.companyName || "N/A"}</p>
                 )}
               </div>
             </div>
@@ -293,7 +321,9 @@ React Fast Training Team`
                   <Calendar className="w-4 h-4" />
                   Date
                 </p>
-                <p className="font-medium">{format(parseISO(booking.courseDate), 'dd MMMM yyyy')}</p>
+                <p className="font-medium">
+                  {format(parseISO(booking.courseDate), "dd MMMM yyyy")}
+                </p>
               </div>
               <div>
                 <p className="text-sm text-gray-500 flex items-center gap-1">
@@ -318,7 +348,12 @@ React Fast Training Team`
                   <input
                     type="number"
                     value={editedBooking.attendees}
-                    onChange={(e) => setEditedBooking({ ...editedBooking, attendees: parseInt(e.target.value) })}
+                    onChange={(e) =>
+                      setEditedBooking({
+                        ...editedBooking,
+                        attendees: parseInt(e.target.value),
+                      })
+                    }
                     className="admin-input mt-1"
                     min="1"
                   />
@@ -347,7 +382,12 @@ React Fast Training Team`
                   </label>
                   <select
                     value={editedBooking.status}
-                    onChange={(e) => setEditedBooking({ ...editedBooking, status: e.target.value as any })}
+                    onChange={(e) =>
+                      setEditedBooking({
+                        ...editedBooking,
+                        status: e.target.value as any,
+                      })
+                    }
                     className="admin-select"
                   >
                     <option value="pending">Pending</option>
@@ -362,7 +402,12 @@ React Fast Training Team`
                   </label>
                   <select
                     value={editedBooking.paymentStatus}
-                    onChange={(e) => setEditedBooking({ ...editedBooking, paymentStatus: e.target.value as any })}
+                    onChange={(e) =>
+                      setEditedBooking({
+                        ...editedBooking,
+                        paymentStatus: e.target.value as any,
+                      })
+                    }
                     className="admin-select"
                   >
                     <option value="pending">Pending</option>
@@ -379,21 +424,31 @@ React Fast Training Team`
             <h3 className="text-lg font-semibold mb-4">Notes</h3>
             {isEditing ? (
               <textarea
-                value={editedBooking.notes || ''}
-                onChange={(e) => setEditedBooking({ ...editedBooking, notes: e.target.value })}
+                value={editedBooking.notes || ""}
+                onChange={(e) =>
+                  setEditedBooking({ ...editedBooking, notes: e.target.value })
+                }
                 rows={3}
                 className="admin-input"
                 placeholder="Add any notes about this booking..."
               />
             ) : (
-              <p className="text-gray-700">{booking.notes || 'No notes added'}</p>
+              <p className="text-gray-700">
+                {booking.notes || "No notes added"}
+              </p>
             )}
           </AdminCard>
 
           {/* Timestamps */}
           <div className="text-sm text-gray-500">
-            <p>Created: {format(parseISO(booking.createdAt), 'dd MMM yyyy HH:mm')}</p>
-            <p>Last Updated: {format(parseISO(booking.updatedAt), 'dd MMM yyyy HH:mm')}</p>
+            <p>
+              Created:{" "}
+              {format(parseISO(booking.createdAt), "dd MMM yyyy HH:mm")}
+            </p>
+            <p>
+              Last Updated:{" "}
+              {format(parseISO(booking.updatedAt), "dd MMM yyyy HH:mm")}
+            </p>
           </div>
 
           {/* Edit Actions */}
@@ -404,7 +459,7 @@ React Fast Training Team`
                 disabled={isUpdating}
                 className="admin-btn admin-btn-primary"
               >
-                {isUpdating ? 'Updating...' : 'Save Changes'}
+                {isUpdating ? "Updating..." : "Save Changes"}
               </button>
               <button
                 onClick={() => {

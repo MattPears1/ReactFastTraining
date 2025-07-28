@@ -1,8 +1,8 @@
-import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { AvailabilityCalendar } from '@components/booking/AvailabilityCalendar';
-import { Plus, Calendar, Filter, AlertCircle } from 'lucide-react';
-import { cn } from '@utils/cn';
+import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { AvailabilityCalendar } from "@components/booking/AvailabilityCalendar";
+import { Plus, Calendar, Filter, AlertCircle } from "lucide-react";
+import { cn } from "@utils/cn";
 
 interface FilterState {
   courseType: string;
@@ -13,8 +13,8 @@ const AdminCalendarPageSimple: React.FC = () => {
   const navigate = useNavigate();
   const [showFilters, setShowFilters] = useState(false);
   const [filters, setFilters] = useState<FilterState>({
-    courseType: '',
-    location: ''
+    courseType: "",
+    location: "",
   });
 
   const handleDateSelect = (date: Date, sessions: any[]) => {
@@ -23,7 +23,7 @@ const AdminCalendarPageSimple: React.FC = () => {
       navigate(`/admin/sessions/${sessions[0].id}`);
     } else {
       // Create a new session for this date
-      navigate('/admin/sessions/new');
+      navigate("/admin/sessions/new");
     }
   };
 
@@ -40,7 +40,7 @@ const AdminCalendarPageSimple: React.FC = () => {
               View and manage all course sessions
             </p>
           </div>
-          
+
           <div className="flex items-center gap-3">
             <button
               onClick={() => setShowFilters(!showFilters)}
@@ -48,15 +48,15 @@ const AdminCalendarPageSimple: React.FC = () => {
                 "px-4 py-2 border rounded-lg flex items-center gap-2 transition-colors",
                 showFilters
                   ? "bg-primary-50 border-primary-300 text-primary-700 dark:bg-primary-900/20 dark:border-primary-700 dark:text-primary-400"
-                  : "border-gray-300 dark:border-gray-600 hover:bg-gray-50 dark:hover:bg-gray-700"
+                  : "border-gray-300 dark:border-gray-600 hover:bg-gray-50 dark:hover:bg-gray-700",
               )}
             >
               <Filter className="w-4 h-4" />
               Filters
             </button>
-            
+
             <button
-              onClick={() => navigate('/admin/sessions/new')}
+              onClick={() => navigate("/admin/sessions/new")}
               className="px-4 py-2 bg-primary-600 text-white rounded-lg hover:bg-primary-700 flex items-center gap-2"
             >
               <Plus className="w-4 h-4" />
@@ -72,7 +72,9 @@ const AdminCalendarPageSimple: React.FC = () => {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <select
               value={filters.courseType}
-              onChange={(e) => setFilters({ ...filters, courseType: e.target.value })}
+              onChange={(e) =>
+                setFilters({ ...filters, courseType: e.target.value })
+              }
               className="px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-primary-500"
             >
               <option value="">All Course Types</option>
@@ -81,10 +83,12 @@ const AdminCalendarPageSimple: React.FC = () => {
               <option value="paediatric">Paediatric First Aid</option>
               <option value="mental-health">Mental Health First Aid</option>
             </select>
-            
+
             <select
               value={filters.location}
-              onChange={(e) => setFilters({ ...filters, location: e.target.value })}
+              onChange={(e) =>
+                setFilters({ ...filters, location: e.target.value })
+              }
               className="px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-primary-500"
             >
               <option value="">All Locations</option>
@@ -92,10 +96,10 @@ const AdminCalendarPageSimple: React.FC = () => {
               <option value="location-b">Location B</option>
             </select>
           </div>
-          
+
           <div className="mt-4 flex justify-end">
             <button
-              onClick={() => setFilters({ courseType: '', location: '' })}
+              onClick={() => setFilters({ courseType: "", location: "" })}
               className="px-4 py-2 text-sm text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white"
             >
               Clear Filters
@@ -124,7 +128,7 @@ const AdminCalendarPageSimple: React.FC = () => {
 
       {/* Calendar */}
       <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 p-6">
-        <AvailabilityCalendar 
+        <AvailabilityCalendar
           onDateSelect={handleDateSelect}
           filters={filters}
           isAdminView={true}

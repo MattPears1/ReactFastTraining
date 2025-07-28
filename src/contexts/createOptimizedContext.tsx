@@ -1,13 +1,13 @@
-import React, { 
-  createContext, 
-  useContext, 
-  useReducer, 
-  useCallback, 
+import React, {
+  createContext,
+  useContext,
+  useReducer,
+  useCallback,
   useMemo,
   useRef,
   useEffect,
-  ReactNode 
-} from 'react';
+  ReactNode,
+} from "react";
 
 export interface ContextOptions<T> {
   displayName?: string;
@@ -29,37 +29,35 @@ const defaultEqualityFn = <T,>(a: T, b: T): boolean => a === b;
 export const deepEqual = <T,>(a: T, b: T): boolean => {
   if (a === b) return true;
   if (a == null || b == null) return false;
-  if (typeof a !== 'object' || typeof b !== 'object') return false;
-  
+  if (typeof a !== "object" || typeof b !== "object") return false;
+
   const keysA = Object.keys(a);
   const keysB = Object.keys(b);
-  
+
   if (keysA.length !== keysB.length) return false;
-  
-  return keysA.every(key => 
-    deepEqual((a as any)[key], (b as any)[key])
-  );
+
+  return keysA.every((key) => deepEqual((a as any)[key], (b as any)[key]));
 };
 
 export function createOptimizedContext<State, Actions>(
-  options: ContextOptions<State> = {}
+  options: ContextOptions<State> = {},
 ) {
   const {
-    displayName = 'OptimizedContext',
+    displayName = "OptimizedContext",
     errorMessage = `use${displayName} must be used within ${displayName}Provider`,
-    devtools = process.env.NODE_ENV === 'development',
+    devtools = process.env.NODE_ENV === "development",
   } = options;
 
   // Create separate contexts for state and dispatch
   const StateContext = createContext<State | undefined>(undefined);
   const DispatchContext = createContext<Actions | undefined>(undefined);
-  
+
   StateContext.displayName = `${displayName}State`;
   DispatchContext.displayName = `${displayName}Dispatch`;
 
   // Provider component
-  function Provider({ 
-    children, 
+  function Provider({
+    children,
     initialState,
     actions,
     reducer,
@@ -72,7 +70,7 @@ export function createOptimizedContext<State, Actions>(
   }) {
     const [state, dispatch] = useReducer(
       reducer || ((state: State) => state),
-      initialState
+      initialState,
     );
 
     // Ref to get current state without causing re-renders
@@ -104,12 +102,16 @@ export function createOptimizedContext<State, Actions>(
     // Create memoized actions
     const memoizedActions = useMemo(
       () => actions(enhancedDispatch, getState),
-      [enhancedDispatch, getState]
+      [enhancedDispatch, getState],
     );
 
     // DevTools integration
     useEffect(() => {
-      if (devtools && typeof window !== 'undefined' && (window as any).__REDUX_DEVTOOLS_EXTENSION__) {
+      if (
+        devtools &&
+        typeof window !== "undefined" &&
+        (window as any).__REDUX_DEVTOOLS_EXTENSION__
+      ) {
         const devTools = (window as any).__REDUX_DEVTOOLS_EXTENSION__.connect({
           name: displayName,
         });
@@ -117,9 +119,9 @@ export function createOptimizedContext<State, Actions>(
         devTools.init(state);
 
         const unsubscribe = devTools.subscribe((message: any) => {
-          if (message.type === 'DISPATCH' && message.state) {
+          if (message.type === "DISPATCH" && message.state) {
             // Handle time travel debugging
-            console.log('DevTools time travel:', message);
+            console.log("DevTools time travel:", message);
           }
         });
 
@@ -142,15 +144,17 @@ export function createOptimizedContext<State, Actions>(
   // Hook to use state with selector and equality function
   function useContextState<Selected = State>(
     selector?: Selector<State, Selected>,
-    equalityFn: EqualityFn<Selected> = defaultEqualityFn
+    equalityFn: EqualityFn<Selected> = defaultEqualityFn,
   ): Selected {
     const state = useContext(StateContext);
-    
+
     if (state === undefined) {
       throw new Error(errorMessage);
     }
 
-    const selectedState = selector ? selector(state) : (state as unknown as Selected);
+    const selectedState = selector
+      ? selector(state)
+      : (state as unknown as Selected);
     const selectedStateRef = useRef(selectedState);
     const [, forceUpdate] = useReducer((x) => x + 1, 0);
 
@@ -167,23 +171,20 @@ export function createOptimizedContext<State, Actions>(
   // Hook to use dispatch/actions
   function useContextDispatch(): Actions {
     const dispatch = useContext(DispatchContext);
-    
+
     if (dispatch === undefined) {
       throw new Error(errorMessage);
     }
-    
+
     return dispatch;
   }
 
   // Combined hook
   function useContextValue<Selected = State>(
     selector?: Selector<State, Selected>,
-    equalityFn?: EqualityFn<Selected>
+    equalityFn?: EqualityFn<Selected>,
   ): [Selected, Actions] {
-    return [
-      useContextState(selector, equalityFn),
-      useContextDispatch(),
-    ];
+    return [useContextState(selector, equalityFn), useContextDispatch()];
   }
 
   return {
@@ -197,7 +198,7 @@ export function createOptimizedContext<State, Actions>(
 // Example usage with performance monitoring
 export function createMonitoredContext<State, Actions>(
   name: string,
-  options?: ContextOptions<State>
+  options?: ContextOptions<State>,
 ) {
   const context = createOptimizedContext<State, Actions>({
     ...options,
@@ -205,24 +206,30 @@ export function createMonitoredContext<State, Actions>(
   });
 
   // Add performance monitoring middleware
-  const performanceMiddleware = (state: State, action: any, next: () => void) => {
+  const performanceMiddleware = (
+    state: State,
+    action: any,
+    next: () => void,
+  ) => {
     const start = performance.now();
     next();
     const end = performance.now();
-    
-    if (process.env.NODE_ENV === 'development') {
-      console.log(`[${name}] Action ${action.type} took ${(end - start).toFixed(2)}ms`);
+
+    if (process.env.NODE_ENV === "development") {
+      console.log(
+        `[${name}] Action ${action.type} took ${(end - start).toFixed(2)}ms`,
+      );
     }
   };
 
   // Logging middleware
   const loggingMiddleware = (state: State, action: any, next: () => void) => {
-    if (process.env.NODE_ENV === 'development') {
+    if (process.env.NODE_ENV === "development") {
       console.group(`[${name}] ${action.type}`);
-      console.log('Prev State:', state);
-      console.log('Action:', action);
+      console.log("Prev State:", state);
+      console.log("Action:", action);
       next();
-      console.log('Next State:', state);
+      console.log("Next State:", state);
       console.groupEnd();
     } else {
       next();
@@ -245,7 +252,7 @@ export function createPersistedContext<State, Actions>(
     storage?: Storage;
     serialize?: (state: State) => string;
     deserialize?: (data: string) => State;
-  }
+  },
 ) {
   const {
     storage = localStorage,
@@ -258,9 +265,13 @@ export function createPersistedContext<State, Actions>(
   const storageKey = `persisted-context-${name}`;
 
   // Persistence middleware
-  const persistenceMiddleware = (state: State, action: any, next: () => void) => {
+  const persistenceMiddleware = (
+    state: State,
+    action: any,
+    next: () => void,
+  ) => {
     next();
-    
+
     try {
       storage.setItem(storageKey, serialize(state));
     } catch (error) {

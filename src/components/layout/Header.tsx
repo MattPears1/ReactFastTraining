@@ -1,131 +1,158 @@
-import React, { useState, useEffect } from 'react'
-import { Link, useLocation } from 'react-router-dom'
-import { motion, AnimatePresence } from 'framer-motion'
-import { Menu, X, Sun, Moon, Bell, Search } from 'lucide-react'
-import { useTheme } from '@contexts/ThemeContext'
-import { useNotifications } from '@contexts/NotificationContext'
-import { NotificationCenter } from '@components/ui/NotificationCenter'
-import { NotificationBadge } from '@components/ui/NotificationBadge'
-import { SearchModal } from '@components/ui/SearchModal'
-import { CoursesModal } from '@components/ui/CoursesModal'
-import { cn } from '@utils/cn'
+import React, { useState, useEffect } from "react";
+import { Link, useLocation } from "react-router-dom";
+import { motion, AnimatePresence } from "framer-motion";
+import { Menu, X, Sun, Moon, Bell, Search } from "lucide-react";
+import { useTheme } from "@contexts/ThemeContext";
+import { useNotifications } from "@contexts/NotificationContext";
+import { NotificationCenter } from "@components/ui/NotificationCenter";
+import { NotificationBadge } from "@components/ui/NotificationBadge";
+import { SearchModal } from "@components/ui/SearchModal";
+import { CoursesModal } from "@components/ui/CoursesModal";
+import { cn } from "@utils/cn";
 
 interface NavItem {
-  label: string
-  href: string
-  children?: { label: string; href: string }[]
+  label: string;
+  href: string;
+  children?: { label: string; href: string }[];
 }
 
 const navItems: NavItem[] = [
-  { label: 'Home', href: '/' },
-  { label: 'About Us', href: '/about' },
+  { label: "Home", href: "/" },
+  { label: "About Us", href: "/about" },
   {
-    label: 'Courses',
-    href: '/courses',
+    label: "Courses",
+    href: "/courses",
     children: [
-      { label: 'Emergency First Aid at Work', href: '/courses/efaw' },
-      { label: 'First Aid at Work', href: '/courses/faw' },
-      { label: 'Paediatric First Aid', href: '/courses/paediatric' },
-      { label: 'Emergency Paediatric First Aid', href: '/courses/emergency-paediatric' },
-      { label: 'FAW Requalification', href: '/courses/faw-requalification' },
-      { label: 'EFAW Requalification', href: '/courses/efaw-requalification' },
-      { label: 'Paediatric Requalification', href: '/courses/paediatric-requalification' },
-      { label: 'Emergency Paediatric Requalification', href: '/courses/emergency-paediatric-requalification' },
-      { label: 'Activity First Aid', href: '/courses/activity-first-aid' },
-      { label: 'Activity First Aid Requalification', href: '/courses/activity-first-aid-requalification' },
-      { label: 'CPR and AED', href: '/courses/cpr-aed' },
-      { label: 'Annual Skills Refresher', href: '/courses/annual-skills-refresher' },
-      { label: 'Oxygen Therapy', href: '/courses/oxygen-therapy' },
+      { label: "Emergency First Aid at Work", href: "/courses/efaw" },
+      { label: "First Aid at Work", href: "/courses/faw" },
+      { label: "Paediatric First Aid", href: "/courses/paediatric" },
+      {
+        label: "Emergency Paediatric First Aid",
+        href: "/courses/emergency-paediatric",
+      },
+      { label: "FAW Requalification", href: "/courses/faw-requalification" },
+      { label: "EFAW Requalification", href: "/courses/efaw-requalification" },
+      {
+        label: "Paediatric Requalification",
+        href: "/courses/paediatric-requalification",
+      },
+      {
+        label: "Emergency Paediatric Requalification",
+        href: "/courses/emergency-paediatric-requalification",
+      },
+      { label: "Activity First Aid", href: "/courses/activity-first-aid" },
+      {
+        label: "Activity First Aid Requalification",
+        href: "/courses/activity-first-aid-requalification",
+      },
+      { label: "CPR and AED", href: "/courses/cpr-aed" },
+      {
+        label: "Annual Skills Refresher",
+        href: "/courses/annual-skills-refresher",
+      },
+      { label: "Oxygen Therapy", href: "/courses/oxygen-therapy" },
     ],
   },
-  { label: 'Training Venue', href: '/venue' },
-  { label: 'Contact', href: '/contact' },
-]
+  { label: "Training Venue", href: "/venue" },
+  { label: "Contact", href: "/contact" },
+];
 
 const Header: React.FC = () => {
-  const [isOpen, setIsOpen] = useState(false)
-  const [scrolled, setScrolled] = useState(false)
-  const [openDropdown, setOpenDropdown] = useState<string | null>(null)
-  const [showNotifications, setShowNotifications] = useState(false)
-  const [showSearch, setShowSearch] = useState(false)
-  const [showCoursesModal, setShowCoursesModal] = useState(false)
-  const location = useLocation()
-  const { theme, toggleTheme } = useTheme()
-  const { notifications, unreadCount, markAsRead, markAllAsRead, removeNotification, clearAll } = useNotifications()
+  const [isOpen, setIsOpen] = useState(false);
+  const [scrolled, setScrolled] = useState(false);
+  const [openDropdown, setOpenDropdown] = useState<string | null>(null);
+  const [showNotifications, setShowNotifications] = useState(false);
+  const [showSearch, setShowSearch] = useState(false);
+  const [showCoursesModal, setShowCoursesModal] = useState(false);
+  const location = useLocation();
+  const { theme, toggleTheme } = useTheme();
+  const {
+    notifications,
+    unreadCount,
+    markAsRead,
+    markAllAsRead,
+    removeNotification,
+    clearAll,
+  } = useNotifications();
 
   useEffect(() => {
     const handleScroll = () => {
-      setScrolled(window.scrollY > 20)
-    }
+      setScrolled(window.scrollY > 20);
+    };
 
-    window.addEventListener('scroll', handleScroll)
-    return () => window.removeEventListener('scroll', handleScroll)
-  }, [])
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
 
   useEffect(() => {
-    setIsOpen(false)
-    setOpenDropdown(null)
-    setShowNotifications(false)
-    setShowCoursesModal(false)
-  }, [location])
+    setIsOpen(false);
+    setOpenDropdown(null);
+    setShowNotifications(false);
+    setShowCoursesModal(false);
+  }, [location]);
 
   // Close notifications on click outside
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
       const target = event.target as HTMLElement;
-      if (!target.closest('.notification-center-container') && !target.closest('[aria-label="View notifications"]')) {
+      if (
+        !target.closest(".notification-center-container") &&
+        !target.closest('[aria-label="View notifications"]')
+      ) {
         setShowNotifications(false);
       }
     };
 
     if (showNotifications) {
-      document.addEventListener('click', handleClickOutside);
-      return () => document.removeEventListener('click', handleClickOutside);
+      document.addEventListener("click", handleClickOutside);
+      return () => document.removeEventListener("click", handleClickOutside);
     }
-  }, [showNotifications])
+  }, [showNotifications]);
 
   const isActive = (href: string) => {
-    if (href === '/') return location.pathname === '/'
-    return location.pathname.startsWith(href)
-  }
+    if (href === "/") return location.pathname === "/";
+    return location.pathname.startsWith(href);
+  };
 
   return (
     <>
       <header
         className={cn(
-          'fixed top-0 left-0 right-0 z-40 transition-all duration-300',
+          "fixed top-0 left-0 right-0 z-40 transition-all duration-300",
           scrolled
-            ? 'bg-white/95 dark:bg-gray-900/95 backdrop-blur-xl shadow-lg border-b border-gray-100 dark:border-gray-800'
-            : 'bg-gradient-to-b from-white/10 to-transparent dark:from-gray-900/20'
+            ? "bg-white/95 dark:bg-gray-900/95 backdrop-blur-xl shadow-lg border-b border-gray-100 dark:border-gray-800"
+            : "bg-gradient-to-b from-white/10 to-transparent dark:from-gray-900/20",
         )}
         role="banner"
       >
-        <nav id="main-navigation" className="container px-4 sm:px-6 lg:px-8" role="navigation" aria-label="Main navigation">
+        <nav
+          id="main-navigation"
+          className="container px-4 sm:px-6 lg:px-8"
+          role="navigation"
+          aria-label="Main navigation"
+        >
           <div className="flex items-center justify-between h-16 sm:h-18 md:h-20 lg:h-24">
             {/* Logo on the left */}
-            <Link
-              to="/"
-              className="flex items-center flex-shrink-0"
-            >
-              <img 
-                src="/images/logos/fulllogo_transparent.png" 
-                alt="React Fast Training" 
+            <Link to="/" className="flex items-center flex-shrink-0">
+              <img
+                src="/images/logos/fulllogo_transparent.png"
+                alt="React Fast Training"
                 className="h-16 sm:h-20 md:h-24 lg:h-28 xl:h-32 w-auto"
               />
             </Link>
-              
+
             {/* Desktop Navigation */}
             <div className="hidden lg:flex items-center space-x-4 xl:space-x-6 2xl:space-x-8">
               {navItems.map((item) => (
                 <div key={item.label} className="relative">
-                  {item.label === 'Courses' ? (
+                  {item.label === "Courses" ? (
                     <button
                       onClick={() => setShowCoursesModal(true)}
                       className={cn(
-                        'flex items-center space-x-1 text-sm font-medium transition-colors',
+                        "flex items-center space-x-1 text-sm font-medium transition-colors",
                         isActive(item.href)
-                          ? 'text-primary-600 dark:text-primary-400'
-                          : 'text-gray-700 dark:text-gray-300 hover:text-primary-600 dark:hover:text-primary-400'
+                          ? "text-primary-600 dark:text-primary-400"
+                          : "text-gray-700 dark:text-gray-300 hover:text-primary-600 dark:hover:text-primary-400",
                       )}
                       aria-label="View courses"
                     >
@@ -135,10 +162,10 @@ const Header: React.FC = () => {
                     <Link
                       to={item.href}
                       className={cn(
-                        'text-sm font-medium transition-colors',
+                        "text-sm font-medium transition-colors",
                         isActive(item.href)
-                          ? 'text-primary-600 dark:text-primary-400'
-                          : 'text-gray-700 dark:text-gray-300 hover:text-primary-600 dark:hover:text-primary-400'
+                          ? "text-primary-600 dark:text-primary-400"
+                          : "text-gray-700 dark:text-gray-300 hover:text-primary-600 dark:hover:text-primary-400",
                       )}
                     >
                       {item.label}
@@ -151,12 +178,23 @@ const Header: React.FC = () => {
             {/* Right Side Actions */}
             <div className="flex items-center space-x-2 sm:space-x-3 md:space-x-4">
               {/* Phone Number - visible on mobile and desktop */}
-              <a 
-                href="tel:07447485644" 
+              <a
+                href="tel:07447485644"
                 className="flex items-center space-x-1 sm:space-x-2 text-primary-600 dark:text-primary-400 font-semibold hover:text-primary-700 dark:hover:text-primary-300 transition-colors text-base sm:text-sm lg:text-base min-w-[44px] min-h-[44px] sm:min-w-0 sm:min-h-0 p-2 sm:p-0 justify-center sm:justify-start rounded-lg"
               >
-                <svg className="w-6 h-6 sm:w-4 sm:h-4 lg:w-5 lg:h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
+                <svg
+                  className="w-6 h-6 sm:w-4 sm:h-4 lg:w-5 lg:h-5"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"
+                  />
                 </svg>
                 <span className="hidden sm:inline">07447 485644</span>
               </a>
@@ -176,7 +214,7 @@ const Header: React.FC = () => {
                 className="p-3 sm:p-2 rounded-lg text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors min-w-[44px] min-h-[44px] flex items-center justify-center"
                 aria-label="Toggle theme"
               >
-                {theme === 'light' ? (
+                {theme === "light" ? (
                   <Moon className="w-5 h-5" />
                 ) : (
                   <Sun className="w-5 h-5" />
@@ -198,7 +236,11 @@ const Header: React.FC = () => {
                 aria-label="Toggle menu"
                 aria-expanded={isOpen}
               >
-                {isOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
+                {isOpen ? (
+                  <X className="w-6 h-6" />
+                ) : (
+                  <Menu className="w-6 h-6" />
+                )}
               </button>
             </div>
           </div>
@@ -217,10 +259,10 @@ const Header: React.FC = () => {
               onClick={() => setIsOpen(false)}
             />
             <motion.nav
-              initial={{ x: '100%' }}
+              initial={{ x: "100%" }}
               animate={{ x: 0 }}
-              exit={{ x: '100%' }}
-              transition={{ type: 'tween', duration: 0.3 }}
+              exit={{ x: "100%" }}
+              transition={{ type: "tween", duration: 0.3 }}
               className="fixed top-0 right-0 bottom-0 w-full sm:w-80 bg-white dark:bg-gray-900 z-50 lg:hidden overflow-y-auto shadow-2xl mobile-menu"
             >
               <div className="p-4 sm:p-6">
@@ -240,17 +282,17 @@ const Header: React.FC = () => {
                 <div className="space-y-2">
                   {navItems.map((item) => (
                     <div key={item.label}>
-                      {item.label === 'Courses' ? (
+                      {item.label === "Courses" ? (
                         <button
                           onClick={() => {
-                            setIsOpen(false)
-                            setShowCoursesModal(true)
+                            setIsOpen(false);
+                            setShowCoursesModal(true);
                           }}
                           className={cn(
-                            'w-full flex items-center justify-between py-4 px-4 -mx-4 text-base sm:text-lg font-medium transition-colors rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 min-h-[56px] mobile-nav-item',
+                            "w-full flex items-center justify-between py-4 px-4 -mx-4 text-base sm:text-lg font-medium transition-colors rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 min-h-[56px] mobile-nav-item",
                             isActive(item.href)
-                              ? 'text-primary-600 dark:text-primary-400'
-                              : 'text-gray-700 dark:text-gray-300'
+                              ? "text-primary-600 dark:text-primary-400"
+                              : "text-gray-700 dark:text-gray-300",
                           )}
                         >
                           <span>{item.label}</span>
@@ -259,10 +301,10 @@ const Header: React.FC = () => {
                         <Link
                           to={item.href}
                           className={cn(
-                            'block py-4 px-4 -mx-4 text-base sm:text-lg font-medium transition-colors rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 min-h-[56px] flex items-center mobile-nav-item',
+                            "block py-4 px-4 -mx-4 text-base sm:text-lg font-medium transition-colors rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 min-h-[56px] flex items-center mobile-nav-item",
                             isActive(item.href)
-                              ? 'text-primary-600 dark:text-primary-400'
-                              : 'text-gray-700 dark:text-gray-300'
+                              ? "text-primary-600 dark:text-primary-400"
+                              : "text-gray-700 dark:text-gray-300",
                           )}
                         >
                           {item.label}
@@ -283,8 +325,19 @@ const Header: React.FC = () => {
                     href="tel:07447485644"
                     className="btn btn-outline w-full text-center flex items-center justify-center gap-3 min-h-[52px] text-base font-medium"
                   >
-                    <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
+                    <svg
+                      className="w-5 h-5"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                      xmlns="http://www.w3.org/2000/svg"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={2}
+                        d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"
+                      />
                     </svg>
                     Call 07447 485644
                   </a>
@@ -295,14 +348,16 @@ const Header: React.FC = () => {
         )}
       </AnimatePresence>
 
-
       {/* Search Modal */}
       <SearchModal isOpen={showSearch} onClose={() => setShowSearch(false)} />
 
       {/* Courses Modal */}
-      <CoursesModal isOpen={showCoursesModal} onClose={() => setShowCoursesModal(false)} />
+      <CoursesModal
+        isOpen={showCoursesModal}
+        onClose={() => setShowCoursesModal(false)}
+      />
     </>
-  )
-}
+  );
+};
 
-export default Header
+export default Header;

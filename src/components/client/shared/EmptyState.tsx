@@ -1,6 +1,6 @@
-import React from 'react';
-import { Link } from 'react-router-dom';
-import { LucideIcon } from 'lucide-react';
+import React from "react";
+import { Link } from "react-router-dom";
+import { LucideIcon } from "lucide-react";
 
 interface EmptyStateProps {
   icon: LucideIcon;
@@ -19,7 +19,7 @@ export const EmptyState: React.FC<EmptyStateProps> = ({
   title,
   description,
   action,
-  className = '',
+  className = "",
 }) => {
   return (
     <div className={`text-center py-8 sm:py-12 px-4 ${className}`}>
@@ -32,8 +32,8 @@ export const EmptyState: React.FC<EmptyStateProps> = ({
       <p className="text-sm sm:text-base text-gray-600 dark:text-gray-400 mb-6 max-w-md mx-auto">
         {description}
       </p>
-      {action && (
-        action.onClick ? (
+      {action &&
+        (action.onClick ? (
           <button
             onClick={action.onClick}
             className="inline-flex items-center px-4 py-2 bg-primary-600 text-white rounded-lg hover:bg-primary-700 transition-colors text-sm sm:text-base touch-target"
@@ -47,8 +47,7 @@ export const EmptyState: React.FC<EmptyStateProps> = ({
           >
             {action.label}
           </Link>
-        )
-      )}
+        ))}
     </div>
   );
 };

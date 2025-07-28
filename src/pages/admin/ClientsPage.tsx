@@ -1,2 +1,2 @@
 // Re-export from new location
-export { AdminClientsPage } from './clients/ClientsPage';
+export { AdminClientsPage } from "./clients/ClientsPage";

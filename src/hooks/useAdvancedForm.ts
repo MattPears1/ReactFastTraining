@@ -1,7 +1,7 @@
-import { useState, useCallback, useRef, useEffect } from 'react';
-import { z, ZodSchema, ZodError } from 'zod';
-import { DeepPartial, PathValue, Paths } from '@types/advanced';
-import { debounce } from '@utils/performance';
+import { useState, useCallback, useRef, useEffect } from "react";
+import { z, ZodSchema, ZodError } from "zod";
+import { DeepPartial, PathValue, Paths } from "@types/advanced";
+import { debounce } from "@utils/performance";
 
 export interface FormField<T> {
   value: T;
@@ -29,7 +29,7 @@ export interface UseAdvancedFormOptions<T> {
   validateOnChange?: boolean;
   validateOnBlur?: boolean;
   validateOnMount?: boolean;
-  reValidateMode?: 'onChange' | 'onBlur' | 'onSubmit';
+  reValidateMode?: "onChange" | "onBlur" | "onSubmit";
   resetOnSubmit?: boolean;
   onSubmit?: (values: T) => Promise<void> | void;
   onError?: (errors: Partial<Record<keyof T, string>>) => void;
@@ -49,7 +49,7 @@ export function useAdvancedForm<T extends Record<string, any>>({
   validateOnChange = true,
   validateOnBlur = true,
   validateOnMount = false,
-  reValidateMode = 'onChange',
+  reValidateMode = "onChange",
   resetOnSubmit = false,
   onSubmit,
   onError,
@@ -83,7 +83,7 @@ export function useAdvancedForm<T extends Record<string, any>>({
         if (error instanceof ZodError) {
           const errors: Partial<Record<keyof T, string>> = {};
           error.errors.forEach((err) => {
-            const path = err.path.join('.') as keyof T;
+            const path = err.path.join(".") as keyof T;
             errors[path] = err.message;
           });
           return errors;
@@ -91,14 +91,14 @@ export function useAdvancedForm<T extends Record<string, any>>({
         return {};
       }
     },
-    [validationSchema]
+    [validationSchema],
   );
 
   // Validate single field
   const validateField = useCallback(
     async (name: keyof T, value: any): Promise<string | null> => {
       const options = fieldOptions.current.get(name);
-      
+
       // Custom field validation
       if (options?.validate) {
         const error = await options.validate(value);
@@ -113,15 +113,15 @@ export function useAdvancedForm<T extends Record<string, any>>({
           return null;
         } catch (error) {
           if (error instanceof ZodError) {
-            return error.errors[0]?.message || 'Validation error';
+            return error.errors[0]?.message || "Validation error";
           }
-          return 'Validation error';
+          return "Validation error";
         }
       }
 
       return null;
     },
-    [validationSchema]
+    [validationSchema],
   );
 
   // Debounced validation
@@ -138,21 +138,30 @@ export function useAdvancedForm<T extends Record<string, any>>({
         ...prev,
         errors: { ...prev.errors, [name]: error || undefined },
         validating: { ...prev.validating, [name]: false },
-        isValid: !error && Object.values({ ...prev.errors, [name]: error }).every((e) => !e),
+        isValid:
+          !error &&
+          Object.values({ ...prev.errors, [name]: error }).every((e) => !e),
       }));
     }, debounceDelay),
-    [validateField, debounceDelay]
+    [validateField, debounceDelay],
   );
 
   // Set field value
   const setValue = useCallback(
-    <K extends keyof T>(name: K, value: T[K], shouldValidate = validateOnChange) => {
+    <K extends keyof T>(
+      name: K,
+      value: T[K],
+      shouldValidate = validateOnChange,
+    ) => {
       const options = fieldOptions.current.get(name);
-      const transformedValue = options?.transform ? options.transform(value) : value;
+      const transformedValue = options?.transform
+        ? options.transform(value)
+        : value;
 
       setState((prev) => {
         const newValues = { ...prev.values, [name]: transformedValue };
-        const isDirty = JSON.stringify(newValues) !== JSON.stringify(initialValues);
+        const isDirty =
+          JSON.stringify(newValues) !== JSON.stringify(initialValues);
 
         return {
           ...prev,
@@ -166,7 +175,7 @@ export function useAdvancedForm<T extends Record<string, any>>({
         debouncedValidateField(name, transformedValue);
       }
     },
-    [initialValues, validateOnChange, debouncedValidateField]
+    [initialValues, validateOnChange, debouncedValidateField],
   );
 
   // Set multiple values
@@ -174,7 +183,8 @@ export function useAdvancedForm<T extends Record<string, any>>({
     (values: DeepPartial<T>, shouldValidate = validateOnChange) => {
       setState((prev) => {
         const newValues = { ...prev.values, ...values };
-        const isDirty = JSON.stringify(newValues) !== JSON.stringify(initialValues);
+        const isDirty =
+          JSON.stringify(newValues) !== JSON.stringify(initialValues);
 
         return {
           ...prev,
@@ -189,7 +199,7 @@ export function useAdvancedForm<T extends Record<string, any>>({
         });
       }
     },
-    [initialValues, validateOnChange, debouncedValidateField]
+    [initialValues, validateOnChange, debouncedValidateField],
   );
 
   // Touch field
@@ -204,7 +214,7 @@ export function useAdvancedForm<T extends Record<string, any>>({
         debouncedValidateField(name, state.values[name]);
       }
     },
-    [validateOnBlur, debouncedValidateField, state.values, state.dirty]
+    [validateOnBlur, debouncedValidateField, state.values, state.dirty],
   );
 
   // Set error
@@ -212,7 +222,9 @@ export function useAdvancedForm<T extends Record<string, any>>({
     setState((prev) => ({
       ...prev,
       errors: { ...prev.errors, [name]: error || undefined },
-      isValid: !error && Object.values({ ...prev.errors, [name]: error }).every((e) => !e),
+      isValid:
+        !error &&
+        Object.values({ ...prev.errors, [name]: error }).every((e) => !e),
     }));
   }, []);
 
@@ -244,7 +256,7 @@ export function useAdvancedForm<T extends Record<string, any>>({
         submitCount: 0,
       });
     },
-    [initialValues]
+    [initialValues],
   );
 
   // Register field
@@ -256,8 +268,14 @@ export function useAdvancedForm<T extends Record<string, any>>({
 
       return {
         name,
-        value: options?.format ? options.format(state.values[name]) : state.values[name],
-        onChange: (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
+        value: options?.format
+          ? options.format(state.values[name])
+          : state.values[name],
+        onChange: (
+          e: React.ChangeEvent<
+            HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement
+          >,
+        ) => {
           const value = e.target.value;
           const parsedValue = options?.parse ? options.parse(value) : value;
           setValue(name, parsedValue);
@@ -270,11 +288,13 @@ export function useAdvancedForm<T extends Record<string, any>>({
             fieldRefs.current.delete(name);
           }
         },
-        'aria-invalid': !!state.errors[name],
-        'aria-describedby': state.errors[name] ? `${String(name)}-error` : undefined,
+        "aria-invalid": !!state.errors[name],
+        "aria-describedby": state.errors[name]
+          ? `${String(name)}-error`
+          : undefined,
       };
     },
-    [state.values, state.errors, setValue, touchField]
+    [state.values, state.errors, setValue, touchField],
   );
 
   // Get field state
@@ -286,7 +306,7 @@ export function useAdvancedForm<T extends Record<string, any>>({
       dirty: state.dirty[name] || false,
       validating: state.validating[name] || false,
     }),
-    [state]
+    [state],
   );
 
   // Handle submit
@@ -306,13 +326,13 @@ export function useAdvancedForm<T extends Record<string, any>>({
         // Touch all fields
         const allTouched = Object.keys(state.values).reduce(
           (acc, key) => ({ ...acc, [key]: true }),
-          {}
+          {},
         );
         setState((prev) => ({ ...prev, touched: allTouched as any }));
 
         // Validate all fields
         const errors = await validateForm(state.values);
-        
+
         if (Object.keys(errors).length > 0) {
           setState((prev) => ({
             ...prev,
@@ -320,20 +340,20 @@ export function useAdvancedForm<T extends Record<string, any>>({
             isSubmitting: false,
             isValid: false,
           }));
-          
+
           onError?.(errors);
-          
+
           // Focus first error field
           const firstErrorField = Object.keys(errors)[0] as keyof T;
           const fieldEl = fieldRefs.current.get(firstErrorField);
           fieldEl?.focus();
-          
+
           return;
         }
 
         try {
           await onSubmit?.(state.values);
-          
+
           if (resetOnSubmit) {
             reset();
           } else {
@@ -350,7 +370,7 @@ export function useAdvancedForm<T extends Record<string, any>>({
         }
       };
     },
-    [state.values, validateForm, onSubmit, onError, resetOnSubmit, reset]
+    [state.values, validateForm, onSubmit, onError, resetOnSubmit, reset],
   );
 
   // Watch field value
@@ -358,7 +378,7 @@ export function useAdvancedForm<T extends Record<string, any>>({
     <K extends keyof T>(name: K): T[K] => {
       return state.values[name];
     },
-    [state.values]
+    [state.values],
   );
 
   // Watch multiple fields
@@ -366,10 +386,10 @@ export function useAdvancedForm<T extends Record<string, any>>({
     <K extends keyof T>(...names: K[]): Pick<T, K> => {
       return names.reduce(
         (acc, name) => ({ ...acc, [name]: state.values[name] }),
-        {} as Pick<T, K>
+        {} as Pick<T, K>,
       );
     },
-    [state.values]
+    [state.values],
   );
 
   // Validate on mount
@@ -399,7 +419,7 @@ export function useAdvancedForm<T extends Record<string, any>>({
     isValid: state.isValid,
     isDirty: state.isDirty,
     submitCount: state.submitCount,
-    
+
     // Methods
     setValue,
     setValues,
@@ -412,7 +432,7 @@ export function useAdvancedForm<T extends Record<string, any>>({
     reset,
     watch,
     watchAll,
-    
+
     // Validation
     validateField,
     validateForm,

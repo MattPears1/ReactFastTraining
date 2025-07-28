@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { motion } from 'framer-motion';
+import React, { useState } from "react";
+import { motion } from "framer-motion";
 import {
   User,
   Mail,
@@ -15,9 +15,9 @@ import {
   Bell,
   Globe,
   Lock,
-} from 'lucide-react';
-import { UserAvatar } from './UserAvatar';
-import { clsx } from 'clsx';
+} from "lucide-react";
+import { UserAvatar } from "./UserAvatar";
+import { clsx } from "clsx";
 
 export interface UserProfileData {
   id: string;
@@ -69,9 +69,9 @@ export const UserProfile: React.FC<UserProfileProps> = ({
 
   const handleAvatarClick = () => {
     if (editable && !isEditing) {
-      const input = document.createElement('input');
-      input.type = 'file';
-      input.accept = 'image/*';
+      const input = document.createElement("input");
+      input.type = "file";
+      input.accept = "image/*";
       input.onchange = (e) => {
         const file = (e.target as HTMLInputElement).files?.[0];
         if (file) {
@@ -83,16 +83,25 @@ export const UserProfile: React.FC<UserProfileProps> = ({
   };
 
   return (
-    <div className={clsx('bg-white dark:bg-gray-800 rounded-xl shadow-sm', className)}>
+    <div
+      className={clsx(
+        "bg-white dark:bg-gray-800 rounded-xl shadow-sm",
+        className,
+      )}
+    >
       {/* Header Section */}
       <div className="relative h-32 bg-gradient-to-r from-primary-500 to-primary-600 rounded-t-xl">
         {editable && (
           <button
-            onClick={() => isEditing ? handleCancel() : setIsEditing(true)}
+            onClick={() => (isEditing ? handleCancel() : setIsEditing(true))}
             className="absolute top-4 right-4 p-2 bg-white/10 backdrop-blur-sm rounded-lg text-white hover:bg-white/20 transition-colors"
-            aria-label={isEditing ? 'Cancel editing' : 'Edit profile'}
+            aria-label={isEditing ? "Cancel editing" : "Edit profile"}
           >
-            {isEditing ? <X className="w-5 h-5" /> : <Edit2 className="w-5 h-5" />}
+            {isEditing ? (
+              <X className="w-5 h-5" />
+            ) : (
+              <Edit2 className="w-5 h-5" />
+            )}
           </button>
         )}
       </div>
@@ -112,7 +121,8 @@ export const UserProfile: React.FC<UserProfileProps> = ({
             onClick={editable ? handleAvatarClick : undefined}
           />
           {editable && avatarHover && (
-            <div className="absolute inset-0 flex items-center justify-center bg-black/50 rounded-full cursor-pointer"
+            <div
+              className="absolute inset-0 flex items-center justify-center bg-black/50 rounded-full cursor-pointer"
               onClick={handleAvatarClick}
             >
               <Camera className="w-6 h-6 text-white" />
@@ -129,7 +139,9 @@ export const UserProfile: React.FC<UserProfileProps> = ({
               <input
                 type="text"
                 value={editedData.name}
-                onChange={(e) => setEditedData({ ...editedData, name: e.target.value })}
+                onChange={(e) =>
+                  setEditedData({ ...editedData, name: e.target.value })
+                }
                 className="text-2xl font-bold bg-transparent border-b-2 border-primary-500 focus:outline-none"
               />
             ) : (
@@ -147,8 +159,10 @@ export const UserProfile: React.FC<UserProfileProps> = ({
 
           {isEditing ? (
             <textarea
-              value={editedData.bio || ''}
-              onChange={(e) => setEditedData({ ...editedData, bio: e.target.value })}
+              value={editedData.bio || ""}
+              onChange={(e) =>
+                setEditedData({ ...editedData, bio: e.target.value })
+              }
               placeholder="Add a bio..."
               className="mt-2 w-full p-2 bg-gray-50 dark:bg-gray-700 rounded-lg resize-none focus:outline-none focus:ring-2 focus:ring-primary-500"
               rows={3}
@@ -182,14 +196,18 @@ export const UserProfile: React.FC<UserProfileProps> = ({
             label="Location"
             value={user.location}
             editable={isEditing}
-            onChange={(value) => setEditedData({ ...editedData, location: value })}
+            onChange={(value) =>
+              setEditedData({ ...editedData, location: value })
+            }
           />
           <InfoItem
             icon={Briefcase}
             label="Company"
             value={user.company}
             editable={isEditing}
-            onChange={(value) => setEditedData({ ...editedData, company: value })}
+            onChange={(value) =>
+              setEditedData({ ...editedData, company: value })
+            }
           />
           <InfoItem
             icon={Calendar}
@@ -248,7 +266,7 @@ const InfoItem: React.FC<InfoItemProps> = ({
         {editable ? (
           <input
             type="text"
-            value={value || ''}
+            value={value || ""}
             onChange={(e) => onChange?.(e.target.value)}
             placeholder={`Add ${label.toLowerCase()}...`}
             className="w-full px-2 py-1 bg-gray-50 dark:bg-gray-700 rounded focus:outline-none focus:ring-2 focus:ring-primary-500"
@@ -263,8 +281,8 @@ const InfoItem: React.FC<InfoItemProps> = ({
 
 // Profile Settings Component
 export interface ProfileSettingsProps {
-  preferences: UserProfileData['preferences'];
-  onUpdate: (preferences: UserProfileData['preferences']) => void;
+  preferences: UserProfileData["preferences"];
+  onUpdate: (preferences: UserProfileData["preferences"]) => void;
   className?: string;
 }
 
@@ -286,7 +304,12 @@ export const ProfileSettings: React.FC<ProfileSettingsProps> = ({
   };
 
   return (
-    <div className={clsx('bg-white dark:bg-gray-800 rounded-xl shadow-sm p-6', className)}>
+    <div
+      className={clsx(
+        "bg-white dark:bg-gray-800 rounded-xl shadow-sm p-6",
+        className,
+      )}
+    >
       <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-6">
         Privacy & Preferences
       </h3>
@@ -297,21 +320,21 @@ export const ProfileSettings: React.FC<ProfileSettingsProps> = ({
           title="Push Notifications"
           description="Receive notifications about your account activity"
           enabled={settings.notifications}
-          onToggle={() => handleToggle('notifications')}
+          onToggle={() => handleToggle("notifications")}
         />
         <SettingToggle
           icon={Mail}
           title="Newsletter"
           description="Receive our weekly newsletter with updates and offers"
           enabled={settings.newsletter}
-          onToggle={() => handleToggle('newsletter')}
+          onToggle={() => handleToggle("newsletter")}
         />
         <SettingToggle
           icon={Globe}
           title="Public Profile"
           description="Make your profile visible to other users"
           enabled={settings.publicProfile}
-          onToggle={() => handleToggle('publicProfile')}
+          onToggle={() => handleToggle("publicProfile")}
         />
       </div>
 
@@ -353,16 +376,16 @@ const SettingToggle: React.FC<SettingToggleProps> = ({
       <button
         onClick={onToggle}
         className={clsx(
-          'relative inline-flex h-6 w-11 items-center rounded-full transition-colors',
-          enabled ? 'bg-primary-600' : 'bg-gray-200 dark:bg-gray-700'
+          "relative inline-flex h-6 w-11 items-center rounded-full transition-colors",
+          enabled ? "bg-primary-600" : "bg-gray-200 dark:bg-gray-700",
         )}
         role="switch"
         aria-checked={enabled}
       >
         <span
           className={clsx(
-            'inline-block h-4 w-4 transform rounded-full bg-white transition-transform',
-            enabled ? 'translate-x-6' : 'translate-x-1'
+            "inline-block h-4 w-4 transform rounded-full bg-white transition-transform",
+            enabled ? "translate-x-6" : "translate-x-1",
           )}
         />
       </button>

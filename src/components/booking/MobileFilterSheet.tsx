@@ -1,15 +1,15 @@
-import React, { useState } from 'react';
-import { Filter, X } from 'lucide-react';
-import { cn } from '@utils/cn';
+import React, { useState } from "react";
+import { Filter, X } from "lucide-react";
+import { cn } from "@utils/cn";
 
 interface MobileFilterSheetProps {
   children: React.ReactNode;
   className?: string;
 }
 
-export const MobileFilterSheet: React.FC<MobileFilterSheetProps> = ({ 
-  children, 
-  className = '' 
+export const MobileFilterSheet: React.FC<MobileFilterSheetProps> = ({
+  children,
+  className = "",
 }) => {
   const [isOpen, setIsOpen] = useState(false);
 
@@ -19,8 +19,8 @@ export const MobileFilterSheet: React.FC<MobileFilterSheetProps> = ({
       <button
         onClick={() => setIsOpen(true)}
         className={cn(
-          'md:hidden fixed bottom-4 right-4 bg-primary-600 text-white p-3 rounded-full shadow-lg z-40 hover:bg-primary-700 transition-colors',
-          className
+          "md:hidden fixed bottom-4 right-4 bg-primary-600 text-white p-3 rounded-full shadow-lg z-40 hover:bg-primary-700 transition-colors",
+          className,
         )}
         aria-label="Open filters"
       >
@@ -39,8 +39,8 @@ export const MobileFilterSheet: React.FC<MobileFilterSheetProps> = ({
       {/* Filter Sheet */}
       <div
         className={cn(
-          'md:hidden fixed inset-x-0 bottom-0 bg-white rounded-t-2xl shadow-xl z-50 transition-transform duration-300 max-h-[85vh]',
-          isOpen ? 'translate-y-0' : 'translate-y-full'
+          "md:hidden fixed inset-x-0 bottom-0 bg-white rounded-t-2xl shadow-xl z-50 transition-transform duration-300 max-h-[85vh]",
+          isOpen ? "translate-y-0" : "translate-y-full",
         )}
       >
         {/* Header */}
@@ -58,7 +58,10 @@ export const MobileFilterSheet: React.FC<MobileFilterSheetProps> = ({
         </div>
 
         {/* Content */}
-        <div className="overflow-y-auto p-4" style={{ maxHeight: 'calc(85vh - 4rem)' }}>
+        <div
+          className="overflow-y-auto p-4"
+          style={{ maxHeight: "calc(85vh - 4rem)" }}
+        >
           {children}
         </div>
 

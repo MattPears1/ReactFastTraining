@@ -1,4 +1,4 @@
-import axios, { AxiosInstance } from 'axios';
+import axios, { AxiosInstance } from "axios";
 
 interface LoginRequest {
   email: string;
@@ -37,9 +37,14 @@ class AdminAuthService {
 
   constructor() {
     // Use relative URL in production, localhost in development
-    const baseURL = import.meta.env.PROD ? '' : (import.meta.env.VITE_API_URL || 'http://localhost:3000');
-    console.log('🌐 [AdminAuthService] Using backend URL:', baseURL || 'relative URLs');
-    
+    const baseURL = import.meta.env.PROD
+      ? ""
+      : import.meta.env.VITE_API_URL || "http://localhost:3000";
+    console.log(
+      "🌐 [AdminAuthService] Using backend URL:",
+      baseURL || "relative URLs",
+    );
+
     this.api = axios.create({
       baseURL,
       withCredentials: true, // For cookies
@@ -49,13 +54,13 @@ class AdminAuthService {
     // Request interceptor to add auth token
     this.api.interceptors.request.use(
       (config) => {
-        const token = localStorage.getItem('adminAccessToken');
+        const token = localStorage.getItem("adminAccessToken");
         if (token) {
           config.headers.Authorization = `Bearer ${token}`;
         }
         return config;
       },
-      (error) => Promise.reject(error)
+      (error) => Promise.reject(error),
     );
 
     // Response interceptor to handle token refresh
@@ -64,21 +69,25 @@ class AdminAuthService {
       async (error) => {
         const originalRequest = error.config;
 
-        if (error.response?.status === 401 && !originalRequest._retry && !this.isRefreshing) {
+        if (
+          error.response?.status === 401 &&
+          !originalRequest._retry &&
+          !this.isRefreshing
+        ) {
           originalRequest._retry = true;
           this.isRefreshing = true;
-          
+
           try {
             const response = await this.refreshToken();
-            localStorage.setItem('adminAccessToken', response.accessToken);
+            localStorage.setItem("adminAccessToken", response.accessToken);
             originalRequest.headers.Authorization = `Bearer ${response.accessToken}`;
             return this.api(originalRequest);
           } catch (refreshError) {
             // Refresh failed, clear tokens and redirect to login
-            console.log('🔄 Token refresh failed, clearing auth state');
-            localStorage.removeItem('adminAccessToken');
-            localStorage.removeItem('adminRefreshToken');
-            window.location.href = '/admin/login';
+            console.log("🔄 Token refresh failed, clearing auth state");
+            localStorage.removeItem("adminAccessToken");
+            localStorage.removeItem("adminRefreshToken");
+            window.location.href = "/admin/login";
             return Promise.reject(refreshError);
           } finally {
             this.isRefreshing = false;
@@ -86,26 +95,33 @@ class AdminAuthService {
         }
 
         return Promise.reject(error);
-      }
+      },
     );
   }
 
-  async login(email: string, password: string, captcha?: string): Promise<LoginResponse> {
-    console.log('🔐 [AdminAuthService] Attempting login...');
-    console.log('📧 [AdminAuthService] Email:', email);
-    console.log('🔗 [AdminAuthService] Endpoint: /api/admin/auth/login');
-    
+  async login(
+    email: string,
+    password: string,
+    captcha?: string,
+  ): Promise<LoginResponse> {
+    console.log("🔐 [AdminAuthService] Attempting login...");
+    console.log("📧 [AdminAuthService] Email:", email);
+    console.log("🔗 [AdminAuthService] Endpoint: /api/admin/auth/login");
+
     try {
-      const response = await this.api.post<LoginResponse>('/api/admin/auth/login', {
-        email,
-        password,
-        captcha,
-      });
-      console.log('✅ [AdminAuthService] Login successful:', response.data);
+      const response = await this.api.post<LoginResponse>(
+        "/api/admin/auth/login",
+        {
+          email,
+          password,
+          captcha,
+        },
+      );
+      console.log("✅ [AdminAuthService] Login successful:", response.data);
       return response.data;
     } catch (error: any) {
-      console.error('❌ [AdminAuthService] Login failed:', error);
-      console.error('🔍 [AdminAuthService] Error details:', {
+      console.error("❌ [AdminAuthService] Login failed:", error);
+      console.error("🔍 [AdminAuthService] Error details:", {
         message: error.message,
         code: error.code,
         response: error.response?.data,
@@ -113,8 +129,8 @@ class AdminAuthService {
         config: {
           url: error.config?.url,
           baseURL: error.config?.baseURL,
-          method: error.config?.method
-        }
+          method: error.config?.method,
+        },
       });
       throw error;
     }
@@ -122,54 +138,64 @@ class AdminAuthService {
 
   async logout(): Promise<void> {
     try {
-      await this.api.post('/api/admin/auth/logout');
+      await this.api.post("/api/admin/auth/logout");
     } catch (error) {
-      console.error('Logout error:', error);
+      console.error("Logout error:", error);
     } finally {
       this.clearAuthState();
     }
   }
 
   clearAuthState(): void {
-    console.log('🧹 Clearing admin auth state');
-    localStorage.removeItem('adminAccessToken');
-    localStorage.removeItem('adminRefreshToken');
+    console.log("🧹 Clearing admin auth state");
+    localStorage.removeItem("adminAccessToken");
+    localStorage.removeItem("adminRefreshToken");
     this.isRefreshing = false;
   }
 
   async refreshToken(): Promise<RefreshResponse> {
     // Create a separate axios instance for refresh to avoid interceptor loops
     const refreshApi = axios.create({
-      baseURL: import.meta.env.PROD ? '' : (import.meta.env.VITE_API_URL || 'http://localhost:3000'),
+      baseURL: import.meta.env.PROD
+        ? ""
+        : import.meta.env.VITE_API_URL || "http://localhost:3000",
       withCredentials: true,
       timeout: 10000,
     });
-    
-    const token = localStorage.getItem('adminRefreshToken');
-    const response = await refreshApi.post<RefreshResponse>('/api/admin/auth/refresh', {}, {
-      headers: token ? { Authorization: `Bearer ${token}` } : {},
-    });
+
+    const token = localStorage.getItem("adminRefreshToken");
+    const response = await refreshApi.post<RefreshResponse>(
+      "/api/admin/auth/refresh",
+      {},
+      {
+        headers: token ? { Authorization: `Bearer ${token}` } : {},
+      },
+    );
     return response.data;
   }
 
   async getCurrentUser(): Promise<CurrentUserResponse> {
-    const response = await this.api.get<CurrentUserResponse>('/api/admin/auth/me');
+    const response =
+      await this.api.get<CurrentUserResponse>("/api/admin/auth/me");
     return response.data;
   }
 
-  async changePassword(currentPassword: string, newPassword: string): Promise<void> {
-    await this.api.post('/api/admin/auth/change-password', {
+  async changePassword(
+    currentPassword: string,
+    newPassword: string,
+  ): Promise<void> {
+    await this.api.post("/api/admin/auth/change-password", {
       currentPassword,
       newPassword,
     });
   }
 
   async forgotPassword(email: string): Promise<void> {
-    await this.api.post('/api/admin/auth/forgot-password', { email });
+    await this.api.post("/api/admin/auth/forgot-password", { email });
   }
 
   async resetPassword(token: string, newPassword: string): Promise<void> {
-    await this.api.post('/api/admin/auth/reset-password', {
+    await this.api.post("/api/admin/auth/reset-password", {
       token,
       newPassword,
     });

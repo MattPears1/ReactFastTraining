@@ -1,16 +1,16 @@
-import React, { useState } from 'react';
-import { useNavigate, useLocation } from 'react-router-dom';
-import { useForm } from 'react-hook-form';
-import { zodResolver } from '@hookform/resolvers/zod';
-import { z } from 'zod';
-import { Eye, EyeOff, Lock, Mail, AlertCircle } from 'lucide-react';
-import { useAdminAuth } from '../../contexts/AdminAuthContext';
-import { useNotifications } from '../../contexts/NotificationContext';
-import { cn } from '@/utils/cn';
+import React, { useState } from "react";
+import { useNavigate, useLocation } from "react-router-dom";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { z } from "zod";
+import { Eye, EyeOff, Lock, Mail, AlertCircle } from "lucide-react";
+import { useAdminAuth } from "../../contexts/AdminAuthContext";
+import { useNotifications } from "../../contexts/NotificationContext";
+import { cn } from "@/utils/cn";
 
 const loginSchema = z.object({
-  email: z.string().email('Please enter a valid email address'),
-  password: z.string().min(8, 'Password must be at least 8 characters'),
+  email: z.string().email("Please enter a valid email address"),
+  password: z.string().min(8, "Password must be at least 8 characters"),
 });
 
 type LoginFormData = z.infer<typeof loginSchema>;
@@ -20,13 +20,13 @@ export const LoginPage: React.FC = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [loginError, setLoginError] = useState<string | null>(null);
   const [failedAttempts, setFailedAttempts] = useState(0);
-  
+
   const navigate = useNavigate();
   const location = useLocation();
   const { login } = useAdminAuth();
   const { addNotification } = useNotifications();
 
-  const from = location.state?.from?.pathname || '/admin/dashboard';
+  const from = location.state?.from?.pathname || "/admin/dashboard";
 
   const {
     register,
@@ -43,9 +43,9 @@ export const LoginPage: React.FC = () => {
     try {
       await login(data.email, data.password);
       addNotification({
-        type: 'success',
-        title: 'Login successful',
-        message: 'Welcome back!',
+        type: "success",
+        title: "Login successful",
+        message: "Welcome back!",
       });
       navigate(from, { replace: true });
     } catch (error: any) {
@@ -53,16 +53,18 @@ export const LoginPage: React.FC = () => {
       setFailedAttempts(newFailedAttempts);
 
       if (error.response?.status === 429) {
-        setLoginError('Too many login attempts. Please try again later.');
+        setLoginError("Too many login attempts. Please try again later.");
       } else if (error.response?.status === 403) {
-        setLoginError('Your account has been locked. Please contact support.');
+        setLoginError("Your account has been locked. Please contact support.");
       } else if (error.response?.status === 401) {
-        setLoginError('Invalid email or password');
+        setLoginError("Invalid email or password");
         if (newFailedAttempts >= 3) {
-          setLoginError('Invalid email or password. Please check your credentials or reset your password.');
+          setLoginError(
+            "Invalid email or password. Please check your credentials or reset your password.",
+          );
         }
       } else {
-        setLoginError('An error occurred. Please try again.');
+        setLoginError("An error occurred. Please try again.");
       }
     } finally {
       setIsLoading(false);
@@ -92,18 +94,20 @@ export const LoginPage: React.FC = () => {
                   <Mail className="h-5 w-5 text-gray-400" />
                 </div>
                 <input
-                  {...register('email')}
+                  {...register("email")}
                   type="email"
                   autoComplete="email"
                   className={cn(
                     "appearance-none rounded-none relative block w-full px-3 py-2 pl-10 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-t-md focus:outline-none focus:ring-primary-500 focus:border-primary-500 focus:z-10 sm:text-sm",
-                    errors.email && "border-red-300"
+                    errors.email && "border-red-300",
                   )}
                   placeholder="Email address"
                 />
               </div>
               {errors.email && (
-                <p className="mt-1 text-sm text-red-600">{errors.email.message}</p>
+                <p className="mt-1 text-sm text-red-600">
+                  {errors.email.message}
+                </p>
               )}
             </div>
 
@@ -116,12 +120,12 @@ export const LoginPage: React.FC = () => {
                   <Lock className="h-5 w-5 text-gray-400" />
                 </div>
                 <input
-                  {...register('password')}
-                  type={showPassword ? 'text' : 'password'}
+                  {...register("password")}
+                  type={showPassword ? "text" : "password"}
                   autoComplete="current-password"
                   className={cn(
                     "appearance-none rounded-none relative block w-full px-3 py-2 pl-10 pr-10 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-b-md focus:outline-none focus:ring-primary-500 focus:border-primary-500 focus:z-10 sm:text-sm",
-                    errors.password && "border-red-300"
+                    errors.password && "border-red-300",
                   )}
                   placeholder="Password"
                 />
@@ -138,7 +142,9 @@ export const LoginPage: React.FC = () => {
                 </button>
               </div>
               {errors.password && (
-                <p className="mt-1 text-sm text-red-600">{errors.password.message}</p>
+                <p className="mt-1 text-sm text-red-600">
+                  {errors.password.message}
+                </p>
               )}
             </div>
           </div>
@@ -175,7 +181,7 @@ export const LoginPage: React.FC = () => {
               disabled={isLoading}
               className={cn(
                 "group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-primary-600 hover:bg-primary-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500",
-                isLoading && "opacity-50 cursor-not-allowed"
+                isLoading && "opacity-50 cursor-not-allowed",
               )}
             >
               {isLoading ? (
@@ -203,7 +209,7 @@ export const LoginPage: React.FC = () => {
                   Signing in...
                 </>
               ) : (
-                'Sign in'
+                "Sign in"
               )}
             </button>
           </div>
@@ -211,7 +217,8 @@ export const LoginPage: React.FC = () => {
 
         <div className="text-center text-sm text-gray-600">
           <p>
-            For security reasons, this portal is restricted to authorized administrators only.
+            For security reasons, this portal is restricted to authorized
+            administrators only.
           </p>
         </div>
       </div>

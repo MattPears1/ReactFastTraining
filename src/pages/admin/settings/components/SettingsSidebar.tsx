@@ -1,7 +1,7 @@
-import React from 'react';
-import { Building2, Users, Bell, Shield, CreditCard } from 'lucide-react';
-import { cn } from '@utils/cn';
-import { SettingsSection } from '../types';
+import React from "react";
+import { Building2, Users, Bell, Shield, CreditCard } from "lucide-react";
+import { cn } from "@utils/cn";
+import { SettingsSection } from "../types";
 
 interface SettingsSidebarProps {
   activeSection: SettingsSection;
@@ -12,39 +12,39 @@ interface SettingsSidebarProps {
 export const SettingsSidebar: React.FC<SettingsSidebarProps> = ({
   activeSection,
   onSectionChange,
-  hasChanges
+  hasChanges,
 }) => {
   const sections = [
     {
-      id: 'business' as const,
-      label: 'Business',
+      id: "business" as const,
+      label: "Business",
       icon: Building2,
-      description: 'Company information and details'
+      description: "Company information and details",
     },
     {
-      id: 'course' as const,
-      label: 'Courses',
+      id: "course" as const,
+      label: "Courses",
       icon: Users,
-      description: 'Course settings and configuration'
+      description: "Course settings and configuration",
     },
     {
-      id: 'notifications' as const,
-      label: 'Notifications',
+      id: "notifications" as const,
+      label: "Notifications",
       icon: Bell,
-      description: 'Email and alert preferences'
+      description: "Email and alert preferences",
     },
     {
-      id: 'security' as const,
-      label: 'Security',
+      id: "security" as const,
+      label: "Security",
       icon: Shield,
-      description: 'Security and access settings'
+      description: "Security and access settings",
     },
     {
-      id: 'payment' as const,
-      label: 'Payment',
+      id: "payment" as const,
+      label: "Payment",
       icon: CreditCard,
-      description: 'Payment methods and policies'
-    }
+      description: "Payment methods and policies",
+    },
   ];
 
   return (
@@ -53,13 +53,15 @@ export const SettingsSidebar: React.FC<SettingsSidebarProps> = ({
         {sections.map((section) => {
           const Icon = section.icon;
           const isActive = activeSection === section.id;
-          
+
           return (
             <button
               key={section.id}
               onClick={() => {
                 if (hasChanges) {
-                  const confirmed = window.confirm('You have unsaved changes. Do you want to discard them?');
+                  const confirmed = window.confirm(
+                    "You have unsaved changes. Do you want to discard them?",
+                  );
                   if (!confirmed) return;
                 }
                 onSectionChange(section.id);
@@ -68,24 +70,30 @@ export const SettingsSidebar: React.FC<SettingsSidebarProps> = ({
                 "w-full flex items-start gap-3 px-3 py-3 rounded-lg text-left transition-colors",
                 isActive
                   ? "bg-primary-50 text-primary-700"
-                  : "text-gray-700 hover:bg-gray-50"
+                  : "text-gray-700 hover:bg-gray-50",
               )}
             >
-              <Icon className={cn(
-                "h-5 w-5 mt-0.5",
-                isActive ? "text-primary-600" : "text-gray-400"
-              )} />
+              <Icon
+                className={cn(
+                  "h-5 w-5 mt-0.5",
+                  isActive ? "text-primary-600" : "text-gray-400",
+                )}
+              />
               <div className="flex-1">
-                <div className={cn(
-                  "font-medium text-sm",
-                  isActive ? "text-primary-900" : "text-gray-900"
-                )}>
+                <div
+                  className={cn(
+                    "font-medium text-sm",
+                    isActive ? "text-primary-900" : "text-gray-900",
+                  )}
+                >
                   {section.label}
                 </div>
-                <div className={cn(
-                  "text-xs mt-0.5",
-                  isActive ? "text-primary-600" : "text-gray-500"
-                )}>
+                <div
+                  className={cn(
+                    "text-xs mt-0.5",
+                    isActive ? "text-primary-600" : "text-gray-500",
+                  )}
+                >
                   {section.description}
                 </div>
               </div>

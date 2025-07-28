@@ -1,8 +1,10 @@
-import React from 'react'
-import { motion } from 'framer-motion'
-import { Heart, Cross } from 'lucide-react'
+import React from "react";
+import { motion } from "framer-motion";
+import { Heart, Cross } from "lucide-react";
 
-export const HeartPulseLoader: React.FC<{ size?: number }> = ({ size = 60 }) => {
+export const HeartPulseLoader: React.FC<{ size?: number }> = ({
+  size = 60,
+}) => {
   return (
     <motion.div
       className="relative"
@@ -13,18 +15,20 @@ export const HeartPulseLoader: React.FC<{ size?: number }> = ({ size = 60 }) => 
       transition={{
         duration: 1.5,
         repeat: Infinity,
-        ease: "easeInOut"
+        ease: "easeInOut",
       }}
     >
-      <Heart 
+      <Heart
         className="w-full h-full text-red-500 fill-red-500"
         strokeWidth={0}
       />
     </motion.div>
-  )
-}
+  );
+};
 
-export const MedicalCrossSpinner: React.FC<{ size?: number }> = ({ size = 60 }) => {
+export const MedicalCrossSpinner: React.FC<{ size?: number }> = ({
+  size = 60,
+}) => {
   return (
     <motion.div
       className="relative"
@@ -33,13 +37,13 @@ export const MedicalCrossSpinner: React.FC<{ size?: number }> = ({ size = 60 }) 
       transition={{
         duration: 2,
         repeat: Infinity,
-        ease: "linear"
+        ease: "linear",
       }}
     >
       <Cross className="w-full h-full text-green-500" strokeWidth={3} />
     </motion.div>
-  )
-}
+  );
+};
 
 export const EmergencyDotsLoader: React.FC = () => {
   return (
@@ -56,20 +60,22 @@ export const EmergencyDotsLoader: React.FC = () => {
             duration: 1.4,
             repeat: Infinity,
             delay: index * 0.16,
-            ease: "easeInOut"
+            ease: "easeInOut",
           }}
         />
       ))}
     </div>
-  )
-}
+  );
+};
 
-export const LoadingScreen: React.FC<{ message?: string }> = ({ message = "Loading..." }) => {
+export const LoadingScreen: React.FC<{ message?: string }> = ({
+  message = "Loading...",
+}) => {
   return (
     <div className="fixed inset-0 bg-white/90 dark:bg-gray-900/90 backdrop-blur-sm z-50 flex items-center justify-center">
       <div className="text-center">
         <HeartPulseLoader size={80} />
-        <motion.p 
+        <motion.p
           className="mt-4 text-lg text-gray-600 dark:text-gray-400"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
@@ -79,5 +85,5 @@ export const LoadingScreen: React.FC<{ message?: string }> = ({ message = "Loadi
         </motion.p>
       </div>
     </div>
-  )
-}
+  );
+};

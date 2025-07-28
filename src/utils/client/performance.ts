@@ -1,5 +1,5 @@
-import { useEffect, useRef, useCallback, useState } from 'react';
-import type { DependencyList } from 'react';
+import { useEffect, useRef, useCallback, useState } from "react";
+import type { DependencyList } from "react";
 
 // Virtual scrolling hook for large lists
 interface VirtualScrollOptions {
@@ -11,7 +11,7 @@ interface VirtualScrollOptions {
 
 export const useVirtualScroll = <T>(
   items: T[],
-  options: VirtualScrollOptions
+  options: VirtualScrollOptions,
 ) => {
   const { itemHeight, containerHeight, overscan = 3, getItemHeight } = options;
   const [scrollTop, setScrollTop] = useState(0);
@@ -21,20 +21,19 @@ export const useVirtualScroll = <T>(
     ? items.reduce((sum, _, index) => sum + getItemHeight(index), 0)
     : items.length * itemHeight;
 
-  const startIndex = Math.max(
-    0,
-    Math.floor(scrollTop / itemHeight) - overscan
-  );
+  const startIndex = Math.max(0, Math.floor(scrollTop / itemHeight) - overscan);
 
   const endIndex = Math.min(
     items.length - 1,
-    Math.ceil((scrollTop + containerHeight) / itemHeight) + overscan
+    Math.ceil((scrollTop + containerHeight) / itemHeight) + overscan,
   );
 
   const visibleItems = items.slice(startIndex, endIndex + 1);
 
   const offsetY = getItemHeight
-    ? items.slice(0, startIndex).reduce((sum, _, index) => sum + getItemHeight(index), 0)
+    ? items
+        .slice(0, startIndex)
+        .reduce((sum, _, index) => sum + getItemHeight(index), 0)
     : startIndex * itemHeight;
 
   const handleScroll = useCallback((e: React.UIEvent<HTMLDivElement>) => {
@@ -55,7 +54,7 @@ export const useVirtualScroll = <T>(
 // Intersection observer hook for lazy loading
 export const useIntersectionObserver = (
   callback: IntersectionObserverCallback,
-  options?: IntersectionObserverInit
+  options?: IntersectionObserverInit,
 ) => {
   const observerRef = useRef<IntersectionObserver | null>(null);
   const elementRefs = useRef<Set<Element>>(new Set());
@@ -63,7 +62,7 @@ export const useIntersectionObserver = (
   useEffect(() => {
     observerRef.current = new IntersectionObserver(callback, options);
 
-    elementRefs.current.forEach(element => {
+    elementRefs.current.forEach((element) => {
       observerRef.current?.observe(element);
     });
 
@@ -108,29 +107,32 @@ export const useDebouncedValue = <T>(value: T, delay: number): T => {
 export const useThrottledCallback = <T extends (...args: any[]) => any>(
   callback: T,
   delay: number,
-  deps: DependencyList
+  deps: DependencyList,
 ): T => {
   const lastCall = useRef(0);
   const timeout = useRef<NodeJS.Timeout>();
 
-  return useCallback((...args: Parameters<T>) => {
-    const now = Date.now();
-    const timeSinceLastCall = now - lastCall.current;
+  return useCallback(
+    (...args: Parameters<T>) => {
+      const now = Date.now();
+      const timeSinceLastCall = now - lastCall.current;
 
-    if (timeSinceLastCall >= delay) {
-      lastCall.current = now;
-      return callback(...args);
-    }
+      if (timeSinceLastCall >= delay) {
+        lastCall.current = now;
+        return callback(...args);
+      }
 
-    if (timeout.current) {
-      clearTimeout(timeout.current);
-    }
+      if (timeout.current) {
+        clearTimeout(timeout.current);
+      }
 
-    timeout.current = setTimeout(() => {
-      lastCall.current = Date.now();
-      callback(...args);
-    }, delay - timeSinceLastCall);
-  }, [...deps, delay]) as T;
+      timeout.current = setTimeout(() => {
+        lastCall.current = Date.now();
+        callback(...args);
+      }, delay - timeSinceLastCall);
+    },
+    [...deps, delay],
+  ) as T;
 };
 
 // Performance monitoring
@@ -156,7 +158,7 @@ export class PerformanceMonitor {
     }
 
     const duration = end - start;
-    
+
     if (!this.measures.has(name)) {
       this.measures.set(name, []);
     }
@@ -173,12 +175,14 @@ export class PerformanceMonitor {
   }
 
   logMetrics(): void {
-    console.group('Performance Metrics');
+    console.group("Performance Metrics");
     this.measures.forEach((values, name) => {
       const avg = values.reduce((sum, val) => sum + val, 0) / values.length;
       const min = Math.min(...values);
       const max = Math.max(...values);
-      console.log(`${name}: avg=${avg.toFixed(2)}ms, min=${min.toFixed(2)}ms, max=${max.toFixed(2)}ms`);
+      console.log(
+        `${name}: avg=${avg.toFixed(2)}ms, min=${min.toFixed(2)}ms, max=${max.toFixed(2)}ms`,
+      );
     });
     console.groupEnd();
   }
@@ -193,20 +197,20 @@ export const performanceMonitor = new PerformanceMonitor();
 
 // Image lazy loading with blur-up effect
 export const useLazyImage = (src: string, placeholder?: string) => {
-  const [imageSrc, setImageSrc] = useState(placeholder || '');
+  const [imageSrc, setImageSrc] = useState(placeholder || "");
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<Error | null>(null);
 
   useEffect(() => {
     const img = new Image();
-    
+
     img.onload = () => {
       setImageSrc(src);
       setIsLoading(false);
     };
 
     img.onerror = () => {
-      setError(new Error('Failed to load image'));
+      setError(new Error("Failed to load image"));
       setIsLoading(false);
     };
 
@@ -224,7 +228,10 @@ export const useLazyImage = (src: string, placeholder?: string) => {
 // Web Worker manager for heavy computations
 export class WorkerManager<T = any, R = any> {
   private worker: Worker | null = null;
-  private pending = new Map<string, { resolve: (value: R) => void; reject: (error: Error) => void }>();
+  private pending = new Map<
+    string,
+    { resolve: (value: R) => void; reject: (error: Error) => void }
+  >();
 
   constructor(private workerPath: string) {}
 
@@ -236,7 +243,7 @@ export class WorkerManager<T = any, R = any> {
     }
 
     const id = Math.random().toString(36).substr(2, 9);
-    
+
     return new Promise((resolve, reject) => {
       this.pending.set(id, { resolve, reject });
       this.worker!.postMessage({ id, data });
@@ -246,11 +253,11 @@ export class WorkerManager<T = any, R = any> {
   private handleMessage(event: MessageEvent): void {
     const { id, result, error } = event.data;
     const pending = this.pending.get(id);
-    
+
     if (!pending) return;
 
     this.pending.delete(id);
-    
+
     if (error) {
       pending.reject(new Error(error));
     } else {
@@ -259,8 +266,8 @@ export class WorkerManager<T = any, R = any> {
   }
 
   private handleError(error: ErrorEvent): void {
-    console.error('Worker error:', error);
-    this.pending.forEach(({ reject }) => reject(new Error('Worker error')));
+    console.error("Worker error:", error);
+    this.pending.forEach(({ reject }) => reject(new Error("Worker error")));
     this.pending.clear();
   }
 
@@ -276,14 +283,17 @@ export const useAnimationFrame = (callback: (deltaTime: number) => void) => {
   const requestRef = useRef<number>();
   const previousTimeRef = useRef<number>();
 
-  const animate = useCallback((time: number) => {
-    if (previousTimeRef.current !== undefined) {
-      const deltaTime = time - previousTimeRef.current;
-      callback(deltaTime);
-    }
-    previousTimeRef.current = time;
-    requestRef.current = requestAnimationFrame(animate);
-  }, [callback]);
+  const animate = useCallback(
+    (time: number) => {
+      if (previousTimeRef.current !== undefined) {
+        const deltaTime = time - previousTimeRef.current;
+        callback(deltaTime);
+      }
+      previousTimeRef.current = time;
+      requestRef.current = requestAnimationFrame(animate);
+    },
+    [callback],
+  );
 
   useEffect(() => {
     requestRef.current = requestAnimationFrame(animate);

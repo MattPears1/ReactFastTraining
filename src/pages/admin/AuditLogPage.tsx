@@ -1,5 +1,5 @@
-import React from 'react';
-import { FileText, Shield } from 'lucide-react';
+import React from "react";
+import { FileText, Shield } from "lucide-react";
 
 const AuditLogPage: React.FC = () => {
   return (
@@ -20,7 +20,8 @@ const AuditLogPage: React.FC = () => {
             Audit Logging Coming Soon
           </h3>
           <p className="text-gray-500 dark:text-gray-400">
-            This feature will track all administrative actions, changes, and system access for security and compliance.
+            This feature will track all administrative actions, changes, and
+            system access for security and compliance.
           </p>
         </div>
       </div>
@@ -32,16 +33,28 @@ const AuditLogPage: React.FC = () => {
         </h3>
         <div className="space-y-2 text-sm">
           <div className="flex items-start gap-3">
-            <span className="text-gray-500 dark:text-gray-400 w-32">2025-01-27 14:32</span>
-            <span className="text-gray-900 dark:text-white">Admin created new session for Emergency First Aid at Work</span>
+            <span className="text-gray-500 dark:text-gray-400 w-32">
+              2025-01-27 14:32
+            </span>
+            <span className="text-gray-900 dark:text-white">
+              Admin created new session for Emergency First Aid at Work
+            </span>
           </div>
           <div className="flex items-start gap-3">
-            <span className="text-gray-500 dark:text-gray-400 w-32">2025-01-27 14:15</span>
-            <span className="text-gray-900 dark:text-white">Admin marked attendance for session #123</span>
+            <span className="text-gray-500 dark:text-gray-400 w-32">
+              2025-01-27 14:15
+            </span>
+            <span className="text-gray-900 dark:text-white">
+              Admin marked attendance for session #123
+            </span>
           </div>
           <div className="flex items-start gap-3">
-            <span className="text-gray-500 dark:text-gray-400 w-32">2025-01-27 13:45</span>
-            <span className="text-gray-900 dark:text-white">Admin cancelled session due to trainer unavailable</span>
+            <span className="text-gray-500 dark:text-gray-400 w-32">
+              2025-01-27 13:45
+            </span>
+            <span className="text-gray-900 dark:text-white">
+              Admin cancelled session due to trainer unavailable
+            </span>
           </div>
         </div>
       </div>

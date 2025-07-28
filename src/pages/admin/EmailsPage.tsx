@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect } from "react";
 import {
   Mail,
   Send,
@@ -16,21 +16,21 @@ import {
   AlertCircle,
   Info,
   X,
-  MoreVertical
-} from 'lucide-react';
-import { useAuth } from '@contexts/AuthContext';
-import { useToast } from '@contexts/ToastContext';
-import { adminDashboardApi } from '@services/api/admin-dashboard.service';
-import { cn } from '@utils/cn';
+  MoreVertical,
+} from "lucide-react";
+import { useAuth } from "@contexts/AuthContext";
+import { useToast } from "@contexts/ToastContext";
+import { adminDashboardApi } from "@services/api/admin-dashboard.service";
+import { cn } from "@utils/cn";
 
 interface EmailTemplate {
   id: string;
   name: string;
   subject: string;
-  category: 'booking' | 'reminder' | 'marketing' | 'system';
+  category: "booking" | "reminder" | "marketing" | "system";
   lastModified: string;
   timesUsed: number;
-  status: 'active' | 'draft';
+  status: "active" | "draft";
 }
 
 interface EmailHistory {
@@ -39,32 +39,35 @@ interface EmailHistory {
   recipients: number;
   subject: string;
   sentAt: string;
-  status: 'delivered' | 'failed' | 'pending';
+  status: "delivered" | "failed" | "pending";
   openRate?: number;
 }
 
 const AdminEmailsPage: React.FC = () => {
   const { user } = useAuth();
   const { showToast } = useToast();
-  
+
   // State
-  const [activeTab, setActiveTab] = useState<'templates' | 'compose' | 'history'>('templates');
+  const [activeTab, setActiveTab] = useState<
+    "templates" | "compose" | "history"
+  >("templates");
   const [templates, setTemplates] = useState<EmailTemplate[]>([]);
   const [emailHistory, setEmailHistory] = useState<EmailHistory[]>([]);
   const [loading, setLoading] = useState(false);
-  const [selectedTemplate, setSelectedTemplate] = useState<EmailTemplate | null>(null);
+  const [selectedTemplate, setSelectedTemplate] =
+    useState<EmailTemplate | null>(null);
   const [showTemplateModal, setShowTemplateModal] = useState(false);
   const [showComposeModal, setShowComposeModal] = useState(false);
-  const [searchTerm, setSearchTerm] = useState('');
-  const [filterCategory, setFilterCategory] = useState('all');
-  
+  const [searchTerm, setSearchTerm] = useState("");
+  const [filterCategory, setFilterCategory] = useState("all");
+
   // Compose email state
   const [composeData, setComposeData] = useState({
-    recipients: 'all',
-    template: '',
-    subject: '',
-    content: '',
-    scheduledFor: ''
+    recipients: "all",
+    template: "",
+    subject: "",
+    content: "",
+    scheduledFor: "",
   });
 
   // Load data
@@ -75,94 +78,96 @@ const AdminEmailsPage: React.FC = () => {
   const loadEmailData = async () => {
     try {
       setLoading(true);
-      
+
       // Mock data - replace with actual API calls
       const mockTemplates: EmailTemplate[] = [
         {
-          id: '1',
-          name: 'Booking Confirmation',
-          subject: 'Your First Aid Training is Confirmed',
-          category: 'booking',
-          lastModified: '2025-01-25T10:00:00Z',
+          id: "1",
+          name: "Booking Confirmation",
+          subject: "Your First Aid Training is Confirmed",
+          category: "booking",
+          lastModified: "2025-01-25T10:00:00Z",
           timesUsed: 145,
-          status: 'active'
+          status: "active",
         },
         {
-          id: '2',
-          name: 'Course Reminder - 24 Hours',
-          subject: 'Your Training is Tomorrow',
-          category: 'reminder',
-          lastModified: '2025-01-20T14:30:00Z',
+          id: "2",
+          name: "Course Reminder - 24 Hours",
+          subject: "Your Training is Tomorrow",
+          category: "reminder",
+          lastModified: "2025-01-20T14:30:00Z",
           timesUsed: 89,
-          status: 'active'
+          status: "active",
         },
         {
-          id: '3',
-          name: 'Certificate Ready',
-          subject: 'Your First Aid Certificate is Ready',
-          category: 'system',
-          lastModified: '2025-01-18T09:00:00Z',
+          id: "3",
+          name: "Certificate Ready",
+          subject: "Your First Aid Certificate is Ready",
+          category: "system",
+          lastModified: "2025-01-18T09:00:00Z",
           timesUsed: 234,
-          status: 'active'
+          status: "active",
         },
         {
-          id: '4',
-          name: 'Spring Training Offer',
-          subject: 'Special Offer: 20% Off Spring Courses',
-          category: 'marketing',
-          lastModified: '2025-01-22T16:00:00Z',
+          id: "4",
+          name: "Spring Training Offer",
+          subject: "Special Offer: 20% Off Spring Courses",
+          category: "marketing",
+          lastModified: "2025-01-22T16:00:00Z",
           timesUsed: 2,
-          status: 'draft'
-        }
+          status: "draft",
+        },
       ];
-      
+
       const mockHistory: EmailHistory[] = [
         {
-          id: '1',
-          template: 'Booking Confirmation',
+          id: "1",
+          template: "Booking Confirmation",
           recipients: 12,
-          subject: 'Your First Aid Training is Confirmed',
-          sentAt: '2025-01-26T14:00:00Z',
-          status: 'delivered',
-          openRate: 92
+          subject: "Your First Aid Training is Confirmed",
+          sentAt: "2025-01-26T14:00:00Z",
+          status: "delivered",
+          openRate: 92,
         },
         {
-          id: '2',
-          template: 'Course Reminder - 24 Hours',
+          id: "2",
+          template: "Course Reminder - 24 Hours",
           recipients: 8,
-          subject: 'Your Training is Tomorrow',
-          sentAt: '2025-01-26T09:00:00Z',
-          status: 'delivered',
-          openRate: 87
+          subject: "Your Training is Tomorrow",
+          sentAt: "2025-01-26T09:00:00Z",
+          status: "delivered",
+          openRate: 87,
         },
         {
-          id: '3',
-          template: 'Custom Email',
+          id: "3",
+          template: "Custom Email",
           recipients: 45,
-          subject: 'Important: Course Rescheduled',
-          sentAt: '2025-01-25T16:30:00Z',
-          status: 'delivered',
-          openRate: 95
-        }
+          subject: "Important: Course Rescheduled",
+          sentAt: "2025-01-25T16:30:00Z",
+          status: "delivered",
+          openRate: 95,
+        },
       ];
-      
+
       setTemplates(mockTemplates);
       setEmailHistory(mockHistory);
     } catch (error) {
-      showToast('Failed to load email data', 'error');
+      showToast("Failed to load email data", "error");
     } finally {
       setLoading(false);
     }
   };
 
   // Filter templates
-  const filteredTemplates = templates.filter(template => {
-    const matchesSearch = searchTerm === '' || 
+  const filteredTemplates = templates.filter((template) => {
+    const matchesSearch =
+      searchTerm === "" ||
       template.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
       template.subject.toLowerCase().includes(searchTerm.toLowerCase());
-    
-    const matchesCategory = filterCategory === 'all' || template.category === filterCategory;
-    
+
+    const matchesCategory =
+      filterCategory === "all" || template.category === filterCategory;
+
     return matchesSearch && matchesCategory;
   });
 
@@ -171,59 +176,67 @@ const AdminEmailsPage: React.FC = () => {
     try {
       // Validate
       if (!composeData.subject || !composeData.content) {
-        showToast('Please fill in all required fields', 'error');
+        showToast("Please fill in all required fields", "error");
         return;
       }
-      
-      showToast('Sending emails...', 'info');
-      
+
+      showToast("Sending emails...", "info");
+
       // API call to send email
       setTimeout(() => {
-        showToast('Emails sent successfully', 'success');
+        showToast("Emails sent successfully", "success");
         setShowComposeModal(false);
         setComposeData({
-          recipients: 'all',
-          template: '',
-          subject: '',
-          content: '',
-          scheduledFor: ''
+          recipients: "all",
+          template: "",
+          subject: "",
+          content: "",
+          scheduledFor: "",
         });
         loadEmailData();
       }, 1500);
     } catch (error) {
-      showToast('Failed to send emails', 'error');
+      showToast("Failed to send emails", "error");
     }
   };
 
   // Delete template
   const handleDeleteTemplate = async (templateId: string) => {
-    if (!confirm('Are you sure you want to delete this template?')) {
+    if (!confirm("Are you sure you want to delete this template?")) {
       return;
     }
-    
+
     try {
-      showToast('Deleting template...', 'info');
-      setTemplates(templates.filter(t => t.id !== templateId));
-      showToast('Template deleted successfully', 'success');
+      showToast("Deleting template...", "info");
+      setTemplates(templates.filter((t) => t.id !== templateId));
+      showToast("Template deleted successfully", "success");
     } catch (error) {
-      showToast('Failed to delete template', 'error');
+      showToast("Failed to delete template", "error");
     }
   };
 
   // Category badge
-  const CategoryBadge: React.FC<{ category: EmailTemplate['category'] }> = ({ category }) => {
+  const CategoryBadge: React.FC<{ category: EmailTemplate["category"] }> = ({
+    category,
+  }) => {
     const styles = {
-      booking: 'bg-blue-100 text-blue-800 dark:bg-blue-900/30 dark:text-blue-400',
-      reminder: 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900/30 dark:text-yellow-400',
-      marketing: 'bg-purple-100 text-purple-800 dark:bg-purple-900/30 dark:text-purple-400',
-      system: 'bg-gray-100 text-gray-800 dark:bg-gray-900/30 dark:text-gray-400'
+      booking:
+        "bg-blue-100 text-blue-800 dark:bg-blue-900/30 dark:text-blue-400",
+      reminder:
+        "bg-yellow-100 text-yellow-800 dark:bg-yellow-900/30 dark:text-yellow-400",
+      marketing:
+        "bg-purple-100 text-purple-800 dark:bg-purple-900/30 dark:text-purple-400",
+      system:
+        "bg-gray-100 text-gray-800 dark:bg-gray-900/30 dark:text-gray-400",
     };
-    
+
     return (
-      <span className={cn(
-        'inline-flex items-center px-2 py-1 text-xs font-medium rounded-full capitalize',
-        styles[category]
-      )}>
+      <span
+        className={cn(
+          "inline-flex items-center px-2 py-1 text-xs font-medium rounded-full capitalize",
+          styles[category],
+        )}
+      >
         {category}
       </span>
     );
@@ -242,7 +255,7 @@ const AdminEmailsPage: React.FC = () => {
               Manage email templates and send communications
             </p>
           </div>
-          
+
           <button
             onClick={() => setShowComposeModal(true)}
             className="px-4 py-2 bg-primary-600 text-white rounded-lg hover:bg-primary-700 flex items-center gap-2"
@@ -258,38 +271,52 @@ const AdminEmailsPage: React.FC = () => {
         <div className="bg-white dark:bg-gray-800 rounded-lg shadow p-4">
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-sm text-gray-600 dark:text-gray-400">Total Sent</p>
-              <p className="text-2xl font-bold text-gray-900 dark:text-white">1,847</p>
+              <p className="text-sm text-gray-600 dark:text-gray-400">
+                Total Sent
+              </p>
+              <p className="text-2xl font-bold text-gray-900 dark:text-white">
+                1,847
+              </p>
             </div>
             <Mail className="w-8 h-8 text-primary-600" />
           </div>
         </div>
-        
+
         <div className="bg-white dark:bg-gray-800 rounded-lg shadow p-4">
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-sm text-gray-600 dark:text-gray-400">Avg. Open Rate</p>
+              <p className="text-sm text-gray-600 dark:text-gray-400">
+                Avg. Open Rate
+              </p>
               <p className="text-2xl font-bold text-green-600">89.3%</p>
             </div>
             <Eye className="w-8 h-8 text-green-600" />
           </div>
         </div>
-        
+
         <div className="bg-white dark:bg-gray-800 rounded-lg shadow p-4">
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-sm text-gray-600 dark:text-gray-400">Templates</p>
-              <p className="text-2xl font-bold text-gray-900 dark:text-white">{templates.length}</p>
+              <p className="text-sm text-gray-600 dark:text-gray-400">
+                Templates
+              </p>
+              <p className="text-2xl font-bold text-gray-900 dark:text-white">
+                {templates.length}
+              </p>
             </div>
             <FileText className="w-8 h-8 text-blue-600" />
           </div>
         </div>
-        
+
         <div className="bg-white dark:bg-gray-800 rounded-lg shadow p-4">
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-sm text-gray-600 dark:text-gray-400">Scheduled</p>
-              <p className="text-2xl font-bold text-gray-900 dark:text-white">3</p>
+              <p className="text-sm text-gray-600 dark:text-gray-400">
+                Scheduled
+              </p>
+              <p className="text-2xl font-bold text-gray-900 dark:text-white">
+                3
+              </p>
             </div>
             <Clock className="w-8 h-8 text-orange-600" />
           </div>
@@ -301,23 +328,23 @@ const AdminEmailsPage: React.FC = () => {
         <div className="border-b border-gray-200 dark:border-gray-700">
           <nav className="flex -mb-px">
             <button
-              onClick={() => setActiveTab('templates')}
+              onClick={() => setActiveTab("templates")}
               className={cn(
                 "px-6 py-3 text-sm font-medium border-b-2 transition-colors",
-                activeTab === 'templates'
+                activeTab === "templates"
                   ? "text-primary-600 border-primary-600"
-                  : "text-gray-500 border-transparent hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200"
+                  : "text-gray-500 border-transparent hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200",
               )}
             >
               Email Templates
             </button>
             <button
-              onClick={() => setActiveTab('history')}
+              onClick={() => setActiveTab("history")}
               className={cn(
                 "px-6 py-3 text-sm font-medium border-b-2 transition-colors",
-                activeTab === 'history'
+                activeTab === "history"
                   ? "text-primary-600 border-primary-600"
-                  : "text-gray-500 border-transparent hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200"
+                  : "text-gray-500 border-transparent hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200",
               )}
             >
               Email History
@@ -327,7 +354,7 @@ const AdminEmailsPage: React.FC = () => {
 
         {/* Tab Content */}
         <div className="p-6">
-          {activeTab === 'templates' && (
+          {activeTab === "templates" && (
             <div>
               {/* Filters */}
               <div className="flex flex-col md:flex-row gap-4 mb-6">
@@ -343,7 +370,7 @@ const AdminEmailsPage: React.FC = () => {
                     />
                   </div>
                 </div>
-                
+
                 <select
                   value={filterCategory}
                   onChange={(e) => setFilterCategory(e.target.value)}
@@ -355,7 +382,7 @@ const AdminEmailsPage: React.FC = () => {
                   <option value="marketing">Marketing</option>
                   <option value="system">System</option>
                 </select>
-                
+
                 <button
                   onClick={() => setShowTemplateModal(true)}
                   className="px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 flex items-center gap-2"
@@ -387,21 +414,26 @@ const AdminEmailsPage: React.FC = () => {
                         </button>
                       </div>
                     </div>
-                    
+
                     <div className="flex items-center justify-between mb-3">
                       <CategoryBadge category={template.category} />
-                      <span className={cn(
-                        "text-xs font-medium",
-                        template.status === 'active' ? "text-green-600" : "text-gray-500"
-                      )}>
-                        {template.status === 'active' ? 'Active' : 'Draft'}
+                      <span
+                        className={cn(
+                          "text-xs font-medium",
+                          template.status === "active"
+                            ? "text-green-600"
+                            : "text-gray-500",
+                        )}
+                      >
+                        {template.status === "active" ? "Active" : "Draft"}
                       </span>
                     </div>
-                    
+
                     <div className="text-xs text-gray-500 dark:text-gray-400 mb-3">
-                      Used {template.timesUsed} times • Modified {new Date(template.lastModified).toLocaleDateString()}
+                      Used {template.timesUsed} times • Modified{" "}
+                      {new Date(template.lastModified).toLocaleDateString()}
                     </div>
-                    
+
                     <div className="flex gap-2">
                       <button
                         onClick={() => {
@@ -410,7 +442,7 @@ const AdminEmailsPage: React.FC = () => {
                             ...composeData,
                             template: template.id,
                             subject: template.subject,
-                            content: 'Template content would be loaded here...'
+                            content: "Template content would be loaded here...",
                           });
                           setShowComposeModal(true);
                         }}
@@ -421,7 +453,7 @@ const AdminEmailsPage: React.FC = () => {
                       <button className="px-3 py-1 text-sm border border-gray-300 dark:border-gray-600 rounded hover:bg-gray-50 dark:hover:bg-gray-700">
                         <Edit2 className="w-3 h-3" />
                       </button>
-                      <button 
+                      <button
                         onClick={() => handleDeleteTemplate(template.id)}
                         className="px-3 py-1 text-sm border border-gray-300 dark:border-gray-600 rounded hover:bg-gray-50 dark:hover:bg-gray-700 text-red-600"
                       >
@@ -434,7 +466,7 @@ const AdminEmailsPage: React.FC = () => {
             </div>
           )}
 
-          {activeTab === 'history' && (
+          {activeTab === "history" && (
             <div>
               {/* History Table */}
               <div className="overflow-x-auto">
@@ -486,12 +518,17 @@ const AdminEmailsPage: React.FC = () => {
                           {new Date(email.sentAt).toLocaleString()}
                         </td>
                         <td className="px-6 py-4">
-                          <span className={cn(
-                            "inline-flex items-center px-2 py-1 text-xs font-medium rounded-full",
-                            email.status === 'delivered' && "bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400",
-                            email.status === 'pending' && "bg-yellow-100 text-yellow-800 dark:bg-yellow-900/30 dark:text-yellow-400",
-                            email.status === 'failed' && "bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-400"
-                          )}>
+                          <span
+                            className={cn(
+                              "inline-flex items-center px-2 py-1 text-xs font-medium rounded-full",
+                              email.status === "delivered" &&
+                                "bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400",
+                              email.status === "pending" &&
+                                "bg-yellow-100 text-yellow-800 dark:bg-yellow-900/30 dark:text-yellow-400",
+                              email.status === "failed" &&
+                                "bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-400",
+                            )}
+                          >
                             {email.status}
                           </span>
                         </td>
@@ -502,8 +539,8 @@ const AdminEmailsPage: React.FC = () => {
                                 {email.openRate}%
                               </span>
                               <div className="w-16 bg-gray-200 dark:bg-gray-600 rounded-full h-2">
-                                <div 
-                                  className="bg-green-500 h-2 rounded-full" 
+                                <div
+                                  className="bg-green-500 h-2 rounded-full"
                                   style={{ width: `${email.openRate}%` }}
                                 />
                               </div>
@@ -552,11 +589,18 @@ const AdminEmailsPage: React.FC = () => {
                   </label>
                   <select
                     value={composeData.recipients}
-                    onChange={(e) => setComposeData({ ...composeData, recipients: e.target.value })}
+                    onChange={(e) =>
+                      setComposeData({
+                        ...composeData,
+                        recipients: e.target.value,
+                      })
+                    }
                     className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-primary-500"
                   >
                     <option value="all">All Active Clients</option>
-                    <option value="upcoming">Clients with Upcoming Bookings</option>
+                    <option value="upcoming">
+                      Clients with Upcoming Bookings
+                    </option>
                     <option value="past">Past Attendees</option>
                     <option value="custom">Custom Selection</option>
                   </select>
@@ -570,22 +614,28 @@ const AdminEmailsPage: React.FC = () => {
                   <select
                     value={composeData.template}
                     onChange={(e) => {
-                      const template = templates.find(t => t.id === e.target.value);
+                      const template = templates.find(
+                        (t) => t.id === e.target.value,
+                      );
                       if (template) {
                         setComposeData({
                           ...composeData,
                           template: e.target.value,
                           subject: template.subject,
-                          content: 'Template content would be loaded here...'
+                          content: "Template content would be loaded here...",
                         });
                       }
                     }}
                     className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-primary-500"
                   >
                     <option value="">Select a template (optional)</option>
-                    {templates.filter(t => t.status === 'active').map(template => (
-                      <option key={template.id} value={template.id}>{template.name}</option>
-                    ))}
+                    {templates
+                      .filter((t) => t.status === "active")
+                      .map((template) => (
+                        <option key={template.id} value={template.id}>
+                          {template.name}
+                        </option>
+                      ))}
                   </select>
                 </div>
 
@@ -597,7 +647,12 @@ const AdminEmailsPage: React.FC = () => {
                   <input
                     type="text"
                     value={composeData.subject}
-                    onChange={(e) => setComposeData({ ...composeData, subject: e.target.value })}
+                    onChange={(e) =>
+                      setComposeData({
+                        ...composeData,
+                        subject: e.target.value,
+                      })
+                    }
                     placeholder="Enter email subject"
                     className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-primary-500"
                   />
@@ -610,7 +665,12 @@ const AdminEmailsPage: React.FC = () => {
                   </label>
                   <textarea
                     value={composeData.content}
-                    onChange={(e) => setComposeData({ ...composeData, content: e.target.value })}
+                    onChange={(e) =>
+                      setComposeData({
+                        ...composeData,
+                        content: e.target.value,
+                      })
+                    }
                     placeholder="Write your email content here..."
                     rows={10}
                     className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-primary-500 resize-none"
@@ -625,7 +685,12 @@ const AdminEmailsPage: React.FC = () => {
                   <input
                     type="datetime-local"
                     value={composeData.scheduledFor}
-                    onChange={(e) => setComposeData({ ...composeData, scheduledFor: e.target.value })}
+                    onChange={(e) =>
+                      setComposeData({
+                        ...composeData,
+                        scheduledFor: e.target.value,
+                      })
+                    }
                     className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-primary-500"
                   />
                 </div>
@@ -638,10 +703,18 @@ const AdminEmailsPage: React.FC = () => {
                       <p className="font-medium mb-1">Email Variables</p>
                       <p>You can use the following variables in your email:</p>
                       <ul className="mt-2 space-y-1">
-                        <li>• {'{'}first_name{'}'} - Recipient's first name</li>
-                        <li>• {'{'}course_name{'}'} - Course name</li>
-                        <li>• {'{'}course_date{'}'} - Course date</li>
-                        <li>• {'{'}course_time{'}'} - Course time</li>
+                        <li>
+                          • {"{"}first_name{"}"} - Recipient's first name
+                        </li>
+                        <li>
+                          • {"{"}course_name{"}"} - Course name
+                        </li>
+                        <li>
+                          • {"{"}course_date{"}"} - Course date
+                        </li>
+                        <li>
+                          • {"{"}course_time{"}"} - Course time
+                        </li>
                       </ul>
                     </div>
                   </div>
@@ -657,11 +730,9 @@ const AdminEmailsPage: React.FC = () => {
               >
                 Cancel
               </button>
-              
+
               <div className="flex gap-2">
-                <button
-                  className="px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700"
-                >
+                <button className="px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700">
                   Save as Draft
                 </button>
                 <button
@@ -669,7 +740,7 @@ const AdminEmailsPage: React.FC = () => {
                   className="px-4 py-2 bg-primary-600 text-white rounded-lg hover:bg-primary-700 flex items-center gap-2"
                 >
                   <Send className="w-4 h-4" />
-                  {composeData.scheduledFor ? 'Schedule Email' : 'Send Email'}
+                  {composeData.scheduledFor ? "Schedule Email" : "Send Email"}
                 </button>
               </div>
             </div>

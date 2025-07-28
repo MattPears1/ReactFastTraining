@@ -1,12 +1,15 @@
-import React from 'react';
-import { FilterState } from '../types';
+import React from "react";
+import { FilterState } from "../types";
 
 interface CalendarFiltersProps {
   filters: FilterState;
   onChange: (filters: FilterState) => void;
 }
 
-export const CalendarFilters: React.FC<CalendarFiltersProps> = ({ filters, onChange }) => {
+export const CalendarFilters: React.FC<CalendarFiltersProps> = ({
+  filters,
+  onChange,
+}) => {
   return (
     <div className="mb-6 p-4 bg-white dark:bg-gray-800 rounded-lg shadow">
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
@@ -21,7 +24,7 @@ export const CalendarFilters: React.FC<CalendarFiltersProps> = ({ filters, onCha
           <option value="Paediatric">Paediatric First Aid</option>
           <option value="Mental Health">Mental Health First Aid</option>
         </select>
-        
+
         <select
           value={filters.location}
           onChange={(e) => onChange({ ...filters, location: e.target.value })}
@@ -33,7 +36,7 @@ export const CalendarFilters: React.FC<CalendarFiltersProps> = ({ filters, onCha
           <option value="Bradford Office">Bradford Office</option>
           <option value="Client Site">Client Site</option>
         </select>
-        
+
         <select
           value={filters.instructor}
           onChange={(e) => onChange({ ...filters, instructor: e.target.value })}
@@ -45,10 +48,12 @@ export const CalendarFilters: React.FC<CalendarFiltersProps> = ({ filters, onCha
           <option value="Mike Wilson">Mike Wilson</option>
         </select>
       </div>
-      
+
       <div className="mt-4 flex justify-end">
         <button
-          onClick={() => onChange({ courseType: '', location: '', instructor: '' })}
+          onClick={() =>
+            onChange({ courseType: "", location: "", instructor: "" })
+          }
           className="px-4 py-2 text-sm text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white"
         >
           Clear Filters

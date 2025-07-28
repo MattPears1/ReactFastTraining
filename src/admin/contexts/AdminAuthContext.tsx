@@ -1,6 +1,12 @@
-import React, { createContext, useContext, useState, useCallback, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { adminAuthService } from '../services/admin-auth.service';
+import React, {
+  createContext,
+  useContext,
+  useState,
+  useCallback,
+  useEffect,
+} from "react";
+import { useNavigate } from "react-router-dom";
+import { adminAuthService } from "../services/admin-auth.service";
 
 interface AdminUser {
   id: number;
@@ -21,12 +27,14 @@ interface AdminAuthContextType {
   checkPermission: (permission: string) => boolean;
 }
 
-const AdminAuthContext = createContext<AdminAuthContextType | undefined>(undefined);
+const AdminAuthContext = createContext<AdminAuthContextType | undefined>(
+  undefined,
+);
 
 export const useAdminAuth = () => {
   const context = useContext(AdminAuthContext);
   if (!context) {
-    throw new Error('useAdminAuth must be used within AdminAuthProvider');
+    throw new Error("useAdminAuth must be used within AdminAuthProvider");
   }
   return context;
 };
@@ -35,7 +43,9 @@ interface AdminAuthProviderProps {
   children: React.ReactNode;
 }
 
-export const AdminAuthProvider: React.FC<AdminAuthProviderProps> = ({ children }) => {
+export const AdminAuthProvider: React.FC<AdminAuthProviderProps> = ({
+  children,
+}) => {
   const [user, setUser] = useState<AdminUser | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const navigate = useNavigate();
@@ -44,14 +54,14 @@ export const AdminAuthProvider: React.FC<AdminAuthProviderProps> = ({ children }
   useEffect(() => {
     const initAuth = async () => {
       try {
-        const token = localStorage.getItem('adminAccessToken');
+        const token = localStorage.getItem("adminAccessToken");
         if (token) {
           const currentUser = await adminAuthService.getCurrentUser();
           setUser(currentUser);
         }
       } catch (error) {
-        console.error('Failed to initialize auth:', error);
-        localStorage.removeItem('adminAccessToken');
+        console.error("Failed to initialize auth:", error);
+        localStorage.removeItem("adminAccessToken");
       } finally {
         setIsLoading(false);
       }
@@ -65,59 +75,68 @@ export const AdminAuthProvider: React.FC<AdminAuthProviderProps> = ({ children }
     if (!user) return;
 
     // Refresh token 5 minutes before expiry
-    const refreshInterval = setInterval(async () => {
-      try {
-        await refreshToken();
-      } catch (error) {
-        console.error('Token refresh failed:', error);
-        await logout();
-      }
-    }, 10 * 60 * 1000); // 10 minutes
+    const refreshInterval = setInterval(
+      async () => {
+        try {
+          await refreshToken();
+        } catch (error) {
+          console.error("Token refresh failed:", error);
+          await logout();
+        }
+      },
+      10 * 60 * 1000,
+    ); // 10 minutes
 
     return () => clearInterval(refreshInterval);
   }, [user]);
 
-  const login = useCallback(async (email: string, password: string) => {
-    setIsLoading(true);
-    try {
-      const response = await adminAuthService.login(email, password);
-      localStorage.setItem('adminAccessToken', response.accessToken);
-      setUser(response.user);
-      navigate('/admin/dashboard');
-    } catch (error) {
-      throw error;
-    } finally {
-      setIsLoading(false);
-    }
-  }, [navigate]);
+  const login = useCallback(
+    async (email: string, password: string) => {
+      setIsLoading(true);
+      try {
+        const response = await adminAuthService.login(email, password);
+        localStorage.setItem("adminAccessToken", response.accessToken);
+        setUser(response.user);
+        navigate("/admin/dashboard");
+      } catch (error) {
+        throw error;
+      } finally {
+        setIsLoading(false);
+      }
+    },
+    [navigate],
+  );
 
   const logout = useCallback(async () => {
     try {
       await adminAuthService.logout();
     } catch (error) {
-      console.error('Logout error:', error);
+      console.error("Logout error:", error);
     } finally {
-      localStorage.removeItem('adminAccessToken');
+      localStorage.removeItem("adminAccessToken");
       setUser(null);
-      navigate('/admin/login');
+      navigate("/admin/login");
     }
   }, [navigate]);
 
   const refreshToken = useCallback(async () => {
     try {
       const response = await adminAuthService.refreshToken();
-      localStorage.setItem('adminAccessToken', response.accessToken);
+      localStorage.setItem("adminAccessToken", response.accessToken);
     } catch (error) {
-      console.error('Token refresh failed:', error);
+      console.error("Token refresh failed:", error);
       throw error;
     }
   }, []);
 
-  const checkPermission = useCallback((permission: string): boolean => {
-    if (!user) return false;
-    if (user.role === 'admin') return true; // Admin has all permissions
-    return user.permissions.includes(permission);
-  }, [user]);
+  const checkPermission = useCallback(
+    (permission: string): boolean => {
+      if (!user) return false;
+      if (user.role === "admin") return true; // Admin has all permissions
+      return user.permissions.includes(permission);
+    },
+    [user],
+  );
 
   const value: AdminAuthContextType = {
     user,

@@ -1,15 +1,15 @@
-import React from 'react'
-import { motion } from 'framer-motion'
-import { RefreshCw, Home, AlertTriangle, Mail } from 'lucide-react'
-import { useNavigate } from 'react-router-dom'
-import Button from '@components/ui/Button'
+import React from "react";
+import { motion } from "framer-motion";
+import { RefreshCw, Home, AlertTriangle, Mail } from "lucide-react";
+import { useNavigate } from "react-router-dom";
+import Button from "@components/ui/Button";
 
 const ServerErrorPage: React.FC = () => {
-  const navigate = useNavigate()
+  const navigate = useNavigate();
 
   const handleRefresh = () => {
-    window.location.reload()
-  }
+    window.location.reload();
+  };
 
   return (
     <div className="min-h-[70vh] flex items-center justify-center">
@@ -51,12 +51,13 @@ const ServerErrorPage: React.FC = () => {
               Internal Server Error
             </h2>
             <p className="text-lg text-gray-600 dark:text-gray-400 mb-8">
-              Oops! Something went wrong on our end. The issue has been logged and will be addressed promptly.
+              Oops! Something went wrong on our end. The issue has been logged
+              and will be addressed promptly.
             </p>
           </motion.div>
 
           {/* Error Details (in development) */}
-          {process.env.NODE_ENV === 'development' && (
+          {process.env.NODE_ENV === "development" && (
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
@@ -84,10 +85,7 @@ const ServerErrorPage: React.FC = () => {
             >
               Try Again
             </Button>
-            <Button
-              href="/"
-              leftIcon={<Home />}
-            >
+            <Button href="/" leftIcon={<Home />}>
               Go to Homepage
             </Button>
           </motion.div>
@@ -131,7 +129,7 @@ const ServerErrorPage: React.FC = () => {
         </div>
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default ServerErrorPage
+export default ServerErrorPage;

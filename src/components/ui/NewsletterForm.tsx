@@ -1,29 +1,29 @@
-import React, { useState } from 'react'
-import { useForm } from 'react-hook-form'
-import { zodResolver } from '@hookform/resolvers/zod'
-import { z } from 'zod'
-import { Send } from 'lucide-react'
-import { useToast } from '@contexts/ToastContext'
-import { cn } from '@utils/cn'
+import React, { useState } from "react";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { z } from "zod";
+import { Send } from "lucide-react";
+import { useToast } from "@contexts/ToastContext";
+import { cn } from "@utils/cn";
 
 const newsletterSchema = z.object({
-  email: z.string().email('Please enter a valid email address'),
-})
+  email: z.string().email("Please enter a valid email address"),
+});
 
-type NewsletterFormData = z.infer<typeof newsletterSchema>
+type NewsletterFormData = z.infer<typeof newsletterSchema>;
 
 interface NewsletterFormProps {
-  variant?: 'default' | 'inline'
-  className?: string
+  variant?: "default" | "inline";
+  className?: string;
 }
 
-const NewsletterForm: React.FC<NewsletterFormProps> = ({ 
-  variant = 'inline',
-  className 
+const NewsletterForm: React.FC<NewsletterFormProps> = ({
+  variant = "inline",
+  className,
 }) => {
-  const [isLoading, setIsLoading] = useState(false)
-  const { showToast } = useToast()
-  
+  const [isLoading, setIsLoading] = useState(false);
+  const { showToast } = useToast();
+
   const {
     register,
     handleSubmit,
@@ -31,29 +31,29 @@ const NewsletterForm: React.FC<NewsletterFormProps> = ({
     formState: { errors },
   } = useForm<NewsletterFormData>({
     resolver: zodResolver(newsletterSchema),
-  })
+  });
 
   const onSubmit = async (data: NewsletterFormData) => {
-    setIsLoading(true)
-    
+    setIsLoading(true);
+
     try {
       // Simulate API call
-      await new Promise(resolve => setTimeout(resolve, 1500))
-      
-      showToast('success', 'Successfully subscribed to newsletter!')
-      reset()
-    } catch (error) {
-      showToast('error', 'Failed to subscribe. Please try again.')
-    } finally {
-      setIsLoading(false)
-    }
-  }
+      await new Promise((resolve) => setTimeout(resolve, 1500));
 
-  if (variant === 'default') {
+      showToast("success", "Successfully subscribed to newsletter!");
+      reset();
+    } catch (error) {
+      showToast("error", "Failed to subscribe. Please try again.");
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  if (variant === "default") {
     return (
       <form
         onSubmit={handleSubmit(onSubmit)}
-        className={cn('space-y-4', className)}
+        className={cn("space-y-4", className)}
       >
         <div>
           <label htmlFor="newsletter-email" className="form-label">
@@ -64,12 +64,10 @@ const NewsletterForm: React.FC<NewsletterFormProps> = ({
             type="email"
             placeholder="Enter your email"
             className="form-input"
-            {...register('email')}
+            {...register("email")}
             disabled={isLoading}
           />
-          {errors.email && (
-            <p className="form-error">{errors.email.message}</p>
-          )}
+          {errors.email && <p className="form-error">{errors.email.message}</p>}
         </div>
         <button
           type="submit"
@@ -89,20 +87,20 @@ const NewsletterForm: React.FC<NewsletterFormProps> = ({
           )}
         </button>
       </form>
-    )
+    );
   }
 
   return (
     <form
       onSubmit={handleSubmit(onSubmit)}
-      className={cn('flex flex-col sm:flex-row gap-3', className)}
+      className={cn("flex flex-col sm:flex-row gap-3", className)}
     >
       <div className="flex-1">
         <input
           type="email"
           placeholder="Enter your email"
           className="w-full px-4 py-3 rounded-lg bg-white/10 backdrop-blur-sm border border-white/20 text-white placeholder-white/70 focus:bg-white/20 focus:border-white/40 focus:outline-none transition-all duration-200"
-          {...register('email')}
+          {...register("email")}
           disabled={isLoading}
         />
         {errors.email && (
@@ -120,11 +118,11 @@ const NewsletterForm: React.FC<NewsletterFormProps> = ({
             <span className="sr-only">Subscribing...</span>
           </span>
         ) : (
-          'Subscribe'
+          "Subscribe"
         )}
       </button>
     </form>
-  )
-}
+  );
+};
 
-export default NewsletterForm
+export default NewsletterForm;

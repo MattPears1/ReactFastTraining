@@ -1,7 +1,7 @@
-import React, { useState } from 'react';
-import DatePicker from 'react-datepicker';
-import { Calendar, Filter, X } from 'lucide-react';
-import { cn } from '@utils/cn';
+import React, { useState } from "react";
+import DatePicker from "react-datepicker";
+import { Calendar, Filter, X } from "lucide-react";
+import { cn } from "@utils/cn";
 import "react-datepicker/dist/react-datepicker.css";
 
 export interface FilterState {
@@ -17,33 +17,33 @@ interface CourseFiltersProps {
   className?: string;
 }
 
-export const CourseFilters: React.FC<CourseFiltersProps> = ({ 
-  onFiltersChange, 
-  className = '' 
+export const CourseFilters: React.FC<CourseFiltersProps> = ({
+  onFiltersChange,
+  className = "",
 }) => {
   const [filters, setFilters] = useState<FilterState>({
     dateFrom: null,
     dateTo: null,
-    courseType: '',
+    courseType: "",
     showOnlyAvailable: true,
-    location: '',
+    location: "",
   });
 
   const [hasActiveFilters, setHasActiveFilters] = useState(false);
 
   const updateFilter = <K extends keyof FilterState>(
-    key: K, 
-    value: FilterState[K]
+    key: K,
+    value: FilterState[K],
   ) => {
     const newFilters = { ...filters, [key]: value };
     setFilters(newFilters);
     onFiltersChange(newFilters);
-    
+
     // Check if any filters are active
     const active = !!(
-      newFilters.dateFrom || 
-      newFilters.dateTo || 
-      newFilters.courseType || 
+      newFilters.dateFrom ||
+      newFilters.dateTo ||
+      newFilters.courseType ||
       newFilters.location ||
       !newFilters.showOnlyAvailable
     );
@@ -54,9 +54,9 @@ export const CourseFilters: React.FC<CourseFiltersProps> = ({
     const clearedFilters: FilterState = {
       dateFrom: null,
       dateTo: null,
-      courseType: '',
+      courseType: "",
       showOnlyAvailable: true,
-      location: '',
+      location: "",
     };
     setFilters(clearedFilters);
     onFiltersChange(clearedFilters);
@@ -64,7 +64,7 @@ export const CourseFilters: React.FC<CourseFiltersProps> = ({
   };
 
   return (
-    <div className={cn('bg-white rounded-lg shadow p-4 space-y-4', className)}>
+    <div className={cn("bg-white rounded-lg shadow p-4 space-y-4", className)}>
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-2">
           <Filter className="w-5 h-5 text-gray-500" />
@@ -96,7 +96,7 @@ export const CourseFilters: React.FC<CourseFiltersProps> = ({
             <label className="block text-xs text-gray-600 mb-1">From</label>
             <DatePicker
               selected={filters.dateFrom}
-              onChange={(date) => updateFilter('dateFrom', date)}
+              onChange={(date) => updateFilter("dateFrom", date)}
               minDate={new Date()}
               maxDate={filters.dateTo || undefined}
               placeholderText="Select start date"
@@ -112,7 +112,7 @@ export const CourseFilters: React.FC<CourseFiltersProps> = ({
             <label className="block text-xs text-gray-600 mb-1">To</label>
             <DatePicker
               selected={filters.dateTo}
-              onChange={(date) => updateFilter('dateTo', date)}
+              onChange={(date) => updateFilter("dateTo", date)}
               minDate={filters.dateFrom || new Date()}
               placeholderText="Select end date"
               className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
@@ -133,22 +133,34 @@ export const CourseFilters: React.FC<CourseFiltersProps> = ({
         </label>
         <select
           value={filters.courseType}
-          onChange={(e) => updateFilter('courseType', e.target.value)}
+          onChange={(e) => updateFilter("courseType", e.target.value)}
           className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
         >
           <option value="">All Courses</option>
-          <option value="Emergency First Aid at Work">Emergency First Aid at Work</option>
+          <option value="Emergency First Aid at Work">
+            Emergency First Aid at Work
+          </option>
           <option value="First Aid at Work">First Aid at Work</option>
           <option value="Paediatric First Aid">Paediatric First Aid</option>
-          <option value="Emergency Paediatric First Aid">Emergency Paediatric First Aid</option>
+          <option value="Emergency Paediatric First Aid">
+            Emergency Paediatric First Aid
+          </option>
           <option value="FAW Requalification">FAW Requalification</option>
           <option value="EFAW Requalification">EFAW Requalification</option>
-          <option value="Paediatric Requalification">Paediatric Requalification</option>
-          <option value="Emergency Paediatric Requalification">Emergency Paediatric Requalification</option>
+          <option value="Paediatric Requalification">
+            Paediatric Requalification
+          </option>
+          <option value="Emergency Paediatric Requalification">
+            Emergency Paediatric Requalification
+          </option>
           <option value="Activity First Aid">Activity First Aid</option>
-          <option value="Activity First Aid Requalification">Activity First Aid Requalification</option>
+          <option value="Activity First Aid Requalification">
+            Activity First Aid Requalification
+          </option>
           <option value="CPR and AED">CPR and AED</option>
-          <option value="Annual Skills Refresher">Annual Skills Refresher</option>
+          <option value="Annual Skills Refresher">
+            Annual Skills Refresher
+          </option>
           <option value="Oxygen Therapy">Oxygen Therapy</option>
         </select>
       </div>
@@ -160,7 +172,7 @@ export const CourseFilters: React.FC<CourseFiltersProps> = ({
         </label>
         <select
           value={filters.location}
-          onChange={(e) => updateFilter('location', e.target.value)}
+          onChange={(e) => updateFilter("location", e.target.value)}
           className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
         >
           <option value="">All Locations</option>
@@ -174,7 +186,10 @@ export const CourseFilters: React.FC<CourseFiltersProps> = ({
 
       {/* Availability Toggle */}
       <div className="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
-        <label htmlFor="showOnlyAvailable" className="text-sm font-medium text-gray-700 cursor-pointer">
+        <label
+          htmlFor="showOnlyAvailable"
+          className="text-sm font-medium text-gray-700 cursor-pointer"
+        >
           Show only available courses
         </label>
         <button
@@ -182,16 +197,18 @@ export const CourseFilters: React.FC<CourseFiltersProps> = ({
           type="button"
           role="switch"
           aria-checked={filters.showOnlyAvailable}
-          onClick={() => updateFilter('showOnlyAvailable', !filters.showOnlyAvailable)}
+          onClick={() =>
+            updateFilter("showOnlyAvailable", !filters.showOnlyAvailable)
+          }
           className={cn(
-            'relative inline-flex h-6 w-11 items-center rounded-full transition-colors',
-            filters.showOnlyAvailable ? 'bg-primary-600' : 'bg-gray-200'
+            "relative inline-flex h-6 w-11 items-center rounded-full transition-colors",
+            filters.showOnlyAvailable ? "bg-primary-600" : "bg-gray-200",
           )}
         >
           <span
             className={cn(
-              'inline-block h-4 w-4 transform rounded-full bg-white transition-transform',
-              filters.showOnlyAvailable ? 'translate-x-6' : 'translate-x-1'
+              "inline-block h-4 w-4 transform rounded-full bg-white transition-transform",
+              filters.showOnlyAvailable ? "translate-x-6" : "translate-x-1",
             )}
           />
         </button>
@@ -201,12 +218,13 @@ export const CourseFilters: React.FC<CourseFiltersProps> = ({
       {hasActiveFilters && (
         <div className="pt-3 border-t border-gray-200">
           <p className="text-xs text-gray-600">
-            Filtering by:{' '}
-            {filters.dateFrom && `From ${filters.dateFrom.toLocaleDateString()} `}
+            Filtering by:{" "}
+            {filters.dateFrom &&
+              `From ${filters.dateFrom.toLocaleDateString()} `}
             {filters.dateTo && `To ${filters.dateTo.toLocaleDateString()} `}
             {filters.courseType && `• ${filters.courseType} `}
             {filters.location && `• ${filters.location} `}
-            {!filters.showOnlyAvailable && '• Including full courses'}
+            {!filters.showOnlyAvailable && "• Including full courses"}
           </p>
         </div>
       )}

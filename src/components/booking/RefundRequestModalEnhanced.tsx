@@ -1,20 +1,20 @@
-import React, { useState, useEffect } from 'react';
-import { 
-  X, 
-  AlertCircle, 
-  Info, 
-  CheckCircle, 
+import React, { useState, useEffect } from "react";
+import {
+  X,
+  AlertCircle,
+  Info,
+  CheckCircle,
   Calendar,
   Clock,
   MapPin,
   Users,
   CreditCard,
   AlertTriangle,
-  HelpCircle
-} from 'lucide-react';
-import { format, differenceInDays, isAfter } from 'date-fns';
-import { motion, AnimatePresence } from 'framer-motion';
-import { refundApi } from '@/services/api/refunds';
+  HelpCircle,
+} from "lucide-react";
+import { format, differenceInDays, isAfter } from "date-fns";
+import { motion, AnimatePresence } from "framer-motion";
+import { refundApi } from "@/services/api/refunds";
 
 interface RefundRequestModalProps {
   booking: {
@@ -44,7 +44,7 @@ interface RefundRequestModalProps {
 }
 
 interface RefundEstimate {
-  eligibility: 'full' | 'partial' | 'none';
+  eligibility: "full" | "partial" | "none";
   amount: number;
   percentage: number;
   reason: string;
@@ -52,14 +52,38 @@ interface RefundEstimate {
 }
 
 const REFUND_REASONS = [
-  { value: 'unable_to_attend', label: 'Unable to attend', requiresDetails: false },
-  { value: 'medical_emergency', label: 'Medical emergency', requiresDetails: true },
-  { value: 'work_commitment', label: 'Work commitment', requiresDetails: false },
-  { value: 'course_not_suitable', label: 'Course not suitable', requiresDetails: true },
-  { value: 'duplicate_booking', label: 'Duplicate booking', requiresDetails: false },
-  { value: 'personal_circumstances', label: 'Personal circumstances', requiresDetails: true },
-  { value: 'covid_related', label: 'COVID-19 related', requiresDetails: true },
-  { value: 'other', label: 'Other reason', requiresDetails: true },
+  {
+    value: "unable_to_attend",
+    label: "Unable to attend",
+    requiresDetails: false,
+  },
+  {
+    value: "medical_emergency",
+    label: "Medical emergency",
+    requiresDetails: true,
+  },
+  {
+    value: "work_commitment",
+    label: "Work commitment",
+    requiresDetails: false,
+  },
+  {
+    value: "course_not_suitable",
+    label: "Course not suitable",
+    requiresDetails: true,
+  },
+  {
+    value: "duplicate_booking",
+    label: "Duplicate booking",
+    requiresDetails: false,
+  },
+  {
+    value: "personal_circumstances",
+    label: "Personal circumstances",
+    requiresDetails: true,
+  },
+  { value: "covid_related", label: "COVID-19 related", requiresDetails: true },
+  { value: "other", label: "Other reason", requiresDetails: true },
 ];
 
 export const RefundRequestModalEnhanced: React.FC<RefundRequestModalProps> = ({
@@ -69,12 +93,16 @@ export const RefundRequestModalEnhanced: React.FC<RefundRequestModalProps> = ({
   onClose,
   onSuccess,
 }) => {
-  const [step, setStep] = useState<'reason' | 'review' | 'submitting' | 'success'>('reason');
-  const [reason, setReason] = useState('');
-  const [customReason, setCustomReason] = useState('');
+  const [step, setStep] = useState<
+    "reason" | "review" | "submitting" | "success"
+  >("reason");
+  const [reason, setReason] = useState("");
+  const [customReason, setCustomReason] = useState("");
   const [acceptTerms, setAcceptTerms] = useState(false);
-  const [error, setError] = useState('');
-  const [refundEstimate, setRefundEstimate] = useState<RefundEstimate | null>(null);
+  const [error, setError] = useState("");
+  const [refundEstimate, setRefundEstimate] = useState<RefundEstimate | null>(
+    null,
+  );
   const [processingTime, setProcessingTime] = useState(0);
 
   useEffect(() => {
@@ -93,50 +121,50 @@ export const RefundRequestModalEnhanced: React.FC<RefundRequestModalProps> = ({
 
     if (daysUntilSession > 7) {
       estimate = {
-        eligibility: 'full',
+        eligibility: "full",
         amount: totalAmount,
         percentage: 100,
-        reason: 'More than 7 days before course',
+        reason: "More than 7 days before course",
         policyDetails: [
-          'Full refund available',
-          'No cancellation fee',
-          'Immediate processing'
-        ]
+          "Full refund available",
+          "No cancellation fee",
+          "Immediate processing",
+        ],
       };
     } else if (daysUntilSession >= 3) {
       estimate = {
-        eligibility: 'partial',
+        eligibility: "partial",
         amount: totalAmount * 0.5,
         percentage: 50,
-        reason: '3-7 days before course',
+        reason: "3-7 days before course",
         policyDetails: [
-          '50% refund available',
-          '50% cancellation fee applies',
-          'Processing within 24-48 hours'
-        ]
+          "50% refund available",
+          "50% cancellation fee applies",
+          "Processing within 24-48 hours",
+        ],
       };
     } else if (daysUntilSession >= 0) {
       estimate = {
-        eligibility: 'none',
+        eligibility: "none",
         amount: 0,
         percentage: 0,
-        reason: 'Less than 3 days before course',
+        reason: "Less than 3 days before course",
         policyDetails: [
-          'No refund available',
-          'Consider rescheduling instead',
-          'Contact support for exceptional circumstances'
-        ]
+          "No refund available",
+          "Consider rescheduling instead",
+          "Contact support for exceptional circumstances",
+        ],
       };
     } else {
       estimate = {
-        eligibility: 'none',
+        eligibility: "none",
         amount: 0,
         percentage: 0,
-        reason: 'Course has already taken place',
+        reason: "Course has already taken place",
         policyDetails: [
-          'Refunds not available for past courses',
-          'Contact support for special circumstances'
-        ]
+          "Refunds not available for past courses",
+          "Contact support for special circumstances",
+        ],
       };
     }
 
@@ -144,29 +172,30 @@ export const RefundRequestModalEnhanced: React.FC<RefundRequestModalProps> = ({
   };
 
   const handleSubmit = async () => {
-    const selectedReason = REFUND_REASONS.find(r => r.value === reason);
-    const finalReason = selectedReason?.requiresDetails || reason === 'other' 
-      ? customReason 
-      : selectedReason?.label || reason;
-    
+    const selectedReason = REFUND_REASONS.find((r) => r.value === reason);
+    const finalReason =
+      selectedReason?.requiresDetails || reason === "other"
+        ? customReason
+        : selectedReason?.label || reason;
+
     if (!finalReason.trim()) {
-      setError('Please provide a reason for the refund');
+      setError("Please provide a reason for the refund");
       return;
     }
 
     if (!acceptTerms) {
-      setError('Please accept the terms to proceed');
+      setError("Please accept the terms to proceed");
       return;
     }
 
-    setStep('submitting');
-    setError('');
+    setStep("submitting");
+    setError("");
     const startTime = Date.now();
 
     try {
       // Simulate processing time for better UX
       const minProcessingTime = 2000;
-      
+
       const [response] = await Promise.all([
         refundApi.requestRefund({
           bookingId: booking.id,
@@ -174,42 +203,47 @@ export const RefundRequestModalEnhanced: React.FC<RefundRequestModalProps> = ({
           metadata: {
             originalAmount: booking.totalAmount,
             refundEstimate: refundEstimate?.amount,
-            daysBeforeCourse: differenceInDays(new Date(booking.courseDetails.sessionDate), new Date()),
-          }
+            daysBeforeCourse: differenceInDays(
+              new Date(booking.courseDetails.sessionDate),
+              new Date(),
+            ),
+          },
         }),
-        new Promise(resolve => setTimeout(resolve, minProcessingTime))
+        new Promise((resolve) => setTimeout(resolve, minProcessingTime)),
       ]);
-      
+
       setProcessingTime(Date.now() - startTime);
-      setStep('success');
-      
+      setStep("success");
+
       // Auto close after showing success
       setTimeout(() => {
         onSuccess();
         onClose();
       }, 3000);
     } catch (err: any) {
-      setError(err.response?.data?.message || 'Failed to submit refund request');
-      setStep('review');
+      setError(
+        err.response?.data?.message || "Failed to submit refund request",
+      );
+      setStep("review");
     }
   };
 
   const handleClose = () => {
-    if (step !== 'submitting') {
-      setStep('reason');
-      setReason('');
-      setCustomReason('');
+    if (step !== "submitting") {
+      setStep("reason");
+      setReason("");
+      setCustomReason("");
       setAcceptTerms(false);
-      setError('');
+      setError("");
       setRefundEstimate(null);
       onClose();
     }
   };
 
   const formatCurrency = (amount: number) => {
-    return new Intl.NumberFormat('en-GB', {
-      style: 'currency',
-      currency: 'GBP',
+    return new Intl.NumberFormat("en-GB", {
+      style: "currency",
+      currency: "GBP",
     }).format(amount);
   };
 
@@ -230,9 +264,9 @@ export const RefundRequestModalEnhanced: React.FC<RefundRequestModalProps> = ({
             <label
               key={option.value}
               className={`flex items-start gap-3 p-3 border rounded-lg cursor-pointer transition-all ${
-                reason === option.value 
-                  ? 'border-primary-500 bg-primary-50' 
-                  : 'border-gray-200 hover:border-gray-300 hover:bg-gray-50'
+                reason === option.value
+                  ? "border-primary-500 bg-primary-50"
+                  : "border-gray-200 hover:border-gray-300 hover:bg-gray-50"
               }`}
             >
               <input
@@ -245,7 +279,9 @@ export const RefundRequestModalEnhanced: React.FC<RefundRequestModalProps> = ({
               <div className="flex-1">
                 <span className="font-medium">{option.label}</span>
                 {option.requiresDetails && (
-                  <span className="text-xs text-gray-500 ml-2">(Details required)</span>
+                  <span className="text-xs text-gray-500 ml-2">
+                    (Details required)
+                  </span>
                 )}
               </div>
             </label>
@@ -254,10 +290,10 @@ export const RefundRequestModalEnhanced: React.FC<RefundRequestModalProps> = ({
       </div>
 
       {/* Custom Reason */}
-      {REFUND_REASONS.find(r => r.value === reason)?.requiresDetails && (
+      {REFUND_REASONS.find((r) => r.value === reason)?.requiresDetails && (
         <motion.div
           initial={{ opacity: 0, height: 0 }}
-          animate={{ opacity: 1, height: 'auto' }}
+          animate={{ opacity: 1, height: "auto" }}
           exit={{ opacity: 0, height: 0 }}
         >
           <label className="block text-sm font-medium text-gray-700 mb-2">
@@ -283,33 +319,37 @@ export const RefundRequestModalEnhanced: React.FC<RefundRequestModalProps> = ({
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
           className={`p-4 rounded-lg border ${
-            refundEstimate.eligibility === 'full' 
-              ? 'bg-green-50 border-green-200' 
-              : refundEstimate.eligibility === 'partial'
-              ? 'bg-amber-50 border-amber-200'
-              : 'bg-red-50 border-red-200'
+            refundEstimate.eligibility === "full"
+              ? "bg-green-50 border-green-200"
+              : refundEstimate.eligibility === "partial"
+                ? "bg-amber-50 border-amber-200"
+                : "bg-red-50 border-red-200"
           }`}
         >
           <div className="flex items-start gap-3">
-            {refundEstimate.eligibility === 'full' ? (
+            {refundEstimate.eligibility === "full" ? (
               <CheckCircle className="w-5 h-5 text-green-600 flex-shrink-0 mt-0.5" />
-            ) : refundEstimate.eligibility === 'partial' ? (
+            ) : refundEstimate.eligibility === "partial" ? (
               <AlertCircle className="w-5 h-5 text-amber-600 flex-shrink-0 mt-0.5" />
             ) : (
               <AlertTriangle className="w-5 h-5 text-red-600 flex-shrink-0 mt-0.5" />
             )}
             <div className="flex-1">
               <h4 className="font-medium">
-                {refundEstimate.eligibility === 'full' && 'Full refund available'}
-                {refundEstimate.eligibility === 'partial' && 'Partial refund available'}
-                {refundEstimate.eligibility === 'none' && 'Refund not available'}
+                {refundEstimate.eligibility === "full" &&
+                  "Full refund available"}
+                {refundEstimate.eligibility === "partial" &&
+                  "Partial refund available"}
+                {refundEstimate.eligibility === "none" &&
+                  "Refund not available"}
               </h4>
               <p className="text-sm mt-1">{refundEstimate.reason}</p>
               {refundEstimate.amount > 0 && (
                 <p className="text-lg font-semibold mt-2">
                   Refund amount: {formatCurrency(refundEstimate.amount)}
                   <span className="text-sm font-normal text-gray-600 ml-2">
-                    ({refundEstimate.percentage}% of {formatCurrency(parseFloat(booking.totalAmount))})
+                    ({refundEstimate.percentage}% of{" "}
+                    {formatCurrency(parseFloat(booking.totalAmount))})
                   </span>
                 </p>
               )}
@@ -337,8 +377,12 @@ export const RefundRequestModalEnhanced: React.FC<RefundRequestModalProps> = ({
         </button>
         <button
           type="button"
-          onClick={() => setStep('review')}
-          disabled={!reason || (REFUND_REASONS.find(r => r.value === reason)?.requiresDetails && customReason.length < 20)}
+          onClick={() => setStep("review")}
+          disabled={
+            !reason ||
+            (REFUND_REASONS.find((r) => r.value === reason)?.requiresDetails &&
+              customReason.length < 20)
+          }
           className="flex-1 px-4 py-3 bg-primary-600 text-white rounded-lg hover:bg-primary-700 
                    disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
         >
@@ -358,16 +402,24 @@ export const RefundRequestModalEnhanced: React.FC<RefundRequestModalProps> = ({
       {/* Summary */}
       <div className="space-y-4">
         <h3 className="font-medium text-lg">Review Your Refund Request</h3>
-        
+
         {/* Booking Details */}
         <div className="bg-gray-50 rounded-lg p-4 space-y-3">
           <div className="flex items-center gap-2 text-gray-700">
             <Calendar className="w-4 h-4" />
-            <span className="text-sm">{format(new Date(booking.courseDetails.sessionDate), 'EEEE, dd MMMM yyyy')}</span>
+            <span className="text-sm">
+              {format(
+                new Date(booking.courseDetails.sessionDate),
+                "EEEE, dd MMMM yyyy",
+              )}
+            </span>
           </div>
           <div className="flex items-center gap-2 text-gray-700">
             <Clock className="w-4 h-4" />
-            <span className="text-sm">{booking.courseDetails.startTime} - {booking.courseDetails.endTime || 'TBD'}</span>
+            <span className="text-sm">
+              {booking.courseDetails.startTime} -{" "}
+              {booking.courseDetails.endTime || "TBD"}
+            </span>
           </div>
           <div className="flex items-center gap-2 text-gray-700">
             <MapPin className="w-4 h-4" />
@@ -375,11 +427,16 @@ export const RefundRequestModalEnhanced: React.FC<RefundRequestModalProps> = ({
           </div>
           <div className="flex items-center gap-2 text-gray-700">
             <Users className="w-4 h-4" />
-            <span className="text-sm">{booking.numberOfAttendees} attendee{booking.numberOfAttendees > 1 ? 's' : ''}</span>
+            <span className="text-sm">
+              {booking.numberOfAttendees} attendee
+              {booking.numberOfAttendees > 1 ? "s" : ""}
+            </span>
           </div>
           <div className="flex items-center gap-2 text-gray-700">
             <CreditCard className="w-4 h-4" />
-            <span className="text-sm font-semibold">{formatCurrency(parseFloat(booking.totalAmount))}</span>
+            <span className="text-sm font-semibold">
+              {formatCurrency(parseFloat(booking.totalAmount))}
+            </span>
           </div>
         </div>
 
@@ -387,17 +444,21 @@ export const RefundRequestModalEnhanced: React.FC<RefundRequestModalProps> = ({
         <div className="bg-gray-50 rounded-lg p-4">
           <h4 className="font-medium mb-2">Refund Reason</h4>
           <p className="text-sm text-gray-700">
-            {REFUND_REASONS.find(r => r.value === reason)?.label || reason}
+            {REFUND_REASONS.find((r) => r.value === reason)?.label || reason}
           </p>
           {customReason && (
-            <p className="text-sm text-gray-600 mt-2 italic">"{customReason}"</p>
+            <p className="text-sm text-gray-600 mt-2 italic">
+              "{customReason}"
+            </p>
           )}
         </div>
 
         {/* Refund Amount */}
         {refundEstimate && refundEstimate.amount > 0 && (
           <div className="bg-primary-50 border border-primary-200 rounded-lg p-4">
-            <h4 className="font-medium text-primary-900 mb-1">Expected Refund</h4>
+            <h4 className="font-medium text-primary-900 mb-1">
+              Expected Refund
+            </h4>
             <p className="text-2xl font-bold text-primary-700">
               {formatCurrency(refundEstimate.amount)}
             </p>
@@ -443,7 +504,7 @@ export const RefundRequestModalEnhanced: React.FC<RefundRequestModalProps> = ({
       <div className="flex gap-3 pt-4">
         <button
           type="button"
-          onClick={() => setStep('reason')}
+          onClick={() => setStep("reason")}
           className="flex-1 px-4 py-3 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors"
         >
           Back
@@ -473,8 +534,12 @@ export const RefundRequestModalEnhanced: React.FC<RefundRequestModalProps> = ({
           <CreditCard className="w-6 h-6 text-primary-600" />
         </div>
       </div>
-      <p className="mt-4 text-lg font-medium">Processing your refund request...</p>
-      <p className="text-sm text-gray-600 mt-2">Please don't close this window</p>
+      <p className="mt-4 text-lg font-medium">
+        Processing your refund request...
+      </p>
+      <p className="text-sm text-gray-600 mt-2">
+        Please don't close this window
+      </p>
     </motion.div>
   );
 
@@ -487,7 +552,7 @@ export const RefundRequestModalEnhanced: React.FC<RefundRequestModalProps> = ({
       <motion.div
         initial={{ scale: 0 }}
         animate={{ scale: 1 }}
-        transition={{ type: 'spring', stiffness: 200, damping: 15 }}
+        transition={{ type: "spring", stiffness: 200, damping: 15 }}
         className="w-20 h-20 bg-green-100 rounded-full flex items-center justify-center mb-4"
       >
         <CheckCircle className="w-10 h-10 text-green-600" />
@@ -526,7 +591,7 @@ export const RefundRequestModalEnhanced: React.FC<RefundRequestModalProps> = ({
           initial={{ scale: 0.95, opacity: 0 }}
           animate={{ scale: 1, opacity: 1 }}
           exit={{ scale: 0.95, opacity: 0 }}
-          transition={{ type: 'spring', stiffness: 300, damping: 30 }}
+          transition={{ type: "spring", stiffness: 300, damping: 30 }}
           className="bg-white rounded-xl max-w-lg w-full max-h-[90vh] overflow-hidden shadow-xl"
           onClick={(e) => e.stopPropagation()}
         >
@@ -539,7 +604,7 @@ export const RefundRequestModalEnhanced: React.FC<RefundRequestModalProps> = ({
               </div>
               <button
                 onClick={handleClose}
-                disabled={step === 'submitting'}
+                disabled={step === "submitting"}
                 className="p-1 hover:bg-white/10 rounded-full transition-colors disabled:opacity-50"
               >
                 <X className="w-5 h-5 text-white" />
@@ -548,22 +613,34 @@ export const RefundRequestModalEnhanced: React.FC<RefundRequestModalProps> = ({
           </div>
 
           {/* Progress Indicator */}
-          {step !== 'submitting' && step !== 'success' && (
+          {step !== "submitting" && step !== "success" && (
             <div className="px-6 py-3 bg-gray-50 border-b">
               <div className="flex items-center gap-2">
-                <div className={`flex items-center gap-2 ${step === 'reason' ? 'text-primary-600' : 'text-gray-400'}`}>
-                  <div className={`w-6 h-6 rounded-full flex items-center justify-center text-xs font-medium ${
-                    step === 'reason' ? 'bg-primary-600 text-white' : 'bg-gray-300 text-white'
-                  }`}>
+                <div
+                  className={`flex items-center gap-2 ${step === "reason" ? "text-primary-600" : "text-gray-400"}`}
+                >
+                  <div
+                    className={`w-6 h-6 rounded-full flex items-center justify-center text-xs font-medium ${
+                      step === "reason"
+                        ? "bg-primary-600 text-white"
+                        : "bg-gray-300 text-white"
+                    }`}
+                  >
                     1
                   </div>
                   <span className="text-sm font-medium">Reason</span>
                 </div>
                 <div className="flex-1 h-0.5 bg-gray-300 mx-2" />
-                <div className={`flex items-center gap-2 ${step === 'review' ? 'text-primary-600' : 'text-gray-400'}`}>
-                  <div className={`w-6 h-6 rounded-full flex items-center justify-center text-xs font-medium ${
-                    step === 'review' ? 'bg-primary-600 text-white' : 'bg-gray-300 text-white'
-                  }`}>
+                <div
+                  className={`flex items-center gap-2 ${step === "review" ? "text-primary-600" : "text-gray-400"}`}
+                >
+                  <div
+                    className={`w-6 h-6 rounded-full flex items-center justify-center text-xs font-medium ${
+                      step === "review"
+                        ? "bg-primary-600 text-white"
+                        : "bg-gray-300 text-white"
+                    }`}
+                  >
                     2
                   </div>
                   <span className="text-sm font-medium">Review</span>
@@ -575,7 +652,7 @@ export const RefundRequestModalEnhanced: React.FC<RefundRequestModalProps> = ({
           {/* Content */}
           <div className="p-6 overflow-y-auto max-h-[calc(90vh-8rem)]">
             {/* Help Button */}
-            {step !== 'submitting' && step !== 'success' && (
+            {step !== "submitting" && step !== "success" && (
               <div className="flex justify-end mb-4">
                 <button className="text-sm text-primary-600 hover:text-primary-700 flex items-center gap-1">
                   <HelpCircle className="w-4 h-4" />
@@ -585,10 +662,10 @@ export const RefundRequestModalEnhanced: React.FC<RefundRequestModalProps> = ({
             )}
 
             <AnimatePresence mode="wait">
-              {step === 'reason' && renderReasonStep()}
-              {step === 'review' && renderReviewStep()}
-              {step === 'submitting' && renderSubmittingStep()}
-              {step === 'success' && renderSuccessStep()}
+              {step === "reason" && renderReasonStep()}
+              {step === "review" && renderReviewStep()}
+              {step === "submitting" && renderSubmittingStep()}
+              {step === "success" && renderSuccessStep()}
             </AnimatePresence>
           </div>
         </motion.div>

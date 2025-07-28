@@ -1,4 +1,4 @@
-import { useState, useCallback, useRef, useEffect } from 'react';
+import { useState, useCallback, useRef, useEffect } from "react";
 
 interface AsyncState<T> {
   data: T | null;
@@ -17,10 +17,10 @@ interface UseAsyncOptions {
 
 export function useAsync<T = any>(
   asyncFunction: (...args: any[]) => Promise<T>,
-  options: UseAsyncOptions = {}
+  options: UseAsyncOptions = {},
 ) {
   const { onSuccess, onError, retryCount = 0, retryDelay = 1000 } = options;
-  
+
   const [state, setState] = useState<AsyncState<T>>({
     data: null,
     error: null,
@@ -54,7 +54,7 @@ export function useAsync<T = any>(
       });
 
       let attempts = 0;
-      
+
       while (attempts <= retryCount) {
         try {
           const result = await asyncFunction(...args, {
@@ -74,13 +74,13 @@ export function useAsync<T = any>(
 
           return result;
         } catch (error: any) {
-          if (error.name === 'AbortError') {
+          if (error.name === "AbortError") {
             // Request was cancelled
             return;
           }
 
           attempts++;
-          
+
           if (attempts > retryCount) {
             if (isMountedRef.current) {
               setState({
@@ -96,11 +96,11 @@ export function useAsync<T = any>(
           }
 
           // Wait before retrying
-          await new Promise(resolve => setTimeout(resolve, retryDelay));
+          await new Promise((resolve) => setTimeout(resolve, retryDelay));
         }
       }
     },
-    [asyncFunction, onSuccess, onError, retryCount, retryDelay]
+    [asyncFunction, onSuccess, onError, retryCount, retryDelay],
   );
 
   const reset = useCallback(() => {
@@ -123,7 +123,7 @@ export function useAsync<T = any>(
 // Specialized version for API calls
 export function useApiCall<T = any>(
   apiCall: (...args: any[]) => Promise<T>,
-  options: UseAsyncOptions = {}
+  options: UseAsyncOptions = {},
 ) {
   return useAsync(apiCall, {
     retryCount: 3,

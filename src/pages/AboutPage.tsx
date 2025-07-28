@@ -1,42 +1,48 @@
-import React from 'react'
-import { motion } from 'framer-motion'
-import { Users, Target, Award, Shield, Heart, MapPin } from 'lucide-react'
-import CTASection from '@components/sections/CTASection'
-import SEO from '@components/common/SEO'
-import { AnimatedCounter } from '@components/ui/AnimatedCounter'
+import React from "react";
+import { motion } from "framer-motion";
+import { Users, Target, Award, Shield, Heart, MapPin } from "lucide-react";
+import CTASection from "@components/sections/CTASection";
+import SEO from "@components/common/SEO";
+import { AnimatedCounter } from "@components/ui/AnimatedCounter";
 
 const values = [
   {
     icon: Heart,
-    title: 'Life-Saving Focus',
-    description: 'Every course we deliver could save a life. We take this responsibility seriously and ensure the highest quality training.',
+    title: "Life-Saving Focus",
+    description:
+      "Every course we deliver could save a life. We take this responsibility seriously and ensure the highest quality training.",
   },
   {
     icon: Shield,
-    title: 'Royal Navy and Policing Background',
-    description: 'Our founder\'s Navy and policing background brings discipline, clarity, and real-world experience to every course.',
+    title: "Royal Navy and Policing Background",
+    description:
+      "Our founder's Navy and policing background brings discipline, clarity, and real-world experience to every course.",
   },
   {
     icon: Users,
-    title: 'Group Sizes',
-    description: 'We can accommodate up to 12 people per course to ensure everyone gets personal attention and hands-on practice time.',
+    title: "Group Sizes",
+    description:
+      "We can accommodate up to 12 people per course to ensure everyone gets personal attention and hands-on practice time.",
   },
   {
     icon: Award,
-    title: 'Fully Accredited',
-    description: 'All our courses are Ofqual regulated and HSE approved, meeting the highest industry standards.',
+    title: "Fully Accredited",
+    description:
+      "All our courses are Ofqual regulated and HSE approved, meeting the highest industry standards.",
   },
   {
     icon: Target,
-    title: 'Practical Focus',
-    description: 'We focus on real-world scenarios and practical skills that can be applied immediately in emergency situations.',
+    title: "Practical Focus",
+    description:
+      "We focus on real-world scenarios and practical skills that can be applied immediately in emergency situations.",
   },
   {
     icon: MapPin,
-    title: 'Yorkshire Proud',
-    description: 'Born and based in Yorkshire, we understand local businesses and deliver training that fits your needs.',
+    title: "Yorkshire Proud",
+    description:
+      "Born and based in Yorkshire, we understand local businesses and deliver training that fits your needs.",
   },
-]
+];
 
 // Real timeline will be added as the business grows
 
@@ -49,14 +55,13 @@ const AboutPage: React.FC = () => {
         keywords="about react fast training, first aid trainer Yorkshire, Yorkshire training company"
         canonical="/about"
       />
-      
-      
+
       {/* Hero Section */}
       <section className="relative py-12 sm:py-16 md:py-20 lg:py-24 overflow-hidden">
         <div className="absolute inset-0 bg-gradient-to-br from-primary-50 to-secondary-50 dark:from-gray-900 dark:to-gray-800">
           <div className="absolute inset-0 bg-dot-pattern opacity-5" />
         </div>
-        
+
         <div className="container px-4 sm:px-6 lg:px-8 relative z-10">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -64,11 +69,15 @@ const AboutPage: React.FC = () => {
             className="max-w-4xl mx-auto text-center"
           >
             <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold text-gray-900 dark:text-white mb-4 sm:mb-6">
-              About <span className="text-gradient gradient-primary">React Fast Training</span>
+              About{" "}
+              <span className="text-gradient gradient-primary">
+                React Fast Training
+              </span>
             </h1>
             <p className="text-base sm:text-lg md:text-xl text-gray-600 dark:text-gray-400 px-4 sm:px-0">
-              South Yorkshire's newest first aid training provider. 
-              Professional, practical, and personal - because every second counts.
+              South Yorkshire's newest first aid training provider.
+              Professional, practical, and personal - because every second
+              counts.
             </p>
           </motion.div>
         </div>
@@ -87,13 +96,15 @@ const AboutPage: React.FC = () => {
                 Our Mission
               </h2>
               <p className="text-sm sm:text-base text-gray-600 dark:text-gray-400 mb-4 sm:mb-6">
-                To provide Yorkshire businesses and individuals with the highest quality first aid training, 
-                delivered by experienced professionals who understand that knowledge saves lives.
+                To provide Yorkshire businesses and individuals with the highest
+                quality first aid training, delivered by experienced
+                professionals who understand that knowledge saves lives.
               </p>
               <p className="text-sm sm:text-base text-gray-600 dark:text-gray-400">
-                We believe that everyone should have access to life-saving skills. Our mission is to make 
-                first aid training accessible, affordable, and engaging - because in an emergency, 
-                confidence and competence make all the difference.
+                We believe that everyone should have access to life-saving
+                skills. Our mission is to make first aid training accessible,
+                affordable, and engaging - because in an emergency, confidence
+                and competence make all the difference.
               </p>
             </motion.div>
 
@@ -107,14 +118,17 @@ const AboutPage: React.FC = () => {
                 Our Story
               </h2>
               <p className="text-sm sm:text-base text-gray-600 dark:text-gray-400 mb-4 sm:mb-6">
-                Founded by Lex, React Fast Training brings together the discipline from Royal Navy 
-                and policing service. This background shapes our approach to training - practical, 
-                no-nonsense, and focused on real-world application.
+                Founded by Lex, React Fast Training brings together the
+                discipline from Royal Navy and policing service. This background
+                shapes our approach to training - practical, no-nonsense, and
+                focused on real-world application.
               </p>
               <p className="text-sm sm:text-base text-gray-600 dark:text-gray-400">
-                We're not a faceless corporation - we're a small, personal operation that cares deeply about 
-                every student who walks through our doors. When you train with us, you're learning from someone 
-                who has faced real emergencies and understands the importance of being prepared.
+                We're not a faceless corporation - we're a small, personal
+                operation that cares deeply about every student who walks
+                through our doors. When you train with us, you're learning from
+                someone who has faced real emergencies and understands the
+                importance of being prepared.
               </p>
             </motion.div>
           </div>
@@ -130,8 +144,13 @@ const AboutPage: React.FC = () => {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
             >
-              <AnimatedCounter target={12} className="text-primary-600 dark:text-primary-400" />
-              <p className="text-xs sm:text-sm text-gray-600 dark:text-gray-400 mt-2">Maximum Group Size</p>
+              <AnimatedCounter
+                target={12}
+                className="text-primary-600 dark:text-primary-400"
+              />
+              <p className="text-xs sm:text-sm text-gray-600 dark:text-gray-400 mt-2">
+                Maximum Group Size
+              </p>
             </motion.div>
             <motion.div
               initial={{ opacity: 0, y: 20 }}
@@ -139,8 +158,13 @@ const AboutPage: React.FC = () => {
               viewport={{ once: true }}
               transition={{ delay: 0.1 }}
             >
-              <AnimatedCounter target={13} className="text-primary-600 dark:text-primary-400" />
-              <p className="text-xs sm:text-sm text-gray-600 dark:text-gray-400 mt-2">Different Courses</p>
+              <AnimatedCounter
+                target={13}
+                className="text-primary-600 dark:text-primary-400"
+              />
+              <p className="text-xs sm:text-sm text-gray-600 dark:text-gray-400 mt-2">
+                Different Courses
+              </p>
             </motion.div>
             <motion.div
               initial={{ opacity: 0, y: 20 }}
@@ -148,8 +172,14 @@ const AboutPage: React.FC = () => {
               viewport={{ once: true }}
               transition={{ delay: 0.2 }}
             >
-              <AnimatedCounter target={18} suffix="+" className="text-primary-600 dark:text-primary-400" />
-              <p className="text-xs sm:text-sm text-gray-600 dark:text-gray-400 mt-2">Years Experience</p>
+              <AnimatedCounter
+                target={18}
+                suffix="+"
+                className="text-primary-600 dark:text-primary-400"
+              />
+              <p className="text-xs sm:text-sm text-gray-600 dark:text-gray-400 mt-2">
+                Years Experience
+              </p>
             </motion.div>
             <motion.div
               initial={{ opacity: 0, y: 20 }}
@@ -157,8 +187,14 @@ const AboutPage: React.FC = () => {
               viewport={{ once: true }}
               transition={{ delay: 0.3 }}
             >
-              <AnimatedCounter target={100} suffix="%" className="text-primary-600 dark:text-primary-400" />
-              <p className="text-xs sm:text-sm text-gray-600 dark:text-gray-400 mt-2">Practical Focus</p>
+              <AnimatedCounter
+                target={100}
+                suffix="%"
+                className="text-primary-600 dark:text-primary-400"
+              />
+              <p className="text-xs sm:text-sm text-gray-600 dark:text-gray-400 mt-2">
+                Practical Focus
+              </p>
             </motion.div>
           </div>
         </div>
@@ -177,7 +213,8 @@ const AboutPage: React.FC = () => {
               Our Core Values
             </h2>
             <p className="text-base sm:text-lg text-gray-600 dark:text-gray-400 max-w-2xl mx-auto px-4 sm:px-0">
-              These principles guide everything we do and shape our company culture.
+              These principles guide everything we do and shape our company
+              culture.
             </p>
           </motion.div>
 
@@ -221,12 +258,12 @@ const AboutPage: React.FC = () => {
             <div className="mt-8 bg-white dark:bg-gray-900 rounded-lg shadow-lg overflow-hidden">
               <div className="grid md:grid-cols-2 gap-8">
                 <div className="relative">
-                  <img 
+                  <img
                     src="/images/homepage1.png"
                     alt="Lead Instructor teaching first aid"
                     className="w-full h-full object-cover"
                     onError={(e) => {
-                      e.currentTarget.src = '/images/placeholder-course.jpg'
+                      e.currentTarget.src = "/images/placeholder-course.jpg";
                     }}
                   />
                 </div>
@@ -234,30 +271,39 @@ const AboutPage: React.FC = () => {
                   <h3 className="text-2xl font-bold text-gray-900 dark:text-white mb-4">
                     Lex - Founder & Lead Instructor
                   </h3>
-              <p className="text-gray-600 dark:text-gray-400 mb-4">
-                With a background in the Royal Navy and law enforcement, Lex brings a unique perspective 
-                to first aid training. This means you're learning from someone who understands the importance 
-                of clear instruction and practical skills.
-              </p>
-              <p className="text-gray-600 dark:text-gray-400">
-                "I founded React Fast Training because I saw a need for practical, no-nonsense first aid training 
-                delivered by people who truly understand emergencies. Every course I teach is informed by real 
-                experiences, not just textbook theory."
-              </p>
-              <div className="mt-6 flex flex-wrap justify-center gap-4">
-                <div className="flex items-center gap-2">
-                  <Shield className="w-5 h-5 text-primary-600 dark:text-primary-400" />
-                  <span className="text-gray-700 dark:text-gray-300">Royal Navy Experience</span>
-                </div>
-                <div className="flex items-center gap-2">
-                  <Award className="w-5 h-5 text-primary-600 dark:text-primary-400" />
-                  <span className="text-gray-700 dark:text-gray-300">Police Service</span>
-                </div>
-                <div className="flex items-center gap-2">
-                  <Heart className="w-5 h-5 text-primary-600 dark:text-primary-400" />
-                  <span className="text-gray-700 dark:text-gray-300">First Aid Expert</span>
-                </div>
-              </div>
+                  <p className="text-gray-600 dark:text-gray-400 mb-4">
+                    With a background in the Royal Navy and law enforcement, Lex
+                    brings a unique perspective to first aid training. This
+                    means you're learning from someone who understands the
+                    importance of clear instruction and practical skills.
+                  </p>
+                  <p className="text-gray-600 dark:text-gray-400">
+                    "I founded React Fast Training because I saw a need for
+                    practical, no-nonsense first aid training delivered by
+                    people who truly understand emergencies. Every course I
+                    teach is informed by real experiences, not just textbook
+                    theory."
+                  </p>
+                  <div className="mt-6 flex flex-wrap justify-center gap-4">
+                    <div className="flex items-center gap-2">
+                      <Shield className="w-5 h-5 text-primary-600 dark:text-primary-400" />
+                      <span className="text-gray-700 dark:text-gray-300">
+                        Royal Navy Experience
+                      </span>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <Award className="w-5 h-5 text-primary-600 dark:text-primary-400" />
+                      <span className="text-gray-700 dark:text-gray-300">
+                        Police Service
+                      </span>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <Heart className="w-5 h-5 text-primary-600 dark:text-primary-400" />
+                      <span className="text-gray-700 dark:text-gray-300">
+                        First Aid Expert
+                      </span>
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>
@@ -265,19 +311,15 @@ const AboutPage: React.FC = () => {
         </div>
       </section>
 
-
       <CTASection
         title="Ready to Learn First Aid?"
         description="Join our training courses and gain essential skills. Book your course today."
         primaryButtonText="Book Your Course"
         secondaryButtonText="Call 07447 485644"
-        features={[
-          "Ofqual Regulated",
-          "HSE Approved",
-        ]}
+        features={["Ofqual Regulated", "HSE Approved"]}
       />
     </div>
-  )
-}
+  );
+};
 
-export default AboutPage
+export default AboutPage;

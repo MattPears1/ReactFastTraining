@@ -1,10 +1,10 @@
-import React from 'react';
-import { ClientPortalError, NetworkError } from '@/types/client/enhanced.types';
+import React from "react";
+import { ClientPortalError, NetworkError } from "@/types/client/enhanced.types";
 
 interface RetryOptions {
   maxAttempts?: number;
   delay?: number;
-  backoff?: 'linear' | 'exponential';
+  backoff?: "linear" | "exponential";
   shouldRetry?: (error: Error, attempt: number) => boolean;
   onRetry?: (error: Error, attempt: number) => void;
 }
@@ -12,12 +12,12 @@ interface RetryOptions {
 export class ErrorRecovery {
   static async retry<T>(
     fn: () => Promise<T>,
-    options: RetryOptions = {}
+    options: RetryOptions = {},
   ): Promise<T> {
     const {
       maxAttempts = 3,
       delay = 1000,
-      backoff = 'exponential',
+      backoff = "exponential",
       shouldRetry = this.defaultShouldRetry,
       onRetry,
     } = options;
@@ -28,7 +28,7 @@ export class ErrorRecovery {
       try {
         return await fn();
       } catch (error) {
-        lastError = error instanceof Error ? error : new Error('Unknown error');
+        lastError = error instanceof Error ? error : new Error("Unknown error");
 
         if (attempt === maxAttempts || !shouldRetry(lastError, attempt)) {
           throw lastError;
@@ -36,9 +36,10 @@ export class ErrorRecovery {
 
         onRetry?.(lastError, attempt);
 
-        const waitTime = backoff === 'exponential' 
-          ? delay * Math.pow(2, attempt - 1)
-          : delay * attempt;
+        const waitTime =
+          backoff === "exponential"
+            ? delay * Math.pow(2, attempt - 1)
+            : delay * attempt;
 
         await this.delay(waitTime);
       }
@@ -50,20 +51,20 @@ export class ErrorRecovery {
   static async retryWithFallback<T>(
     primary: () => Promise<T>,
     fallback: () => Promise<T>,
-    options?: RetryOptions
+    options?: RetryOptions,
   ): Promise<T> {
     try {
       return await this.retry(primary, options);
     } catch (primaryError) {
-      console.warn('Primary function failed, trying fallback:', primaryError);
-      
+      console.warn("Primary function failed, trying fallback:", primaryError);
+
       try {
         return await fallback();
       } catch (fallbackError) {
         throw new ClientPortalError(
-          'Both primary and fallback operations failed',
-          'FALLBACK_FAILED',
-          { primaryError, fallbackError }
+          "Both primary and fallback operations failed",
+          "FALLBACK_FAILED",
+          { primaryError, fallbackError },
         );
       }
     }
@@ -72,13 +73,16 @@ export class ErrorRecovery {
   static async withTimeout<T>(
     fn: () => Promise<T>,
     timeoutMs: number,
-    timeoutError?: Error
+    timeoutError?: Error,
   ): Promise<T> {
     return Promise.race([
       fn(),
       new Promise<never>((_, reject) => {
         setTimeout(() => {
-          reject(timeoutError || new Error(`Operation timed out after ${timeoutMs}ms`));
+          reject(
+            timeoutError ||
+              new Error(`Operation timed out after ${timeoutMs}ms`),
+          );
         }, timeoutMs);
       }),
     ]);
@@ -87,12 +91,12 @@ export class ErrorRecovery {
   static async gracefulDegrade<T, F>(
     fn: () => Promise<T>,
     fallbackValue: F,
-    onError?: (error: Error) => void
+    onError?: (error: Error) => void,
   ): Promise<T | F> {
     try {
       return await fn();
     } catch (error) {
-      const err = error instanceof Error ? error : new Error('Unknown error');
+      const err = error instanceof Error ? error : new Error("Unknown error");
       onError?.(err);
       return fallbackValue;
     }
@@ -100,40 +104,38 @@ export class ErrorRecovery {
 
   static createCircuitBreaker(
     threshold: number = 5,
-    resetTimeout: number = 60000
+    resetTimeout: number = 60000,
   ) {
     let failures = 0;
     let lastFailureTime = 0;
-    let state: 'closed' | 'open' | 'half-open' = 'closed';
+    let state: "closed" | "open" | "half-open" = "closed";
 
-    return async function circuitBreaker<T>(
-      fn: () => Promise<T>
-    ): Promise<T> {
+    return async function circuitBreaker<T>(fn: () => Promise<T>): Promise<T> {
       // Check if circuit should be reset
-      if (state === 'open' && Date.now() - lastFailureTime > resetTimeout) {
-        state = 'half-open';
+      if (state === "open" && Date.now() - lastFailureTime > resetTimeout) {
+        state = "half-open";
         failures = 0;
       }
 
-      if (state === 'open') {
-        throw new ClientPortalError('Circuit breaker is open', 'CIRCUIT_OPEN');
+      if (state === "open") {
+        throw new ClientPortalError("Circuit breaker is open", "CIRCUIT_OPEN");
       }
 
       try {
         const result = await fn();
-        
-        if (state === 'half-open') {
-          state = 'closed';
+
+        if (state === "half-open") {
+          state = "closed";
           failures = 0;
         }
-        
+
         return result;
       } catch (error) {
         failures++;
         lastFailureTime = Date.now();
 
         if (failures >= threshold) {
-          state = 'open';
+          state = "open";
         }
 
         throw error;
@@ -144,17 +146,17 @@ export class ErrorRecovery {
   static async bulkhead<T>(
     fn: () => Promise<T>,
     maxConcurrent: number,
-    queue: Array<() => Promise<any>>
+    queue: Array<() => Promise<any>>,
   ): Promise<T> {
     if (queue.length >= maxConcurrent) {
       throw new ClientPortalError(
-        'Too many concurrent requests',
-        'BULKHEAD_FULL'
+        "Too many concurrent requests",
+        "BULKHEAD_FULL",
       );
     }
 
     queue.push(fn);
-    
+
     try {
       return await fn();
     } finally {
@@ -172,12 +174,18 @@ export class ErrorRecovery {
     }
 
     // Don't retry on validation errors
-    if (error instanceof ClientPortalError && error.code === 'VALIDATION_ERROR') {
+    if (
+      error instanceof ClientPortalError &&
+      error.code === "VALIDATION_ERROR"
+    ) {
       return false;
     }
 
     // Retry on network errors
-    if (error.message.includes('Network') || error.message.includes('timeout')) {
+    if (
+      error.message.includes("Network") ||
+      error.message.includes("timeout")
+    ) {
       return true;
     }
 
@@ -185,7 +193,7 @@ export class ErrorRecovery {
   }
 
   private static delay(ms: number): Promise<void> {
-    return new Promise(resolve => setTimeout(resolve, ms));
+    return new Promise((resolve) => setTimeout(resolve, ms));
   }
 }
 
@@ -202,12 +210,12 @@ export const useErrorBoundary = () => {
       setError(new Error(event.reason));
     };
 
-    window.addEventListener('error', handleError);
-    window.addEventListener('unhandledrejection', handleRejection);
+    window.addEventListener("error", handleError);
+    window.addEventListener("unhandledrejection", handleRejection);
 
     return () => {
-      window.removeEventListener('error', handleError);
-      window.removeEventListener('unhandledrejection', handleRejection);
+      window.removeEventListener("error", handleError);
+      window.removeEventListener("unhandledrejection", handleRejection);
     };
   }, []);
 
@@ -228,7 +236,7 @@ export class AutoSave {
       minInterval?: number;
       onError?: (error: Error) => void;
       onSuccess?: () => void;
-    } = {}
+    } = {},
   ) {}
 
   trigger(): void {
@@ -255,7 +263,7 @@ export class AutoSave {
       this.lastSave = Date.now();
       this.options.onSuccess?.();
     } catch (error) {
-      const err = error instanceof Error ? error : new Error('Save failed');
+      const err = error instanceof Error ? error : new Error("Save failed");
       this.options.onError?.(err);
     }
   }
@@ -277,7 +285,7 @@ export class OfflineQueue {
     retries: number;
   }> = [];
 
-  constructor(private storageKey: string = 'offline-queue') {
+  constructor(private storageKey: string = "offline-queue") {
     this.loadFromStorage();
   }
 
@@ -292,31 +300,31 @@ export class OfflineQueue {
 
     this.queue.push(item);
     this.saveToStorage();
-    
+
     return id;
   }
 
   async process(): Promise<void> {
     const items = [...this.queue];
-    
+
     for (const item of items) {
       try {
         await item.request();
         this.remove(item.id);
       } catch (error) {
         item.retries++;
-        
+
         if (item.retries >= 3) {
           this.remove(item.id);
         }
       }
     }
-    
+
     this.saveToStorage();
   }
 
   remove(id: string): void {
-    this.queue = this.queue.filter(item => item.id !== id);
+    this.queue = this.queue.filter((item) => item.id !== id);
   }
 
   clear(): void {
@@ -333,7 +341,7 @@ export class OfflineQueue {
       }));
       localStorage.setItem(this.storageKey, JSON.stringify(data));
     } catch (error) {
-      console.error('Failed to save offline queue:', error);
+      console.error("Failed to save offline queue:", error);
     }
   }
 
@@ -343,10 +351,10 @@ export class OfflineQueue {
       if (data) {
         // Note: We can't restore the actual request functions from storage
         // This would need to be handled differently in a real implementation
-        console.warn('Offline queue loaded but requests cannot be restored');
+        console.warn("Offline queue loaded but requests cannot be restored");
       }
     } catch (error) {
-      console.error('Failed to load offline queue:', error);
+      console.error("Failed to load offline queue:", error);
     }
   }
 }

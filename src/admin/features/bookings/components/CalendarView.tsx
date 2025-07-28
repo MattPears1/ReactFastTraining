@@ -1,18 +1,18 @@
-import React, { useState } from 'react';
-import { 
-  ChevronLeft, 
-  ChevronRight, 
+import React, { useState } from "react";
+import {
+  ChevronLeft,
+  ChevronRight,
   Calendar,
   Clock,
   MapPin,
   Users,
   Eye,
-  Plus
-} from 'lucide-react';
-import { 
-  format, 
-  startOfMonth, 
-  endOfMonth, 
+  Plus,
+} from "lucide-react";
+import {
+  format,
+  startOfMonth,
+  endOfMonth,
   eachDayOfInterval,
   getDay,
   isToday,
@@ -21,12 +21,12 @@ import {
   startOfWeek,
   endOfWeek,
   addMonths,
-  subMonths
-} from 'date-fns';
-import { AdminCard } from '../../../components/ui/AdminCard';
-import { AdminBadge } from '../../../components/ui/AdminBadge';
-import { useQuery } from '@tanstack/react-query';
-import type { Booking, CourseSchedule } from '../../../../types/booking';
+  subMonths,
+} from "date-fns";
+import { AdminCard } from "../../../components/ui/AdminCard";
+import { AdminBadge } from "../../../components/ui/AdminBadge";
+import { useQuery } from "@tanstack/react-query";
+import type { Booking, CourseSchedule } from "../../../../types/booking";
 
 interface CalendarViewProps {
   bookings: Booking[];
@@ -35,17 +35,20 @@ interface CalendarViewProps {
 export const CalendarView: React.FC<CalendarViewProps> = ({ bookings }) => {
   const [currentMonth, setCurrentMonth] = useState(new Date());
   const [selectedDate, setSelectedDate] = useState<Date | null>(null);
-  const [selectedSchedule, setSelectedSchedule] = useState<CourseSchedule | null>(null);
+  const [selectedSchedule, setSelectedSchedule] =
+    useState<CourseSchedule | null>(null);
 
   // Fetch course schedules
   const { data: schedules } = useQuery({
-    queryKey: ['admin-schedules', format(currentMonth, 'yyyy-MM')],
+    queryKey: ["admin-schedules", format(currentMonth, "yyyy-MM")],
     queryFn: async () => {
-      const start = format(startOfMonth(currentMonth), 'yyyy-MM-dd');
-      const end = format(endOfMonth(currentMonth), 'yyyy-MM-dd');
-      
-      const response = await fetch(`/api/admin/schedules?dateFrom=${start}&dateTo=${end}`);
-      if (!response.ok) throw new Error('Failed to fetch schedules');
+      const start = format(startOfMonth(currentMonth), "yyyy-MM-dd");
+      const end = format(endOfMonth(currentMonth), "yyyy-MM-dd");
+
+      const response = await fetch(
+        `/api/admin/schedules?dateFrom=${start}&dateTo=${end}`,
+      );
+      if (!response.ok) throw new Error("Failed to fetch schedules");
       return response.json() as Promise<CourseSchedule[]>;
     },
     staleTime: 5 * 60 * 1000,
@@ -55,18 +58,22 @@ export const CalendarView: React.FC<CalendarViewProps> = ({ bookings }) => {
   const monthEnd = endOfMonth(currentMonth);
   const calendarStart = startOfWeek(monthStart);
   const calendarEnd = endOfWeek(monthEnd);
-  const calendarDays = eachDayOfInterval({ start: calendarStart, end: calendarEnd });
+  const calendarDays = eachDayOfInterval({
+    start: calendarStart,
+    end: calendarEnd,
+  });
 
   const getSchedulesForDate = (date: Date) => {
-    const dateStr = format(date, 'yyyy-MM-dd');
-    return schedules?.filter(s => s.date === dateStr) || [];
+    const dateStr = format(date, "yyyy-MM-dd");
+    return schedules?.filter((s) => s.date === dateStr) || [];
   };
 
   const getBookingsForSchedule = (schedule: CourseSchedule) => {
-    return bookings.filter(b => 
-      b.courseId === schedule.courseId && 
-      b.courseDate === schedule.date &&
-      b.courseTime === schedule.time
+    return bookings.filter(
+      (b) =>
+        b.courseId === schedule.courseId &&
+        b.courseDate === schedule.date &&
+        b.courseTime === schedule.time,
     );
   };
 
@@ -78,7 +85,7 @@ export const CalendarView: React.FC<CalendarViewProps> = ({ bookings }) => {
     setCurrentMonth(addMonths(currentMonth, 1));
   };
 
-  const weekDays = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+  const weekDays = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
 
   return (
     <div className="space-y-6">
@@ -86,7 +93,7 @@ export const CalendarView: React.FC<CalendarViewProps> = ({ bookings }) => {
       <AdminCard>
         <div className="flex items-center justify-between mb-6">
           <h2 className="text-xl font-semibold text-gray-900">
-            {format(currentMonth, 'MMMM yyyy')}
+            {format(currentMonth, "MMMM yyyy")}
           </h2>
           <div className="flex gap-2">
             <button
@@ -113,7 +120,7 @@ export const CalendarView: React.FC<CalendarViewProps> = ({ bookings }) => {
         {/* Calendar Grid */}
         <div className="grid grid-cols-7 gap-px bg-gray-200">
           {/* Week days header */}
-          {weekDays.map(day => (
+          {weekDays.map((day) => (
             <div
               key={day}
               className="bg-gray-50 p-2 text-center text-sm font-medium text-gray-700"
@@ -126,23 +133,27 @@ export const CalendarView: React.FC<CalendarViewProps> = ({ bookings }) => {
           {calendarDays.map((day, idx) => {
             const daySchedules = getSchedulesForDate(day);
             const isCurrentMonth = isSameMonth(day, currentMonth);
-            const isSelectedDate = selectedDate && format(day, 'yyyy-MM-dd') === format(selectedDate, 'yyyy-MM-dd');
+            const isSelectedDate =
+              selectedDate &&
+              format(day, "yyyy-MM-dd") === format(selectedDate, "yyyy-MM-dd");
 
             return (
               <div
                 key={idx}
                 className={`
                   bg-white min-h-[100px] p-2 cursor-pointer transition-colors
-                  ${!isCurrentMonth ? 'bg-gray-50 text-gray-400' : ''}
-                  ${isToday(day) ? 'bg-blue-50' : ''}
-                  ${isSelectedDate ? 'ring-2 ring-primary-500' : ''}
+                  ${!isCurrentMonth ? "bg-gray-50 text-gray-400" : ""}
+                  ${isToday(day) ? "bg-blue-50" : ""}
+                  ${isSelectedDate ? "ring-2 ring-primary-500" : ""}
                   hover:bg-gray-50
                 `}
                 onClick={() => setSelectedDate(day)}
               >
                 <div className="flex justify-between items-start mb-1">
-                  <span className={`text-sm font-medium ${isToday(day) ? 'text-primary-600' : ''}`}>
-                    {format(day, 'd')}
+                  <span
+                    className={`text-sm font-medium ${isToday(day) ? "text-primary-600" : ""}`}
+                  >
+                    {format(day, "d")}
                   </span>
                   {daySchedules.length > 0 && (
                     <span className="text-xs bg-primary-100 text-primary-700 px-1.5 py-0.5 rounded">
@@ -162,7 +173,9 @@ export const CalendarView: React.FC<CalendarViewProps> = ({ bookings }) => {
                       }}
                       className="text-xs p-1 bg-primary-50 rounded hover:bg-primary-100 cursor-pointer"
                     >
-                      <p className="font-medium truncate">{schedule.courseName}</p>
+                      <p className="font-medium truncate">
+                        {schedule.courseName}
+                      </p>
                       <p className="text-gray-600">{schedule.time}</p>
                     </div>
                   ))}
@@ -183,7 +196,7 @@ export const CalendarView: React.FC<CalendarViewProps> = ({ bookings }) => {
         <AdminCard>
           <div className="flex items-center justify-between mb-4">
             <h3 className="text-lg font-semibold">
-              Courses on {format(selectedDate, 'EEEE, d MMMM yyyy')}
+              Courses on {format(selectedDate, "EEEE, d MMMM yyyy")}
             </h3>
             <button className="admin-btn admin-btn-primary">
               <Plus className="admin-icon-sm" />
@@ -194,7 +207,8 @@ export const CalendarView: React.FC<CalendarViewProps> = ({ bookings }) => {
           <div className="space-y-4">
             {getSchedulesForDate(selectedDate).map((schedule) => {
               const scheduleBookings = getBookingsForSchedule(schedule);
-              const capacityPercentage = (schedule.currentCapacity / schedule.maxCapacity) * 100;
+              const capacityPercentage =
+                (schedule.currentCapacity / schedule.maxCapacity) * 100;
 
               return (
                 <div
@@ -204,7 +218,9 @@ export const CalendarView: React.FC<CalendarViewProps> = ({ bookings }) => {
                 >
                   <div className="flex items-start justify-between mb-3">
                     <div>
-                      <h4 className="font-semibold text-gray-900">{schedule.courseName}</h4>
+                      <h4 className="font-semibold text-gray-900">
+                        {schedule.courseName}
+                      </h4>
                       <div className="flex items-center gap-4 mt-1 text-sm text-gray-600">
                         <span className="flex items-center gap-1">
                           <Clock className="w-4 h-4" />
@@ -220,7 +236,11 @@ export const CalendarView: React.FC<CalendarViewProps> = ({ bookings }) => {
                         </span>
                       </div>
                     </div>
-                    <AdminBadge variant={schedule.status === 'scheduled' ? 'neutral' : 'success'}>
+                    <AdminBadge
+                      variant={
+                        schedule.status === "scheduled" ? "neutral" : "success"
+                      }
+                    >
                       {schedule.status}
                     </AdminBadge>
                   </div>
@@ -230,17 +250,22 @@ export const CalendarView: React.FC<CalendarViewProps> = ({ bookings }) => {
                     <div className="flex items-center justify-between text-sm mb-1">
                       <span className="text-gray-600">Capacity</span>
                       <span className="font-medium">
-                        {schedule.currentCapacity} / {schedule.maxCapacity} attendees
+                        {schedule.currentCapacity} / {schedule.maxCapacity}{" "}
+                        attendees
                       </span>
                     </div>
                     <div className="w-full bg-gray-200 rounded-full h-2">
                       <div
                         className={`h-2 rounded-full transition-all ${
-                          capacityPercentage >= 100 ? 'bg-red-500' :
-                          capacityPercentage >= 80 ? 'bg-yellow-500' :
-                          'bg-green-500'
+                          capacityPercentage >= 100
+                            ? "bg-red-500"
+                            : capacityPercentage >= 80
+                              ? "bg-yellow-500"
+                              : "bg-green-500"
                         }`}
-                        style={{ width: `${Math.min(capacityPercentage, 100)}%` }}
+                        style={{
+                          width: `${Math.min(capacityPercentage, 100)}%`,
+                        }}
                       />
                     </div>
                   </div>
@@ -253,8 +278,13 @@ export const CalendarView: React.FC<CalendarViewProps> = ({ bookings }) => {
                       </p>
                       <div className="space-y-1">
                         {scheduleBookings.slice(0, 3).map((booking, idx) => (
-                          <div key={idx} className="flex items-center justify-between text-sm">
-                            <span className="text-gray-600">{booking.customerName}</span>
+                          <div
+                            key={idx}
+                            className="flex items-center justify-between text-sm"
+                          >
+                            <span className="text-gray-600">
+                              {booking.customerName}
+                            </span>
                             <AdminBadge variant="success" size="sm">
                               {booking.paymentStatus}
                             </AdminBadge>
@@ -288,7 +318,8 @@ export const CalendarView: React.FC<CalendarViewProps> = ({ bookings }) => {
           <div className="bg-white rounded-lg shadow-xl max-w-3xl w-full max-h-[80vh] overflow-y-auto">
             <div className="sticky top-0 bg-white border-b border-gray-200 px-6 py-4 flex items-center justify-between">
               <h2 className="text-xl font-semibold text-gray-900">
-                {selectedSchedule.courseName} - {format(parseISO(selectedSchedule.date), 'dd MMM yyyy')}
+                {selectedSchedule.courseName} -{" "}
+                {format(parseISO(selectedSchedule.date), "dd MMM yyyy")}
               </h2>
               <button
                 onClick={() => setSelectedSchedule(null)}
@@ -316,7 +347,8 @@ export const CalendarView: React.FC<CalendarViewProps> = ({ bookings }) => {
                 <div>
                   <p className="text-sm text-gray-500">Capacity</p>
                   <p className="font-medium">
-                    {selectedSchedule.currentCapacity} / {selectedSchedule.maxCapacity}
+                    {selectedSchedule.currentCapacity} /{" "}
+                    {selectedSchedule.maxCapacity}
                   </p>
                 </div>
               </div>
@@ -325,19 +357,27 @@ export const CalendarView: React.FC<CalendarViewProps> = ({ bookings }) => {
               <h3 className="text-lg font-semibold mb-4">Bookings</h3>
               <div className="space-y-3">
                 {getBookingsForSchedule(selectedSchedule).map((booking) => (
-                  <div key={booking.id} className="border border-gray-200 rounded-lg p-4">
+                  <div
+                    key={booking.id}
+                    className="border border-gray-200 rounded-lg p-4"
+                  >
                     <div className="flex items-center justify-between">
                       <div>
                         <p className="font-medium">{booking.customerName}</p>
-                        <p className="text-sm text-gray-600">{booking.customerEmail}</p>
-                        <p className="text-sm text-gray-600">{booking.customerPhone}</p>
+                        <p className="text-sm text-gray-600">
+                          {booking.customerEmail}
+                        </p>
+                        <p className="text-sm text-gray-600">
+                          {booking.customerPhone}
+                        </p>
                       </div>
                       <div className="text-right">
                         <AdminBadge variant="success" className="mb-1">
                           {booking.status}
                         </AdminBadge>
                         <p className="text-sm text-gray-600">
-                          {booking.attendees} {booking.attendees === 1 ? 'attendee' : 'attendees'}
+                          {booking.attendees}{" "}
+                          {booking.attendees === 1 ? "attendee" : "attendees"}
                         </p>
                       </div>
                     </div>

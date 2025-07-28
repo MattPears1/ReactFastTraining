@@ -1,17 +1,19 @@
-import React, { useState, useEffect } from 'react';
-import { loadStripe } from '@stripe/stripe-js';
+import React, { useState, useEffect } from "react";
+import { loadStripe } from "@stripe/stripe-js";
 import {
   Elements,
   CardElement,
   useStripe,
   useElements,
-} from '@stripe/react-stripe-js';
-import { Lock, CreditCard, AlertCircle } from 'lucide-react';
-import { BookingData } from '../BookingWizard';
-import { bookingApi } from '@/services/api/bookings';
+} from "@stripe/react-stripe-js";
+import { Lock, CreditCard, AlertCircle } from "lucide-react";
+import { BookingData } from "../BookingWizard";
+import { bookingApi } from "@/services/api/bookings";
 
 // Initialize Stripe
-const stripePublishableKey = import.meta.env.VITE_STRIPE_PUBLISHABLE_KEY || 'pk_test_51Qw5QyQSHAAMHn4tPbe31bwAtRb7qEAGms4h3kr8h8mu1nfyzzM1u9GHdnbtGtiuzJWH9NSqFoER4Wmhw3k91cKN00PQVbUU7I';
+const stripePublishableKey =
+  import.meta.env.VITE_STRIPE_PUBLISHABLE_KEY ||
+  "pk_test_51Qw5QyQSHAAMHn4tPbe31bwAtRb7qEAGms4h3kr8h8mu1nfyzzM1u9GHdnbtGtiuzJWH9NSqFoER4Wmhw3k91cKN00PQVbUU7I";
 const stripePromise = loadStripe(stripePublishableKey);
 
 interface PaymentStepProps {
@@ -20,15 +22,20 @@ interface PaymentStepProps {
   onBack: () => void;
 }
 
-const PaymentForm: React.FC<PaymentStepProps> = ({ bookingData, onComplete, onBack }) => {
+const PaymentForm: React.FC<PaymentStepProps> = ({
+  bookingData,
+  onComplete,
+  onBack,
+}) => {
   const stripe = useStripe();
   const elements = useElements();
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const [clientSecret, setClientSecret] = useState<string>('');
-  const [bookingId, setBookingId] = useState<string>('');
+  const [clientSecret, setClientSecret] = useState<string>("");
+  const [bookingId, setBookingId] = useState<string>("");
 
-  const totalAmount = bookingData.courseDetails.price * bookingData.attendees.length;
+  const totalAmount =
+    bookingData.courseDetails.price * bookingData.attendees.length;
 
   useEffect(() => {
     // Create booking and payment intent
@@ -48,8 +55,8 @@ const PaymentForm: React.FC<PaymentStepProps> = ({ bookingData, onComplete, onBa
       setClientSecret(response.clientSecret);
       setBookingId(response.bookingId);
     } catch (err) {
-      setError('Failed to initialize payment. Please try again.');
-      console.error('Booking creation failed:', err);
+      setError("Failed to initialize payment. Please try again.");
+      console.error("Booking creation failed:", err);
     } finally {
       setLoading(false);
     }
@@ -67,29 +74,30 @@ const PaymentForm: React.FC<PaymentStepProps> = ({ bookingData, onComplete, onBa
 
     const cardElement = elements.getElement(CardElement);
     if (!cardElement) {
-      setError('Card details not found');
+      setError("Card details not found");
       setLoading(false);
       return;
     }
 
     // Confirm the payment
-    const { error: stripeError, paymentIntent } = await stripe.confirmCardPayment(clientSecret, {
-      payment_method: {
-        card: cardElement,
-        billing_details: {
-          name: bookingData.attendees[0].name,
-          email: bookingData.attendees[0].email,
+    const { error: stripeError, paymentIntent } =
+      await stripe.confirmCardPayment(clientSecret, {
+        payment_method: {
+          card: cardElement,
+          billing_details: {
+            name: bookingData.attendees[0].name,
+            email: bookingData.attendees[0].email,
+          },
         },
-      },
-    });
+      });
 
     if (stripeError) {
-      setError(stripeError.message || 'Payment failed');
+      setError(stripeError.message || "Payment failed");
       setLoading(false);
       return;
     }
 
-    if (paymentIntent?.status === 'succeeded') {
+    if (paymentIntent?.status === "succeeded") {
       // Confirm booking on backend
       try {
         const confirmResponse = await bookingApi.confirmBooking({
@@ -101,8 +109,10 @@ const PaymentForm: React.FC<PaymentStepProps> = ({ bookingData, onComplete, onBa
         const bookingDetails = await bookingApi.getBooking(bookingId);
         onComplete(bookingDetails.bookingReference);
       } catch (err) {
-        setError('Payment succeeded but booking confirmation failed. Please contact support.');
-        console.error('Booking confirmation failed:', err);
+        setError(
+          "Payment succeeded but booking confirmation failed. Please contact support.",
+        );
+        console.error("Booking confirmation failed:", err);
       }
     }
 
@@ -112,14 +122,14 @@ const PaymentForm: React.FC<PaymentStepProps> = ({ bookingData, onComplete, onBa
   const cardElementOptions = {
     style: {
       base: {
-        fontSize: '16px',
-        color: '#424770',
-        '::placeholder': {
-          color: '#aab7c4',
+        fontSize: "16px",
+        color: "#424770",
+        "::placeholder": {
+          color: "#aab7c4",
         },
       },
       invalid: {
-        color: '#9e2146',
+        color: "#9e2146",
       },
     },
   };
@@ -128,7 +138,9 @@ const PaymentForm: React.FC<PaymentStepProps> = ({ bookingData, onComplete, onBa
     <form onSubmit={handleSubmit} className="space-y-6">
       <div>
         <h2 className="text-2xl font-semibold mb-2">Payment Details</h2>
-        <p className="text-gray-600">Complete your booking with secure payment</p>
+        <p className="text-gray-600">
+          Complete your booking with secure payment
+        </p>
       </div>
 
       {/* Payment Summary */}
@@ -139,11 +151,16 @@ const PaymentForm: React.FC<PaymentStepProps> = ({ bookingData, onComplete, onBa
             <span className="text-gray-600">
               {bookingData.courseDetails.courseType}
             </span>
-            <span>£{bookingData.courseDetails.price} × {bookingData.attendees.length}</span>
+            <span>
+              £{bookingData.courseDetails.price} ×{" "}
+              {bookingData.attendees.length}
+            </span>
           </div>
           <div className="pt-2 border-t flex justify-between items-center">
             <span className="font-semibold">Total Amount</span>
-            <span className="text-2xl font-bold text-primary-600">£{totalAmount}</span>
+            <span className="text-2xl font-bold text-primary-600">
+              £{totalAmount}
+            </span>
           </div>
         </div>
       </div>
@@ -221,8 +238,8 @@ const PaymentForm: React.FC<PaymentStepProps> = ({ bookingData, onComplete, onBa
 
       {/* Terms Notice */}
       <p className="text-xs text-gray-500 text-center">
-        By completing this payment, you agree to our terms and conditions. 
-        Your booking will be confirmed via email once payment is processed.
+        By completing this payment, you agree to our terms and conditions. Your
+        booking will be confirmed via email once payment is processed.
       </p>
     </form>
   );

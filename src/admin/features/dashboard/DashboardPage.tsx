@@ -1,27 +1,31 @@
-import React from 'react';
-import { useQuery } from '@tanstack/react-query';
-import { 
-  TrendingUp, 
-  Users, 
-  Calendar, 
+import React from "react";
+import { useQuery } from "@tanstack/react-query";
+import {
+  TrendingUp,
+  Users,
+  Calendar,
   PoundSterling,
   ArrowUp,
   ArrowDown,
-  ArrowRight
-} from 'lucide-react';
-import { adminDashboardService } from '../../services/admin-dashboard.service';
-import { MetricCard } from '../../components/common/MetricCard';
-import { AdminCard } from '../../components/ui/AdminCard';
-import { RevenueChart } from './components/RevenueChart';
-import { BookingStatusChart } from './components/BookingStatusChart';
-import { UpcomingSchedules } from './components/UpcomingSchedules';
-import { RecentActivity } from './components/RecentActivity';
-import { LoadingSpinner } from '../../components/common/LoadingSpinner';
-import './dashboard.css';
+  ArrowRight,
+} from "lucide-react";
+import { adminDashboardService } from "../../services/admin-dashboard.service";
+import { MetricCard } from "../../components/common/MetricCard";
+import { AdminCard } from "../../components/ui/AdminCard";
+import { RevenueChart } from "./components/RevenueChart";
+import { BookingStatusChart } from "./components/BookingStatusChart";
+import { UpcomingSchedules } from "./components/UpcomingSchedules";
+import { RecentActivity } from "./components/RecentActivity";
+import { LoadingSpinner } from "../../components/common/LoadingSpinner";
+import "./dashboard.css";
 
 export const DashboardPage: React.FC = () => {
-  const { data: dashboardData, isLoading, error } = useQuery({
-    queryKey: ['admin-dashboard'],
+  const {
+    data: dashboardData,
+    isLoading,
+    error,
+  } = useQuery({
+    queryKey: ["admin-dashboard"],
     queryFn: () => adminDashboardService.getDashboardOverview(),
     refetchInterval: 5 * 60 * 1000, // Refresh every 5 minutes
   });
@@ -38,8 +42,12 @@ export const DashboardPage: React.FC = () => {
     return (
       <div className="admin-card admin-mt-8">
         <div className="admin-card-body text-center">
-          <p className="text-red-600 font-medium">Failed to load dashboard data</p>
-          <p className="admin-text-small admin-text-muted admin-mt-2">Please try refreshing the page</p>
+          <p className="text-red-600 font-medium">
+            Failed to load dashboard data
+          </p>
+          <p className="admin-text-small admin-text-muted admin-mt-2">
+            Please try refreshing the page
+          </p>
         </div>
       </div>
     );
@@ -49,7 +57,7 @@ export const DashboardPage: React.FC = () => {
     revenue: { current: 0, previous: 0, change: 0 },
     bookings: { current: 0, previous: 0, change: 0 },
     users: { total: 0, new: 0, active: 0 },
-    courses: { upcoming: 0, inProgress: 0, completed: 0 }
+    courses: { upcoming: 0, inProgress: 0, completed: 0 },
   };
 
   return (
@@ -68,25 +76,25 @@ export const DashboardPage: React.FC = () => {
           title="Monthly Revenue"
           value={`£${metrics.revenue.current.toLocaleString()}`}
           change={metrics.revenue.change}
-          changeType={metrics.revenue.change >= 0 ? 'increase' : 'decrease'}
+          changeType={metrics.revenue.change >= 0 ? "increase" : "decrease"}
           icon={<PoundSterling className="h-6 w-6" />}
         />
-        
+
         <MetricCard
           title="Total Bookings"
           value={metrics.bookings.current}
           change={metrics.bookings.change}
-          changeType={metrics.bookings.change >= 0 ? 'increase' : 'decrease'}
+          changeType={metrics.bookings.change >= 0 ? "increase" : "decrease"}
           icon={<Calendar className="h-6 w-6" />}
         />
-        
+
         <MetricCard
           title="Active Users"
           value={metrics.users.active}
           subtitle={`${metrics.users.new} new this month`}
           icon={<Users className="h-6 w-6" />}
         />
-        
+
         <MetricCard
           title="Upcoming Courses"
           value={metrics.courses.upcoming}
@@ -105,7 +113,7 @@ export const DashboardPage: React.FC = () => {
         >
           <RevenueChart data={dashboardData?.revenueData || []} />
         </AdminCard>
-        
+
         <AdminCard
           title="Booking Status"
           subtitle="Current distribution"
@@ -123,21 +131,29 @@ export const DashboardPage: React.FC = () => {
           icon={Calendar}
           iconColor="primary"
           actions={
-            <a href="/admin/schedule" className="admin-btn admin-btn-secondary admin-btn-sm">
+            <a
+              href="/admin/schedule"
+              className="admin-btn admin-btn-secondary admin-btn-sm"
+            >
               View all
               <ArrowRight className="admin-icon-sm" />
             </a>
           }
         >
-          <UpcomingSchedules schedules={dashboardData?.upcomingSchedules || []} />
+          <UpcomingSchedules
+            schedules={dashboardData?.upcomingSchedules || []}
+          />
         </AdminCard>
-        
+
         <AdminCard
           title="Recent Activity"
           icon={Users}
           iconColor="accent"
           actions={
-            <a href="/admin/activity" className="admin-btn admin-btn-secondary admin-btn-sm">
+            <a
+              href="/admin/activity"
+              className="admin-btn admin-btn-secondary admin-btn-sm"
+            >
               View all
               <ArrowRight className="admin-icon-sm" />
             </a>

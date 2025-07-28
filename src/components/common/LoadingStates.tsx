@@ -1,32 +1,34 @@
-import React from 'react';
-import { Loader2 } from 'lucide-react';
-import { cn } from '@utils/cn';
+import React from "react";
+import { Loader2 } from "lucide-react";
+import { cn } from "@utils/cn";
 
 interface LoadingSpinnerProps {
-  size?: 'sm' | 'md' | 'lg' | 'xl';
+  size?: "sm" | "md" | "lg" | "xl";
   className?: string;
   label?: string;
 }
 
 export const LoadingSpinner: React.FC<LoadingSpinnerProps> = ({
-  size = 'md',
+  size = "md",
   className,
-  label = 'Loading...',
+  label = "Loading...",
 }) => {
   const sizeClasses = {
-    sm: 'w-4 h-4',
-    md: 'w-6 h-6',
-    lg: 'w-8 h-8',
-    xl: 'w-12 h-12',
+    sm: "w-4 h-4",
+    md: "w-6 h-6",
+    lg: "w-8 h-8",
+    xl: "w-12 h-12",
   };
 
   return (
-    <div 
-      className={cn('flex items-center justify-center', className)}
+    <div
+      className={cn("flex items-center justify-center", className)}
       role="status"
       aria-label={label}
     >
-      <Loader2 className={cn('animate-spin text-primary-600', sizeClasses[size])} />
+      <Loader2
+        className={cn("animate-spin text-primary-600", sizeClasses[size])}
+      />
       <span className="sr-only">{label}</span>
     </div>
   );
@@ -42,7 +44,7 @@ interface LoadingOverlayProps {
 export const LoadingOverlay: React.FC<LoadingOverlayProps> = ({
   isLoading,
   children,
-  label = 'Loading...',
+  label = "Loading...",
   blur = true,
 }) => {
   return (
@@ -70,9 +72,9 @@ export const Skeleton: React.FC<SkeletonProps> = ({
   return (
     <div
       className={cn(
-        'bg-gray-200 dark:bg-gray-700 rounded',
-        animate && 'animate-pulse',
-        className
+        "bg-gray-200 dark:bg-gray-700 rounded",
+        animate && "animate-pulse",
+        className,
       )}
     />
   );
@@ -89,17 +91,12 @@ export const CardSkeleton: React.FC<CardSkeletonProps> = ({
 }) => {
   return (
     <div className="bg-white dark:bg-gray-800 rounded-lg shadow p-4">
-      {showImage && (
-        <Skeleton className="w-full h-48 mb-4" />
-      )}
+      {showImage && <Skeleton className="w-full h-48 mb-4" />}
       <Skeleton className="h-6 w-3/4 mb-2" />
       {Array.from({ length: lines }).map((_, i) => (
         <Skeleton
           key={i}
-          className={cn(
-            'h-4 mb-2',
-            i === lines - 1 ? 'w-1/2' : 'w-full'
-          )}
+          className={cn("h-4 mb-2", i === lines - 1 ? "w-1/2" : "w-full")}
         />
       ))}
     </div>
@@ -119,13 +116,16 @@ export const TableSkeleton: React.FC<TableSkeletonProps> = ({
     <div className="w-full">
       {/* Header */}
       <div className="border-b border-gray-200 dark:border-gray-700 pb-2 mb-2">
-        <div className="grid gap-4" style={{ gridTemplateColumns: `repeat(${columns}, 1fr)` }}>
+        <div
+          className="grid gap-4"
+          style={{ gridTemplateColumns: `repeat(${columns}, 1fr)` }}
+        >
           {Array.from({ length: columns }).map((_, i) => (
             <Skeleton key={i} className="h-4" />
           ))}
         </div>
       </div>
-      
+
       {/* Rows */}
       {Array.from({ length: rows }).map((_, rowIndex) => (
         <div
@@ -136,10 +136,7 @@ export const TableSkeleton: React.FC<TableSkeletonProps> = ({
           {Array.from({ length: columns }).map((_, colIndex) => (
             <Skeleton
               key={colIndex}
-              className={cn(
-                'h-4',
-                colIndex === 0 && 'w-3/4'
-              )}
+              className={cn("h-4", colIndex === 0 && "w-3/4")}
             />
           ))}
         </div>
@@ -155,17 +152,17 @@ interface LoadingButtonProps {
   className?: string;
   disabled?: boolean;
   onClick?: () => void;
-  type?: 'button' | 'submit' | 'reset';
+  type?: "button" | "submit" | "reset";
 }
 
 export const LoadingButton: React.FC<LoadingButtonProps> = ({
   isLoading,
   children,
-  loadingText = 'Loading...',
+  loadingText = "Loading...",
   className,
   disabled,
   onClick,
-  type = 'button',
+  type = "button",
 }) => {
   return (
     <button
@@ -173,9 +170,9 @@ export const LoadingButton: React.FC<LoadingButtonProps> = ({
       disabled={isLoading || disabled}
       onClick={onClick}
       className={cn(
-        'relative flex items-center justify-center gap-2',
-        'disabled:opacity-50 disabled:cursor-not-allowed',
-        className
+        "relative flex items-center justify-center gap-2",
+        "disabled:opacity-50 disabled:cursor-not-allowed",
+        className,
       )}
     >
       {isLoading ? (
@@ -210,8 +207,8 @@ export const LoadingState: React.FC<LoadingStateProps> = ({
   loadingComponent,
   emptyComponent,
   errorComponent,
-  emptyMessage = 'No data available',
-  errorMessage = 'An error occurred',
+  emptyMessage = "No data available",
+  errorMessage = "An error occurred",
 }) => {
   if (isLoading) {
     return <>{loadingComponent || <LoadingSpinner size="lg" />}</>;
@@ -223,7 +220,7 @@ export const LoadingState: React.FC<LoadingStateProps> = ({
         {errorComponent || (
           <div className="text-center py-8">
             <p className="text-red-600 dark:text-red-400">{errorMessage}</p>
-            {process.env.NODE_ENV === 'development' && (
+            {process.env.NODE_ENV === "development" && (
               <p className="text-sm text-gray-600 dark:text-gray-400 mt-2">
                 {error.message}
               </p>

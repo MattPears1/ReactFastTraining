@@ -1,14 +1,20 @@
-import React, { useState, useEffect, useRef } from 'react';
-import { motion } from 'framer-motion';
-import { Loader2, AlertCircle, ExternalLink } from 'lucide-react';
-import { clsx } from 'clsx';
+import React, { useState, useEffect, useRef } from "react";
+import { motion } from "framer-motion";
+import { Loader2, AlertCircle, ExternalLink } from "lucide-react";
+import { clsx } from "clsx";
 
 export interface SocialEmbedProps {
   url: string;
-  platform?: 'twitter' | 'facebook' | 'instagram' | 'youtube' | 'linkedin' | 'tiktok';
+  platform?:
+    | "twitter"
+    | "facebook"
+    | "instagram"
+    | "youtube"
+    | "linkedin"
+    | "tiktok";
   width?: string | number;
   height?: string | number;
-  theme?: 'light' | 'dark';
+  theme?: "light" | "dark";
   className?: string;
   onLoad?: () => void;
   onError?: (error: Error) => void;
@@ -28,12 +34,14 @@ const embedConfigs: Record<string, EmbedConfig> = {
       return `https://platform.twitter.com/embed/Tweet.html?id=${tweetId}`;
     },
     defaultHeight: 500,
-    scriptSrc: 'https://platform.twitter.com/widgets.js',
-    scriptId: 'twitter-wjs',
+    scriptSrc: "https://platform.twitter.com/widgets.js",
+    scriptId: "twitter-wjs",
   },
   youtube: {
     getEmbedUrl: (url) => {
-      const videoId = url.match(/(?:youtu\.be\/|youtube\.com\/(?:embed\/|v\/|watch\?v=))([^&\n?#]+)/)?.[1];
+      const videoId = url.match(
+        /(?:youtu\.be\/|youtube\.com\/(?:embed\/|v\/|watch\?v=))([^&\n?#]+)/,
+      )?.[1];
       return `https://www.youtube.com/embed/${videoId}`;
     },
     defaultHeight: 315,
@@ -43,8 +51,9 @@ const embedConfigs: Record<string, EmbedConfig> = {
       return `https://www.facebook.com/plugins/post.php?href=${encodeURIComponent(url)}&show_text=true`;
     },
     defaultHeight: 500,
-    scriptSrc: 'https://connect.facebook.net/en_US/sdk.js#xfbml=1&version=v15.0',
-    scriptId: 'facebook-jssdk',
+    scriptSrc:
+      "https://connect.facebook.net/en_US/sdk.js#xfbml=1&version=v15.0",
+    scriptId: "facebook-jssdk",
   },
   instagram: {
     getEmbedUrl: (url) => {
@@ -52,7 +61,7 @@ const embedConfigs: Record<string, EmbedConfig> = {
       return `https://www.instagram.com/p/${postId}/embed`;
     },
     defaultHeight: 600,
-    scriptSrc: 'https://www.instagram.com/embed.js',
+    scriptSrc: "https://www.instagram.com/embed.js",
   },
   linkedin: {
     getEmbedUrl: (url) => {
@@ -66,26 +75,26 @@ const embedConfigs: Record<string, EmbedConfig> = {
       return `https://www.tiktok.com/embed/v2/${videoId}`;
     },
     defaultHeight: 700,
-    scriptSrc: 'https://www.tiktok.com/embed.js',
+    scriptSrc: "https://www.tiktok.com/embed.js",
   },
 };
 
 function detectPlatform(url: string): string | null {
-  if (url.includes('twitter.com') || url.includes('x.com')) return 'twitter';
-  if (url.includes('facebook.com') || url.includes('fb.com')) return 'facebook';
-  if (url.includes('instagram.com')) return 'instagram';
-  if (url.includes('youtube.com') || url.includes('youtu.be')) return 'youtube';
-  if (url.includes('linkedin.com')) return 'linkedin';
-  if (url.includes('tiktok.com')) return 'tiktok';
+  if (url.includes("twitter.com") || url.includes("x.com")) return "twitter";
+  if (url.includes("facebook.com") || url.includes("fb.com")) return "facebook";
+  if (url.includes("instagram.com")) return "instagram";
+  if (url.includes("youtube.com") || url.includes("youtu.be")) return "youtube";
+  if (url.includes("linkedin.com")) return "linkedin";
+  if (url.includes("tiktok.com")) return "tiktok";
   return null;
 }
 
 export const SocialEmbed: React.FC<SocialEmbedProps> = ({
   url,
   platform,
-  width = '100%',
+  width = "100%",
   height,
-  theme = 'light',
+  theme = "light",
   className,
   onLoad,
   onError,
@@ -100,19 +109,19 @@ export const SocialEmbed: React.FC<SocialEmbedProps> = ({
 
   useEffect(() => {
     if (!config) {
-      setError('Unsupported platform or invalid URL');
+      setError("Unsupported platform or invalid URL");
       setLoading(false);
       return;
     }
 
     // Load platform-specific scripts if needed
-    if (config.scriptSrc && typeof window !== 'undefined') {
-      const existingScript = config.scriptId 
+    if (config.scriptSrc && typeof window !== "undefined") {
+      const existingScript = config.scriptId
         ? document.getElementById(config.scriptId)
         : document.querySelector(`script[src="${config.scriptSrc}"]`);
 
       if (!existingScript) {
-        const script = document.createElement('script');
+        const script = document.createElement("script");
         script.src = config.scriptSrc;
         script.async = true;
         if (config.scriptId) {
@@ -129,15 +138,15 @@ export const SocialEmbed: React.FC<SocialEmbedProps> = ({
   };
 
   const handleIframeError = () => {
-    const err = new Error('Failed to load embed');
-    setError('Failed to load social media content');
+    const err = new Error("Failed to load embed");
+    setError("Failed to load social media content");
     setLoading(false);
     onError?.(err);
   };
 
   if (!detectedPlatform || !config) {
     return (
-      <div className={clsx('text-center py-8', className)}>
+      <div className={clsx("text-center py-8", className)}>
         <AlertCircle className="w-12 h-12 text-red-500 mx-auto mb-4" />
         <p className="text-gray-600 dark:text-gray-400 mb-2">
           Unable to embed this content
@@ -148,7 +157,7 @@ export const SocialEmbed: React.FC<SocialEmbedProps> = ({
           rel="noopener noreferrer"
           className="inline-flex items-center gap-2 text-primary-600 hover:text-primary-700"
         >
-          View on {detectedPlatform || 'social media'}
+          View on {detectedPlatform || "social media"}
           <ExternalLink className="w-4 h-4" />
         </a>
       </div>
@@ -157,11 +166,9 @@ export const SocialEmbed: React.FC<SocialEmbedProps> = ({
 
   if (error) {
     return (
-      <div className={clsx('text-center py-8', className)}>
+      <div className={clsx("text-center py-8", className)}>
         <AlertCircle className="w-12 h-12 text-red-500 mx-auto mb-4" />
-        <p className="text-gray-600 dark:text-gray-400 mb-2">
-          {error}
-        </p>
+        <p className="text-gray-600 dark:text-gray-400 mb-2">{error}</p>
         <a
           href={url}
           target="_blank"
@@ -182,8 +189,8 @@ export const SocialEmbed: React.FC<SocialEmbedProps> = ({
     <div
       ref={containerRef}
       className={clsx(
-        'relative overflow-hidden rounded-lg bg-gray-100 dark:bg-gray-800',
-        className
+        "relative overflow-hidden rounded-lg bg-gray-100 dark:bg-gray-800",
+        className,
       )}
       style={{ width, height: embedHeight }}
     >
@@ -234,7 +241,7 @@ export const LazySocialEmbed: React.FC<LazyEmbedProps> = ({
           observer.disconnect();
         }
       },
-      { threshold: 0.1 }
+      { threshold: 0.1 },
     );
 
     if (containerRef.current) {
@@ -252,10 +259,13 @@ export const LazySocialEmbed: React.FC<LazyEmbedProps> = ({
         placeholder || (
           <div
             className="bg-gray-100 dark:bg-gray-800 rounded-lg flex items-center justify-center"
-            style={{ width: embedProps.width || '100%', height: embedProps.height || 400 }}
+            style={{
+              width: embedProps.width || "100%",
+              height: embedProps.height || 400,
+            }}
           >
             <p className="text-gray-500 dark:text-gray-400">
-              Click to load {embedProps.platform || 'social media'} content
+              Click to load {embedProps.platform || "social media"} content
             </p>
           </div>
         )

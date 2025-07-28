@@ -1,11 +1,11 @@
-import React from 'react'
-import { motion } from 'framer-motion'
-import { Lock, Home, LogIn, ArrowLeft } from 'lucide-react'
-import { useNavigate } from 'react-router-dom'
-import Button from '@components/ui/Button'
+import React from "react";
+import { motion } from "framer-motion";
+import { Lock, Home, LogIn, ArrowLeft } from "lucide-react";
+import { useNavigate } from "react-router-dom";
+import Button from "@components/ui/Button";
 
 const ForbiddenPage: React.FC = () => {
-  const navigate = useNavigate()
+  const navigate = useNavigate();
 
   return (
     <div className="min-h-[70vh] flex items-center justify-center">
@@ -47,7 +47,8 @@ const ForbiddenPage: React.FC = () => {
               Access Forbidden
             </h2>
             <p className="text-lg text-gray-600 dark:text-gray-400 mb-8">
-              You don't have permission to access this resource. Please log in or contact an administrator if you believe this is an error.
+              You don't have permission to access this resource. Please log in
+              or contact an administrator if you believe this is an error.
             </p>
           </motion.div>
 
@@ -64,17 +65,10 @@ const ForbiddenPage: React.FC = () => {
             >
               Go Back
             </Button>
-            <Button
-              href="/login"
-              variant="secondary"
-              leftIcon={<LogIn />}
-            >
+            <Button href="/login" variant="secondary" leftIcon={<LogIn />}>
               Log In
             </Button>
-            <Button
-              href="/"
-              leftIcon={<Home />}
-            >
+            <Button href="/" leftIcon={<Home />}>
               Go to Homepage
             </Button>
           </motion.div>
@@ -123,7 +117,7 @@ const ForbiddenPage: React.FC = () => {
         </div>
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default ForbiddenPage
+export default ForbiddenPage;

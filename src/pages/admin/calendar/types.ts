@@ -1,5 +1,5 @@
 // Calendar types
-import { Views } from 'react-big-calendar';
+import { Views } from "react-big-calendar";
 
 export interface CalendarEvent {
   id: string;
@@ -16,7 +16,7 @@ export interface CalendarEvent {
       booked: number;
       available: number;
       percentFull: number;
-      status: 'available' | 'filling' | 'nearly-full' | 'full';
+      status: "available" | "filling" | "nearly-full" | "full";
     };
     stats: {
       bookings: number;
@@ -34,7 +34,7 @@ export interface FilterState {
   instructor: string;
 }
 
-export type CalendarView = typeof Views[keyof typeof Views];
+export type CalendarView = (typeof Views)[keyof typeof Views];
 
 export interface EventStyleResult {
   style: React.CSSProperties;

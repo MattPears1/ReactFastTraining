@@ -1,10 +1,10 @@
-import React, { useState, useEffect } from 'react';
-import { 
-  Star, 
-  Eye, 
-  Check, 
-  X, 
-  MessageSquare, 
+import React, { useState, useEffect } from "react";
+import {
+  Star,
+  Eye,
+  Check,
+  X,
+  MessageSquare,
   Calendar,
   User,
   MapPin,
@@ -12,14 +12,14 @@ import {
   Filter,
   CheckCircle,
   XCircle,
-  Clock
-} from 'lucide-react';
-import { AdminCard } from '../../components/ui/AdminCard';
-import { AdminTable } from '../../components/ui/AdminTable';
-import { AdminBadge } from '../../components/ui/AdminBadge';
-import { LoadingSpinner } from '../../components/common/LoadingSpinner';
-import { useNotifications } from '../../contexts/NotificationContext';
-import { TestimonialDetailsModal } from './components/TestimonialDetailsModal';
+  Clock,
+} from "lucide-react";
+import { AdminCard } from "../../components/ui/AdminCard";
+import { AdminTable } from "../../components/ui/AdminTable";
+import { AdminBadge } from "../../components/ui/AdminBadge";
+import { LoadingSpinner } from "../../components/common/LoadingSpinner";
+import { useNotifications } from "../../contexts/NotificationContext";
+import { TestimonialDetailsModal } from "./components/TestimonialDetailsModal";
 
 interface Testimonial {
   id: number;
@@ -32,7 +32,7 @@ interface Testimonial {
   rating: number;
   photoUrl?: string;
   photoConsent: string;
-  status: 'pending' | 'approved' | 'rejected' | 'featured';
+  status: "pending" | "approved" | "rejected" | "featured";
   showOnHomepage: boolean;
   verifiedBooking: boolean;
   bookingReference?: string;
@@ -45,9 +45,10 @@ export const TestimonialsPage: React.FC = () => {
   const { showNotification } = useNotifications();
   const [testimonials, setTestimonials] = useState<Testimonial[]>([]);
   const [loading, setLoading] = useState(true);
-  const [selectedTestimonial, setSelectedTestimonial] = useState<Testimonial | null>(null);
-  const [filterStatus, setFilterStatus] = useState<string>('all');
-  const [searchTerm, setSearchTerm] = useState('');
+  const [selectedTestimonial, setSelectedTestimonial] =
+    useState<Testimonial | null>(null);
+  const [filterStatus, setFilterStatus] = useState<string>("all");
+  const [searchTerm, setSearchTerm] = useState("");
   const [stats, setStats] = useState({
     total: 0,
     pending: 0,
@@ -65,15 +66,18 @@ export const TestimonialsPage: React.FC = () => {
   const fetchTestimonials = async () => {
     try {
       setLoading(true);
-      const response = await fetch(`/api/admin/testimonials?status=${filterStatus}`, {
-        headers: {
-          'Authorization': `Bearer ${localStorage.getItem('adminToken')}`,
+      const response = await fetch(
+        `/api/admin/testimonials?status=${filterStatus}`,
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("adminToken")}`,
+          },
         },
-      });
+      );
       const data = await response.json();
       setTestimonials(data);
     } catch (error) {
-      console.error('Failed to fetch testimonials:', error);
+      console.error("Failed to fetch testimonials:", error);
       // Use mock data for development
       setTestimonials(getMockTestimonials());
     } finally {
@@ -83,15 +87,15 @@ export const TestimonialsPage: React.FC = () => {
 
   const fetchStats = async () => {
     try {
-      const response = await fetch('/api/admin/testimonials/stats', {
+      const response = await fetch("/api/admin/testimonials/stats", {
         headers: {
-          'Authorization': `Bearer ${localStorage.getItem('adminToken')}`,
+          Authorization: `Bearer ${localStorage.getItem("adminToken")}`,
         },
       });
       const data = await response.json();
       setStats(data);
     } catch (error) {
-      console.error('Failed to fetch stats:', error);
+      console.error("Failed to fetch stats:", error);
       // Use mock stats
       setStats({
         total: 45,
@@ -104,24 +108,31 @@ export const TestimonialsPage: React.FC = () => {
     }
   };
 
-  const handleStatusChange = async (testimonialId: number, newStatus: string, rejectionReason?: string) => {
+  const handleStatusChange = async (
+    testimonialId: number,
+    newStatus: string,
+    rejectionReason?: string,
+  ) => {
     try {
-      const response = await fetch(`/api/admin/testimonials/${testimonialId}/status`, {
-        method: 'PUT',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${localStorage.getItem('adminToken')}`,
+      const response = await fetch(
+        `/api/admin/testimonials/${testimonialId}/status`,
+        {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${localStorage.getItem("adminToken")}`,
+          },
+          body: JSON.stringify({
+            status: newStatus,
+            rejectionReason: rejectionReason,
+          }),
         },
-        body: JSON.stringify({ 
-          status: newStatus,
-          rejectionReason: rejectionReason,
-        }),
-      });
+      );
 
       if (response.ok) {
         showNotification({
-          type: 'success',
-          title: 'Status Updated',
+          type: "success",
+          title: "Status Updated",
           message: `Testimonial ${newStatus} successfully`,
         });
         fetchTestimonials();
@@ -130,60 +141,89 @@ export const TestimonialsPage: React.FC = () => {
       }
     } catch (error) {
       showNotification({
-        type: 'error',
-        title: 'Update Failed',
-        message: 'Failed to update testimonial status',
+        type: "error",
+        title: "Update Failed",
+        message: "Failed to update testimonial status",
       });
     }
   };
 
-  const handleToggleHomepage = async (testimonialId: number, showOnHomepage: boolean) => {
+  const handleToggleHomepage = async (
+    testimonialId: number,
+    showOnHomepage: boolean,
+  ) => {
     try {
-      const response = await fetch(`/api/admin/testimonials/${testimonialId}/homepage`, {
-        method: 'PUT',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${localStorage.getItem('adminToken')}`,
+      const response = await fetch(
+        `/api/admin/testimonials/${testimonialId}/homepage`,
+        {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${localStorage.getItem("adminToken")}`,
+          },
+          body: JSON.stringify({ showOnHomepage }),
         },
-        body: JSON.stringify({ showOnHomepage }),
-      });
+      );
 
       if (response.ok) {
         showNotification({
-          type: 'success',
-          title: 'Updated',
-          message: showOnHomepage ? 'Added to homepage' : 'Removed from homepage',
+          type: "success",
+          title: "Updated",
+          message: showOnHomepage
+            ? "Added to homepage"
+            : "Removed from homepage",
         });
         fetchTestimonials();
       }
     } catch (error) {
       showNotification({
-        type: 'error',
-        title: 'Update Failed',
-        message: 'Failed to update homepage display',
+        type: "error",
+        title: "Update Failed",
+        message: "Failed to update homepage display",
       });
     }
   };
 
-  const filteredTestimonials = testimonials.filter(testimonial => {
-    const matchesSearch = 
+  const filteredTestimonials = testimonials.filter((testimonial) => {
+    const matchesSearch =
       testimonial.authorName.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      testimonial.courseTaken.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      testimonial.courseTaken
+        .toLowerCase()
+        .includes(searchTerm.toLowerCase()) ||
       testimonial.content.toLowerCase().includes(searchTerm.toLowerCase());
-    
+
     return matchesSearch;
   });
 
   const getStatusBadge = (status: string) => {
     switch (status) {
-      case 'pending':
-        return <AdminBadge variant="warning" icon={<Clock className="w-3 h-3" />}>Pending</AdminBadge>;
-      case 'approved':
-        return <AdminBadge variant="success" icon={<CheckCircle className="w-3 h-3" />}>Approved</AdminBadge>;
-      case 'rejected':
-        return <AdminBadge variant="danger" icon={<XCircle className="w-3 h-3" />}>Rejected</AdminBadge>;
-      case 'featured':
-        return <AdminBadge variant="primary" icon={<Star className="w-3 h-3" />}>Featured</AdminBadge>;
+      case "pending":
+        return (
+          <AdminBadge variant="warning" icon={<Clock className="w-3 h-3" />}>
+            Pending
+          </AdminBadge>
+        );
+      case "approved":
+        return (
+          <AdminBadge
+            variant="success"
+            icon={<CheckCircle className="w-3 h-3" />}
+          >
+            Approved
+          </AdminBadge>
+        );
+      case "rejected":
+        return (
+          <AdminBadge variant="danger" icon={<XCircle className="w-3 h-3" />}>
+            Rejected
+          </AdminBadge>
+        );
+      case "featured":
+        return (
+          <AdminBadge variant="primary" icon={<Star className="w-3 h-3" />}>
+            Featured
+          </AdminBadge>
+        );
       default:
         return null;
     }
@@ -191,7 +231,7 @@ export const TestimonialsPage: React.FC = () => {
 
   const columns = [
     {
-      header: 'Author',
+      header: "Author",
       accessor: (testimonial: Testimonial) => (
         <div>
           <p className="font-medium">{testimonial.authorName}</p>
@@ -206,7 +246,7 @@ export const TestimonialsPage: React.FC = () => {
       ),
     },
     {
-      header: 'Course',
+      header: "Course",
       accessor: (testimonial: Testimonial) => (
         <div>
           <p className="text-sm">{testimonial.courseTaken}</p>
@@ -219,7 +259,7 @@ export const TestimonialsPage: React.FC = () => {
       ),
     },
     {
-      header: 'Rating',
+      header: "Rating",
       accessor: (testimonial: Testimonial) => (
         <div className="flex gap-0.5">
           {[...Array(5)].map((_, i) => (
@@ -227,8 +267,8 @@ export const TestimonialsPage: React.FC = () => {
               key={i}
               className={`w-4 h-4 ${
                 i < testimonial.rating
-                  ? 'fill-yellow-400 text-yellow-400'
-                  : 'text-gray-300'
+                  ? "fill-yellow-400 text-yellow-400"
+                  : "text-gray-300"
               }`}
             />
           ))}
@@ -236,7 +276,7 @@ export const TestimonialsPage: React.FC = () => {
       ),
     },
     {
-      header: 'Content',
+      header: "Content",
       accessor: (testimonial: Testimonial) => (
         <p className="text-sm text-gray-600 line-clamp-2 max-w-xs">
           {testimonial.content}
@@ -244,30 +284,35 @@ export const TestimonialsPage: React.FC = () => {
       ),
     },
     {
-      header: 'Status',
-      accessor: (testimonial: Testimonial) => getStatusBadge(testimonial.status),
+      header: "Status",
+      accessor: (testimonial: Testimonial) =>
+        getStatusBadge(testimonial.status),
     },
     {
-      header: 'Verified',
-      accessor: (testimonial: Testimonial) => (
+      header: "Verified",
+      accessor: (testimonial: Testimonial) =>
         testimonial.verifiedBooking ? (
           <CheckCircle className="w-5 h-5 text-green-600" />
         ) : (
           <span className="text-gray-400">-</span>
-        )
-      ),
+        ),
     },
     {
-      header: 'Homepage',
+      header: "Homepage",
       accessor: (testimonial: Testimonial) => (
         <button
-          onClick={() => handleToggleHomepage(testimonial.id, !testimonial.showOnHomepage)}
+          onClick={() =>
+            handleToggleHomepage(testimonial.id, !testimonial.showOnHomepage)
+          }
           className={`p-1 rounded ${
             testimonial.showOnHomepage
-              ? 'text-primary-600 bg-primary-50'
-              : 'text-gray-400 hover:text-gray-600'
+              ? "text-primary-600 bg-primary-50"
+              : "text-gray-400 hover:text-gray-600"
           }`}
-          disabled={testimonial.status !== 'approved' && testimonial.status !== 'featured'}
+          disabled={
+            testimonial.status !== "approved" &&
+            testimonial.status !== "featured"
+          }
         >
           {testimonial.showOnHomepage ? (
             <CheckCircle className="w-5 h-5" />
@@ -278,7 +323,7 @@ export const TestimonialsPage: React.FC = () => {
       ),
     },
     {
-      header: 'Actions',
+      header: "Actions",
       accessor: (testimonial: Testimonial) => (
         <div className="flex gap-2">
           <button
@@ -288,10 +333,10 @@ export const TestimonialsPage: React.FC = () => {
           >
             <Eye className="w-5 h-5" />
           </button>
-          {testimonial.status === 'pending' && (
+          {testimonial.status === "pending" && (
             <>
               <button
-                onClick={() => handleStatusChange(testimonial.id, 'approved')}
+                onClick={() => handleStatusChange(testimonial.id, "approved")}
                 className="text-green-600 hover:text-green-700"
                 title="Approve"
               >
@@ -299,9 +344,9 @@ export const TestimonialsPage: React.FC = () => {
               </button>
               <button
                 onClick={() => {
-                  const reason = prompt('Rejection reason:');
+                  const reason = prompt("Rejection reason:");
                   if (reason) {
-                    handleStatusChange(testimonial.id, 'rejected', reason);
+                    handleStatusChange(testimonial.id, "rejected", reason);
                   }
                 }}
                 className="text-red-600 hover:text-red-700"
@@ -327,7 +372,9 @@ export const TestimonialsPage: React.FC = () => {
   return (
     <div className="space-y-6">
       <div className="flex justify-between items-center">
-        <h1 className="text-2xl font-bold text-gray-900">Testimonials Management</h1>
+        <h1 className="text-2xl font-bold text-gray-900">
+          Testimonials Management
+        </h1>
       </div>
 
       {/* Stats Cards */}
@@ -341,52 +388,62 @@ export const TestimonialsPage: React.FC = () => {
             <MessageSquare className="w-8 h-8 text-gray-400" />
           </div>
         </AdminCard>
-        
+
         <AdminCard className="p-4">
           <div className="flex items-center justify-between">
             <div>
               <p className="text-sm text-gray-600">Pending</p>
-              <p className="text-2xl font-bold text-yellow-600">{stats.pending}</p>
+              <p className="text-2xl font-bold text-yellow-600">
+                {stats.pending}
+              </p>
             </div>
             <Clock className="w-8 h-8 text-yellow-400" />
           </div>
         </AdminCard>
-        
+
         <AdminCard className="p-4">
           <div className="flex items-center justify-between">
             <div>
               <p className="text-sm text-gray-600">Approved</p>
-              <p className="text-2xl font-bold text-green-600">{stats.approved}</p>
+              <p className="text-2xl font-bold text-green-600">
+                {stats.approved}
+              </p>
             </div>
             <CheckCircle className="w-8 h-8 text-green-400" />
           </div>
         </AdminCard>
-        
+
         <AdminCard className="p-4">
           <div className="flex items-center justify-between">
             <div>
               <p className="text-sm text-gray-600">Rejected</p>
-              <p className="text-2xl font-bold text-red-600">{stats.rejected}</p>
+              <p className="text-2xl font-bold text-red-600">
+                {stats.rejected}
+              </p>
             </div>
             <XCircle className="w-8 h-8 text-red-400" />
           </div>
         </AdminCard>
-        
+
         <AdminCard className="p-4">
           <div className="flex items-center justify-between">
             <div>
               <p className="text-sm text-gray-600">Featured</p>
-              <p className="text-2xl font-bold text-primary-600">{stats.featured}</p>
+              <p className="text-2xl font-bold text-primary-600">
+                {stats.featured}
+              </p>
             </div>
             <Star className="w-8 h-8 text-primary-400" />
           </div>
         </AdminCard>
-        
+
         <AdminCard className="p-4">
           <div className="flex items-center justify-between">
             <div>
               <p className="text-sm text-gray-600">Avg Rating</p>
-              <p className="text-2xl font-bold">{stats.averageRating.toFixed(1)}</p>
+              <p className="text-2xl font-bold">
+                {stats.averageRating.toFixed(1)}
+              </p>
             </div>
             <Star className="w-8 h-8 text-yellow-400 fill-yellow-400" />
           </div>
@@ -409,7 +466,7 @@ export const TestimonialsPage: React.FC = () => {
                 />
               </div>
             </div>
-            
+
             <div className="flex gap-2">
               <select
                 value={filterStatus}
@@ -452,39 +509,41 @@ function getMockTestimonials(): Testimonial[] {
   return [
     {
       id: 1,
-      authorName: 'John Smith',
-      authorEmail: 'john.smith@example.com',
-      authorLocation: 'Leeds, Yorkshire',
-      courseTaken: 'Emergency First Aid at Work',
-      courseDate: '2025-01-15',
-      content: 'Excellent course! The instructor was very knowledgeable and made the content easy to understand.',
+      authorName: "John Smith",
+      authorEmail: "john.smith@example.com",
+      authorLocation: "Leeds, Yorkshire",
+      courseTaken: "Emergency First Aid at Work",
+      courseDate: "2025-01-15",
+      content:
+        "Excellent course! The instructor was very knowledgeable and made the content easy to understand.",
       rating: 5,
-      photoUrl: 'https://via.placeholder.com/150',
-      photoConsent: 'given',
-      status: 'pending',
+      photoUrl: "https://via.placeholder.com/150",
+      photoConsent: "given",
+      status: "pending",
       showOnHomepage: false,
       verifiedBooking: true,
-      bookingReference: 'RFT-2025-0001',
-      createdAt: '2025-01-16T10:00:00Z',
+      bookingReference: "RFT-2025-0001",
+      createdAt: "2025-01-16T10:00:00Z",
     },
     {
       id: 2,
-      authorName: 'Sarah Johnson',
-      authorEmail: 'sarah.j@example.com',
-      authorLocation: 'Sheffield',
-      courseTaken: 'Paediatric First Aid',
-      courseDate: '2025-01-10',
-      content: 'Great training! I feel much more confident handling emergencies with children now.',
+      authorName: "Sarah Johnson",
+      authorEmail: "sarah.j@example.com",
+      authorLocation: "Sheffield",
+      courseTaken: "Paediatric First Aid",
+      courseDate: "2025-01-10",
+      content:
+        "Great training! I feel much more confident handling emergencies with children now.",
       rating: 5,
       photoUrl: null,
-      photoConsent: 'not_given',
-      status: 'approved',
+      photoConsent: "not_given",
+      status: "approved",
       showOnHomepage: true,
       verifiedBooking: true,
-      bookingReference: 'RFT-2025-0002',
-      createdAt: '2025-01-11T14:30:00Z',
-      approvedAt: '2025-01-12T09:00:00Z',
-      approvedBy: 'Admin',
+      bookingReference: "RFT-2025-0002",
+      createdAt: "2025-01-11T14:30:00Z",
+      approvedAt: "2025-01-12T09:00:00Z",
+      approvedBy: "Admin",
     },
   ];
 }

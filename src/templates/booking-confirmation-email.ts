@@ -1,6 +1,6 @@
-import { CourseSchedule } from '@/types/booking.types';
-import { VENUE_CONFIG } from '@/config/venues.config';
-import { formatDate, formatTime } from '@/utils/dateFormatting';
+import { CourseSchedule } from "@/types/booking.types";
+import { VENUE_CONFIG } from "@/config/venues.config";
+import { formatDate, formatTime } from "@/utils/dateFormatting";
 
 interface BookingConfirmationEmailData {
   confirmationCode: string;
@@ -17,17 +17,20 @@ interface BookingConfirmationEmailData {
   }>;
 }
 
-export const generateBookingConfirmationEmail = (data: BookingConfirmationEmailData): {
+export const generateBookingConfirmationEmail = (
+  data: BookingConfirmationEmailData,
+): {
   subject: string;
   htmlContent: string;
   textContent: string;
 } => {
-  const venue = VENUE_CONFIG[data.courseSchedule.venue as keyof typeof VENUE_CONFIG];
+  const venue =
+    VENUE_CONFIG[data.courseSchedule.venue as keyof typeof VENUE_CONFIG];
   const courseDate = formatDate(data.courseSchedule.startDate);
   const courseTime = `${formatTime(data.courseSchedule.startDate)} - ${formatTime(data.courseSchedule.endDate)}`;
-  
+
   const subject = `Booking Confirmation - ${data.courseSchedule.courseName} - ${data.confirmationCode}`;
-  
+
   const htmlContent = `
 <!DOCTYPE html>
 <html>
@@ -179,12 +182,16 @@ export const generateBookingConfirmationEmail = (data: BookingConfirmationEmailD
           <span class="detail-label">Venue:</span>
           <span class="detail-value">${data.courseSchedule.venueName}</span>
         </div>
-        ${venue ? `
+        ${
+          venue
+            ? `
         <div class="detail-row">
           <span class="detail-label">Address:</span>
           <span class="detail-value">${venue.address}</span>
         </div>
-        ` : ''}
+        `
+            : ""
+        }
         <div class="detail-row">
           <span class="detail-label">Instructor:</span>
           <span class="detail-value">${data.courseSchedule.instructorName}</span>
@@ -203,15 +210,19 @@ export const generateBookingConfirmationEmail = (data: BookingConfirmationEmailD
         </div>
       </div>
       
-      ${data.participants && data.participants.length > 0 ? `
+      ${
+        data.participants && data.participants.length > 0
+          ? `
       <div class="participants-list">
         <h3>Registered Participants</h3>
         <ol>
           <li>${data.firstName} ${data.lastName} (Primary Contact)</li>
-          ${data.participants.map(p => `<li>${p.firstName} ${p.lastName}</li>`).join('')}
+          ${data.participants.map((p) => `<li>${p.firstName} ${p.lastName}</li>`).join("")}
         </ol>
       </div>
-      ` : ''}
+      `
+          : ""
+      }
       
       <div class="important-info">
         <h3>Important Information</h3>
@@ -250,7 +261,7 @@ export const generateBookingConfirmationEmail = (data: BookingConfirmationEmailD
 </body>
 </html>
   `.trim();
-  
+
   const textContent = `
 Booking Confirmation - React Fast Training
 
@@ -266,18 +277,22 @@ COURSE DETAILS:
 - Date: ${courseDate}
 - Time: ${courseTime}
 - Venue: ${data.courseSchedule.venueName}
-${venue ? `- Address: ${venue.address}` : ''}
+${venue ? `- Address: ${venue.address}` : ""}
 - Instructor: ${data.courseSchedule.instructorName}
 
 BOOKING SUMMARY:
 - Number of Participants: ${data.numberOfParticipants}
 - Total Paid: £${data.totalPrice.toFixed(2)}
 
-${data.participants && data.participants.length > 0 ? `
+${
+  data.participants && data.participants.length > 0
+    ? `
 REGISTERED PARTICIPANTS:
 1. ${data.firstName} ${data.lastName} (Primary Contact)
-${data.participants.map((p, i) => `${i + 2}. ${p.firstName} ${p.lastName}`).join('\n')}
-` : ''}
+${data.participants.map((p, i) => `${i + 2}. ${p.firstName} ${p.lastName}`).join("\n")}
+`
+    : ""
+}
 
 IMPORTANT INFORMATION:
 - Please arrive 15 minutes before the course start time
@@ -305,10 +320,10 @@ https://reactfasttraining.co.uk
 This email was sent to ${data.email}
 © ${new Date().getFullYear()} React Fast Training. All rights reserved.
   `.trim();
-  
+
   return {
     subject,
     htmlContent,
-    textContent
+    textContent,
   };
 };

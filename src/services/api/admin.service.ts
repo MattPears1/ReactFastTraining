@@ -1,4 +1,4 @@
-import apiClient from './client';
+import apiClient from "./client";
 
 export interface CreateSessionData {
   courseId: string;
@@ -21,7 +21,7 @@ export interface RecurringSessionData extends CreateSessionData {
 export interface AttendanceRecord {
   bookingId: string;
   userId: string;
-  status: 'PRESENT' | 'ABSENT' | 'LATE' | 'PARTIAL';
+  status: "PRESENT" | "ABSENT" | "LATE" | "PARTIAL";
   notes?: string;
 }
 
@@ -50,12 +50,12 @@ export interface AttendanceStats {
 
 export const adminApi = {
   // ========== Session Management ==========
-  
+
   /**
    * Create a new course session
    */
   async createSession(data: CreateSessionData): Promise<any> {
-    const response = await apiClient.post('/admin/sessions', data);
+    const response = await apiClient.post("/admin/sessions", data);
     return response.data;
   },
 
@@ -63,7 +63,7 @@ export const adminApi = {
    * Create recurring sessions
    */
   async createRecurringSessions(data: RecurringSessionData): Promise<any[]> {
-    const response = await apiClient.post('/admin/sessions/recurring', data);
+    const response = await apiClient.post("/admin/sessions/recurring", data);
     return response.data;
   },
 
@@ -71,7 +71,10 @@ export const adminApi = {
    * Update a session
    */
   async updateSession(sessionId: string, updates: any): Promise<any> {
-    const response = await apiClient.put(`/admin/sessions/${sessionId}`, updates);
+    const response = await apiClient.put(
+      `/admin/sessions/${sessionId}`,
+      updates,
+    );
     return response.data;
   },
 
@@ -89,9 +92,12 @@ export const adminApi = {
    * Clone a session to a new date
    */
   async cloneSession(sessionId: string, newDate: Date): Promise<any> {
-    const response = await apiClient.post(`/admin/sessions/${sessionId}/clone`, {
-      newDate: newDate.toISOString(),
-    });
+    const response = await apiClient.post(
+      `/admin/sessions/${sessionId}/clone`,
+      {
+        newDate: newDate.toISOString(),
+      },
+    );
     return response.data;
   },
 
@@ -103,12 +109,15 @@ export const adminApi = {
   async markAttendance(
     sessionId: string,
     attendance: AttendanceRecord[],
-    markedBy: string
+    markedBy: string,
   ): Promise<any[]> {
-    const response = await apiClient.post(`/admin/sessions/${sessionId}/attendance`, {
-      attendance,
-      markedBy,
-    });
+    const response = await apiClient.post(
+      `/admin/sessions/${sessionId}/attendance`,
+      {
+        attendance,
+        markedBy,
+      },
+    );
     return response.data;
   },
 
@@ -116,7 +125,9 @@ export const adminApi = {
    * Get attendance for a session
    */
   async getSessionAttendance(sessionId: string): Promise<SessionAttendance[]> {
-    const response = await apiClient.get(`/admin/sessions/${sessionId}/attendance`);
+    const response = await apiClient.get(
+      `/admin/sessions/${sessionId}/attendance`,
+    );
     return response.data;
   },
 
@@ -135,13 +146,15 @@ export const adminApi = {
     });
 
     if (params.courseType) {
-      queryParams.append('courseType', params.courseType);
+      queryParams.append("courseType", params.courseType);
     }
     if (params.trainerId) {
-      queryParams.append('trainerId', params.trainerId);
+      queryParams.append("trainerId", params.trainerId);
     }
 
-    const response = await apiClient.get(`/admin/attendance/report?${queryParams}`);
+    const response = await apiClient.get(
+      `/admin/attendance/report?${queryParams}`,
+    );
     return response.data;
   },
 
@@ -149,9 +162,12 @@ export const adminApi = {
    * Export attendance as CSV
    */
   async exportAttendanceCSV(sessionId: string): Promise<string> {
-    const response = await apiClient.get(`/admin/sessions/${sessionId}/attendance/export`, {
-      responseType: 'text',
-    });
+    const response = await apiClient.get(
+      `/admin/sessions/${sessionId}/attendance/export`,
+      {
+        responseType: "text",
+      },
+    );
     return response.data;
   },
 
@@ -160,29 +176,29 @@ export const adminApi = {
   /**
    * Get list of trainers for dropdown
    */
-  async getTrainers(): Promise<Array<{id: string; name: string}>> {
+  async getTrainers(): Promise<Array<{ id: string; name: string }>> {
     // For now, return single trainer as per requirements
-    return [
-      { id: 'lex-trainer-id', name: 'Lex' }
-    ];
+    return [{ id: "lex-trainer-id", name: "Lex" }];
   },
 
   /**
    * Get list of locations for dropdown
    */
-  async getLocations(): Promise<Array<{id: string; name: string}>> {
+  async getLocations(): Promise<Array<{ id: string; name: string }>> {
     // Simplified locations as per requirements
     return [
-      { id: 'location-a', name: 'Location A' },
-      { id: 'location-b', name: 'Location B' }
+      { id: "location-a", name: "Location A" },
+      { id: "location-b", name: "Location B" },
     ];
   },
 
   /**
    * Get list of courses for dropdown
    */
-  async getCourses(): Promise<Array<{id: string; name: string; duration: string}>> {
-    const response = await apiClient.get('/courses');
+  async getCourses(): Promise<
+    Array<{ id: string; name: string; duration: string }>
+  > {
+    const response = await apiClient.get("/courses");
     return response.data;
   },
 
@@ -197,7 +213,7 @@ export const adminApi = {
     completed: number;
     cancelled: number;
   }> {
-    const response = await apiClient.get('/admin/stats/sessions');
+    const response = await apiClient.get("/admin/stats/sessions");
     return response.data;
   },
 
@@ -211,7 +227,7 @@ export const adminApi = {
     cancelled: number;
     averageAttendance: number;
   }> {
-    const response = await apiClient.get('/admin/stats/bookings');
+    const response = await apiClient.get("/admin/stats/bookings");
     return response.data;
   },
 };

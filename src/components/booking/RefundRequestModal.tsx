@@ -1,7 +1,7 @@
-import React, { useState } from 'react';
-import { X, AlertCircle, Info } from 'lucide-react';
-import { format } from 'date-fns';
-import { refundApi } from '@/services/api/refunds';
+import React, { useState } from "react";
+import { X, AlertCircle, Info } from "lucide-react";
+import { format } from "date-fns";
+import { refundApi } from "@/services/api/refunds";
 
 interface RefundRequestModalProps {
   booking: {
@@ -28,36 +28,38 @@ export const RefundRequestModal: React.FC<RefundRequestModalProps> = ({
   onClose,
   onSuccess,
 }) => {
-  const [reason, setReason] = useState('');
-  const [customReason, setCustomReason] = useState('');
+  const [reason, setReason] = useState("");
+  const [customReason, setCustomReason] = useState("");
   const [submitting, setSubmitting] = useState(false);
-  const [error, setError] = useState('');
+  const [error, setError] = useState("");
 
   if (!isOpen) return null;
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    
-    const finalReason = reason === 'Other' ? customReason : reason;
-    
+
+    const finalReason = reason === "Other" ? customReason : reason;
+
     if (!finalReason.trim()) {
-      setError('Please provide a reason for the refund');
+      setError("Please provide a reason for the refund");
       return;
     }
 
     setSubmitting(true);
-    setError('');
+    setError("");
 
     try {
       await refundApi.requestRefund({
         bookingId: booking.id,
         reason: finalReason,
       });
-      
+
       onSuccess();
       onClose();
     } catch (err: any) {
-      setError(err.response?.data?.message || 'Failed to submit refund request');
+      setError(
+        err.response?.data?.message || "Failed to submit refund request",
+      );
     } finally {
       setSubmitting(false);
     }
@@ -65,9 +67,9 @@ export const RefundRequestModal: React.FC<RefundRequestModalProps> = ({
 
   const handleClose = () => {
     if (!submitting) {
-      setReason('');
-      setCustomReason('');
-      setError('');
+      setReason("");
+      setCustomReason("");
+      setError("");
       onClose();
     }
   };
@@ -99,21 +101,30 @@ export const RefundRequestModal: React.FC<RefundRequestModalProps> = ({
               </div>
               <div className="flex justify-between">
                 <span className="text-gray-600">Course:</span>
-                <span className="font-medium">{booking.courseDetails.courseType}</span>
+                <span className="font-medium">
+                  {booking.courseDetails.courseType}
+                </span>
               </div>
               <div className="flex justify-between">
                 <span className="text-gray-600">Date:</span>
                 <span className="font-medium">
-                  {format(new Date(booking.courseDetails.sessionDate), 'dd/MM/yyyy')}
+                  {format(
+                    new Date(booking.courseDetails.sessionDate),
+                    "dd/MM/yyyy",
+                  )}
                 </span>
               </div>
               <div className="flex justify-between">
                 <span className="text-gray-600">Time:</span>
-                <span className="font-medium">{booking.courseDetails.startTime}</span>
+                <span className="font-medium">
+                  {booking.courseDetails.startTime}
+                </span>
               </div>
               <div className="flex justify-between">
                 <span className="text-gray-600">Location:</span>
-                <span className="font-medium">{booking.courseDetails.location}</span>
+                <span className="font-medium">
+                  {booking.courseDetails.location}
+                </span>
               </div>
               <div className="flex justify-between">
                 <span className="text-gray-600">Attendees:</span>
@@ -121,8 +132,12 @@ export const RefundRequestModal: React.FC<RefundRequestModalProps> = ({
               </div>
               <div className="pt-2 mt-2 border-t">
                 <div className="flex justify-between">
-                  <span className="text-gray-600 font-medium">Amount Paid:</span>
-                  <span className="font-semibold text-lg">£{booking.totalAmount}</span>
+                  <span className="text-gray-600 font-medium">
+                    Amount Paid:
+                  </span>
+                  <span className="font-semibold text-lg">
+                    £{booking.totalAmount}
+                  </span>
                 </div>
               </div>
             </div>
@@ -146,13 +161,15 @@ export const RefundRequestModal: React.FC<RefundRequestModalProps> = ({
                 <option value="Course cancelled">Course cancelled</option>
                 <option value="Medical reasons">Medical reasons</option>
                 <option value="Work commitment">Work commitment</option>
-                <option value="Found alternative course">Found alternative course</option>
+                <option value="Found alternative course">
+                  Found alternative course
+                </option>
                 <option value="Other">Other</option>
               </select>
             </div>
 
             {/* Custom Reason */}
-            {reason === 'Other' && (
+            {reason === "Other" && (
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-2">
                   Please specify
@@ -186,10 +203,17 @@ export const RefundRequestModal: React.FC<RefundRequestModalProps> = ({
                 <div className="text-sm text-blue-800">
                   <p className="font-medium mb-1">Refund Policy</p>
                   <ul className="space-y-1">
-                    <li>• Full refunds are currently available for all cancellations</li>
-                    <li>• Refunds typically process within 5-10 business days</li>
+                    <li>
+                      • Full refunds are currently available for all
+                      cancellations
+                    </li>
+                    <li>
+                      • Refunds typically process within 5-10 business days
+                    </li>
                     <li>• You will receive email confirmation once approved</li>
-                    <li>• Refunds will be credited to your original payment method</li>
+                    <li>
+                      • Refunds will be credited to your original payment method
+                    </li>
                   </ul>
                 </div>
               </div>
@@ -201,7 +225,10 @@ export const RefundRequestModal: React.FC<RefundRequestModalProps> = ({
                 <AlertCircle className="w-5 h-5 text-amber-600 flex-shrink-0" />
                 <div className="text-sm text-amber-800">
                   <p className="font-medium">Important:</p>
-                  <p>Requesting a refund will cancel your booking and release your course spot to other participants.</p>
+                  <p>
+                    Requesting a refund will cancel your booking and release
+                    your course spot to other participants.
+                  </p>
                 </div>
               </div>
             </div>
@@ -229,7 +256,7 @@ export const RefundRequestModal: React.FC<RefundRequestModalProps> = ({
                     Submitting...
                   </span>
                 ) : (
-                  'Request Refund'
+                  "Request Refund"
                 )}
               </button>
             </div>

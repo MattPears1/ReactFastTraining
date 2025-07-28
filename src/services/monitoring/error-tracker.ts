@@ -1,5 +1,5 @@
-import { logger } from './logger';
-import { apiClient } from '@services/api/enhanced-client';
+import { logger } from "./logger";
+import { apiClient } from "@services/api/enhanced-client";
 
 interface ErrorInfo {
   message: string;
@@ -11,8 +11,8 @@ interface ErrorInfo {
   userAgent: string;
   timestamp: string;
   url: string;
-  type: 'error' | 'unhandledRejection' | 'componentError';
-  severity: 'low' | 'medium' | 'high' | 'critical';
+  type: "error" | "unhandledRejection" | "componentError";
+  severity: "low" | "medium" | "high" | "critical";
   context?: Record<string, any>;
   breadcrumbs: Breadcrumb[];
   userId?: string;
@@ -20,7 +20,7 @@ interface ErrorInfo {
 }
 
 interface Breadcrumb {
-  type: 'navigation' | 'click' | 'console' | 'xhr' | 'custom';
+  type: "navigation" | "click" | "console" | "xhr" | "custom";
   category: string;
   message: string;
   timestamp: string;
@@ -50,7 +50,7 @@ class ErrorTracker {
   constructor(config: Partial<ErrorTrackerConfig> = {}) {
     this.config = {
       enabled: true,
-      apiEndpoint: '/api/errors',
+      apiEndpoint: "/api/errors",
       maxBreadcrumbs: 50,
       ignoredErrors: [
         /ResizeObserver loop limit exceeded/,
@@ -59,12 +59,12 @@ class ErrorTracker {
       ],
       sampleRate: 1.0,
       enableSourceMaps: true,
-      enableConsoleLogs: process.env.NODE_ENV === 'development',
+      enableConsoleLogs: process.env.NODE_ENV === "development",
       ...config,
     };
 
     this.sessionId = this.generateSessionId();
-    
+
     if (this.config.enabled) {
       this.initialize();
     }
@@ -80,7 +80,7 @@ class ErrorTracker {
   captureError(error: Error | string, context?: Record<string, any>) {
     if (!this.shouldCaptureError(error)) return;
 
-    const errorInfo = this.createErrorInfo(error, 'error', context);
+    const errorInfo = this.createErrorInfo(error, "error", context);
     this.sendError(errorInfo);
   }
 
@@ -88,20 +88,20 @@ class ErrorTracker {
   captureComponentError(
     error: Error,
     errorInfo: { componentStack: string },
-    context?: Record<string, any>
+    context?: Record<string, any>,
   ) {
     if (!this.shouldCaptureError(error)) return;
 
-    const info = this.createErrorInfo(error, 'componentError', {
+    const info = this.createErrorInfo(error, "componentError", {
       ...context,
       componentStack: errorInfo.componentStack,
     });
-    
+
     this.sendError(info);
   }
 
   // Add breadcrumb
-  addBreadcrumb(breadcrumb: Omit<Breadcrumb, 'timestamp'>) {
+  addBreadcrumb(breadcrumb: Omit<Breadcrumb, "timestamp">) {
     this.breadcrumbs.push({
       ...breadcrumb,
       timestamp: new Date().toISOString(),
@@ -121,32 +121,32 @@ class ErrorTracker {
   // Setup error handlers
   private setupErrorHandlers() {
     // Global error handler
-    window.addEventListener('error', (event) => {
+    window.addEventListener("error", (event) => {
       if (!this.shouldCaptureError(event.error || event.message)) return;
 
       const errorInfo = this.createErrorInfo(
         event.error || event.message,
-        'error',
+        "error",
         {
           fileName: event.filename,
           lineNumber: event.lineno,
           columnNumber: event.colno,
-        }
+        },
       );
 
       this.sendError(errorInfo);
     });
 
     // Unhandled promise rejection
-    window.addEventListener('unhandledrejection', (event) => {
+    window.addEventListener("unhandledrejection", (event) => {
       if (!this.shouldCaptureError(event.reason)) return;
 
       const errorInfo = this.createErrorInfo(
         event.reason,
-        'unhandledRejection',
+        "unhandledRejection",
         {
           promise: event.promise,
-        }
+        },
       );
 
       this.sendError(errorInfo);
@@ -159,8 +159,8 @@ class ErrorTracker {
     const originalPushState = history.pushState;
     history.pushState = (...args) => {
       this.addBreadcrumb({
-        type: 'navigation',
-        category: 'navigation',
+        type: "navigation",
+        category: "navigation",
         message: `Navigated to ${args[2]}`,
         data: { url: args[2] },
       });
@@ -168,22 +168,26 @@ class ErrorTracker {
     };
 
     // Clicks
-    document.addEventListener('click', (event) => {
-      const target = event.target as HTMLElement;
-      if (!target) return;
+    document.addEventListener(
+      "click",
+      (event) => {
+        const target = event.target as HTMLElement;
+        if (!target) return;
 
-      this.addBreadcrumb({
-        type: 'click',
-        category: 'ui',
-        message: `Clicked ${this.getElementPath(target)}`,
-        data: {
-          tagName: target.tagName,
-          id: target.id,
-          className: target.className,
-          text: target.textContent?.substring(0, 100),
-        },
-      });
-    }, true);
+        this.addBreadcrumb({
+          type: "click",
+          category: "ui",
+          message: `Clicked ${this.getElementPath(target)}`,
+          data: {
+            tagName: target.tagName,
+            id: target.id,
+            className: target.className,
+            text: target.textContent?.substring(0, 100),
+          },
+        });
+      },
+      true,
+    );
 
     // XHR/Fetch
     this.interceptXHR();
@@ -194,17 +198,19 @@ class ErrorTracker {
   private setupConsoleInterception() {
     if (!this.config.enableConsoleLogs) return;
 
-    const methods: Array<keyof Console> = ['log', 'warn', 'error', 'info'];
-    
-    methods.forEach(method => {
+    const methods: Array<keyof Console> = ["log", "warn", "error", "info"];
+
+    methods.forEach((method) => {
       const original = console[method];
       (console as any)[method] = (...args: any[]) => {
         this.addBreadcrumb({
-          type: 'console',
-          category: 'console',
-          message: args.map(arg => 
-            typeof arg === 'object' ? JSON.stringify(arg) : String(arg)
-          ).join(' '),
+          type: "console",
+          category: "console",
+          message: args
+            .map((arg) =>
+              typeof arg === "object" ? JSON.stringify(arg) : String(arg),
+            )
+            .join(" "),
           data: { level: method },
         });
         original.apply(console, args);
@@ -217,22 +223,22 @@ class ErrorTracker {
     const originalOpen = XMLHttpRequest.prototype.open;
     const originalSend = XMLHttpRequest.prototype.send;
 
-    XMLHttpRequest.prototype.open = function(method, url, ...args) {
+    XMLHttpRequest.prototype.open = function (method, url, ...args) {
       this._errorTrackerMethod = method;
       this._errorTrackerUrl = url;
       originalOpen.apply(this, [method, url, ...args]);
     };
 
-    XMLHttpRequest.prototype.send = function(...args) {
+    XMLHttpRequest.prototype.send = function (...args) {
       const startTime = Date.now();
-      
-      this.addEventListener('load', () => {
+
+      this.addEventListener("load", () => {
         const duration = Date.now() - startTime;
         const tracker = (window as any).errorTracker;
-        
+
         tracker?.addBreadcrumb({
-          type: 'xhr',
-          category: 'network',
+          type: "xhr",
+          category: "network",
           message: `${this._errorTrackerMethod} ${this._errorTrackerUrl}`,
           data: {
             method: this._errorTrackerMethod,
@@ -250,20 +256,20 @@ class ErrorTracker {
   // Intercept Fetch
   private interceptFetch() {
     const originalFetch = window.fetch;
-    
+
     window.fetch = async (...args) => {
       const startTime = Date.now();
       const [resource, config] = args;
-      const method = config?.method || 'GET';
-      const url = typeof resource === 'string' ? resource : resource.url;
+      const method = config?.method || "GET";
+      const url = typeof resource === "string" ? resource : resource.url;
 
       try {
         const response = await originalFetch(...args);
         const duration = Date.now() - startTime;
 
         this.addBreadcrumb({
-          type: 'xhr',
-          category: 'network',
+          type: "xhr",
+          category: "network",
           message: `${method} ${url}`,
           data: {
             method,
@@ -276,15 +282,15 @@ class ErrorTracker {
         return response;
       } catch (error) {
         const duration = Date.now() - startTime;
-        
+
         this.addBreadcrumb({
-          type: 'xhr',
-          category: 'network',
+          type: "xhr",
+          category: "network",
           message: `${method} ${url} (failed)`,
           data: {
             method,
             url,
-            error: error instanceof Error ? error.message : 'Unknown error',
+            error: error instanceof Error ? error.message : "Unknown error",
             duration,
           },
         });
@@ -297,8 +303,8 @@ class ErrorTracker {
   // Create error info object
   private createErrorInfo(
     error: Error | string,
-    type: ErrorInfo['type'],
-    context?: any
+    type: ErrorInfo["type"],
+    context?: any,
   ): ErrorInfo {
     const isError = error instanceof Error;
     const message = isError ? error.message : String(error);
@@ -326,24 +332,30 @@ class ErrorTracker {
   // Calculate error severity
   private calculateSeverity(
     error: Error | string,
-    type: ErrorInfo['type']
-  ): ErrorInfo['severity'] {
+    type: ErrorInfo["type"],
+  ): ErrorInfo["severity"] {
     // Critical: Security errors, auth failures
     if (/security|auth|permission|forbidden/i.test(String(error))) {
-      return 'critical';
+      return "critical";
     }
 
     // High: Component errors, syntax errors
-    if (type === 'componentError' || /syntax|reference|type/i.test(String(error))) {
-      return 'high';
+    if (
+      type === "componentError" ||
+      /syntax|reference|type/i.test(String(error))
+    ) {
+      return "high";
     }
 
     // Medium: Network errors, promise rejections
-    if (type === 'unhandledRejection' || /network|fetch|xhr/i.test(String(error))) {
-      return 'medium';
+    if (
+      type === "unhandledRejection" ||
+      /network|fetch|xhr/i.test(String(error))
+    ) {
+      return "medium";
     }
 
-    return 'low';
+    return "low";
   }
 
   // Check if error should be captured
@@ -371,10 +383,12 @@ class ErrorTracker {
     const oneMinuteAgo = now - 60000;
 
     // Remove old timestamps
-    this.errorTimestamps = this.errorTimestamps.filter(ts => ts > oneMinuteAgo);
+    this.errorTimestamps = this.errorTimestamps.filter(
+      (ts) => ts > oneMinuteAgo,
+    );
 
     if (this.errorTimestamps.length >= this.errorRateLimit) {
-      logger.warn('Error rate limit exceeded');
+      logger.warn("Error rate limit exceeded");
       return false;
     }
 
@@ -394,16 +408,16 @@ class ErrorTracker {
 
       // Log to console in development
       if (this.config.enableConsoleLogs) {
-        console.error('[ErrorTracker]', errorInfo);
+        console.error("[ErrorTracker]", errorInfo);
       }
 
       // Send to backend
       await apiClient.post(this.config.apiEndpoint, errorInfo);
-      
+
       this.errorCount++;
-      logger.info('Error tracked', { errorCount: this.errorCount });
+      logger.info("Error tracked", { errorCount: this.errorCount });
     } catch (error) {
-      logger.error('Failed to send error', error);
+      logger.error("Failed to send error", error);
     }
   }
 
@@ -414,18 +428,18 @@ class ErrorTracker {
 
     while (current && current !== document.body) {
       let selector = current.tagName.toLowerCase();
-      
+
       if (current.id) {
         selector += `#${current.id}`;
       } else if (current.className) {
-        selector += `.${current.className.split(' ')[0]}`;
+        selector += `.${current.className.split(" ")[0]}`;
       }
-      
+
       path.unshift(selector);
       current = current.parentElement;
     }
 
-    return path.join(' > ');
+    return path.join(" > ");
   }
 
   private generateSessionId(): string {

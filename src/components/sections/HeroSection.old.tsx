@@ -1,27 +1,45 @@
-import React from 'react'
-import { motion } from 'framer-motion'
-import { ArrowRight, CheckCircle, BookOpen, Users, Award } from 'lucide-react'
-import MagneticButton from '@components/ui/MagneticButton'
-import { useKineticTypography } from '@hooks/useAnimation'
-import { FloatingIcons } from '@components/ui/FloatingIcons'
-import { AnimatedGradientText } from '@components/ui/AnimatedGradientText'
+import React from "react";
+import { motion } from "framer-motion";
+import { ArrowRight, CheckCircle, BookOpen, Users, Award } from "lucide-react";
+import MagneticButton from "@components/ui/MagneticButton";
+import { useKineticTypography } from "@hooks/useAnimation";
+import { FloatingIcons } from "@components/ui/FloatingIcons";
+import { AnimatedGradientText } from "@components/ui/AnimatedGradientText";
 
 const HeroSection: React.FC = () => {
-  const { ref: titleRef, displayText } = useKineticTypography('Professional First Aid Training')
-  
+  const { ref: titleRef, displayText } = useKineticTypography(
+    "Professional First Aid Training",
+  );
+
   return (
     <section className="relative min-h-screen flex items-center overflow-hidden">
       {/* Unique Diagonal Split Background */}
       <div className="absolute inset-0">
         <div className="absolute inset-0 bg-gradient-to-br from-primary-50 via-white to-secondary-50 dark:from-gray-900 dark:via-gray-900 dark:to-gray-800" />
-        <svg className="absolute inset-0 w-full h-full" preserveAspectRatio="none">
+        <svg
+          className="absolute inset-0 w-full h-full"
+          preserveAspectRatio="none"
+        >
           <defs>
-            <pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse">
-              <path d="M 40 0 L 0 0 0 40" fill="none" stroke="rgba(14, 165, 233, 0.05)" strokeWidth="1"/>
+            <pattern
+              id="grid"
+              width="40"
+              height="40"
+              patternUnits="userSpaceOnUse"
+            >
+              <path
+                d="M 40 0 L 0 0 0 40"
+                fill="none"
+                stroke="rgba(14, 165, 233, 0.05)"
+                strokeWidth="1"
+              />
             </pattern>
           </defs>
           <rect width="100%" height="100%" fill="url(#grid)" />
-          <path d="M 0 0 L 100 0 L 100 70 L 0 100 Z" fill="rgba(16, 185, 129, 0.03)" />
+          <path
+            d="M 0 0 L 100 0 L 100 70 L 0 100 Z"
+            fill="rgba(16, 185, 129, 0.03)"
+          />
         </svg>
       </div>
 
@@ -51,28 +69,33 @@ const HeroSection: React.FC = () => {
 
             {/* Title with Unique Typography */}
             <div className="relative mb-8">
-              <h1 ref={titleRef} className="text-5xl md:text-6xl lg:text-7xl font-heading font-bold text-gray-900 dark:text-white leading-tight">
+              <h1
+                ref={titleRef}
+                className="text-5xl md:text-6xl lg:text-7xl font-heading font-bold text-gray-900 dark:text-white leading-tight"
+              >
                 <span className="block">{displayText}</span>
                 <span className="block mt-2 text-transparent bg-clip-text bg-gradient-to-r from-primary-500 to-secondary-500">
                   in South Yorkshire
                 </span>
               </h1>
               {/* Animated Slogan */}
-              <AnimatedGradientText 
-                text="Act Fast | Save Lives" 
+              <AnimatedGradientText
+                text="Act Fast | Save Lives"
                 className="text-2xl md:text-3xl mt-4 font-semibold"
               />
               {/* Decorative Line */}
               <motion.div
                 initial={{ width: 0 }}
-                animate={{ width: '100px' }}
+                animate={{ width: "100px" }}
                 transition={{ delay: 0.5, duration: 0.8 }}
                 className="h-1 bg-gradient-to-r from-primary-500 to-secondary-500 rounded-full mt-4"
               />
             </div>
 
             <p className="text-lg md:text-xl text-gray-600 dark:text-gray-400 mb-8 max-w-xl">
-              Professional first aid training in Yorkshire. Learn life-saving skills from an experienced instructor for businesses and individuals.
+              Professional first aid training in Yorkshire. Learn life-saving
+              skills from an experienced instructor for businesses and
+              individuals.
             </p>
 
             {/* CTA Buttons in Unique Layout */}
@@ -112,7 +135,9 @@ const HeroSection: React.FC = () => {
                 className="text-center p-4 rounded-lg bg-white/50 dark:bg-gray-800/50 backdrop-blur-sm"
               >
                 <BookOpen className="w-8 h-8 text-primary-500 mx-auto mb-2" />
-                <p className="text-sm font-medium text-gray-900 dark:text-white">From £75</p>
+                <p className="text-sm font-medium text-gray-900 dark:text-white">
+                  From £75
+                </p>
               </motion.div>
               <motion.div
                 initial={{ opacity: 0, y: 20 }}
@@ -121,7 +146,9 @@ const HeroSection: React.FC = () => {
                 className="text-center p-4 rounded-lg bg-white/50 dark:bg-gray-800/50 backdrop-blur-sm"
               >
                 <Users className="w-8 h-8 text-secondary-500 mx-auto mb-2" />
-                <p className="text-sm font-medium text-gray-900 dark:text-white">Group Bookings</p>
+                <p className="text-sm font-medium text-gray-900 dark:text-white">
+                  Group Bookings
+                </p>
               </motion.div>
               <motion.div
                 initial={{ opacity: 0, y: 20 }}
@@ -130,7 +157,9 @@ const HeroSection: React.FC = () => {
                 className="text-center p-4 rounded-lg bg-white/50 dark:bg-gray-800/50 backdrop-blur-sm"
               >
                 <CheckCircle className="w-8 h-8 text-accent-500 mx-auto mb-2" />
-                <p className="text-sm font-medium text-gray-900 dark:text-white">Certified</p>
+                <p className="text-sm font-medium text-gray-900 dark:text-white">
+                  Certified
+                </p>
               </motion.div>
             </div>
           </motion.div>
@@ -171,12 +200,12 @@ const HeroSection: React.FC = () => {
               {/* Front Card with Logo */}
               <div className="relative rounded-3xl overflow-hidden shadow-2xl bg-white dark:bg-gray-800">
                 <div className="flex items-center justify-center h-[400px] xl:h-[500px] p-8 lg:p-12">
-                  <img 
-                    src="/images/logos/fulllogo_transparent.png" 
+                  <img
+                    src="/images/logos/fulllogo_transparent.png"
                     alt="React Fast Training Logo"
                     className="w-full h-auto max-w-sm xl:max-w-md"
                     onError={(e) => {
-                      e.currentTarget.src = '/images/placeholder-course.jpg'
+                      e.currentTarget.src = "/images/placeholder-course.jpg";
                     }}
                   />
                 </div>
@@ -188,14 +217,31 @@ const HeroSection: React.FC = () => {
 
       {/* Bottom Wave */}
       <div className="absolute bottom-0 left-0 right-0">
-        <svg viewBox="0 0 1440 100" fill="none" xmlns="http://www.w3.org/2000/svg" className="w-full">
-          <path d="M0 50C240 20 480 80 720 50C960 20 1200 80 1440 50V100H0V50Z" fill="white" fillOpacity="0.1"/>
-          <path d="M0 60C240 30 480 90 720 60C960 30 1200 90 1440 60V100H0V60Z" fill="white" fillOpacity="0.2"/>
-          <path d="M0 70C240 40 480 100 720 70C960 40 1200 100 1440 70V100H0V70Z" fill="white" fillOpacity="0.3"/>
+        <svg
+          viewBox="0 0 1440 100"
+          fill="none"
+          xmlns="http://www.w3.org/2000/svg"
+          className="w-full"
+        >
+          <path
+            d="M0 50C240 20 480 80 720 50C960 20 1200 80 1440 50V100H0V50Z"
+            fill="white"
+            fillOpacity="0.1"
+          />
+          <path
+            d="M0 60C240 30 480 90 720 60C960 30 1200 90 1440 60V100H0V60Z"
+            fill="white"
+            fillOpacity="0.2"
+          />
+          <path
+            d="M0 70C240 40 480 100 720 70C960 40 1200 100 1440 70V100H0V70Z"
+            fill="white"
+            fillOpacity="0.3"
+          />
         </svg>
       </div>
     </section>
-  )
-}
+  );
+};
 
-export default HeroSection
+export default HeroSection;

@@ -1,4 +1,4 @@
-import React from 'react';
+import React from "react";
 
 interface LoadingSkeletonProps {
   className?: string;
@@ -8,14 +8,14 @@ interface LoadingSkeletonProps {
 }
 
 export const LoadingSkeleton: React.FC<LoadingSkeletonProps> = ({
-  className = '',
-  height = 'h-4',
-  width = 'w-full',
-  rounded = false
+  className = "",
+  height = "h-4",
+  width = "w-full",
+  rounded = false,
 }) => {
   return (
-    <div 
-      className={`skeleton ${height} ${width} ${rounded ? 'rounded-full' : 'rounded-md'} ${className}`}
+    <div
+      className={`skeleton ${height} ${width} ${rounded ? "rounded-full" : "rounded-md"} ${className}`}
     />
   );
 };
@@ -82,7 +82,10 @@ export const SessionDetailsSkeleton: React.FC = () => {
               </div>
               <div className="space-y-4">
                 {[1, 2, 3].map((i) => (
-                  <div key={i} className="p-4 border border-gray-200 rounded-lg space-y-3">
+                  <div
+                    key={i}
+                    className="p-4 border border-gray-200 rounded-lg space-y-3"
+                  >
                     <div className="flex justify-between">
                       <div className="space-y-2 flex-1">
                         <LoadingSkeleton height="h-5" width="w-32" />

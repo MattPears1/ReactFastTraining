@@ -1,15 +1,15 @@
-import React from 'react'
+import React from "react";
 
 interface SkipLink {
-  href: string
-  label: string
+  href: string;
+  label: string;
 }
 
 const skipLinks: SkipLink[] = [
-  { href: '#main-content', label: 'Skip to main content' },
-  { href: '#main-navigation', label: 'Skip to navigation' },
-  { href: '#footer', label: 'Skip to footer' },
-]
+  { href: "#main-content", label: "Skip to main content" },
+  { href: "#main-navigation", label: "Skip to navigation" },
+  { href: "#footer", label: "Skip to footer" },
+];
 
 const SkipLinks: React.FC = () => {
   return (
@@ -24,7 +24,7 @@ const SkipLinks: React.FC = () => {
         </a>
       ))}
     </div>
-  )
-}
+  );
+};
 
-export default SkipLinks
+export default SkipLinks;

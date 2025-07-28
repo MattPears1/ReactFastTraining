@@ -1,128 +1,179 @@
-import React from 'react'
-import { motion } from 'framer-motion'
-import { Link } from 'react-router-dom'
-import { 
-  Heart, Shield, Users, Brain, Activity, 
-  CheckCircle, Calendar, Clock, Award, MapPin,
-  ArrowRight, BookOpen, RefreshCw
-} from 'lucide-react'
-import Button from '@components/ui/Button'
-import CTASection from '@components/sections/CTASection'
-import SEO from '@components/common/SEO'
+import React from "react";
+import { motion } from "framer-motion";
+import { Link } from "react-router-dom";
+import {
+  Heart,
+  Shield,
+  Users,
+  Brain,
+  Activity,
+  CheckCircle,
+  Calendar,
+  Clock,
+  Award,
+  MapPin,
+  ArrowRight,
+  BookOpen,
+  RefreshCw,
+} from "lucide-react";
+import Button from "@components/ui/Button";
+import CTASection from "@components/sections/CTASection";
+import SEO from "@components/common/SEO";
 
 const courseCategories = [
   {
-    category: 'Workplace First Aid',
-    description: 'HSE approved courses for workplace compliance',
+    category: "Workplace First Aid",
+    description: "HSE approved courses for workplace compliance",
     icon: Shield,
-    color: 'primary',
+    color: "primary",
     courses: [
       {
-        title: 'Emergency First Aid at Work',
-        duration: '1 Day',
-        price: '£100',
-        href: '/courses/efaw',
-        features: ['HSE Approved', '3-Year Certificate', 'CPR Training', 'Basic Life Support']
+        title: "Emergency First Aid at Work",
+        duration: "1 Day",
+        price: "£100",
+        href: "/courses/efaw",
+        features: [
+          "HSE Approved",
+          "3-Year Certificate",
+          "CPR Training",
+          "Basic Life Support",
+        ],
       },
       {
-        title: 'First Aid at Work',
-        duration: '1 Day',
-        price: '£200',
-        href: '/courses/faw',
-        features: ['Comprehensive Training', '3-Year Certificate', 'Advanced Techniques', 'Emergency Protocols']
-      }
-    ]
+        title: "First Aid at Work",
+        duration: "1 Day",
+        price: "£200",
+        href: "/courses/faw",
+        features: [
+          "Comprehensive Training",
+          "3-Year Certificate",
+          "Advanced Techniques",
+          "Emergency Protocols",
+        ],
+      },
+    ],
   },
   {
-    category: 'Paediatric First Aid',
-    description: 'Ofsted compliant courses for childcare professionals',
+    category: "Paediatric First Aid",
+    description: "Ofsted compliant courses for childcare professionals",
     icon: Users,
-    color: 'secondary',
+    color: "secondary",
     courses: [
       {
-        title: 'Paediatric First Aid',
-        duration: '1 Day',
-        price: '£120',
-        href: '/courses/paediatric',
-        features: ['EYFS Compliant', 'Child CPR', 'Common Illnesses', 'Emergency Response']
+        title: "Paediatric First Aid",
+        duration: "1 Day",
+        price: "£120",
+        href: "/courses/paediatric",
+        features: [
+          "EYFS Compliant",
+          "Child CPR",
+          "Common Illnesses",
+          "Emergency Response",
+        ],
       },
       {
-        title: 'Emergency Paediatric First Aid',
-        duration: '1 Day',
-        price: '£100',
-        href: '/courses/emergency-paediatric',
-        features: ['Essential Skills', 'Quick Course', 'EYFS Compliant', 'Practical Focus']
-      }
-    ]
+        title: "Emergency Paediatric First Aid",
+        duration: "1 Day",
+        price: "£100",
+        href: "/courses/emergency-paediatric",
+        features: [
+          "Essential Skills",
+          "Quick Course",
+          "EYFS Compliant",
+          "Practical Focus",
+        ],
+      },
+    ],
   },
   {
-    category: 'Requalification Courses',
-    description: 'Refresh your certification before it expires',
+    category: "Requalification Courses",
+    description: "Refresh your certification before it expires",
     icon: RefreshCw,
-    color: 'accent',
+    color: "accent",
     courses: [
       {
-        title: 'FAW Requalification',
-        duration: '1 Day',
-        price: '£150',
-        href: '/courses/faw-requalification',
-        features: ['Skills Refresh', 'Updated Protocols', '3-Year Renewal', 'HSE Approved']
+        title: "FAW Requalification",
+        duration: "1 Day",
+        price: "£150",
+        href: "/courses/faw-requalification",
+        features: [
+          "Skills Refresh",
+          "Updated Protocols",
+          "3-Year Renewal",
+          "HSE Approved",
+        ],
       },
       {
-        title: 'EFAW Requalification',
-        duration: '1 Day',
-        price: '£70',
-        href: '/courses/efaw-requalification',
-        features: ['Quick Refresh', 'Same Day Certificate', 'HSE Compliant', 'Practical Assessment']
-      }
-    ]
+        title: "EFAW Requalification",
+        duration: "1 Day",
+        price: "£70",
+        href: "/courses/efaw-requalification",
+        features: [
+          "Quick Refresh",
+          "Same Day Certificate",
+          "HSE Compliant",
+          "Practical Assessment",
+        ],
+      },
+    ],
   },
   {
-    category: 'Specialist Courses',
-    description: 'Additional training for specific needs',
+    category: "Specialist Courses",
+    description: "Additional training for specific needs",
     icon: Activity,
-    color: 'info',
+    color: "info",
     courses: [
       {
-        title: 'Activity First Aid',
-        duration: '1 Day',
-        price: '£120',
-        href: '/courses/activity-first-aid',
-        features: ['Outdoor Focus', 'Sports Injuries', 'Remote Scenarios', 'Adventure Activities']
+        title: "Activity First Aid",
+        duration: "1 Day",
+        price: "£120",
+        href: "/courses/activity-first-aid",
+        features: [
+          "Outdoor Focus",
+          "Sports Injuries",
+          "Remote Scenarios",
+          "Adventure Activities",
+        ],
       },
       {
-        title: 'CPR and AED',
-        duration: '3 Hours',
-        price: '£60',
-        href: '/courses/cpr-aed',
-        features: ['Life-Saving Skills', 'Defibrillator Training', 'Hands-on Practice', 'Essential Knowledge']
-      }
-    ]
-  }
-]
+        title: "CPR and AED",
+        duration: "3 Hours",
+        price: "£60",
+        href: "/courses/cpr-aed",
+        features: [
+          "Life-Saving Skills",
+          "Defibrillator Training",
+          "Hands-on Practice",
+          "Essential Knowledge",
+        ],
+      },
+    ],
+  },
+];
 
 const trainingFeatures = [
   {
     icon: Award,
-    title: 'Fully Accredited',
-    description: 'All courses are Ofqual regulated and HSE approved'
+    title: "Fully Accredited",
+    description: "All courses are Ofqual regulated and HSE approved",
   },
   {
     icon: MapPin,
-    title: 'On-Site Training',
-    description: 'We come to your workplace across South Yorkshire'
+    title: "On-Site Training",
+    description: "We come to your workplace across South Yorkshire",
   },
   {
     icon: Clock,
-    title: 'Flexible Scheduling',
-    description: 'Weekend and evening courses available'
+    title: "Flexible Scheduling",
+    description: "Weekend and evening courses available",
   },
   {
     icon: Heart,
-    title: 'Experienced Instructor',
-    description: 'Learn from a professional with military and emergency service background'
-  }
-]
+    title: "Experienced Instructor",
+    description:
+      "Learn from a professional with military and emergency service background",
+  },
+];
 
 const ProductsPage: React.FC = () => {
   return (
@@ -133,13 +184,13 @@ const ProductsPage: React.FC = () => {
         keywords="first aid courses South Yorkshire, workplace first aid training, paediatric first aid courses, HSE approved training, CPR training Yorkshire"
         canonical="/products"
       />
-      
+
       {/* Hero Section */}
       <section className="relative py-20 md:py-32 overflow-hidden">
         <div className="absolute inset-0 bg-gradient-to-br from-primary-50 to-secondary-50 dark:from-gray-900 dark:to-gray-800">
           <div className="absolute inset-0 bg-dot-pattern opacity-5" />
         </div>
-        
+
         <div className="container relative z-10">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -147,25 +198,19 @@ const ProductsPage: React.FC = () => {
             className="max-w-4xl mx-auto text-center"
           >
             <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-gray-900 dark:text-white mb-6">
-              First Aid Training <span className="text-gradient gradient-primary">Courses</span>
+              First Aid Training{" "}
+              <span className="text-gradient gradient-primary">Courses</span>
             </h1>
             <p className="text-lg md:text-xl text-gray-600 dark:text-gray-400 mb-8">
-              Professional, accredited first aid training delivered across South Yorkshire. 
-              Choose from our range of HSE approved and Ofsted compliant courses.
+              Professional, accredited first aid training delivered across South
+              Yorkshire. Choose from our range of HSE approved and Ofsted
+              compliant courses.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <Button
-                href="/contact"
-                size="lg"
-                rightIcon={<ArrowRight />}
-              >
+              <Button href="/contact" size="lg" rightIcon={<ArrowRight />}>
                 Book Your Course
               </Button>
-              <Button
-                href="/courses"
-                size="lg"
-                variant="outline"
-              >
+              <Button href="/courses" size="lg" variant="outline">
                 View All Courses
               </Button>
             </div>
@@ -175,9 +220,9 @@ const ProductsPage: React.FC = () => {
 
       {/* Course Categories */}
       {courseCategories.map((category, categoryIndex) => (
-        <section 
+        <section
           key={category.category}
-          className={`section ${categoryIndex % 2 === 1 ? 'bg-gray-50 dark:bg-gray-800' : ''}`}
+          className={`section ${categoryIndex % 2 === 1 ? "bg-gray-50 dark:bg-gray-800" : ""}`}
         >
           <div className="container">
             <motion.div
@@ -186,8 +231,12 @@ const ProductsPage: React.FC = () => {
               viewport={{ once: true }}
               className="text-center mb-12"
             >
-              <div className={`w-16 h-16 bg-${category.color}-100 dark:bg-${category.color}-900/30 rounded-2xl flex items-center justify-center mx-auto mb-4`}>
-                <category.icon className={`w-8 h-8 text-${category.color}-600 dark:text-${category.color}-400`} />
+              <div
+                className={`w-16 h-16 bg-${category.color}-100 dark:bg-${category.color}-900/30 rounded-2xl flex items-center justify-center mx-auto mb-4`}
+              >
+                <category.icon
+                  className={`w-8 h-8 text-${category.color}-600 dark:text-${category.color}-400`}
+                />
               </div>
               <h2 className="text-3xl md:text-4xl font-bold text-gray-900 dark:text-white mb-4">
                 {category.category}
@@ -207,12 +256,14 @@ const ProductsPage: React.FC = () => {
                   transition={{ delay: index * 0.1 }}
                 >
                   <div className="h-full bg-white dark:bg-gray-900 rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 overflow-hidden">
-                    <div className={`h-2 bg-gradient-to-r from-${category.color}-500 to-${category.color}-600`} />
+                    <div
+                      className={`h-2 bg-gradient-to-r from-${category.color}-500 to-${category.color}-600`}
+                    />
                     <div className="p-8">
                       <h3 className="text-2xl font-bold text-gray-900 dark:text-white mb-4">
                         {course.title}
                       </h3>
-                      
+
                       <div className="flex items-center justify-between mb-6">
                         <div className="flex items-center gap-2 text-gray-600 dark:text-gray-400">
                           <Clock className="w-4 h-4" />
@@ -226,8 +277,12 @@ const ProductsPage: React.FC = () => {
                       <ul className="space-y-2 mb-6">
                         {course.features.map((feature) => (
                           <li key={feature} className="flex items-center gap-2">
-                            <CheckCircle className={`w-4 h-4 text-${category.color}-600 dark:text-${category.color}-400`} />
-                            <span className="text-sm text-gray-600 dark:text-gray-400">{feature}</span>
+                            <CheckCircle
+                              className={`w-4 h-4 text-${category.color}-600 dark:text-${category.color}-400`}
+                            />
+                            <span className="text-sm text-gray-600 dark:text-gray-400">
+                              {feature}
+                            </span>
                           </li>
                         ))}
                       </ul>
@@ -241,10 +296,7 @@ const ProductsPage: React.FC = () => {
                         >
                           Learn More
                         </Button>
-                        <Button
-                          href="/contact"
-                          fullWidth
-                        >
+                        <Button href="/contact" fullWidth>
                           Book Now
                         </Button>
                       </div>
@@ -313,9 +365,9 @@ const ProductsPage: React.FC = () => {
               Group Training Available
             </h2>
             <p className="text-lg text-gray-600 dark:text-gray-400 mb-8">
-              Save time and money with on-site training for your team. 
-              We can accommodate groups of up to 12 learners per course, 
-              ensuring everyone gets personal attention and hands-on practice time.
+              Save time and money with on-site training for your team. We can
+              accommodate groups of up to 12 learners per course, ensuring
+              everyone gets personal attention and hands-on practice time.
             </p>
             <div className="bg-white dark:bg-gray-900 rounded-2xl p-8 shadow-lg">
               <h3 className="text-xl font-semibold text-gray-900 dark:text-white mb-4">
@@ -325,37 +377,49 @@ const ProductsPage: React.FC = () => {
                 <div className="flex items-start gap-3">
                   <CheckCircle className="w-5 h-5 text-success-600 flex-shrink-0 mt-0.5" />
                   <div>
-                    <p className="font-medium text-gray-900 dark:text-white">No travel time</p>
-                    <p className="text-sm text-gray-600 dark:text-gray-400">Training delivered at your workplace</p>
+                    <p className="font-medium text-gray-900 dark:text-white">
+                      No travel time
+                    </p>
+                    <p className="text-sm text-gray-600 dark:text-gray-400">
+                      Training delivered at your workplace
+                    </p>
                   </div>
                 </div>
                 <div className="flex items-start gap-3">
                   <CheckCircle className="w-5 h-5 text-success-600 flex-shrink-0 mt-0.5" />
                   <div>
-                    <p className="font-medium text-gray-900 dark:text-white">Team building</p>
-                    <p className="text-sm text-gray-600 dark:text-gray-400">Staff learn together as a team</p>
+                    <p className="font-medium text-gray-900 dark:text-white">
+                      Team building
+                    </p>
+                    <p className="text-sm text-gray-600 dark:text-gray-400">
+                      Staff learn together as a team
+                    </p>
                   </div>
                 </div>
                 <div className="flex items-start gap-3">
                   <CheckCircle className="w-5 h-5 text-success-600 flex-shrink-0 mt-0.5" />
                   <div>
-                    <p className="font-medium text-gray-900 dark:text-white">Cost effective</p>
-                    <p className="text-sm text-gray-600 dark:text-gray-400">Save money on group bookings</p>
+                    <p className="font-medium text-gray-900 dark:text-white">
+                      Cost effective
+                    </p>
+                    <p className="text-sm text-gray-600 dark:text-gray-400">
+                      Save money on group bookings
+                    </p>
                   </div>
                 </div>
                 <div className="flex items-start gap-3">
                   <CheckCircle className="w-5 h-5 text-success-600 flex-shrink-0 mt-0.5" />
                   <div>
-                    <p className="font-medium text-gray-900 dark:text-white">Flexible scheduling</p>
-                    <p className="text-sm text-gray-600 dark:text-gray-400">Choose dates that suit your business</p>
+                    <p className="font-medium text-gray-900 dark:text-white">
+                      Flexible scheduling
+                    </p>
+                    <p className="text-sm text-gray-600 dark:text-gray-400">
+                      Choose dates that suit your business
+                    </p>
                   </div>
                 </div>
               </div>
-              <Button
-                href="/contact"
-                size="lg"
-                className="mt-8"
-              >
+              <Button href="/contact" size="lg" className="mt-8">
                 Enquire About Group Training
               </Button>
             </div>
@@ -365,7 +429,7 @@ const ProductsPage: React.FC = () => {
 
       <CTASection />
     </div>
-  )
-}
+  );
+};
 
-export default ProductsPage
+export default ProductsPage;

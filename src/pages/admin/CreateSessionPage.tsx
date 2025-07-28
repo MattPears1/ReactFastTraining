@@ -1,14 +1,14 @@
-import React from 'react';
-import { useNavigate } from 'react-router-dom';
-import { CourseCreationForm } from '@components/admin/CourseCreationForm';
-import { ArrowLeft } from 'lucide-react';
+import React from "react";
+import { useNavigate } from "react-router-dom";
+import { CourseCreationForm } from "@components/admin/CourseCreationForm";
+import { ArrowLeft } from "lucide-react";
 
 const CreateSessionPage: React.FC = () => {
   const navigate = useNavigate();
 
   const handleSuccess = () => {
     // Navigate back to calendar or sessions list after successful creation
-    navigate('/admin/calendar');
+    navigate("/admin/calendar");
   };
 
   return (

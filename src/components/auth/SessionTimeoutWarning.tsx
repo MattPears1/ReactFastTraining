@@ -1,8 +1,8 @@
-import React, { useState, useEffect } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
-import { Clock, RefreshCw } from 'lucide-react';
-import Button from '@components/ui/Button';
-import { useAuth } from '@/contexts/AuthContext';
+import React, { useState, useEffect } from "react";
+import { motion, AnimatePresence } from "framer-motion";
+import { Clock, RefreshCw } from "lucide-react";
+import Button from "@components/ui/Button";
+import { useAuth } from "@/contexts/AuthContext";
 
 export const SessionTimeoutWarning: React.FC = () => {
   const [showWarning, setShowWarning] = useState(false);
@@ -15,10 +15,16 @@ export const SessionTimeoutWarning: React.FC = () => {
       setShowWarning(true);
     };
 
-    window.addEventListener('auth:session-expiring-soon', handleSessionExpiring as EventListener);
+    window.addEventListener(
+      "auth:session-expiring-soon",
+      handleSessionExpiring as EventListener,
+    );
 
     return () => {
-      window.removeEventListener('auth:session-expiring-soon', handleSessionExpiring as EventListener);
+      window.removeEventListener(
+        "auth:session-expiring-soon",
+        handleSessionExpiring as EventListener,
+      );
     };
   }, []);
 
@@ -52,8 +58,9 @@ export const SessionTimeoutWarning: React.FC = () => {
                   Session Expiring Soon
                 </h3>
                 <p className="text-sm text-amber-700 dark:text-amber-300 mt-1">
-                  Your session will expire in {minutesLeft} minute{minutesLeft !== 1 ? 's' : ''}. 
-                  Would you like to stay logged in?
+                  Your session will expire in {minutesLeft} minute
+                  {minutesLeft !== 1 ? "s" : ""}. Would you like to stay logged
+                  in?
                 </p>
                 <div className="mt-4 flex gap-2">
                   <Button
@@ -64,11 +71,7 @@ export const SessionTimeoutWarning: React.FC = () => {
                   >
                     Stay Logged In
                   </Button>
-                  <Button
-                    variant="outline"
-                    size="sm"
-                    onClick={handleLogout}
-                  >
+                  <Button variant="outline" size="sm" onClick={handleLogout}>
                     Logout
                   </Button>
                 </div>

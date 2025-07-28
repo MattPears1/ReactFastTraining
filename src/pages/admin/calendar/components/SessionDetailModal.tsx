@@ -1,15 +1,9 @@
-import React, { useState } from 'react';
-import moment from 'moment';
-import {
-  Clock,
-  MapPin,
-  CalendarIcon,
-  Users,
-  AlertCircle
-} from 'lucide-react';
-import { CalendarEvent } from '../types';
-import { useToast } from '@contexts/ToastContext';
-import { cn } from '@utils/cn';
+import React, { useState } from "react";
+import moment from "moment";
+import { Clock, MapPin, CalendarIcon, Users, AlertCircle } from "lucide-react";
+import { CalendarEvent } from "../types";
+import { useToast } from "@contexts/ToastContext";
+import { cn } from "@utils/cn";
 
 interface SessionDetailModalProps {
   event: CalendarEvent;
@@ -17,26 +11,32 @@ interface SessionDetailModalProps {
   onUpdate: () => void;
 }
 
-export const SessionDetailModal: React.FC<SessionDetailModalProps> = ({ 
-  event, 
-  onClose, 
-  onUpdate 
+export const SessionDetailModal: React.FC<SessionDetailModalProps> = ({
+  event,
+  onClose,
+  onUpdate,
 }) => {
   const { showToast } = useToast();
-  const [activeTab, setActiveTab] = useState<'details' | 'bookings' | 'actions'>('details');
-  
+  const [activeTab, setActiveTab] = useState<
+    "details" | "bookings" | "actions"
+  >("details");
+
   const handleCancelSession = async () => {
-    if (!confirm('Are you sure you want to cancel this session? All attendees will be notified.')) {
+    if (
+      !confirm(
+        "Are you sure you want to cancel this session? All attendees will be notified.",
+      )
+    ) {
       return;
     }
-    
+
     try {
       // API call to cancel session
-      showToast('Session cancelled successfully', 'success');
+      showToast("Session cancelled successfully", "success");
       onUpdate();
       onClose();
     } catch (error) {
-      showToast('Failed to cancel session', 'error');
+      showToast("Failed to cancel session", "error");
     }
   };
 
@@ -50,7 +50,7 @@ export const SessionDetailModal: React.FC<SessionDetailModalProps> = ({
               {event.title}
             </h2>
             <p className="text-sm text-gray-600 dark:text-gray-400 mt-1">
-              {moment(event.start).format('dddd, MMMM D, YYYY')}
+              {moment(event.start).format("dddd, MMMM D, YYYY")}
             </p>
           </div>
           <button
@@ -64,34 +64,34 @@ export const SessionDetailModal: React.FC<SessionDetailModalProps> = ({
         {/* Tabs */}
         <div className="flex border-b border-gray-200 dark:border-gray-700">
           <button
-            onClick={() => setActiveTab('details')}
+            onClick={() => setActiveTab("details")}
             className={cn(
               "px-6 py-3 font-medium text-sm",
-              activeTab === 'details'
+              activeTab === "details"
                 ? "text-primary-600 border-b-2 border-primary-600"
-                : "text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200"
+                : "text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200",
             )}
           >
             Session Details
           </button>
           <button
-            onClick={() => setActiveTab('bookings')}
+            onClick={() => setActiveTab("bookings")}
             className={cn(
               "px-6 py-3 font-medium text-sm",
-              activeTab === 'bookings'
+              activeTab === "bookings"
                 ? "text-primary-600 border-b-2 border-primary-600"
-                : "text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200"
+                : "text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200",
             )}
           >
             Bookings ({event.resource.stats.bookings})
           </button>
           <button
-            onClick={() => setActiveTab('actions')}
+            onClick={() => setActiveTab("actions")}
             className={cn(
               "px-6 py-3 font-medium text-sm",
-              activeTab === 'actions'
+              activeTab === "actions"
                 ? "text-primary-600 border-b-2 border-primary-600"
-                : "text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200"
+                : "text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200",
             )}
           >
             Actions
@@ -100,66 +100,86 @@ export const SessionDetailModal: React.FC<SessionDetailModalProps> = ({
 
         {/* Content */}
         <div className="flex-1 overflow-y-auto p-6">
-          {activeTab === 'details' && (
+          {activeTab === "details" && (
             <div className="space-y-6">
               {/* Time and Location */}
               <div className="grid grid-cols-2 gap-6">
                 <div>
-                  <h3 className="text-sm font-medium text-gray-500 dark:text-gray-400 mb-2">Time</h3>
+                  <h3 className="text-sm font-medium text-gray-500 dark:text-gray-400 mb-2">
+                    Time
+                  </h3>
                   <div className="flex items-center gap-2">
                     <Clock className="w-5 h-5 text-gray-400" />
                     <span className="text-gray-900 dark:text-white">
-                      {moment(event.start).format('h:mm A')} - {moment(event.end).format('h:mm A')}
+                      {moment(event.start).format("h:mm A")} -{" "}
+                      {moment(event.end).format("h:mm A")}
                     </span>
                   </div>
                 </div>
-                
+
                 <div>
-                  <h3 className="text-sm font-medium text-gray-500 dark:text-gray-400 mb-2">Location</h3>
+                  <h3 className="text-sm font-medium text-gray-500 dark:text-gray-400 mb-2">
+                    Location
+                  </h3>
                   <div className="flex items-center gap-2">
                     <MapPin className="w-5 h-5 text-gray-400" />
-                    <span className="text-gray-900 dark:text-white">{event.resource.location}</span>
+                    <span className="text-gray-900 dark:text-white">
+                      {event.resource.location}
+                    </span>
                   </div>
                 </div>
               </div>
 
               {/* Capacity */}
               <div>
-                <h3 className="text-sm font-medium text-gray-500 dark:text-gray-400 mb-3">Capacity</h3>
+                <h3 className="text-sm font-medium text-gray-500 dark:text-gray-400 mb-3">
+                  Capacity
+                </h3>
                 <div className="bg-gray-50 dark:bg-gray-700/50 rounded-lg p-4">
                   <div className="space-y-3">
                     <div className="flex items-center justify-between">
-                      <span className="text-gray-600 dark:text-gray-400">Total Capacity</span>
+                      <span className="text-gray-600 dark:text-gray-400">
+                        Total Capacity
+                      </span>
                       <span className="font-semibold text-gray-900 dark:text-white">
                         {event.resource.capacity.max}
                       </span>
                     </div>
                     <div className="flex items-center justify-between">
-                      <span className="text-gray-600 dark:text-gray-400">Booked</span>
+                      <span className="text-gray-600 dark:text-gray-400">
+                        Booked
+                      </span>
                       <span className="font-semibold text-gray-900 dark:text-white">
                         {event.resource.capacity.booked}
                       </span>
                     </div>
                     <div className="flex items-center justify-between">
-                      <span className="text-gray-600 dark:text-gray-400">Available</span>
+                      <span className="text-gray-600 dark:text-gray-400">
+                        Available
+                      </span>
                       <span className="font-semibold text-green-600">
                         {event.resource.capacity.available}
                       </span>
                     </div>
                   </div>
-                  
+
                   {/* Progress bar */}
                   <div className="mt-4">
                     <div className="w-full bg-gray-200 dark:bg-gray-600 rounded-full h-2">
                       <div
                         className={cn(
                           "h-2 rounded-full transition-all",
-                          event.resource.capacity.percentFull >= 100 ? "bg-red-500" :
-                          event.resource.capacity.percentFull >= 75 ? "bg-amber-500" :
-                          event.resource.capacity.percentFull >= 50 ? "bg-blue-500" :
-                          "bg-green-500"
+                          event.resource.capacity.percentFull >= 100
+                            ? "bg-red-500"
+                            : event.resource.capacity.percentFull >= 75
+                              ? "bg-amber-500"
+                              : event.resource.capacity.percentFull >= 50
+                                ? "bg-blue-500"
+                                : "bg-green-500",
                         )}
-                        style={{ width: `${Math.min(100, event.resource.capacity.percentFull)}%` }}
+                        style={{
+                          width: `${Math.min(100, event.resource.capacity.percentFull)}%`,
+                        }}
                       />
                     </div>
                     <p className="text-sm text-gray-600 dark:text-gray-400 mt-2">
@@ -176,7 +196,9 @@ export const SessionDetailModal: React.FC<SessionDetailModalProps> = ({
                 </h3>
                 <div className="bg-gray-50 dark:bg-gray-700/50 rounded-lg p-4">
                   <div className="flex items-center justify-between">
-                    <span className="text-gray-600 dark:text-gray-400">Total Revenue</span>
+                    <span className="text-gray-600 dark:text-gray-400">
+                      Total Revenue
+                    </span>
                     <span className="font-semibold text-lg text-gray-900 dark:text-white">
                       £{event.resource.stats.revenue.toFixed(2)}
                     </span>
@@ -186,18 +208,20 @@ export const SessionDetailModal: React.FC<SessionDetailModalProps> = ({
             </div>
           )}
 
-          {activeTab === 'bookings' && (
+          {activeTab === "bookings" && (
             <div className="text-center py-8 text-gray-500 dark:text-gray-400">
               Booking list would be displayed here
             </div>
           )}
 
-          {activeTab === 'actions' && (
+          {activeTab === "actions" && (
             <div className="space-y-4">
               <button className="w-full flex items-center gap-3 px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700">
                 <CalendarIcon className="w-5 h-5" />
                 <div className="text-left">
-                  <p className="font-medium text-gray-900 dark:text-white">Edit Session</p>
+                  <p className="font-medium text-gray-900 dark:text-white">
+                    Edit Session
+                  </p>
                   <p className="text-sm text-gray-600 dark:text-gray-400">
                     Change time, location, or capacity
                   </p>
@@ -207,7 +231,9 @@ export const SessionDetailModal: React.FC<SessionDetailModalProps> = ({
               <button className="w-full flex items-center gap-3 px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700">
                 <Users className="w-5 h-5" />
                 <div className="text-left">
-                  <p className="font-medium text-gray-900 dark:text-white">Email Attendees</p>
+                  <p className="font-medium text-gray-900 dark:text-white">
+                    Email Attendees
+                  </p>
                   <p className="text-sm text-gray-600 dark:text-gray-400">
                     Send message to all confirmed bookings
                   </p>
@@ -221,7 +247,9 @@ export const SessionDetailModal: React.FC<SessionDetailModalProps> = ({
                 <AlertCircle className="w-5 h-5" />
                 <div className="text-left">
                   <p className="font-medium">Cancel Session</p>
-                  <p className="text-sm">Notify all attendees and process refunds</p>
+                  <p className="text-sm">
+                    Notify all attendees and process refunds
+                  </p>
                 </div>
               </button>
             </div>

@@ -1,7 +1,7 @@
-import React, { useState, useEffect } from 'react';
-import { useMutation, useQueryClient, useQuery } from '@tanstack/react-query';
-import { X, Calendar, Clock, MapPin, BookOpen } from 'lucide-react';
-import { adminCourseSessionService } from '../../services/course-session.service';
+import React, { useState, useEffect } from "react";
+import { useMutation, useQueryClient, useQuery } from "@tanstack/react-query";
+import { X, Calendar, Clock, MapPin, BookOpen } from "lucide-react";
+import { adminCourseSessionService } from "../../services/course-session.service";
 
 interface AddSessionModalProps {
   isOpen: boolean;
@@ -25,96 +25,105 @@ interface Venue {
   capacity: number;
 }
 
-export const AddSessionModal: React.FC<AddSessionModalProps> = ({ isOpen, onClose }) => {
+export const AddSessionModal: React.FC<AddSessionModalProps> = ({
+  isOpen,
+  onClose,
+}) => {
   const [formData, setFormData] = useState({
-    courseId: '',
-    venueId: '',
-    date: '',
-    startTime: '09:00',
-    endTime: '17:00',
-    notes: ''
+    courseId: "",
+    venueId: "",
+    date: "",
+    startTime: "09:00",
+    endTime: "17:00",
+    notes: "",
   });
 
   const queryClient = useQueryClient();
 
   // Fetch courses for dropdown
   const { data: courses } = useQuery({
-    queryKey: ['admin-courses'],
+    queryKey: ["admin-courses"],
     queryFn: async () => {
-      const apiUrl = import.meta.env.PROD ? '' : (import.meta.env.VITE_API_URL || 'http://localhost:3000');
-      const token = localStorage.getItem('adminAccessToken');
-      
+      const apiUrl = import.meta.env.PROD
+        ? ""
+        : import.meta.env.VITE_API_URL || "http://localhost:3000";
+      const token = localStorage.getItem("adminAccessToken");
+
       const response = await fetch(`${apiUrl}/api/admin/courses`, {
         headers: {
-          'Authorization': `Bearer ${token}`,
-          'Content-Type': 'application/json'
-        }
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
+        },
       });
-      
-      if (!response.ok) throw new Error('Failed to fetch courses');
+
+      if (!response.ok) throw new Error("Failed to fetch courses");
       return response.json() as Course[];
     },
-    enabled: isOpen
+    enabled: isOpen,
   });
 
   // Fetch venues for dropdown
   const { data: venues } = useQuery({
-    queryKey: ['admin-venues'],
+    queryKey: ["admin-venues"],
     queryFn: async () => {
-      const apiUrl = import.meta.env.PROD ? '' : (import.meta.env.VITE_API_URL || 'http://localhost:3000');
-      const token = localStorage.getItem('adminAccessToken');
-      
+      const apiUrl = import.meta.env.PROD
+        ? ""
+        : import.meta.env.VITE_API_URL || "http://localhost:3000";
+      const token = localStorage.getItem("adminAccessToken");
+
       const response = await fetch(`${apiUrl}/api/admin/venues`, {
         headers: {
-          'Authorization': `Bearer ${token}`,
-          'Content-Type': 'application/json'
-        }
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
+        },
       });
-      
-      if (!response.ok) throw new Error('Failed to fetch venues');
+
+      if (!response.ok) throw new Error("Failed to fetch venues");
       return response.json() as Venue[];
     },
-    enabled: isOpen
+    enabled: isOpen,
   });
 
   const createSessionMutation = useMutation({
     mutationFn: async (data: typeof formData) => {
-      const apiUrl = import.meta.env.PROD ? '' : (import.meta.env.VITE_API_URL || 'http://localhost:3000');
-      const token = localStorage.getItem('adminAccessToken');
-      
+      const apiUrl = import.meta.env.PROD
+        ? ""
+        : import.meta.env.VITE_API_URL || "http://localhost:3000";
+      const token = localStorage.getItem("adminAccessToken");
+
       const startDatetime = `${data.date} ${data.startTime}:00`;
       const endDatetime = `${data.date} ${data.endTime}:00`;
-      
+
       const response = await fetch(`${apiUrl}/course-sessions`, {
-        method: 'POST',
+        method: "POST",
         headers: {
-          'Authorization': `Bearer ${token}`,
-          'Content-Type': 'application/json'
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
         },
         body: JSON.stringify({
           courseId: parseInt(data.courseId),
           venueId: parseInt(data.venueId),
           startDatetime,
           endDatetime,
-          notes: data.notes
-        })
+          notes: data.notes,
+        }),
       });
-      
-      if (!response.ok) throw new Error('Failed to create session');
+
+      if (!response.ok) throw new Error("Failed to create session");
       return response.json();
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['admin-schedules'] });
+      queryClient.invalidateQueries({ queryKey: ["admin-schedules"] });
       onClose();
       setFormData({
-        courseId: '',
-        venueId: '',
-        date: '',
-        startTime: '09:00',
-        endTime: '17:00',
-        notes: ''
+        courseId: "",
+        venueId: "",
+        date: "",
+        startTime: "09:00",
+        endTime: "17:00",
+        notes: "",
       });
-    }
+    },
   });
 
   const handleSubmit = (e: React.FormEvent) => {
@@ -122,9 +131,13 @@ export const AddSessionModal: React.FC<AddSessionModalProps> = ({ isOpen, onClos
     createSessionMutation.mutate(formData);
   };
 
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
+  const handleInputChange = (
+    e: React.ChangeEvent<
+      HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement
+    >,
+  ) => {
     const { name, value } = e.target;
-    setFormData(prev => ({ ...prev, [name]: value }));
+    setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
   if (!isOpen) return null;
@@ -133,7 +146,9 @@ export const AddSessionModal: React.FC<AddSessionModalProps> = ({ isOpen, onClos
     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
       <div className="bg-white rounded-lg shadow-xl max-w-md w-full mx-4 max-h-[90vh] overflow-y-auto">
         <div className="flex items-center justify-between p-6 border-b">
-          <h2 className="text-xl font-semibold text-gray-900">Add New Session</h2>
+          <h2 className="text-xl font-semibold text-gray-900">
+            Add New Session
+          </h2>
           <button
             onClick={onClose}
             className="text-gray-400 hover:text-gray-600 transition-colors"
@@ -157,7 +172,7 @@ export const AddSessionModal: React.FC<AddSessionModalProps> = ({ isOpen, onClos
               className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent"
             >
               <option value="">Select a course...</option>
-              {courses?.map(course => (
+              {courses?.map((course) => (
                 <option key={course.id} value={course.id}>
                   {course.name} (£{course.price})
                 </option>
@@ -179,7 +194,7 @@ export const AddSessionModal: React.FC<AddSessionModalProps> = ({ isOpen, onClos
               className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent"
             >
               <option value="">Select a venue...</option>
-              {venues?.map(venue => (
+              {venues?.map((venue) => (
                 <option key={venue.id} value={venue.id}>
                   {venue.name} - {venue.city}
                 </option>
@@ -199,7 +214,7 @@ export const AddSessionModal: React.FC<AddSessionModalProps> = ({ isOpen, onClos
               value={formData.date}
               onChange={handleInputChange}
               required
-              min={new Date().toISOString().split('T')[0]}
+              min={new Date().toISOString().split("T")[0]}
               className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent"
             />
           </div>
@@ -264,7 +279,9 @@ export const AddSessionModal: React.FC<AddSessionModalProps> = ({ isOpen, onClos
               disabled={createSessionMutation.isPending}
               className="flex-1 px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
             >
-              {createSessionMutation.isPending ? 'Creating...' : 'Create Session'}
+              {createSessionMutation.isPending
+                ? "Creating..."
+                : "Create Session"}
             </button>
           </div>
 

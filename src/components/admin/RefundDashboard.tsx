@@ -1,7 +1,15 @@
-import React, { useState, useEffect } from 'react';
-import { DollarSign, Clock, Check, X, AlertCircle, RefreshCw, FileText } from 'lucide-react';
-import { format } from 'date-fns';
-import { refundApi } from '@/services/api/refunds';
+import React, { useState, useEffect } from "react";
+import {
+  DollarSign,
+  Clock,
+  Check,
+  X,
+  AlertCircle,
+  RefreshCw,
+  FileText,
+} from "lucide-react";
+import { format } from "date-fns";
+import { refundApi } from "@/services/api/refunds";
 
 interface RefundRequest {
   id: string;
@@ -33,9 +41,13 @@ interface RefundStats {
 export const RefundDashboard: React.FC = () => {
   const [refunds, setRefunds] = useState<RefundRequest[]>([]);
   const [stats, setStats] = useState<RefundStats | null>(null);
-  const [filter, setFilter] = useState<'all' | 'pending' | 'processed' | 'rejected'>('pending');
+  const [filter, setFilter] = useState<
+    "all" | "pending" | "processed" | "rejected"
+  >("pending");
   const [loading, setLoading] = useState(true);
-  const [selectedRefund, setSelectedRefund] = useState<RefundRequest | null>(null);
+  const [selectedRefund, setSelectedRefund] = useState<RefundRequest | null>(
+    null,
+  );
 
   useEffect(() => {
     loadData();
@@ -45,13 +57,13 @@ export const RefundDashboard: React.FC = () => {
     setLoading(true);
     try {
       const [refundsData, statsData] = await Promise.all([
-        refundApi.listRefunds(filter === 'all' ? undefined : filter),
+        refundApi.listRefunds(filter === "all" ? undefined : filter),
         refundApi.getRefundStats(),
       ]);
       setRefunds(refundsData.refunds);
       setStats(statsData);
     } catch (error) {
-      console.error('Failed to load refund data:', error);
+      console.error("Failed to load refund data:", error);
     } finally {
       setLoading(false);
     }
@@ -59,23 +71,23 @@ export const RefundDashboard: React.FC = () => {
 
   const getStatusColor = (status: string) => {
     const colors = {
-      pending: 'bg-yellow-100 text-yellow-800',
-      approved: 'bg-blue-100 text-blue-800',
-      processing: 'bg-purple-100 text-purple-800',
-      processed: 'bg-green-100 text-green-800',
-      rejected: 'bg-red-100 text-red-800',
-      failed: 'bg-gray-100 text-gray-800',
+      pending: "bg-yellow-100 text-yellow-800",
+      approved: "bg-blue-100 text-blue-800",
+      processing: "bg-purple-100 text-purple-800",
+      processed: "bg-green-100 text-green-800",
+      rejected: "bg-red-100 text-red-800",
+      failed: "bg-gray-100 text-gray-800",
     };
-    return colors[status as keyof typeof colors] || 'bg-gray-100 text-gray-800';
+    return colors[status as keyof typeof colors] || "bg-gray-100 text-gray-800";
   };
 
   const getStatusIcon = (status: string) => {
     switch (status) {
-      case 'pending':
+      case "pending":
         return <Clock className="w-4 h-4" />;
-      case 'processed':
+      case "processed":
         return <Check className="w-4 h-4" />;
-      case 'rejected':
+      case "rejected":
         return <X className="w-4 h-4" />;
       default:
         return <AlertCircle className="w-4 h-4" />;
@@ -103,37 +115,45 @@ export const RefundDashboard: React.FC = () => {
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm text-gray-600">Pending Refunds</p>
-                <p className="text-2xl font-bold text-gray-900">{stats.pending}</p>
+                <p className="text-2xl font-bold text-gray-900">
+                  {stats.pending}
+                </p>
               </div>
               <Clock className="w-8 h-8 text-yellow-500" />
             </div>
           </div>
-          
+
           <div className="bg-white rounded-lg shadow p-6">
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm text-gray-600">Pending Amount</p>
-                <p className="text-2xl font-bold text-gray-900">£{stats.pendingAmount.toFixed(2)}</p>
+                <p className="text-2xl font-bold text-gray-900">
+                  £{stats.pendingAmount.toFixed(2)}
+                </p>
               </div>
               <DollarSign className="w-8 h-8 text-red-500" />
             </div>
           </div>
-          
+
           <div className="bg-white rounded-lg shadow p-6">
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm text-gray-600">Processed This Month</p>
-                <p className="text-2xl font-bold text-gray-900">{stats.processed}</p>
+                <p className="text-2xl font-bold text-gray-900">
+                  {stats.processed}
+                </p>
               </div>
               <Check className="w-8 h-8 text-green-500" />
             </div>
           </div>
-          
+
           <div className="bg-white rounded-lg shadow p-6">
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm text-gray-600">Total Refunded</p>
-                <p className="text-2xl font-bold text-gray-900">£{stats.totalAmount.toFixed(2)}</p>
+                <p className="text-2xl font-bold text-gray-900">
+                  £{stats.totalAmount.toFixed(2)}
+                </p>
               </div>
               <DollarSign className="w-8 h-8 text-blue-500" />
             </div>
@@ -145,19 +165,21 @@ export const RefundDashboard: React.FC = () => {
       <div className="bg-white rounded-lg shadow">
         <div className="border-b">
           <nav className="flex -mb-px">
-            {(['pending', 'all', 'processed', 'rejected'] as const).map(tab => (
-              <button
-                key={tab}
-                onClick={() => setFilter(tab)}
-                className={`px-6 py-3 text-sm font-medium border-b-2 transition-colors ${
-                  filter === tab
-                    ? 'border-primary-500 text-primary-600'
-                    : 'border-transparent text-gray-500 hover:text-gray-700'
-                }`}
-              >
-                {tab.charAt(0).toUpperCase() + tab.slice(1)}
-              </button>
-            ))}
+            {(["pending", "all", "processed", "rejected"] as const).map(
+              (tab) => (
+                <button
+                  key={tab}
+                  onClick={() => setFilter(tab)}
+                  className={`px-6 py-3 text-sm font-medium border-b-2 transition-colors ${
+                    filter === tab
+                      ? "border-primary-500 text-primary-600"
+                      : "border-transparent text-gray-500 hover:text-gray-700"
+                  }`}
+                >
+                  {tab.charAt(0).toUpperCase() + tab.slice(1)}
+                </button>
+              ),
+            )}
           </nav>
         </div>
 
@@ -169,14 +191,14 @@ export const RefundDashboard: React.FC = () => {
             </div>
           ) : refunds.length === 0 ? (
             <div className="text-center py-8 text-gray-500">
-              No {filter === 'all' ? '' : filter} refunds found
+              No {filter === "all" ? "" : filter} refunds found
             </div>
           ) : (
             <div className="space-y-4">
-              {refunds.map(refund => (
-                <RefundCard 
-                  key={refund.id} 
-                  refund={refund} 
+              {refunds.map((refund) => (
+                <RefundCard
+                  key={refund.id}
+                  refund={refund}
                   onAction={loadData}
                   onSelect={() => setSelectedRefund(refund)}
                 />
@@ -205,7 +227,7 @@ const RefundCard: React.FC<{
 }> = ({ refund, onAction, onSelect }) => {
   const [processing, setProcessing] = useState(false);
   const [showNotes, setShowNotes] = useState(false);
-  const [notes, setNotes] = useState('');
+  const [notes, setNotes] = useState("");
 
   const handleApprove = async () => {
     setProcessing(true);
@@ -213,7 +235,7 @@ const RefundCard: React.FC<{
       await refundApi.approveRefund(refund.id, { notes });
       onAction();
     } catch (error) {
-      console.error('Failed to approve refund:', error);
+      console.error("Failed to approve refund:", error);
     } finally {
       setProcessing(false);
     }
@@ -221,16 +243,16 @@ const RefundCard: React.FC<{
 
   const handleReject = async () => {
     if (!notes.trim()) {
-      alert('Please provide a reason for rejection');
+      alert("Please provide a reason for rejection");
       return;
     }
-    
+
     setProcessing(true);
     try {
       await refundApi.rejectRefund(refund.id, { reason: notes });
       onAction();
     } catch (error) {
-      console.error('Failed to reject refund:', error);
+      console.error("Failed to reject refund:", error);
     } finally {
       setProcessing(false);
     }
@@ -242,12 +264,14 @@ const RefundCard: React.FC<{
         <div className="flex-1">
           <div className="flex items-center gap-3 mb-2">
             <h4 className="font-semibold">{refund.bookingReference}</h4>
-            <span className={`px-2 py-1 rounded-full text-xs font-medium flex items-center gap-1 ${getStatusColor(refund.status)}`}>
+            <span
+              className={`px-2 py-1 rounded-full text-xs font-medium flex items-center gap-1 ${getStatusColor(refund.status)}`}
+            >
               {getStatusIcon(refund.status)}
               {refund.status}
             </span>
           </div>
-          
+
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-sm text-gray-600">
             <div>
               <p className="font-medium">Customer</p>
@@ -256,7 +280,9 @@ const RefundCard: React.FC<{
             </div>
             <div>
               <p className="font-medium">Amount</p>
-              <p className="text-lg font-semibold text-gray-900">£{refund.amount}</p>
+              <p className="text-lg font-semibold text-gray-900">
+                £{refund.amount}
+              </p>
             </div>
             <div>
               <p className="font-medium">Reason</p>
@@ -264,7 +290,7 @@ const RefundCard: React.FC<{
             </div>
             <div>
               <p className="font-medium">Requested</p>
-              <p>{format(new Date(refund.requestedAt), 'dd/MM/yyyy HH:mm')}</p>
+              <p>{format(new Date(refund.requestedAt), "dd/MM/yyyy HH:mm")}</p>
             </div>
           </div>
 
@@ -283,8 +309,8 @@ const RefundCard: React.FC<{
           >
             <FileText className="w-4 h-4" />
           </button>
-          
-          {refund.status === 'pending' && (
+
+          {refund.status === "pending" && (
             <button
               onClick={() => setShowNotes(!showNotes)}
               className="px-3 py-1 text-sm border border-gray-300 rounded hover:bg-gray-50"
@@ -295,7 +321,7 @@ const RefundCard: React.FC<{
         </div>
       </div>
 
-      {showNotes && refund.status === 'pending' && (
+      {showNotes && refund.status === "pending" && (
         <div className="mt-4 p-4 bg-gray-50 rounded-lg space-y-3">
           <textarea
             value={notes}
@@ -351,7 +377,7 @@ const RefundDetailsModal: React.FC<{
       const data = await refundApi.getRefundDetails(refund.id);
       setDetails(data);
     } catch (error) {
-      console.error('Failed to load refund details:', error);
+      console.error("Failed to load refund details:", error);
     } finally {
       setLoading(false);
     }

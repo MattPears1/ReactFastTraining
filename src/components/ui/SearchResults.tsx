@@ -1,8 +1,15 @@
-import React from 'react';
-import { motion } from 'framer-motion';
-import { Search, ArrowRight, Package, FileText, HelpCircle, File } from 'lucide-react';
-import { Link } from 'react-router-dom';
-import { SearchSuggestion } from './SearchInput';
+import React from "react";
+import { motion } from "framer-motion";
+import {
+  Search,
+  ArrowRight,
+  Package,
+  FileText,
+  HelpCircle,
+  File,
+} from "lucide-react";
+import { Link } from "react-router-dom";
+import { SearchSuggestion } from "./SearchInput";
 
 interface SearchResultsProps {
   results: SearchSuggestion[];
@@ -19,10 +26,11 @@ const iconMap: Record<string, React.ReactNode> = {
 };
 
 const categoryColors: Record<string, string> = {
-  product: 'bg-blue-100 dark:bg-blue-900/20 text-blue-600 dark:text-blue-400',
-  article: 'bg-green-100 dark:bg-green-900/20 text-green-600 dark:text-green-400',
-  faq: 'bg-yellow-100 dark:bg-yellow-900/20 text-yellow-600 dark:text-yellow-400',
-  page: 'bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-400',
+  product: "bg-blue-100 dark:bg-blue-900/20 text-blue-600 dark:text-blue-400",
+  article:
+    "bg-green-100 dark:bg-green-900/20 text-green-600 dark:text-green-400",
+  faq: "bg-yellow-100 dark:bg-yellow-900/20 text-yellow-600 dark:text-yellow-400",
+  page: "bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-400",
 };
 
 export const SearchResults: React.FC<SearchResultsProps> = ({
@@ -61,14 +69,17 @@ export const SearchResults: React.FC<SearchResultsProps> = ({
   }
 
   // Group results by category
-  const groupedResults = results.reduce((acc, result) => {
-    const category = result.category || 'page';
-    if (!acc[category]) {
-      acc[category] = [];
-    }
-    acc[category].push(result);
-    return acc;
-  }, {} as Record<string, SearchSuggestion[]>);
+  const groupedResults = results.reduce(
+    (acc, result) => {
+      const category = result.category || "page";
+      if (!acc[category]) {
+        acc[category] = [];
+      }
+      acc[category].push(result);
+      return acc;
+    },
+    {} as Record<string, SearchSuggestion[]>,
+  );
 
   return (
     <div className={className}>
@@ -77,7 +88,8 @@ export const SearchResults: React.FC<SearchResultsProps> = ({
           Search Results
         </h2>
         <p className="text-gray-600 dark:text-gray-400 mt-1">
-          Found {results.length} result{results.length !== 1 ? 's' : ''} for "{query}"
+          Found {results.length} result{results.length !== 1 ? "s" : ""} for "
+          {query}"
         </p>
       </div>
 
@@ -96,7 +108,7 @@ export const SearchResults: React.FC<SearchResultsProps> = ({
                   transition={{ delay: index * 0.05 }}
                 >
                   <Link
-                    to={result.url || '#'}
+                    to={result.url || "#"}
                     className="block bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700 p-4 hover:shadow-lg hover:border-primary-300 dark:hover:border-primary-700 transition-all duration-200 group"
                   >
                     <div className="flex items-start gap-4">
@@ -149,17 +161,20 @@ export const SearchResults: React.FC<SearchResultsProps> = ({
 function highlightText(text: string, query: string): React.ReactNode {
   if (!query) return text;
 
-  const parts = text.split(new RegExp(`(${query})`, 'gi'));
+  const parts = text.split(new RegExp(`(${query})`, "gi"));
   return (
     <>
       {parts.map((part, index) =>
         part.toLowerCase() === query.toLowerCase() ? (
-          <mark key={index} className="bg-yellow-200 dark:bg-yellow-800 text-inherit">
+          <mark
+            key={index}
+            className="bg-yellow-200 dark:bg-yellow-800 text-inherit"
+          >
             {part}
           </mark>
         ) : (
           part
-        )
+        ),
       )}
     </>
   );

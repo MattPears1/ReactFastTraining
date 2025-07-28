@@ -1,17 +1,26 @@
-import React, { useState, useEffect } from 'react';
-import { Calendar, Users, PoundSterling, AlertCircle, TrendingUp, Clock, CheckCircle, XCircle } from 'lucide-react';
-import { adminDashboardApi } from '@services/api/admin-dashboard.service';
-import { useAuth } from '@contexts/AuthContext';
-import { Navigate } from 'react-router-dom';
-import LoadingScreen from '@components/common/LoadingScreen';
-import { DashboardStats } from '@components/admin/features/dashboard/components/DashboardStats';
-import { RevenueChart } from '@components/admin/features/dashboard/components/RevenueChart';
-import { UpcomingSessionsList } from '@components/admin/features/dashboard/components/UpcomingSessionsList';
-import { RecentActivityFeed } from '@components/admin/features/dashboard/components/RecentActivityFeed';
-import { QuickActions } from '@components/admin/features/dashboard/components/QuickActions';
-import { DashboardSkeleton } from '@components/admin/shared/components/DashboardSkeleton';
-import { format } from 'date-fns';
-import { cn } from '@utils/cn';
+import React, { useState, useEffect } from "react";
+import {
+  Calendar,
+  Users,
+  PoundSterling,
+  AlertCircle,
+  TrendingUp,
+  Clock,
+  CheckCircle,
+  XCircle,
+} from "lucide-react";
+import { adminDashboardApi } from "@services/api/admin-dashboard.service";
+import { useAuth } from "@contexts/AuthContext";
+import { Navigate } from "react-router-dom";
+import LoadingScreen from "@components/common/LoadingScreen";
+import { DashboardStats } from "@components/admin/features/dashboard/components/DashboardStats";
+import { RevenueChart } from "@components/admin/features/dashboard/components/RevenueChart";
+import { UpcomingSessionsList } from "@components/admin/features/dashboard/components/UpcomingSessionsList";
+import { RecentActivityFeed } from "@components/admin/features/dashboard/components/RecentActivityFeed";
+import { QuickActions } from "@components/admin/features/dashboard/components/QuickActions";
+import { DashboardSkeleton } from "@components/admin/shared/components/DashboardSkeleton";
+import { format } from "date-fns";
+import { cn } from "@utils/cn";
 
 interface DashboardData {
   today: {
@@ -47,11 +56,11 @@ export const AdminDashboardPage: React.FC = () => {
   const [error, setError] = useState<string | null>(null);
   const [dateRange, setDateRange] = useState({
     start: new Date(Date.now() - 30 * 24 * 60 * 60 * 1000),
-    end: new Date()
+    end: new Date(),
   });
 
   useEffect(() => {
-    if (isAuthenticated && user?.role === 'admin') {
+    if (isAuthenticated && user?.role === "admin") {
       loadDashboardData();
       // Refresh every 30 seconds
       const interval = setInterval(loadDashboardData, 30000);
@@ -65,8 +74,8 @@ export const AdminDashboardPage: React.FC = () => {
       const data = await adminDashboardApi.getDashboardStats(dateRange);
       setStats(data);
     } catch (err: any) {
-      setError(err.message || 'Failed to load dashboard data');
-      console.error('Dashboard error:', err);
+      setError(err.message || "Failed to load dashboard data");
+      console.error("Dashboard error:", err);
     } finally {
       setLoading(false);
     }
@@ -77,7 +86,7 @@ export const AdminDashboardPage: React.FC = () => {
     return <LoadingScreen />;
   }
 
-  if (!isAuthenticated || user?.role !== 'admin') {
+  if (!isAuthenticated || user?.role !== "admin") {
     return <Navigate to="/login" replace />;
   }
 
@@ -108,9 +117,10 @@ export const AdminDashboardPage: React.FC = () => {
   if (!stats) return null;
 
   // Calculate percentage changes
-  const weeklyRevenueChange = stats.week.revenue > 0 && stats.month.revenue > 0
-    ? ((stats.week.revenue / (stats.month.revenue / 4)) - 1) * 100
-    : 0;
+  const weeklyRevenueChange =
+    stats.week.revenue > 0 && stats.month.revenue > 0
+      ? (stats.week.revenue / (stats.month.revenue / 4) - 1) * 100
+      : 0;
 
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
@@ -147,10 +157,10 @@ export const AdminDashboardPage: React.FC = () => {
           <StatCard
             title="Weekly Revenue"
             value={`£${stats.week.revenue.toFixed(2)}`}
-            change={`${weeklyRevenueChange >= 0 ? '+' : ''}${weeklyRevenueChange.toFixed(0)}% from last week`}
+            change={`${weeklyRevenueChange >= 0 ? "+" : ""}${weeklyRevenueChange.toFixed(0)}% from last week`}
             icon={PoundSterling}
             color="purple"
-            trend={weeklyRevenueChange >= 0 ? 'up' : 'down'}
+            trend={weeklyRevenueChange >= 0 ? "up" : "down"}
           />
           <StatCard
             title="Pending Refunds"
@@ -177,7 +187,7 @@ export const AdminDashboardPage: React.FC = () => {
                     const days = parseInt(e.target.value);
                     setDateRange({
                       start: new Date(Date.now() - days * 24 * 60 * 60 * 1000),
-                      end: new Date()
+                      end: new Date(),
                     });
                   }}
                   className="px-3 py-1 border border-gray-300 dark:border-gray-600 rounded-lg text-sm bg-white dark:bg-gray-700"
@@ -210,26 +220,32 @@ export const AdminDashboardPage: React.FC = () => {
               Course Popularity
             </h2>
             <div className="space-y-4">
-              {stats.chartData.coursePopularity.slice(0, 5).map((course, index) => (
-                <div key={course.courseType} className="flex items-center justify-between">
-                  <div className="flex items-center gap-3">
-                    <span className="text-2xl font-bold text-gray-400">
-                      {index + 1}
-                    </span>
-                    <div>
-                      <p className="font-medium text-gray-900 dark:text-white">
-                        {course.courseType}
-                      </p>
-                      <p className="text-sm text-gray-500">
-                        {course.bookings} bookings • {course.attendees} attendees
-                      </p>
+              {stats.chartData.coursePopularity
+                .slice(0, 5)
+                .map((course, index) => (
+                  <div
+                    key={course.courseType}
+                    className="flex items-center justify-between"
+                  >
+                    <div className="flex items-center gap-3">
+                      <span className="text-2xl font-bold text-gray-400">
+                        {index + 1}
+                      </span>
+                      <div>
+                        <p className="font-medium text-gray-900 dark:text-white">
+                          {course.courseType}
+                        </p>
+                        <p className="text-sm text-gray-500">
+                          {course.bookings} bookings • {course.attendees}{" "}
+                          attendees
+                        </p>
+                      </div>
                     </div>
+                    <p className="font-semibold text-gray-900 dark:text-white">
+                      £{course.revenue.toFixed(2)}
+                    </p>
                   </div>
-                  <p className="font-semibold text-gray-900 dark:text-white">
-                    £{course.revenue.toFixed(2)}
-                  </p>
-                </div>
-              ))}
+                ))}
             </div>
           </div>
 
@@ -243,7 +259,9 @@ export const AdminDashboardPage: React.FC = () => {
                 <div className="flex items-center gap-3">
                   <Calendar className="w-8 h-8 text-blue-600" />
                   <div>
-                    <p className="font-medium text-gray-900 dark:text-white">Total Bookings</p>
+                    <p className="font-medium text-gray-900 dark:text-white">
+                      Total Bookings
+                    </p>
                     <p className="text-sm text-gray-500">This month</p>
                   </div>
                 </div>
@@ -251,12 +269,14 @@ export const AdminDashboardPage: React.FC = () => {
                   {stats.month.count}
                 </p>
               </div>
-              
+
               <div className="flex items-center justify-between p-4 bg-gray-50 dark:bg-gray-700/50 rounded-lg">
                 <div className="flex items-center gap-3">
                   <Users className="w-8 h-8 text-green-600" />
                   <div>
-                    <p className="font-medium text-gray-900 dark:text-white">Total Attendees</p>
+                    <p className="font-medium text-gray-900 dark:text-white">
+                      Total Attendees
+                    </p>
                     <p className="text-sm text-gray-500">This month</p>
                   </div>
                 </div>
@@ -264,12 +284,14 @@ export const AdminDashboardPage: React.FC = () => {
                   {stats.month.attendees}
                 </p>
               </div>
-              
+
               <div className="flex items-center justify-between p-4 bg-gray-50 dark:bg-gray-700/50 rounded-lg">
                 <div className="flex items-center gap-3">
                   <PoundSterling className="w-8 h-8 text-purple-600" />
                   <div>
-                    <p className="font-medium text-gray-900 dark:text-white">Total Revenue</p>
+                    <p className="font-medium text-gray-900 dark:text-white">
+                      Total Revenue
+                    </p>
                     <p className="text-sm text-gray-500">This month</p>
                   </div>
                 </div>
@@ -301,22 +323,26 @@ const StatCard: React.FC<{
   value: string | number;
   change?: string;
   icon: React.ElementType;
-  color: 'blue' | 'green' | 'purple' | 'red';
+  color: "blue" | "green" | "purple" | "red";
   alert?: boolean;
-  trend?: 'up' | 'down';
+  trend?: "up" | "down";
 }> = ({ title, value, change, icon: Icon, color, alert, trend }) => {
   const colorClasses = {
-    blue: 'bg-blue-100 text-blue-600 dark:bg-blue-900/30 dark:text-blue-400',
-    green: 'bg-green-100 text-green-600 dark:bg-green-900/30 dark:text-green-400',
-    purple: 'bg-purple-100 text-purple-600 dark:bg-purple-900/30 dark:text-purple-400',
-    red: 'bg-red-100 text-red-600 dark:bg-red-900/30 dark:text-red-400',
+    blue: "bg-blue-100 text-blue-600 dark:bg-blue-900/30 dark:text-blue-400",
+    green:
+      "bg-green-100 text-green-600 dark:bg-green-900/30 dark:text-green-400",
+    purple:
+      "bg-purple-100 text-purple-600 dark:bg-purple-900/30 dark:text-purple-400",
+    red: "bg-red-100 text-red-600 dark:bg-red-900/30 dark:text-red-400",
   };
 
   return (
-    <div className={cn(
-      "bg-white dark:bg-gray-800 rounded-lg shadow p-6",
-      alert && "ring-2 ring-red-500"
-    )}>
+    <div
+      className={cn(
+        "bg-white dark:bg-gray-800 rounded-lg shadow p-6",
+        alert && "ring-2 ring-red-500",
+      )}
+    >
       <div className="flex items-center justify-between">
         <div>
           <p className="text-sm font-medium text-gray-600 dark:text-gray-400">
@@ -327,16 +353,22 @@ const StatCard: React.FC<{
           </p>
           {change && (
             <p className="text-sm text-gray-500 dark:text-gray-400 mt-1 flex items-center gap-1">
-              {trend === 'up' && <TrendingUp className="w-4 h-4 text-green-500" />}
-              {trend === 'down' && <TrendingUp className="w-4 h-4 text-red-500 rotate-180" />}
+              {trend === "up" && (
+                <TrendingUp className="w-4 h-4 text-green-500" />
+              )}
+              {trend === "down" && (
+                <TrendingUp className="w-4 h-4 text-red-500 rotate-180" />
+              )}
               {change}
             </p>
           )}
         </div>
-        <div className={cn(
-          "w-12 h-12 rounded-lg flex items-center justify-center",
-          colorClasses[color]
-        )}>
+        <div
+          className={cn(
+            "w-12 h-12 rounded-lg flex items-center justify-center",
+            colorClasses[color],
+          )}
+        >
           <Icon className="w-6 h-6" />
         </div>
       </div>

@@ -1,14 +1,27 @@
-import { useCallback, useEffect, useState, useRef } from 'react';
-import { bookingHistoryService } from '@/services/client';
-import type { BookingHistoryItem, BookingFilters, PaginationInfo } from '@/types/client/booking.types';
-import { isBookingHistoryItem, ClientPortalError, NetworkError, type UsePaginatedReturn } from '@/types/client/enhanced.types';
+import { useCallback, useEffect, useState, useRef } from "react";
+import { bookingHistoryService } from "@/services/client";
+import type {
+  BookingHistoryItem,
+  BookingFilters,
+  PaginationInfo,
+} from "@/types/client/booking.types";
+import {
+  isBookingHistoryItem,
+  ClientPortalError,
+  NetworkError,
+  type UsePaginatedReturn,
+} from "@/types/client/enhanced.types";
 
 interface UseBookingHistoryParams {
   initialFilters?: BookingFilters;
   pageSize?: number;
 }
 
-interface UseBookingHistoryReturn extends Omit<UsePaginatedReturn<BookingHistoryItem>, 'loadMore' | 'hasMore' | 'refetch'> {
+interface UseBookingHistoryReturn
+  extends Omit<
+    UsePaginatedReturn<BookingHistoryItem>,
+    "loadMore" | "hasMore" | "refetch"
+  > {
   bookings: BookingHistoryItem[];
   filters: BookingFilters;
   searchTerm: string;
@@ -26,14 +39,14 @@ export const useBookingHistory = ({
   const [bookings, setBookings] = useState<BookingHistoryItem[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<Error | null>(null);
-  const [searchTerm, setSearchTerm] = useState('');
+  const [searchTerm, setSearchTerm] = useState("");
   const [filters, setFilters] = useState<BookingFilters>(initialFilters);
   const [pagination, setPagination] = useState({
     limit: pageSize,
     offset: 0,
     total: 0,
   });
-  
+
   // Abort controller for cancelling requests
   const abortControllerRef = useRef<AbortController | null>(null);
 
@@ -42,13 +55,13 @@ export const useBookingHistory = ({
     if (abortControllerRef.current) {
       abortControllerRef.current.abort();
     }
-    
+
     // Create new abort controller
     abortControllerRef.current = new AbortController();
-    
+
     setLoading(true);
     setError(null);
-    
+
     try {
       const response = await bookingHistoryService.getBookingHistory({
         ...filters,
@@ -56,52 +69,60 @@ export const useBookingHistory = ({
         limit: pagination.limit,
         offset: pagination.offset,
       });
-      
+
       // Validate response structure
-      if (!response || typeof response !== 'object') {
-        throw new ClientPortalError('Invalid response format');
+      if (!response || typeof response !== "object") {
+        throw new ClientPortalError("Invalid response format");
       }
-      
+
       if (!Array.isArray(response.bookings)) {
-        throw new ClientPortalError('Bookings must be an array');
+        throw new ClientPortalError("Bookings must be an array");
       }
-      
+
       // Validate each booking item
       if (!response.bookings.every(isBookingHistoryItem)) {
-        throw new ClientPortalError('Invalid booking data format');
+        throw new ClientPortalError("Invalid booking data format");
       }
-      
+
       // Validate pagination
-      if (!response.pagination || typeof response.pagination.total !== 'number') {
-        throw new ClientPortalError('Invalid pagination data');
+      if (
+        !response.pagination ||
+        typeof response.pagination.total !== "number"
+      ) {
+        throw new ClientPortalError("Invalid pagination data");
       }
-      
+
       setBookings(response.bookings);
-      setPagination(prev => ({
+      setPagination((prev) => ({
         ...prev,
         total: response.pagination.total,
       }));
     } catch (err) {
       // Ignore abort errors
-      if (err instanceof Error && err.name === 'AbortError') {
+      if (err instanceof Error && err.name === "AbortError") {
         return;
       }
-      
+
       if (err instanceof Error) {
         setError(err);
-      } else if (typeof err === 'object' && err !== null && 'status' in err) {
-        setError(new NetworkError('Failed to load booking history', (err as any).status));
+      } else if (typeof err === "object" && err !== null && "status" in err) {
+        setError(
+          new NetworkError(
+            "Failed to load booking history",
+            (err as any).status,
+          ),
+        );
       } else {
-        setError(new ClientPortalError('An unexpected error occurred'));
+        setError(new ClientPortalError("An unexpected error occurred"));
       }
-      console.error('Booking history fetch error:', err);
+      console.error("Booking history fetch error:", err);
     } finally {
       setLoading(false);
     }
   }, [filters, searchTerm, pagination.limit, pagination.offset]);
 
   const setPage = useCallback((page: number) => {
-    setPagination(prev => ({
+    setPagination((prev) => ({
       ...prev,
       offset: (page - 1) * prev.limit,
     }));
@@ -114,17 +135,17 @@ export const useBookingHistory = ({
   const exportToCSV = useCallback(async () => {
     try {
       const csv = await bookingHistoryService.exportBookingHistory(filters);
-      const blob = new Blob([csv], { type: 'text/csv' });
+      const blob = new Blob([csv], { type: "text/csv" });
       const url = window.URL.createObjectURL(blob);
-      const link = document.createElement('a');
+      const link = document.createElement("a");
       link.href = url;
-      link.download = `booking-history-${new Date().toISOString().split('T')[0]}.csv`;
+      link.download = `booking-history-${new Date().toISOString().split("T")[0]}.csv`;
       document.body.appendChild(link);
       link.click();
       document.body.removeChild(link);
       window.URL.revokeObjectURL(url);
     } catch (err) {
-      console.error('Export failed:', err);
+      console.error("Export failed:", err);
       throw err;
     }
   }, [filters]);
@@ -132,7 +153,7 @@ export const useBookingHistory = ({
   // Debounced search
   useEffect(() => {
     const timer = setTimeout(() => {
-      setPagination(prev => ({ ...prev, offset: 0 })); // Reset to first page
+      setPagination((prev) => ({ ...prev, offset: 0 })); // Reset to first page
       fetchBookings();
     }, 300);
 
@@ -160,7 +181,7 @@ export const useBookingHistory = ({
     error,
     pagination: {
       ...pagination,
-      hasMore: pagination.offset + pagination.limit < pagination.total
+      hasMore: pagination.offset + pagination.limit < pagination.total,
     },
     filters,
     searchTerm,

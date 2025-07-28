@@ -1,17 +1,20 @@
-import { useEffect, useRef, useState, RefObject } from 'react';
+import { useEffect, useRef, useState, RefObject } from "react";
 
 interface UseIntersectionObserverOptions extends IntersectionObserverInit {
   freezeOnceVisible?: boolean;
-  onChange?: (isIntersecting: boolean, entry: IntersectionObserverEntry) => void;
+  onChange?: (
+    isIntersecting: boolean,
+    entry: IntersectionObserverEntry,
+  ) => void;
 }
 
 export function useIntersectionObserver<T extends Element>(
-  options: UseIntersectionObserverOptions = {}
+  options: UseIntersectionObserverOptions = {},
 ): [RefObject<T>, boolean, IntersectionObserverEntry | undefined] {
   const {
     threshold = 0,
     root = null,
-    rootMargin = '0%',
+    rootMargin = "0%",
     freezeOnceVisible = false,
     onChange,
   } = options;
@@ -28,7 +31,7 @@ export function useIntersectionObserver<T extends Element>(
     const observer = new IntersectionObserver(
       ([entry]) => {
         const isElementIntersecting = entry.isIntersecting;
-        
+
         setEntry(entry);
         setIsIntersecting(isElementIntersecting);
         onChange?.(isElementIntersecting, entry);
@@ -38,7 +41,7 @@ export function useIntersectionObserver<T extends Element>(
           observer.disconnect();
         }
       },
-      { threshold, root, rootMargin }
+      { threshold, root, rootMargin },
     );
 
     observer.observe(element);
@@ -53,10 +56,10 @@ export function useIntersectionObserver<T extends Element>(
 
 // Specialized hook for lazy loading
 export function useLazyLoading<T extends Element>(
-  options?: Omit<UseIntersectionObserverOptions, 'freezeOnceVisible'>
+  options?: Omit<UseIntersectionObserverOptions, "freezeOnceVisible">,
 ) {
   const [hasLoaded, setHasLoaded] = useState(false);
-  
+
   const [ref, isIntersecting] = useIntersectionObserver<T>({
     ...options,
     freezeOnceVisible: true,
@@ -80,7 +83,7 @@ export function useInfiniteScroll(
   options?: UseIntersectionObserverOptions & {
     enabled?: boolean;
     delay?: number;
-  }
+  },
 ) {
   const { enabled = true, delay = 0, ...observerOptions } = options || {};
   const [isLoading, setIsLoading] = useState(false);

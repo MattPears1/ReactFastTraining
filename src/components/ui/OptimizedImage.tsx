@@ -1,19 +1,19 @@
-import React from 'react'
-import { cn } from '@utils/cn'
-import { useLazyImage } from '@hooks/useLazyLoad'
-import Skeleton from './Skeleton'
+import React from "react";
+import { cn } from "@utils/cn";
+import { useLazyImage } from "@hooks/useLazyLoad";
+import Skeleton from "./Skeleton";
 
 interface OptimizedImageProps {
-  src: string
-  alt: string
-  className?: string
-  width?: number | string
-  height?: number | string
-  placeholder?: string
-  sizes?: string
-  priority?: boolean
-  onLoad?: () => void
-  onError?: () => void
+  src: string;
+  alt: string;
+  className?: string;
+  width?: number | string;
+  height?: number | string;
+  placeholder?: string;
+  sizes?: string;
+  priority?: boolean;
+  onLoad?: () => void;
+  onError?: () => void;
 }
 
 const OptimizedImage: React.FC<OptimizedImageProps> = ({
@@ -28,25 +28,30 @@ const OptimizedImage: React.FC<OptimizedImageProps> = ({
   onLoad,
   onError,
 }) => {
-  const { ref, src: imageSrc, isLoading, error } = useLazyImage(
-    priority ? src : '', // If priority, load immediately
-    placeholder
-  )
+  const {
+    ref,
+    src: imageSrc,
+    isLoading,
+    error,
+  } = useLazyImage(
+    priority ? src : "", // If priority, load immediately
+    placeholder,
+  );
 
   // For priority images, load immediately
   React.useEffect(() => {
     if (priority && src) {
-      const img = new Image()
-      img.src = src
+      const img = new Image();
+      img.src = src;
     }
-  }, [priority, src])
+  }, [priority, src]);
 
   if (error) {
     return (
-      <div 
+      <div
         className={cn(
-          'bg-gray-200 dark:bg-gray-700 flex items-center justify-center',
-          className
+          "bg-gray-200 dark:bg-gray-700 flex items-center justify-center",
+          className,
         )}
         style={{ width, height }}
       >
@@ -54,38 +59,41 @@ const OptimizedImage: React.FC<OptimizedImageProps> = ({
           Failed to load image
         </span>
       </div>
-    )
+    );
   }
 
   return (
-    <div className={cn('relative overflow-hidden', className)} style={{ width, height }}>
+    <div
+      className={cn("relative overflow-hidden", className)}
+      style={{ width, height }}
+    >
       {isLoading && !priority && (
         <div className="absolute inset-0">
           <Skeleton className="w-full h-full" />
         </div>
       )}
-      
+
       <img
         ref={ref}
         src={priority ? src : imageSrc}
         alt={alt}
         className={cn(
-          'w-full h-full object-cover transition-opacity duration-300',
-          isLoading && !priority ? 'opacity-0' : 'opacity-100'
+          "w-full h-full object-cover transition-opacity duration-300",
+          isLoading && !priority ? "opacity-0" : "opacity-100",
         )}
         width={width}
         height={height}
         sizes={sizes}
-        loading={priority ? 'eager' : 'lazy'}
+        loading={priority ? "eager" : "lazy"}
         onLoad={() => {
-          onLoad?.()
+          onLoad?.();
         }}
         onError={() => {
-          onError?.()
+          onError?.();
         }}
       />
     </div>
-  )
-}
+  );
+};
 
-export default React.memo(OptimizedImage)
+export default React.memo(OptimizedImage);

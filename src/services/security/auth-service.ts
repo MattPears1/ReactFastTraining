@@ -1,6 +1,6 @@
-import { apiClient } from '@services/api/enhanced-client';
-import { Result } from '@types/advanced';
-import { jwtDecode } from 'jwt-decode';
+import { apiClient } from "@services/api/enhanced-client";
+import { Result } from "@types/advanced";
+import { jwtDecode } from "jwt-decode";
 
 interface AuthTokens {
   accessToken: string;
@@ -25,13 +25,16 @@ interface SecurityConfig {
 }
 
 class AuthService {
-  private readonly TOKEN_KEY = 'auth_token';
-  private readonly REFRESH_TOKEN_KEY = 'refresh_token';
-  private readonly SESSION_KEY = 'auth_session';
+  private readonly TOKEN_KEY = "auth_token";
+  private readonly REFRESH_TOKEN_KEY = "refresh_token";
+  private readonly SESSION_KEY = "auth_session";
   private refreshTimer: NodeJS.Timeout | null = null;
   private activityTimer: NodeJS.Timeout | null = null;
-  private loginAttempts = new Map<string, { count: number; lastAttempt: Date }>();
-  
+  private loginAttempts = new Map<
+    string,
+    { count: number; lastAttempt: Date }
+  >();
+
   private config: SecurityConfig = {
     maxLoginAttempts: 3,
     lockoutDuration: 15,
@@ -51,7 +54,7 @@ class AuthService {
 
     // Setup activity monitoring
     this.setupActivityMonitoring();
-    
+
     // Setup secure storage event listener
     this.setupStorageListener();
   }
@@ -59,11 +62,18 @@ class AuthService {
   /**
    * Login with enhanced security
    */
-  async login(email: string, password: string): Promise<Result<AuthTokens, Error>> {
+  async login(
+    email: string,
+    password: string,
+  ): Promise<Result<AuthTokens, Error>> {
     try {
       // Check for account lockout
       if (this.isAccountLocked(email)) {
-        return Result.err(new Error('Account is temporarily locked due to multiple failed attempts'));
+        return Result.err(
+          new Error(
+            "Account is temporarily locked due to multiple failed attempts",
+          ),
+        );
       }
 
       // Hash password client-side (additional server-side hashing should also be done)
@@ -72,7 +82,7 @@ class AuthService {
       // Get device fingerprint
       const deviceFingerprint = await this.getDeviceFingerprint();
 
-      const result = await apiClient.post<AuthTokens>('/api/auth/login', {
+      const result = await apiClient.post<AuthTokens>("/api/auth/login", {
         email,
         password: hashedPassword,
         deviceFingerprint,
@@ -94,7 +104,7 @@ class AuthService {
       this.setupTokenRefresh(result.data.data.accessToken);
 
       // Log successful login
-      await this.logSecurityEvent('login_success', { email });
+      await this.logSecurityEvent("login_success", { email });
 
       return Result.ok(result.data.data);
     } catch (error) {
@@ -109,10 +119,10 @@ class AuthService {
   async logout(): Promise<void> {
     try {
       const token = this.getStoredToken();
-      
+
       // Notify server
       if (token) {
-        await apiClient.post('/api/auth/logout', {
+        await apiClient.post("/api/auth/logout", {
           token,
           timestamp: new Date().toISOString(),
         });
@@ -120,7 +130,7 @@ class AuthService {
 
       // Clear local storage
       this.clearTokens();
-      
+
       // Clear timers
       this.clearTimers();
 
@@ -128,9 +138,9 @@ class AuthService {
       sessionStorage.clear();
 
       // Log logout
-      await this.logSecurityEvent('logout', {});
+      await this.logSecurityEvent("logout", {});
     } catch (error) {
-      console.error('Logout error:', error);
+      console.error("Logout error:", error);
       // Still clear local data even if server call fails
       this.clearTokens();
       this.clearTimers();
@@ -143,12 +153,12 @@ class AuthService {
   async refreshToken(): Promise<Result<AuthTokens, Error>> {
     try {
       const refreshToken = localStorage.getItem(this.REFRESH_TOKEN_KEY);
-      
+
       if (!refreshToken) {
-        return Result.err(new Error('No refresh token available'));
+        return Result.err(new Error("No refresh token available"));
       }
 
-      const result = await apiClient.post<AuthTokens>('/api/auth/refresh', {
+      const result = await apiClient.post<AuthTokens>("/api/auth/refresh", {
         refreshToken,
         deviceFingerprint: await this.getDeviceFingerprint(),
       });
@@ -174,20 +184,20 @@ class AuthService {
   async validateToken(token?: string): Promise<boolean> {
     try {
       const tokenToValidate = token || this.getStoredToken();
-      
+
       if (!tokenToValidate) {
         return false;
       }
 
       const payload = this.decodeToken(tokenToValidate);
-      
+
       // Check expiration
       if (payload.exp * 1000 < Date.now()) {
         return false;
       }
 
       // Verify with server
-      const result = await apiClient.post('/api/auth/validate', {
+      const result = await apiClient.post("/api/auth/validate", {
         token: tokenToValidate,
       });
 
@@ -234,10 +244,10 @@ class AuthService {
     // Use Web Crypto API for client-side hashing
     const encoder = new TextEncoder();
     const data = encoder.encode(password);
-    const hash = await crypto.subtle.digest('SHA-256', data);
+    const hash = await crypto.subtle.digest("SHA-256", data);
     return Array.from(new Uint8Array(hash))
-      .map(b => b.toString(16).padStart(2, '0'))
-      .join('');
+      .map((b) => b.toString(16).padStart(2, "0"))
+      .join("");
   }
 
   private async getDeviceFingerprint(): Promise<string> {
@@ -249,7 +259,7 @@ class AuthService {
       timezone: Intl.DateTimeFormat().resolvedOptions().timeZone,
       hardwareConcurrency: navigator.hardwareConcurrency,
     };
-    
+
     return btoa(JSON.stringify(fingerprint));
   }
 
@@ -258,18 +268,27 @@ class AuthService {
   }
 
   private getStoredToken(): string | null {
-    return localStorage.getItem(this.TOKEN_KEY) || sessionStorage.getItem(this.TOKEN_KEY);
+    return (
+      localStorage.getItem(this.TOKEN_KEY) ||
+      sessionStorage.getItem(this.TOKEN_KEY)
+    );
   }
 
-  private async storeTokens(tokens: AuthTokens, persistent: boolean): Promise<void> {
+  private async storeTokens(
+    tokens: AuthTokens,
+    persistent: boolean,
+  ): Promise<void> {
     const storage = persistent ? localStorage : sessionStorage;
-    
+
     storage.setItem(this.TOKEN_KEY, tokens.accessToken);
     storage.setItem(this.REFRESH_TOKEN_KEY, tokens.refreshToken);
-    storage.setItem(this.SESSION_KEY, JSON.stringify({
-      startTime: Date.now(),
-      lastActivity: Date.now(),
-    }));
+    storage.setItem(
+      this.SESSION_KEY,
+      JSON.stringify({
+        startTime: Date.now(),
+        lastActivity: Date.now(),
+      }),
+    );
   }
 
   private clearTokens(): void {
@@ -304,7 +323,7 @@ class AuthService {
         }, refreshTime);
       }
     } catch (error) {
-      console.error('Failed to setup token refresh:', error);
+      console.error("Failed to setup token refresh:", error);
     }
   }
 
@@ -321,7 +340,7 @@ class AuthService {
     };
 
     // Monitor user activity
-    ['mousedown', 'keydown', 'scroll', 'touchstart'].forEach(event => {
+    ["mousedown", "keydown", "scroll", "touchstart"].forEach((event) => {
       document.addEventListener(event, updateActivity, { passive: true });
     });
 
@@ -336,12 +355,12 @@ class AuthService {
 
   private setupStorageListener(): void {
     // Listen for storage changes (multi-tab support)
-    window.addEventListener('storage', (e) => {
+    window.addEventListener("storage", (e) => {
       if (e.key === this.TOKEN_KEY) {
         if (!e.newValue) {
           // Token removed in another tab
           this.clearTimers();
-          window.location.href = '/login';
+          window.location.href = "/login";
         } else if (e.oldValue !== e.newValue) {
           // Token changed in another tab
           this.validateAndRefreshToken(e.newValue);
@@ -356,7 +375,7 @@ class AuthService {
       const refreshResult = await this.refreshToken();
       if (!refreshResult.success) {
         this.clearTokens();
-        window.location.href = '/login';
+        window.location.href = "/login";
       }
     }
   }
@@ -368,7 +387,10 @@ class AuthService {
     const timeSinceLastAttempt = Date.now() - attempts.lastAttempt.getTime();
     const lockoutTime = this.config.lockoutDuration * 60 * 1000;
 
-    if (attempts.count >= this.config.maxLoginAttempts && timeSinceLastAttempt < lockoutTime) {
+    if (
+      attempts.count >= this.config.maxLoginAttempts &&
+      timeSinceLastAttempt < lockoutTime
+    ) {
       return true;
     }
 
@@ -381,7 +403,10 @@ class AuthService {
   }
 
   private recordFailedAttempt(email: string): void {
-    const attempts = this.loginAttempts.get(email) || { count: 0, lastAttempt: new Date() };
+    const attempts = this.loginAttempts.get(email) || {
+      count: 0,
+      lastAttempt: new Date(),
+    };
     attempts.count++;
     attempts.lastAttempt = new Date();
     this.loginAttempts.set(email, attempts);
@@ -398,14 +423,14 @@ class AuthService {
 
   private async logSecurityEvent(event: string, data: any): Promise<void> {
     try {
-      await apiClient.post('/api/security/events', {
+      await apiClient.post("/api/security/events", {
         event,
         data,
         timestamp: new Date().toISOString(),
         userAgent: navigator.userAgent,
       });
     } catch (error) {
-      console.error('Failed to log security event:', error);
+      console.error("Failed to log security event:", error);
     }
   }
 }

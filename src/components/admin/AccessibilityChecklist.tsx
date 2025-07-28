@@ -1,103 +1,104 @@
-import React, { useState, useEffect } from 'react';
-import { Check, X, AlertCircle, Save } from 'lucide-react';
-import { Button } from '@/components/ui/Button';
+import React, { useState, useEffect } from "react";
+import { Check, X, AlertCircle, Save } from "lucide-react";
+import { Button } from "@/components/ui/Button";
 
 interface ChecklistItem {
   id: string;
   label: string;
   description: string;
   required: boolean;
-  category: 'access' | 'facilities' | 'equipment' | 'safety';
+  category: "access" | "facilities" | "equipment" | "safety";
 }
 
 const ACCESSIBILITY_CHECKLIST: ChecklistItem[] = [
   // Access
   {
-    id: 'wheelchair',
-    label: 'Wheelchair Access',
-    description: 'Step-free access to training room and facilities',
+    id: "wheelchair",
+    label: "Wheelchair Access",
+    description: "Step-free access to training room and facilities",
     required: true,
-    category: 'access',
+    category: "access",
   },
   {
-    id: 'parking',
-    label: 'Accessible Parking',
-    description: 'Designated disabled parking spaces available',
+    id: "parking",
+    label: "Accessible Parking",
+    description: "Designated disabled parking spaces available",
     required: true,
-    category: 'access',
+    category: "access",
   },
   {
-    id: 'entrance',
-    label: 'Accessible Entrance',
+    id: "entrance",
+    label: "Accessible Entrance",
     description: 'Wide doorways (min 36") and automatic doors if available',
     required: true,
-    category: 'access',
+    category: "access",
   },
   // Facilities
   {
-    id: 'toilets',
-    label: 'Accessible Toilets',
-    description: 'Wheelchair accessible toilet facilities with grab rails',
+    id: "toilets",
+    label: "Accessible Toilets",
+    description: "Wheelchair accessible toilet facilities with grab rails",
     required: true,
-    category: 'facilities',
+    category: "facilities",
   },
   {
-    id: 'lift',
-    label: 'Lift Access',
-    description: 'Working lift if training room is not on ground floor',
+    id: "lift",
+    label: "Lift Access",
+    description: "Working lift if training room is not on ground floor",
     required: false,
-    category: 'facilities',
+    category: "facilities",
   },
   {
-    id: 'breakroom',
-    label: 'Accessible Break Area',
-    description: 'Accessible space for lunch and refreshments',
+    id: "breakroom",
+    label: "Accessible Break Area",
+    description: "Accessible space for lunch and refreshments",
     required: false,
-    category: 'facilities',
+    category: "facilities",
   },
   // Equipment
   {
-    id: 'hearing',
-    label: 'Hearing Loop',
-    description: 'Induction loop system available if needed',
+    id: "hearing",
+    label: "Hearing Loop",
+    description: "Induction loop system available if needed",
     required: false,
-    category: 'equipment',
+    category: "equipment",
   },
   {
-    id: 'lighting',
-    label: 'Adequate Lighting',
-    description: 'Good lighting for visual impairments (min 500 lux)',
+    id: "lighting",
+    label: "Adequate Lighting",
+    description: "Good lighting for visual impairments (min 500 lux)",
     required: true,
-    category: 'equipment',
+    category: "equipment",
   },
   {
-    id: 'adjustable',
-    label: 'Adjustable Furniture',
-    description: 'Height-adjustable tables and chairs available',
+    id: "adjustable",
+    label: "Adjustable Furniture",
+    description: "Height-adjustable tables and chairs available",
     required: false,
-    category: 'equipment',
+    category: "equipment",
   },
   // Safety
   {
-    id: 'evacuation',
-    label: 'Emergency Evacuation',
-    description: 'Clear evacuation plan for disabled attendees',
+    id: "evacuation",
+    label: "Emergency Evacuation",
+    description: "Clear evacuation plan for disabled attendees",
     required: true,
-    category: 'safety',
+    category: "safety",
   },
   {
-    id: 'signage',
-    label: 'Clear Signage',
-    description: 'Large, clear signage throughout venue with braille where possible',
+    id: "signage",
+    label: "Clear Signage",
+    description:
+      "Large, clear signage throughout venue with braille where possible",
     required: false,
-    category: 'safety',
+    category: "safety",
   },
   {
-    id: 'firstaid',
-    label: 'Accessibility-Aware First Aid',
-    description: 'First aiders briefed on accessibility needs',
+    id: "firstaid",
+    label: "Accessibility-Aware First Aid",
+    description: "First aiders briefed on accessibility needs",
     required: true,
-    category: 'safety',
+    category: "safety",
   },
 ];
 
@@ -107,10 +108,10 @@ interface AccessibilityChecklistProps {
   onSave?: (checkedItems: Record<string, boolean>) => void;
 }
 
-export const AccessibilityChecklist: React.FC<AccessibilityChecklistProps> = ({ 
-  venueId, 
-  venueName = 'Venue',
-  onSave 
+export const AccessibilityChecklist: React.FC<AccessibilityChecklistProps> = ({
+  venueId,
+  venueName = "Venue",
+  onSave,
 }) => {
   const [checked, setChecked] = useState<Record<string, boolean>>({});
   const [notes, setNotes] = useState<Record<string, string>>({});
@@ -129,19 +130,21 @@ export const AccessibilityChecklist: React.FC<AccessibilityChecklistProps> = ({
   };
 
   const toggleItem = (itemId: string) => {
-    setChecked(prev => ({ ...prev, [itemId]: !prev[itemId] }));
+    setChecked((prev) => ({ ...prev, [itemId]: !prev[itemId] }));
   };
 
   const updateNote = (itemId: string, note: string) => {
-    setNotes(prev => ({ ...prev, [itemId]: note }));
+    setNotes((prev) => ({ ...prev, [itemId]: note }));
   };
 
-  const allRequiredChecked = ACCESSIBILITY_CHECKLIST
-    .filter(item => item.required)
-    .every(item => checked[item.id]);
+  const allRequiredChecked = ACCESSIBILITY_CHECKLIST.filter(
+    (item) => item.required,
+  ).every((item) => checked[item.id]);
 
   const completionPercentage = Math.round(
-    (Object.values(checked).filter(Boolean).length / ACCESSIBILITY_CHECKLIST.length) * 100
+    (Object.values(checked).filter(Boolean).length /
+      ACCESSIBILITY_CHECKLIST.length) *
+      100,
   );
 
   const handleSave = async () => {
@@ -157,21 +160,25 @@ export const AccessibilityChecklist: React.FC<AccessibilityChecklistProps> = ({
   };
 
   const categories = {
-    access: { label: 'Access', icon: '🚪' },
-    facilities: { label: 'Facilities', icon: '🚻' },
-    equipment: { label: 'Equipment', icon: '⚙️' },
-    safety: { label: 'Safety', icon: '🚨' },
+    access: { label: "Access", icon: "🚪" },
+    facilities: { label: "Facilities", icon: "🚻" },
+    equipment: { label: "Equipment", icon: "⚙️" },
+    safety: { label: "Safety", icon: "🚨" },
   };
 
   return (
     <div className="bg-white rounded-lg shadow p-6">
       <div className="flex items-center justify-between mb-6">
         <div>
-          <h3 className="text-lg font-semibold">Venue Accessibility Checklist</h3>
+          <h3 className="text-lg font-semibold">
+            Venue Accessibility Checklist
+          </h3>
           <p className="text-sm text-gray-600 mt-1">{venueName}</p>
         </div>
         <div className="text-right">
-          <div className="text-2xl font-bold text-primary-600">{completionPercentage}%</div>
+          <div className="text-2xl font-bold text-primary-600">
+            {completionPercentage}%
+          </div>
           <p className="text-sm text-gray-600">Complete</p>
         </div>
       </div>
@@ -180,7 +187,7 @@ export const AccessibilityChecklist: React.FC<AccessibilityChecklistProps> = ({
       <div className="w-full bg-gray-200 rounded-full h-3 mb-6">
         <div
           className={`h-3 rounded-full transition-all duration-300 ${
-            allRequiredChecked ? 'bg-green-500' : 'bg-primary-600'
+            allRequiredChecked ? "bg-green-500" : "bg-primary-600"
           }`}
           style={{ width: `${completionPercentage}%` }}
         />
@@ -188,8 +195,10 @@ export const AccessibilityChecklist: React.FC<AccessibilityChecklistProps> = ({
 
       {/* Categories */}
       {Object.entries(categories).map(([category, config]) => {
-        const items = ACCESSIBILITY_CHECKLIST.filter(item => item.category === category);
-        const checkedCount = items.filter(item => checked[item.id]).length;
+        const items = ACCESSIBILITY_CHECKLIST.filter(
+          (item) => item.category === category,
+        );
+        const checkedCount = items.filter((item) => checked[item.id]).length;
 
         return (
           <div key={category} className="mb-6">
@@ -202,13 +211,13 @@ export const AccessibilityChecklist: React.FC<AccessibilityChecklistProps> = ({
             </h4>
 
             <div className="space-y-3">
-              {items.map(item => (
+              {items.map((item) => (
                 <div
                   key={item.id}
                   className={`border rounded-lg p-4 transition-all ${
-                    checked[item.id] 
-                      ? 'border-green-300 bg-green-50' 
-                      : 'border-gray-200 hover:border-gray-300'
+                    checked[item.id]
+                      ? "border-green-300 bg-green-50"
+                      : "border-gray-200 hover:border-gray-300"
                   }`}
                 >
                   <label className="flex items-start gap-3 cursor-pointer">
@@ -223,19 +232,25 @@ export const AccessibilityChecklist: React.FC<AccessibilityChecklistProps> = ({
                         <p className="font-medium">
                           {item.label}
                           {item.required && (
-                            <span className="ml-2 text-red-600 text-sm">*Required</span>
+                            <span className="ml-2 text-red-600 text-sm">
+                              *Required
+                            </span>
                           )}
                         </p>
                       </div>
-                      <p className="text-sm text-gray-600 mt-1">{item.description}</p>
-                      
+                      <p className="text-sm text-gray-600 mt-1">
+                        {item.description}
+                      </p>
+
                       {checked[item.id] && (
                         <div className="mt-2">
                           <input
                             type="text"
                             placeholder="Add notes (optional)..."
-                            value={notes[item.id] || ''}
-                            onChange={(e) => updateNote(item.id, e.target.value)}
+                            value={notes[item.id] || ""}
+                            onChange={(e) =>
+                              updateNote(item.id, e.target.value)
+                            }
                             className="w-full px-3 py-1 text-sm border border-gray-300 rounded"
                           />
                         </div>
@@ -266,7 +281,7 @@ export const AccessibilityChecklist: React.FC<AccessibilityChecklistProps> = ({
                 Required items incomplete
               </p>
               <p className="text-sm text-yellow-700 mt-1">
-                Please ensure all required accessibility features are available 
+                Please ensure all required accessibility features are available
                 before confirming venue suitability.
               </p>
             </div>
@@ -282,7 +297,7 @@ export const AccessibilityChecklist: React.FC<AccessibilityChecklistProps> = ({
           variant="primary"
         >
           <Save className="w-4 h-4 mr-2" />
-          {saving ? 'Saving...' : 'Save Checklist'}
+          {saving ? "Saving..." : "Save Checklist"}
         </Button>
       </div>
     </div>

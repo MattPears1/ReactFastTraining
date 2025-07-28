@@ -1,10 +1,15 @@
-import React, { useState, useEffect, useCallback } from 'react';
-import { Calendar, momentLocalizer, Event as CalendarEvent, View } from 'react-big-calendar';
-import moment from 'moment';
-import { useWebSocket, SessionUpdateEvent } from '@hooks/useWebSocket';
-import { calendarApi } from '@services/api/calendar.service';
-import { Loader2 } from 'lucide-react';
-import 'react-big-calendar/lib/css/react-big-calendar.css';
+import React, { useState, useEffect, useCallback } from "react";
+import {
+  Calendar,
+  momentLocalizer,
+  Event as CalendarEvent,
+  View,
+} from "react-big-calendar";
+import moment from "moment";
+import { useWebSocket, SessionUpdateEvent } from "@hooks/useWebSocket";
+import { calendarApi } from "@services/api/calendar.service";
+import { Loader2 } from "lucide-react";
+import "react-big-calendar/lib/css/react-big-calendar.css";
 
 const localizer = momentLocalizer(moment);
 
@@ -38,25 +43,25 @@ interface AvailabilityCalendarProps {
 export const AvailabilityCalendar: React.FC<AvailabilityCalendarProps> = ({
   onSessionSelect,
   onDateSelect,
-  className = '',
+  className = "",
   filters: externalFilters,
   isAdminView = false,
 }) => {
   const [events, setEvents] = useState<CustomEvent[]>([]);
-  const [view, setView] = useState<View>('month');
+  const [view, setView] = useState<View>("month");
   const [date, setDate] = useState(new Date());
   const [loading, setLoading] = useState(true);
   const [filters, setFilters] = useState({
-    courseType: externalFilters?.courseType || '',
-    location: externalFilters?.location || '',
+    courseType: externalFilters?.courseType || "",
+    location: externalFilters?.location || "",
   });
 
   // Update filters when external filters change
   useEffect(() => {
     if (externalFilters) {
       setFilters({
-        courseType: externalFilters.courseType || '',
-        location: externalFilters.location || '',
+        courseType: externalFilters.courseType || "",
+        location: externalFilters.location || "",
       });
     }
   }, [externalFilters]);
@@ -77,7 +82,7 @@ export const AvailabilityCalendar: React.FC<AvailabilityCalendarProps> = ({
         location: filters.location || undefined,
       });
 
-      const calendarEvents: CustomEvent[] = sessions.map(session => ({
+      const calendarEvents: CustomEvent[] = sessions.map((session) => ({
         id: session.id,
         title: session.title,
         start: new Date(session.start),
@@ -95,7 +100,7 @@ export const AvailabilityCalendar: React.FC<AvailabilityCalendarProps> = ({
 
       setEvents(calendarEvents);
     } catch (error) {
-      console.error('Failed to load calendar events:', error);
+      console.error("Failed to load calendar events:", error);
     } finally {
       setLoading(false);
     }
@@ -108,8 +113,8 @@ export const AvailabilityCalendar: React.FC<AvailabilityCalendarProps> = ({
   // Subscribe to real-time updates
   useEffect(() => {
     const handleSessionUpdate = (data: SessionUpdateEvent) => {
-      setEvents(prevEvents =>
-        prevEvents.map(event =>
+      setEvents((prevEvents) =>
+        prevEvents.map((event) =>
           event.id === data.sessionId
             ? {
                 ...event,
@@ -117,17 +122,23 @@ export const AvailabilityCalendar: React.FC<AvailabilityCalendarProps> = ({
                   ...event.resource,
                   currentBookings: data.currentBookings,
                   availableSpots: data.availableSpots,
-                  percentFull: Math.round((data.currentBookings / event.resource.maxCapacity) * 100),
-                  status: data.availableSpots === 0 ? 'FULL' : 
-                         data.availableSpots <= 3 ? 'ALMOST_FULL' : 'AVAILABLE',
+                  percentFull: Math.round(
+                    (data.currentBookings / event.resource.maxCapacity) * 100,
+                  ),
+                  status:
+                    data.availableSpots === 0
+                      ? "FULL"
+                      : data.availableSpots <= 3
+                        ? "ALMOST_FULL"
+                        : "AVAILABLE",
                 },
               }
-            : event
-        )
+            : event,
+        ),
       );
     };
 
-    const unsubscribeFn = subscribe('session-update', handleSessionUpdate);
+    const unsubscribeFn = subscribe("session-update", handleSessionUpdate);
     return unsubscribeFn;
   }, [subscribe]);
 
@@ -139,10 +150,10 @@ export const AvailabilityCalendar: React.FC<AvailabilityCalendarProps> = ({
 
     return {
       style: {
-        backgroundColor: isFull ? '#DC2626' : color,
+        backgroundColor: isFull ? "#DC2626" : color,
         opacity: isFull ? 0.7 : 1,
-        border: isAlmostFull ? '2px solid #F59E0B' : 'none',
-        color: '#FFFFFF',
+        border: isAlmostFull ? "2px solid #F59E0B" : "none",
+        color: "#FFFFFF",
         fontWeight: 600,
       },
     };
@@ -167,7 +178,11 @@ export const AvailabilityCalendar: React.FC<AvailabilityCalendarProps> = ({
   const handleSelectEvent = (event: CustomEvent) => {
     if (isAdminView && onSessionSelect) {
       onSessionSelect(event.id);
-    } else if (!isAdminView && event.resource.availableSpots > 0 && onSessionSelect) {
+    } else if (
+      !isAdminView &&
+      event.resource.availableSpots > 0 &&
+      onSessionSelect
+    ) {
       onSessionSelect(event.id);
     }
   };
@@ -175,9 +190,9 @@ export const AvailabilityCalendar: React.FC<AvailabilityCalendarProps> = ({
   const handleSelectSlot = (slotInfo: { start: Date; end: Date }) => {
     if (isAdminView && onDateSelect) {
       // Find sessions on this date
-      const selectedDate = moment(slotInfo.start).startOf('day');
-      const sessionsOnDate = events.filter(event => 
-        moment(event.start).isSame(selectedDate, 'day')
+      const selectedDate = moment(slotInfo.start).startOf("day");
+      const sessionsOnDate = events.filter((event) =>
+        moment(event.start).isSame(selectedDate, "day"),
       );
       onDateSelect(slotInfo.start, sessionsOnDate);
     }
@@ -199,20 +214,28 @@ export const AvailabilityCalendar: React.FC<AvailabilityCalendarProps> = ({
           <div className="flex flex-wrap gap-4">
             <select
               value={filters.courseType}
-              onChange={(e) => setFilters({ ...filters, courseType: e.target.value })}
+              onChange={(e) =>
+                setFilters({ ...filters, courseType: e.target.value })
+              }
               className="px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500"
             >
               <option value="">All Courses</option>
-              <option value="Emergency First Aid at Work">Emergency First Aid at Work</option>
+              <option value="Emergency First Aid at Work">
+                Emergency First Aid at Work
+              </option>
               <option value="First Aid at Work">First Aid at Work</option>
               <option value="Paediatric First Aid">Paediatric First Aid</option>
               <option value="CPR and AED">CPR and AED</option>
-              <option value="Mental Health First Aid">Mental Health First Aid</option>
+              <option value="Mental Health First Aid">
+                Mental Health First Aid
+              </option>
             </select>
 
             <select
               value={filters.location}
-              onChange={(e) => setFilters({ ...filters, location: e.target.value })}
+              onChange={(e) =>
+                setFilters({ ...filters, location: e.target.value })
+              }
               className="px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500"
             >
               <option value="">All Locations</option>
@@ -245,12 +268,12 @@ export const AvailabilityCalendar: React.FC<AvailabilityCalendarProps> = ({
             `${event.resource.availableSpots} of ${event.resource.maxCapacity} spots available`
           }
           messages={{
-            next: 'Next',
-            previous: 'Previous',
-            today: 'Today',
-            month: 'Month',
-            week: 'Week',
-            day: 'Day',
+            next: "Next",
+            previous: "Previous",
+            today: "Today",
+            month: "Month",
+            week: "Week",
+            day: "Day",
           }}
         />
       </div>

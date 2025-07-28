@@ -31,7 +31,7 @@ export interface ReportData {
   };
 }
 
-export type ReportTab = 'revenue' | 'bookings' | 'attendance' | 'courses';
+export type ReportTab = "revenue" | "bookings" | "attendance" | "courses";
 
 export interface ChartColors {
   primary: string;

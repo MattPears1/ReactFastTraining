@@ -1,25 +1,27 @@
-import React, { useEffect, useRef } from 'react';
-import { NavLink, useNavigate, Outlet } from 'react-router-dom';
-import { 
-  LayoutDashboard, 
-  Calendar, 
-  User, 
+import React, { useEffect, useRef } from "react";
+import { NavLink, useNavigate, Outlet } from "react-router-dom";
+import {
+  LayoutDashboard,
+  Calendar,
+  User,
   LogOut,
   Menu,
   X,
-  SkipForward
-} from 'lucide-react';
-import { motion, AnimatePresence } from 'framer-motion';
-import { useAuth } from '@/contexts/AuthContext';
-import { ClientPortalProvider } from '@/contexts/ClientPortalContext';
-import { ClientPortalErrorBoundary } from './ClientPortalErrorBoundary';
-import { FocusTrap } from '@/components/common/FocusTrap';
+  SkipForward,
+} from "lucide-react";
+import { motion, AnimatePresence } from "framer-motion";
+import { useAuth } from "@/contexts/AuthContext";
+import { ClientPortalProvider } from "@/contexts/ClientPortalContext";
+import { ClientPortalErrorBoundary } from "./ClientPortalErrorBoundary";
+import { FocusTrap } from "@/components/common/FocusTrap";
 
 interface ClientPortalLayoutProps {
   children?: React.ReactNode;
 }
 
-export const ClientPortalLayout: React.FC<ClientPortalLayoutProps> = ({ children }) => {
+export const ClientPortalLayout: React.FC<ClientPortalLayoutProps> = ({
+  children,
+}) => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = React.useState(false);
   const { user, logout } = useAuth();
   const navigate = useNavigate();
@@ -29,22 +31,22 @@ export const ClientPortalLayout: React.FC<ClientPortalLayoutProps> = ({ children
   // Check authentication
   useEffect(() => {
     if (!user) {
-      navigate('/login', { replace: true, state: { from: '/client' } });
+      navigate("/login", { replace: true, state: { from: "/client" } });
     }
   }, [user, navigate]);
 
   const navItems = [
-    { path: '/client/dashboard', label: 'Dashboard', icon: LayoutDashboard },
-    { path: '/client/bookings', label: 'My Bookings', icon: Calendar },
-    { path: '/profile', label: 'Profile', icon: User },
+    { path: "/client/dashboard", label: "Dashboard", icon: LayoutDashboard },
+    { path: "/client/bookings", label: "My Bookings", icon: Calendar },
+    { path: "/profile", label: "Profile", icon: User },
   ];
 
   const handleLogout = async () => {
     try {
       await logout();
-      navigate('/login');
+      navigate("/login");
     } catch (error) {
-      console.error('Logout failed:', error);
+      console.error("Logout failed:", error);
     }
   };
 
@@ -56,14 +58,14 @@ export const ClientPortalLayout: React.FC<ClientPortalLayoutProps> = ({ children
   // Keyboard navigation
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
-      if (e.key === 'Escape' && isMobileMenuOpen) {
+      if (e.key === "Escape" && isMobileMenuOpen) {
         setIsMobileMenuOpen(false);
         menuButtonRef.current?.focus();
       }
     };
 
-    document.addEventListener('keydown', handleKeyDown);
-    return () => document.removeEventListener('keydown', handleKeyDown);
+    document.addEventListener("keydown", handleKeyDown);
+    return () => document.removeEventListener("keydown", handleKeyDown);
   }, [isMobileMenuOpen]);
 
   if (!user) {
@@ -88,12 +90,20 @@ export const ClientPortalLayout: React.FC<ClientPortalLayoutProps> = ({ children
             <div className="flex h-full flex-col">
               {/* Logo */}
               <div className="px-6 py-4 border-b border-gray-200 dark:border-gray-700">
-                <h2 className="text-xl font-bold text-primary-600">React Fast Training</h2>
-                <p className="text-sm text-gray-600 dark:text-gray-400">Client Portal</p>
+                <h2 className="text-xl font-bold text-primary-600">
+                  React Fast Training
+                </h2>
+                <p className="text-sm text-gray-600 dark:text-gray-400">
+                  Client Portal
+                </p>
               </div>
 
               {/* Navigation */}
-              <nav className="flex-1 px-4 py-6 space-y-1" role="navigation" aria-label="Main navigation">
+              <nav
+                className="flex-1 px-4 py-6 space-y-1"
+                role="navigation"
+                aria-label="Main navigation"
+              >
                 {navItems.map((item) => {
                   const Icon = item.icon;
                   return (
@@ -103,8 +113,8 @@ export const ClientPortalLayout: React.FC<ClientPortalLayoutProps> = ({ children
                       className={({ isActive }) =>
                         `flex items-center gap-3 px-3 py-2 rounded-lg transition-colors ${
                           isActive
-                            ? 'bg-primary-50 text-primary-600 dark:bg-primary-900/20'
-                            : 'text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-700'
+                            ? "bg-primary-50 text-primary-600 dark:bg-primary-900/20"
+                            : "text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-700"
                         }`
                       }
                     >
@@ -132,16 +142,26 @@ export const ClientPortalLayout: React.FC<ClientPortalLayoutProps> = ({ children
           {/* Mobile Header */}
           <header className="lg:hidden fixed top-0 left-0 right-0 z-50 bg-white dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700">
             <div className="flex items-center justify-between px-4 py-3">
-              <h2 className="text-lg font-bold text-primary-600">Client Portal</h2>
+              <h2 className="text-lg font-bold text-primary-600">
+                Client Portal
+              </h2>
               <button
                 ref={menuButtonRef}
                 onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
                 className="p-2 text-gray-600 hover:bg-gray-100 dark:text-gray-400 dark:hover:bg-gray-700 rounded-lg"
-                aria-label={isMobileMenuOpen ? 'Close navigation menu' : 'Open navigation menu'}
+                aria-label={
+                  isMobileMenuOpen
+                    ? "Close navigation menu"
+                    : "Open navigation menu"
+                }
                 aria-expanded={isMobileMenuOpen}
                 aria-controls="mobile-navigation"
               >
-                {isMobileMenuOpen ? <X className="w-6 h-6" aria-hidden="true" /> : <Menu className="w-6 h-6" aria-hidden="true" />}
+                {isMobileMenuOpen ? (
+                  <X className="w-6 h-6" aria-hidden="true" />
+                ) : (
+                  <Menu className="w-6 h-6" aria-hidden="true" />
+                )}
               </button>
             </div>
           </header>
@@ -149,12 +169,15 @@ export const ClientPortalLayout: React.FC<ClientPortalLayoutProps> = ({ children
           {/* Mobile Menu */}
           <AnimatePresence>
             {isMobileMenuOpen && (
-              <FocusTrap active={isMobileMenuOpen} onEscape={() => setIsMobileMenuOpen(false)}>
+              <FocusTrap
+                active={isMobileMenuOpen}
+                onEscape={() => setIsMobileMenuOpen(false)}
+              >
                 <motion.div
                   initial={{ opacity: 0, x: -300 }}
                   animate={{ opacity: 1, x: 0 }}
                   exit={{ opacity: 0, x: -300 }}
-                  transition={{ type: 'tween' }}
+                  transition={{ type: "tween" }}
                   className="lg:hidden fixed inset-0 z-40 bg-black bg-opacity-50"
                   onClick={() => setIsMobileMenuOpen(false)}
                   aria-label="Close menu overlay"
@@ -164,7 +187,7 @@ export const ClientPortalLayout: React.FC<ClientPortalLayoutProps> = ({ children
                     initial={{ x: -300 }}
                     animate={{ x: 0 }}
                     exit={{ x: -300 }}
-                    transition={{ type: 'tween' }}
+                    transition={{ type: "tween" }}
                     className="fixed inset-y-0 left-0 w-64 bg-white dark:bg-gray-800"
                     onClick={(e) => e.stopPropagation()}
                     role="navigation"
@@ -183,8 +206,8 @@ export const ClientPortalLayout: React.FC<ClientPortalLayoutProps> = ({ children
                               className={({ isActive }) =>
                                 `flex items-center gap-3 px-3 py-2 rounded-lg transition-colors ${
                                   isActive
-                                    ? 'bg-primary-50 text-primary-600 dark:bg-primary-900/20'
-                                    : 'text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-700'
+                                    ? "bg-primary-50 text-primary-600 dark:bg-primary-900/20"
+                                    : "text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-700"
                                 }`
                               }
                             >

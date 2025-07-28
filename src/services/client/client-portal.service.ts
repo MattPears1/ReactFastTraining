@@ -1,13 +1,13 @@
-import { apiService } from '../api.service';
-import type { 
-  UserStats, 
-  NextCourse, 
-  UpcomingCourse, 
-  PreCourseMaterial 
-} from '@/types/client';
+import { apiService } from "../api.service";
+import type {
+  UserStats,
+  NextCourse,
+  UpcomingCourse,
+  PreCourseMaterial,
+} from "@/types/client";
 
 class ClientPortalService {
-  private basePath = '/client';
+  private basePath = "/client";
 
   async getDashboard(): Promise<{
     stats: UserStats;
@@ -34,20 +34,22 @@ class ClientPortalService {
   }
 
   async getPreCourseMaterials(bookingId: string): Promise<PreCourseMaterial[]> {
-    const response = await apiService.get(`${this.basePath}/materials/${bookingId}`);
+    const response = await apiService.get(
+      `${this.basePath}/materials/${bookingId}`,
+    );
     return response.data;
   }
 
   async downloadMaterial(materialId: string): Promise<void> {
     const response = await apiService.get(
       `${this.basePath}/materials/${materialId}/download`,
-      { responseType: 'blob' }
+      { responseType: "blob" },
     );
-    
+
     const url = window.URL.createObjectURL(new Blob([response.data]));
-    const link = document.createElement('a');
+    const link = document.createElement("a");
     link.href = url;
-    link.setAttribute('download', `material-${materialId}.pdf`);
+    link.setAttribute("download", `material-${materialId}.pdf`);
     document.body.appendChild(link);
     link.click();
     link.remove();
@@ -59,7 +61,9 @@ class ClientPortalService {
   }
 
   async addToCalendar(bookingId: string): Promise<string> {
-    const response = await apiService.get(`${this.basePath}/bookings/${bookingId}/calendar`);
+    const response = await apiService.get(
+      `${this.basePath}/bookings/${bookingId}/calendar`,
+    );
     return response.data.icsUrl;
   }
 }

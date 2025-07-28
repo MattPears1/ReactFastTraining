@@ -1,35 +1,36 @@
-import React, { useState } from 'react'
-import { motion, AnimatePresence } from 'framer-motion'
-import { ChevronDown } from 'lucide-react'
-import { cn } from '@utils/cn'
+import React, { useState } from "react";
+import { motion, AnimatePresence } from "framer-motion";
+import { ChevronDown } from "lucide-react";
+import { cn } from "@utils/cn";
 
 interface FAQItem {
-  id: string
-  question: string
-  answer: string
+  id: string;
+  question: string;
+  answer: string;
 }
 
 interface AnimatedFAQProps {
-  items: FAQItem[]
-  className?: string
+  items: FAQItem[];
+  className?: string;
 }
 
-export const AnimatedFAQ: React.FC<AnimatedFAQProps> = ({ items, className = '' }) => {
-  const [openItems, setOpenItems] = useState<string[]>([])
+export const AnimatedFAQ: React.FC<AnimatedFAQProps> = ({
+  items,
+  className = "",
+}) => {
+  const [openItems, setOpenItems] = useState<string[]>([]);
 
   const toggleItem = (id: string) => {
-    setOpenItems(prev =>
-      prev.includes(id)
-        ? prev.filter(item => item !== id)
-        : [...prev, id]
-    )
-  }
+    setOpenItems((prev) =>
+      prev.includes(id) ? prev.filter((item) => item !== id) : [...prev, id],
+    );
+  };
 
   return (
-    <div className={cn('space-y-4', className)}>
+    <div className={cn("space-y-4", className)}>
       {items.map((item, index) => {
-        const isOpen = openItems.includes(item.id)
-        
+        const isOpen = openItems.includes(item.id);
+
         return (
           <motion.div
             key={item.id}
@@ -52,14 +53,14 @@ export const AnimatedFAQ: React.FC<AnimatedFAQProps> = ({ items, className = '' 
                 <ChevronDown className="w-5 h-5 text-gray-500 dark:text-gray-400 flex-shrink-0" />
               </motion.div>
             </button>
-            
+
             <AnimatePresence>
               {isOpen && (
                 <motion.div
                   initial={{ height: 0, opacity: 0 }}
-                  animate={{ height: 'auto', opacity: 1 }}
+                  animate={{ height: "auto", opacity: 1 }}
                   exit={{ height: 0, opacity: 0 }}
-                  transition={{ duration: 0.3, ease: 'easeInOut' }}
+                  transition={{ duration: 0.3, ease: "easeInOut" }}
                   className="overflow-hidden"
                 >
                   <div className="px-6 pb-4 text-gray-600 dark:text-gray-400">
@@ -69,8 +70,8 @@ export const AnimatedFAQ: React.FC<AnimatedFAQProps> = ({ items, className = '' 
               )}
             </AnimatePresence>
           </motion.div>
-        )
+        );
       })}
     </div>
-  )
-}
+  );
+};

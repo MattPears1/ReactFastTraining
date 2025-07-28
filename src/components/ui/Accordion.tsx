@@ -1,20 +1,20 @@
-import React, { useState, useRef } from 'react'
-import { motion, AnimatePresence } from 'framer-motion'
-import { ChevronDown } from 'lucide-react'
-import { cn } from '@utils/cn'
-import { useKeyboardNavigation } from '@hooks/useAccessibility'
+import React, { useState, useRef } from "react";
+import { motion, AnimatePresence } from "framer-motion";
+import { ChevronDown } from "lucide-react";
+import { cn } from "@utils/cn";
+import { useKeyboardNavigation } from "@hooks/useAccessibility";
 
 interface AccordionItem {
-  id: string
-  title: string
-  content: React.ReactNode
+  id: string;
+  title: string;
+  content: React.ReactNode;
 }
 
 interface AccordionProps {
-  items: AccordionItem[]
-  allowMultiple?: boolean
-  defaultOpen?: string[]
-  className?: string
+  items: AccordionItem[];
+  allowMultiple?: boolean;
+  defaultOpen?: string[];
+  className?: string;
 }
 
 const Accordion: React.FC<AccordionProps> = ({
@@ -23,31 +23,27 @@ const Accordion: React.FC<AccordionProps> = ({
   defaultOpen = [],
   className,
 }) => {
-  const [openItems, setOpenItems] = useState<string[]>(defaultOpen)
-  const itemRefs = useRef<HTMLButtonElement[]>([])
-  const { handleKeyDown } = useKeyboardNavigation(
-    { current: itemRefs.current } as React.RefObject<HTMLElement[]>
-  )
+  const [openItems, setOpenItems] = useState<string[]>(defaultOpen);
+  const itemRefs = useRef<HTMLButtonElement[]>([]);
+  const { handleKeyDown } = useKeyboardNavigation({
+    current: itemRefs.current,
+  } as React.RefObject<HTMLElement[]>);
 
   const toggleItem = (id: string) => {
     if (allowMultiple) {
-      setOpenItems(prev =>
-        prev.includes(id)
-          ? prev.filter(item => item !== id)
-          : [...prev, id]
-      )
+      setOpenItems((prev) =>
+        prev.includes(id) ? prev.filter((item) => item !== id) : [...prev, id],
+      );
     } else {
-      setOpenItems(prev =>
-        prev.includes(id) ? [] : [id]
-      )
+      setOpenItems((prev) => (prev.includes(id) ? [] : [id]));
     }
-  }
+  };
 
-  const isOpen = (id: string) => openItems.includes(id)
+  const isOpen = (id: string) => openItems.includes(id);
 
   return (
     <div
-      className={cn('space-y-2', className)}
+      className={cn("space-y-2", className)}
       role="region"
       aria-label="Accordion"
     >
@@ -57,8 +53,8 @@ const Accordion: React.FC<AccordionProps> = ({
           className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg overflow-hidden"
         >
           <button
-            ref={el => {
-              if (el) itemRefs.current[index] = el
+            ref={(el) => {
+              if (el) itemRefs.current[index] = el;
             }}
             onClick={() => toggleItem(item.id)}
             onKeyDown={(e) => handleKeyDown(e, index)}
@@ -72,20 +68,20 @@ const Accordion: React.FC<AccordionProps> = ({
             </span>
             <ChevronDown
               className={cn(
-                'w-5 h-5 text-gray-500 transition-transform duration-200 flex-shrink-0',
-                isOpen(item.id) && 'rotate-180'
+                "w-5 h-5 text-gray-500 transition-transform duration-200 flex-shrink-0",
+                isOpen(item.id) && "rotate-180",
               )}
               aria-hidden="true"
             />
           </button>
-          
+
           <AnimatePresence initial={false}>
             {isOpen(item.id) && (
               <motion.div
                 initial={{ height: 0 }}
-                animate={{ height: 'auto' }}
+                animate={{ height: "auto" }}
                 exit={{ height: 0 }}
-                transition={{ duration: 0.3, ease: 'easeInOut' }}
+                transition={{ duration: 0.3, ease: "easeInOut" }}
                 className="overflow-hidden"
               >
                 <div
@@ -102,7 +98,7 @@ const Accordion: React.FC<AccordionProps> = ({
         </div>
       ))}
     </div>
-  )
-}
+  );
+};
 
-export default Accordion
+export default Accordion;

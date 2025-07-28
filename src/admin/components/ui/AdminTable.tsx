@@ -1,11 +1,11 @@
-import React from 'react';
-import { ChevronLeft, ChevronRight } from 'lucide-react';
+import React from "react";
+import { ChevronLeft, ChevronRight } from "lucide-react";
 
 interface Column<T> {
   key: string;
   header: string;
   render?: (item: T) => React.ReactNode;
-  align?: 'left' | 'center' | 'right';
+  align?: "left" | "center" | "right";
   width?: string;
 }
 
@@ -32,7 +32,7 @@ export function AdminTable<T>({
   data,
   keyExtractor,
   loading = false,
-  emptyMessage = 'No data found',
+  emptyMessage = "No data found",
   emptyIcon,
   pagination,
   onRowClick,
@@ -40,12 +40,12 @@ export function AdminTable<T>({
 }: AdminTableProps<T>) {
   const getAlignmentClass = (align?: string) => {
     switch (align) {
-      case 'center':
-        return 'text-center';
-      case 'right':
-        return 'text-right';
+      case "center":
+        return "text-center";
+      case "right":
+        return "text-right";
       default:
-        return 'text-left';
+        return "text-left";
     }
   };
 
@@ -101,8 +101,8 @@ export function AdminTable<T>({
                 key={keyExtractor(item)}
                 onClick={() => onRowClick?.(item)}
                 className={`
-                  ${onRowClick ? 'cursor-pointer' : ''}
-                  ${rowClassName ? rowClassName(item) : ''}
+                  ${onRowClick ? "cursor-pointer" : ""}
+                  ${rowClassName ? rowClassName(item) : ""}
                 `}
               >
                 {columns.map((column) => (
@@ -125,16 +125,19 @@ export function AdminTable<T>({
         <div className="admin-card-footer">
           <div className="admin-flex-between">
             <div className="admin-text-small admin-text-muted">
-              Showing {(pagination.currentPage - 1) * pagination.itemsPerPage + 1} to{' '}
+              Showing{" "}
+              {(pagination.currentPage - 1) * pagination.itemsPerPage + 1} to{" "}
               {Math.min(
                 pagination.currentPage * pagination.itemsPerPage,
-                pagination.totalItems
-              )}{' '}
+                pagination.totalItems,
+              )}{" "}
               of {pagination.totalItems} entries
             </div>
             <div className="flex items-center gap-2">
               <button
-                onClick={() => pagination.onPageChange(pagination.currentPage - 1)}
+                onClick={() =>
+                  pagination.onPageChange(pagination.currentPage - 1)
+                }
                 disabled={pagination.currentPage === 1}
                 className="admin-btn admin-btn-secondary admin-btn-sm"
               >
@@ -157,8 +160,8 @@ export function AdminTable<T>({
                           px-3 py-1 text-sm rounded-md transition-colors
                           ${
                             page === pagination.currentPage
-                              ? 'bg-primary-500 text-white'
-                              : 'text-gray-700 hover:bg-gray-100'
+                              ? "bg-primary-500 text-white"
+                              : "text-gray-700 hover:bg-gray-100"
                           }
                         `}
                       >
@@ -179,7 +182,9 @@ export function AdminTable<T>({
                 })}
               </div>
               <button
-                onClick={() => pagination.onPageChange(pagination.currentPage + 1)}
+                onClick={() =>
+                  pagination.onPageChange(pagination.currentPage + 1)
+                }
                 disabled={pagination.currentPage === pagination.totalPages}
                 className="admin-btn admin-btn-secondary admin-btn-sm"
               >

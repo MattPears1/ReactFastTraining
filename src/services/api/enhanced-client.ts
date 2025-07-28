@@ -1,11 +1,11 @@
-import { 
-  ApiResponse, 
-  ApiError, 
-  PaginatedResponse, 
+import {
+  ApiResponse,
+  ApiError,
+  PaginatedResponse,
   Result,
   HTTPMethod,
-  APIEndpoint 
-} from '@types/advanced';
+  APIEndpoint,
+} from "@types/advanced";
 
 export interface ApiClientConfig {
   baseURL: string;
@@ -20,8 +20,12 @@ export interface ApiClientConfig {
   };
 }
 
-export type RequestInterceptor = (config: RequestInit) => RequestInit | Promise<RequestInit>;
-export type ResponseInterceptor = (response: Response) => Response | Promise<Response>;
+export type RequestInterceptor = (
+  config: RequestInit,
+) => RequestInit | Promise<RequestInit>;
+export type ResponseInterceptor = (
+  response: Response,
+) => Response | Promise<Response>;
 export type ErrorInterceptor = (error: Error) => Error | Promise<Error>;
 
 export interface RequestOptions extends RequestInit {
@@ -46,7 +50,7 @@ export class EnhancedApiClient {
       retryAttempts: config.retryAttempts || 3,
       retryDelay: config.retryDelay || 1000,
       headers: {
-        'Content-Type': 'application/json',
+        "Content-Type": "application/json",
         ...config.headers,
       },
       interceptors: config.interceptors || {},
@@ -108,45 +112,49 @@ export class EnhancedApiClient {
    */
   private buildURL(endpoint: string, params?: Record<string, any>): string {
     const url = new URL(endpoint, this.config.baseURL);
-    
+
     if (params) {
       Object.entries(params).forEach(([key, value]) => {
         if (value !== undefined && value !== null) {
           if (Array.isArray(value)) {
-            value.forEach(v => url.searchParams.append(key, String(v)));
+            value.forEach((v) => url.searchParams.append(key, String(v)));
           } else {
             url.searchParams.append(key, String(value));
           }
         }
       });
     }
-    
+
     return url.toString();
   }
 
   /**
    * Apply request interceptors
    */
-  private async applyRequestInterceptors(config: RequestInit): Promise<RequestInit> {
+  private async applyRequestInterceptors(
+    config: RequestInit,
+  ): Promise<RequestInit> {
     let finalConfig = config;
-    
+
     for (const interceptor of this.requestInterceptors) {
       finalConfig = await interceptor(finalConfig);
     }
-    
+
     return finalConfig;
   }
 
   /**
    * Apply response interceptors
    */
-  private async applyResponseInterceptors(response: Response): Promise<Response> {
+  private async applyResponseInterceptors(
+    response: Response,
+  ): Promise<Response> {
     let finalResponse = response;
-    
+
     for (const interceptor of this.responseInterceptors) {
       finalResponse = await interceptor(finalResponse);
     }
-    
+
     return finalResponse;
   }
 
@@ -155,11 +163,11 @@ export class EnhancedApiClient {
    */
   private async applyErrorInterceptors(error: Error): Promise<Error> {
     let finalError = error;
-    
+
     for (const interceptor of this.errorInterceptors) {
       finalError = await interceptor(finalError);
     }
-    
+
     return finalError;
   }
 
@@ -168,7 +176,7 @@ export class EnhancedApiClient {
    */
   private async executeRequest(
     url: string,
-    options: RequestOptions
+    options: RequestOptions,
   ): Promise<Response> {
     const {
       timeout = this.config.timeout,
@@ -179,7 +187,7 @@ export class EnhancedApiClient {
     } = options;
 
     let lastError: Error | null = null;
-    
+
     for (let attempt = 0; attempt <= retryAttempts; attempt++) {
       try {
         // Create abort controller for timeout
@@ -193,7 +201,7 @@ export class EnhancedApiClient {
         }, timeout);
 
         // Merge signals
-        const mergedSignal = signal 
+        const mergedSignal = signal
           ? this.mergeSignals([signal, abortController.signal])
           : abortController.signal;
 
@@ -209,7 +217,7 @@ export class EnhancedApiClient {
 
         // Execute request
         const response = await fetch(url, finalOptions);
-        
+
         clearTimeout(timeoutId);
         this.activeRequests.delete(requestId);
 
@@ -223,9 +231,9 @@ export class EnhancedApiClient {
         return finalResponse;
       } catch (error) {
         lastError = error as Error;
-        
+
         // Don't retry on abort
-        if (error instanceof Error && error.name === 'AbortError') {
+        if (error instanceof Error && error.name === "AbortError") {
           throw error;
         }
 
@@ -234,14 +242,14 @@ export class EnhancedApiClient {
 
         // Wait before retry
         if (attempt < retryAttempts) {
-          await new Promise(resolve => 
-            setTimeout(resolve, retryDelay * Math.pow(2, attempt))
+          await new Promise((resolve) =>
+            setTimeout(resolve, retryDelay * Math.pow(2, attempt)),
           );
         }
       }
     }
 
-    throw lastError || new Error('Request failed');
+    throw lastError || new Error("Request failed");
   }
 
   /**
@@ -249,7 +257,7 @@ export class EnhancedApiClient {
    */
   private async createApiError(response: Response): Promise<ApiError> {
     let errorData: any;
-    
+
     try {
       errorData = await response.json();
     } catch {
@@ -272,15 +280,15 @@ export class EnhancedApiClient {
    */
   private mergeSignals(signals: AbortSignal[]): AbortSignal {
     const controller = new AbortController();
-    
-    signals.forEach(signal => {
+
+    signals.forEach((signal) => {
       if (signal.aborted) {
         controller.abort();
       } else {
-        signal.addEventListener('abort', () => controller.abort());
+        signal.addEventListener("abort", () => controller.abort());
       }
     });
-    
+
     return controller.signal;
   }
 
@@ -290,11 +298,11 @@ export class EnhancedApiClient {
   async request<T>(
     method: HTTPMethod,
     endpoint: APIEndpoint | string,
-    options?: RequestOptions & { data?: any }
+    options?: RequestOptions & { data?: any },
   ): Promise<Result<ApiResponse<T>, ApiError>> {
     try {
       const url = this.buildURL(endpoint, options?.params);
-      
+
       const requestOptions: RequestOptions = {
         ...options,
         method,
@@ -303,19 +311,19 @@ export class EnhancedApiClient {
 
       const response = await this.executeRequest(url, requestOptions);
       const data = await response.json();
-      
+
       return Result.ok({
         data: data.data || data,
         meta: data.meta,
       });
     } catch (error) {
-      if (error instanceof Error && 'code' in error) {
+      if (error instanceof Error && "code" in error) {
         return Result.err(error as ApiError);
       }
-      
+
       return Result.err({
-        code: 'UNKNOWN_ERROR',
-        message: error instanceof Error ? error.message : 'Unknown error',
+        code: "UNKNOWN_ERROR",
+        message: error instanceof Error ? error.message : "Unknown error",
         details: { error },
       });
     }
@@ -326,9 +334,9 @@ export class EnhancedApiClient {
    */
   async get<T>(
     endpoint: APIEndpoint | string,
-    options?: RequestOptions
+    options?: RequestOptions,
   ): Promise<Result<ApiResponse<T>, ApiError>> {
-    return this.request<T>('GET', endpoint, options);
+    return this.request<T>("GET", endpoint, options);
   }
 
   /**
@@ -337,9 +345,9 @@ export class EnhancedApiClient {
   async post<T>(
     endpoint: APIEndpoint | string,
     data?: any,
-    options?: RequestOptions
+    options?: RequestOptions,
   ): Promise<Result<ApiResponse<T>, ApiError>> {
-    return this.request<T>('POST', endpoint, { ...options, data });
+    return this.request<T>("POST", endpoint, { ...options, data });
   }
 
   /**
@@ -348,9 +356,9 @@ export class EnhancedApiClient {
   async put<T>(
     endpoint: APIEndpoint | string,
     data?: any,
-    options?: RequestOptions
+    options?: RequestOptions,
   ): Promise<Result<ApiResponse<T>, ApiError>> {
-    return this.request<T>('PUT', endpoint, { ...options, data });
+    return this.request<T>("PUT", endpoint, { ...options, data });
   }
 
   /**
@@ -359,9 +367,9 @@ export class EnhancedApiClient {
   async patch<T>(
     endpoint: APIEndpoint | string,
     data?: any,
-    options?: RequestOptions
+    options?: RequestOptions,
   ): Promise<Result<ApiResponse<T>, ApiError>> {
-    return this.request<T>('PATCH', endpoint, { ...options, data });
+    return this.request<T>("PATCH", endpoint, { ...options, data });
   }
 
   /**
@@ -369,9 +377,9 @@ export class EnhancedApiClient {
    */
   async delete<T>(
     endpoint: APIEndpoint | string,
-    options?: RequestOptions
+    options?: RequestOptions,
   ): Promise<Result<ApiResponse<T>, ApiError>> {
-    return this.request<T>('DELETE', endpoint, options);
+    return this.request<T>("DELETE", endpoint, options);
   }
 
   /**
@@ -380,10 +388,10 @@ export class EnhancedApiClient {
   async getPaginated<T>(
     endpoint: APIEndpoint | string,
     params?: Record<string, any> & { page?: number; limit?: number },
-    options?: RequestOptions
+    options?: RequestOptions,
   ): Promise<Result<PaginatedResponse<T>, ApiError>> {
     const result = await this.get<any>(endpoint, { ...options, params });
-    
+
     if (!result.success) {
       return result;
     }
@@ -406,7 +414,7 @@ export class EnhancedApiClient {
    * Cancel all active requests
    */
   cancelAllRequests(): void {
-    this.activeRequests.forEach(controller => controller.abort());
+    this.activeRequests.forEach((controller) => controller.abort());
     this.activeRequests.clear();
   }
 
@@ -427,7 +435,7 @@ export class EnhancedApiClient {
 
 // Create default instance
 export const apiClient = new EnhancedApiClient({
-  baseURL: import.meta.env.VITE_API_URL || 'http://localhost:3000',
+  baseURL: import.meta.env.VITE_API_URL || "http://localhost:3000",
   timeout: 30000,
   retryAttempts: 3,
   retryDelay: 1000,
@@ -435,7 +443,7 @@ export const apiClient = new EnhancedApiClient({
 
 // Add auth interceptor
 apiClient.addRequestInterceptor((config) => {
-  const token = localStorage.getItem('authToken');
+  const token = localStorage.getItem("authToken");
   if (token) {
     config.headers = {
       ...config.headers,
@@ -447,6 +455,6 @@ apiClient.addRequestInterceptor((config) => {
 
 // Add error logging interceptor
 apiClient.addErrorInterceptor((error) => {
-  console.error('[API Error]', error);
+  console.error("[API Error]", error);
   return error;
 });

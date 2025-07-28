@@ -1,12 +1,14 @@
-import axios, { AxiosInstance } from 'axios';
+import axios, { AxiosInstance } from "axios";
 
 class AdminApi {
   private api: AxiosInstance;
 
   constructor() {
     // Use relative URL in production, localhost in development
-    const baseURL = import.meta.env.PROD ? '' : (import.meta.env.VITE_API_URL || 'http://localhost:3000');
-    
+    const baseURL = import.meta.env.PROD
+      ? ""
+      : import.meta.env.VITE_API_URL || "http://localhost:3000";
+
     this.api = axios.create({
       baseURL,
       withCredentials: true,
@@ -16,13 +18,13 @@ class AdminApi {
     // Request interceptor to add auth token
     this.api.interceptors.request.use(
       (config) => {
-        const token = localStorage.getItem('adminAccessToken');
+        const token = localStorage.getItem("adminAccessToken");
         if (token) {
           config.headers.Authorization = `Bearer ${token}`;
         }
         return config;
       },
-      (error) => Promise.reject(error)
+      (error) => Promise.reject(error),
     );
 
     // Response interceptor to handle errors
@@ -33,17 +35,17 @@ class AdminApi {
 
         if (error.response?.status === 401 && !originalRequest._retry) {
           originalRequest._retry = true;
-          
+
           // Clear tokens and redirect to login
-          localStorage.removeItem('adminAccessToken');
-          localStorage.removeItem('adminRefreshToken');
-          window.location.href = '/admin/login';
-          
+          localStorage.removeItem("adminAccessToken");
+          localStorage.removeItem("adminRefreshToken");
+          window.location.href = "/admin/login";
+
           return Promise.reject(error);
         }
 
         return Promise.reject(error);
-      }
+      },
     );
   }
 

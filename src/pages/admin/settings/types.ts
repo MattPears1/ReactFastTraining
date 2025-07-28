@@ -51,4 +51,9 @@ export interface SecuritySettings {
   ipWhitelist: string[];
 }
 
-export type SettingsSection = 'business' | 'course' | 'notifications' | 'security' | 'payment';
+export type SettingsSection =
+  | "business"
+  | "course"
+  | "notifications"
+  | "security"
+  | "payment";

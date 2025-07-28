@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { motion } from 'framer-motion';
+import React, { useState } from "react";
+import { motion } from "framer-motion";
 import {
   User,
   Mail,
@@ -14,8 +14,8 @@ import {
   AlertCircle,
   Check,
   ChevronRight,
-} from 'lucide-react';
-import { clsx } from 'clsx';
+} from "lucide-react";
+import { clsx } from "clsx";
 
 export interface AccountSettingsProps {
   activeSection?: string;
@@ -32,50 +32,50 @@ interface SettingsSection {
 
 const sections: SettingsSection[] = [
   {
-    id: 'profile',
-    label: 'Profile Information',
+    id: "profile",
+    label: "Profile Information",
     icon: User,
-    description: 'Update your personal details',
+    description: "Update your personal details",
   },
   {
-    id: 'security',
-    label: 'Security',
+    id: "security",
+    label: "Security",
     icon: Shield,
-    description: 'Password and authentication',
+    description: "Password and authentication",
   },
   {
-    id: 'notifications',
-    label: 'Notifications',
+    id: "notifications",
+    label: "Notifications",
     icon: Bell,
-    description: 'Email and push preferences',
+    description: "Email and push preferences",
   },
   {
-    id: 'privacy',
-    label: 'Privacy',
+    id: "privacy",
+    label: "Privacy",
     icon: Lock,
-    description: 'Data and visibility settings',
+    description: "Data and visibility settings",
   },
   {
-    id: 'payment',
-    label: 'Payment Methods',
+    id: "payment",
+    label: "Payment Methods",
     icon: CreditCard,
-    description: 'Manage payment options',
+    description: "Manage payment options",
   },
   {
-    id: 'addresses',
-    label: 'Addresses',
+    id: "addresses",
+    label: "Addresses",
     icon: MapPin,
-    description: 'Shipping and billing addresses',
+    description: "Shipping and billing addresses",
   },
 ];
 
 export const AccountSettings: React.FC<AccountSettingsProps> = ({
-  activeSection = 'profile',
+  activeSection = "profile",
   onSectionChange,
   className,
 }) => {
   return (
-    <div className={clsx('flex gap-8', className)}>
+    <div className={clsx("flex gap-8", className)}>
       {/* Sidebar Navigation */}
       <div className="w-64 flex-shrink-0">
         <nav className="space-y-1">
@@ -88,10 +88,10 @@ export const AccountSettings: React.FC<AccountSettingsProps> = ({
                 key={section.id}
                 onClick={() => onSectionChange?.(section.id)}
                 className={clsx(
-                  'w-full flex items-start gap-3 px-4 py-3 rounded-lg transition-colors text-left',
+                  "w-full flex items-start gap-3 px-4 py-3 rounded-lg transition-colors text-left",
                   isActive
-                    ? 'bg-primary-50 dark:bg-primary-900/20 text-primary-600 dark:text-primary-400'
-                    : 'hover:bg-gray-100 dark:hover:bg-gray-800 text-gray-700 dark:text-gray-300'
+                    ? "bg-primary-50 dark:bg-primary-900/20 text-primary-600 dark:text-primary-400"
+                    : "hover:bg-gray-100 dark:hover:bg-gray-800 text-gray-700 dark:text-gray-300",
                 )}
               >
                 <Icon className="w-5 h-5 mt-0.5 flex-shrink-0" />
@@ -105,8 +105,8 @@ export const AccountSettings: React.FC<AccountSettingsProps> = ({
                 </div>
                 <ChevronRight
                   className={clsx(
-                    'w-4 h-4 mt-0.5 transition-opacity',
-                    isActive ? 'opacity-100' : 'opacity-0'
+                    "w-4 h-4 mt-0.5 transition-opacity",
+                    isActive ? "opacity-100" : "opacity-0",
                   )}
                 />
               </button>
@@ -117,12 +117,12 @@ export const AccountSettings: React.FC<AccountSettingsProps> = ({
 
       {/* Content Area */}
       <div className="flex-1">
-        {activeSection === 'profile' && <ProfileSettings />}
-        {activeSection === 'security' && <SecuritySettings />}
-        {activeSection === 'notifications' && <NotificationSettings />}
-        {activeSection === 'privacy' && <PrivacySettings />}
-        {activeSection === 'payment' && <PaymentSettings />}
-        {activeSection === 'addresses' && <AddressSettings />}
+        {activeSection === "profile" && <ProfileSettings />}
+        {activeSection === "security" && <SecuritySettings />}
+        {activeSection === "notifications" && <NotificationSettings />}
+        {activeSection === "privacy" && <PrivacySettings />}
+        {activeSection === "payment" && <PaymentSettings />}
+        {activeSection === "addresses" && <AddressSettings />}
       </div>
     </div>
   );
@@ -131,11 +131,11 @@ export const AccountSettings: React.FC<AccountSettingsProps> = ({
 // Profile Settings Section
 const ProfileSettings: React.FC = () => {
   const [formData, setFormData] = useState({
-    firstName: 'John',
-    lastName: 'Doe',
-    email: 'john.doe@example.com',
-    phone: '+1 (555) 123-4567',
-    bio: 'Software developer and tech enthusiast.',
+    firstName: "John",
+    lastName: "Doe",
+    email: "john.doe@example.com",
+    phone: "+1 (555) 123-4567",
+    bio: "Software developer and tech enthusiast.",
   });
 
   return (
@@ -157,7 +157,9 @@ const ProfileSettings: React.FC = () => {
             <input
               type="text"
               value={formData.firstName}
-              onChange={(e) => setFormData({ ...formData, firstName: e.target.value })}
+              onChange={(e) =>
+                setFormData({ ...formData, firstName: e.target.value })
+              }
               className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-primary-500"
             />
           </div>
@@ -168,7 +170,9 @@ const ProfileSettings: React.FC = () => {
             <input
               type="text"
               value={formData.lastName}
-              onChange={(e) => setFormData({ ...formData, lastName: e.target.value })}
+              onChange={(e) =>
+                setFormData({ ...formData, lastName: e.target.value })
+              }
               className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-primary-500"
             />
           </div>
@@ -182,7 +186,9 @@ const ProfileSettings: React.FC = () => {
             <input
               type="email"
               value={formData.email}
-              onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+              onChange={(e) =>
+                setFormData({ ...formData, email: e.target.value })
+              }
               className="w-full pl-10 pr-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-primary-500"
             />
             <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
@@ -197,7 +203,9 @@ const ProfileSettings: React.FC = () => {
             <input
               type="tel"
               value={formData.phone}
-              onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
+              onChange={(e) =>
+                setFormData({ ...formData, phone: e.target.value })
+              }
               className="w-full pl-10 pr-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-primary-500"
             />
             <Smartphone className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
@@ -295,14 +303,16 @@ const SecuritySettings: React.FC = () => {
           <button
             onClick={() => setTwoFactorEnabled(!twoFactorEnabled)}
             className={clsx(
-              'relative inline-flex h-6 w-11 items-center rounded-full transition-colors',
-              twoFactorEnabled ? 'bg-primary-600' : 'bg-gray-200 dark:bg-gray-700'
+              "relative inline-flex h-6 w-11 items-center rounded-full transition-colors",
+              twoFactorEnabled
+                ? "bg-primary-600"
+                : "bg-gray-200 dark:bg-gray-700",
             )}
           >
             <span
               className={clsx(
-                'inline-block h-4 w-4 transform rounded-full bg-white transition-transform',
-                twoFactorEnabled ? 'translate-x-6' : 'translate-x-1'
+                "inline-block h-4 w-4 transform rounded-full bg-white transition-transform",
+                twoFactorEnabled ? "translate-x-6" : "translate-x-1",
               )}
             />
           </button>
@@ -331,11 +341,26 @@ const SecuritySettings: React.FC = () => {
         </h3>
         <div className="space-y-3">
           {[
-            { device: 'Chrome on Windows', location: 'New York, US', time: '2 hours ago' },
-            { device: 'Safari on iPhone', location: 'New York, US', time: '1 day ago' },
-            { device: 'Firefox on MacOS', location: 'San Francisco, US', time: '3 days ago' },
+            {
+              device: "Chrome on Windows",
+              location: "New York, US",
+              time: "2 hours ago",
+            },
+            {
+              device: "Safari on iPhone",
+              location: "New York, US",
+              time: "1 day ago",
+            },
+            {
+              device: "Firefox on MacOS",
+              location: "San Francisco, US",
+              time: "3 days ago",
+            },
           ].map((activity, index) => (
-            <div key={index} className="flex items-start justify-between py-3 border-b border-gray-200 dark:border-gray-700 last:border-0">
+            <div
+              key={index}
+              className="flex items-start justify-between py-3 border-b border-gray-200 dark:border-gray-700 last:border-0"
+            >
               <div>
                 <p className="font-medium text-gray-900 dark:text-white">
                   {activity.device}
@@ -365,7 +390,9 @@ const NotificationSettings: React.FC = () => (
     <h2 className="text-2xl font-semibold text-gray-900 dark:text-white mb-6">
       Notification Preferences
     </h2>
-    <p className="text-gray-600 dark:text-gray-400">Notification settings content...</p>
+    <p className="text-gray-600 dark:text-gray-400">
+      Notification settings content...
+    </p>
   </motion.div>
 );
 
@@ -378,7 +405,9 @@ const PrivacySettings: React.FC = () => (
     <h2 className="text-2xl font-semibold text-gray-900 dark:text-white mb-6">
       Privacy Settings
     </h2>
-    <p className="text-gray-600 dark:text-gray-400">Privacy settings content...</p>
+    <p className="text-gray-600 dark:text-gray-400">
+      Privacy settings content...
+    </p>
   </motion.div>
 );
 
@@ -391,7 +420,9 @@ const PaymentSettings: React.FC = () => (
     <h2 className="text-2xl font-semibold text-gray-900 dark:text-white mb-6">
       Payment Methods
     </h2>
-    <p className="text-gray-600 dark:text-gray-400">Payment methods content...</p>
+    <p className="text-gray-600 dark:text-gray-400">
+      Payment methods content...
+    </p>
   </motion.div>
 );
 
@@ -404,6 +435,8 @@ const AddressSettings: React.FC = () => (
     <h2 className="text-2xl font-semibold text-gray-900 dark:text-white mb-6">
       Addresses
     </h2>
-    <p className="text-gray-600 dark:text-gray-400">Address management content...</p>
+    <p className="text-gray-600 dark:text-gray-400">
+      Address management content...
+    </p>
   </motion.div>
 );

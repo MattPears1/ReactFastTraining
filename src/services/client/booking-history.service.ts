@@ -1,9 +1,9 @@
-import { apiService } from '../api.service';
-import type { 
-  BookingHistoryResponse, 
-  BookingFilters, 
-  BookingDetails 
-} from '@/types/client';
+import { apiService } from "../api.service";
+import type {
+  BookingHistoryResponse,
+  BookingFilters,
+  BookingDetails,
+} from "@/types/client";
 
 interface GetBookingHistoryParams extends BookingFilters {
   limit?: number;
@@ -11,9 +11,11 @@ interface GetBookingHistoryParams extends BookingFilters {
 }
 
 class BookingHistoryService {
-  private basePath = '/client/bookings';
+  private basePath = "/client/bookings";
 
-  async getBookingHistory(params?: GetBookingHistoryParams): Promise<BookingHistoryResponse> {
+  async getBookingHistory(
+    params?: GetBookingHistoryParams,
+  ): Promise<BookingHistoryResponse> {
     const response = await apiService.get(this.basePath, { params });
     return response.data;
   }
@@ -26,13 +28,13 @@ class BookingHistoryService {
   async downloadCertificate(bookingId: string): Promise<void> {
     const response = await apiService.get(
       `${this.basePath}/${bookingId}/certificate`,
-      { responseType: 'blob' }
+      { responseType: "blob" },
     );
-    
+
     const url = window.URL.createObjectURL(new Blob([response.data]));
-    const link = document.createElement('a');
+    const link = document.createElement("a");
     link.href = url;
-    link.setAttribute('download', `certificate-${bookingId}.pdf`);
+    link.setAttribute("download", `certificate-${bookingId}.pdf`);
     document.body.appendChild(link);
     link.click();
     link.remove();
@@ -42,13 +44,13 @@ class BookingHistoryService {
   async downloadInvoice(invoiceId: string): Promise<void> {
     const response = await apiService.get(
       `/client/invoices/${invoiceId}/download`,
-      { responseType: 'blob' }
+      { responseType: "blob" },
     );
-    
+
     const url = window.URL.createObjectURL(new Blob([response.data]));
-    const link = document.createElement('a');
+    const link = document.createElement("a");
     link.href = url;
-    link.setAttribute('download', `invoice-${invoiceId}.pdf`);
+    link.setAttribute("download", `invoice-${invoiceId}.pdf`);
     document.body.appendChild(link);
     link.click();
     link.remove();
@@ -56,30 +58,32 @@ class BookingHistoryService {
   }
 
   async exportBookingHistory(filters?: BookingFilters): Promise<string> {
-    const response = await apiService.get(
-      `${this.basePath}/export`,
-      { 
-        params: filters,
-        responseType: 'text' 
-      }
-    );
+    const response = await apiService.get(`${this.basePath}/export`, {
+      params: filters,
+      responseType: "text",
+    });
     return response.data;
   }
 
-  async rescheduleBooking(bookingId: string, newSessionId: string): Promise<void> {
+  async rescheduleBooking(
+    bookingId: string,
+    newSessionId: string,
+  ): Promise<void> {
     await apiService.put(`${this.basePath}/${bookingId}/reschedule`, {
-      sessionId: newSessionId
+      sessionId: newSessionId,
     });
   }
 
   async cancelBooking(bookingId: string, reason?: string): Promise<void> {
     await apiService.put(`${this.basePath}/${bookingId}/cancel`, {
-      reason
+      reason,
     });
   }
 
   async rebookCourse(bookingId: string): Promise<{ redirectUrl: string }> {
-    const response = await apiService.post(`${this.basePath}/${bookingId}/rebook`);
+    const response = await apiService.post(
+      `${this.basePath}/${bookingId}/rebook`,
+    );
     return response.data;
   }
 }

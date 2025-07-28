@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef, useCallback } from 'react';
+import { useState, useEffect, useRef, useCallback } from "react";
 
 /**
  * Hook that delays updating a value until after a specified delay
@@ -25,10 +25,10 @@ export function useDebounce<T>(value: T, delay: number): T {
 export function useDebouncedCallback<T extends (...args: any[]) => any>(
   callback: T,
   delay: number,
-  options: { leading?: boolean; trailing?: boolean; maxWait?: number } = {}
+  options: { leading?: boolean; trailing?: boolean; maxWait?: number } = {},
 ): [T, () => void] {
   const { leading = false, trailing = true, maxWait } = options;
-  
+
   const timeoutRef = useRef<NodeJS.Timeout | null>(null);
   const lastCallTimeRef = useRef<number | null>(null);
   const lastInvokeTimeRef = useRef<number>(0);
@@ -94,7 +94,7 @@ export function useDebouncedCallback<T extends (...args: any[]) => any>(
         }, delay);
       }
     },
-    [delay, cancel]
+    [delay, cancel],
   ) as T;
 
   // Cleanup on unmount
@@ -109,8 +109,8 @@ export function useDebouncedCallback<T extends (...args: any[]) => any>(
  * Hook for debounced search input
  */
 export function useDebouncedSearch(
-  initialValue = '',
-  delay = 500
+  initialValue = "",
+  delay = 500,
 ): {
   value: string;
   debouncedValue: string;
@@ -121,7 +121,7 @@ export function useDebouncedSearch(
   const debouncedValue = useDebounce(value, delay);
 
   const clear = useCallback(() => {
-    setValue('');
+    setValue("");
   }, []);
 
   return {

@@ -1,23 +1,23 @@
-import React from 'react'
-import { motion } from 'framer-motion'
-import LoginForm from '@components/auth/LoginForm'
-import { useNavigate } from 'react-router-dom'
+import React from "react";
+import { motion } from "framer-motion";
+import LoginForm from "@components/auth/LoginForm";
+import { useNavigate } from "react-router-dom";
 
 const LoginPage: React.FC = () => {
-  const navigate = useNavigate()
+  const navigate = useNavigate();
 
   const handleLogin = async (data: any) => {
     // Simulate API call
-    console.log('Login data:', data)
-    await new Promise(resolve => setTimeout(resolve, 2000))
+    console.log("Login data:", data);
+    await new Promise((resolve) => setTimeout(resolve, 2000));
     // Navigate to dashboard after successful login
-    navigate('/dashboard')
-  }
+    navigate("/dashboard");
+  };
 
   const handleSocialLogin = (provider: string) => {
-    console.log('Social login with:', provider)
+    console.log("Social login with:", provider);
     // Implement social login logic
-  }
+  };
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-50 dark:bg-gray-900 py-12 px-4 sm:px-6 lg:px-8">
@@ -41,14 +41,11 @@ const LoginPage: React.FC = () => {
           transition={{ delay: 0.1 }}
           className="bg-white dark:bg-gray-800 py-8 px-4 shadow-xl rounded-lg sm:px-10"
         >
-          <LoginForm
-            onSubmit={handleLogin}
-            onSocialLogin={handleSocialLogin}
-          />
+          <LoginForm onSubmit={handleLogin} onSocialLogin={handleSocialLogin} />
         </motion.div>
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default LoginPage
+export default LoginPage;

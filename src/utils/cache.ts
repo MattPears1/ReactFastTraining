@@ -27,13 +27,13 @@ export class DataCache<T = any> {
   set(key: string, data: T, customTTL?: number): void {
     const ttl = customTTL || this.ttl;
     const now = Date.now();
-    
+
     // Remove from access order if exists
-    this.accessOrder = this.accessOrder.filter(k => k !== key);
-    
+    this.accessOrder = this.accessOrder.filter((k) => k !== key);
+
     // Add to end of access order
     this.accessOrder.push(key);
-    
+
     this.cache.set(key, {
       data,
       timestamp: now,
@@ -55,7 +55,7 @@ export class DataCache<T = any> {
 
   get(key: string): T | null {
     const entry = this.cache.get(key);
-    
+
     if (!entry) {
       return null;
     }
@@ -67,7 +67,7 @@ export class DataCache<T = any> {
     }
 
     // Update access order (move to end)
-    this.accessOrder = this.accessOrder.filter(k => k !== key);
+    this.accessOrder = this.accessOrder.filter((k) => k !== key);
     this.accessOrder.push(key);
 
     return entry.data;
@@ -76,12 +76,12 @@ export class DataCache<T = any> {
   has(key: string): boolean {
     const entry = this.cache.get(key);
     if (!entry) return false;
-    
+
     if (Date.now() > entry.expiresAt) {
       this.delete(key);
       return false;
     }
-    
+
     return true;
   }
 
@@ -90,8 +90,8 @@ export class DataCache<T = any> {
     if (entry && this.onEvict) {
       this.onEvict(key, entry.data);
     }
-    
-    this.accessOrder = this.accessOrder.filter(k => k !== key);
+
+    this.accessOrder = this.accessOrder.filter((k) => k !== key);
     return this.cache.delete(key);
   }
 
@@ -101,7 +101,7 @@ export class DataCache<T = any> {
         this.onEvict!(key, entry.data);
       });
     }
-    
+
     this.cache.clear();
     this.accessOrder = [];
   }
@@ -121,7 +121,7 @@ export class DataCache<T = any> {
       }
     });
 
-    expiredKeys.forEach(key => this.delete(key));
+    expiredKeys.forEach((key) => this.delete(key));
   }
 
   // Get all valid entries
@@ -174,30 +174,30 @@ export const apiCache = new DataCache({
 // Cache key generators
 export const cacheKeys = {
   session: (id: string) => `session:${id}`,
-  sessionList: (filters: Record<string, any>) => 
+  sessionList: (filters: Record<string, any>) =>
     `sessions:${JSON.stringify(filters)}`,
   user: (id: string) => `user:${id}`,
   booking: (id: string) => `booking:${id}`,
-  availability: (date: string, location?: string) => 
-    `availability:${date}:${location || 'all'}`,
+  availability: (date: string, location?: string) =>
+    `availability:${date}:${location || "all"}`,
 };
 
 // Decorator for caching method results
 export function cacheable(
   cache: DataCache,
   keyGenerator: (...args: any[]) => string,
-  ttl?: number
+  ttl?: number,
 ) {
   return function (
     target: any,
     propertyKey: string,
-    descriptor: PropertyDescriptor
+    descriptor: PropertyDescriptor,
   ) {
     const originalMethod = descriptor.value;
 
     descriptor.value = async function (...args: any[]) {
       const key = keyGenerator(...args);
-      
+
       // Check cache first
       const cached = cache.get(key);
       if (cached !== null) {
@@ -206,10 +206,10 @@ export function cacheable(
 
       // Call original method
       const result = await originalMethod.apply(this, args);
-      
+
       // Cache result
       cache.set(key, result, ttl);
-      
+
       return result;
     };
 

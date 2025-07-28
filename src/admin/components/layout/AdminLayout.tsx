@@ -1,11 +1,11 @@
-import React, { useState } from 'react';
-import { Link, useLocation } from 'react-router-dom';
-import { 
-  LayoutDashboard, 
-  GraduationCap, 
-  Calendar, 
-  Users, 
-  Settings, 
+import React, { useState } from "react";
+import { Link, useLocation } from "react-router-dom";
+import {
+  LayoutDashboard,
+  GraduationCap,
+  Calendar,
+  Users,
+  Settings,
   FileText,
   Menu,
   X,
@@ -14,11 +14,11 @@ import {
   Activity,
   AlertTriangle,
   BarChart3,
-  MessageSquare
-} from 'lucide-react';
-import { cn } from '@/utils/cn';
-import { useAdminAuth } from '../../contexts/AdminAuthContext';
-import { NotificationContainer } from '../common/NotificationContainer';
+  MessageSquare,
+} from "lucide-react";
+import { cn } from "@/utils/cn";
+import { useAdminAuth } from "../../contexts/AdminAuthContext";
+import { NotificationContainer } from "../common/NotificationContainer";
 
 interface AdminLayoutProps {
   children: React.ReactNode;
@@ -34,53 +34,53 @@ interface NavItem {
 
 const navigationItems: NavItem[] = [
   {
-    label: 'Dashboard',
-    href: '/admin/dashboard',
+    label: "Dashboard",
+    href: "/admin/dashboard",
     icon: LayoutDashboard,
   },
   {
-    label: 'Courses',
-    href: '/admin/courses',
+    label: "Courses",
+    href: "/admin/courses",
     icon: GraduationCap,
   },
   {
-    label: 'Bookings',
-    href: '/admin/bookings',
+    label: "Bookings",
+    href: "/admin/bookings",
     icon: Calendar,
   },
   {
-    label: 'Schedule',
-    href: '/admin/schedule',
+    label: "Schedule",
+    href: "/admin/schedule",
     icon: Calendar,
   },
   {
-    label: 'Users',
-    href: '/admin/users',
+    label: "Users",
+    href: "/admin/users",
     icon: Users,
   },
   {
-    label: 'Activity Log',
-    href: '/admin/activity',
+    label: "Activity Log",
+    href: "/admin/activity",
     icon: Activity,
   },
   {
-    label: 'Alerts',
-    href: '/admin/alerts',
+    label: "Alerts",
+    href: "/admin/alerts",
     icon: AlertTriangle,
   },
   {
-    label: 'Analytics',
-    href: '/admin/analytics',
+    label: "Analytics",
+    href: "/admin/analytics",
     icon: BarChart3,
   },
   {
-    label: 'Testimonials',
-    href: '/admin/testimonials',
+    label: "Testimonials",
+    href: "/admin/testimonials",
     icon: MessageSquare,
   },
   {
-    label: 'Settings',
-    href: '/admin/settings',
+    label: "Settings",
+    href: "/admin/settings",
     icon: Settings,
   },
 ];
@@ -108,7 +108,7 @@ export const AdminLayout: React.FC<AdminLayoutProps> = ({ children }) => {
       <div
         className={cn(
           "fixed top-16 bottom-0 left-0 z-30 w-64 bg-white shadow-lg transform transition-transform lg:translate-x-0",
-          sidebarOpen ? "translate-x-0" : "-translate-x-full"
+          sidebarOpen ? "translate-x-0" : "-translate-x-full",
         )}
       >
         <div className="flex h-full flex-col">
@@ -132,7 +132,7 @@ export const AdminLayout: React.FC<AdminLayoutProps> = ({ children }) => {
                   "flex items-center justify-between px-2 py-2 text-sm font-medium rounded-md transition-colors",
                   isActive(item.href)
                     ? "bg-primary-50 text-primary-700"
-                    : "text-gray-700 hover:bg-gray-50 hover:text-gray-900"
+                    : "text-gray-700 hover:bg-gray-50 hover:text-gray-900",
                 )}
               >
                 <div className="flex items-center">
@@ -152,7 +152,9 @@ export const AdminLayout: React.FC<AdminLayoutProps> = ({ children }) => {
           <div className="border-t p-4 pb-8">
             <div className="flex items-center">
               <div className="flex-1">
-                <p className="text-sm font-medium text-gray-900">{user?.name}</p>
+                <p className="text-sm font-medium text-gray-900">
+                  {user?.name}
+                </p>
                 <p className="text-xs text-gray-500">{user?.role}</p>
               </div>
               <button
@@ -172,10 +174,7 @@ export const AdminLayout: React.FC<AdminLayoutProps> = ({ children }) => {
         {/* Top header */}
         <header className="sticky top-0 z-40 bg-white shadow-sm">
           <div className="flex h-16 items-center justify-between px-4 sm:px-6 lg:px-8">
-            <button
-              onClick={() => setSidebarOpen(true)}
-              className="lg:hidden"
-            >
+            <button onClick={() => setSidebarOpen(true)} className="lg:hidden">
               <Menu className="h-6 w-6" />
             </button>
 

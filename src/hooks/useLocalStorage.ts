@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback } from "react";
 
 type SetValue<T> = T | ((prevValue: T) => T);
 
@@ -9,7 +9,7 @@ export function useLocalStorage<T>(
     serialize?: (value: T) => string;
     deserialize?: (value: string) => T;
     onError?: (error: Error) => void;
-  }
+  },
 ): [T, (value: SetValue<T>) => void, () => void] {
   const {
     serialize = JSON.stringify,
@@ -32,21 +32,22 @@ export function useLocalStorage<T>(
   const setValue = useCallback(
     (value: SetValue<T>) => {
       try {
-        const valueToStore = value instanceof Function ? value(storedValue) : value;
+        const valueToStore =
+          value instanceof Function ? value(storedValue) : value;
         setStoredValue(valueToStore);
         window.localStorage.setItem(key, serialize(valueToStore));
-        
+
         // Dispatch custom event for cross-tab synchronization
         window.dispatchEvent(
-          new CustomEvent('local-storage-change', {
+          new CustomEvent("local-storage-change", {
             detail: { key, value: valueToStore },
-          })
+          }),
         );
       } catch (error) {
         onError(error as Error);
       }
     },
-    [key, serialize, storedValue, onError]
+    [key, serialize, storedValue, onError],
   );
 
   // Remove value from localStorage
@@ -54,12 +55,12 @@ export function useLocalStorage<T>(
     try {
       window.localStorage.removeItem(key);
       setStoredValue(initialValue);
-      
+
       // Dispatch custom event for cross-tab synchronization
       window.dispatchEvent(
-        new CustomEvent('local-storage-change', {
+        new CustomEvent("local-storage-change", {
           detail: { key, value: null },
-        })
+        }),
       );
     } catch (error) {
       onError(error as Error);
@@ -84,17 +85,17 @@ export function useLocalStorage<T>(
       }
     };
 
-    window.addEventListener('storage', handleStorageChange);
+    window.addEventListener("storage", handleStorageChange);
     window.addEventListener(
-      'local-storage-change',
-      handleCustomStorageChange as EventListener
+      "local-storage-change",
+      handleCustomStorageChange as EventListener,
     );
 
     return () => {
-      window.removeEventListener('storage', handleStorageChange);
+      window.removeEventListener("storage", handleStorageChange);
       window.removeEventListener(
-        'local-storage-change',
-        handleCustomStorageChange as EventListener
+        "local-storage-change",
+        handleCustomStorageChange as EventListener,
       );
     };
   }, [key, deserialize, initialValue, onError]);
@@ -104,15 +105,15 @@ export function useLocalStorage<T>(
 
 // Specialized hook for storing user preferences
 export function useUserPreferences<T extends Record<string, any>>(
-  defaultPreferences: T
+  defaultPreferences: T,
 ): {
   preferences: T;
   updatePreference: <K extends keyof T>(key: K, value: T[K]) => void;
   resetPreferences: () => void;
 } {
   const [preferences, setPreferences, resetPreferences] = useLocalStorage(
-    'userPreferences',
-    defaultPreferences
+    "userPreferences",
+    defaultPreferences,
   );
 
   const updatePreference = useCallback(
@@ -122,7 +123,7 @@ export function useUserPreferences<T extends Record<string, any>>(
         [key]: value,
       }));
     },
-    [setPreferences]
+    [setPreferences],
   );
 
   return {

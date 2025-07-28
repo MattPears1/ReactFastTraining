@@ -1,21 +1,25 @@
-import React, { useState, useEffect } from 'react';
-import { 
-  Calendar, 
-  Clock, 
-  MapPin, 
-  User, 
-  DollarSign, 
-  Edit2, 
-  Check, 
+import React, { useState, useEffect } from "react";
+import {
+  Calendar,
+  Clock,
+  MapPin,
+  User,
+  DollarSign,
+  Edit2,
+  Check,
   X,
   Building,
-  FileText
-} from 'lucide-react';
-import { format } from 'date-fns';
-import { SessionDetails, UpdateSessionData, SessionViewMode } from '../../../types/schedule.types';
-import { AdminCard } from '../../../components/ui/AdminCard';
-import { AdminBadge } from '../../../components/ui/AdminBadge';
-import { Button } from '../../../../components/ui/Button';
+  FileText,
+} from "lucide-react";
+import { format } from "date-fns";
+import {
+  SessionDetails,
+  UpdateSessionData,
+  SessionViewMode,
+} from "../../../types/schedule.types";
+import { AdminCard } from "../../../components/ui/AdminCard";
+import { AdminBadge } from "../../../components/ui/AdminBadge";
+import { Button } from "../../../../components/ui/Button";
 
 interface SessionInfoSectionProps {
   session: SessionDetails;
@@ -31,7 +35,7 @@ interface EditableFieldProps {
   value: string | number;
   editValue: string | number;
   isEditing: boolean;
-  type?: 'text' | 'number' | 'time' | 'date' | 'textarea';
+  type?: "text" | "number" | "time" | "date" | "textarea";
   icon?: React.ReactNode;
   onChange: (value: string | number) => void;
   min?: number;
@@ -44,12 +48,12 @@ const EditableField: React.FC<EditableFieldProps> = ({
   value,
   editValue,
   isEditing,
-  type = 'text',
+  type = "text",
   icon,
   onChange,
   min,
   max,
-  required
+  required,
 }) => {
   return (
     <div className="space-y-2 group">
@@ -64,7 +68,7 @@ const EditableField: React.FC<EditableFieldProps> = ({
           </span>
         )}
         {isEditing ? (
-          type === 'textarea' ? (
+          type === "textarea" ? (
             <textarea
               value={editValue}
               onChange={(e) => onChange(e.target.value)}
@@ -77,7 +81,13 @@ const EditableField: React.FC<EditableFieldProps> = ({
             <input
               type={type}
               value={editValue}
-              onChange={(e) => onChange(type === 'number' ? parseInt(e.target.value) || 0 : e.target.value)}
+              onChange={(e) =>
+                onChange(
+                  type === "number"
+                    ? parseInt(e.target.value) || 0
+                    : e.target.value,
+                )
+              }
               className="flex-1 px-4 py-3 text-base sm:text-sm min-h-[44px] border-2 border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-500 transition-all duration-200 hover:border-gray-300"
               min={min}
               max={max}
@@ -101,13 +111,13 @@ export const SessionInfoSection: React.FC<SessionInfoSectionProps> = ({
   onEdit,
   onSave,
   onCancel,
-  isLoading: _isLoading = false
+  isLoading: _isLoading = false,
 }) => {
   const [editData, setEditData] = useState<UpdateSessionData>({});
   const [isSaving, setIsSaving] = useState(false);
 
   useEffect(() => {
-    if (viewMode === 'edit') {
+    if (viewMode === "edit") {
       // Initialize edit data with current values
       setEditData({
         startDate: session.startDate,
@@ -116,7 +126,7 @@ export const SessionInfoSection: React.FC<SessionInfoSectionProps> = ({
         endTime: session.endTime,
         pricePerPerson: session.pricePerPerson,
         maxParticipants: session.maxParticipants,
-        notes: session.notes || ''
+        notes: session.notes || "",
       });
     }
   }, [viewMode, session]);
@@ -130,27 +140,29 @@ export const SessionInfoSection: React.FC<SessionInfoSectionProps> = ({
     }
   };
 
-  const getStatusVariant = (status: string): 'success' | 'warning' | 'neutral' => {
+  const getStatusVariant = (
+    status: string,
+  ): "success" | "warning" | "neutral" => {
     switch (status) {
-      case 'SCHEDULED':
-        return 'neutral';
-      case 'CONFIRMED':
-      case 'COMPLETED':
-        return 'success';
-      case 'IN_PROGRESS':
-        return 'warning';
-      case 'CANCELLED':
-        return 'neutral';
+      case "SCHEDULED":
+        return "neutral";
+      case "CONFIRMED":
+      case "COMPLETED":
+        return "success";
+      case "IN_PROGRESS":
+        return "warning";
+      case "CANCELLED":
+        return "neutral";
       default:
-        return 'neutral';
+        return "neutral";
     }
   };
 
-  const isEditing = viewMode === 'edit';
+  const isEditing = viewMode === "edit";
 
   return (
-    <AdminCard 
-      title="Session Information" 
+    <AdminCard
+      title="Session Information"
       subtitle={session.course?.name}
       icon={FileText}
       iconColor="primary"
@@ -171,7 +183,9 @@ export const SessionInfoSection: React.FC<SessionInfoSectionProps> = ({
                 ) : (
                   <Check className="h-4 w-4 mr-1.5 group-hover:scale-110 transition-transform" />
                 )}
-                <span className="hidden sm:inline">{isSaving ? 'Saving...' : 'Save Changes'}</span>
+                <span className="hidden sm:inline">
+                  {isSaving ? "Saving..." : "Save Changes"}
+                </span>
               </Button>
               <Button
                 size="sm"
@@ -203,7 +217,9 @@ export const SessionInfoSection: React.FC<SessionInfoSectionProps> = ({
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           <div>
             <p className="text-sm font-medium text-gray-500">Course Type</p>
-            <p className="mt-1 text-base sm:text-lg font-medium">{session.course?.category || 'N/A'}</p>
+            <p className="mt-1 text-base sm:text-lg font-medium">
+              {session.course?.category || "N/A"}
+            </p>
           </div>
           <div>
             <p className="text-sm font-medium text-gray-500">Status</p>
@@ -219,12 +235,14 @@ export const SessionInfoSection: React.FC<SessionInfoSectionProps> = ({
         <div className="space-y-4">
           <EditableField
             label="Date"
-            value={format(new Date(session.startDate), 'EEEE, MMMM d, yyyy')}
+            value={format(new Date(session.startDate), "EEEE, MMMM d, yyyy")}
             editValue={editData.startDate || session.startDate}
             isEditing={isEditing}
             type="date"
             icon={<Calendar className="h-5 w-5" />}
-            onChange={(value) => setEditData({ ...editData, startDate: value as string })}
+            onChange={(value) =>
+              setEditData({ ...editData, startDate: value as string })
+            }
             required
           />
           <div className="grid grid-cols-2 gap-3">
@@ -235,7 +253,9 @@ export const SessionInfoSection: React.FC<SessionInfoSectionProps> = ({
               isEditing={isEditing}
               type="time"
               icon={<Clock className="h-5 w-5" />}
-              onChange={(value) => setEditData({ ...editData, startTime: value as string })}
+              onChange={(value) =>
+                setEditData({ ...editData, startTime: value as string })
+              }
               required
             />
             <EditableField
@@ -244,7 +264,9 @@ export const SessionInfoSection: React.FC<SessionInfoSectionProps> = ({
               editValue={editData.endTime || session.endTime}
               isEditing={isEditing}
               type="time"
-              onChange={(value) => setEditData({ ...editData, endTime: value as string })}
+              onChange={(value) =>
+                setEditData({ ...editData, endTime: value as string })
+              }
               required
             />
           </div>
@@ -257,14 +279,17 @@ export const SessionInfoSection: React.FC<SessionInfoSectionProps> = ({
             <div className="mt-1 flex items-start space-x-2">
               <MapPin className="h-5 w-5 text-gray-400 mt-0.5 flex-shrink-0" />
               <div className="flex-1 min-w-0">
-                <p className="font-medium break-words">{session.location?.name}</p>
+                <p className="font-medium break-words">
+                  {session.location?.name}
+                </p>
                 <p className="text-sm text-gray-600 break-words">
-                  {session.location?.address}, {session.location?.city} {session.location?.postcode}
+                  {session.location?.address}, {session.location?.city}{" "}
+                  {session.location?.postcode}
                 </p>
                 {session.location?.directions && (
-                  <a 
-                    href={session.location.directions} 
-                    target="_blank" 
+                  <a
+                    href={session.location.directions}
+                    target="_blank"
                     rel="noopener noreferrer"
                     className="text-sm text-primary-600 hover:text-primary-700 inline-block mt-1"
                   >
@@ -279,10 +304,14 @@ export const SessionInfoSection: React.FC<SessionInfoSectionProps> = ({
             <div className="mt-1 flex items-start space-x-2">
               <User className="h-5 w-5 text-gray-400 mt-0.5 flex-shrink-0" />
               <div className="flex-1 min-w-0">
-                <p className="font-medium break-words">{session.trainer?.name}</p>
-                <p className="text-sm text-gray-600">{session.trainer?.qualification}</p>
+                <p className="font-medium break-words">
+                  {session.trainer?.name}
+                </p>
+                <p className="text-sm text-gray-600">
+                  {session.trainer?.qualification}
+                </p>
                 {session.trainer?.email && (
-                  <a 
+                  <a
                     href={`mailto:${session.trainer.email}`}
                     className="text-sm text-primary-600 hover:text-primary-700 break-all"
                   >
@@ -303,7 +332,9 @@ export const SessionInfoSection: React.FC<SessionInfoSectionProps> = ({
             isEditing={isEditing}
             type="number"
             icon={<DollarSign className="h-5 w-5" />}
-            onChange={(value) => setEditData({ ...editData, pricePerPerson: value as number })}
+            onChange={(value) =>
+              setEditData({ ...editData, pricePerPerson: value as number })
+            }
             min={0}
             required
           />
@@ -314,7 +345,9 @@ export const SessionInfoSection: React.FC<SessionInfoSectionProps> = ({
             isEditing={isEditing}
             type="number"
             icon={<User className="h-5 w-5" />}
-            onChange={(value) => setEditData({ ...editData, maxParticipants: value as number })}
+            onChange={(value) =>
+              setEditData({ ...editData, maxParticipants: value as number })
+            }
             min={session.currentParticipants}
             required
           />
@@ -336,9 +369,11 @@ export const SessionInfoSection: React.FC<SessionInfoSectionProps> = ({
                 <>
                   <div>
                     <p className="text-sm font-medium text-gray-500">Contact</p>
-                    <p className="mt-1 break-words">{session.onsiteDetails.contactName}</p>
+                    <p className="mt-1 break-words">
+                      {session.onsiteDetails.contactName}
+                    </p>
                     {session.onsiteDetails.contactEmail && (
-                      <a 
+                      <a
                         href={`mailto:${session.onsiteDetails.contactEmail}`}
                         className="text-sm text-primary-600 hover:text-primary-700 break-all"
                       >
@@ -351,8 +386,12 @@ export const SessionInfoSection: React.FC<SessionInfoSectionProps> = ({
             </div>
             {session.onsiteDetails?.specialRequirements && (
               <div className="mt-4">
-                <p className="text-sm font-medium text-gray-500">Special Requirements</p>
-                <p className="mt-1 text-sm text-gray-700 break-words">{session.onsiteDetails.specialRequirements}</p>
+                <p className="text-sm font-medium text-gray-500">
+                  Special Requirements
+                </p>
+                <p className="mt-1 text-sm text-gray-700 break-words">
+                  {session.onsiteDetails.specialRequirements}
+                </p>
               </div>
             )}
           </div>
@@ -362,19 +401,25 @@ export const SessionInfoSection: React.FC<SessionInfoSectionProps> = ({
         {(session.notes || isEditing) && (
           <EditableField
             label="Notes"
-            value={session.notes || 'No notes'}
-            editValue={editData.notes || ''}
+            value={session.notes || "No notes"}
+            editValue={editData.notes || ""}
             isEditing={isEditing}
             type="textarea"
-            onChange={(value) => setEditData({ ...editData, notes: value as string })}
+            onChange={(value) =>
+              setEditData({ ...editData, notes: value as string })
+            }
           />
         )}
 
         {/* Course Description */}
         {session.course?.description && (
           <div className="prose prose-sm max-w-none">
-            <p className="text-sm font-medium text-gray-500">Course Description</p>
-            <p className="mt-1 text-sm text-gray-700 break-words">{session.course.description}</p>
+            <p className="text-sm font-medium text-gray-500">
+              Course Description
+            </p>
+            <p className="mt-1 text-sm text-gray-700 break-words">
+              {session.course.description}
+            </p>
           </div>
         )}
       </div>

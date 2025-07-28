@@ -1,13 +1,13 @@
-import React from 'react'
-import { Link } from 'react-router-dom'
-import { ArrowLeft } from 'lucide-react'
-import PasswordResetForm from '@components/auth/PasswordResetForm'
-import { authApi } from '@/services/api/auth'
+import React from "react";
+import { Link } from "react-router-dom";
+import { ArrowLeft } from "lucide-react";
+import PasswordResetForm from "@components/auth/PasswordResetForm";
+import { authApi } from "@/services/api/auth";
 
 const ForgotPasswordPage: React.FC = () => {
   const handlePasswordReset = async (data: { email: string }) => {
-    await authApi.forgotPassword(data)
-  }
+    await authApi.forgotPassword(data);
+  };
 
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-gray-900 flex items-center justify-center px-4 py-12">
@@ -21,11 +21,11 @@ const ForgotPasswordPage: React.FC = () => {
             Back to Login
           </Link>
         </div>
-        
+
         <PasswordResetForm onSubmit={handlePasswordReset} />
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default ForgotPasswordPage
+export default ForgotPasswordPage;

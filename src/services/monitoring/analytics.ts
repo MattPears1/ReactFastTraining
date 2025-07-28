@@ -1,5 +1,5 @@
-import { logger } from './logger';
-import { apiClient } from '@services/api/enhanced-client';
+import { logger } from "./logger";
+import { apiClient } from "@services/api/enhanced-client";
 
 interface AnalyticsEvent {
   name: string;
@@ -62,7 +62,7 @@ class Analytics {
   constructor(config: Partial<AnalyticsConfig> = {}) {
     this.config = {
       enabled: true,
-      apiEndpoint: '/api/analytics',
+      apiEndpoint: "/api/analytics",
       batchSize: 20,
       flushInterval: 30000, // 30 seconds
       sessionTimeout: 30 * 60 * 1000, // 30 minutes
@@ -77,7 +77,7 @@ class Analytics {
     };
 
     this.sessionId = this.generateSessionId();
-    
+
     if (this.config.enabled && !this.shouldRespectDoNotTrack()) {
       this.initialize();
     }
@@ -87,7 +87,7 @@ class Analytics {
     this.startFlushTimer();
     this.startSessionTimer();
     this.setupEventListeners();
-    
+
     if (this.config.trackPageViews) {
       this.trackPageView();
     }
@@ -97,7 +97,13 @@ class Analytics {
   track(name: string, properties: Record<string, any> = {}) {
     if (!this.isEnabled()) return;
 
-    const { category = 'custom', action = 'event', label, value, ...metadata } = properties;
+    const {
+      category = "custom",
+      action = "event",
+      label,
+      value,
+      ...metadata
+    } = properties;
 
     const event: AnalyticsEvent = {
       name,
@@ -112,7 +118,7 @@ class Analytics {
     };
 
     this.eventBuffer.push(event);
-    logger.debug('Analytics event tracked', event);
+    logger.debug("Analytics event tracked", event);
 
     if (this.eventBuffer.length >= this.config.batchSize) {
       this.flush();
@@ -138,7 +144,7 @@ class Analytics {
     };
 
     this.pageViewBuffer.push(pageView);
-    logger.debug('Page view tracked', pageView);
+    logger.debug("Page view tracked", pageView);
 
     // Reset scroll depth for new page
     this.scrollDepth = 0;
@@ -155,9 +161,9 @@ class Analytics {
     this.userId = userId;
     logger.setUser(userId);
 
-    this.track('user_identified', {
-      category: 'user',
-      action: 'identify',
+    this.track("user_identified", {
+      category: "user",
+      action: "identify",
       ...properties,
     });
 
@@ -170,9 +176,9 @@ class Analytics {
   updateUserProperties(properties: Partial<UserProperties>) {
     if (!this.isEnabled()) return;
 
-    this.track('user_properties_updated', {
-      category: 'user',
-      action: 'update',
+    this.track("user_properties_updated", {
+      category: "user",
+      action: "update",
       ...properties,
     });
   }
@@ -181,9 +187,9 @@ class Analytics {
   timing(category: string, variable: string, time: number, label?: string) {
     if (!this.isEnabled()) return;
 
-    this.track('timing', {
+    this.track("timing", {
       category,
-      action: 'timing',
+      action: "timing",
       label: label || variable,
       value: time,
       timingCategory: category,
@@ -195,9 +201,9 @@ class Analytics {
   exception(description: string, fatal = false) {
     if (!this.isEnabled() || !this.config.trackErrors) return;
 
-    this.track('exception', {
-      category: 'error',
-      action: 'exception',
+    this.track("exception", {
+      category: "error",
+      action: "exception",
       label: description,
       fatal,
       stack: new Error().stack,
@@ -208,8 +214,8 @@ class Analytics {
   social(network: string, action: string, target?: string) {
     if (!this.isEnabled()) return;
 
-    this.track('social', {
-      category: 'social',
+    this.track("social", {
+      category: "social",
       action,
       label: network,
       socialNetwork: network,
@@ -222,8 +228,8 @@ class Analytics {
   ecommerce(action: string, data: any) {
     if (!this.isEnabled()) return;
 
-    this.track('ecommerce', {
-      category: 'ecommerce',
+    this.track("ecommerce", {
+      category: "ecommerce",
       action,
       ...data,
     });
@@ -233,20 +239,20 @@ class Analytics {
   resetSession() {
     this.sessionId = this.generateSessionId();
     this.startSessionTimer();
-    logger.info('Analytics session reset');
+    logger.info("Analytics session reset");
   }
 
   // Setup event listeners
   private setupEventListeners() {
     // Track clicks
     if (this.config.trackClicks) {
-      document.addEventListener('click', this.handleClick.bind(this), true);
+      document.addEventListener("click", this.handleClick.bind(this), true);
     }
 
     // Track scroll depth
     if (this.config.trackScrollDepth) {
       let scrollTimer: NodeJS.Timeout;
-      window.addEventListener('scroll', () => {
+      window.addEventListener("scroll", () => {
         clearTimeout(scrollTimer);
         scrollTimer = setTimeout(() => this.trackScrollDepth(), 500);
       });
@@ -254,29 +260,37 @@ class Analytics {
 
     // Track form interactions
     if (this.config.trackFormInteractions) {
-      document.addEventListener('submit', this.handleFormSubmit.bind(this), true);
-      document.addEventListener('change', this.handleFormChange.bind(this), true);
+      document.addEventListener(
+        "submit",
+        this.handleFormSubmit.bind(this),
+        true,
+      );
+      document.addEventListener(
+        "change",
+        this.handleFormChange.bind(this),
+        true,
+      );
     }
 
     // Track page visibility
-    document.addEventListener('visibilitychange', () => {
+    document.addEventListener("visibilitychange", () => {
       if (document.hidden) {
-        this.track('page_hidden', {
-          category: 'engagement',
-          action: 'visibility',
+        this.track("page_hidden", {
+          category: "engagement",
+          action: "visibility",
           duration: Date.now() - this.pageStartTime,
         });
         this.flush();
       } else {
-        this.track('page_visible', {
-          category: 'engagement',
-          action: 'visibility',
+        this.track("page_visible", {
+          category: "engagement",
+          action: "visibility",
         });
       }
     });
 
     // Track before unload
-    window.addEventListener('beforeunload', () => {
+    window.addEventListener("beforeunload", () => {
       this.flush();
     });
   }
@@ -286,8 +300,8 @@ class Analytics {
     if (!target) return;
 
     const data: any = {
-      category: 'interaction',
-      action: 'click',
+      category: "interaction",
+      action: "click",
       label: this.getElementIdentifier(target),
       tagName: target.tagName,
       className: target.className,
@@ -296,27 +310,30 @@ class Analytics {
     };
 
     // Special handling for links
-    if (target.tagName === 'A') {
+    if (target.tagName === "A") {
       const link = target as HTMLAnchorElement;
       data.href = link.href;
       data.isExternal = link.hostname !== window.location.hostname;
     }
 
     // Special handling for buttons
-    if (target.tagName === 'BUTTON' || target.getAttribute('role') === 'button') {
-      data.buttonType = target.getAttribute('type') || 'button';
+    if (
+      target.tagName === "BUTTON" ||
+      target.getAttribute("role") === "button"
+    ) {
+      data.buttonType = target.getAttribute("type") || "button";
     }
 
-    this.track('element_click', data);
+    this.track("element_click", data);
   }
 
   private handleFormSubmit(event: Event) {
     const form = event.target as HTMLFormElement;
-    if (!form || form.tagName !== 'FORM') return;
+    if (!form || form.tagName !== "FORM") return;
 
-    this.track('form_submit', {
-      category: 'form',
-      action: 'submit',
+    this.track("form_submit", {
+      category: "form",
+      action: "submit",
       label: this.getElementIdentifier(form),
       formId: form.id,
       formName: form.name,
@@ -327,11 +344,12 @@ class Analytics {
 
   private handleFormChange(event: Event) {
     const input = event.target as HTMLInputElement;
-    if (!input || !['INPUT', 'SELECT', 'TEXTAREA'].includes(input.tagName)) return;
+    if (!input || !["INPUT", "SELECT", "TEXTAREA"].includes(input.tagName))
+      return;
 
-    this.track('form_interaction', {
-      category: 'form',
-      action: 'change',
+    this.track("form_interaction", {
+      category: "form",
+      action: "change",
       label: this.getElementIdentifier(input),
       fieldName: input.name,
       fieldType: input.type,
@@ -344,16 +362,16 @@ class Analytics {
     const documentHeight = document.documentElement.scrollHeight;
     const scrollTop = window.scrollY;
     const scrollPercentage = Math.round(
-      ((scrollTop + windowHeight) / documentHeight) * 100
+      ((scrollTop + windowHeight) / documentHeight) * 100,
     );
 
     // Track milestones
     const milestones = [25, 50, 75, 90, 100];
     for (const milestone of milestones) {
       if (scrollPercentage >= milestone && this.scrollDepth < milestone) {
-        this.track('scroll_depth', {
-          category: 'engagement',
-          action: 'scroll',
+        this.track("scroll_depth", {
+          category: "engagement",
+          action: "scroll",
           label: `${milestone}%`,
           value: milestone,
         });
@@ -365,7 +383,7 @@ class Analytics {
 
   private getElementIdentifier(element: HTMLElement): string {
     if (element.id) return `#${element.id}`;
-    if (element.className) return `.${element.className.split(' ')[0]}`;
+    if (element.className) return `.${element.className.split(" ")[0]}`;
     return element.tagName.toLowerCase();
   }
 
@@ -376,7 +394,7 @@ class Analytics {
 
     const events = [...this.eventBuffer];
     const pageViews = [...this.pageViewBuffer];
-    
+
     this.eventBuffer = [];
     this.pageViewBuffer = [];
 
@@ -387,8 +405,8 @@ class Analytics {
         sessionId: this.sessionId,
         userId: this.userId,
       });
-      
-      logger.debug('Analytics data flushed', {
+
+      logger.debug("Analytics data flushed", {
         eventCount: events.length,
         pageViewCount: pageViews.length,
       });
@@ -396,7 +414,7 @@ class Analytics {
       // Re-add to buffers if failed
       this.eventBuffer.unshift(...events);
       this.pageViewBuffer.unshift(...pageViews);
-      logger.error('Failed to flush analytics', error);
+      logger.error("Failed to flush analytics", error);
     }
   }
 
@@ -426,11 +444,11 @@ class Analytics {
 
   private shouldRespectDoNotTrack(): boolean {
     if (!this.config.respectDoNotTrack) return false;
-    
+
     return (
-      navigator.doNotTrack === '1' ||
-      (window as any).doNotTrack === '1' ||
-      (navigator as any).msDoNotTrack === '1'
+      navigator.doNotTrack === "1" ||
+      (window as any).doNotTrack === "1" ||
+      (navigator as any).msDoNotTrack === "1"
     );
   }
 

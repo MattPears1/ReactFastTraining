@@ -1,5 +1,5 @@
-import React from 'react'
-import { HeartPulseLoader } from '@components/ui/LoadingAnimations'
+import React from "react";
+import { HeartPulseLoader } from "@components/ui/LoadingAnimations";
 
 const LoadingScreen: React.FC = () => {
   return (
@@ -11,7 +11,7 @@ const LoadingScreen: React.FC = () => {
         </p>
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default LoadingScreen
+export default LoadingScreen;

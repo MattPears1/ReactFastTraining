@@ -1,5 +1,5 @@
-import { useEffect, useRef, useCallback, useState } from 'react';
-import { io, Socket } from 'socket.io-client';
+import { useEffect, useRef, useCallback, useState } from "react";
+import { io, Socket } from "socket.io-client";
 
 interface UseWebSocketOptions {
   url?: string;
@@ -36,7 +36,7 @@ const RECONNECT_BACKOFF_FACTOR = 1.5;
 
 export const useEnhancedWebSocket = (options: UseWebSocketOptions = {}) => {
   const {
-    url = import.meta.env.VITE_WS_URL || 'http://localhost:3000',
+    url = import.meta.env.VITE_WS_URL || "http://localhost:3000",
     autoConnect = true,
     reconnectAttempts = 10,
     reconnectDelay = 1000,
@@ -54,7 +54,7 @@ export const useEnhancedWebSocket = (options: UseWebSocketOptions = {}) => {
   const heartbeatTimerRef = useRef<NodeJS.Timeout | null>(null);
   const reconnectTimerRef = useRef<NodeJS.Timeout | null>(null);
   const currentReconnectDelay = useRef(reconnectDelay);
-  
+
   const [connectionState, setConnectionState] = useState<ConnectionState>({
     isConnected: false,
     isConnecting: false,
@@ -72,19 +72,19 @@ export const useEnhancedWebSocket = (options: UseWebSocketOptions = {}) => {
     heartbeatTimerRef.current = setInterval(() => {
       if (socketRef.current?.connected) {
         const startTime = Date.now();
-        socketRef.current.emit('ping', { timestamp: startTime });
-        
+        socketRef.current.emit("ping", { timestamp: startTime });
+
         const pongHandler = (data: { timestamp: number }) => {
           const latency = Date.now() - data.timestamp;
-          setConnectionState(prev => ({ ...prev, latency }));
-          socketRef.current?.off('pong', pongHandler);
+          setConnectionState((prev) => ({ ...prev, latency }));
+          socketRef.current?.off("pong", pongHandler);
         };
-        
-        socketRef.current.once('pong', pongHandler);
-        
+
+        socketRef.current.once("pong", pongHandler);
+
         // Timeout for pong response
         setTimeout(() => {
-          socketRef.current?.off('pong', pongHandler);
+          socketRef.current?.off("pong", pongHandler);
         }, 5000);
       }
     }, HEARTBEAT_INTERVAL);
@@ -101,7 +101,7 @@ export const useEnhancedWebSocket = (options: UseWebSocketOptions = {}) => {
   const processMessageQueue = useCallback(() => {
     const queue = [...messageQueueRef.current];
     messageQueueRef.current = [];
-    
+
     queue.forEach(({ event, data, retries }) => {
       if (retries < MAX_MESSAGE_RETRIES) {
         emit(event, data);
@@ -123,7 +123,7 @@ export const useEnhancedWebSocket = (options: UseWebSocketOptions = {}) => {
           retries: 0,
         });
       } else {
-        console.warn('Message queue full, dropping message:', event);
+        console.warn("Message queue full, dropping message:", event);
       }
     }
   }, []);
@@ -131,7 +131,7 @@ export const useEnhancedWebSocket = (options: UseWebSocketOptions = {}) => {
   // Manual reconnect function
   const reconnect = useCallback(() => {
     if (socketRef.current && !socketRef.current.connected) {
-      setConnectionState(prev => ({ ...prev, isConnecting: true }));
+      setConnectionState((prev) => ({ ...prev, isConnecting: true }));
       socketRef.current.connect();
     }
   }, []);
@@ -140,11 +140,11 @@ export const useEnhancedWebSocket = (options: UseWebSocketOptions = {}) => {
   useEffect(() => {
     if (!autoConnect) return;
 
-    setConnectionState(prev => ({ ...prev, isConnecting: true }));
+    setConnectionState((prev) => ({ ...prev, isConnecting: true }));
 
     // Create socket with enhanced options
     socketRef.current = io(url, {
-      transports: enableFallback ? ['websocket', 'polling'] : ['websocket'],
+      transports: enableFallback ? ["websocket", "polling"] : ["websocket"],
       reconnection: true,
       reconnectionAttempts,
       reconnectionDelay,
@@ -152,7 +152,7 @@ export const useEnhancedWebSocket = (options: UseWebSocketOptions = {}) => {
       timeout,
       autoConnect: true,
       query: {
-        clientVersion: '1.0.0',
+        clientVersion: "1.0.0",
         timestamp: Date.now(),
       },
     });
@@ -160,8 +160,8 @@ export const useEnhancedWebSocket = (options: UseWebSocketOptions = {}) => {
     const socket = socketRef.current;
 
     // Connection event handlers
-    socket.on('connect', () => {
-      console.log('WebSocket connected');
+    socket.on("connect", () => {
+      console.log("WebSocket connected");
       setConnectionState({
         isConnected: true,
         isConnecting: false,
@@ -175,18 +175,18 @@ export const useEnhancedWebSocket = (options: UseWebSocketOptions = {}) => {
       onConnect?.();
     });
 
-    socket.on('disconnect', (reason) => {
-      console.log('WebSocket disconnected:', reason);
-      setConnectionState(prev => ({
+    socket.on("disconnect", (reason) => {
+      console.log("WebSocket disconnected:", reason);
+      setConnectionState((prev) => ({
         ...prev,
         isConnected: false,
-        isConnecting: reason === 'io server disconnect' ? false : true,
+        isConnecting: reason === "io server disconnect" ? false : true,
       }));
       stopHeartbeat();
       onDisconnect?.(reason);
 
       // Handle server-initiated disconnect differently
-      if (reason === 'io server disconnect') {
+      if (reason === "io server disconnect") {
         // Manual reconnection needed
         reconnectTimerRef.current = setTimeout(() => {
           reconnect();
@@ -194,9 +194,9 @@ export const useEnhancedWebSocket = (options: UseWebSocketOptions = {}) => {
       }
     });
 
-    socket.on('connect_error', (error) => {
-      console.error('WebSocket connection error:', error);
-      setConnectionState(prev => ({
+    socket.on("connect_error", (error) => {
+      console.error("WebSocket connection error:", error);
+      setConnectionState((prev) => ({
         ...prev,
         error: error,
         reconnectAttempt: prev.reconnectAttempt + 1,
@@ -206,24 +206,24 @@ export const useEnhancedWebSocket = (options: UseWebSocketOptions = {}) => {
       // Exponential backoff for reconnection
       currentReconnectDelay.current = Math.min(
         currentReconnectDelay.current * RECONNECT_BACKOFF_FACTOR,
-        reconnectDelayMax
+        reconnectDelayMax,
       );
     });
 
-    socket.on('reconnect', (attemptNumber) => {
-      console.log('WebSocket reconnected after', attemptNumber, 'attempts');
-      setConnectionState(prev => ({
+    socket.on("reconnect", (attemptNumber) => {
+      console.log("WebSocket reconnected after", attemptNumber, "attempts");
+      setConnectionState((prev) => ({
         ...prev,
         reconnectAttempt: 0,
       }));
     });
 
-    socket.on('reconnect_failed', () => {
-      console.error('WebSocket reconnection failed');
-      setConnectionState(prev => ({
+    socket.on("reconnect_failed", () => {
+      console.error("WebSocket reconnection failed");
+      setConnectionState((prev) => ({
         ...prev,
         isConnecting: false,
-        error: new Error('Failed to reconnect after maximum attempts'),
+        error: new Error("Failed to reconnect after maximum attempts"),
       }));
     });
 
@@ -231,11 +231,14 @@ export const useEnhancedWebSocket = (options: UseWebSocketOptions = {}) => {
     socket.onAny((eventName, ...args) => {
       const handlers = listenersRef.current.get(eventName);
       if (handlers) {
-        handlers.forEach(handler => {
+        handlers.forEach((handler) => {
           try {
             handler(...args);
           } catch (error) {
-            console.error(`Error in WebSocket handler for ${eventName}:`, error);
+            console.error(
+              `Error in WebSocket handler for ${eventName}:`,
+              error,
+            );
           }
         });
       }
@@ -274,7 +277,7 @@ export const useEnhancedWebSocket = (options: UseWebSocketOptions = {}) => {
 
     // Join room on server if connected
     if (socketRef.current?.connected) {
-      socketRef.current.emit('subscribe', event);
+      socketRef.current.emit("subscribe", event);
     }
 
     // Return unsubscribe function
@@ -285,7 +288,7 @@ export const useEnhancedWebSocket = (options: UseWebSocketOptions = {}) => {
         if (handlers.size === 0) {
           listenersRef.current.delete(event);
           if (socketRef.current?.connected) {
-            socketRef.current.emit('unsubscribe', event);
+            socketRef.current.emit("unsubscribe", event);
           }
         }
       }
@@ -299,7 +302,7 @@ export const useEnhancedWebSocket = (options: UseWebSocketOptions = {}) => {
       if (handlers.size === 0) {
         listenersRef.current.delete(event);
         if (socketRef.current?.connected) {
-          socketRef.current.emit('unsubscribe', event);
+          socketRef.current.emit("unsubscribe", event);
         }
       }
     }
@@ -310,7 +313,7 @@ export const useEnhancedWebSocket = (options: UseWebSocketOptions = {}) => {
     <T = any>(event: string, data?: any, timeoutMs = 5000): Promise<T> => {
       return new Promise((resolve, reject) => {
         if (!socketRef.current?.connected) {
-          reject(new Error('WebSocket not connected'));
+          reject(new Error("WebSocket not connected"));
           return;
         }
 
@@ -320,15 +323,18 @@ export const useEnhancedWebSocket = (options: UseWebSocketOptions = {}) => {
           reject(new Error(`Request timeout for ${event}`));
         }, timeoutMs);
 
-        socketRef.current.once(`${event}:response:${requestId}`, (response: T) => {
-          clearTimeout(timeoutId);
-          resolve(response);
-        });
+        socketRef.current.once(
+          `${event}:response:${requestId}`,
+          (response: T) => {
+            clearTimeout(timeoutId);
+            resolve(response);
+          },
+        );
 
         socketRef.current.emit(event, { ...data, requestId });
       });
     },
-    []
+    [],
   );
 
   return {
@@ -343,9 +349,9 @@ export const useEnhancedWebSocket = (options: UseWebSocketOptions = {}) => {
 };
 
 // Re-export event types from original hook
-export type { 
-  SessionUpdateEvent, 
-  SessionCreatedEvent, 
-  SessionCancelledEvent, 
-  BookingConfirmedEvent 
-} from './useWebSocket';
+export type {
+  SessionUpdateEvent,
+  SessionCreatedEvent,
+  SessionCancelledEvent,
+  BookingConfirmedEvent,
+} from "./useWebSocket";

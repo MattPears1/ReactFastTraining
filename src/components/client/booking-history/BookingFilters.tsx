@@ -1,6 +1,6 @@
-import React from 'react';
-import { X } from 'lucide-react';
-import type { BookingFilters as BookingFiltersType } from '@/types/client';
+import React from "react";
+import { X } from "lucide-react";
+import type { BookingFilters as BookingFiltersType } from "@/types/client";
 
 interface BookingFiltersProps {
   filters: BookingFiltersType;
@@ -21,18 +21,18 @@ export const BookingFilters: React.FC<BookingFiltersProps> = ({
   };
 
   const statusOptions = [
-    { value: '', label: 'All Statuses' },
-    { value: 'upcoming', label: 'Upcoming' },
-    { value: 'completed', label: 'Completed' },
-    { value: 'cancelled', label: 'Cancelled' },
+    { value: "", label: "All Statuses" },
+    { value: "upcoming", label: "Upcoming" },
+    { value: "completed", label: "Completed" },
+    { value: "cancelled", label: "Cancelled" },
   ];
 
   const courseTypeOptions = [
-    { value: '', label: 'All Course Types' },
-    { value: 'Emergency First Aid at Work', label: 'EFAW' },
-    { value: 'First Aid at Work', label: 'FAW' },
-    { value: 'Paediatric First Aid', label: 'Paediatric' },
-    { value: 'Mental Health First Aid', label: 'Mental Health' },
+    { value: "", label: "All Course Types" },
+    { value: "Emergency First Aid at Work", label: "EFAW" },
+    { value: "First Aid at Work", label: "FAW" },
+    { value: "Paediatric First Aid", label: "Paediatric" },
+    { value: "Mental Health First Aid", label: "Mental Health" },
   ];
 
   return (
@@ -44,8 +44,8 @@ export const BookingFilters: React.FC<BookingFiltersProps> = ({
             Status
           </label>
           <select
-            value={filters.status || ''}
-            onChange={(e) => handleFilterChange('status', e.target.value)}
+            value={filters.status || ""}
+            onChange={(e) => handleFilterChange("status", e.target.value)}
             className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-primary-500"
           >
             {statusOptions.map((option) => (
@@ -62,8 +62,8 @@ export const BookingFilters: React.FC<BookingFiltersProps> = ({
             Course Type
           </label>
           <select
-            value={filters.courseType || ''}
-            onChange={(e) => handleFilterChange('courseType', e.target.value)}
+            value={filters.courseType || ""}
+            onChange={(e) => handleFilterChange("courseType", e.target.value)}
             className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-primary-500"
           >
             {courseTypeOptions.map((option) => (
@@ -81,9 +81,16 @@ export const BookingFilters: React.FC<BookingFiltersProps> = ({
           </label>
           <input
             type="date"
-            value={filters.startDate ? filters.startDate.toISOString().split('T')[0] : ''}
-            onChange={(e) => 
-              handleFilterChange('startDate', e.target.value ? new Date(e.target.value) : null)
+            value={
+              filters.startDate
+                ? filters.startDate.toISOString().split("T")[0]
+                : ""
+            }
+            onChange={(e) =>
+              handleFilterChange(
+                "startDate",
+                e.target.value ? new Date(e.target.value) : null,
+              )
             }
             className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-primary-500"
           />
@@ -96,9 +103,14 @@ export const BookingFilters: React.FC<BookingFiltersProps> = ({
           </label>
           <input
             type="date"
-            value={filters.endDate ? filters.endDate.toISOString().split('T')[0] : ''}
-            onChange={(e) => 
-              handleFilterChange('endDate', e.target.value ? new Date(e.target.value) : null)
+            value={
+              filters.endDate ? filters.endDate.toISOString().split("T")[0] : ""
+            }
+            onChange={(e) =>
+              handleFilterChange(
+                "endDate",
+                e.target.value ? new Date(e.target.value) : null,
+              )
             }
             className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-primary-500"
           />

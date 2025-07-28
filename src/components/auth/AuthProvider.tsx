@@ -1,8 +1,8 @@
-import React, { ReactNode } from 'react';
-import { AuthProvider as BaseAuthProvider } from '@/contexts/AuthContext';
-import { AuthErrorBoundary } from './AuthErrorBoundary';
-import { SecureRoute } from '@/middleware/security-headers';
-import { useAuthErrorHandler } from './AuthErrorBoundary';
+import React, { ReactNode } from "react";
+import { AuthProvider as BaseAuthProvider } from "@/contexts/AuthContext";
+import { AuthErrorBoundary } from "./AuthErrorBoundary";
+import { SecureRoute } from "@/middleware/security-headers";
+import { useAuthErrorHandler } from "./AuthErrorBoundary";
 
 interface AuthProviderProps {
   children: ReactNode;
@@ -27,7 +27,7 @@ export function AuthProvider({
     if (onAuthError) {
       onAuthError(error);
     }
-    
+
     // Always use default handler as well
     handleAuthError(error, errorInfo);
   };
@@ -42,14 +42,14 @@ export function AuthProvider({
   );
 
   // Wrap with security headers if enabled
-  return enableSecurityHeaders ? (
-    <SecureRoute>{content}</SecureRoute>
-  ) : (
-    content
-  );
+  return enableSecurityHeaders ? <SecureRoute>{content}</SecureRoute> : content;
 }
 
 // Re-export auth hooks and components for convenience
-export { useAuth } from '@/contexts/AuthContext';
-export { AuthErrorBoundary, withAuthErrorBoundary, useAuthErrorHandler } from './AuthErrorBoundary';
-export { SecureRoute } from '@/middleware/security-headers';
+export { useAuth } from "@/contexts/AuthContext";
+export {
+  AuthErrorBoundary,
+  withAuthErrorBoundary,
+  useAuthErrorHandler,
+} from "./AuthErrorBoundary";
+export { SecureRoute } from "@/middleware/security-headers";

@@ -61,16 +61,16 @@ export interface ValidateTokenResponse {
   email?: string;
 }
 
-export type AuthErrorCode = 
-  | 'auth/invalid-credentials'
-  | 'auth/account-locked'
-  | 'auth/email-not-verified'
-  | 'auth/session-expired'
-  | 'auth/rate-limited'
-  | 'auth/email-in-use'
-  | 'auth/weak-password'
-  | 'auth/invalid-token'
-  | 'auth/network-error';
+export type AuthErrorCode =
+  | "auth/invalid-credentials"
+  | "auth/account-locked"
+  | "auth/email-not-verified"
+  | "auth/session-expired"
+  | "auth/rate-limited"
+  | "auth/email-in-use"
+  | "auth/weak-password"
+  | "auth/invalid-token"
+  | "auth/network-error";
 
 export interface AuthContextState {
   user: User | null;

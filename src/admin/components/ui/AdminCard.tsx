@@ -1,11 +1,11 @@
-import React from 'react';
-import { LucideIcon } from 'lucide-react';
+import React from "react";
+import { LucideIcon } from "lucide-react";
 
 interface AdminCardProps {
   title?: string;
   subtitle?: string;
   icon?: LucideIcon;
-  iconColor?: 'primary' | 'success' | 'accent' | 'danger';
+  iconColor?: "primary" | "success" | "accent" | "danger";
   actions?: React.ReactNode;
   children: React.ReactNode;
   className?: string;
@@ -17,25 +17,25 @@ export const AdminCard: React.FC<AdminCardProps> = ({
   title,
   subtitle,
   icon: Icon,
-  iconColor = 'primary',
+  iconColor = "primary",
   actions,
   children,
-  className = '',
+  className = "",
   noPadding = false,
   loading = false,
 }) => {
   const getIconColorClass = () => {
     switch (iconColor) {
-      case 'primary':
-        return 'text-primary-500';
-      case 'success':
-        return 'text-secondary-500';
-      case 'accent':
-        return 'text-accent-500';
-      case 'danger':
-        return 'text-red-500';
+      case "primary":
+        return "text-primary-500";
+      case "success":
+        return "text-secondary-500";
+      case "accent":
+        return "text-accent-500";
+      case "danger":
+        return "text-red-500";
       default:
-        return 'text-primary-500';
+        return "text-primary-500";
     }
   };
 
@@ -67,7 +67,7 @@ export const AdminCard: React.FC<AdminCardProps> = ({
           </div>
         </div>
       )}
-      
+
       {loading ? (
         <div className="admin-card-body">
           <div className="space-y-3">
@@ -77,9 +77,7 @@ export const AdminCard: React.FC<AdminCardProps> = ({
           </div>
         </div>
       ) : (
-        <div className={noPadding ? '' : 'admin-card-body'}>
-          {children}
-        </div>
+        <div className={noPadding ? "" : "admin-card-body"}>{children}</div>
       )}
     </div>
   );

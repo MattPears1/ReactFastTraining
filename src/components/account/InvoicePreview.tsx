@@ -1,7 +1,7 @@
-import React, { useState, useEffect } from 'react';
-import { X, Download, Mail, Printer, FileText } from 'lucide-react';
-import { format } from 'date-fns';
-import { invoiceApi } from '@/services/api/invoices';
+import React, { useState, useEffect } from "react";
+import { X, Download, Mail, Printer, FileText } from "lucide-react";
+import { format } from "date-fns";
+import { invoiceApi } from "@/services/api/invoices";
 
 interface InvoicePreviewProps {
   invoiceId: string;
@@ -62,13 +62,13 @@ export const InvoicePreview: React.FC<InvoicePreviewProps> = ({
       setLoading(true);
       const data = await invoiceApi.getInvoice(invoiceId);
       setInvoice(data);
-      
+
       // Load PDF preview
       const pdfBlob = await invoiceApi.downloadInvoice(invoiceId);
       const url = URL.createObjectURL(pdfBlob);
       setPdfUrl(url);
     } catch (error) {
-      console.error('Failed to load invoice:', error);
+      console.error("Failed to load invoice:", error);
     } finally {
       setLoading(false);
     }
@@ -76,12 +76,12 @@ export const InvoicePreview: React.FC<InvoicePreviewProps> = ({
 
   const handleDownload = async () => {
     if (!invoice) return;
-    
+
     try {
       setDownloading(true);
       const blob = await invoiceApi.downloadInvoice(invoiceId);
       const url = window.URL.createObjectURL(blob);
-      const a = document.createElement('a');
+      const a = document.createElement("a");
       a.href = url;
       a.download = `invoice-${invoice.invoiceNumber}.pdf`;
       document.body.appendChild(a);
@@ -89,8 +89,8 @@ export const InvoicePreview: React.FC<InvoicePreviewProps> = ({
       window.URL.revokeObjectURL(url);
       document.body.removeChild(a);
     } catch (error) {
-      console.error('Failed to download invoice:', error);
-      alert('Failed to download invoice. Please try again.');
+      console.error("Failed to download invoice:", error);
+      alert("Failed to download invoice. Please try again.");
     } finally {
       setDownloading(false);
     }
@@ -100,10 +100,10 @@ export const InvoicePreview: React.FC<InvoicePreviewProps> = ({
     try {
       setResending(true);
       await invoiceApi.resendInvoice(invoiceId);
-      alert('Invoice has been sent to your email address.');
+      alert("Invoice has been sent to your email address.");
     } catch (error) {
-      console.error('Failed to resend invoice:', error);
-      alert('Failed to resend invoice. Please try again.');
+      console.error("Failed to resend invoice:", error);
+      alert("Failed to resend invoice. Please try again.");
     } finally {
       setResending(false);
     }
@@ -111,9 +111,9 @@ export const InvoicePreview: React.FC<InvoicePreviewProps> = ({
 
   const handlePrint = () => {
     if (pdfUrl) {
-      const printWindow = window.open(pdfUrl, '_blank');
+      const printWindow = window.open(pdfUrl, "_blank");
       if (printWindow) {
-        printWindow.addEventListener('load', () => {
+        printWindow.addEventListener("load", () => {
           printWindow.print();
         });
       }
@@ -142,7 +142,7 @@ export const InvoicePreview: React.FC<InvoicePreviewProps> = ({
               <div className="h-4 bg-gray-200 rounded w-3/4"></div>
               <div className="h-4 bg-gray-200 rounded w-1/2"></div>
               <div className="space-y-2">
-                {[1, 2, 3, 4].map(i => (
+                {[1, 2, 3, 4].map((i) => (
                   <div key={i} className="h-3 bg-gray-100 rounded"></div>
                 ))}
               </div>
@@ -151,15 +151,21 @@ export const InvoicePreview: React.FC<InvoicePreviewProps> = ({
             <div className="space-y-6">
               {/* Invoice Header */}
               <div>
-                <h3 className="font-semibold text-lg mb-2">{invoice.invoiceNumber}</h3>
+                <h3 className="font-semibold text-lg mb-2">
+                  {invoice.invoiceNumber}
+                </h3>
                 <p className="text-sm text-gray-600">
-                  Issued: {format(new Date(invoice.issueDate), 'dd MMM yyyy')}
+                  Issued: {format(new Date(invoice.issueDate), "dd MMM yyyy")}
                 </p>
-                <span className={`inline-block mt-2 px-2 py-1 text-xs font-medium rounded-full ${
-                  invoice.status === 'paid' ? 'bg-green-100 text-green-800' :
-                  invoice.status === 'void' ? 'bg-gray-100 text-gray-800' :
-                  'bg-yellow-100 text-yellow-800'
-                }`}>
+                <span
+                  className={`inline-block mt-2 px-2 py-1 text-xs font-medium rounded-full ${
+                    invoice.status === "paid"
+                      ? "bg-green-100 text-green-800"
+                      : invoice.status === "void"
+                        ? "bg-gray-100 text-gray-800"
+                        : "bg-yellow-100 text-yellow-800"
+                  }`}
+                >
                   {invoice.status.toUpperCase()}
                 </span>
               </div>
@@ -168,17 +174,34 @@ export const InvoicePreview: React.FC<InvoicePreviewProps> = ({
               <div>
                 <h4 className="font-medium mb-2">Customer</h4>
                 <p className="text-sm">{invoice.customer.name}</p>
-                <p className="text-sm text-gray-600">{invoice.customer.email}</p>
+                <p className="text-sm text-gray-600">
+                  {invoice.customer.email}
+                </p>
               </div>
 
               {/* Booking Details */}
               <div>
                 <h4 className="font-medium mb-2">Booking Details</h4>
                 <div className="text-sm space-y-1">
-                  <p><span className="text-gray-600">Reference:</span> {invoice.booking.reference}</p>
-                  <p><span className="text-gray-600">Course:</span> {invoice.booking.courseType}</p>
-                  <p><span className="text-gray-600">Date:</span> {format(new Date(invoice.booking.sessionDate), 'dd/MM/yyyy')}</p>
-                  <p><span className="text-gray-600">Attendees:</span> {invoice.booking.numberOfAttendees}</p>
+                  <p>
+                    <span className="text-gray-600">Reference:</span>{" "}
+                    {invoice.booking.reference}
+                  </p>
+                  <p>
+                    <span className="text-gray-600">Course:</span>{" "}
+                    {invoice.booking.courseType}
+                  </p>
+                  <p>
+                    <span className="text-gray-600">Date:</span>{" "}
+                    {format(
+                      new Date(invoice.booking.sessionDate),
+                      "dd/MM/yyyy",
+                    )}
+                  </p>
+                  <p>
+                    <span className="text-gray-600">Attendees:</span>{" "}
+                    {invoice.booking.numberOfAttendees}
+                  </p>
                 </div>
               </div>
 

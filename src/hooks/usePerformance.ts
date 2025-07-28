@@ -1,5 +1,5 @@
-import { useEffect, useRef, useState, useCallback } from 'react';
-import { debounce } from '@utils/helpers';
+import { useEffect, useRef, useState, useCallback } from "react";
+import { debounce } from "@utils/helpers";
 
 interface PerformanceMetrics {
   renderTime: number;
@@ -18,13 +18,13 @@ interface PerformanceOptions {
 
 export const usePerformance = (
   componentName: string,
-  options: PerformanceOptions = {}
+  options: PerformanceOptions = {},
 ) => {
   const {
     trackMemory = true,
     trackRenderCount = true,
     warnThreshold = 16.67, // 60fps threshold
-    enableLogging = process.env.NODE_ENV === 'development',
+    enableLogging = process.env.NODE_ENV === "development",
   } = options;
 
   const renderCount = useRef(0);
@@ -49,45 +49,53 @@ export const usePerformance = (
     };
 
     // Track memory if available
-    if (trackMemory && 'memory' in performance) {
+    if (trackMemory && "memory" in performance) {
       metric.memoryUsage = (performance as any).memory.usedJSHeapSize;
     }
 
     // Warn if render time exceeds threshold
     if (renderTime > warnThreshold && enableLogging) {
       console.warn(
-        `[Performance] ${componentName} render took ${renderTime.toFixed(2)}ms (threshold: ${warnThreshold}ms)`
+        `[Performance] ${componentName} render took ${renderTime.toFixed(2)}ms (threshold: ${warnThreshold}ms)`,
       );
     }
 
-    setMetrics(prev => [...prev.slice(-99), metric]);
+    setMetrics((prev) => [...prev.slice(-99), metric]);
   });
 
   // Mark performance measures
-  const markStart = useCallback((label: string) => {
-    performance.mark(`${componentName}-${label}-start`);
-  }, [componentName]);
+  const markStart = useCallback(
+    (label: string) => {
+      performance.mark(`${componentName}-${label}-start`);
+    },
+    [componentName],
+  );
 
-  const markEnd = useCallback((label: string) => {
-    const startMark = `${componentName}-${label}-start`;
-    const endMark = `${componentName}-${label}-end`;
-    const measureName = `${componentName}-${label}`;
+  const markEnd = useCallback(
+    (label: string) => {
+      const startMark = `${componentName}-${label}-start`;
+      const endMark = `${componentName}-${label}-end`;
+      const measureName = `${componentName}-${label}`;
 
-    performance.mark(endMark);
-    performance.measure(measureName, startMark, endMark);
+      performance.mark(endMark);
+      performance.measure(measureName, startMark, endMark);
 
-    const measure = performance.getEntriesByName(measureName)[0];
-    if (measure && enableLogging) {
-      console.log(`[Performance] ${measureName}: ${measure.duration.toFixed(2)}ms`);
-    }
+      const measure = performance.getEntriesByName(measureName)[0];
+      if (measure && enableLogging) {
+        console.log(
+          `[Performance] ${measureName}: ${measure.duration.toFixed(2)}ms`,
+        );
+      }
 
-    // Cleanup marks
-    performance.clearMarks(startMark);
-    performance.clearMarks(endMark);
-    performance.clearMeasures(measureName);
+      // Cleanup marks
+      performance.clearMarks(startMark);
+      performance.clearMarks(endMark);
+      performance.clearMeasures(measureName);
 
-    return measure?.duration || 0;
-  }, [componentName, enableLogging]);
+      return measure?.duration || 0;
+    },
+    [componentName, enableLogging],
+  );
 
   // Get average metrics
   const getAverageMetrics = useCallback(() => {
@@ -98,7 +106,7 @@ export const usePerformance = (
         renderTime: acc.renderTime + metric.renderTime,
         memoryUsage: (acc.memoryUsage || 0) + (metric.memoryUsage || 0),
       }),
-      { renderTime: 0, memoryUsage: 0 }
+      { renderTime: 0, memoryUsage: 0 },
     );
 
     return {
@@ -117,7 +125,7 @@ export const usePerformance = (
         console.log(`[Performance Summary] ${componentName}:`, averages);
       }
     }, 5000),
-    [componentName, getAverageMetrics, enableLogging]
+    [componentName, getAverageMetrics, enableLogging],
   );
 
   useEffect(() => {
@@ -136,30 +144,32 @@ export const usePerformance = (
 // Memory leak detector
 export const useMemoryLeakDetector = (
   componentName: string,
-  threshold = 10 * 1024 * 1024 // 10MB
+  threshold = 10 * 1024 * 1024, // 10MB
 ) => {
   const initialMemory = useRef<number>(0);
   const [isLeaking, setIsLeaking] = useState(false);
 
   useEffect(() => {
-    if (!('memory' in performance)) return;
+    if (!("memory" in performance)) return;
 
     const checkMemory = () => {
       const currentMemory = (performance as any).memory.usedJSHeapSize;
-      
+
       if (initialMemory.current === 0) {
         initialMemory.current = currentMemory;
         return;
       }
 
       const memoryIncrease = currentMemory - initialMemory.current;
-      
+
       if (memoryIncrease > threshold) {
         setIsLeaking(true);
         console.warn(
           `[Memory Leak] ${componentName} may have a memory leak. Memory increased by ${(
-            memoryIncrease / 1024 / 1024
-          ).toFixed(2)}MB`
+            memoryIncrease /
+            1024 /
+            1024
+          ).toFixed(2)}MB`,
         );
       }
     };
@@ -218,13 +228,13 @@ export const useBundleSizeAnalyzer = () => {
   useEffect(() => {
     const analyzeBundle = () => {
       const scripts = performance
-        .getEntriesByType('resource')
-        .filter(entry => entry.name.endsWith('.js'))
+        .getEntriesByType("resource")
+        .filter((entry) => entry.name.endsWith(".js"))
         .reduce((sum, entry) => sum + entry.transferSize, 0);
 
       const styles = performance
-        .getEntriesByType('resource')
-        .filter(entry => entry.name.endsWith('.css'))
+        .getEntriesByType("resource")
+        .filter((entry) => entry.name.endsWith(".css"))
         .reduce((sum, entry) => sum + entry.transferSize, 0);
 
       setBundleInfo({
@@ -235,11 +245,11 @@ export const useBundleSizeAnalyzer = () => {
     };
 
     // Wait for all resources to load
-    if (document.readyState === 'complete') {
+    if (document.readyState === "complete") {
       analyzeBundle();
     } else {
-      window.addEventListener('load', analyzeBundle);
-      return () => window.removeEventListener('load', analyzeBundle);
+      window.addEventListener("load", analyzeBundle);
+      return () => window.removeEventListener("load", analyzeBundle);
     }
   }, []);
 
@@ -249,7 +259,7 @@ export const useBundleSizeAnalyzer = () => {
 // Render optimization hook
 export const useRenderOptimization = <T extends Record<string, any>>(
   props: T,
-  dependencies: any[] = []
+  dependencies: any[] = [],
 ) => {
   const previousProps = useRef<T>(props);
   const changedProps = useRef<Partial<T>>({});
@@ -257,12 +267,12 @@ export const useRenderOptimization = <T extends Record<string, any>>(
 
   useEffect(() => {
     renderCount.current++;
-    
+
     // Track which props changed
     const changes: Partial<T> = {};
     let hasChanges = false;
 
-    Object.keys(props).forEach(key => {
+    Object.keys(props).forEach((key) => {
       if (previousProps.current[key] !== props[key]) {
         changes[key as keyof T] = props[key];
         hasChanges = true;

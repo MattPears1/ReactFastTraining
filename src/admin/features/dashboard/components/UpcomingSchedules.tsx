@@ -1,7 +1,7 @@
-import React from 'react';
-import { Link } from 'react-router-dom';
-import { Calendar, MapPin, Users } from 'lucide-react';
-import { format } from 'date-fns';
+import React from "react";
+import { Link } from "react-router-dom";
+import { Calendar, MapPin, Users } from "lucide-react";
+import { format } from "date-fns";
 
 interface Schedule {
   id: number;
@@ -17,7 +17,9 @@ interface UpcomingSchedulesProps {
   schedules: Schedule[];
 }
 
-export const UpcomingSchedules: React.FC<UpcomingSchedulesProps> = ({ schedules }) => {
+export const UpcomingSchedules: React.FC<UpcomingSchedulesProps> = ({
+  schedules,
+}) => {
   if (schedules.length === 0) {
     return (
       <div className="text-center py-6 text-gray-500">
@@ -35,11 +37,14 @@ export const UpcomingSchedules: React.FC<UpcomingSchedulesProps> = ({ schedules 
         >
           <div className="flex justify-between items-start">
             <div className="flex-1">
-              <h3 className="font-medium text-gray-900">{schedule.courseName}</h3>
+              <h3 className="font-medium text-gray-900">
+                {schedule.courseName}
+              </h3>
               <div className="mt-2 space-y-1 text-sm text-gray-500">
                 <div className="flex items-center">
                   <Calendar className="h-4 w-4 mr-2" />
-                  {format(new Date(schedule.date), 'MMM d, yyyy')} at {schedule.time}
+                  {format(new Date(schedule.date), "MMM d, yyyy")} at{" "}
+                  {schedule.time}
                 </div>
                 <div className="flex items-center">
                   <MapPin className="h-4 w-4 mr-2" />
@@ -60,7 +65,7 @@ export const UpcomingSchedules: React.FC<UpcomingSchedulesProps> = ({ schedules 
           </div>
         </div>
       ))}
-      
+
       {schedules.length > 5 && (
         <Link
           to="/admin/schedule"

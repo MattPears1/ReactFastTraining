@@ -1,8 +1,8 @@
-import React, { useEffect, useRef } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
-import { X, Search } from 'lucide-react';
-import { SearchBar } from './SearchBar';
-import { createPortal } from 'react-dom';
+import React, { useEffect, useRef } from "react";
+import { motion, AnimatePresence } from "framer-motion";
+import { X, Search } from "lucide-react";
+import { SearchBar } from "./SearchBar";
+import { createPortal } from "react-dom";
 
 interface SearchModalProps {
   isOpen: boolean;
@@ -20,25 +20,25 @@ export const SearchModal: React.FC<SearchModalProps> = ({
   // Handle escape key
   useEffect(() => {
     const handleEscape = (e: KeyboardEvent) => {
-      if (e.key === 'Escape' && isOpen) {
+      if (e.key === "Escape" && isOpen) {
         onClose();
       }
     };
 
-    document.addEventListener('keydown', handleEscape);
-    return () => document.removeEventListener('keydown', handleEscape);
+    document.addEventListener("keydown", handleEscape);
+    return () => document.removeEventListener("keydown", handleEscape);
   }, [isOpen, onClose]);
 
   // Prevent body scroll when modal is open
   useEffect(() => {
     if (isOpen) {
-      document.body.style.overflow = 'hidden';
+      document.body.style.overflow = "hidden";
     } else {
-      document.body.style.overflow = '';
+      document.body.style.overflow = "";
     }
 
     return () => {
-      document.body.style.overflow = '';
+      document.body.style.overflow = "";
     };
   }, [isOpen]);
 
@@ -102,12 +102,12 @@ export const SearchModal: React.FC<SearchModalProps> = ({
               </h3>
               <div className="flex flex-wrap gap-2">
                 {[
-                  'Products',
-                  'Services',
-                  'About Us',
-                  'Contact',
-                  'Support',
-                  'FAQ',
+                  "Products",
+                  "Services",
+                  "About Us",
+                  "Contact",
+                  "Support",
+                  "FAQ",
                 ].map((term) => (
                   <button
                     key={term}
@@ -126,6 +126,6 @@ export const SearchModal: React.FC<SearchModalProps> = ({
         </motion.div>
       </motion.div>
     </AnimatePresence>,
-    document.body
+    document.body,
   );
 };

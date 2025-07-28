@@ -1,10 +1,10 @@
-import React, { useState, useMemo } from 'react';
-import { 
-  Users, 
-  Mail, 
-  Phone, 
-  Search, 
-  Filter, 
+import React, { useState, useMemo } from "react";
+import {
+  Users,
+  Mail,
+  Phone,
+  Search,
+  Filter,
   Download,
   MoreVertical,
   CheckCircle,
@@ -18,26 +18,29 @@ import {
   ChevronDown,
   ChevronUp,
   Calendar,
-  X
-} from 'lucide-react';
-import { format } from 'date-fns';
-import { AdminCard } from '../../../components/ui/AdminCard';
-import { AdminBadge } from '../../../components/ui/AdminBadge';
-import { Button } from '../../../../components/ui/Button';
-import { BookingDetails, BulkAction } from '../../../types/schedule.types';
+  X,
+} from "lucide-react";
+import { format } from "date-fns";
+import { AdminCard } from "../../../components/ui/AdminCard";
+import { AdminBadge } from "../../../components/ui/AdminBadge";
+import { Button } from "../../../../components/ui/Button";
+import { BookingDetails, BulkAction } from "../../../types/schedule.types";
 
 interface AttendeesListProps {
   bookings: BookingDetails[];
   onViewBooking: (bookingId: string) => void;
-  onUpdateBooking: (bookingId: string, data: Partial<BookingDetails>) => Promise<void>;
+  onUpdateBooking: (
+    bookingId: string,
+    data: Partial<BookingDetails>,
+  ) => Promise<void>;
   onCancelBooking: (bookingId: string) => Promise<void>;
   onEmailAttendees: (bookingIds: string[]) => void;
   onExportList: () => void;
   onBulkAction?: (action: BulkAction) => Promise<void>;
 }
 
-type FilterStatus = 'all' | 'confirmed' | 'pending' | 'cancelled';
-type SortField = 'name' | 'date' | 'status' | 'payment';
+type FilterStatus = "all" | "confirmed" | "pending" | "cancelled";
+type SortField = "name" | "date" | "status" | "payment";
 
 export const AttendeesList: React.FC<AttendeesListProps> = ({
   bookings,
@@ -46,24 +49,24 @@ export const AttendeesList: React.FC<AttendeesListProps> = ({
   onCancelBooking,
   onEmailAttendees,
   onExportList,
-  onBulkAction: _onBulkAction
+  onBulkAction: _onBulkAction,
 }) => {
-  const [searchTerm, setSearchTerm] = useState('');
-  const [filterStatus, setFilterStatus] = useState<FilterStatus>('all');
+  const [searchTerm, setSearchTerm] = useState("");
+  const [filterStatus, setFilterStatus] = useState<FilterStatus>("all");
   const [selectedBookings, setSelectedBookings] = useState<string[]>([]);
   const [expandedBooking, setExpandedBooking] = useState<string | null>(null); // eslint-disable-line @typescript-eslint/no-unused-vars
-  const [sortField, setSortField] = useState<SortField>('date');
+  const [sortField, setSortField] = useState<SortField>("date");
   const [sortAscending, setSortAscending] = useState(false);
   const [showActions, setShowActions] = useState<string | null>(null);
   const [showMobileFilters, setShowMobileFilters] = useState(false);
 
   // Filter and sort bookings
   const filteredAndSortedBookings = useMemo(() => {
-    const filtered = bookings.filter(booking => {
+    const filtered = bookings.filter((booking) => {
       // Search filter
       if (searchTerm) {
         const search = searchTerm.toLowerCase();
-        const matchesSearch = 
+        const matchesSearch =
           booking.userName.toLowerCase().includes(search) ||
           booking.userEmail.toLowerCase().includes(search) ||
           booking.userPhone?.toLowerCase().includes(search);
@@ -71,7 +74,7 @@ export const AttendeesList: React.FC<AttendeesListProps> = ({
       }
 
       // Status filter
-      if (filterStatus !== 'all' && booking.status !== filterStatus) {
+      if (filterStatus !== "all" && booking.status !== filterStatus) {
         return false;
       }
 
@@ -82,16 +85,18 @@ export const AttendeesList: React.FC<AttendeesListProps> = ({
     filtered.sort((a, b) => {
       let comparison = 0;
       switch (sortField) {
-        case 'name':
+        case "name":
           comparison = a.userName.localeCompare(b.userName);
           break;
-        case 'date':
-          comparison = new Date(a.bookingDate).getTime() - new Date(b.bookingDate).getTime();
+        case "date":
+          comparison =
+            new Date(a.bookingDate).getTime() -
+            new Date(b.bookingDate).getTime();
           break;
-        case 'status':
+        case "status":
           comparison = a.status.localeCompare(b.status);
           break;
-        case 'payment':
+        case "payment":
           comparison = a.paymentStatus.localeCompare(b.paymentStatus);
           break;
       }
@@ -105,41 +110,43 @@ export const AttendeesList: React.FC<AttendeesListProps> = ({
     if (selectedBookings.length === filteredAndSortedBookings.length) {
       setSelectedBookings([]);
     } else {
-      setSelectedBookings(filteredAndSortedBookings.map(b => b.id));
+      setSelectedBookings(filteredAndSortedBookings.map((b) => b.id));
     }
   };
 
   const handleSelectBooking = (bookingId: string) => {
-    setSelectedBookings(prev =>
+    setSelectedBookings((prev) =>
       prev.includes(bookingId)
-        ? prev.filter(id => id !== bookingId)
-        : [...prev, bookingId]
+        ? prev.filter((id) => id !== bookingId)
+        : [...prev, bookingId],
     );
   };
 
-  const getStatusIcon = (status: BookingDetails['status']) => {
+  const getStatusIcon = (status: BookingDetails["status"]) => {
     switch (status) {
-      case 'confirmed':
+      case "confirmed":
         return <CheckCircle className="h-4 w-4 text-green-600" />;
-      case 'pending':
+      case "pending":
         return <Clock className="h-4 w-4 text-yellow-600" />;
-      case 'cancelled':
+      case "cancelled":
         return <XCircle className="h-4 w-4 text-red-600" />;
-      case 'completed':
+      case "completed":
         return <CheckCircle className="h-4 w-4 text-blue-600" />;
     }
   };
 
-  const getPaymentStatusVariant = (status: BookingDetails['paymentStatus']): 'success' | 'warning' | 'danger' | 'neutral' => {
+  const getPaymentStatusVariant = (
+    status: BookingDetails["paymentStatus"],
+  ): "success" | "warning" | "danger" | "neutral" => {
     switch (status) {
-      case 'paid':
-        return 'success';
-      case 'pending':
-        return 'warning';
-      case 'failed':
-        return 'danger';
-      case 'refunded':
-        return 'neutral';
+      case "paid":
+        return "success";
+      case "pending":
+        return "warning";
+      case "failed":
+        return "danger";
+      case "refunded":
+        return "neutral";
     }
   };
 
@@ -152,9 +159,9 @@ export const AttendeesList: React.FC<AttendeesListProps> = ({
   const statusCounts = useMemo(() => {
     return {
       all: bookings.length,
-      confirmed: bookings.filter(b => b.status === 'confirmed').length,
-      pending: bookings.filter(b => b.status === 'pending').length,
-      cancelled: bookings.filter(b => b.status === 'cancelled').length
+      confirmed: bookings.filter((b) => b.status === "confirmed").length,
+      pending: bookings.filter((b) => b.status === "pending").length,
+      cancelled: bookings.filter((b) => b.status === "cancelled").length,
     };
   }, [bookings]);
 
@@ -162,20 +169,25 @@ export const AttendeesList: React.FC<AttendeesListProps> = ({
   const AttendeeCard: React.FC<{ booking: BookingDetails }> = ({ booking }) => (
     <div className="attendee-card group relative overflow-hidden transition-all duration-300 hover:shadow-lg">
       {/* Status indicator bar */}
-      <div className={`absolute top-0 left-0 right-0 h-1 transition-all duration-300 ${
-        booking.status === 'confirmed' ? 'bg-green-500' :
-        booking.status === 'pending' ? 'bg-yellow-500' :
-        booking.status === 'cancelled' ? 'bg-red-500' :
-        'bg-blue-500'
-      }`} />
-      
+      <div
+        className={`absolute top-0 left-0 right-0 h-1 transition-all duration-300 ${
+          booking.status === "confirmed"
+            ? "bg-green-500"
+            : booking.status === "pending"
+              ? "bg-yellow-500"
+              : booking.status === "cancelled"
+                ? "bg-red-500"
+                : "bg-blue-500"
+        }`}
+      />
+
       {/* Header with checkbox */}
       <div className="flex justify-between items-start">
         <div className="flex-1 pr-2">
           <h3 className="font-semibold text-base text-gray-900 break-words group-hover:text-primary-600 transition-colors">
             {booking.userName}
           </h3>
-          <a 
+          <a
             href={`mailto:${booking.userEmail}`}
             className="text-sm text-gray-600 hover:text-primary-600 break-all transition-colors inline-flex items-center gap-1 mt-0.5"
           >
@@ -183,7 +195,7 @@ export const AttendeesList: React.FC<AttendeesListProps> = ({
             {booking.userEmail}
           </a>
           {booking.userPhone && (
-            <a 
+            <a
               href={`tel:${booking.userPhone}`}
               className="text-sm text-gray-600 hover:text-primary-600 flex items-center mt-1 transition-colors"
             >
@@ -202,23 +214,31 @@ export const AttendeesList: React.FC<AttendeesListProps> = ({
           <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-primary-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-primary-600"></div>
         </label>
       </div>
-      
+
       {/* Enhanced Status badges with animations */}
       <div className="flex flex-wrap gap-2 text-sm mt-3">
         <span className="inline-flex items-center px-2.5 py-1 rounded-full bg-gray-100 text-gray-700 transition-all hover:bg-gray-200">
           <Calendar className="h-3.5 w-3.5 mr-1.5" />
-          {format(new Date(booking.bookingDate), 'MMM d, yyyy')}
+          {format(new Date(booking.bookingDate), "MMM d, yyyy")}
         </span>
-        <span className={`inline-flex items-center px-2.5 py-1 rounded-full transition-all ${
-          booking.status === 'confirmed' ? 'bg-green-100 text-green-800 hover:bg-green-200' :
-          booking.status === 'pending' ? 'bg-yellow-100 text-yellow-800 hover:bg-yellow-200' :
-          booking.status === 'cancelled' ? 'bg-red-100 text-red-800 hover:bg-red-200' :
-          'bg-blue-100 text-blue-800 hover:bg-blue-200'
-        }`}>
+        <span
+          className={`inline-flex items-center px-2.5 py-1 rounded-full transition-all ${
+            booking.status === "confirmed"
+              ? "bg-green-100 text-green-800 hover:bg-green-200"
+              : booking.status === "pending"
+                ? "bg-yellow-100 text-yellow-800 hover:bg-yellow-200"
+                : booking.status === "cancelled"
+                  ? "bg-red-100 text-red-800 hover:bg-red-200"
+                  : "bg-blue-100 text-blue-800 hover:bg-blue-200"
+          }`}
+        >
           {getStatusIcon(booking.status)}
           <span className="ml-1 capitalize font-medium">{booking.status}</span>
         </span>
-        <AdminBadge variant={getPaymentStatusVariant(booking.paymentStatus)} className="transition-all hover:scale-105">
+        <AdminBadge
+          variant={getPaymentStatusVariant(booking.paymentStatus)}
+          className="transition-all hover:scale-105"
+        >
           <DollarSign className="h-3.5 w-3.5 mr-1" />
           {booking.paymentStatus}
         </AdminBadge>
@@ -231,31 +251,31 @@ export const AttendeesList: React.FC<AttendeesListProps> = ({
           Special requirements
         </div>
       )}
-      
+
       {/* Enhanced Action buttons with hover effects */}
       <div className="flex gap-2 pt-3 mt-3 border-t border-gray-100">
-        <Button 
-          size="sm" 
-          variant="secondary" 
+        <Button
+          size="sm"
+          variant="secondary"
           className="flex-1 min-h-[44px] group hover:bg-primary-50 hover:text-primary-700 hover:border-primary-300 transition-all"
           onClick={() => onEmailAttendees([booking.id])}
         >
           <Mail className="h-4 w-4 mr-1.5 group-hover:scale-110 transition-transform" />
           Email
         </Button>
-        <Button 
-          size="sm" 
-          variant="secondary" 
+        <Button
+          size="sm"
+          variant="secondary"
           className="flex-1 min-h-[44px] group hover:bg-primary-50 hover:text-primary-700 hover:border-primary-300 transition-all"
           onClick={() => onViewBooking(booking.id)}
         >
           <FileText className="h-4 w-4 mr-1.5 group-hover:scale-110 transition-transform" />
           View
         </Button>
-        {booking.status !== 'cancelled' && (
-          <Button 
-            size="sm" 
-            variant="secondary" 
+        {booking.status !== "cancelled" && (
+          <Button
+            size="sm"
+            variant="secondary"
             className="min-h-[44px] px-3 group hover:bg-red-50 hover:text-red-700 hover:border-red-300 transition-all"
             onClick={() => onCancelBooking(booking.id)}
             title="Cancel booking"
@@ -268,8 +288,8 @@ export const AttendeesList: React.FC<AttendeesListProps> = ({
   );
 
   return (
-    <AdminCard 
-      title="Attendees" 
+    <AdminCard
+      title="Attendees"
       subtitle={`${bookings.length} total bookings`}
       icon={Users}
       iconColor="primary"
@@ -284,7 +304,8 @@ export const AttendeesList: React.FC<AttendeesListProps> = ({
                 className="min-h-[40px]"
               >
                 <Mail className="h-4 w-4 mr-1" />
-                <span className="hidden sm:inline">Email</span> ({selectedBookings.length})
+                <span className="hidden sm:inline">Email</span> (
+                {selectedBookings.length})
               </Button>
               <Button
                 size="sm"
@@ -333,7 +354,7 @@ export const AttendeesList: React.FC<AttendeesListProps> = ({
             >
               <Filter className="h-5 w-5 mr-2" />
               Filters & Sort
-              {filterStatus !== 'all' && (
+              {filterStatus !== "all" && (
                 <span className="ml-2 bg-primary-100 text-primary-700 px-2 py-0.5 rounded-full text-xs">
                   Active
                 </span>
@@ -350,9 +371,13 @@ export const AttendeesList: React.FC<AttendeesListProps> = ({
               className="px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500"
             >
               <option value="all">All ({statusCounts.all})</option>
-              <option value="confirmed">Confirmed ({statusCounts.confirmed})</option>
+              <option value="confirmed">
+                Confirmed ({statusCounts.confirmed})
+              </option>
               <option value="pending">Pending ({statusCounts.pending})</option>
-              <option value="cancelled">Cancelled ({statusCounts.cancelled})</option>
+              <option value="cancelled">
+                Cancelled ({statusCounts.cancelled})
+              </option>
             </select>
             <select
               value={sortField}
@@ -380,20 +405,32 @@ export const AttendeesList: React.FC<AttendeesListProps> = ({
               </button>
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Status</label>
+              <label className="block text-sm font-medium text-gray-700 mb-1">
+                Status
+              </label>
               <select
                 value={filterStatus}
-                onChange={(e) => setFilterStatus(e.target.value as FilterStatus)}
+                onChange={(e) =>
+                  setFilterStatus(e.target.value as FilterStatus)
+                }
                 className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500"
               >
                 <option value="all">All ({statusCounts.all})</option>
-                <option value="confirmed">Confirmed ({statusCounts.confirmed})</option>
-                <option value="pending">Pending ({statusCounts.pending})</option>
-                <option value="cancelled">Cancelled ({statusCounts.cancelled})</option>
+                <option value="confirmed">
+                  Confirmed ({statusCounts.confirmed})
+                </option>
+                <option value="pending">
+                  Pending ({statusCounts.pending})
+                </option>
+                <option value="cancelled">
+                  Cancelled ({statusCounts.cancelled})
+                </option>
               </select>
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Sort By</label>
+              <label className="block text-sm font-medium text-gray-700 mb-1">
+                Sort By
+              </label>
               <select
                 value={sortField}
                 onChange={(e) => setSortField(e.target.value as SortField)}
@@ -426,14 +463,18 @@ export const AttendeesList: React.FC<AttendeesListProps> = ({
             <label className="flex items-center">
               <input
                 type="checkbox"
-                checked={selectedBookings.length === filteredAndSortedBookings.length}
+                checked={
+                  selectedBookings.length === filteredAndSortedBookings.length
+                }
                 onChange={handleSelectAll}
                 className="h-4 w-4 text-primary-600 focus:ring-primary-500 border-gray-300 rounded mr-2"
               />
               <span className="text-sm text-gray-700">Select all</span>
             </label>
             {selectedBookings.length > 0 && (
-              <span className="text-sm text-gray-500">{selectedBookings.length} selected</span>
+              <span className="text-sm text-gray-500">
+                {selectedBookings.length} selected
+              </span>
             )}
           </div>
         )}
@@ -453,55 +494,65 @@ export const AttendeesList: React.FC<AttendeesListProps> = ({
                 <th className="w-12 px-6 py-3">
                   <input
                     type="checkbox"
-                    checked={selectedBookings.length === filteredAndSortedBookings.length && filteredAndSortedBookings.length > 0}
+                    checked={
+                      selectedBookings.length ===
+                        filteredAndSortedBookings.length &&
+                      filteredAndSortedBookings.length > 0
+                    }
                     onChange={handleSelectAll}
                     className="h-4 w-4 text-primary-600 focus:ring-primary-500 border-gray-300 rounded"
                   />
                 </th>
-                <th 
+                <th
                   className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider cursor-pointer"
                   onClick={() => {
-                    setSortField('name');
+                    setSortField("name");
                     setSortAscending(!sortAscending);
                   }}
                 >
                   <div className="flex items-center space-x-1">
                     <span>Attendee</span>
-                    {sortField === 'name' && (
-                      sortAscending ? <ChevronUp className="h-4 w-4" /> : <ChevronDown className="h-4 w-4" />
-                    )}
+                    {sortField === "name" &&
+                      (sortAscending ? (
+                        <ChevronUp className="h-4 w-4" />
+                      ) : (
+                        <ChevronDown className="h-4 w-4" />
+                      ))}
                   </div>
                 </th>
                 <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                   Contact
                 </th>
-                <th 
+                <th
                   className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider cursor-pointer"
                   onClick={() => {
-                    setSortField('date');
+                    setSortField("date");
                     setSortAscending(!sortAscending);
                   }}
                 >
                   <div className="flex items-center space-x-1">
                     <span>Booking Date</span>
-                    {sortField === 'date' && (
-                      sortAscending ? <ChevronUp className="h-4 w-4" /> : <ChevronDown className="h-4 w-4" />
-                    )}
+                    {sortField === "date" &&
+                      (sortAscending ? (
+                        <ChevronUp className="h-4 w-4" />
+                      ) : (
+                        <ChevronDown className="h-4 w-4" />
+                      ))}
                   </div>
                 </th>
-                <th 
+                <th
                   className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider cursor-pointer"
                   onClick={() => {
-                    setSortField('status');
+                    setSortField("status");
                     setSortAscending(!sortAscending);
                   }}
                 >
                   Status
                 </th>
-                <th 
+                <th
                   className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider cursor-pointer"
                   onClick={() => {
-                    setSortField('payment');
+                    setSortField("payment");
                     setSortAscending(!sortAscending);
                   }}
                 >
@@ -527,7 +578,9 @@ export const AttendeesList: React.FC<AttendeesListProps> = ({
                     <td className="px-6 py-4 whitespace-nowrap">
                       <div className="flex items-center">
                         <div>
-                          <p className="text-sm font-medium text-gray-900">{booking.userName}</p>
+                          <p className="text-sm font-medium text-gray-900">
+                            {booking.userName}
+                          </p>
                           {booking.specialRequirements && (
                             <p className="text-xs text-gray-500 flex items-center mt-1">
                               <AlertCircle className="h-3 w-3 mr-1" />
@@ -539,7 +592,7 @@ export const AttendeesList: React.FC<AttendeesListProps> = ({
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap">
                       <div className="text-sm">
-                        <a 
+                        <a
                           href={`mailto:${booking.userEmail}`}
                           className="text-primary-600 hover:text-primary-700 flex items-center"
                         >
@@ -547,7 +600,7 @@ export const AttendeesList: React.FC<AttendeesListProps> = ({
                           {booking.userEmail}
                         </a>
                         {booking.userPhone && (
-                          <a 
+                          <a
                             href={`tel:${booking.userPhone}`}
                             className="text-gray-500 flex items-center mt-1"
                           >
@@ -558,16 +611,20 @@ export const AttendeesList: React.FC<AttendeesListProps> = ({
                       </div>
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                      {format(new Date(booking.bookingDate), 'MMM d, yyyy')}
+                      {format(new Date(booking.bookingDate), "MMM d, yyyy")}
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap">
                       <div className="flex items-center space-x-2">
                         {getStatusIcon(booking.status)}
-                        <span className="text-sm capitalize">{booking.status}</span>
+                        <span className="text-sm capitalize">
+                          {booking.status}
+                        </span>
                       </div>
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap">
-                      <AdminBadge variant={getPaymentStatusVariant(booking.paymentStatus)}>
+                      <AdminBadge
+                        variant={getPaymentStatusVariant(booking.paymentStatus)}
+                      >
                         <DollarSign className="h-3 w-3 mr-1" />
                         {booking.paymentStatus}
                       </AdminBadge>
@@ -575,7 +632,11 @@ export const AttendeesList: React.FC<AttendeesListProps> = ({
                     <td className="px-6 py-4 whitespace-nowrap text-sm">
                       <div className="relative">
                         <button
-                          onClick={() => setShowActions(showActions === booking.id ? null : booking.id)}
+                          onClick={() =>
+                            setShowActions(
+                              showActions === booking.id ? null : booking.id,
+                            )
+                          }
                           className="text-gray-400 hover:text-gray-600 p-2"
                         >
                           <MoreVertical className="h-5 w-5" />
@@ -603,7 +664,7 @@ export const AttendeesList: React.FC<AttendeesListProps> = ({
                                 <Send className="h-4 w-4 mr-2" />
                                 Send Email
                               </button>
-                              {booking.status !== 'cancelled' && (
+                              {booking.status !== "cancelled" && (
                                 <button
                                   onClick={async () => {
                                     await onCancelBooking(booking.id);
@@ -627,14 +688,22 @@ export const AttendeesList: React.FC<AttendeesListProps> = ({
                         <div className="space-y-3">
                           {booking.specialRequirements && (
                             <div>
-                              <p className="text-sm font-medium text-gray-700">Special Requirements:</p>
-                              <p className="text-sm text-gray-600 mt-1">{booking.specialRequirements}</p>
+                              <p className="text-sm font-medium text-gray-700">
+                                Special Requirements:
+                              </p>
+                              <p className="text-sm text-gray-600 mt-1">
+                                {booking.specialRequirements}
+                              </p>
                             </div>
                           )}
                           <div className="flex items-center space-x-4 text-sm">
-                            <span className="text-gray-500">Amount: £{booking.paymentAmount}</span>
+                            <span className="text-gray-500">
+                              Amount: £{booking.paymentAmount}
+                            </span>
                             {booking.certificateIssued && (
-                              <span className="text-green-600">Certificate Issued</span>
+                              <span className="text-green-600">
+                                Certificate Issued
+                              </span>
                             )}
                             {booking.attendanceStatus && (
                               <span className="text-gray-500">
@@ -656,11 +725,11 @@ export const AttendeesList: React.FC<AttendeesListProps> = ({
           <div className="text-center py-12">
             <Users className="h-12 w-12 text-gray-400 mx-auto mb-4" />
             <p className="text-gray-500 text-base">No attendees found</p>
-            {(searchTerm || filterStatus !== 'all') && (
+            {(searchTerm || filterStatus !== "all") && (
               <button
                 onClick={() => {
-                  setSearchTerm('');
-                  setFilterStatus('all');
+                  setSearchTerm("");
+                  setFilterStatus("all");
                 }}
                 className="mt-3 text-sm text-primary-600 hover:text-primary-700"
               >

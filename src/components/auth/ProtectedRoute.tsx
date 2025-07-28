@@ -1,7 +1,7 @@
-import React from 'react';
-import { Navigate, useLocation } from 'react-router-dom';
-import { useAuth } from '@/contexts/AuthContext';
-import LoadingScreen from '@components/common/LoadingScreen';
+import React from "react";
+import { Navigate, useLocation } from "react-router-dom";
+import { useAuth } from "@/contexts/AuthContext";
+import LoadingScreen from "@components/common/LoadingScreen";
 
 interface ProtectedRouteProps {
   children: React.ReactNode;
@@ -12,7 +12,7 @@ interface ProtectedRouteProps {
 export const ProtectedRoute: React.FC<ProtectedRouteProps> = ({
   children,
   requireEmailVerified = true,
-  redirectTo = '/login',
+  redirectTo = "/login",
 }) => {
   const { isAuthenticated, isLoading, user } = useAuth();
   const location = useLocation();
@@ -25,21 +25,17 @@ export const ProtectedRoute: React.FC<ProtectedRouteProps> = ({
   // Redirect to login if not authenticated
   if (!isAuthenticated) {
     return (
-      <Navigate 
-        to={redirectTo} 
-        state={{ from: location.pathname }} 
-        replace 
-      />
+      <Navigate to={redirectTo} state={{ from: location.pathname }} replace />
     );
   }
 
   // Check email verification if required
   if (requireEmailVerified && user && !user.emailVerified) {
     return (
-      <Navigate 
-        to="/verify-email-required" 
-        state={{ from: location.pathname }} 
-        replace 
+      <Navigate
+        to="/verify-email-required"
+        state={{ from: location.pathname }}
+        replace
       />
     );
   }

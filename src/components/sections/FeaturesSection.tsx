@@ -1,75 +1,91 @@
-import React from 'react'
-import { motion } from 'framer-motion'
-import { 
-  Heart, Clock, MapPin, Award, Users, BookOpen,
-  GraduationCap, Building, Baby, Brain, Briefcase, CheckCircle
-} from 'lucide-react'
+import React from "react";
+import { motion } from "framer-motion";
+import {
+  Heart,
+  Clock,
+  MapPin,
+  Award,
+  Users,
+  BookOpen,
+  GraduationCap,
+  Building,
+  Baby,
+  Brain,
+  Briefcase,
+  CheckCircle,
+} from "lucide-react";
 
 const features = [
   {
     icon: Heart,
-    title: 'Emergency First Aid at Work',
-    description: 'One-day course covering life-saving basics. HSE compliant training for workplace first aiders. Certificate valid for 3 years.',
-    price: '£75',
-    duration: '1 Day',
-    color: 'text-red-600',
-    bgColor: 'bg-red-100 dark:bg-red-900/20',
+    title: "Emergency First Aid at Work",
+    description:
+      "One-day course covering life-saving basics. HSE compliant training for workplace first aiders. Certificate valid for 3 years.",
+    price: "£75",
+    duration: "1 Day",
+    color: "text-red-600",
+    bgColor: "bg-red-100 dark:bg-red-900/20",
   },
   {
     icon: Briefcase,
-    title: 'First Aid at Work',
-    description: 'Comprehensive course for designated workplace first aiders. Covers all emergency situations and advanced techniques.',
-    price: '£225',
-    duration: '1 Day',
-    color: 'text-blue-600',
-    bgColor: 'bg-blue-100 dark:bg-blue-900/20',
+    title: "First Aid at Work",
+    description:
+      "Comprehensive course for designated workplace first aiders. Covers all emergency situations and advanced techniques.",
+    price: "£225",
+    duration: "1 Day",
+    color: "text-blue-600",
+    bgColor: "bg-blue-100 dark:bg-blue-900/20",
   },
   {
     icon: Baby,
-    title: 'Paediatric First Aid',
-    description: 'Essential training for childcare professionals. Covers infant and child CPR, choking, and common childhood emergencies.',
-    price: '£95',
-    duration: '1 Day',
-    color: 'text-pink-600',
-    bgColor: 'bg-pink-100 dark:bg-pink-900/20',
+    title: "Paediatric First Aid",
+    description:
+      "Essential training for childcare professionals. Covers infant and child CPR, choking, and common childhood emergencies.",
+    price: "£95",
+    duration: "1 Day",
+    color: "text-pink-600",
+    bgColor: "bg-pink-100 dark:bg-pink-900/20",
   },
   {
     icon: Brain,
-    title: 'Mental Health First Aid',
-    description: 'Learn to recognize and support mental health issues in the workplace. Includes crisis intervention techniques.',
-    price: '£125',
-    duration: '1 Day',
-    color: 'text-purple-600',
-    bgColor: 'bg-purple-100 dark:bg-purple-900/20',
+    title: "Mental Health First Aid",
+    description:
+      "Learn to recognize and support mental health issues in the workplace. Includes crisis intervention techniques.",
+    price: "£125",
+    duration: "1 Day",
+    color: "text-purple-600",
+    bgColor: "bg-purple-100 dark:bg-purple-900/20",
   },
   {
     icon: Users,
-    title: 'Group Bookings',
-    description: 'On-site training for 6+ people. We come to your workplace. Flexible scheduling including weekends and evenings.',
-    price: 'From £60pp',
-    duration: 'Flexible',
-    color: 'text-green-600',
-    bgColor: 'bg-green-100 dark:bg-green-900/20',
+    title: "Group Bookings",
+    description:
+      "On-site training for 6+ people. We come to your workplace. Flexible scheduling including weekends and evenings.",
+    price: "From £60pp",
+    duration: "Flexible",
+    color: "text-green-600",
+    bgColor: "bg-green-100 dark:bg-green-900/20",
   },
   {
     icon: GraduationCap,
-    title: 'Refresher Training',
-    description: '3-hour refresher courses for those with existing certificates. Keep your skills sharp and certification current.',
-    price: '£45',
-    duration: '3 Hours',
-    color: 'text-indigo-600',
-    bgColor: 'bg-indigo-100 dark:bg-indigo-900/20',
+    title: "Refresher Training",
+    description:
+      "3-hour refresher courses for those with existing certificates. Keep your skills sharp and certification current.",
+    price: "£45",
+    duration: "3 Hours",
+    color: "text-indigo-600",
+    bgColor: "bg-indigo-100 dark:bg-indigo-900/20",
   },
-]
+];
 
 const additionalFeatures = [
-  { icon: Award, label: 'Ofqual Regulated' },
-  { icon: CheckCircle, label: 'HSE Approved' },
-  { icon: Clock, label: 'Same Day Certificates' },
-  { icon: MapPin, label: 'Yorkshire Based' },
-  { icon: BookOpen, label: 'Free Course Materials' },
-  { icon: Building, label: 'On-Site Training' },
-]
+  { icon: Award, label: "Ofqual Regulated" },
+  { icon: CheckCircle, label: "HSE Approved" },
+  { icon: Clock, label: "Same Day Certificates" },
+  { icon: MapPin, label: "Yorkshire Based" },
+  { icon: BookOpen, label: "Free Course Materials" },
+  { icon: Building, label: "On-Site Training" },
+];
 
 const FeaturesSection: React.FC = () => {
   return (
@@ -86,8 +102,9 @@ const FeaturesSection: React.FC = () => {
             Our First Aid Training Courses
           </h2>
           <p className="text-lg text-gray-600 dark:text-gray-400 max-w-3xl mx-auto">
-            Professional, practical first aid training delivered by an experienced instructor. 
-            All courses are Ofqual regulated and HSE approved.
+            Professional, practical first aid training delivered by an
+            experienced instructor. All courses are Ofqual regulated and HSE
+            approved.
           </p>
         </motion.div>
 
@@ -104,7 +121,9 @@ const FeaturesSection: React.FC = () => {
             >
               <div className="card h-full hover:shadow-xl transition-all duration-300 hover:-translate-y-1">
                 <div className="card-body">
-                  <div className={`w-14 h-14 rounded-xl ${feature.bgColor} flex items-center justify-center mb-4 group-hover:scale-110 transition-transform duration-300`}>
+                  <div
+                    className={`w-14 h-14 rounded-xl ${feature.bgColor} flex items-center justify-center mb-4 group-hover:scale-110 transition-transform duration-300`}
+                  >
                     <feature.icon className={`w-7 h-7 ${feature.color}`} />
                   </div>
                   <h3 className="text-xl font-semibold text-gray-900 dark:text-white mb-3">
@@ -183,7 +202,7 @@ const FeaturesSection: React.FC = () => {
         </motion.div>
       </div>
     </section>
-  )
-}
+  );
+};
 
-export default FeaturesSection
+export default FeaturesSection;

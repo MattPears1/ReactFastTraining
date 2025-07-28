@@ -1,8 +1,13 @@
-import { apiService } from '../api.service';
+import { apiService } from "../api.service";
 
 export interface CreateBookingRequest {
   sessionId: string;
-  attendees: Array<{ name: string; email: string; certificateName?: string; isPrimary?: boolean }>;
+  attendees: Array<{
+    name: string;
+    email: string;
+    certificateName?: string;
+    isPrimary?: boolean;
+  }>;
   specialRequirements?: string;
   termsAccepted: boolean;
 }
@@ -44,13 +49,17 @@ export interface BookingDetails {
 }
 
 export const bookingApi = {
-  async createBooking(data: CreateBookingRequest): Promise<CreateBookingResponse> {
-    const response = await apiService.post('/api/bookings/create', data);
+  async createBooking(
+    data: CreateBookingRequest,
+  ): Promise<CreateBookingResponse> {
+    const response = await apiService.post("/api/bookings/create", data);
     return response.data;
   },
 
-  async confirmBooking(data: ConfirmBookingRequest): Promise<{ success: boolean }> {
-    const response = await apiService.post('/api/bookings/confirm', data);
+  async confirmBooking(
+    data: ConfirmBookingRequest,
+  ): Promise<{ success: boolean }> {
+    const response = await apiService.post("/api/bookings/confirm", data);
     return response.data;
   },
 
@@ -60,21 +69,29 @@ export const bookingApi = {
   },
 
   async getBookingByReference(reference: string): Promise<BookingDetails> {
-    const response = await apiService.get(`/api/bookings/reference/${reference}`);
+    const response = await apiService.get(
+      `/api/bookings/reference/${reference}`,
+    );
     return response.data;
   },
 
   async downloadPDF(bookingId: string): Promise<Blob> {
-    const response = await apiService.get(`/api/bookings/${bookingId}/download-pdf`, {
-      responseType: 'blob',
-    });
+    const response = await apiService.get(
+      `/api/bookings/${bookingId}/download-pdf`,
+      {
+        responseType: "blob",
+      },
+    );
     return response.data;
   },
 
   async downloadICS(bookingId: string): Promise<Blob> {
-    const response = await apiService.get(`/api/bookings/${bookingId}/download-ics`, {
-      responseType: 'blob',
-    });
+    const response = await apiService.get(
+      `/api/bookings/${bookingId}/download-ics`,
+      {
+        responseType: "blob",
+      },
+    );
     return response.data;
   },
 
@@ -84,7 +101,7 @@ export const bookingApi = {
   },
 
   async getUserBookings(): Promise<BookingDetails[]> {
-    const response = await apiService.get('/api/bookings/user/current');
+    const response = await apiService.get("/api/bookings/user/current");
     return response.data;
   },
 };

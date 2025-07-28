@@ -1,4 +1,4 @@
-import axios, { AxiosInstance } from 'axios';
+import axios, { AxiosInstance } from "axios";
 
 interface DashboardMetrics {
   revenue: {
@@ -66,12 +66,14 @@ class AdminDashboardService {
 
   constructor() {
     this.api = axios.create({
-      baseURL: import.meta.env.PROD ? '' : (import.meta.env.VITE_API_URL || 'http://localhost:3000'),
+      baseURL: import.meta.env.PROD
+        ? ""
+        : import.meta.env.VITE_API_URL || "http://localhost:3000",
     });
 
     // Add auth token to requests
     this.api.interceptors.request.use((config) => {
-      const token = localStorage.getItem('adminAccessToken');
+      const token = localStorage.getItem("adminAccessToken");
       if (token) {
         config.headers.Authorization = `Bearer ${token}`;
       }
@@ -80,45 +82,56 @@ class AdminDashboardService {
   }
 
   async getDashboardOverview(): Promise<DashboardOverview> {
-    const response = await this.api.get<DashboardOverview>('/api/admin/dashboard/overview');
+    const response = await this.api.get<DashboardOverview>(
+      "/api/admin/dashboard/overview",
+    );
     return response.data;
   }
 
-  async getRevenueAnalytics(period: 'week' | 'month' | 'year' = 'month'): Promise<any> {
-    const response = await this.api.get('/api/admin/analytics/revenue', {
-      params: { period }
+  async getRevenueAnalytics(
+    period: "week" | "month" | "year" = "month",
+  ): Promise<any> {
+    const response = await this.api.get("/api/admin/analytics/revenue", {
+      params: { period },
     });
     return response.data;
   }
 
   async getBookingAnalytics(filters?: any): Promise<any> {
-    const response = await this.api.get('/api/admin/analytics/bookings', {
-      params: filters
+    const response = await this.api.get("/api/admin/analytics/bookings", {
+      params: filters,
     });
     return response.data;
   }
 
   async getUserAnalytics(segment?: string): Promise<any> {
-    const response = await this.api.get('/api/admin/analytics/users', {
-      params: { segment }
+    const response = await this.api.get("/api/admin/analytics/users", {
+      params: { segment },
     });
     return response.data;
   }
 
   async getTrafficAnalytics(page?: string): Promise<any> {
-    const response = await this.api.get('/api/admin/analytics/traffic', {
-      params: { page }
+    const response = await this.api.get("/api/admin/analytics/traffic", {
+      params: { page },
     });
     return response.data;
   }
 
-  async exportReport(reportType: string, format: 'pdf' | 'excel' | 'csv'): Promise<Blob> {
-    const response = await this.api.post('/api/admin/export/analytics', {
-      reportType,
-      format
-    }, {
-      responseType: 'blob'
-    });
+  async exportReport(
+    reportType: string,
+    format: "pdf" | "excel" | "csv",
+  ): Promise<Blob> {
+    const response = await this.api.post(
+      "/api/admin/export/analytics",
+      {
+        reportType,
+        format,
+      },
+      {
+        responseType: "blob",
+      },
+    );
     return response.data;
   }
 }

@@ -27,8 +27,8 @@ export type DeepPick<T, K extends string> = K extends `${infer K1}.${infer K2}`
     ? { [P in K1]: DeepPick<T[P], K2> }
     : never
   : K extends keyof T
-  ? { [P in K]: T[P] }
-  : never;
+    ? { [P in K]: T[P] }
+    : never;
 
 // Omit nested properties
 export type DeepOmit<T, K extends string> = K extends `${infer K1}.${infer K2}`
@@ -41,7 +41,8 @@ export type DeepOmit<T, K extends string> = K extends `${infer K1}.${infer K2}`
 export type PartialBy<T, K extends keyof T> = Omit<T, K> & Partial<Pick<T, K>>;
 
 // Make specific properties required
-export type RequiredBy<T, K extends keyof T> = Omit<T, K> & Required<Pick<T, K>>;
+export type RequiredBy<T, K extends keyof T> = Omit<T, K> &
+  Required<Pick<T, K>>;
 
 // Extract non-nullable types
 export type NonNullableKeys<T> = {
@@ -60,15 +61,18 @@ export type Paths<T> = T extends object
   : never;
 
 // Get type at path
-export type PathValue<T, P extends string> = P extends `${infer K}.${infer Rest}`
+export type PathValue<
+  T,
+  P extends string,
+> = P extends `${infer K}.${infer Rest}`
   ? K extends keyof T
     ? Rest extends Paths<T[K]>
       ? PathValue<T[K], Rest>
       : never
     : never
   : P extends keyof T
-  ? T[P]
-  : never;
+    ? T[P]
+    : never;
 
 // Function types
 export type AsyncFunction<T = void> = () => Promise<T>;
@@ -112,34 +116,31 @@ export type Result<T, E = Error> =
 export const Result = {
   ok: <T>(data: T): Result<T> => ({ success: true, data }),
   err: <E>(error: E): Result<never, E> => ({ success: false, error }),
-  
-  map: <T, U, E>(
-    result: Result<T, E>,
-    fn: (data: T) => U
-  ): Result<U, E> => {
+
+  map: <T, U, E>(result: Result<T, E>, fn: (data: T) => U): Result<U, E> => {
     if (result.success) {
       return Result.ok(fn(result.data));
     }
     return result;
   },
-  
+
   mapError: <T, E, F>(
     result: Result<T, E>,
-    fn: (error: E) => F
+    fn: (error: E) => F,
   ): Result<T, F> => {
     if (!result.success) {
       return Result.err(fn(result.error));
     }
     return result as Result<T, F>;
   },
-  
+
   unwrap: <T, E>(result: Result<T, E>): T => {
     if (result.success) {
       return result.data;
     }
     throw result.error;
   },
-  
+
   unwrapOr: <T, E>(result: Result<T, E>, defaultValue: T): T => {
     if (result.success) {
       return result.data;
@@ -154,35 +155,32 @@ export type Option<T> = T | null | undefined;
 export const Option = {
   some: <T>(value: T): Option<T> => value,
   none: <T>(): Option<T> => null,
-  
+
   isSome: <T>(option: Option<T>): option is T => {
     return option !== null && option !== undefined;
   },
-  
+
   isNone: <T>(option: Option<T>): option is null | undefined => {
     return option === null || option === undefined;
   },
-  
-  map: <T, U>(
-    option: Option<T>,
-    fn: (value: T) => U
-  ): Option<U> => {
+
+  map: <T, U>(option: Option<T>, fn: (value: T) => U): Option<U> => {
     if (Option.isSome(option)) {
       return fn(option);
     }
     return null;
   },
-  
+
   flatMap: <T, U>(
     option: Option<T>,
-    fn: (value: T) => Option<U>
+    fn: (value: T) => Option<U>,
   ): Option<U> => {
     if (Option.isSome(option)) {
       return fn(option);
     }
     return null;
   },
-  
+
   unwrapOr: <T>(option: Option<T>, defaultValue: T): T => {
     if (Option.isSome(option)) {
       return option;
@@ -194,11 +192,11 @@ export const Option = {
 // Branded types for type safety
 export type Brand<K, T> = K & { __brand: T };
 
-export type UserId = Brand<string, 'UserId'>;
-export type SessionId = Brand<string, 'SessionId'>;
-export type BookingId = Brand<string, 'BookingId'>;
-export type Email = Brand<string, 'Email'>;
-export type URL = Brand<string, 'URL'>;
+export type UserId = Brand<string, "UserId">;
+export type SessionId = Brand<string, "SessionId">;
+export type BookingId = Brand<string, "BookingId">;
+export type Email = Brand<string, "Email">;
+export type URL = Brand<string, "URL">;
 
 // Type guards
 export const isUserId = (value: string): value is UserId => {
@@ -228,13 +226,13 @@ export const isURL = (value: string): value is URL => {
 
 // Discriminated unions
 export type LoadingState<T> =
-  | { status: 'idle' }
-  | { status: 'loading' }
-  | { status: 'success'; data: T }
-  | { status: 'error'; error: Error };
+  | { status: "idle" }
+  | { status: "loading" }
+  | { status: "success"; data: T }
+  | { status: "error"; error: Error };
 
 // Template literal types
-export type HTTPMethod = 'GET' | 'POST' | 'PUT' | 'DELETE' | 'PATCH';
+export type HTTPMethod = "GET" | "POST" | "PUT" | "DELETE" | "PATCH";
 export type APIEndpoint = `/api/${string}`;
 export type Route = `/${string}`;
 
@@ -252,7 +250,7 @@ export type ArrayElement<T> = T extends (infer U)[] ? U : never;
 // Tuple utilities
 export type Head<T extends any[]> = T extends [infer H, ...any[]] ? H : never;
 export type Tail<T extends any[]> = T extends [any, ...infer Tail] ? Tail : [];
-export type Length<T extends any[]> = T['length'];
+export type Length<T extends any[]> = T["length"];
 
 // String literal manipulation
 export type Uppercase<S extends string> = S extends `${infer C}${infer R}`

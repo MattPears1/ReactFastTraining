@@ -1,4 +1,4 @@
-import React, { useCallback, useMemo, useState } from 'react';
+import React, { useCallback, useMemo, useState } from "react";
 import {
   flexRender,
   getCoreRowModel,
@@ -12,21 +12,21 @@ import {
   ColumnFiltersState,
   VisibilityState,
   RowSelectionState,
-  Table as TableType
-} from '@tanstack/react-table';
-import { 
-  ChevronDown, 
-  ChevronUp, 
+  Table as TableType,
+} from "@tanstack/react-table";
+import {
+  ChevronDown,
+  ChevronUp,
   ChevronsUpDown,
   Search,
   Filter,
   Download,
   Columns,
   MoreVertical,
-  Check
-} from 'lucide-react';
-import { cn } from '@utils/cn';
-import { useAdminStore } from '@store/adminStore';
+  Check,
+} from "lucide-react";
+import { cn } from "@utils/cn";
+import { useAdminStore } from "@store/adminStore";
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
@@ -56,15 +56,15 @@ const rankItem = (rowValue: any, searchValue: string) => {
   const options = {
     threshold: 0.3,
   };
-  
-  const searchTerms = searchValue.toLowerCase().split(' ');
+
+  const searchTerms = searchValue.toLowerCase().split(" ");
   const rowValueStr = String(rowValue).toLowerCase();
-  
-  const matches = searchTerms.every(term => rowValueStr.includes(term));
-  
+
+  const matches = searchTerms.every((term) => rowValueStr.includes(term));
+
   return {
     passed: matches,
-    score: matches ? 1 : 0
+    score: matches ? 1 : 0,
   };
 };
 
@@ -79,23 +79,23 @@ export function DataTable<TData, TValue>({
   onExport,
   onRowClick,
   loading = false,
-  emptyMessage = 'No data available',
+  emptyMessage = "No data available",
   stickyHeader = true,
-  className
+  className,
 }: DataTableProps<TData, TValue>) {
   const { viewPreferences } = useAdminStore();
   const [sorting, setSorting] = useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
   const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({});
   const [rowSelection, setRowSelection] = useState<RowSelectionState>({});
-  const [globalFilter, setGlobalFilter] = useState('');
+  const [globalFilter, setGlobalFilter] = useState("");
 
   // Enhanced columns with selection
   const enhancedColumns = useMemo(() => {
     if (!showSelection) return columns;
-    
+
     const selectionColumn: ColumnDef<TData, TValue> = {
-      id: 'select',
+      id: "select",
       header: ({ table }) => (
         <input
           type="checkbox"
@@ -116,7 +116,7 @@ export function DataTable<TData, TValue>({
       ),
       size: 40,
     };
-    
+
     return [selectionColumn, ...columns];
   }, [columns, showSelection]);
 
@@ -149,30 +149,31 @@ export function DataTable<TData, TValue>({
 
   const handleExport = useCallback(() => {
     if (onExport) {
-      const exportData = selectedRows.length > 0
-        ? selectedRows.map(row => row.original)
-        : table.getFilteredRowModel().rows.map(row => row.original);
+      const exportData =
+        selectedRows.length > 0
+          ? selectedRows.map((row) => row.original)
+          : table.getFilteredRowModel().rows.map((row) => row.original);
       onExport(exportData);
     }
   }, [onExport, selectedRows, table]);
 
   const densityClasses = {
-    compact: 'px-2 py-1 text-sm',
-    normal: 'px-4 py-2',
-    comfortable: 'px-6 py-3 text-lg'
+    compact: "px-2 py-1 text-sm",
+    normal: "px-4 py-2",
+    comfortable: "px-6 py-3 text-lg",
   };
 
   const cellPadding = densityClasses[viewPreferences.density];
 
   return (
-    <div className={cn('space-y-4', className)}>
+    <div className={cn("space-y-4", className)}>
       {/* Table Controls */}
       <div className="flex flex-col md:flex-row gap-4 items-start md:items-center justify-between">
         <div className="flex-1 max-w-sm">
           <div className="relative">
             <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-400" />
             <input
-              value={globalFilter ?? ''}
+              value={globalFilter ?? ""}
               onChange={(e) => setGlobalFilter(e.target.value)}
               placeholder="Search all columns..."
               className="w-full pl-10 pr-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-primary-500"
@@ -186,11 +187,9 @@ export function DataTable<TData, TValue>({
               {selectedRows.length} selected
             </span>
           )}
-          
-          {showColumnVisibility && (
-            <ColumnVisibilityDropdown table={table} />
-          )}
-          
+
+          {showColumnVisibility && <ColumnVisibilityDropdown table={table} />}
+
           {showExport && onExport && (
             <button
               onClick={handleExport}
@@ -207,20 +206,24 @@ export function DataTable<TData, TValue>({
       <div className="relative overflow-hidden border border-gray-200 dark:border-gray-700 rounded-lg">
         <div className="overflow-x-auto">
           <table className="w-full">
-            <thead className={cn(
-              'bg-gray-50 dark:bg-gray-800',
-              stickyHeader && 'sticky top-0 z-10'
-            )}>
+            <thead
+              className={cn(
+                "bg-gray-50 dark:bg-gray-800",
+                stickyHeader && "sticky top-0 z-10",
+              )}
+            >
               {table.getHeaderGroups().map((headerGroup) => (
                 <tr key={headerGroup.id}>
                   {headerGroup.headers.map((header) => (
                     <th
                       key={header.id}
                       className={cn(
-                        'text-left font-medium text-gray-700 dark:text-gray-300',
+                        "text-left font-medium text-gray-700 dark:text-gray-300",
                         cellPadding,
-                        header.column.getCanSort() && 'cursor-pointer select-none',
-                        viewPreferences.showGridLines && 'border-r border-gray-200 dark:border-gray-700 last:border-r-0'
+                        header.column.getCanSort() &&
+                          "cursor-pointer select-none",
+                        viewPreferences.showGridLines &&
+                          "border-r border-gray-200 dark:border-gray-700 last:border-r-0",
                       )}
                       onClick={header.column.getToggleSortingHandler()}
                       style={{ width: header.getSize() }}
@@ -230,13 +233,13 @@ export function DataTable<TData, TValue>({
                           ? null
                           : flexRender(
                               header.column.columnDef.header,
-                              header.getContext()
+                              header.getContext(),
                             )}
                         {header.column.getCanSort() && (
                           <span className="ml-auto">
-                            {header.column.getIsSorted() === 'desc' ? (
+                            {header.column.getIsSorted() === "desc" ? (
                               <ChevronDown className="w-4 h-4" />
-                            ) : header.column.getIsSorted() === 'asc' ? (
+                            ) : header.column.getIsSorted() === "asc" ? (
                               <ChevronUp className="w-4 h-4" />
                             ) : (
                               <ChevronsUpDown className="w-4 h-4 opacity-50" />
@@ -266,12 +269,13 @@ export function DataTable<TData, TValue>({
                 table.getRowModel().rows.map((row) => (
                   <tr
                     key={row.id}
-                    data-state={row.getIsSelected() && 'selected'}
+                    data-state={row.getIsSelected() && "selected"}
                     className={cn(
-                      'border-b border-gray-200 dark:border-gray-700 last:border-b-0',
-                      'hover:bg-gray-50 dark:hover:bg-gray-800/50 transition-colors',
-                      onRowClick && 'cursor-pointer',
-                      row.getIsSelected() && 'bg-primary-50 dark:bg-primary-900/20'
+                      "border-b border-gray-200 dark:border-gray-700 last:border-b-0",
+                      "hover:bg-gray-50 dark:hover:bg-gray-800/50 transition-colors",
+                      onRowClick && "cursor-pointer",
+                      row.getIsSelected() &&
+                        "bg-primary-50 dark:bg-primary-900/20",
                     )}
                     onClick={() => onRowClick?.(row.original)}
                   >
@@ -279,14 +283,15 @@ export function DataTable<TData, TValue>({
                       <td
                         key={cell.id}
                         className={cn(
-                          'text-gray-900 dark:text-white',
+                          "text-gray-900 dark:text-white",
                           cellPadding,
-                          viewPreferences.showGridLines && 'border-r border-gray-200 dark:border-gray-700 last:border-r-0'
+                          viewPreferences.showGridLines &&
+                            "border-r border-gray-200 dark:border-gray-700 last:border-r-0",
                         )}
                       >
                         {flexRender(
                           cell.column.columnDef.cell,
-                          cell.getContext()
+                          cell.getContext(),
                         )}
                       </td>
                     ))}
@@ -316,7 +321,11 @@ export function DataTable<TData, TValue>({
 }
 
 // Column Visibility Dropdown
-function ColumnVisibilityDropdown<TData>({ table }: { table: TableType<TData> }) {
+function ColumnVisibilityDropdown<TData>({
+  table,
+}: {
+  table: TableType<TData>;
+}) {
   const [open, setOpen] = useState(false);
 
   return (
@@ -328,13 +337,10 @@ function ColumnVisibilityDropdown<TData>({ table }: { table: TableType<TData> })
         <Columns className="w-4 h-4" />
         Columns
       </button>
-      
+
       {open && (
         <>
-          <div
-            className="fixed inset-0 z-10"
-            onClick={() => setOpen(false)}
-          />
+          <div className="fixed inset-0 z-10" onClick={() => setOpen(false)} />
           <div className="absolute right-0 mt-2 w-48 bg-white dark:bg-gray-800 rounded-lg shadow-lg border border-gray-200 dark:border-gray-700 z-20">
             <div className="p-2">
               {table
@@ -348,7 +354,9 @@ function ColumnVisibilityDropdown<TData>({ table }: { table: TableType<TData> })
                     <input
                       type="checkbox"
                       checked={column.getIsVisible()}
-                      onChange={(e) => column.toggleVisibility(e.target.checked)}
+                      onChange={(e) =>
+                        column.toggleVisibility(e.target.checked)
+                      }
                       className="rounded border-gray-300 dark:border-gray-600"
                     />
                     <span className="text-sm text-gray-700 dark:text-gray-300">
@@ -369,20 +377,27 @@ function DataTablePagination<TData>({ table }: { table: TableType<TData> }) {
   return (
     <div className="flex items-center justify-between">
       <div className="text-sm text-gray-700 dark:text-gray-300">
-        Showing{' '}
+        Showing{" "}
         <span className="font-medium">
-          {table.getState().pagination.pageIndex * table.getState().pagination.pageSize + 1}
-        </span>{' '}
-        to{' '}
+          {table.getState().pagination.pageIndex *
+            table.getState().pagination.pageSize +
+            1}
+        </span>{" "}
+        to{" "}
         <span className="font-medium">
           {Math.min(
-            (table.getState().pagination.pageIndex + 1) * table.getState().pagination.pageSize,
-            table.getFilteredRowModel().rows.length
+            (table.getState().pagination.pageIndex + 1) *
+              table.getState().pagination.pageSize,
+            table.getFilteredRowModel().rows.length,
           )}
-        </span>{' '}
-        of <span className="font-medium">{table.getFilteredRowModel().rows.length}</span> results
+        </span>{" "}
+        of{" "}
+        <span className="font-medium">
+          {table.getFilteredRowModel().rows.length}
+        </span>{" "}
+        results
       </div>
-      
+
       <div className="flex items-center gap-2">
         <button
           onClick={() => table.previousPage()}

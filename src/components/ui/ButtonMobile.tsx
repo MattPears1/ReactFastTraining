@@ -1,14 +1,14 @@
-import React from 'react';
-import { motion } from 'framer-motion';
-import { cn } from '@utils/cn';
+import React from "react";
+import { motion } from "framer-motion";
+import { cn } from "@utils/cn";
 
 interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
-  variant?: 'primary' | 'secondary' | 'outline' | 'ghost' | 'danger';
-  size?: 'sm' | 'md' | 'lg';
+  variant?: "primary" | "secondary" | "outline" | "ghost" | "danger";
+  size?: "sm" | "md" | "lg";
   fullWidth?: boolean;
   loading?: boolean;
   icon?: React.ReactNode;
-  iconPosition?: 'left' | 'right';
+  iconPosition?: "left" | "right";
   children: React.ReactNode;
 }
 
@@ -16,17 +16,17 @@ const ButtonMobile = React.forwardRef<HTMLButtonElement, ButtonProps>(
   (
     {
       className,
-      variant = 'primary',
-      size = 'md',
+      variant = "primary",
+      size = "md",
       fullWidth = false,
       loading = false,
       icon,
-      iconPosition = 'left',
+      iconPosition = "left",
       disabled,
       children,
       ...props
     },
-    ref
+    ref,
   ) => {
     const baseStyles = `
       inline-flex items-center justify-center font-medium rounded-lg
@@ -71,16 +71,16 @@ const ButtonMobile = React.forwardRef<HTMLButtonElement, ButtonProps>(
 
     // Mobile-optimized sizes with minimum touch targets
     const sizes = {
-      sm: 'text-sm px-4 py-2 min-h-[44px] min-w-[44px]',
-      md: 'text-base px-6 py-3 min-h-[48px] min-w-[48px]',
-      lg: 'text-lg px-8 py-4 min-h-[56px] min-w-[56px]',
+      sm: "text-sm px-4 py-2 min-h-[44px] min-w-[44px]",
+      md: "text-base px-6 py-3 min-h-[48px] min-w-[48px]",
+      lg: "text-lg px-8 py-4 min-h-[56px] min-w-[56px]",
     };
 
     // Mobile-specific responsive adjustments
     const mobileStyles = `
-      ${size === 'sm' ? 'text-base sm:text-sm' : ''}
-      ${size === 'md' ? 'text-base sm:text-base' : ''}
-      ${size === 'lg' ? 'text-lg sm:text-lg' : ''}
+      ${size === "sm" ? "text-base sm:text-sm" : ""}
+      ${size === "md" ? "text-base sm:text-base" : ""}
+      ${size === "lg" ? "text-lg sm:text-lg" : ""}
     `;
 
     return (
@@ -92,8 +92,8 @@ const ButtonMobile = React.forwardRef<HTMLButtonElement, ButtonProps>(
           variants[variant],
           sizes[size],
           mobileStyles,
-          fullWidth && 'w-full',
-          className
+          fullWidth && "w-full",
+          className,
         )}
         disabled={disabled || loading}
         {...props}
@@ -124,42 +124,40 @@ const ButtonMobile = React.forwardRef<HTMLButtonElement, ButtonProps>(
           </>
         ) : (
           <>
-            {icon && iconPosition === 'left' && (
+            {icon && iconPosition === "left" && (
               <span className="mr-2 flex-shrink-0">{icon}</span>
             )}
             {children}
-            {icon && iconPosition === 'right' && (
+            {icon && iconPosition === "right" && (
               <span className="ml-2 flex-shrink-0">{icon}</span>
             )}
           </>
         )}
       </motion.button>
     );
-  }
+  },
 );
 
-ButtonMobile.displayName = 'ButtonMobile';
+ButtonMobile.displayName = "ButtonMobile";
 
 export default ButtonMobile;
 
 // Export a set of pre-configured mobile buttons
 export const MobileButtons = {
-  Primary: (props: Omit<ButtonProps, 'variant'>) => (
+  Primary: (props: Omit<ButtonProps, "variant">) => (
     <ButtonMobile variant="primary" {...props} />
   ),
-  Secondary: (props: Omit<ButtonProps, 'variant'>) => (
+  Secondary: (props: Omit<ButtonProps, "variant">) => (
     <ButtonMobile variant="secondary" {...props} />
   ),
-  Outline: (props: Omit<ButtonProps, 'variant'>) => (
+  Outline: (props: Omit<ButtonProps, "variant">) => (
     <ButtonMobile variant="outline" {...props} />
   ),
-  Ghost: (props: Omit<ButtonProps, 'variant'>) => (
+  Ghost: (props: Omit<ButtonProps, "variant">) => (
     <ButtonMobile variant="ghost" {...props} />
   ),
-  Danger: (props: Omit<ButtonProps, 'variant'>) => (
+  Danger: (props: Omit<ButtonProps, "variant">) => (
     <ButtonMobile variant="danger" {...props} />
   ),
-  FullWidth: (props: ButtonProps) => (
-    <ButtonMobile fullWidth {...props} />
-  ),
+  FullWidth: (props: ButtonProps) => <ButtonMobile fullWidth {...props} />,
 };

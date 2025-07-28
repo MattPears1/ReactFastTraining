@@ -1,80 +1,168 @@
-import React, { useMemo, useEffect } from 'react'
-import { motion } from 'framer-motion'
-import { ArrowRight, CheckCircle, Heart, Clock, MapPin, Award, Shield, Users, BookOpen, Calendar, Phone, Star, Sun } from 'lucide-react'
-import Button from '@components/ui/Button'
-import HeroSection from '@components/sections/HeroSection'
-import CTASection from '@components/sections/CTASection'
-import SEO from '@components/common/SEO'
-import { Link } from 'react-router-dom'
-import { useNotifications } from '@contexts/NotificationContext'
-import { useTheme } from '@contexts/ThemeContext'
-import { getCourseColorTheme } from '@/config/courseColorThemes.config'
-import { TestimonialsSection } from '@/components/testimonials/TestimonialsSection'
+import React, { useMemo, useEffect } from "react";
+import { motion } from "framer-motion";
+import {
+  ArrowRight,
+  CheckCircle,
+  Heart,
+  Clock,
+  MapPin,
+  Award,
+  Shield,
+  Users,
+  BookOpen,
+  Calendar,
+  Phone,
+  Star,
+  Sun,
+} from "lucide-react";
+import Button from "@components/ui/Button";
+import HeroSection from "@components/sections/HeroSection";
+import CTASection from "@components/sections/CTASection";
+import SEO from "@components/common/SEO";
+import { Link } from "react-router-dom";
+import { useNotifications } from "@contexts/NotificationContext";
+import { useTheme } from "@contexts/ThemeContext";
+import { getCourseColorTheme } from "@/config/courseColorThemes.config";
+import { TestimonialsSection } from "@/components/testimonials/TestimonialsSection";
 
 const HomePage: React.FC = () => {
-  const { addNotification } = useNotifications()
-  const { setTheme } = useTheme()
+  const { addNotification } = useNotifications();
+  const { setTheme } = useTheme();
 
   useEffect(() => {
-    const firstVisit = localStorage.getItem('firstVisit')
+    const firstVisit = localStorage.getItem("firstVisit");
     if (!firstVisit) {
       addNotification({
-        type: 'info',
-        title: 'Light Mode Available',
-        message: 'Prefer a lighter background? Switch to light mode.',
+        type: "info",
+        title: "Light Mode Available",
+        message: "Prefer a lighter background? Switch to light mode.",
         persistent: true,
         icon: <Sun className="w-5 h-5" />,
         actions: [
           {
-            label: 'Switch to Light Mode',
-            onClick: () => setTheme('light'),
+            label: "Switch to Light Mode",
+            onClick: () => setTheme("light"),
           },
         ],
-      })
-      localStorage.setItem('firstVisit', 'false')
+      });
+      localStorage.setItem("firstVisit", "false");
     }
-  }, [addNotification, setTheme])
+  }, [addNotification, setTheme]);
 
-  const courseCategories = useMemo(() => [
-    // Row 1
-    { title: 'First Aid at Work (FAW)', duration: '1 Day', price: '£200', href: '/courses/faw' },
-    { title: 'Emergency First Aid at Work (EFAW)', duration: '1 Day', price: '£100', href: '/courses/efaw' },
-    // Row 2
-    { title: 'Paediatric First Aid (PFA)', duration: '1 Day', price: '£120', href: '/courses/paediatric' },
-    { title: 'Emergency Paediatric First Aid (EPFA)', duration: '5 Hours', price: '£100', href: '/courses/emergency-paediatric' },
-    // Row 3
-    { title: 'Activity First Aid (Act FA)', duration: '1 Day', price: '£120', href: '/courses/activity-first-aid' },
-    { title: 'CPR and AED', duration: '3 Hours', price: '£60', href: '/courses/cpr-aed' },
-    // Row 4
-    { title: 'First Aid at Work Requalification (FAW Requal)', duration: '5 Hours', price: '£150', href: '/courses/faw-requalification' },
-    { title: 'Emergency First Aid at Work Requalification (EFAW Requal)', duration: '3 Hours', price: '£70', href: '/courses/efaw-requalification' },
-    // Row 5
-    { title: 'Paediatric First Aid Requalification (PFA Requal)', duration: '3 Hours', price: '£90', href: '/courses/paediatric-requalification' },
-    { title: 'Emergency Paediatric First Aid Requalification (EPFA Requal)', duration: '3 Hours', price: '£70', href: '/courses/emergency-paediatric-requalification' },
-    // Row 6
-    { title: 'Activity First Aid Requalification (Act FA Requal)', duration: '3 Hours', price: '£90', href: '/courses/activity-first-aid-requalification' },
-    { title: 'Annual Skills Refresher', duration: '3 Hours', price: '£60', href: '/courses/annual-skills-refresher' },
-    // Row 7
-    { title: 'Oxygen Therapy Course', duration: '3 Hours', price: '£80', href: '/courses/oxygen-therapy' },
-  ], [])
+  const courseCategories = useMemo(
+    () => [
+      // Row 1
+      {
+        title: "First Aid at Work (FAW)",
+        duration: "1 Day",
+        price: "£200",
+        href: "/courses/faw",
+      },
+      {
+        title: "Emergency First Aid at Work (EFAW)",
+        duration: "1 Day",
+        price: "£100",
+        href: "/courses/efaw",
+      },
+      // Row 2
+      {
+        title: "Paediatric First Aid (PFA)",
+        duration: "1 Day",
+        price: "£120",
+        href: "/courses/paediatric",
+      },
+      {
+        title: "Emergency Paediatric First Aid (EPFA)",
+        duration: "5 Hours",
+        price: "£100",
+        href: "/courses/emergency-paediatric",
+      },
+      // Row 3
+      {
+        title: "Activity First Aid (Act FA)",
+        duration: "1 Day",
+        price: "£120",
+        href: "/courses/activity-first-aid",
+      },
+      {
+        title: "CPR and AED",
+        duration: "3 Hours",
+        price: "£60",
+        href: "/courses/cpr-aed",
+      },
+      // Row 4
+      {
+        title: "First Aid at Work Requalification (FAW Requal)",
+        duration: "5 Hours",
+        price: "£150",
+        href: "/courses/faw-requalification",
+      },
+      {
+        title: "Emergency First Aid at Work Requalification (EFAW Requal)",
+        duration: "3 Hours",
+        price: "£70",
+        href: "/courses/efaw-requalification",
+      },
+      // Row 5
+      {
+        title: "Paediatric First Aid Requalification (PFA Requal)",
+        duration: "3 Hours",
+        price: "£90",
+        href: "/courses/paediatric-requalification",
+      },
+      {
+        title: "Emergency Paediatric First Aid Requalification (EPFA Requal)",
+        duration: "3 Hours",
+        price: "£70",
+        href: "/courses/emergency-paediatric-requalification",
+      },
+      // Row 6
+      {
+        title: "Activity First Aid Requalification (Act FA Requal)",
+        duration: "3 Hours",
+        price: "£90",
+        href: "/courses/activity-first-aid-requalification",
+      },
+      {
+        title: "Annual Skills Refresher",
+        duration: "3 Hours",
+        price: "£60",
+        href: "/courses/annual-skills-refresher",
+      },
+      // Row 7
+      {
+        title: "Oxygen Therapy Course",
+        duration: "3 Hours",
+        price: "£80",
+        href: "/courses/oxygen-therapy",
+      },
+    ],
+    [],
+  );
 
-  const trainingApproach = useMemo(() => [
-    {
-      icon: MapPin,
-      title: 'Onsite training',
-      description: 'With the option of onsite first aid training for your flexibility and convenience',
-    },
-    {
-      icon: Users,
-      title: 'Group Sizes',
-      description: 'Maximum 12 learners per course ensuring personal attention and effective learning',
-    },
-    {
-      icon: Award,
-      title: 'Experienced trainer',
-      description: 'Learn from a professional with a military and emergency service background',
-    },
-  ], [])
+  const trainingApproach = useMemo(
+    () => [
+      {
+        icon: MapPin,
+        title: "Onsite training",
+        description:
+          "With the option of onsite first aid training for your flexibility and convenience",
+      },
+      {
+        icon: Users,
+        title: "Group Sizes",
+        description:
+          "Maximum 12 learners per course ensuring personal attention and effective learning",
+      },
+      {
+        icon: Award,
+        title: "Experienced trainer",
+        description:
+          "Learn from a professional with a military and emergency service background",
+      },
+    ],
+    [],
+  );
 
   return (
     <div className="relative bg-white dark:bg-gray-900">
@@ -84,13 +172,13 @@ const HomePage: React.FC = () => {
         keywords="first aid training Yorkshire, first aid courses Leeds, first aid training Sheffield, EFAW Yorkshire, emergency first aid Bradford, HSE approved first aid training, first aid training near me"
         canonical="/"
       />
-      
+
       <HeroSection />
-      
+
       {/* Course Section - Simple 2-Column Grid */}
       <section className="relative py-12 sm:py-16 md:py-20 overflow-hidden">
         <div className="absolute inset-0 bg-gradient-to-b from-gray-50 to-white dark:from-gray-800 dark:to-gray-900" />
-        
+
         <div className="container px-4 sm:px-6 lg:px-8 relative z-10">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -102,25 +190,27 @@ const HomePage: React.FC = () => {
               Available Training Courses
             </h2>
             <p className="text-base sm:text-lg text-gray-600 dark:text-gray-400 max-w-2xl mx-auto px-4 sm:px-0">
-              All courses are Ofqual regulated and HSE compliant, delivered by an experienced professional
+              All courses are Ofqual regulated and HSE compliant, delivered by
+              an experienced professional
             </p>
           </motion.div>
 
           <div className="grid sm:grid-cols-2 gap-4 sm:gap-6 max-w-6xl mx-auto">
             {courseCategories.map((course, index) => {
               // Skip the last course for special handling
-              if (index === courseCategories.length - 1) return null
-              
+              if (index === courseCategories.length - 1) return null;
+
               // Determine course category and color theme
-              const title = course.title.toLowerCase()
-              const isWorkplace = title.includes('work') && !title.includes('paediatric')
-              const isPaediatric = title.includes('paediatric')
-              const isSpecialist = !isWorkplace && !isPaediatric
-              const isPrimary = index < 2 // FAW and EFAW are most popular
-              
+              const title = course.title.toLowerCase();
+              const isWorkplace =
+                title.includes("work") && !title.includes("paediatric");
+              const isPaediatric = title.includes("paediatric");
+              const isSpecialist = !isWorkplace && !isPaediatric;
+              const isPrimary = index < 2; // FAW and EFAW are most popular
+
               // Get color theme
-              const colorTheme = getCourseColorTheme(course.title)
-              
+              const colorTheme = getCourseColorTheme(course.title);
+
               return (
                 <motion.div
                   key={course.title}
@@ -135,9 +225,9 @@ const HomePage: React.FC = () => {
                     className={`
                       block rounded-xl overflow-hidden transition-all duration-300
                       bg-gradient-to-br shadow-lg hover:shadow-2xl transform hover:-translate-y-1
-                      ${isWorkplace ? 'from-blue-50 via-white to-blue-50/30 dark:from-blue-900/20 dark:via-gray-800 dark:to-blue-900/10 border border-blue-200 dark:border-blue-700' : ''}
-                      ${isPaediatric ? 'from-purple-50 via-white to-purple-50/30 dark:from-purple-900/20 dark:via-gray-800 dark:to-purple-900/10 border border-purple-200 dark:border-purple-700' : ''}
-                      ${isSpecialist ? 'from-orange-50 via-white to-orange-50/30 dark:from-orange-900/20 dark:via-gray-800 dark:to-orange-900/10 border border-orange-200 dark:border-orange-700' : ''}
+                      ${isWorkplace ? "from-blue-50 via-white to-blue-50/30 dark:from-blue-900/20 dark:via-gray-800 dark:to-blue-900/10 border border-blue-200 dark:border-blue-700" : ""}
+                      ${isPaediatric ? "from-purple-50 via-white to-purple-50/30 dark:from-purple-900/20 dark:via-gray-800 dark:to-purple-900/10 border border-purple-200 dark:border-purple-700" : ""}
+                      ${isSpecialist ? "from-orange-50 via-white to-orange-50/30 dark:from-orange-900/20 dark:via-gray-800 dark:to-orange-900/10 border border-orange-200 dark:border-orange-700" : ""}
                       relative p-6 sm:p-8 min-h-[140px]
                     `}
                   >
@@ -147,11 +237,11 @@ const HomePage: React.FC = () => {
                         Most Popular
                       </span>
                     )}
-                    
+
                     <h3 className="text-lg sm:text-xl font-bold text-gray-900 dark:text-white mb-4 pr-20">
                       {course.title}
                     </h3>
-                    
+
                     <div className="flex items-end justify-between">
                       <div className="flex items-center gap-2">
                         <Clock className="w-4 h-4 text-gray-500 dark:text-gray-400" />
@@ -160,31 +250,35 @@ const HomePage: React.FC = () => {
                         </span>
                       </div>
                       <div className="text-right">
-                        <span className={`
+                        <span
+                          className={`
                           text-2xl font-bold
-                          ${isWorkplace ? 'text-blue-600 dark:text-blue-400' : ''}
-                          ${isPaediatric ? 'text-purple-600 dark:text-purple-400' : ''}
-                          ${isSpecialist ? 'text-orange-600 dark:text-orange-400' : ''}
-                        `}>
+                          ${isWorkplace ? "text-blue-600 dark:text-blue-400" : ""}
+                          ${isPaediatric ? "text-purple-600 dark:text-purple-400" : ""}
+                          ${isSpecialist ? "text-orange-600 dark:text-orange-400" : ""}
+                        `}
+                        >
                           {course.price}
                         </span>
                       </div>
                     </div>
-                    
+
                     {/* Hover effect arrow */}
-                    <ArrowRight className={`
+                    <ArrowRight
+                      className={`
                       absolute bottom-6 right-6 w-5 h-5 transform translate-x-2 opacity-0 
                       group-hover:translate-x-0 group-hover:opacity-100 transition-all duration-300
-                      ${isWorkplace ? 'text-gray-400 group-hover:text-blue-500' : ''}
-                      ${isPaediatric ? 'text-gray-400 group-hover:text-purple-500' : ''}
-                      ${isSpecialist ? 'text-gray-400 group-hover:text-orange-500' : ''}
-                    `} />
+                      ${isWorkplace ? "text-gray-400 group-hover:text-blue-500" : ""}
+                      ${isPaediatric ? "text-gray-400 group-hover:text-purple-500" : ""}
+                      ${isSpecialist ? "text-gray-400 group-hover:text-orange-500" : ""}
+                    `}
+                    />
                   </Link>
                 </motion.div>
-              )
+              );
             })}
           </div>
-          
+
           {/* Last course - Oxygen Therapy */}
           <div className="flex justify-center mt-6">
             <motion.div
@@ -201,11 +295,11 @@ const HomePage: React.FC = () => {
                 <span className="absolute top-3 right-3 bg-sky-500 text-white text-xs font-bold px-2 py-1 rounded-full">
                   Specialist
                 </span>
-                
+
                 <h3 className="text-lg sm:text-xl font-bold text-gray-900 dark:text-white mb-4 pr-20">
                   {courseCategories[courseCategories.length - 1].title}
                 </h3>
-                
+
                 <div className="flex items-end justify-between">
                   <div className="flex items-center gap-2">
                     <Clock className="w-4 h-4 text-gray-500 dark:text-gray-400" />
@@ -219,7 +313,7 @@ const HomePage: React.FC = () => {
                     </span>
                   </div>
                 </div>
-                
+
                 <ArrowRight className="absolute bottom-6 right-6 w-5 h-5 text-gray-400 group-hover:text-sky-500 transform translate-x-2 opacity-0 group-hover:translate-x-0 group-hover:opacity-100 transition-all duration-300" />
               </Link>
             </motion.div>
@@ -254,20 +348,24 @@ const HomePage: React.FC = () => {
                 transition={{ delay: index * 0.1 }}
                 className="bg-white dark:bg-gray-800 rounded-xl sm:rounded-2xl p-5 sm:p-6 shadow-lg hover:shadow-xl transition-all duration-300"
               >
-                <div className={`
+                <div
+                  className={`
                   w-12 h-12 rounded-lg flex items-center justify-center mb-4
-                  ${index === 0 ? 'bg-primary-100 dark:bg-primary-900/30' : ''}
-                  ${index === 1 ? 'bg-secondary-100 dark:bg-secondary-900/30' : ''}
-                  ${index === 2 ? 'bg-accent-100 dark:bg-accent-900/30' : ''}
-                  ${index === 3 ? 'bg-info-light dark:bg-info-dark/30' : ''}
-                `}>
-                  <item.icon className={`
+                  ${index === 0 ? "bg-primary-100 dark:bg-primary-900/30" : ""}
+                  ${index === 1 ? "bg-secondary-100 dark:bg-secondary-900/30" : ""}
+                  ${index === 2 ? "bg-accent-100 dark:bg-accent-900/30" : ""}
+                  ${index === 3 ? "bg-info-light dark:bg-info-dark/30" : ""}
+                `}
+                >
+                  <item.icon
+                    className={`
                     w-6 h-6
-                    ${index === 0 ? 'text-primary-600 dark:text-primary-400' : ''}
-                    ${index === 1 ? 'text-secondary-600 dark:text-secondary-400' : ''}
-                    ${index === 2 ? 'text-accent-600 dark:text-accent-400' : ''}
-                    ${index === 3 ? 'text-info dark:text-info-light' : ''}
-                  `} />
+                    ${index === 0 ? "text-primary-600 dark:text-primary-400" : ""}
+                    ${index === 1 ? "text-secondary-600 dark:text-secondary-400" : ""}
+                    ${index === 2 ? "text-accent-600 dark:text-accent-400" : ""}
+                    ${index === 3 ? "text-info dark:text-info-light" : ""}
+                  `}
+                  />
                 </div>
                 <h3 className="text-lg sm:text-xl font-semibold text-gray-900 dark:text-white mb-2">
                   {item.title}
@@ -294,7 +392,8 @@ const HomePage: React.FC = () => {
               Start Your First Aid Journey
             </h2>
             <p className="text-base sm:text-lg text-gray-600 dark:text-gray-400 max-w-2xl mx-auto px-4 sm:px-0">
-              Join a growing community of trained first aiders across South Yorkshire
+              Join a growing community of trained first aiders across South
+              Yorkshire
             </p>
           </motion.div>
 
@@ -313,7 +412,9 @@ const HomePage: React.FC = () => {
                   <span className="text-white text-xs font-bold">1</span>
                 </div>
               </div>
-              <h3 className="text-lg sm:text-xl font-semibold text-gray-900 dark:text-white mb-2">Choose Your Course</h3>
+              <h3 className="text-lg sm:text-xl font-semibold text-gray-900 dark:text-white mb-2">
+                Choose Your Course
+              </h3>
               <p className="text-sm sm:text-base text-gray-600 dark:text-gray-400 px-4 sm:px-0">
                 Select from our range of accredited first aid courses
               </p>
@@ -334,9 +435,12 @@ const HomePage: React.FC = () => {
                   <span className="text-white text-xs font-bold">2</span>
                 </div>
               </div>
-              <h3 className="text-lg sm:text-xl font-semibold text-gray-900 dark:text-white mb-2">Book Your Date</h3>
+              <h3 className="text-lg sm:text-xl font-semibold text-gray-900 dark:text-white mb-2">
+                Book Your Date
+              </h3>
               <p className="text-sm sm:text-base text-gray-600 dark:text-gray-400 px-4 sm:px-0">
-                Flexible scheduling to suit your needs, including evenings and weekends
+                Flexible scheduling to suit your needs, including evenings and
+                weekends
               </p>
             </motion.div>
 
@@ -355,7 +459,9 @@ const HomePage: React.FC = () => {
                   <span className="text-white text-xs font-bold">3</span>
                 </div>
               </div>
-              <h3 className="text-lg sm:text-xl font-semibold text-gray-900 dark:text-white mb-2">Get Certified</h3>
+              <h3 className="text-lg sm:text-xl font-semibold text-gray-900 dark:text-white mb-2">
+                Get Certified
+              </h3>
               <p className="text-sm sm:text-base text-gray-600 dark:text-gray-400 px-4 sm:px-0">
                 Receive your certificate upon successful completion
               </p>
@@ -370,7 +476,9 @@ const HomePage: React.FC = () => {
             className="max-w-4xl mx-auto"
           >
             <div className="bg-gradient-to-r from-primary-500 to-secondary-500 rounded-2xl sm:rounded-3xl p-6 sm:p-8 md:p-12 text-white text-center shadow-2xl">
-              <h3 className="text-2xl sm:text-3xl font-bold mb-3 sm:mb-4">Ready to Learn Life-Saving Skills?</h3>
+              <h3 className="text-2xl sm:text-3xl font-bold mb-3 sm:mb-4">
+                Ready to Learn Life-Saving Skills?
+              </h3>
               <p className="text-base sm:text-lg md:text-xl mb-6 sm:mb-8 text-white/90">
                 Contact us today for a personalized quote for your team
               </p>
@@ -407,7 +515,7 @@ const HomePage: React.FC = () => {
               Our certifications meet all regulatory requirements
             </p>
           </div>
-          
+
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 sm:gap-6 md:gap-8 max-w-4xl mx-auto">
             <motion.div
               initial={{ opacity: 0, y: 20 }}
@@ -418,9 +526,11 @@ const HomePage: React.FC = () => {
               <div className="w-16 h-16 sm:w-20 sm:h-20 md:w-24 md:h-24 bg-white dark:bg-gray-700 rounded-xl sm:rounded-2xl shadow-lg flex items-center justify-center mb-2 sm:mb-3 mx-auto">
                 <Shield className="w-8 h-8 sm:w-10 sm:h-10 md:w-12 md:h-12 text-primary-600 dark:text-primary-400" />
               </div>
-              <p className="text-xs sm:text-sm font-medium text-gray-900 dark:text-white">Ofqual Regulated</p>
+              <p className="text-xs sm:text-sm font-medium text-gray-900 dark:text-white">
+                Ofqual Regulated
+              </p>
             </motion.div>
-            
+
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
@@ -431,9 +541,11 @@ const HomePage: React.FC = () => {
               <div className="w-16 h-16 sm:w-20 sm:h-20 md:w-24 md:h-24 bg-white dark:bg-gray-700 rounded-xl sm:rounded-2xl shadow-lg flex items-center justify-center mb-2 sm:mb-3 mx-auto">
                 <Award className="w-8 h-8 sm:w-10 sm:h-10 md:w-12 md:h-12 text-secondary-600 dark:text-secondary-400" />
               </div>
-              <p className="text-xs sm:text-sm font-medium text-gray-900 dark:text-white">HSE Approved</p>
+              <p className="text-xs sm:text-sm font-medium text-gray-900 dark:text-white">
+                HSE Approved
+              </p>
             </motion.div>
-            
+
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
@@ -444,9 +556,11 @@ const HomePage: React.FC = () => {
               <div className="w-16 h-16 sm:w-20 sm:h-20 md:w-24 md:h-24 bg-white dark:bg-gray-700 rounded-xl sm:rounded-2xl shadow-lg flex items-center justify-center mb-2 sm:mb-3 mx-auto">
                 <CheckCircle className="w-8 h-8 sm:w-10 sm:h-10 md:w-12 md:h-12 text-accent-600 dark:text-accent-400" />
               </div>
-              <p className="text-xs sm:text-sm font-medium text-gray-900 dark:text-white">CPD Certified</p>
+              <p className="text-xs sm:text-sm font-medium text-gray-900 dark:text-white">
+                CPD Certified
+              </p>
             </motion.div>
-            
+
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
@@ -457,7 +571,9 @@ const HomePage: React.FC = () => {
               <div className="w-16 h-16 sm:w-20 sm:h-20 md:w-24 md:h-24 bg-white dark:bg-gray-700 rounded-xl sm:rounded-2xl shadow-lg flex items-center justify-center mb-2 sm:mb-3 mx-auto">
                 <Star className="w-8 h-8 sm:w-10 sm:h-10 md:w-12 md:h-12 text-info dark:text-info-light" />
               </div>
-              <p className="text-xs sm:text-sm font-medium text-gray-900 dark:text-white">Quality Assured</p>
+              <p className="text-xs sm:text-sm font-medium text-gray-900 dark:text-white">
+                Quality Assured
+              </p>
             </motion.div>
           </div>
         </div>
@@ -479,7 +595,8 @@ const HomePage: React.FC = () => {
               Training Locations Across South Yorkshire
             </h2>
             <p className="text-base sm:text-lg text-gray-600 dark:text-gray-400 max-w-2xl mx-auto px-4 sm:px-0">
-              We can come to your workplace anywhere in South Yorkshire and surrounding areas, or training venues are available if needed.
+              We can come to your workplace anywhere in South Yorkshire and
+              surrounding areas, or training venues are available if needed.
             </p>
           </motion.div>
 
@@ -500,7 +617,7 @@ const HomePage: React.FC = () => {
         </div>
       </section>
     </div>
-  )
-}
+  );
+};
 
-export default HomePage
+export default HomePage;

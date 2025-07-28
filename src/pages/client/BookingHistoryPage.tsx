@@ -1,22 +1,25 @@
-import React, { useState, useEffect, useCallback } from 'react';
-import { useParams } from 'react-router-dom';
-import { Search, Filter, Download, WifiOff } from 'lucide-react';
-import { ClientPortalLayout } from '@/components/client/shared/ClientPortalLayout';
-import { BookingFilters } from '@/components/client/booking-history/BookingFilters';
-import { BookingHistoryList } from '@/components/client/booking-history/BookingHistoryList';
-import { BookingDetailModal } from '@/components/client/booking-history/BookingDetailModal';
-import { LoadingState } from '@/components/client/shared/LoadingStates';
-import { useBookingHistory } from '@/hooks/client/useBookingHistory';
-import { usePageTracking, analytics } from '@/utils/client/analytics';
-import { useOnlineStatus, usePersistedState } from '@/utils/client/persistence';
-import { useVirtualScroll } from '@/utils/client/performance';
-import { downloadRateLimiter } from '@/utils/client/security';
-import type { BookingHistoryItem, BookingFilters as BookingFiltersType } from '@/types/client/booking.types';
+import React, { useState, useEffect, useCallback } from "react";
+import { useParams } from "react-router-dom";
+import { Search, Filter, Download, WifiOff } from "lucide-react";
+import { ClientPortalLayout } from "@/components/client/shared/ClientPortalLayout";
+import { BookingFilters } from "@/components/client/booking-history/BookingFilters";
+import { BookingHistoryList } from "@/components/client/booking-history/BookingHistoryList";
+import { BookingDetailModal } from "@/components/client/booking-history/BookingDetailModal";
+import { LoadingState } from "@/components/client/shared/LoadingStates";
+import { useBookingHistory } from "@/hooks/client/useBookingHistory";
+import { usePageTracking, analytics } from "@/utils/client/analytics";
+import { useOnlineStatus, usePersistedState } from "@/utils/client/persistence";
+import { useVirtualScroll } from "@/utils/client/performance";
+import { downloadRateLimiter } from "@/utils/client/security";
+import type {
+  BookingHistoryItem,
+  BookingFilters as BookingFiltersType,
+} from "@/types/client/booking.types";
 
 export const BookingHistoryPage: React.FC = () => {
   const { id } = useParams<{ id?: string }>();
   const isOnline = useOnlineStatus();
-  
+
   // Use enhanced booking history hook
   const {
     bookings,
@@ -31,46 +34,70 @@ export const BookingHistoryPage: React.FC = () => {
     refresh,
     exportToCSV,
   } = useBookingHistory({ pageSize: 20 });
-  
-  const [selectedBooking, setSelectedBooking] = useState<string | null>(id || null);
-  const [showFilters, setShowFilters] = usePersistedState('booking-filters-visible', false, { storage: 'session' });
+
+  const [selectedBooking, setSelectedBooking] = useState<string | null>(
+    id || null,
+  );
+  const [showFilters, setShowFilters] = usePersistedState(
+    "booking-filters-visible",
+    false,
+    { storage: "session" },
+  );
   const [exportLoading, setExportLoading] = useState(false);
-  
+
   // Analytics
   usePageTracking();
-  
+
   useEffect(() => {
     if (id) {
       setSelectedBooking(id);
-      analytics.trackPageView('/client/booking-history', { bookingId: id });
+      analytics.trackPageView("/client/booking-history", { bookingId: id });
     }
   }, [id]);
-  
+
   // Track filter usage
   useEffect(() => {
-    if (filters.status || filters.courseType || filters.startDate || filters.endDate) {
-      analytics.trackUserAction('Filter Applied', 'Booking History', undefined, filters);
+    if (
+      filters.status ||
+      filters.courseType ||
+      filters.startDate ||
+      filters.endDate
+    ) {
+      analytics.trackUserAction(
+        "Filter Applied",
+        "Booking History",
+        undefined,
+        filters,
+      );
     }
   }, [filters]);
 
   const handleExportHistory = async () => {
     // Rate limit check
-    if (!downloadRateLimiter.check('export-history')) {
-      analytics.trackError(new Error('Export rate limit exceeded'), { userId: 'current' });
-      alert('Please wait before exporting again.');
+    if (!downloadRateLimiter.check("export-history")) {
+      analytics.trackError(new Error("Export rate limit exceeded"), {
+        userId: "current",
+      });
+      alert("Please wait before exporting again.");
       return;
     }
-    
+
     setExportLoading(true);
-    analytics.trackUserAction('Export', 'Booking History');
-    
+    analytics.trackUserAction("Export", "Booking History");
+
     try {
       await exportToCSV();
-      analytics.trackUserAction('Export Success', 'Booking History', bookings.length);
+      analytics.trackUserAction(
+        "Export Success",
+        "Booking History",
+        bookings.length,
+      );
     } catch (error) {
-      console.error('Failed to export history:', error);
-      analytics.trackError(error instanceof Error ? error : new Error('Export failed'));
-      alert('Failed to export booking history. Please try again.');
+      console.error("Failed to export history:", error);
+      analytics.trackError(
+        error instanceof Error ? error : new Error("Export failed"),
+      );
+      alert("Failed to export booking history. Please try again.");
     } finally {
       setExportLoading(false);
     }
@@ -78,13 +105,13 @@ export const BookingHistoryPage: React.FC = () => {
 
   const resetFilters = () => {
     setFilters({});
-    setSearchTerm('');
-    analytics.trackUserAction('Reset Filters', 'Booking History');
+    setSearchTerm("");
+    analytics.trackUserAction("Reset Filters", "Booking History");
   };
-  
+
   const handlePageChange = (page: number) => {
     setPage(page);
-    analytics.trackUserAction('Page Change', 'Booking History', page);
+    analytics.trackUserAction("Page Change", "Booking History", page);
   };
 
   return (
@@ -100,14 +127,16 @@ export const BookingHistoryPage: React.FC = () => {
                 View and manage all your past and upcoming bookings
               </p>
             </div>
-            
+
             <button
               onClick={handleExportHistory}
               disabled={exportLoading}
               className="flex items-center gap-2 px-3 sm:px-4 py-2 text-sm bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 disabled:opacity-50 disabled:cursor-not-allowed touch-target"
             >
               <Download className="w-4 h-4" />
-              <span className="whitespace-nowrap">{exportLoading ? 'Exporting...' : 'Export CSV'}</span>
+              <span className="whitespace-nowrap">
+                {exportLoading ? "Exporting..." : "Export CSV"}
+              </span>
             </button>
           </div>
         </div>
@@ -125,14 +154,17 @@ export const BookingHistoryPage: React.FC = () => {
                 className="w-full pl-9 sm:pl-10 pr-3 sm:pr-4 py-2 text-sm sm:text-base border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-800 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-primary-500"
               />
             </div>
-            
+
             <button
               onClick={() => setShowFilters(!showFilters)}
               className="flex items-center justify-center gap-2 px-3 sm:px-4 py-2 text-sm border border-gray-300 dark:border-gray-600 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 touch-target"
             >
               <Filter className="w-4 h-4" />
               <span>Filters</span>
-              {(filters.status || filters.courseType || filters.startDate || filters.endDate) && (
+              {(filters.status ||
+                filters.courseType ||
+                filters.startDate ||
+                filters.endDate) && (
                 <span className="ml-1 px-1.5 sm:px-2 py-0.5 bg-primary-100 dark:bg-primary-900 text-primary-700 dark:text-primary-300 text-xs rounded-full">
                   Active
                 </span>
@@ -160,7 +192,7 @@ export const BookingHistoryPage: React.FC = () => {
             </div>
           </div>
         )}
-        
+
         {/* Booking List with enhanced loading states */}
         <LoadingState
           isLoading={loading && bookings.length === 0}
@@ -172,7 +204,11 @@ export const BookingHistoryPage: React.FC = () => {
               <p className="text-gray-600 dark:text-gray-400 mb-4">
                 No bookings found matching your criteria.
               </p>
-              {(filters.status || filters.courseType || filters.startDate || filters.endDate || searchTerm) && (
+              {(filters.status ||
+                filters.courseType ||
+                filters.startDate ||
+                filters.endDate ||
+                searchTerm) && (
                 <button
                   onClick={resetFilters}
                   className="text-primary-600 hover:text-primary-700 underline"
@@ -188,7 +224,12 @@ export const BookingHistoryPage: React.FC = () => {
             loading={loading && bookings.length > 0}
             onSelectBooking={(bookingId) => {
               setSelectedBooking(bookingId);
-              analytics.trackUserAction('View Booking', 'Booking History', undefined, { bookingId });
+              analytics.trackUserAction(
+                "View Booking",
+                "Booking History",
+                undefined,
+                { bookingId },
+              );
             }}
             pagination={pagination}
             onPageChange={handlePageChange}

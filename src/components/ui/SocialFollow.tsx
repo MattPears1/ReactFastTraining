@@ -1,5 +1,5 @@
-import React from 'react';
-import { motion } from 'framer-motion';
+import React from "react";
+import { motion } from "framer-motion";
 import {
   Facebook,
   Twitter,
@@ -9,19 +9,19 @@ import {
   UserPlus,
   Users,
   ExternalLink,
-} from 'lucide-react';
-import { clsx } from 'clsx';
+} from "lucide-react";
+import { clsx } from "clsx";
 
 export interface SocialFollowProps {
   platforms: PlatformFollowData[];
-  variant?: 'default' | 'compact' | 'detailed';
-  layout?: 'horizontal' | 'vertical' | 'grid';
+  variant?: "default" | "compact" | "detailed";
+  layout?: "horizontal" | "vertical" | "grid";
   showFollowerCount?: boolean;
   className?: string;
 }
 
 export interface PlatformFollowData {
-  platform: 'facebook' | 'twitter' | 'instagram' | 'youtube' | 'linkedin';
+  platform: "facebook" | "twitter" | "instagram" | "youtube" | "linkedin";
   username: string;
   url: string;
   followers?: number;
@@ -30,39 +30,40 @@ export interface PlatformFollowData {
 
 const platformConfig = {
   facebook: {
-    name: 'Facebook',
+    name: "Facebook",
     icon: Facebook,
-    color: 'bg-blue-600 hover:bg-blue-700',
-    textColor: 'text-blue-600',
-    followText: 'Like',
+    color: "bg-blue-600 hover:bg-blue-700",
+    textColor: "text-blue-600",
+    followText: "Like",
   },
   twitter: {
-    name: 'Twitter',
+    name: "Twitter",
     icon: Twitter,
-    color: 'bg-sky-500 hover:bg-sky-600',
-    textColor: 'text-sky-500',
-    followText: 'Follow',
+    color: "bg-sky-500 hover:bg-sky-600",
+    textColor: "text-sky-500",
+    followText: "Follow",
   },
   instagram: {
-    name: 'Instagram',
+    name: "Instagram",
     icon: Instagram,
-    color: 'bg-gradient-to-tr from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700',
-    textColor: 'text-pink-600',
-    followText: 'Follow',
+    color:
+      "bg-gradient-to-tr from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700",
+    textColor: "text-pink-600",
+    followText: "Follow",
   },
   youtube: {
-    name: 'YouTube',
+    name: "YouTube",
     icon: Youtube,
-    color: 'bg-red-600 hover:bg-red-700',
-    textColor: 'text-red-600',
-    followText: 'Subscribe',
+    color: "bg-red-600 hover:bg-red-700",
+    textColor: "text-red-600",
+    followText: "Subscribe",
   },
   linkedin: {
-    name: 'LinkedIn',
+    name: "LinkedIn",
     icon: Linkedin,
-    color: 'bg-blue-700 hover:bg-blue-800',
-    textColor: 'text-blue-700',
-    followText: 'Follow',
+    color: "bg-blue-700 hover:bg-blue-800",
+    textColor: "text-blue-700",
+    followText: "Follow",
   },
 };
 
@@ -77,15 +78,15 @@ function formatFollowerCount(count: number): string {
 
 export const SocialFollow: React.FC<SocialFollowProps> = ({
   platforms,
-  variant = 'default',
-  layout = 'horizontal',
+  variant = "default",
+  layout = "horizontal",
   showFollowerCount = true,
   className,
 }) => {
   const containerClasses = {
-    horizontal: 'flex flex-wrap gap-4',
-    vertical: 'flex flex-col gap-4',
-    grid: 'grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4',
+    horizontal: "flex flex-wrap gap-4",
+    vertical: "flex flex-col gap-4",
+    grid: "grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4",
   };
 
   return (
@@ -94,7 +95,7 @@ export const SocialFollow: React.FC<SocialFollowProps> = ({
         const config = platformConfig[platform.platform];
         const Icon = config.icon;
 
-        if (variant === 'compact') {
+        if (variant === "compact") {
           return (
             <motion.a
               key={index}
@@ -105,9 +106,9 @@ export const SocialFollow: React.FC<SocialFollowProps> = ({
               animate={{ opacity: 1, scale: 1 }}
               transition={{ delay: index * 0.1 }}
               className={clsx(
-                'inline-flex items-center gap-2 px-4 py-2 rounded-full text-white font-medium transition-all duration-200',
-                'hover:shadow-lg hover:scale-105',
-                config.color
+                "inline-flex items-center gap-2 px-4 py-2 rounded-full text-white font-medium transition-all duration-200",
+                "hover:shadow-lg hover:scale-105",
+                config.color,
               )}
             >
               <Icon className="w-5 h-5" />
@@ -116,7 +117,7 @@ export const SocialFollow: React.FC<SocialFollowProps> = ({
           );
         }
 
-        if (variant === 'detailed') {
+        if (variant === "detailed") {
           return (
             <motion.div
               key={index}
@@ -127,7 +128,9 @@ export const SocialFollow: React.FC<SocialFollowProps> = ({
             >
               <div className="flex items-start justify-between mb-4">
                 <div className="flex items-center gap-3">
-                  <div className={clsx('p-3 rounded-lg text-white', config.color)}>
+                  <div
+                    className={clsx("p-3 rounded-lg text-white", config.color)}
+                  >
                     <Icon className="w-6 h-6" />
                   </div>
                   <div>
@@ -163,10 +166,10 @@ export const SocialFollow: React.FC<SocialFollowProps> = ({
                 target="_blank"
                 rel="noopener noreferrer"
                 className={clsx(
-                  'w-full inline-flex items-center justify-center gap-2 px-4 py-2 rounded-lg',
-                  'text-white font-medium transition-all duration-200',
-                  'hover:shadow-md hover:scale-105',
-                  config.color
+                  "w-full inline-flex items-center justify-center gap-2 px-4 py-2 rounded-lg",
+                  "text-white font-medium transition-all duration-200",
+                  "hover:shadow-md hover:scale-105",
+                  config.color,
                 )}
               >
                 <UserPlus className="w-4 h-4" />
@@ -188,7 +191,7 @@ export const SocialFollow: React.FC<SocialFollowProps> = ({
             transition={{ delay: index * 0.1 }}
             className="group flex items-center gap-3 p-3 bg-white dark:bg-gray-800 rounded-lg shadow-sm hover:shadow-md transition-all duration-200"
           >
-            <div className={clsx('p-2 rounded-lg text-white', config.color)}>
+            <div className={clsx("p-2 rounded-lg text-white", config.color)}>
               <Icon className="w-5 h-5" />
             </div>
             <div className="flex-1">
@@ -226,13 +229,13 @@ interface SocialCTAProps {
 }
 
 export const SocialCTA: React.FC<SocialCTAProps> = ({
-  title = 'Follow Us',
-  description = 'Stay updated with our latest news and updates',
+  title = "Follow Us",
+  description = "Stay updated with our latest news and updates",
   platforms,
   className,
 }) => {
   return (
-    <div className={clsx('text-center py-12', className)}>
+    <div className={clsx("text-center py-12", className)}>
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}

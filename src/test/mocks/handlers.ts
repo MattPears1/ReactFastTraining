@@ -1,17 +1,17 @@
-import { http, HttpResponse } from 'msw';
+import { http, HttpResponse } from "msw";
 
-const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3001/api';
+const API_URL = import.meta.env.VITE_API_URL || "http://localhost:3001/api";
 
 export const handlers = [
   // Auth endpoints
   http.post(`${API_URL}/auth/login`, () => {
     return HttpResponse.json({
-      token: 'mock-jwt-token',
+      token: "mock-jwt-token",
       user: {
-        id: '1',
-        email: 'test@example.com',
-        name: 'Test User',
-        role: 'user',
+        id: "1",
+        email: "test@example.com",
+        name: "Test User",
+        role: "user",
       },
     });
   }),
@@ -19,62 +19,66 @@ export const handlers = [
   http.post(`${API_URL}/auth/register`, () => {
     return HttpResponse.json(
       {
-        message: 'User registered successfully',
+        message: "User registered successfully",
         user: {
-          id: '2',
-          email: 'newuser@example.com',
-          name: 'New User',
+          id: "2",
+          email: "newuser@example.com",
+          name: "New User",
         },
       },
-      { status: 201 }
+      { status: 201 },
     );
   }),
 
   http.post(`${API_URL}/auth/logout`, () => {
-    return HttpResponse.json({ message: 'Logged out successfully' });
+    return HttpResponse.json({ message: "Logged out successfully" });
   }),
 
   http.post(`${API_URL}/auth/forgot-password`, () => {
-    return HttpResponse.json({ message: 'Password reset email sent' });
+    return HttpResponse.json({ message: "Password reset email sent" });
   }),
 
   // Contact endpoints
   http.post(`${API_URL}/contact`, () => {
-    return HttpResponse.json({ message: 'Message sent successfully' });
+    return HttpResponse.json({ message: "Message sent successfully" });
   }),
 
   // Newsletter endpoints
   http.post(`${API_URL}/newsletter/subscribe`, () => {
-    return HttpResponse.json({ message: 'Successfully subscribed to newsletter' });
+    return HttpResponse.json({
+      message: "Successfully subscribed to newsletter",
+    });
   }),
 
   http.post(`${API_URL}/newsletter/unsubscribe`, () => {
-    return HttpResponse.json({ message: 'Successfully unsubscribed from newsletter' });
+    return HttpResponse.json({
+      message: "Successfully unsubscribed from newsletter",
+    });
   }),
 
   // User endpoints
   http.get(`${API_URL}/users/profile`, ({ request }) => {
-    const authHeader = request.headers.get('Authorization');
+    const authHeader = request.headers.get("Authorization");
     if (!authHeader) {
-      return HttpResponse.json({ error: 'Unauthorized' }, { status: 401 });
+      return HttpResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
-    
+
     return HttpResponse.json({
-      id: '1',
-      email: 'test@example.com',
-      name: 'Test User',
-      role: 'user',
+      id: "1",
+      email: "test@example.com",
+      name: "Test User",
+      role: "user",
       createdAt: new Date().toISOString(),
     });
   }),
 
   http.put(`${API_URL}/users/profile`, () => {
     return HttpResponse.json({
-      message: 'Profile updated successfully',
+      message: "Profile updated successfully",
       user: {
-        id: '1',
-        email: 'test@example.com',
-        name: 'Updated User',
+        id: "1",
+        email: "test@example.com",
+        name: "Updated User",
       },
     });
   }),
@@ -84,20 +88,20 @@ export const handlers = [
     return HttpResponse.json({
       products: [
         {
-          id: '1',
-          name: 'Product 1',
-          description: 'Description 1',
+          id: "1",
+          name: "Product 1",
+          description: "Description 1",
           price: 99.99,
-          image: '/product1.jpg',
-          category: 'category1',
+          image: "/product1.jpg",
+          category: "category1",
         },
         {
-          id: '2',
-          name: 'Product 2',
-          description: 'Description 2',
+          id: "2",
+          name: "Product 2",
+          description: "Description 2",
           price: 149.99,
-          image: '/product2.jpg',
-          category: 'category2',
+          image: "/product2.jpg",
+          category: "category2",
         },
       ],
       total: 2,
@@ -114,7 +118,7 @@ export const handlers = [
       description: `Description for product ${id}`,
       price: 99.99,
       image: `/product${id}.jpg`,
-      category: 'category1',
+      category: "category1",
       inStock: true,
     });
   }),
@@ -127,8 +131,8 @@ export const handlers = [
   // File upload endpoint
   http.post(`${API_URL}/upload`, () => {
     return HttpResponse.json({
-      url: 'https://example.com/uploaded-file.jpg',
-      filename: 'uploaded-file.jpg',
+      url: "https://example.com/uploaded-file.jpg",
+      filename: "uploaded-file.jpg",
       size: 1024,
     });
   }),
@@ -137,16 +141,13 @@ export const handlers = [
 // Error handlers for testing error scenarios
 export const errorHandlers = [
   http.post(`${API_URL}/auth/login`, () => {
-    return HttpResponse.json(
-      { error: 'Invalid credentials' },
-      { status: 401 }
-    );
+    return HttpResponse.json({ error: "Invalid credentials" }, { status: 401 });
   }),
 
   http.post(`${API_URL}/contact`, () => {
     return HttpResponse.json(
-      { error: 'Internal server error' },
-      { status: 500 }
+      { error: "Internal server error" },
+      { status: 500 },
     );
   }),
 

@@ -1,20 +1,20 @@
-import React from 'react'
-import Header from './Header'
-import Footer from './Footer'
-import SkipLinks from '@components/common/SkipLinks'
-import { motion } from 'framer-motion'
-import { SystemAlert } from '@components/ui/AlertBanner'
-import { useNotifications } from '@contexts/NotificationContext'
-import { SessionTimeoutWarning } from '@components/auth/SessionTimeoutWarning'
-import { useAuth } from '@contexts/AuthContext'
+import React from "react";
+import Header from "./Header";
+import Footer from "./Footer";
+import SkipLinks from "@components/common/SkipLinks";
+import { motion } from "framer-motion";
+import { SystemAlert } from "@components/ui/AlertBanner";
+import { useNotifications } from "@contexts/NotificationContext";
+import { SessionTimeoutWarning } from "@components/auth/SessionTimeoutWarning";
+import { useAuth } from "@contexts/AuthContext";
 
 interface LayoutProps {
-  children: React.ReactNode
+  children: React.ReactNode;
 }
 
 const Layout: React.FC<LayoutProps> = ({ children }) => {
-  const { systemAlert, dismissSystemAlert } = useNotifications()
-  const { isAuthenticated } = useAuth()
+  const { systemAlert, dismissSystemAlert } = useNotifications();
+  const { isAuthenticated } = useAuth();
 
   return (
     <div className="min-h-screen flex flex-col bg-white dark:bg-gray-900">
@@ -46,7 +46,7 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
       </motion.main>
       <Footer />
     </div>
-  )
-}
+  );
+};
 
-export default Layout
+export default Layout;

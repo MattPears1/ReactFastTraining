@@ -1,7 +1,14 @@
-import React, { Suspense, lazy, ComponentType, ReactNode, useEffect, useState } from 'react';
-import { ErrorBoundary } from '@components/common/ErrorBoundary';
-import { LoadingSpinner } from '@components/common/LoadingStates';
-import { useIntersectionObserver } from '@hooks/useIntersectionObserver';
+import React, {
+  Suspense,
+  lazy,
+  ComponentType,
+  ReactNode,
+  useEffect,
+  useState,
+} from "react";
+import { ErrorBoundary } from "@components/common/ErrorBoundary";
+import { LoadingSpinner } from "@components/common/LoadingStates";
+import { useIntersectionObserver } from "@hooks/useIntersectionObserver";
 
 interface LazyBoundaryProps {
   fallback?: ReactNode;
@@ -29,9 +36,7 @@ export const LazyBoundary: React.FC<LazyBoundaryProps> = ({
 
   return (
     <ErrorBoundary fallback={errorFallback}>
-      <Suspense fallback={showFallback ? fallback : null}>
-        {children}
-      </Suspense>
+      <Suspense fallback={showFallback ? fallback : null}>{children}</Suspense>
     </ErrorBoundary>
   );
 };
@@ -47,10 +52,10 @@ interface LazyLoadOptions {
 
 export function lazyWithPreload<T extends ComponentType<any>>(
   importFn: () => Promise<{ default: T }>,
-  options: LazyLoadOptions = {}
+  options: LazyLoadOptions = {},
 ) {
   const LazyComponent = lazy(importFn);
-  
+
   // Preload function
   const preload = () => {
     importFn();
@@ -60,7 +65,7 @@ export function lazyWithPreload<T extends ComponentType<any>>(
   const WrappedComponent = (props: any) => {
     const [ref, isIntersecting] = useIntersectionObserver<HTMLDivElement>({
       threshold: options.threshold || 0,
-      rootMargin: options.rootMargin || '50px',
+      rootMargin: options.rootMargin || "50px",
       freezeOnceVisible: true,
     });
 
@@ -73,8 +78,8 @@ export function lazyWithPreload<T extends ComponentType<any>>(
 
     if (!isIntersecting) {
       return (
-        <div 
-          ref={ref} 
+        <div
+          ref={ref}
           onMouseEnter={handleMouseEnter}
           className="min-h-[200px] flex items-center justify-center"
         >
@@ -84,8 +89,8 @@ export function lazyWithPreload<T extends ComponentType<any>>(
     }
 
     return (
-      <LazyBoundary 
-        fallback={options.fallback} 
+      <LazyBoundary
+        fallback={options.fallback}
         errorFallback={options.errorFallback}
       >
         <LazyComponent {...props} />
@@ -94,7 +99,7 @@ export function lazyWithPreload<T extends ComponentType<any>>(
   };
 
   WrappedComponent.preload = preload;
-  WrappedComponent.displayName = `LazyWithPreload(${LazyComponent.displayName || 'Component'})`;
+  WrappedComponent.displayName = `LazyWithPreload(${LazyComponent.displayName || "Component"})`;
 
   return WrappedComponent;
 }
@@ -108,7 +113,7 @@ interface RouteConfig {
 }
 
 export function createLazyRoutes(routes: RouteConfig[]) {
-  return routes.map(route => ({
+  return routes.map((route) => ({
     ...route,
     component: lazyWithPreload(route.component, { preload: route.preload }),
   }));
@@ -132,11 +137,11 @@ export const ProgressiveImage: React.FC<ProgressiveImageProps> = ({
   onLoad,
   onError,
 }) => {
-  const [currentSrc, setCurrentSrc] = useState(placeholder || '');
+  const [currentSrc, setCurrentSrc] = useState(placeholder || "");
   const [isLoading, setIsLoading] = useState(true);
   const [ref, isIntersecting] = useIntersectionObserver<HTMLDivElement>({
     threshold: 0,
-    rootMargin: '50px',
+    rootMargin: "50px",
     freezeOnceVisible: true,
   });
 
@@ -144,13 +149,13 @@ export const ProgressiveImage: React.FC<ProgressiveImageProps> = ({
     if (isIntersecting && src) {
       const img = new Image();
       img.src = src;
-      
+
       img.onload = () => {
         setCurrentSrc(src);
         setIsLoading(false);
         onLoad?.();
       };
-      
+
       img.onerror = () => {
         setIsLoading(false);
         onError?.();
@@ -171,7 +176,7 @@ export const ProgressiveImage: React.FC<ProgressiveImageProps> = ({
       <img
         src={currentSrc}
         alt={alt}
-        className={`${className} ${isLoading ? 'opacity-0' : 'opacity-100'} transition-opacity duration-300`}
+        className={`${className} ${isLoading ? "opacity-0" : "opacity-100"} transition-opacity duration-300`}
         loading="lazy"
       />
     </div>
@@ -212,11 +217,12 @@ export function VirtualList<T>({
 
     const handleScroll = () => {
       setScrollTop(container.scrollTop);
-      
+
       // Check if end reached
       if (onEndReached) {
-        const scrollPercentage = 
-          (container.scrollTop + container.clientHeight) / container.scrollHeight;
+        const scrollPercentage =
+          (container.scrollTop + container.clientHeight) /
+          container.scrollHeight;
         if (scrollPercentage > endReachedThreshold) {
           onEndReached();
         }
@@ -224,12 +230,12 @@ export function VirtualList<T>({
     };
 
     updateSize();
-    window.addEventListener('resize', updateSize);
-    container.addEventListener('scroll', handleScroll, { passive: true });
+    window.addEventListener("resize", updateSize);
+    container.addEventListener("scroll", handleScroll, { passive: true });
 
     return () => {
-      window.removeEventListener('resize', updateSize);
-      container.removeEventListener('scroll', handleScroll);
+      window.removeEventListener("resize", updateSize);
+      container.removeEventListener("scroll", handleScroll);
     };
   }, [onEndReached, endReachedThreshold]);
 
@@ -237,7 +243,7 @@ export function VirtualList<T>({
   const startIndex = Math.max(0, Math.floor(scrollTop / itemHeight) - overscan);
   const endIndex = Math.min(
     items.length,
-    Math.ceil((scrollTop + containerHeight) / itemHeight) + overscan
+    Math.ceil((scrollTop + containerHeight) / itemHeight) + overscan,
   );
   const visibleItems = items.slice(startIndex, endIndex);
   const offsetY = startIndex * itemHeight;
@@ -246,23 +252,20 @@ export function VirtualList<T>({
     <div
       ref={containerRef}
       className={`overflow-auto ${className}`}
-      style={{ height: '100%' }}
+      style={{ height: "100%" }}
     >
-      <div style={{ height: totalHeight, position: 'relative' }}>
+      <div style={{ height: totalHeight, position: "relative" }}>
         <div
           style={{
             transform: `translateY(${offsetY}px)`,
-            position: 'absolute',
+            position: "absolute",
             top: 0,
             left: 0,
             right: 0,
           }}
         >
           {visibleItems.map((item, index) => (
-            <div
-              key={startIndex + index}
-              style={{ height: itemHeight }}
-            >
+            <div key={startIndex + index} style={{ height: itemHeight }}>
               {renderItem(item, startIndex + index)}
             </div>
           ))}

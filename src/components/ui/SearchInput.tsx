@@ -1,8 +1,15 @@
-import React, { useState, useRef, useEffect, useCallback } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
-import { Search, X, Loader2, TrendingUp, Clock, ArrowRight } from 'lucide-react';
-import { clsx } from 'clsx';
-import { useDebounce } from '@hooks/useDebounce';
+import React, { useState, useRef, useEffect, useCallback } from "react";
+import { motion, AnimatePresence } from "framer-motion";
+import {
+  Search,
+  X,
+  Loader2,
+  TrendingUp,
+  Clock,
+  ArrowRight,
+} from "lucide-react";
+import { clsx } from "clsx";
+import { useDebounce } from "@hooks/useDebounce";
 
 export interface SearchSuggestion {
   id: string;
@@ -25,33 +32,34 @@ interface SearchInputProps {
   onClearRecent?: () => void;
   loading?: boolean;
   autoFocus?: boolean;
-  size?: 'sm' | 'md' | 'lg';
-  variant?: 'default' | 'minimal' | 'floating';
+  size?: "sm" | "md" | "lg";
+  variant?: "default" | "minimal" | "floating";
   className?: string;
   showTrending?: boolean;
   trendingSearches?: string[];
 }
 
 const sizeClasses = {
-  sm: 'h-10 sm:h-9 text-sm pl-9 pr-3',
-  md: 'h-11 sm:h-11 text-sm sm:text-base pl-10 sm:pl-11 pr-4',
-  lg: 'h-12 sm:h-14 text-base sm:text-lg pl-12 sm:pl-14 pr-5',
+  sm: "h-10 sm:h-9 text-sm pl-9 pr-3",
+  md: "h-11 sm:h-11 text-sm sm:text-base pl-10 sm:pl-11 pr-4",
+  lg: "h-12 sm:h-14 text-base sm:text-lg pl-12 sm:pl-14 pr-5",
 };
 
 const iconSizeClasses = {
-  sm: 'w-4 h-4',
-  md: 'w-5 h-5',
-  lg: 'w-6 h-6',
+  sm: "w-4 h-4",
+  md: "w-5 h-5",
+  lg: "w-6 h-6",
 };
 
 const variantClasses = {
-  default: 'bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600',
-  minimal: 'bg-gray-100 dark:bg-gray-800 border-0',
-  floating: 'bg-white dark:bg-gray-800 shadow-lg border-0',
+  default:
+    "bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600",
+  minimal: "bg-gray-100 dark:bg-gray-800 border-0",
+  floating: "bg-white dark:bg-gray-800 shadow-lg border-0",
 };
 
 export const SearchInput: React.FC<SearchInputProps> = ({
-  placeholder = 'Search...',
+  placeholder = "Search...",
   value: controlledValue,
   onChange,
   onSearch,
@@ -61,13 +69,13 @@ export const SearchInput: React.FC<SearchInputProps> = ({
   onClearRecent,
   loading = false,
   autoFocus = false,
-  size = 'md',
-  variant = 'default',
+  size = "md",
+  variant = "default",
   className,
   showTrending = false,
   trendingSearches = [],
 }) => {
-  const [internalValue, setInternalValue] = useState('');
+  const [internalValue, setInternalValue] = useState("");
   const [isFocused, setIsFocused] = useState(false);
   const [selectedIndex, setSelectedIndex] = useState(-1);
   const inputRef = useRef<HTMLInputElement>(null);
@@ -76,10 +84,12 @@ export const SearchInput: React.FC<SearchInputProps> = ({
   const value = controlledValue !== undefined ? controlledValue : internalValue;
   const debouncedValue = useDebounce(value, 300);
 
-  const showDropdown = isFocused && (
-    suggestions.length > 0 ||
-    (value.length === 0 && (recentSearches.length > 0 || (showTrending && trendingSearches.length > 0)))
-  );
+  const showDropdown =
+    isFocused &&
+    (suggestions.length > 0 ||
+      (value.length === 0 &&
+        (recentSearches.length > 0 ||
+          (showTrending && trendingSearches.length > 0))));
 
   const allSuggestions = [
     ...suggestions,
@@ -108,7 +118,7 @@ export const SearchInput: React.FC<SearchInputProps> = ({
   };
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
-    if (e.key === 'Enter') {
+    if (e.key === "Enter") {
       e.preventDefault();
       if (selectedIndex >= 0 && allSuggestions[selectedIndex]) {
         handleSuggestionClick(allSuggestions[selectedIndex]);
@@ -116,15 +126,15 @@ export const SearchInput: React.FC<SearchInputProps> = ({
         onSearch?.(value);
       }
       inputRef.current?.blur();
-    } else if (e.key === 'ArrowDown') {
+    } else if (e.key === "ArrowDown") {
       e.preventDefault();
-      setSelectedIndex(prev =>
-        prev < allSuggestions.length - 1 ? prev + 1 : prev
+      setSelectedIndex((prev) =>
+        prev < allSuggestions.length - 1 ? prev + 1 : prev,
       );
-    } else if (e.key === 'ArrowUp') {
+    } else if (e.key === "ArrowUp") {
       e.preventDefault();
-      setSelectedIndex(prev => (prev > 0 ? prev - 1 : -1));
-    } else if (e.key === 'Escape') {
+      setSelectedIndex((prev) => (prev > 0 ? prev - 1 : -1));
+    } else if (e.key === "Escape") {
       inputRef.current?.blur();
       setIsFocused(false);
     }
@@ -143,8 +153,8 @@ export const SearchInput: React.FC<SearchInputProps> = ({
   };
 
   const handleClear = () => {
-    setInternalValue('');
-    onChange?.('');
+    setInternalValue("");
+    onChange?.("");
     inputRef.current?.focus();
   };
 
@@ -159,19 +169,24 @@ export const SearchInput: React.FC<SearchInputProps> = ({
       }
     };
 
-    document.addEventListener('mousedown', handleClickOutside);
-    return () => document.removeEventListener('mousedown', handleClickOutside);
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
   return (
-    <div className={clsx('relative', className)}>
+    <div className={clsx("relative", className)}>
       <div className="relative">
         {/* Search Icon or Loader */}
         <div className="absolute left-3 top-1/2 -translate-y-1/2 pointer-events-none">
           {loading ? (
-            <Loader2 className={clsx(iconSizeClasses[size], 'animate-spin text-gray-400')} />
+            <Loader2
+              className={clsx(
+                iconSizeClasses[size],
+                "animate-spin text-gray-400",
+              )}
+            />
           ) : (
-            <Search className={clsx(iconSizeClasses[size], 'text-gray-400')} />
+            <Search className={clsx(iconSizeClasses[size], "text-gray-400")} />
           )}
         </div>
 
@@ -186,12 +201,12 @@ export const SearchInput: React.FC<SearchInputProps> = ({
           placeholder={placeholder}
           autoFocus={autoFocus}
           className={clsx(
-            'w-full rounded-lg transition-all duration-200',
-            'focus:outline-none focus:ring-2 focus:ring-primary-500',
+            "w-full rounded-lg transition-all duration-200",
+            "focus:outline-none focus:ring-2 focus:ring-primary-500",
             sizeClasses[size],
             variantClasses[variant],
-            value && 'pr-10',
-            className
+            value && "pr-10",
+            className,
           )}
         />
 
@@ -202,7 +217,7 @@ export const SearchInput: React.FC<SearchInputProps> = ({
             className="absolute right-3 top-1/2 -translate-y-1/2 p-1 rounded-full hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
             aria-label="Clear search"
           >
-            <X className={clsx(iconSizeClasses[size], 'text-gray-400')} />
+            <X className={clsx(iconSizeClasses[size], "text-gray-400")} />
           </button>
         )}
       </div>
@@ -264,21 +279,20 @@ export const SearchInput: React.FC<SearchInputProps> = ({
                     onClick={() => handleSuggestionClick(suggestion)}
                     onMouseEnter={() => setSelectedIndex(index)}
                     className={clsx(
-                      'flex items-start gap-3 w-full p-3 text-left transition-colors',
+                      "flex items-start gap-3 w-full p-3 text-left transition-colors",
                       selectedIndex === index
-                        ? 'bg-gray-100 dark:bg-gray-700'
-                        : 'hover:bg-gray-50 dark:hover:bg-gray-700/50'
+                        ? "bg-gray-100 dark:bg-gray-700"
+                        : "hover:bg-gray-50 dark:hover:bg-gray-700/50",
                     )}
                   >
                     {/* Icon */}
                     <div className="flex-shrink-0 mt-0.5">
-                      {suggestion.icon || (
-                        suggestion.trending ? (
+                      {suggestion.icon ||
+                        (suggestion.trending ? (
                           <TrendingUp className="w-5 h-5 text-primary-600 dark:text-primary-400" />
                         ) : (
                           <Search className="w-5 h-5 text-gray-400" />
-                        )
-                      )}
+                        ))}
                     </div>
 
                     {/* Content */}

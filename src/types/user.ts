@@ -2,9 +2,9 @@ export interface User {
   id: string;
   email: string;
   name: string;
-  role: 'customer' | 'admin' | 'instructor';
+  role: "customer" | "admin" | "instructor";
   emailVerified: boolean;
-  
+
   // Customer Information
   phone?: string;
   companyName?: string;
@@ -14,24 +14,24 @@ export interface User {
   county?: string;
   postcode?: string;
   country?: string;
-  customerType?: 'individual' | 'corporate';
-  
+  customerType?: "individual" | "corporate";
+
   // Emergency Contact
   emergencyContactName?: string;
   emergencyContactPhone?: string;
   emergencyContactRelationship?: string;
-  
+
   // Medical/Dietary
   medicalNotes?: string;
   dietaryRequirements?: string;
   hasMedicalConditions?: boolean;
-  
+
   // Preferences
   marketingConsent: boolean;
   smsConsent: boolean;
   newsletterSubscribed: boolean;
   preferredContactMethod?: string;
-  
+
   // Statistics
   totalBookings: number;
   totalSpent: number | string;
@@ -39,7 +39,7 @@ export interface User {
   firstBookingDate?: string;
   customerSince?: string;
   lastActivityDate?: string;
-  
+
   // Timestamps
   createdAt: string;
   updatedAt: string;

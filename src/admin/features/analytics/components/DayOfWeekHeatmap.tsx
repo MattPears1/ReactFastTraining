@@ -1,4 +1,4 @@
-import React from 'react';
+import React from "react";
 
 interface DayData {
   day: string;
@@ -22,8 +22,8 @@ export const DayOfWeekHeatmap: React.FC<Props> = ({ data }) => {
 
   try {
     // Find max values for scaling
-    const maxBookings = Math.max(...data.map(d => d.bookings));
-    const maxRevenue = Math.max(...data.map(d => d.revenue));
+    const maxBookings = Math.max(...data.map((d) => d.bookings));
+    const maxRevenue = Math.max(...data.map((d) => d.revenue));
 
     const getIntensity = (value: number, max: number) => {
       if (max === 0) return 0;
@@ -37,19 +37,21 @@ export const DayOfWeekHeatmap: React.FC<Props> = ({ data }) => {
     };
 
     const intensityColors = [
-      'bg-gray-100',
-      'bg-primary-100',
-      'bg-primary-200',
-      'bg-primary-300',
-      'bg-primary-400',
-      'bg-primary-500'
+      "bg-gray-100",
+      "bg-primary-100",
+      "bg-primary-200",
+      "bg-primary-300",
+      "bg-primary-400",
+      "bg-primary-500",
     ];
 
     return (
       <div className="space-y-6">
         {/* Bookings Heatmap */}
         <div>
-          <h4 className="text-sm font-medium text-gray-700 mb-3">Bookings by Day</h4>
+          <h4 className="text-sm font-medium text-gray-700 mb-3">
+            Bookings by Day
+          </h4>
           <div className="grid grid-cols-7 gap-2">
             {data.map((dayData) => {
               const intensity = getIntensity(dayData.bookings, maxBookings);
@@ -59,12 +61,16 @@ export const DayOfWeekHeatmap: React.FC<Props> = ({ data }) => {
                   className={`relative p-4 rounded-lg ${intensityColors[intensity]} transition-all hover:scale-105 cursor-pointer group`}
                 >
                   <div className="text-center">
-                    <p className="text-xs font-medium text-gray-700 mb-1">{dayData.day.slice(0, 3)}</p>
-                    <p className={`text-lg font-bold ${intensity >= 3 ? 'text-white' : 'text-gray-900'}`}>
+                    <p className="text-xs font-medium text-gray-700 mb-1">
+                      {dayData.day.slice(0, 3)}
+                    </p>
+                    <p
+                      className={`text-lg font-bold ${intensity >= 3 ? "text-white" : "text-gray-900"}`}
+                    >
                       {dayData.bookings}
                     </p>
                   </div>
-                  
+
                   {/* Tooltip */}
                   <div className="absolute bottom-full left-1/2 transform -translate-x-1/2 mb-2 px-3 py-2 bg-gray-900 text-white text-xs rounded-lg opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap pointer-events-none">
                     <div>{dayData.day}</div>
@@ -82,7 +88,9 @@ export const DayOfWeekHeatmap: React.FC<Props> = ({ data }) => {
 
         {/* Revenue Heatmap */}
         <div>
-          <h4 className="text-sm font-medium text-gray-700 mb-3">Revenue by Day</h4>
+          <h4 className="text-sm font-medium text-gray-700 mb-3">
+            Revenue by Day
+          </h4>
           <div className="grid grid-cols-7 gap-2">
             {data.map((dayData) => {
               const intensity = getIntensity(dayData.revenue, maxRevenue);
@@ -92,12 +100,16 @@ export const DayOfWeekHeatmap: React.FC<Props> = ({ data }) => {
                   className={`relative p-4 rounded-lg ${intensityColors[intensity]} transition-all hover:scale-105 cursor-pointer group`}
                 >
                   <div className="text-center">
-                    <p className="text-xs font-medium text-gray-700 mb-1">{dayData.day.slice(0, 3)}</p>
-                    <p className={`text-sm font-bold ${intensity >= 3 ? 'text-white' : 'text-gray-900'}`}>
+                    <p className="text-xs font-medium text-gray-700 mb-1">
+                      {dayData.day.slice(0, 3)}
+                    </p>
+                    <p
+                      className={`text-sm font-bold ${intensity >= 3 ? "text-white" : "text-gray-900"}`}
+                    >
                       £{(dayData.revenue / 1000).toFixed(1)}k
                     </p>
                   </div>
-                  
+
                   {/* Tooltip */}
                   <div className="absolute bottom-full left-1/2 transform -translate-x-1/2 mb-2 px-3 py-2 bg-gray-900 text-white text-xs rounded-lg opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap pointer-events-none">
                     <div>{dayData.day}</div>
@@ -126,7 +138,7 @@ export const DayOfWeekHeatmap: React.FC<Props> = ({ data }) => {
       </div>
     );
   } catch (error) {
-    console.error('Error rendering DayOfWeekHeatmap:', error);
+    console.error("Error rendering DayOfWeekHeatmap:", error);
     return (
       <div className="h-80 flex items-center justify-center text-red-500">
         <p>Error loading heatmap. Please try again.</p>

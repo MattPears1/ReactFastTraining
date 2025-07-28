@@ -1,5 +1,5 @@
-import React from 'react';
-import { cn } from '@utils/cn';
+import React from "react";
+import { cn } from "@utils/cn";
 
 interface AdminTableMobileProps<T> {
   data: T[];
@@ -7,10 +7,10 @@ interface AdminTableMobileProps<T> {
     key: string;
     header: string;
     render: (item: T) => React.ReactNode;
-    align?: 'left' | 'center' | 'right';
+    align?: "left" | "center" | "right";
     mobileLabel?: string; // Override label for mobile view
     hideOnMobile?: boolean; // Hide this column on mobile
-    priority?: 'high' | 'medium' | 'low'; // Display priority on mobile
+    priority?: "high" | "medium" | "low"; // Display priority on mobile
   }[];
   keyExtractor: (item: T) => string;
   loading?: boolean;
@@ -24,9 +24,9 @@ export function AdminTableMobile<T>({
   columns,
   keyExtractor,
   loading = false,
-  emptyMessage = 'No data found',
+  emptyMessage = "No data found",
   emptyIcon,
-  className = '',
+  className = "",
 }: AdminTableMobileProps<T>) {
   if (loading) {
     return (
@@ -47,18 +47,18 @@ export function AdminTableMobile<T>({
 
   // Sort columns by priority for mobile display
   const mobileColumns = columns
-    .filter(col => !col.hideOnMobile)
+    .filter((col) => !col.hideOnMobile)
     .sort((a, b) => {
       const priorityOrder = { high: 0, medium: 1, low: 2 };
-      const aPriority = priorityOrder[a.priority || 'medium'];
-      const bPriority = priorityOrder[b.priority || 'medium'];
+      const aPriority = priorityOrder[a.priority || "medium"];
+      const bPriority = priorityOrder[b.priority || "medium"];
       return aPriority - bPriority;
     });
 
   return (
     <>
       {/* Desktop Table View */}
-      <div className={cn('hidden lg:block', className)}>
+      <div className={cn("hidden lg:block", className)}>
         <div className="admin-table-container">
           <table className="admin-table">
             <thead>
@@ -67,9 +67,9 @@ export function AdminTableMobile<T>({
                   <th
                     key={column.key}
                     className={cn({
-                      'text-left': column.align === 'left' || !column.align,
-                      'text-center': column.align === 'center',
-                      'text-right': column.align === 'right',
+                      "text-left": column.align === "left" || !column.align,
+                      "text-center": column.align === "center",
+                      "text-right": column.align === "right",
                     })}
                   >
                     {column.header}
@@ -84,9 +84,9 @@ export function AdminTableMobile<T>({
                     <td
                       key={column.key}
                       className={cn({
-                        'text-left': column.align === 'left' || !column.align,
-                        'text-center': column.align === 'center',
-                        'text-right': column.align === 'right',
+                        "text-left": column.align === "left" || !column.align,
+                        "text-center": column.align === "center",
+                        "text-right": column.align === "right",
                       })}
                     >
                       {column.render(item)}
@@ -100,7 +100,7 @@ export function AdminTableMobile<T>({
       </div>
 
       {/* Mobile Card View */}
-      <div className={cn('lg:hidden space-y-4', className)}>
+      <div className={cn("lg:hidden space-y-4", className)}>
         {data.map((item) => (
           <div
             key={keyExtractor(item)}
@@ -108,7 +108,7 @@ export function AdminTableMobile<T>({
           >
             {mobileColumns.map((column, index) => {
               // First item (usually title) gets special treatment
-              if (index === 0 && column.priority === 'high') {
+              if (index === 0 && column.priority === "high") {
                 return (
                   <div key={column.key} className="mb-3">
                     <div className="text-base font-semibold text-gray-900 dark:text-white">
@@ -121,17 +121,17 @@ export function AdminTableMobile<T>({
               return (
                 <div
                   key={column.key}
-                  className={cn('flex items-start justify-between gap-3', {
-                    'flex-col': column.align === 'center',
+                  className={cn("flex items-start justify-between gap-3", {
+                    "flex-col": column.align === "center",
                   })}
                 >
                   <span className="text-sm font-medium text-gray-500 dark:text-gray-400 flex-shrink-0">
                     {column.mobileLabel || column.header}:
                   </span>
                   <div
-                    className={cn('text-sm text-gray-900 dark:text-gray-100', {
-                      'text-right': column.align === 'right',
-                      'text-center w-full': column.align === 'center',
+                    className={cn("text-sm text-gray-900 dark:text-gray-100", {
+                      "text-right": column.align === "right",
+                      "text-center w-full": column.align === "center",
                     })}
                   >
                     {column.render(item)}

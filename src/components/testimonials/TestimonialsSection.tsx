@@ -1,17 +1,17 @@
-import React, { useState, useEffect } from 'react';
-import { ChevronLeft, ChevronRight, Star } from 'lucide-react';
-import { TestimonialCard, TestimonialData } from './TestimonialCard';
-import { LoadingSpinner } from '@/components/common/LoadingStates';
-import { Link } from 'react-router-dom';
+import React, { useState, useEffect } from "react";
+import { ChevronLeft, ChevronRight, Star } from "lucide-react";
+import { TestimonialCard, TestimonialData } from "./TestimonialCard";
+import { LoadingSpinner } from "@/components/common/LoadingStates";
+import { Link } from "react-router-dom";
 
 interface TestimonialsSectionProps {
   limit?: number;
   showViewAll?: boolean;
 }
 
-export const TestimonialsSection: React.FC<TestimonialsSectionProps> = ({ 
-  limit = 3, 
-  showViewAll = true 
+export const TestimonialsSection: React.FC<TestimonialsSectionProps> = ({
+  limit = 3,
+  showViewAll = true,
 }) => {
   const [testimonials, setTestimonials] = useState<TestimonialData[]>([]);
   const [loading, setLoading] = useState(true);
@@ -25,14 +25,16 @@ export const TestimonialsSection: React.FC<TestimonialsSectionProps> = ({
 
   const fetchTestimonials = async () => {
     try {
-      const response = await fetch(`/api/testimonials/approved?limit=${limit}&featured=true`);
+      const response = await fetch(
+        `/api/testimonials/approved?limit=${limit}&featured=true`,
+      );
       const data = await response.json();
-      
+
       setTestimonials(data.testimonials);
       setAverageRating(data.averageRating);
       setTotalCount(data.totalCount);
     } catch (error) {
-      console.error('Failed to fetch testimonials:', error);
+      console.error("Failed to fetch testimonials:", error);
       // Use mock data in development
       setTestimonials(getMockTestimonials());
       setAverageRating(4.8);
@@ -47,7 +49,9 @@ export const TestimonialsSection: React.FC<TestimonialsSectionProps> = ({
   };
 
   const previousTestimonial = () => {
-    setCurrentIndex((prev) => (prev - 1 + testimonials.length) % testimonials.length);
+    setCurrentIndex(
+      (prev) => (prev - 1 + testimonials.length) % testimonials.length,
+    );
   };
 
   if (loading) {
@@ -75,9 +79,10 @@ export const TestimonialsSection: React.FC<TestimonialsSectionProps> = ({
             What Our Students Say
           </h2>
           <p className="text-lg text-gray-600 max-w-2xl mx-auto">
-            Join {totalCount}+ satisfied students who have enhanced their skills with React Fast Training
+            Join {totalCount}+ satisfied students who have enhanced their skills
+            with React Fast Training
           </p>
-          
+
           {/* Average Rating */}
           <div className="flex items-center justify-center gap-3 mt-6">
             <div className="flex gap-1">
@@ -86,10 +91,10 @@ export const TestimonialsSection: React.FC<TestimonialsSectionProps> = ({
                   key={i}
                   className={`w-6 h-6 ${
                     i < Math.floor(averageRating)
-                      ? 'fill-yellow-400 text-yellow-400'
+                      ? "fill-yellow-400 text-yellow-400"
                       : i < averageRating
-                      ? 'fill-yellow-400/50 text-yellow-400'
-                      : 'text-gray-300'
+                        ? "fill-yellow-400/50 text-yellow-400"
+                        : "text-gray-300"
                   }`}
                 />
               ))}
@@ -97,9 +102,7 @@ export const TestimonialsSection: React.FC<TestimonialsSectionProps> = ({
             <span className="text-lg font-semibold">
               {averageRating.toFixed(1)} out of 5
             </span>
-            <span className="text-gray-500">
-              ({totalCount} reviews)
-            </span>
+            <span className="text-gray-500">({totalCount} reviews)</span>
           </div>
         </div>
 
@@ -117,7 +120,7 @@ export const TestimonialsSection: React.FC<TestimonialsSectionProps> = ({
         {/* Mobile Carousel View */}
         <div className="md:hidden relative">
           <div className="overflow-hidden">
-            <div 
+            <div
               className="flex transition-transform duration-300 ease-in-out"
               style={{ transform: `translateX(-${currentIndex * 100}%)` }}
             >
@@ -157,7 +160,7 @@ export const TestimonialsSection: React.FC<TestimonialsSectionProps> = ({
                     key={index}
                     onClick={() => setCurrentIndex(index)}
                     className={`w-2 h-2 rounded-full transition-colors ${
-                      index === currentIndex ? 'bg-primary-600' : 'bg-gray-300'
+                      index === currentIndex ? "bg-primary-600" : "bg-gray-300"
                     }`}
                     aria-label={`Go to testimonial ${index + 1}`}
                   />
@@ -205,42 +208,45 @@ function getMockTestimonials(): TestimonialData[] {
   return [
     {
       id: 1,
-      authorName: 'Sarah Johnson',
-      authorLocation: 'Leeds, Yorkshire',
-      courseTaken: 'Emergency First Aid at Work',
-      courseDate: '2025-01-15',
-      content: 'Excellent course! The instructor was knowledgeable and made the content easy to understand. I feel confident in my ability to handle emergency situations now.',
+      authorName: "Sarah Johnson",
+      authorLocation: "Leeds, Yorkshire",
+      courseTaken: "Emergency First Aid at Work",
+      courseDate: "2025-01-15",
+      content:
+        "Excellent course! The instructor was knowledgeable and made the content easy to understand. I feel confident in my ability to handle emergency situations now.",
       rating: 5,
-      photoUrl: 'https://via.placeholder.com/150',
+      photoUrl: "https://via.placeholder.com/150",
       showFullName: true,
       verifiedBooking: true,
-      createdAt: '2025-01-16',
+      createdAt: "2025-01-16",
     },
     {
       id: 2,
-      authorName: 'Michael Chen',
-      authorLocation: 'Sheffield',
-      courseTaken: 'Paediatric First Aid',
-      courseDate: '2025-01-10',
-      content: 'As a nursery teacher, this course was invaluable. The hands-on practice with infant and child CPR gave me the confidence I needed. Highly recommend!',
+      authorName: "Michael Chen",
+      authorLocation: "Sheffield",
+      courseTaken: "Paediatric First Aid",
+      courseDate: "2025-01-10",
+      content:
+        "As a nursery teacher, this course was invaluable. The hands-on practice with infant and child CPR gave me the confidence I needed. Highly recommend!",
       rating: 5,
-      photoUrl: 'https://via.placeholder.com/150',
+      photoUrl: "https://via.placeholder.com/150",
       showFullName: true,
       verifiedBooking: true,
-      createdAt: '2025-01-11',
+      createdAt: "2025-01-11",
     },
     {
       id: 3,
-      authorName: 'Emma Williams',
-      authorLocation: 'Bradford',
-      courseTaken: 'Mental Health First Aid',
-      courseDate: '2025-01-05',
-      content: 'This course opened my eyes to the importance of mental health support in the workplace. The trainer created a safe space for discussion and learning.',
+      authorName: "Emma Williams",
+      authorLocation: "Bradford",
+      courseTaken: "Mental Health First Aid",
+      courseDate: "2025-01-05",
+      content:
+        "This course opened my eyes to the importance of mental health support in the workplace. The trainer created a safe space for discussion and learning.",
       rating: 5,
-      photoUrl: 'https://via.placeholder.com/150',
+      photoUrl: "https://via.placeholder.com/150",
       showFullName: false,
       verifiedBooking: true,
-      createdAt: '2025-01-06',
+      createdAt: "2025-01-06",
     },
   ];
 }

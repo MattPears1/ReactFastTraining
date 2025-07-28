@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import React, { useState, useEffect } from "react";
+import { motion, AnimatePresence } from "framer-motion";
 import {
   Facebook,
   Twitter,
@@ -10,13 +10,13 @@ import {
   ExternalLink,
   RefreshCw,
   AlertCircle,
-} from 'lucide-react';
-import { clsx } from 'clsx';
-import { formatDistanceToNow } from 'date-fns';
+} from "lucide-react";
+import { clsx } from "clsx";
+import { formatDistanceToNow } from "date-fns";
 
 export interface SocialPost {
   id: string;
-  platform: 'facebook' | 'twitter' | 'instagram';
+  platform: "facebook" | "twitter" | "instagram";
   author: {
     name: string;
     username: string;
@@ -24,7 +24,7 @@ export interface SocialPost {
   };
   content: string;
   media?: {
-    type: 'image' | 'video';
+    type: "image" | "video";
     url: string;
     thumbnail?: string;
   }[];
@@ -37,7 +37,7 @@ export interface SocialPost {
 
 interface SocialFeedProps {
   posts?: SocialPost[];
-  platforms?: ('facebook' | 'twitter' | 'instagram')[];
+  platforms?: ("facebook" | "twitter" | "instagram")[];
   maxPosts?: number;
   autoRefresh?: boolean;
   refreshInterval?: number;
@@ -45,7 +45,7 @@ interface SocialFeedProps {
   loading?: boolean;
   error?: string;
   className?: string;
-  variant?: 'grid' | 'list' | 'carousel';
+  variant?: "grid" | "list" | "carousel";
 }
 
 const platformIcons = {
@@ -55,63 +55,66 @@ const platformIcons = {
 };
 
 const platformColors = {
-  facebook: 'text-blue-600',
-  twitter: 'text-sky-500',
-  instagram: 'text-pink-600',
+  facebook: "text-blue-600",
+  twitter: "text-sky-500",
+  instagram: "text-pink-600",
 };
 
 // Mock posts for demonstration
 const mockPosts: SocialPost[] = [
   {
-    id: '1',
-    platform: 'twitter',
+    id: "1",
+    platform: "twitter",
     author: {
-      name: 'Lex Business',
-      username: '@lexbusiness',
-      avatar: 'https://via.placeholder.com/40',
+      name: "Lex Business",
+      username: "@lexbusiness",
+      avatar: "https://via.placeholder.com/40",
     },
-    content: 'Excited to announce our new product line! Check out our latest innovations that are designed to make your life easier. #Innovation #NewProducts',
+    content:
+      "Excited to announce our new product line! Check out our latest innovations that are designed to make your life easier. #Innovation #NewProducts",
     timestamp: new Date(Date.now() - 2 * 60 * 60 * 1000),
     likes: 45,
     comments: 12,
     shares: 8,
-    url: 'https://twitter.com/lexbusiness/status/123456',
+    url: "https://twitter.com/lexbusiness/status/123456",
   },
   {
-    id: '2',
-    platform: 'instagram',
+    id: "2",
+    platform: "instagram",
     author: {
-      name: 'Lex Business',
-      username: 'lexbusiness',
-      avatar: 'https://via.placeholder.com/40',
+      name: "Lex Business",
+      username: "lexbusiness",
+      avatar: "https://via.placeholder.com/40",
     },
-    content: 'Behind the scenes at our latest photoshoot! 📸 Can\'t wait to share what we\'ve been working on.',
+    content:
+      "Behind the scenes at our latest photoshoot! 📸 Can't wait to share what we've been working on.",
     media: [
       {
-        type: 'image',
-        url: 'https://via.placeholder.com/400x300',
+        type: "image",
+        url: "https://via.placeholder.com/400x300",
       },
     ],
     timestamp: new Date(Date.now() - 24 * 60 * 60 * 1000),
     likes: 234,
     comments: 28,
     shares: 15,
-    url: 'https://instagram.com/p/123456',
+    url: "https://instagram.com/p/123456",
   },
   {
-    id: '3',
-    platform: 'facebook',
+    id: "3",
+    platform: "facebook",
     author: {
-      name: 'Lex Business',
-      username: 'lexbusiness',
-      avatar: 'https://via.placeholder.com/40',
+      name: "Lex Business",
+      username: "lexbusiness",
+      avatar: "https://via.placeholder.com/40",
     },
-    content: 'Thank you to all our customers for making this year amazing! We couldn\'t have done it without your support. Here\'s to an even better year ahead! 🎉',
+    content:
+      "Thank you to all our customers for making this year amazing! We couldn't have done it without your support. Here's to an even better year ahead! 🎉",
     timestamp: new Date(Date.now() - 3 * 24 * 60 * 60 * 1000),
     likes: 156,
     comments: 34,
     shares: 22,
-    url: 'https://facebook.com/lexbusiness/posts/123456',
+    url: "https://facebook.com/lexbusiness/posts/123456",
   },
 ];
 
@@ -125,22 +128,22 @@ export const SocialFeed: React.FC<SocialFeedProps> = ({
   loading = false,
   error,
   className,
-  variant = 'grid',
+  variant = "grid",
 }) => {
   const [filteredPosts, setFilteredPosts] = useState<SocialPost[]>([]);
   const [selectedPlatform, setSelectedPlatform] = useState<string | null>(null);
 
   useEffect(() => {
     let filtered = posts;
-    
+
     if (platforms && platforms.length > 0) {
-      filtered = posts.filter(post => platforms.includes(post.platform));
+      filtered = posts.filter((post) => platforms.includes(post.platform));
     }
-    
+
     if (selectedPlatform) {
-      filtered = filtered.filter(post => post.platform === selectedPlatform);
+      filtered = filtered.filter((post) => post.platform === selectedPlatform);
     }
-    
+
     setFilteredPosts(filtered.slice(0, maxPosts));
   }, [posts, platforms, selectedPlatform, maxPosts]);
 
@@ -157,7 +160,7 @@ export const SocialFeed: React.FC<SocialFeedProps> = ({
 
   if (error) {
     return (
-      <div className={clsx('text-center py-12', className)}>
+      <div className={clsx("text-center py-12", className)}>
         <AlertCircle className="w-12 h-12 text-red-500 mx-auto mb-4" />
         <p className="text-gray-600 dark:text-gray-400">
           Failed to load social media posts
@@ -185,25 +188,26 @@ export const SocialFeed: React.FC<SocialFeedProps> = ({
             <button
               onClick={() => setSelectedPlatform(null)}
               className={clsx(
-                'px-3 py-1 rounded-full text-sm font-medium transition-colors',
+                "px-3 py-1 rounded-full text-sm font-medium transition-colors",
                 !selectedPlatform
-                  ? 'bg-primary-600 text-white'
-                  : 'bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-400 hover:bg-gray-200 dark:hover:bg-gray-700'
+                  ? "bg-primary-600 text-white"
+                  : "bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-400 hover:bg-gray-200 dark:hover:bg-gray-700",
               )}
             >
               All
             </button>
-            {['facebook', 'twitter', 'instagram'].map((platform) => {
-              const Icon = platformIcons[platform as keyof typeof platformIcons];
+            {["facebook", "twitter", "instagram"].map((platform) => {
+              const Icon =
+                platformIcons[platform as keyof typeof platformIcons];
               return (
                 <button
                   key={platform}
                   onClick={() => setSelectedPlatform(platform)}
                   className={clsx(
-                    'p-1.5 rounded-full transition-colors',
+                    "p-1.5 rounded-full transition-colors",
                     selectedPlatform === platform
-                      ? 'bg-primary-600 text-white'
-                      : 'bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-400 hover:bg-gray-200 dark:hover:bg-gray-700'
+                      ? "bg-primary-600 text-white"
+                      : "bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-400 hover:bg-gray-200 dark:hover:bg-gray-700",
                   )}
                   aria-label={`Filter by ${platform}`}
                 >
@@ -213,19 +217,19 @@ export const SocialFeed: React.FC<SocialFeedProps> = ({
             })}
           </div>
         </div>
-        
+
         <button
           onClick={handleRefresh}
           disabled={loading}
           className={clsx(
-            'p-2 rounded-lg transition-colors',
-            'text-gray-600 dark:text-gray-400',
-            'hover:bg-gray-100 dark:hover:bg-gray-800',
-            loading && 'opacity-50 cursor-not-allowed'
+            "p-2 rounded-lg transition-colors",
+            "text-gray-600 dark:text-gray-400",
+            "hover:bg-gray-100 dark:hover:bg-gray-800",
+            loading && "opacity-50 cursor-not-allowed",
           )}
           aria-label="Refresh feed"
         >
-          <RefreshCw className={clsx('w-5 h-5', loading && 'animate-spin')} />
+          <RefreshCw className={clsx("w-5 h-5", loading && "animate-spin")} />
         </button>
       </div>
 
@@ -241,7 +245,7 @@ export const SocialFeed: React.FC<SocialFeedProps> = ({
         </div>
       ) : (
         <AnimatePresence mode="wait">
-          {variant === 'grid' && (
+          {variant === "grid" && (
             <motion.div
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
@@ -254,7 +258,7 @@ export const SocialFeed: React.FC<SocialFeedProps> = ({
             </motion.div>
           )}
 
-          {variant === 'list' && (
+          {variant === "list" && (
             <motion.div
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
@@ -262,19 +266,24 @@ export const SocialFeed: React.FC<SocialFeedProps> = ({
               className="space-y-4"
             >
               {filteredPosts.map((post, index) => (
-                <SocialPostCard key={post.id} post={post} index={index} variant="list" />
+                <SocialPostCard
+                  key={post.id}
+                  post={post}
+                  index={index}
+                  variant="list"
+                />
               ))}
             </motion.div>
           )}
 
-          {variant === 'carousel' && (
+          {variant === "carousel" && (
             <motion.div
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
               className="overflow-x-auto pb-4"
             >
-              <div className="flex gap-4" style={{ width: 'max-content' }}>
+              <div className="flex gap-4" style={{ width: "max-content" }}>
                 {filteredPosts.map((post, index) => (
                   <div key={post.id} className="w-80 flex-shrink-0">
                     <SocialPostCard post={post} index={index} />
@@ -301,10 +310,14 @@ export const SocialFeed: React.FC<SocialFeedProps> = ({
 interface SocialPostCardProps {
   post: SocialPost;
   index: number;
-  variant?: 'grid' | 'list';
+  variant?: "grid" | "list";
 }
 
-const SocialPostCard: React.FC<SocialPostCardProps> = ({ post, index, variant = 'grid' }) => {
+const SocialPostCard: React.FC<SocialPostCardProps> = ({
+  post,
+  index,
+  variant = "grid",
+}) => {
   const Icon = platformIcons[post.platform];
 
   return (
@@ -313,13 +326,13 @@ const SocialPostCard: React.FC<SocialPostCardProps> = ({ post, index, variant = 
       animate={{ opacity: 1, y: 0 }}
       transition={{ delay: index * 0.1 }}
       className={clsx(
-        'bg-white dark:bg-gray-800 rounded-xl shadow-sm overflow-hidden',
-        'hover:shadow-lg transition-shadow duration-200',
-        variant === 'list' && 'flex gap-4'
+        "bg-white dark:bg-gray-800 rounded-xl shadow-sm overflow-hidden",
+        "hover:shadow-lg transition-shadow duration-200",
+        variant === "list" && "flex gap-4",
       )}
     >
       {/* Media (if exists) */}
-      {post.media && post.media.length > 0 && variant === 'grid' && (
+      {post.media && post.media.length > 0 && variant === "grid" && (
         <div className="aspect-w-16 aspect-h-9 bg-gray-100 dark:bg-gray-700">
           <img
             src={post.media[0].url}
@@ -334,7 +347,7 @@ const SocialPostCard: React.FC<SocialPostCardProps> = ({ post, index, variant = 
         <div className="flex items-start justify-between mb-3">
           <div className="flex items-center gap-3">
             <img
-              src={post.author.avatar || 'https://via.placeholder.com/40'}
+              src={post.author.avatar || "https://via.placeholder.com/40"}
               alt={post.author.name}
               className="w-10 h-10 rounded-full"
             />
@@ -347,7 +360,7 @@ const SocialPostCard: React.FC<SocialPostCardProps> = ({ post, index, variant = 
               </p>
             </div>
           </div>
-          <Icon className={clsx('w-5 h-5', platformColors[post.platform])} />
+          <Icon className={clsx("w-5 h-5", platformColors[post.platform])} />
         </div>
 
         {/* Content */}
@@ -356,7 +369,7 @@ const SocialPostCard: React.FC<SocialPostCardProps> = ({ post, index, variant = 
         </p>
 
         {/* Media (if exists and list variant) */}
-        {post.media && post.media.length > 0 && variant === 'list' && (
+        {post.media && post.media.length > 0 && variant === "list" && (
           <div className="mb-3">
             <img
               src={post.media[0].url}
@@ -382,7 +395,7 @@ const SocialPostCard: React.FC<SocialPostCardProps> = ({ post, index, variant = 
               {post.shares}
             </span>
           </div>
-          
+
           <div className="flex items-center gap-2">
             <span className="text-xs text-gray-500 dark:text-gray-400">
               {formatDistanceToNow(post.timestamp, { addSuffix: true })}

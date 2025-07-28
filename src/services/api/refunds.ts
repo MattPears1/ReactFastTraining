@@ -1,4 +1,4 @@
-import axios from 'axios';
+import axios from "axios";
 
 interface RefundRequestData {
   bookingId: string;
@@ -54,16 +54,16 @@ interface RefundStats {
 
 class RefundApi {
   private api = axios.create({
-    baseURL: import.meta.env.VITE_API_URL || 'http://localhost:3000',
+    baseURL: import.meta.env.VITE_API_URL || "http://localhost:3000",
     headers: {
-      'Content-Type': 'application/json',
+      "Content-Type": "application/json",
     },
   });
 
   constructor() {
     // Add auth token to requests
     this.api.interceptors.request.use((config) => {
-      const token = localStorage.getItem('authToken');
+      const token = localStorage.getItem("authToken");
       if (token) {
         config.headers.Authorization = `Bearer ${token}`;
       }
@@ -73,12 +73,12 @@ class RefundApi {
 
   // Customer endpoints
   async requestRefund(data: RefundRequestData): Promise<RefundResponse> {
-    const response = await this.api.post('/api/refunds/request', data);
+    const response = await this.api.post("/api/refunds/request", data);
     return response.data;
   }
 
   async getMyRefunds() {
-    const response = await this.api.get('/api/refunds/my-refunds');
+    const response = await this.api.get("/api/refunds/my-refunds");
     return response.data;
   }
 
@@ -88,18 +88,22 @@ class RefundApi {
   }
 
   // Admin endpoints
-  async listRefunds(status?: string, limit = 50, offset = 0): Promise<RefundListResponse> {
+  async listRefunds(
+    status?: string,
+    limit = 50,
+    offset = 0,
+  ): Promise<RefundListResponse> {
     const params = new URLSearchParams();
-    if (status) params.append('status', status);
-    params.append('limit', limit.toString());
-    params.append('offset', offset.toString());
+    if (status) params.append("status", status);
+    params.append("limit", limit.toString());
+    params.append("offset", offset.toString());
 
     const response = await this.api.get(`/api/admin/refunds?${params}`);
     return response.data;
   }
 
   async getRefundStats(): Promise<RefundStats> {
-    const response = await this.api.get('/api/admin/refunds/stats');
+    const response = await this.api.get("/api/admin/refunds/stats");
     return response.data;
   }
 
@@ -108,13 +112,25 @@ class RefundApi {
     return response.data;
   }
 
-  async approveRefund(refundId: string, data: RefundApprovalData): Promise<RefundResponse> {
-    const response = await this.api.patch(`/api/admin/refunds/${refundId}/approve`, data);
+  async approveRefund(
+    refundId: string,
+    data: RefundApprovalData,
+  ): Promise<RefundResponse> {
+    const response = await this.api.patch(
+      `/api/admin/refunds/${refundId}/approve`,
+      data,
+    );
     return response.data;
   }
 
-  async rejectRefund(refundId: string, data: RefundRejectionData): Promise<RefundResponse> {
-    const response = await this.api.patch(`/api/admin/refunds/${refundId}/reject`, data);
+  async rejectRefund(
+    refundId: string,
+    data: RefundRejectionData,
+  ): Promise<RefundResponse> {
+    const response = await this.api.patch(
+      `/api/admin/refunds/${refundId}/reject`,
+      data,
+    );
     return response.data;
   }
 }

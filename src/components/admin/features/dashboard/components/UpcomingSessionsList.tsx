@@ -1,8 +1,8 @@
-import React from 'react';
-import { Calendar, MapPin, Users, AlertCircle, Clock } from 'lucide-react';
-import { format } from 'date-fns';
-import { Link } from 'react-router-dom';
-import { cn } from '@utils/cn';
+import React from "react";
+import { Calendar, MapPin, Users, AlertCircle, Clock } from "lucide-react";
+import { format } from "date-fns";
+import { Link } from "react-router-dom";
+import { cn } from "@utils/cn";
 
 interface SessionSummary {
   session: {
@@ -24,7 +24,9 @@ interface UpcomingSessionsListProps {
   sessions: SessionSummary[];
 }
 
-export const UpcomingSessionsList: React.FC<UpcomingSessionsListProps> = ({ sessions }) => {
+export const UpcomingSessionsList: React.FC<UpcomingSessionsListProps> = ({
+  sessions,
+}) => {
   if (sessions.length === 0) {
     return (
       <div className="text-center py-8">
@@ -62,7 +64,7 @@ export const UpcomingSessionsList: React.FC<UpcomingSessionsListProps> = ({ sess
                 <div className="flex items-center gap-3 mt-1 text-sm text-gray-600 dark:text-gray-400">
                   <span className="flex items-center gap-1">
                     <Calendar className="w-3 h-3" />
-                    {format(new Date(session.sessionDate), 'MMM dd')}
+                    {format(new Date(session.sessionDate), "MMM dd")}
                   </span>
                   <span className="flex items-center gap-1">
                     <Clock className="w-3 h-3" />
@@ -74,18 +76,24 @@ export const UpcomingSessionsList: React.FC<UpcomingSessionsListProps> = ({ sess
                   </span>
                 </div>
               </div>
-              
+
               <div className="text-right ml-4">
-                <div className={cn(
-                  "inline-flex items-center gap-1 px-2 py-1 rounded-full text-xs font-medium",
-                  isFull && "bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-400",
-                  isNearlyFull && !isFull && "bg-amber-100 text-amber-700 dark:bg-amber-900/30 dark:text-amber-400",
-                  !isNearlyFull && "bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400"
-                )}>
+                <div
+                  className={cn(
+                    "inline-flex items-center gap-1 px-2 py-1 rounded-full text-xs font-medium",
+                    isFull &&
+                      "bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-400",
+                    isNearlyFull &&
+                      !isFull &&
+                      "bg-amber-100 text-amber-700 dark:bg-amber-900/30 dark:text-amber-400",
+                    !isNearlyFull &&
+                      "bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400",
+                  )}
+                >
                   <Users className="w-3 h-3" />
                   {attendeesCount}/{session.maxCapacity}
                 </div>
-                
+
                 {remainingSpots > 0 && (
                   <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">
                     {remainingSpots} spots left
@@ -102,14 +110,14 @@ export const UpcomingSessionsList: React.FC<UpcomingSessionsListProps> = ({ sess
                     "h-1.5 rounded-full transition-all",
                     isFull && "bg-red-500",
                     isNearlyFull && !isFull && "bg-amber-500",
-                    !isNearlyFull && "bg-green-500"
+                    !isNearlyFull && "bg-green-500",
                   )}
                   style={{ width: `${Math.min(100, percentFull)}%` }}
                 />
               </div>
             </div>
 
-            {session.status === 'scheduled' && percentFull < 50 && (
+            {session.status === "scheduled" && percentFull < 50 && (
               <div className="flex items-center gap-1 mt-2 text-xs text-amber-600 dark:text-amber-400">
                 <AlertCircle className="w-3 h-3" />
                 Low enrollment
@@ -118,7 +126,7 @@ export const UpcomingSessionsList: React.FC<UpcomingSessionsListProps> = ({ sess
           </Link>
         );
       })}
-      
+
       <Link
         to="/admin/calendar"
         className="block text-center py-2 text-sm text-primary-600 hover:text-primary-700 dark:text-primary-400 dark:hover:text-primary-300"

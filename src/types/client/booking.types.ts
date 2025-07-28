@@ -2,7 +2,7 @@ export interface BookingHistoryItem {
   booking: {
     id: string;
     bookingReference: string;
-    status: 'confirmed' | 'pending' | 'cancelled';
+    status: "confirmed" | "pending" | "cancelled";
     createdAt: string;
     userId: string;
   };
@@ -13,19 +13,19 @@ export interface BookingHistoryItem {
     startTime: string;
     endTime: string;
     location: string;
-    status: 'scheduled' | 'in-progress' | 'completed' | 'cancelled';
+    status: "scheduled" | "in-progress" | "completed" | "cancelled";
   };
   attendeeCount: number;
   payment?: {
     id: string;
     amount: number;
-    status: 'pending' | 'completed' | 'failed';
+    status: "pending" | "completed" | "failed";
     createdAt: string;
   };
   refund?: {
     id: string;
     amount: number;
-    status: 'pending' | 'processed' | 'rejected';
+    status: "pending" | "processed" | "rejected";
     processedAt?: string;
   };
   invoice?: {
@@ -63,14 +63,14 @@ export interface AttendanceRecord {
   id: string;
   userId: string;
   bookingId: string;
-  status: 'present' | 'absent';
+  status: "present" | "absent";
   markedAt: string;
 }
 
 export interface SpecialRequirement {
   id: string;
   bookingId: string;
-  category: 'medical' | 'dietary' | 'accessibility' | 'other';
+  category: "medical" | "dietary" | "accessibility" | "other";
   requirementType: string;
   details?: string;
 }

@@ -1,4 +1,4 @@
-import apiClient from './client';
+import apiClient from "./client";
 
 // Types
 export interface DashboardStats {
@@ -36,7 +36,7 @@ export interface SessionSummary {
 }
 
 export interface ActivityLog {
-  type: 'new_booking' | 'cancellation' | 'update';
+  type: "new_booking" | "cancellation" | "update";
   booking: any;
   user: any;
   timestamp: Date;
@@ -90,7 +90,7 @@ export interface CalendarEvent {
     booked: number;
     available: number;
     percentFull: number;
-    status: 'available' | 'filling' | 'nearly-full' | 'full';
+    status: "available" | "filling" | "nearly-full" | "full";
   };
   stats: {
     bookings: number;
@@ -159,13 +159,18 @@ export interface ClientDetails {
 // Admin Dashboard API Service
 export const adminDashboardApi = {
   // Dashboard Statistics
-  async getDashboardStats(dateRange?: { start: Date; end: Date }): Promise<DashboardStats> {
-    const params = dateRange ? {
-      startDate: dateRange.start.toISOString(),
-      endDate: dateRange.end.toISOString()
-    } : undefined;
-    
-    const response = await apiClient.get('/admin/dashboard/stats', { params });
+  async getDashboardStats(dateRange?: {
+    start: Date;
+    end: Date;
+  }): Promise<DashboardStats> {
+    const params = dateRange
+      ? {
+          startDate: dateRange.start.toISOString(),
+          endDate: dateRange.end.toISOString(),
+        }
+      : undefined;
+
+    const response = await apiClient.get("/admin/dashboard/stats", { params });
     return response.data;
   },
 
@@ -181,7 +186,7 @@ export const adminDashboardApi = {
   }): Promise<BookingListResponse> {
     const params: any = {
       page: filters.page || 1,
-      limit: filters.limit || 25
+      limit: filters.limit || 25,
     };
 
     if (filters.search) params.search = filters.search;
@@ -190,19 +195,21 @@ export const adminDashboardApi = {
     if (filters.dateTo) params.dateTo = filters.dateTo.toISOString();
     if (filters.courseType) params.courseType = filters.courseType;
 
-    const response = await apiClient.get('/admin/bookings', { params });
+    const response = await apiClient.get("/admin/bookings", { params });
     return response.data;
   },
 
   async bulkCancelBookings(bookingIds: string[]): Promise<any> {
-    const response = await apiClient.post('/admin/bookings/bulk-cancel', { bookingIds });
+    const response = await apiClient.post("/admin/bookings/bulk-cancel", {
+      bookingIds,
+    });
     return response.data;
   },
 
   async exportBookings(filters: any): Promise<Blob> {
-    const response = await apiClient.get('/admin/bookings/export', {
+    const response = await apiClient.get("/admin/bookings/export", {
       params: filters,
-      responseType: 'blob'
+      responseType: "blob",
     });
     return response.data;
   },
@@ -211,22 +218,26 @@ export const adminDashboardApi = {
   async getCalendarSessions(
     startDate: Date,
     endDate: Date,
-    filters?: { courseType?: string; location?: string }
+    filters?: { courseType?: string; location?: string },
   ): Promise<CalendarEvent[]> {
     const params: any = {
       startDate: startDate.toISOString(),
-      endDate: endDate.toISOString()
+      endDate: endDate.toISOString(),
     };
 
     if (filters?.courseType) params.courseType = filters.courseType;
     if (filters?.location) params.location = filters.location;
 
-    const response = await apiClient.get('/admin/calendar/sessions', { params });
+    const response = await apiClient.get("/admin/calendar/sessions", {
+      params,
+    });
     return response.data;
   },
 
   async getSessionDetails(sessionId: string): Promise<SessionDetails> {
-    const response = await apiClient.get(`/admin/sessions/${sessionId}/details`);
+    const response = await apiClient.get(
+      `/admin/sessions/${sessionId}/details`,
+    );
     return response.data;
   },
 
@@ -234,13 +245,16 @@ export const adminDashboardApi = {
     sessionId: string,
     newDate: Date,
     startTime: string,
-    endTime: string
+    endTime: string,
   ): Promise<any> {
-    const response = await apiClient.put(`/admin/sessions/${sessionId}/reschedule`, {
-      newDate: newDate.toISOString(),
-      startTime,
-      endTime
-    });
+    const response = await apiClient.put(
+      `/admin/sessions/${sessionId}/reschedule`,
+      {
+        newDate: newDate.toISOString(),
+        startTime,
+        endTime,
+      },
+    );
     return response.data;
   },
 
@@ -259,15 +273,18 @@ export const adminDashboardApi = {
     price: number;
     notes?: string;
   }): Promise<any> {
-    const response = await apiClient.post('/admin/sessions', {
+    const response = await apiClient.post("/admin/sessions", {
       ...data,
-      sessionDate: data.sessionDate.toISOString()
+      sessionDate: data.sessionDate.toISOString(),
     });
     return response.data;
   },
 
   async updateSession(sessionId: string, updates: any): Promise<any> {
-    const response = await apiClient.put(`/admin/sessions/${sessionId}`, updates);
+    const response = await apiClient.put(
+      `/admin/sessions/${sessionId}`,
+      updates,
+    );
     return response.data;
   },
 
@@ -281,18 +298,19 @@ export const adminDashboardApi = {
       minSpend?: number;
     },
     sort?: {
-      field: 'name' | 'created' | 'lastBooking' | 'totalSpend' | 'bookingCount';
-      direction: 'asc' | 'desc';
+      field: "name" | "created" | "lastBooking" | "totalSpend" | "bookingCount";
+      direction: "asc" | "desc";
     },
     pagination?: {
       limit: number;
       offset: number;
-    }
+    },
   ): Promise<ClientListResponse> {
     const params: any = {};
 
     if (filters.search) params.search = filters.search;
-    if (filters.hasBookings !== undefined) params.hasBookings = filters.hasBookings;
+    if (filters.hasBookings !== undefined)
+      params.hasBookings = filters.hasBookings;
     if (filters.dateFrom) params.dateFrom = filters.dateFrom.toISOString();
     if (filters.dateTo) params.dateTo = filters.dateTo.toISOString();
     if (filters.minSpend) params.minSpend = filters.minSpend;
@@ -307,7 +325,7 @@ export const adminDashboardApi = {
       params.offset = pagination.offset;
     }
 
-    const response = await apiClient.get('/admin/clients', { params });
+    const response = await apiClient.get("/admin/clients", { params });
     return response.data;
   },
 
@@ -317,52 +335,66 @@ export const adminDashboardApi = {
   },
 
   async addClientNote(clientId: string, note: string): Promise<any> {
-    const response = await apiClient.post(`/admin/clients/${clientId}/notes`, { note });
+    const response = await apiClient.post(`/admin/clients/${clientId}/notes`, {
+      note,
+    });
     return response.data;
   },
 
   async exportClientData(clientId: string): Promise<Blob> {
     const response = await apiClient.get(`/admin/clients/${clientId}/export`, {
-      responseType: 'blob'
+      responseType: "blob",
     });
     return response.data;
   },
 
   async exportAllClients(filters?: any): Promise<Blob> {
-    const response = await apiClient.get('/admin/clients/export-all', {
+    const response = await apiClient.get("/admin/clients/export-all", {
       params: filters,
-      responseType: 'blob'
+      responseType: "blob",
     });
     return response.data;
   },
 
-  async mergeClients(primaryClientId: string, secondaryClientId: string): Promise<any> {
-    const response = await apiClient.post('/admin/clients/merge', {
+  async mergeClients(
+    primaryClientId: string,
+    secondaryClientId: string,
+  ): Promise<any> {
+    const response = await apiClient.post("/admin/clients/merge", {
       primaryClientId,
-      secondaryClientId
+      secondaryClientId,
     });
     return response.data;
   },
 
   // Email Management
-  async sendBulkEmail(clientIds: string[], emailData: {
-    subject: string;
-    message: string;
-    template?: string;
-  }): Promise<any> {
-    const response = await apiClient.post('/admin/emails/bulk', {
+  async sendBulkEmail(
+    clientIds: string[],
+    emailData: {
+      subject: string;
+      message: string;
+      template?: string;
+    },
+  ): Promise<any> {
+    const response = await apiClient.post("/admin/emails/bulk", {
       clientIds,
-      ...emailData
+      ...emailData,
     });
     return response.data;
   },
 
-  async sendIndividualEmail(clientId: string, emailData: {
-    subject: string;
-    message: string;
-    template?: string;
-  }): Promise<any> {
-    const response = await apiClient.post(`/admin/clients/${clientId}/email`, emailData);
+  async sendIndividualEmail(
+    clientId: string,
+    emailData: {
+      subject: string;
+      message: string;
+      template?: string;
+    },
+  ): Promise<any> {
+    const response = await apiClient.post(
+      `/admin/clients/${clientId}/email`,
+      emailData,
+    );
     return response.data;
   },
 
@@ -377,7 +409,7 @@ export const adminDashboardApi = {
   }): Promise<any> {
     const params: any = {
       page: filters?.page || 1,
-      limit: filters?.limit || 50
+      limit: filters?.limit || 50,
     };
 
     if (filters?.adminId) params.adminId = filters.adminId;
@@ -385,9 +417,9 @@ export const adminDashboardApi = {
     if (filters?.dateFrom) params.dateFrom = filters.dateFrom.toISOString();
     if (filters?.dateTo) params.dateTo = filters.dateTo.toISOString();
 
-    const response = await apiClient.get('/admin/audit-log', { params });
+    const response = await apiClient.get("/admin/audit-log", { params });
     return response.data;
-  }
+  },
 };
 
 // Export as default for backward compatibility

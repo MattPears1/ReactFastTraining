@@ -7,26 +7,26 @@ export interface Booking {
   courseTime: string;
   courseVenue: string;
   coursePrice: number;
-  
+
   // Customer details
   customerName: string;
   customerEmail: string;
   customerPhone: string;
   companyName?: string;
-  
+
   // Booking details
   bookingDate: string;
   bookingReference: string;
-  status: 'pending' | 'confirmed' | 'cancelled' | 'completed';
-  paymentStatus: 'pending' | 'paid' | 'refunded';
-  paymentMethod: 'card' | 'bank_transfer' | 'cash';
+  status: "pending" | "confirmed" | "cancelled" | "completed";
+  paymentStatus: "pending" | "paid" | "refunded";
+  paymentMethod: "card" | "bank_transfer" | "cash";
   paymentIntentId?: string;
-  
+
   // Additional info
   notes?: string;
   attendees: number;
   totalAmount: number;
-  
+
   // Timestamps
   createdAt: string;
   updatedAt: string;
@@ -43,7 +43,7 @@ export interface CourseSchedule {
   maxCapacity: number;
   currentCapacity: number;
   price: number;
-  status: 'scheduled' | 'in_progress' | 'completed' | 'cancelled';
+  status: "scheduled" | "in_progress" | "completed" | "cancelled";
   bookings?: Booking[];
 }
 

@@ -1,6 +1,6 @@
-import React from 'react';
-import { secureStorage } from './security';
-import type { ClientPortalState } from '@/types/client/portal.types';
+import React from "react";
+import { secureStorage } from "./security";
+import type { ClientPortalState } from "@/types/client/portal.types";
 
 interface PersistenceConfig {
   version: number;
@@ -29,18 +29,21 @@ export class DataPersistence {
 
       request.onupgradeneeded = (event) => {
         const db = (event.target as IDBOpenDBRequest).result;
-        
+
         // Create object stores
-        if (!db.objectStoreNames.contains('cache')) {
-          db.createObjectStore('cache', { keyPath: 'key' });
+        if (!db.objectStoreNames.contains("cache")) {
+          db.createObjectStore("cache", { keyPath: "key" });
         }
-        
-        if (!db.objectStoreNames.contains('pending')) {
-          db.createObjectStore('pending', { keyPath: 'id', autoIncrement: true });
+
+        if (!db.objectStoreNames.contains("pending")) {
+          db.createObjectStore("pending", {
+            keyPath: "id",
+            autoIncrement: true,
+          });
         }
-        
-        if (!db.objectStoreNames.contains('state')) {
-          db.createObjectStore('state', { keyPath: 'id' });
+
+        if (!db.objectStoreNames.contains("state")) {
+          db.createObjectStore("state", { keyPath: "id" });
         }
       };
     });
@@ -50,7 +53,7 @@ export class DataPersistence {
     if (!this.db) await this.initialize();
 
     return new Promise((resolve, reject) => {
-      const transaction = this.db!.transaction([store], 'readonly');
+      const transaction = this.db!.transaction([store], "readonly");
       const objectStore = transaction.objectStore(store);
       const request = objectStore.get(key);
 
@@ -63,25 +66,30 @@ export class DataPersistence {
           resolve(result?.data || null);
         }
       };
-      
+
       request.onerror = () => reject(request.error);
     });
   }
 
-  async set<T>(store: string, key: string, data: T, ttl?: number): Promise<void> {
+  async set<T>(
+    store: string,
+    key: string,
+    data: T,
+    ttl?: number,
+  ): Promise<void> {
     if (!this.db) await this.initialize();
 
     return new Promise((resolve, reject) => {
-      const transaction = this.db!.transaction([store], 'readwrite');
+      const transaction = this.db!.transaction([store], "readwrite");
       const objectStore = transaction.objectStore(store);
-      
+
       const record = {
         key,
         data,
         timestamp: Date.now(),
         expiry: ttl ? Date.now() + ttl : undefined,
       };
-      
+
       const request = objectStore.put(record);
 
       request.onsuccess = () => resolve();
@@ -93,7 +101,7 @@ export class DataPersistence {
     if (!this.db) await this.initialize();
 
     return new Promise((resolve, reject) => {
-      const transaction = this.db!.transaction([store], 'readwrite');
+      const transaction = this.db!.transaction([store], "readwrite");
       const objectStore = transaction.objectStore(store);
       const request = objectStore.delete(key);
 
@@ -106,7 +114,7 @@ export class DataPersistence {
     if (!this.db) await this.initialize();
 
     return new Promise((resolve, reject) => {
-      const transaction = this.db!.transaction([store], 'readwrite');
+      const transaction = this.db!.transaction([store], "readwrite");
       const objectStore = transaction.objectStore(store);
       const request = objectStore.clear();
 
@@ -117,7 +125,7 @@ export class DataPersistence {
 }
 
 // Singleton instance
-export const persistence = new DataPersistence('client-portal', {
+export const persistence = new DataPersistence("client-portal", {
   version: 1,
 });
 
@@ -128,12 +136,12 @@ export class SyncManager {
 
   constructor() {
     // Listen for online/offline events
-    window.addEventListener('online', () => this.sync());
+    window.addEventListener("online", () => this.sync());
   }
 
   addToSync(id: string, syncFn: () => Promise<any>): void {
     this.syncQueue.set(id, syncFn);
-    
+
     if (navigator.onLine) {
       this.sync();
     }
@@ -172,12 +180,12 @@ export const useOnlineStatus = () => {
     const handleOnline = () => setIsOnline(true);
     const handleOffline = () => setIsOnline(false);
 
-    window.addEventListener('online', handleOnline);
-    window.addEventListener('offline', handleOffline);
+    window.addEventListener("online", handleOnline);
+    window.addEventListener("offline", handleOffline);
 
     return () => {
-      window.removeEventListener('online', handleOnline);
-      window.removeEventListener('offline', handleOffline);
+      window.removeEventListener("online", handleOnline);
+      window.removeEventListener("offline", handleOffline);
     };
   }, []);
 
@@ -189,13 +197,13 @@ export const usePersistedState = <T>(
   key: string,
   defaultValue: T,
   options: {
-    storage?: 'local' | 'session' | 'secure';
+    storage?: "local" | "session" | "secure";
     serialize?: (value: T) => string;
     deserialize?: (value: string) => T;
-  } = {}
+  } = {},
 ) => {
   const {
-    storage = 'local',
+    storage = "local",
     serialize = JSON.stringify,
     deserialize = JSON.parse,
   } = options;
@@ -203,10 +211,10 @@ export const usePersistedState = <T>(
   const [state, setState] = React.useState<T>(() => {
     try {
       let item: string | null = null;
-      
-      if (storage === 'local') {
+
+      if (storage === "local") {
         item = localStorage.getItem(key);
-      } else if (storage === 'session') {
+      } else if (storage === "session") {
         item = sessionStorage.getItem(key);
       } else {
         const secured = secureStorage.getItem<T>(key);
@@ -219,30 +227,33 @@ export const usePersistedState = <T>(
     }
   });
 
-  const setValue = React.useCallback((value: T | ((prev: T) => T)) => {
-    setState(prev => {
-      const nextValue = value instanceof Function ? value(prev) : value;
-      
-      try {
-        if (storage === 'local') {
-          localStorage.setItem(key, serialize(nextValue));
-        } else if (storage === 'session') {
-          sessionStorage.setItem(key, serialize(nextValue));
-        } else {
-          secureStorage.setItem(key, nextValue);
+  const setValue = React.useCallback(
+    (value: T | ((prev: T) => T)) => {
+      setState((prev) => {
+        const nextValue = value instanceof Function ? value(prev) : value;
+
+        try {
+          if (storage === "local") {
+            localStorage.setItem(key, serialize(nextValue));
+          } else if (storage === "session") {
+            sessionStorage.setItem(key, serialize(nextValue));
+          } else {
+            secureStorage.setItem(key, nextValue);
+          }
+        } catch (error) {
+          console.error(`Failed to persist state for key "${key}":`, error);
         }
-      } catch (error) {
-        console.error(`Failed to persist state for key "${key}":`, error);
-      }
-      
-      return nextValue;
-    });
-  }, [key, storage, serialize]);
+
+        return nextValue;
+      });
+    },
+    [key, storage, serialize],
+  );
 
   const removeValue = React.useCallback(() => {
-    if (storage === 'local') {
+    if (storage === "local") {
       localStorage.removeItem(key);
-    } else if (storage === 'session') {
+    } else if (storage === "session") {
       sessionStorage.removeItem(key);
     } else {
       secureStorage.removeItem(key);

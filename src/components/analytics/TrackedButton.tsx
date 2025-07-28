@@ -1,18 +1,18 @@
-import React from 'react'
-import Button, { ButtonProps } from '@/components/ui/Button'
-import { useAnalytics } from '@/hooks/useAnalytics'
+import React from "react";
+import Button, { ButtonProps } from "@/components/ui/Button";
+import { useAnalytics } from "@/hooks/useAnalytics";
 
 interface TrackedButtonProps extends ButtonProps {
-  eventCategory?: string
-  eventAction?: string
-  eventLabel?: string
-  eventValue?: number
-  trackingProps?: Record<string, any>
+  eventCategory?: string;
+  eventAction?: string;
+  eventLabel?: string;
+  eventValue?: number;
+  trackingProps?: Record<string, any>;
 }
 
 export const TrackedButton: React.FC<TrackedButtonProps> = ({
-  eventCategory = 'button',
-  eventAction = 'click',
+  eventCategory = "button",
+  eventAction = "click",
   eventLabel,
   eventValue,
   trackingProps,
@@ -20,25 +20,28 @@ export const TrackedButton: React.FC<TrackedButtonProps> = ({
   children,
   ...props
 }) => {
-  const { trackEvent } = useAnalytics()
+  const { trackEvent } = useAnalytics();
 
   const handleClick = (e: React.MouseEvent<HTMLButtonElement>) => {
     // Track the event
     trackEvent({
       category: eventCategory,
       action: eventAction,
-      label: eventLabel || props.id || (typeof children === 'string' ? children : 'button'),
+      label:
+        eventLabel ||
+        props.id ||
+        (typeof children === "string" ? children : "button"),
       value: eventValue,
-      properties: trackingProps
-    })
+      properties: trackingProps,
+    });
 
     // Call original onClick handler
-    onClick?.(e)
-  }
+    onClick?.(e);
+  };
 
   return (
     <Button {...props} onClick={handleClick}>
       {children}
     </Button>
-  )
-}
+  );
+};

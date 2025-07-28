@@ -1,12 +1,12 @@
-import React, { useState, useCallback } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { SearchInput, SearchSuggestion } from './SearchInput';
-import { useSearch } from '@hooks/useSearch';
-import { File, Package, FileText, HelpCircle, Home, Info } from 'lucide-react';
+import React, { useState, useCallback } from "react";
+import { useNavigate } from "react-router-dom";
+import { SearchInput, SearchSuggestion } from "./SearchInput";
+import { useSearch } from "@hooks/useSearch";
+import { File, Package, FileText, HelpCircle, Home, Info } from "lucide-react";
 
 interface SearchBarProps {
-  variant?: 'default' | 'minimal' | 'floating';
-  size?: 'sm' | 'md' | 'lg';
+  variant?: "default" | "minimal" | "floating";
+  size?: "sm" | "md" | "lg";
   className?: string;
   placeholder?: string;
   showTrending?: boolean;
@@ -23,15 +23,15 @@ const iconMap: Record<string, React.ReactNode> = {
 };
 
 export const SearchBar: React.FC<SearchBarProps> = ({
-  variant = 'default',
-  size = 'md',
+  variant = "default",
+  size = "md",
   className,
-  placeholder = 'Search products, pages, FAQs...',
+  placeholder = "Search products, pages, FAQs...",
   showTrending = true,
   onSearch,
 }) => {
   const navigate = useNavigate();
-  const [query, setQuery] = useState('');
+  const [query, setQuery] = useState("");
   const {
     suggestions,
     recentSearches,
@@ -41,35 +41,43 @@ export const SearchBar: React.FC<SearchBarProps> = ({
     clearRecentSearches,
   } = useSearch();
 
-  const handleSearch = useCallback((searchQuery: string) => {
-    if (searchQuery.trim()) {
-      search(searchQuery);
-      if (onSearch) {
-        onSearch(searchQuery);
-      } else {
-        // Default behavior - navigate to search results page
-        navigate(`/search?q=${encodeURIComponent(searchQuery)}`);
+  const handleSearch = useCallback(
+    (searchQuery: string) => {
+      if (searchQuery.trim()) {
+        search(searchQuery);
+        if (onSearch) {
+          onSearch(searchQuery);
+        } else {
+          // Default behavior - navigate to search results page
+          navigate(`/search?q=${encodeURIComponent(searchQuery)}`);
+        }
       }
-    }
-  }, [search, onSearch, navigate]);
+    },
+    [search, onSearch, navigate],
+  );
 
-  const handleSuggestionClick = useCallback((suggestion: SearchSuggestion) => {
-    if (suggestion.url) {
-      if (suggestion.url.startsWith('http')) {
-        window.location.href = suggestion.url;
+  const handleSuggestionClick = useCallback(
+    (suggestion: SearchSuggestion) => {
+      if (suggestion.url) {
+        if (suggestion.url.startsWith("http")) {
+          window.location.href = suggestion.url;
+        } else {
+          navigate(suggestion.url);
+        }
       } else {
-        navigate(suggestion.url);
+        handleSearch(suggestion.title);
       }
-    } else {
-      handleSearch(suggestion.title);
-    }
-  }, [navigate, handleSearch]);
+    },
+    [navigate, handleSearch],
+  );
 
   // Map search results to suggestions with icons
-  const mappedSuggestions: SearchSuggestion[] = suggestions.map(suggestion => ({
-    ...suggestion,
-    icon: iconMap[suggestion.category || 'page'] || iconMap.page,
-  }));
+  const mappedSuggestions: SearchSuggestion[] = suggestions.map(
+    (suggestion) => ({
+      ...suggestion,
+      icon: iconMap[suggestion.category || "page"] || iconMap.page,
+    }),
+  );
 
   return (
     <SearchInput

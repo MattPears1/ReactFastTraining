@@ -1,12 +1,12 @@
-import React from 'react';
-import { cn } from '@utils/cn';
+import React from "react";
+import { cn } from "@utils/cn";
 
 // Mobile-optimized form field wrapper
 export const FormField: React.FC<{
   children: React.ReactNode;
   className?: string;
 }> = ({ children, className }) => (
-  <div className={cn('mb-6', className)}>{children}</div>
+  <div className={cn("mb-6", className)}>{children}</div>
 );
 
 // Mobile-optimized label
@@ -19,8 +19,8 @@ export const FormLabel: React.FC<{
   <label
     htmlFor={htmlFor}
     className={cn(
-      'block text-base font-medium text-gray-700 dark:text-gray-300 mb-2',
-      className
+      "block text-base font-medium text-gray-700 dark:text-gray-300 mb-2",
+      className,
     )}
   >
     {children}
@@ -45,24 +45,24 @@ export const FormInput = React.forwardRef<
     <input
       ref={ref}
       className={cn(
-        'block w-full rounded-lg border px-4 py-3',
-        'text-base placeholder:text-gray-400',
-        'min-h-[48px]',
-        'focus:outline-none focus:ring-2 focus:ring-offset-2',
-        'transition-colors duration-200',
-        icon && 'pl-10',
+        "block w-full rounded-lg border px-4 py-3",
+        "text-base placeholder:text-gray-400",
+        "min-h-[48px]",
+        "focus:outline-none focus:ring-2 focus:ring-offset-2",
+        "transition-colors duration-200",
+        icon && "pl-10",
         error
-          ? 'border-red-300 text-red-900 placeholder-red-300 focus:border-red-500 focus:ring-red-500'
-          : 'border-gray-300 text-gray-900 focus:border-primary-500 focus:ring-primary-500',
-        'dark:bg-gray-800 dark:border-gray-600 dark:text-gray-100',
-        className
+          ? "border-red-300 text-red-900 placeholder-red-300 focus:border-red-500 focus:ring-red-500"
+          : "border-gray-300 text-gray-900 focus:border-primary-500 focus:ring-primary-500",
+        "dark:bg-gray-800 dark:border-gray-600 dark:text-gray-100",
+        className,
       )}
       {...props}
     />
   </div>
 ));
 
-FormInput.displayName = 'FormInput';
+FormInput.displayName = "FormInput";
 
 // Mobile-optimized select
 export const FormSelect = React.forwardRef<
@@ -75,18 +75,18 @@ export const FormSelect = React.forwardRef<
   <select
     ref={ref}
     className={cn(
-      'block w-full rounded-lg border px-4 py-3',
-      'text-base',
-      'min-h-[48px]',
-      'appearance-none',
-      'bg-white dark:bg-gray-800',
-      'focus:outline-none focus:ring-2 focus:ring-offset-2',
-      'transition-colors duration-200',
+      "block w-full rounded-lg border px-4 py-3",
+      "text-base",
+      "min-h-[48px]",
+      "appearance-none",
+      "bg-white dark:bg-gray-800",
+      "focus:outline-none focus:ring-2 focus:ring-offset-2",
+      "transition-colors duration-200",
       error
-        ? 'border-red-300 text-red-900 focus:border-red-500 focus:ring-red-500'
-        : 'border-gray-300 text-gray-900 focus:border-primary-500 focus:ring-primary-500',
-      'dark:border-gray-600 dark:text-gray-100',
-      className
+        ? "border-red-300 text-red-900 focus:border-red-500 focus:ring-red-500"
+        : "border-gray-300 text-gray-900 focus:border-primary-500 focus:ring-primary-500",
+      "dark:border-gray-600 dark:text-gray-100",
+      className,
     )}
     {...props}
   >
@@ -99,7 +99,7 @@ export const FormSelect = React.forwardRef<
   </select>
 ));
 
-FormSelect.displayName = 'FormSelect';
+FormSelect.displayName = "FormSelect";
 
 // Mobile-optimized textarea
 export const FormTextarea = React.forwardRef<
@@ -111,23 +111,23 @@ export const FormTextarea = React.forwardRef<
   <textarea
     ref={ref}
     className={cn(
-      'block w-full rounded-lg border px-4 py-3',
-      'text-base placeholder:text-gray-400',
-      'min-h-[100px]',
-      'focus:outline-none focus:ring-2 focus:ring-offset-2',
-      'transition-colors duration-200',
-      'resize-y',
+      "block w-full rounded-lg border px-4 py-3",
+      "text-base placeholder:text-gray-400",
+      "min-h-[100px]",
+      "focus:outline-none focus:ring-2 focus:ring-offset-2",
+      "transition-colors duration-200",
+      "resize-y",
       error
-        ? 'border-red-300 text-red-900 placeholder-red-300 focus:border-red-500 focus:ring-red-500'
-        : 'border-gray-300 text-gray-900 focus:border-primary-500 focus:ring-primary-500',
-      'dark:bg-gray-800 dark:border-gray-600 dark:text-gray-100',
-      className
+        ? "border-red-300 text-red-900 placeholder-red-300 focus:border-red-500 focus:ring-red-500"
+        : "border-gray-300 text-gray-900 focus:border-primary-500 focus:ring-primary-500",
+      "dark:bg-gray-800 dark:border-gray-600 dark:text-gray-100",
+      className,
     )}
     {...props}
   />
 ));
 
-FormTextarea.displayName = 'FormTextarea';
+FormTextarea.displayName = "FormTextarea";
 
 // Mobile-optimized checkbox
 export const FormCheckbox: React.FC<{
@@ -138,7 +138,7 @@ export const FormCheckbox: React.FC<{
   error?: boolean;
   className?: string;
 }> = ({ id, label, checked, onChange, error, className }) => (
-  <div className={cn('flex items-start', className)}>
+  <div className={cn("flex items-start", className)}>
     <div className="flex items-center h-6">
       <input
         id={id}
@@ -146,12 +146,12 @@ export const FormCheckbox: React.FC<{
         checked={checked}
         onChange={(e) => onChange?.(e.target.checked)}
         className={cn(
-          'w-5 h-5 rounded',
-          'text-primary-600 focus:ring-2 focus:ring-primary-500',
-          'border-gray-300 dark:border-gray-600',
-          'dark:bg-gray-800',
-          error && 'border-red-300',
-          'cursor-pointer'
+          "w-5 h-5 rounded",
+          "text-primary-600 focus:ring-2 focus:ring-primary-500",
+          "border-gray-300 dark:border-gray-600",
+          "dark:bg-gray-800",
+          error && "border-red-300",
+          "cursor-pointer",
         )}
       />
     </div>
@@ -174,7 +174,7 @@ export const FormRadio: React.FC<{
   onChange?: (value: string) => void;
   className?: string;
 }> = ({ id, name, label, value, checked, onChange, className }) => (
-  <div className={cn('flex items-start', className)}>
+  <div className={cn("flex items-start", className)}>
     <div className="flex items-center h-6">
       <input
         id={id}
@@ -184,11 +184,11 @@ export const FormRadio: React.FC<{
         checked={checked}
         onChange={(e) => onChange?.(e.target.value)}
         className={cn(
-          'w-5 h-5',
-          'text-primary-600 focus:ring-2 focus:ring-primary-500',
-          'border-gray-300 dark:border-gray-600',
-          'dark:bg-gray-800',
-          'cursor-pointer'
+          "w-5 h-5",
+          "text-primary-600 focus:ring-2 focus:ring-primary-500",
+          "border-gray-300 dark:border-gray-600",
+          "dark:bg-gray-800",
+          "cursor-pointer",
         )}
       />
     </div>
@@ -207,9 +207,9 @@ export const FormError: React.FC<{
   className?: string;
 }> = ({ message, className }) => {
   if (!message) return null;
-  
+
   return (
-    <p className={cn('mt-2 text-sm text-red-600 dark:text-red-400', className)}>
+    <p className={cn("mt-2 text-sm text-red-600 dark:text-red-400", className)}>
       {message}
     </p>
   );
@@ -220,7 +220,7 @@ export const FormHelperText: React.FC<{
   children: React.ReactNode;
   className?: string;
 }> = ({ children, className }) => (
-  <p className={cn('mt-2 text-sm text-gray-500 dark:text-gray-400', className)}>
+  <p className={cn("mt-2 text-sm text-gray-500 dark:text-gray-400", className)}>
     {children}
   </p>
 );
@@ -231,7 +231,7 @@ export const FormGroup: React.FC<{
   children: React.ReactNode;
   className?: string;
 }> = ({ legend, children, className }) => (
-  <fieldset className={cn('space-y-3', className)}>
+  <fieldset className={cn("space-y-3", className)}>
     {legend && (
       <legend className="text-base font-medium text-gray-700 dark:text-gray-300 mb-3">
         {legend}
@@ -245,18 +245,18 @@ export const FormGroup: React.FC<{
 export const FormActions: React.FC<{
   children: React.ReactNode;
   className?: string;
-  align?: 'left' | 'center' | 'right' | 'stretch';
-}> = ({ children, className, align = 'stretch' }) => (
+  align?: "left" | "center" | "right" | "stretch";
+}> = ({ children, className, align = "stretch" }) => (
   <div
     className={cn(
-      'mt-8 flex gap-3',
+      "mt-8 flex gap-3",
       {
-        'justify-start': align === 'left',
-        'justify-center': align === 'center',
-        'justify-end': align === 'right',
-        'flex-col sm:flex-row': align === 'stretch',
+        "justify-start": align === "left",
+        "justify-center": align === "center",
+        "justify-end": align === "right",
+        "flex-col sm:flex-row": align === "stretch",
       },
-      className
+      className,
     )}
   >
     {children}
