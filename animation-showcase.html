@@ -1,0 +1,1004 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>React Fast Training - Animation Showcase</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        /* Heartbeat Animation */
+        .heartbeat-line {
+            stroke-dasharray: 1000;
+            stroke-dashoffset: 1000;
+            animation: heartbeat 2s linear infinite;
+        }
+        
+        @keyframes heartbeat {
+            0% { stroke-dashoffset: 1000; }
+            50% { stroke-dashoffset: 0; }
+            100% { stroke-dashoffset: -1000; }
+        }
+        
+        /* Floating Medical Icons */
+        .floating-icon {
+            position: absolute;
+            animation: float 20s infinite linear;
+            opacity: 0.1;
+        }
+        
+        @keyframes float {
+            0% { transform: translateY(100vh) translateX(0) rotate(0deg); }
+            100% { transform: translateY(-100px) translateX(100px) rotate(360deg); }
+        }
+        
+        /* Counter Animation */
+        @keyframes countUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        /* 3D Card Flip */
+        .flip-card {
+            perspective: 1000px;
+            height: 300px;
+        }
+        
+        .flip-card-inner {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            text-align: center;
+            transition: transform 0.6s;
+            transform-style: preserve-3d;
+        }
+        
+        .flip-card:hover .flip-card-inner {
+            transform: rotateY(180deg);
+        }
+        
+        .flip-card-front, .flip-card-back {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            -webkit-backface-visibility: hidden;
+            backface-visibility: hidden;
+            border-radius: 16px;
+            padding: 24px;
+        }
+        
+        .flip-card-back {
+            transform: rotateY(180deg);
+        }
+        
+        /* Pulse Effect */
+        .pulse-emergency {
+            animation: emergencyPulse 2s ease-in-out infinite;
+        }
+        
+        @keyframes emergencyPulse {
+            0% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.4); }
+            70% { box-shadow: 0 0 0 20px rgba(239, 68, 68, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0); }
+        }
+        
+        /* Progress Bar Animation */
+        .progress-fill {
+            animation: fillProgress 2s ease-out forwards;
+        }
+        
+        @keyframes fillProgress {
+            from { width: 0%; }
+        }
+        
+        /* Medical Cursor */
+        .medical-cursor {
+            cursor: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="%23ef4444" stroke-width="2"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5Z"/></svg>'), auto;
+        }
+        
+        /* Staggered Animation */
+        .stagger-item {
+            opacity: 0;
+            transform: translateY(50px);
+            animation: staggerIn 0.6s ease-out forwards;
+        }
+        
+        @keyframes staggerIn {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        /* Morphing Shapes */
+        .morph-shape {
+            animation: morph 8s ease-in-out infinite;
+        }
+        
+        @keyframes morph {
+            0%, 100% { border-radius: 60% 40% 30% 70% / 60% 30% 70% 40%; }
+            50% { border-radius: 30% 60% 70% 40% / 50% 60% 30% 60%; }
+        }
+        
+        /* Gradient Mesh Animation */
+        .gradient-mesh {
+            background: linear-gradient(45deg, #0EA5E9, #10B981, #F97316);
+            background-size: 400% 400%;
+            animation: gradientShift 15s ease infinite;
+        }
+        
+        @keyframes gradientShift {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+        
+        /* Glassmorphism */
+        .glass-card {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        
+        /* Liquid Button */
+        .liquid-button {
+            position: relative;
+            overflow: hidden;
+            transition: all 0.3s;
+        }
+        
+        .liquid-button::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.3);
+            transform: translate(-50%, -50%);
+            transition: width 0.6s, height 0.6s;
+        }
+        
+        .liquid-button:hover::before {
+            width: 300px;
+            height: 300px;
+        }
+        
+        /* Magnetic Button Effect */
+        .magnetic-button {
+            transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+        
+        /* Emergency Lights */
+        .emergency-lights {
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .emergency-lights::before,
+        .emergency-lights::after {
+            content: '';
+            position: absolute;
+            top: -2px;
+            width: 40%;
+            height: 4px;
+            animation: emergencyLight 2s linear infinite;
+        }
+        
+        .emergency-lights::before {
+            left: -40%;
+            background: linear-gradient(90deg, transparent, #ef4444, transparent);
+        }
+        
+        .emergency-lights::after {
+            right: -40%;
+            background: linear-gradient(90deg, transparent, #3b82f6, transparent);
+            animation-delay: 1s;
+        }
+        
+        @keyframes emergencyLight {
+            to { transform: translateX(250%); }
+        }
+        
+        /* Skeleton Loading */
+        .skeleton {
+            background: linear-gradient(90deg, #f3f4f6 25%, #e5e7eb 50%, #f3f4f6 75%);
+            background-size: 200% 100%;
+            animation: loading 1.5s infinite;
+        }
+        
+        @keyframes loading {
+            0% { background-position: 200% 0; }
+            100% { background-position: -200% 0; }
+        }
+        
+        /* Confetti Success */
+        .confetti {
+            position: absolute;
+            width: 10px;
+            height: 10px;
+            background: #10B981;
+            animation: confettiFall 3s linear forwards;
+        }
+        
+        @keyframes confettiFall {
+            to {
+                transform: translateY(300px) rotate(360deg);
+                opacity: 0;
+            }
+        }
+        
+        /* Tooltip */
+        .tooltip {
+            position: relative;
+        }
+        
+        .tooltip-content {
+            position: absolute;
+            bottom: 100%;
+            left: 50%;
+            transform: translateX(-50%) scale(0);
+            background: #1f2937;
+            color: white;
+            padding: 8px 16px;
+            border-radius: 8px;
+            white-space: nowrap;
+            transition: transform 0.3s;
+            margin-bottom: 8px;
+        }
+        
+        .tooltip:hover .tooltip-content {
+            transform: translateX(-50%) scale(1);
+        }
+        
+        /* Number Counter */
+        .counter {
+            font-variant-numeric: tabular-nums;
+        }
+        
+        /* Timeline Animation */
+        .timeline-line {
+            height: 2px;
+            background: #0EA5E9;
+            transform-origin: left;
+            animation: growLine 2s ease-out forwards;
+        }
+        
+        @keyframes growLine {
+            from { transform: scaleX(0); }
+            to { transform: scaleX(1); }
+        }
+        
+        /* Certificate 3D */
+        .certificate-3d {
+            transform-style: preserve-3d;
+            animation: rotate3d 10s linear infinite;
+        }
+        
+        @keyframes rotate3d {
+            from { transform: rotateY(0deg); }
+            to { transform: rotateY(360deg); }
+        }
+        
+        /* Live Feed Ticker */
+        .ticker {
+            animation: ticker 20s linear infinite;
+        }
+        
+        @keyframes ticker {
+            0% { transform: translateX(100%); }
+            100% { transform: translateX(-100%); }
+        }
+    </style>
+</head>
+<body class="bg-gray-50">
+    <!-- Header -->
+    <div class="bg-blue-600 text-white p-4 text-center">
+        <h1 class="text-3xl font-bold mb-2">React Fast Training - Animation Showcase</h1>
+        <p class="text-blue-100">Choose the animations that best fit our professional first aid training theme</p>
+    </div>
+
+    <!-- Navigation -->
+    <nav class="bg-white shadow-lg sticky top-0 z-50">
+        <div class="container mx-auto px-4 py-3">
+            <div class="flex flex-wrap gap-2 justify-center text-sm">
+                <a href="#heartbeat" class="px-3 py-1 rounded hover:bg-blue-100">Heartbeat</a>
+                <a href="#floating" class="px-3 py-1 rounded hover:bg-blue-100">Floating Icons</a>
+                <a href="#counter" class="px-3 py-1 rounded hover:bg-blue-100">Counter</a>
+                <a href="#cards" class="px-3 py-1 rounded hover:bg-blue-100">3D Cards</a>
+                <a href="#progress" class="px-3 py-1 rounded hover:bg-blue-100">Progress Bars</a>
+                <a href="#pulse" class="px-3 py-1 rounded hover:bg-blue-100">Pulse Effect</a>
+                <a href="#stagger" class="px-3 py-1 rounded hover:bg-blue-100">Staggered</a>
+                <a href="#gradient" class="px-3 py-1 rounded hover:bg-blue-100">Gradient Mesh</a>
+                <a href="#glass" class="px-3 py-1 rounded hover:bg-blue-100">Glassmorphism</a>
+                <a href="#liquid" class="px-3 py-1 rounded hover:bg-blue-100">Liquid Buttons</a>
+                <a href="#magnetic" class="px-3 py-1 rounded hover:bg-blue-100">Magnetic</a>
+                <a href="#skeleton" class="px-3 py-1 rounded hover:bg-blue-100">Skeleton</a>
+                <a href="#tooltip" class="px-3 py-1 rounded hover:bg-blue-100">Tooltips</a>
+                <a href="#timeline" class="px-3 py-1 rounded hover:bg-blue-100">Timeline</a>
+                <a href="#certificate" class="px-3 py-1 rounded hover:bg-blue-100">3D Certificate</a>
+                <a href="#ticker" class="px-3 py-1 rounded hover:bg-blue-100">Live Feed</a>
+                <a href="#quiz" class="px-3 py-1 rounded hover:bg-blue-100">Quiz</a>
+                <a href="#map" class="px-3 py-1 rounded hover:bg-blue-100">Map</a>
+                <a href="#myths" class="px-3 py-1 rounded hover:bg-blue-100">Myths</a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container mx-auto px-4 py-8 space-y-16">
+        
+        <!-- Heartbeat Animation -->
+        <section id="heartbeat" class="bg-white rounded-lg shadow-lg p-8">
+            <h2 class="text-2xl font-bold mb-4">Heartbeat Animation (Hero Background)</h2>
+            <div class="relative h-64 bg-gradient-to-br from-blue-500 to-blue-600 rounded-lg overflow-hidden">
+                <svg class="absolute inset-0 w-full h-full opacity-20" viewBox="0 0 800 200">
+                    <path class="heartbeat-line" d="M0,100 L200,100 L220,100 L230,40 L240,160 L250,80 L260,120 L270,100 L800,100" 
+                          stroke="white" stroke-width="3" fill="none"/>
+                </svg>
+                <div class="absolute inset-0 flex items-center justify-center text-white">
+                    <div class="text-center">
+                        <h3 class="text-3xl font-bold mb-2">Life-Saving Skills</h3>
+                        <p>Learn First Aid Today</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Floating Medical Icons -->
+        <section id="floating" class="bg-white rounded-lg shadow-lg p-8">
+            <h2 class="text-2xl font-bold mb-4">Floating Medical Icons (Subtle Background)</h2>
+            <div class="relative h-64 bg-gradient-to-br from-blue-50 to-green-50 rounded-lg overflow-hidden">
+                <div class="floating-icon" style="left: 10%; animation-delay: 0s;">
+                    <i data-lucide="heart" class="w-8 h-8 text-red-400"></i>
+                </div>
+                <div class="floating-icon" style="left: 30%; animation-delay: 5s;">
+                    <i data-lucide="shield" class="w-8 h-8 text-blue-400"></i>
+                </div>
+                <div class="floating-icon" style="left: 50%; animation-delay: 10s;">
+                    <i data-lucide="plus" class="w-8 h-8 text-green-400"></i>
+                </div>
+                <div class="floating-icon" style="left: 70%; animation-delay: 15s;">
+                    <i data-lucide="activity" class="w-8 h-8 text-purple-400"></i>
+                </div>
+                <div class="absolute inset-0 flex items-center justify-center">
+                    <h3 class="text-2xl font-semibold text-gray-800">Professional First Aid Training</h3>
+                </div>
+            </div>
+        </section>
+
+        <!-- Emergency Counter -->
+        <section id="counter" class="bg-white rounded-lg shadow-lg p-8">
+            <h2 class="text-2xl font-bold mb-4">Emergency Counter Animation</h2>
+            <div class="text-center">
+                <div class="inline-flex items-center gap-4 bg-red-50 px-8 py-6 rounded-lg">
+                    <i data-lucide="heart" class="w-12 h-12 text-red-500"></i>
+                    <div>
+                        <div class="text-4xl font-bold text-red-600 counter" id="livesCounter">0</div>
+                        <p class="text-gray-600">Lives Impacted This Year</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 3D Flip Cards -->
+        <section id="cards" class="bg-white rounded-lg shadow-lg p-8">
+            <h2 class="text-2xl font-bold mb-4">3D Flip Course Cards</h2>
+            <div class="grid md:grid-cols-3 gap-6">
+                <div class="flip-card">
+                    <div class="flip-card-inner">
+                        <div class="flip-card-front bg-blue-500 text-white flex flex-col justify-center">
+                            <i data-lucide="briefcase" class="w-16 h-16 mx-auto mb-4"></i>
+                            <h3 class="text-xl font-bold">First Aid at Work</h3>
+                            <p class="mt-2">3 Days • £200</p>
+                        </div>
+                        <div class="flip-card-back bg-blue-600 text-white">
+                            <h3 class="text-xl font-bold mb-4">What You'll Learn</h3>
+                            <ul class="text-left space-y-2">
+                                <li>✓ Emergency procedures</li>
+                                <li>✓ CPR techniques</li>
+                                <li>✓ Wound management</li>
+                                <li>✓ Shock treatment</li>
+                            </ul>
+                            <button class="mt-4 bg-white text-blue-600 px-4 py-2 rounded">Book Now</button>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="flip-card">
+                    <div class="flip-card-inner">
+                        <div class="flip-card-front bg-purple-500 text-white flex flex-col justify-center">
+                            <i data-lucide="baby" class="w-16 h-16 mx-auto mb-4"></i>
+                            <h3 class="text-xl font-bold">Paediatric First Aid</h3>
+                            <p class="mt-2">2 Days • £120</p>
+                        </div>
+                        <div class="flip-card-back bg-purple-600 text-white">
+                            <h3 class="text-xl font-bold mb-4">What You'll Learn</h3>
+                            <ul class="text-left space-y-2">
+                                <li>✓ Child CPR</li>
+                                <li>✓ Choking response</li>
+                                <li>✓ Common injuries</li>
+                                <li>✓ Emergency care</li>
+                            </ul>
+                            <button class="mt-4 bg-white text-purple-600 px-4 py-2 rounded">Book Now</button>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="flip-card">
+                    <div class="flip-card-inner">
+                        <div class="flip-card-front bg-green-500 text-white flex flex-col justify-center">
+                            <i data-lucide="refresh-cw" class="w-16 h-16 mx-auto mb-4"></i>
+                            <h3 class="text-xl font-bold">Annual Refresher</h3>
+                            <p class="mt-2">3 Hours • £60</p>
+                        </div>
+                        <div class="flip-card-back bg-green-600 text-white">
+                            <h3 class="text-xl font-bold mb-4">Stay Current</h3>
+                            <ul class="text-left space-y-2">
+                                <li>✓ Update skills</li>
+                                <li>✓ New guidelines</li>
+                                <li>✓ Practice scenarios</li>
+                                <li>✓ Certification renewal</li>
+                            </ul>
+                            <button class="mt-4 bg-white text-green-600 px-4 py-2 rounded">Book Now</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Progress Bars -->
+        <section id="progress" class="bg-white rounded-lg shadow-lg p-8">
+            <h2 class="text-2xl font-bold mb-4">Animated Progress Bars (Course Duration)</h2>
+            <div class="space-y-6">
+                <div>
+                    <div class="flex justify-between mb-2">
+                        <span class="font-semibold">Emergency First Aid at Work</span>
+                        <span class="text-gray-600">1 Day</span>
+                    </div>
+                    <div class="h-4 bg-gray-200 rounded-full overflow-hidden">
+                        <div class="progress-fill h-full bg-blue-500" style="width: 33%"></div>
+                    </div>
+                </div>
+                <div>
+                    <div class="flex justify-between mb-2">
+                        <span class="font-semibold">First Aid at Work</span>
+                        <span class="text-gray-600">3 Days</span>
+                    </div>
+                    <div class="h-4 bg-gray-200 rounded-full overflow-hidden">
+                        <div class="progress-fill h-full bg-green-500" style="width: 100%; animation-delay: 0.3s"></div>
+                    </div>
+                </div>
+                <div>
+                    <div class="flex justify-between mb-2">
+                        <span class="font-semibold">Annual Refresher</span>
+                        <span class="text-gray-600">3 Hours</span>
+                    </div>
+                    <div class="h-4 bg-gray-200 rounded-full overflow-hidden">
+                        <div class="progress-fill h-full bg-purple-500" style="width: 10%; animation-delay: 0.6s"></div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Pulse Effect -->
+        <section id="pulse" class="bg-white rounded-lg shadow-lg p-8">
+            <h2 class="text-2xl font-bold mb-4">Emergency Pulse Effect</h2>
+            <div class="flex gap-4 justify-center">
+                <button class="pulse-emergency bg-red-500 text-white px-8 py-4 rounded-lg font-semibold">
+                    Emergency First Aid
+                </button>
+                <button class="bg-blue-500 text-white px-8 py-4 rounded-lg font-semibold hover:bg-blue-600 transition">
+                    Standard Course
+                </button>
+            </div>
+        </section>
+
+        <!-- Medical Cursor -->
+        <section class="bg-white rounded-lg shadow-lg p-8">
+            <h2 class="text-2xl font-bold mb-4">Medical Cursor (Hover over cards)</h2>
+            <div class="grid md:grid-cols-3 gap-4">
+                <div class="medical-cursor bg-blue-100 p-6 rounded-lg hover:bg-blue-200 transition">
+                    <i data-lucide="stethoscope" class="w-12 h-12 text-blue-600 mb-4"></i>
+                    <h3 class="font-semibold">Professional Training</h3>
+                </div>
+                <div class="medical-cursor bg-green-100 p-6 rounded-lg hover:bg-green-200 transition">
+                    <i data-lucide="shield-check" class="w-12 h-12 text-green-600 mb-4"></i>
+                    <h3 class="font-semibold">Certified Courses</h3>
+                </div>
+                <div class="medical-cursor bg-purple-100 p-6 rounded-lg hover:bg-purple-200 transition">
+                    <i data-lucide="award" class="w-12 h-12 text-purple-600 mb-4"></i>
+                    <h3 class="font-semibold">Recognized Certificates</h3>
+                </div>
+            </div>
+        </section>
+
+        <!-- Staggered Animations -->
+        <section id="stagger" class="bg-white rounded-lg shadow-lg p-8">
+            <h2 class="text-2xl font-bold mb-4">Staggered Card Animations</h2>
+            <div class="grid md:grid-cols-4 gap-4">
+                <div class="stagger-item bg-gradient-to-br from-blue-400 to-blue-600 text-white p-6 rounded-lg" style="animation-delay: 0.1s">
+                    <i data-lucide="users" class="w-8 h-8 mb-2"></i>
+                    <div class="text-2xl font-bold">500+</div>
+                    <p class="text-sm">Trained Students</p>
+                </div>
+                <div class="stagger-item bg-gradient-to-br from-green-400 to-green-600 text-white p-6 rounded-lg" style="animation-delay: 0.2s">
+                    <i data-lucide="star" class="w-8 h-8 mb-2"></i>
+                    <div class="text-2xl font-bold">4.9/5</div>
+                    <p class="text-sm">Average Rating</p>
+                </div>
+                <div class="stagger-item bg-gradient-to-br from-purple-400 to-purple-600 text-white p-6 rounded-lg" style="animation-delay: 0.3s">
+                    <i data-lucide="award" class="w-8 h-8 mb-2"></i>
+                    <div class="text-2xl font-bold">100%</div>
+                    <p class="text-sm">Pass Rate</p>
+                </div>
+                <div class="stagger-item bg-gradient-to-br from-orange-400 to-orange-600 text-white p-6 rounded-lg" style="animation-delay: 0.4s">
+                    <i data-lucide="clock" class="w-8 h-8 mb-2"></i>
+                    <div class="text-2xl font-bold">24/7</div>
+                    <p class="text-sm">Support</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Morphing Shapes -->
+        <section class="bg-white rounded-lg shadow-lg p-8">
+            <h2 class="text-2xl font-bold mb-4">Morphing Medical Shapes</h2>
+            <div class="flex justify-center gap-8">
+                <div class="morph-shape w-32 h-32 bg-gradient-to-br from-red-400 to-pink-500 opacity-20"></div>
+                <div class="morph-shape w-32 h-32 bg-gradient-to-br from-blue-400 to-cyan-500 opacity-20" style="animation-delay: 2s"></div>
+                <div class="morph-shape w-32 h-32 bg-gradient-to-br from-green-400 to-emerald-500 opacity-20" style="animation-delay: 4s"></div>
+            </div>
+        </section>
+
+        <!-- Gradient Mesh -->
+        <section id="gradient" class="bg-white rounded-lg shadow-lg p-8">
+            <h2 class="text-2xl font-bold mb-4">Animated Gradient Background</h2>
+            <div class="gradient-mesh h-64 rounded-lg flex items-center justify-center">
+                <div class="text-white text-center">
+                    <h3 class="text-3xl font-bold mb-2">Dynamic Background</h3>
+                    <p>Subtle shifting colors for visual interest</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Glassmorphism -->
+        <section id="glass" class="bg-white rounded-lg shadow-lg p-8">
+            <h2 class="text-2xl font-bold mb-4">Glassmorphism Cards</h2>
+            <div class="relative h-64 bg-gradient-to-br from-blue-400 via-purple-500 to-pink-500 rounded-lg p-8">
+                <div class="grid md:grid-cols-3 gap-4">
+                    <div class="glass-card p-6 rounded-lg text-white">
+                        <i data-lucide="book-open" class="w-8 h-8 mb-2"></i>
+                        <h3 class="font-semibold">Learn</h3>
+                        <p class="text-sm opacity-90">Expert instruction</p>
+                    </div>
+                    <div class="glass-card p-6 rounded-lg text-white">
+                        <i data-lucide="target" class="w-8 h-8 mb-2"></i>
+                        <h3 class="font-semibold">Practice</h3>
+                        <p class="text-sm opacity-90">Hands-on training</p>
+                    </div>
+                    <div class="glass-card p-6 rounded-lg text-white">
+                        <i data-lucide="check-circle" class="w-8 h-8 mb-2"></i>
+                        <h3 class="font-semibold">Certify</h3>
+                        <p class="text-sm opacity-90">Get qualified</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Liquid Buttons -->
+        <section id="liquid" class="bg-white rounded-lg shadow-lg p-8">
+            <h2 class="text-2xl font-bold mb-4">Liquid Button Effects</h2>
+            <div class="flex gap-4 justify-center">
+                <button class="liquid-button bg-blue-500 text-white px-8 py-4 rounded-lg font-semibold relative">
+                    Book Course
+                </button>
+                <button class="liquid-button bg-green-500 text-white px-8 py-4 rounded-lg font-semibold relative">
+                    Get Quote
+                </button>
+                <button class="emergency-lights bg-red-500 text-white px-8 py-4 rounded-lg font-semibold relative">
+                    Emergency Course
+                </button>
+            </div>
+        </section>
+
+        <!-- Magnetic Buttons -->
+        <section id="magnetic" class="bg-white rounded-lg shadow-lg p-8">
+            <h2 class="text-2xl font-bold mb-4">Magnetic Button Effect</h2>
+            <div class="flex justify-center">
+                <button class="magnetic-button bg-purple-500 text-white px-12 py-6 rounded-lg font-semibold text-lg" id="magneticBtn">
+                    Hover Near Me
+                </button>
+            </div>
+            <p class="text-center text-gray-600 mt-4">Move your cursor near the button to see the magnetic effect</p>
+        </section>
+
+        <!-- Skeleton Loading -->
+        <section id="skeleton" class="bg-white rounded-lg shadow-lg p-8">
+            <h2 class="text-2xl font-bold mb-4">Skeleton Loading States</h2>
+            <div class="space-y-4">
+                <div class="border rounded-lg p-4">
+                    <div class="skeleton h-6 w-3/4 rounded mb-2"></div>
+                    <div class="skeleton h-4 w-full rounded mb-2"></div>
+                    <div class="skeleton h-4 w-5/6 rounded"></div>
+                </div>
+                <div class="border rounded-lg p-4">
+                    <div class="flex gap-4">
+                        <div class="skeleton w-16 h-16 rounded-full"></div>
+                        <div class="flex-1">
+                            <div class="skeleton h-4 w-1/2 rounded mb-2"></div>
+                            <div class="skeleton h-3 w-3/4 rounded"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Success Animation -->
+        <section class="bg-white rounded-lg shadow-lg p-8">
+            <h2 class="text-2xl font-bold mb-4">Success Animation (Form Submission)</h2>
+            <div class="text-center">
+                <button class="bg-green-500 text-white px-8 py-4 rounded-lg font-semibold" onclick="showSuccess()">
+                    Submit Form
+                </button>
+                <div id="successContainer" class="relative inline-block"></div>
+            </div>
+        </section>
+
+        <!-- Tooltips -->
+        <section id="tooltip" class="bg-white rounded-lg shadow-lg p-8">
+            <h2 class="text-2xl font-bold mb-4">Rich Tooltips</h2>
+            <div class="flex gap-6 justify-center">
+                <div class="tooltip">
+                    <button class="bg-blue-500 text-white px-6 py-3 rounded-lg">
+                        EFAW Course
+                    </button>
+                    <div class="tooltip-content">
+                        <strong>Emergency First Aid at Work</strong><br>
+                        1 Day • £100 • HSE Approved
+                    </div>
+                </div>
+                <div class="tooltip">
+                    <button class="bg-purple-500 text-white px-6 py-3 rounded-lg">
+                        PFA Course
+                    </button>
+                    <div class="tooltip-content">
+                        <strong>Paediatric First Aid</strong><br>
+                        2 Days • £120 • Ofqual Regulated
+                    </div>
+                </div>
+                <div class="tooltip">
+                    <button class="bg-green-500 text-white px-6 py-3 rounded-lg">
+                        Refresher
+                    </button>
+                    <div class="tooltip-content">
+                        <strong>Keep Skills Current</strong><br>
+                        3 Hours • £60 • Annual Update
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Timeline Animation -->
+        <section id="timeline" class="bg-white rounded-lg shadow-lg p-8">
+            <h2 class="text-2xl font-bold mb-4">Animated Timeline (3-Step Process)</h2>
+            <div class="max-w-2xl mx-auto">
+                <div class="flex items-center justify-between">
+                    <div class="text-center z-10">
+                        <div class="w-16 h-16 bg-blue-500 rounded-full flex items-center justify-center text-white font-bold text-xl mb-2">1</div>
+                        <p class="font-semibold">Choose Course</p>
+                    </div>
+                    <div class="flex-1 px-4">
+                        <div class="timeline-line bg-blue-500"></div>
+                    </div>
+                    <div class="text-center z-10">
+                        <div class="w-16 h-16 bg-green-500 rounded-full flex items-center justify-center text-white font-bold text-xl mb-2">2</div>
+                        <p class="font-semibold">Book Date</p>
+                    </div>
+                    <div class="flex-1 px-4">
+                        <div class="timeline-line bg-green-500" style="animation-delay: 0.5s"></div>
+                    </div>
+                    <div class="text-center z-10">
+                        <div class="w-16 h-16 bg-purple-500 rounded-full flex items-center justify-center text-white font-bold text-xl mb-2">3</div>
+                        <p class="font-semibold">Get Certified</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 3D Certificate -->
+        <section id="certificate" class="bg-white rounded-lg shadow-lg p-8">
+            <h2 class="text-2xl font-bold mb-4">3D Rotating Certificate Preview</h2>
+            <div class="flex justify-center">
+                <div class="certificate-3d">
+                    <div class="bg-gradient-to-br from-yellow-100 to-yellow-200 p-8 rounded-lg shadow-2xl border-4 border-yellow-600">
+                        <div class="text-center">
+                            <i data-lucide="award" class="w-16 h-16 text-yellow-600 mx-auto mb-4"></i>
+                            <h3 class="text-2xl font-bold text-gray-800 mb-2">Certificate of Completion</h3>
+                            <p class="text-gray-600">First Aid at Work</p>
+                            <div class="mt-4 pt-4 border-t border-yellow-400">
+                                <p class="text-sm text-gray-500">Ofqual Regulated • HSE Approved</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Live Training Feed -->
+        <section id="ticker" class="bg-white rounded-lg shadow-lg p-8">
+            <h2 class="text-2xl font-bold mb-4">Live Training Feed Ticker</h2>
+            <div class="bg-gray-100 rounded-lg p-4 overflow-hidden">
+                <div class="ticker whitespace-nowrap">
+                    <span class="inline-block px-8">
+                        <i data-lucide="check-circle" class="inline w-4 h-4 text-green-500"></i>
+                        John from Leeds completed EFAW training
+                    </span>
+                    <span class="inline-block px-8">
+                        <i data-lucide="check-circle" class="inline w-4 h-4 text-green-500"></i>
+                        Sarah from Sheffield passed First Aid at Work
+                    </span>
+                    <span class="inline-block px-8">
+                        <i data-lucide="check-circle" class="inline w-4 h-4 text-green-500"></i>
+                        Team from Bradford completed workplace training
+                    </span>
+                </div>
+            </div>
+        </section>
+
+        <!-- Course Recommendation Quiz -->
+        <section id="quiz" class="bg-white rounded-lg shadow-lg p-8">
+            <h2 class="text-2xl font-bold mb-4">Course Recommendation Quiz</h2>
+            <div class="max-w-md mx-auto">
+                <div class="space-y-4">
+                    <div>
+                        <p class="font-semibold mb-2">What type of environment?</p>
+                        <div class="space-y-2">
+                            <label class="flex items-center p-3 border rounded-lg hover:bg-blue-50 cursor-pointer">
+                                <input type="radio" name="env" class="mr-3">
+                                <span>Workplace/Office</span>
+                            </label>
+                            <label class="flex items-center p-3 border rounded-lg hover:bg-blue-50 cursor-pointer">
+                                <input type="radio" name="env" class="mr-3">
+                                <span>Working with children</span>
+                            </label>
+                            <label class="flex items-center p-3 border rounded-lg hover:bg-blue-50 cursor-pointer">
+                                <input type="radio" name="env" class="mr-3">
+                                <span>Outdoor activities</span>
+                            </label>
+                        </div>
+                    </div>
+                    <button class="w-full bg-blue-500 text-white py-3 rounded-lg font-semibold hover:bg-blue-600">
+                        Get Recommendation
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <!-- Interactive Map -->
+        <section id="map" class="bg-white rounded-lg shadow-lg p-8">
+            <h2 class="text-2xl font-bold mb-4">Interactive Yorkshire Map</h2>
+            <div class="bg-gray-100 rounded-lg p-8 text-center">
+                <div class="inline-block relative">
+                    <svg viewBox="0 0 400 300" class="w-full max-w-md">
+                        <!-- Simplified Yorkshire map -->
+                        <path d="M100 50 L300 50 L320 150 L280 250 L120 250 L80 150 Z" 
+                              fill="#e0e7ff" stroke="#3730a3" stroke-width="2"/>
+                        
+                        <!-- Cities -->
+                        <circle cx="200" cy="120" r="8" fill="#3730a3" class="hover:r-12 transition-all cursor-pointer">
+                            <title>Leeds</title>
+                        </circle>
+                        <text x="200" y="140" text-anchor="middle" class="text-sm font-semibold">Leeds</text>
+                        
+                        <circle cx="150" cy="180" r="8" fill="#3730a3" class="hover:r-12 transition-all cursor-pointer">
+                            <title>Sheffield</title>
+                        </circle>
+                        <text x="150" y="200" text-anchor="middle" class="text-sm font-semibold">Sheffield</text>
+                        
+                        <circle cx="250" cy="160" r="8" fill="#3730a3" class="hover:r-12 transition-all cursor-pointer">
+                            <title>York</title>
+                        </circle>
+                        <text x="250" y="180" text-anchor="middle" class="text-sm font-semibold">York</text>
+                    </svg>
+                </div>
+                <p class="mt-4 text-gray-600">Click on a city to see available training locations</p>
+            </div>
+        </section>
+
+        <!-- Before/After Slider -->
+        <section class="bg-white rounded-lg shadow-lg p-8">
+            <h2 class="text-2xl font-bold mb-4">Before/After Workplace Safety</h2>
+            <div class="max-w-2xl mx-auto">
+                <div class="relative bg-gray-100 rounded-lg overflow-hidden" style="height: 300px;">
+                    <div class="absolute inset-0 flex">
+                        <div class="w-1/2 bg-red-50 flex items-center justify-center">
+                            <div class="text-center p-8">
+                                <i data-lucide="alert-triangle" class="w-16 h-16 text-red-500 mx-auto mb-4"></i>
+                                <h3 class="font-bold text-red-700">Before Training</h3>
+                                <p class="text-red-600">Unprepared for emergencies</p>
+                            </div>
+                        </div>
+                        <div class="w-1/2 bg-green-50 flex items-center justify-center">
+                            <div class="text-center p-8">
+                                <i data-lucide="shield-check" class="w-16 h-16 text-green-500 mx-auto mb-4"></i>
+                                <h3 class="font-bold text-green-700">After Training</h3>
+                                <p class="text-green-600">Confident & prepared team</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="absolute inset-y-0 left-1/2 w-1 bg-gray-400 transform -translate-x-1/2"></div>
+                    <div class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-white rounded-full p-2 shadow-lg cursor-ew-resize">
+                        <i data-lucide="grip-vertical" class="w-6 h-6 text-gray-600"></i>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Emergency Scenario Carousel -->
+        <section class="bg-white rounded-lg shadow-lg p-8">
+            <h2 class="text-2xl font-bold mb-4">Emergency Scenarios Carousel</h2>
+            <div class="max-w-2xl mx-auto">
+                <div class="bg-gradient-to-br from-blue-50 to-blue-100 rounded-lg p-8">
+                    <div class="text-center">
+                        <i data-lucide="zap" class="w-16 h-16 text-blue-600 mx-auto mb-4"></i>
+                        <h3 class="text-xl font-bold mb-2">Cardiac Emergency</h3>
+                        <p class="text-gray-700 mb-4">Every minute counts. With our CPR training, you'll know exactly what to do.</p>
+                        <div class="flex justify-center gap-2">
+                            <div class="w-2 h-2 bg-blue-600 rounded-full"></div>
+                            <div class="w-2 h-2 bg-gray-300 rounded-full"></div>
+                            <div class="w-2 h-2 bg-gray-300 rounded-full"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- First Aid Myths Buster -->
+        <section id="myths" class="bg-white rounded-lg shadow-lg p-8">
+            <h2 class="text-2xl font-bold mb-4">First Aid Myths Buster</h2>
+            <div class="grid md:grid-cols-2 gap-4 max-w-4xl mx-auto">
+                <div class="flip-card" style="height: 200px;">
+                    <div class="flip-card-inner">
+                        <div class="flip-card-front bg-red-100 flex items-center justify-center p-4">
+                            <div class="text-center">
+                                <i data-lucide="x-circle" class="w-12 h-12 text-red-500 mx-auto mb-2"></i>
+                                <p class="font-semibold">Myth: Tilt head back for nosebleeds</p>
+                            </div>
+                        </div>
+                        <div class="flip-card-back bg-green-100 flex items-center justify-center p-4">
+                            <div class="text-center">
+                                <i data-lucide="check-circle" class="w-12 h-12 text-green-500 mx-auto mb-2"></i>
+                                <p class="font-semibold">Truth: Lean forward and pinch the nose</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="flip-card" style="height: 200px;">
+                    <div class="flip-card-inner">
+                        <div class="flip-card-front bg-red-100 flex items-center justify-center p-4">
+                            <div class="text-center">
+                                <i data-lucide="x-circle" class="w-12 h-12 text-red-500 mx-auto mb-2"></i>
+                                <p class="font-semibold">Myth: Put butter on burns</p>
+                            </div>
+                        </div>
+                        <div class="flip-card-back bg-green-100 flex items-center justify-center p-4">
+                            <div class="text-center">
+                                <i data-lucide="check-circle" class="w-12 h-12 text-green-500 mx-auto mb-2"></i>
+                                <p class="font-semibold">Truth: Cool with running water for 20 minutes</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Emergency Response Timer -->
+        <section class="bg-white rounded-lg shadow-lg p-8">
+            <h2 class="text-2xl font-bold mb-4">Emergency Response Timer</h2>
+            <div class="text-center">
+                <div class="inline-block">
+                    <div class="text-6xl font-bold text-red-600 counter" id="responseTimer">4:00</div>
+                    <p class="text-gray-600 mt-2">Average time before brain damage begins without CPR</p>
+                    <p class="text-green-600 font-semibold mt-4">With our training: Immediate response</p>
+                </div>
+            </div>
+        </section>
+
+    </div>
+
+    <script>
+        // Initialize Lucide icons
+        lucide.createIcons();
+
+        // Counter Animation
+        function animateCounter(id, target, duration = 2000) {
+            const element = document.getElementById(id);
+            const start = 0;
+            const increment = target / (duration / 16);
+            let current = start;
+            
+            const timer = setInterval(() => {
+                current += increment;
+                if (current >= target) {
+                    current = target;
+                    clearInterval(timer);
+                }
+                element.textContent = Math.floor(current);
+            }, 16);
+        }
+
+        // Start counter when visible
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting && entry.target.id === 'livesCounter') {
+                    animateCounter('livesCounter', 523);
+                    observer.unobserve(entry.target);
+                }
+            });
+        });
+
+        const counter = document.getElementById('livesCounter');
+        if (counter) observer.observe(counter);
+
+        // Magnetic button effect
+        const magneticBtn = document.getElementById('magneticBtn');
+        if (magneticBtn) {
+            document.addEventListener('mousemove', (e) => {
+                const rect = magneticBtn.getBoundingClientRect();
+                const x = e.clientX - rect.left - rect.width / 2;
+                const y = e.clientY - rect.top - rect.height / 2;
+                const distance = Math.sqrt(x * x + y * y);
+                
+                if (distance < 100) {
+                    const translateX = x * 0.3;
+                    const translateY = y * 0.3;
+                    magneticBtn.style.transform = `translate(${translateX}px, ${translateY}px)`;
+                } else {
+                    magneticBtn.style.transform = 'translate(0, 0)';
+                }
+            });
+        }
+
+        // Success animation
+        function showSuccess() {
+            const container = document.getElementById('successContainer');
+            container.innerHTML = '';
+            
+            // Create checkmark
+            const checkmark = document.createElement('div');
+            checkmark.className = 'text-green-500 text-6xl';
+            checkmark.innerHTML = '✓';
+            checkmark.style.animation = 'countUp 0.5s ease-out';
+            container.appendChild(checkmark);
+            
+            // Create confetti
+            for (let i = 0; i < 20; i++) {
+                const confetti = document.createElement('div');
+                confetti.className = 'confetti';
+                confetti.style.left = Math.random() * 100 + '%';
+                confetti.style.backgroundColor = ['#10B981', '#3B82F6', '#F59E0B', '#EF4444'][Math.floor(Math.random() * 4)];
+                confetti.style.animationDelay = Math.random() * 0.5 + 's';
+                container.appendChild(confetti);
+            }
+        }
+
+        // Response timer countdown
+        let responseTime = 240; // 4 minutes in seconds
+        const responseTimer = document.getElementById('responseTimer');
+        
+        setInterval(() => {
+            if (responseTime > 0) {
+                responseTime--;
+                const minutes = Math.floor(responseTime / 60);
+                const seconds = responseTime % 60;
+                responseTimer.textContent = `${minutes}:${seconds.toString().padStart(2, '0')}`;
+                
+                if (responseTime < 60) {
+                    responseTimer.classList.add('text-red-700');
+                }
+            }
+        }, 1000);
+    </script>
+</body>
+</html>

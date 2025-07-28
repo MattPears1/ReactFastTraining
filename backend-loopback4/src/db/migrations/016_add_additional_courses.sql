@@ -41,73 +41,17 @@ INSERT INTO courses (
   max_capacity, 
   certification_validity_years, 
   is_active
-) VALUES 
--- Emergency Paediatric First Aid
-(
-  'Emergency Paediatric First Aid',
-  'Essential emergency care for infants and children. This 1-day course provides vital skills for those working with young children.',
-  'EPFA',
-  'paediatric',
-  '1 Day',
-  6,
-  100.00,
-  12,
-  3,
-  true
-),
--- Activity First Aid
-(
-  'Activity First Aid',
-  'Specialized first aid training for sports and outdoor activities. Perfect for coaches, activity leaders, and outdoor instructors.',
-  'AFA',
-  'specialist',
-  '1 Day',
-  6,
-  120.00,
-  12,
-  3,
-  true
-),
--- CPR and AED
-(
-  'CPR and AED',
-  'Life-saving CPR and defibrillator training. Essential skills that could save a life in cardiac emergencies.',
-  'CPR_AED',
-  'specialist',
-  '3 Hours',
-  3,
-  60.00,
-  12,
-  1,
-  true
-),
--- Annual Skills Refresher
-(
-  'Annual Skills Refresher', 
-  'Keep your first aid skills current with this essential refresher course. HSE strongly recommends annual refresher training to maintain competence.',
-  'ASR',
-  'requalification',
-  '3 Hours',
-  3,
-  60.00,
-  12,
-  1,
-  true
-),
--- Oxygen Therapy Course
-(
-  'Oxygen Therapy Course',
-  'Learn the safe administration of emergency oxygen. Essential for first aiders in high-risk environments.',
-  'O2',
-  'specialist', 
-  '3 Hours',
-  3,
-  60.00,
-  12,
-  3,
-  true
 )
-ON CONFLICT (name) DO NOTHING;
+SELECT * FROM (VALUES 
+  ('Emergency Paediatric First Aid', 'Essential emergency care for infants and children. This 1-day course provides vital skills for those working with young children.', 'EPFA', 'paediatric', '1 Day', 6, 100.00, 12, 3, true),
+  ('Activity First Aid', 'Specialized first aid training for sports and outdoor activities. Perfect for coaches, activity leaders, and outdoor instructors.', 'AFA', 'specialist', '1 Day', 6, 120.00, 12, 3, true),
+  ('CPR and AED', 'Life-saving CPR and defibrillator training. Essential skills that could save a life in cardiac emergencies.', 'CPR_AED', 'specialist', '3 Hours', 3, 60.00, 12, 1, true),
+  ('Annual Skills Refresher', 'Keep your first aid skills current with this essential refresher course. HSE strongly recommends annual refresher training to maintain competence.', 'ASR', 'requalification', '3 Hours', 3, 60.00, 12, 1, true),
+  ('Oxygen Therapy Course', 'Learn the safe administration of emergency oxygen. Essential for first aiders in high-risk environments.', 'O2', 'specialist', '3 Hours', 3, 60.00, 12, 3, true)
+) AS new_courses(name, description, course_type, category, duration, duration_hours, price, max_capacity, certification_validity_years, is_active)
+WHERE NOT EXISTS (
+  SELECT 1 FROM courses WHERE courses.name = new_courses.name
+);
 
 -- Update additional fields for courses that were just inserted
 UPDATE courses SET 
