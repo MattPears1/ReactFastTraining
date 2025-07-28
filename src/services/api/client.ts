@@ -4,7 +4,7 @@ import { AuthErrorService } from "@/services/auth/error.service";
 import { csrfService } from "@/services/auth/csrf.service";
 
 const apiClient = axios.create({
-  baseURL: import.meta.env.VITE_API_URL || "http://localhost:3000/api",
+  baseURL: import.meta.env.VITE_API_URL || "/api",
   headers: {
     "Content-Type": "application/json",
   },

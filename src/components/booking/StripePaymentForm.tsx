@@ -321,7 +321,7 @@ export const StripePaymentForm: React.FC<StripePaymentFormProps> = (props) => {
         setHasCreatedIntent(true);
 
         const response = await fetch(
-          `${import.meta.env.VITE_API_URL || "http://localhost:3000"}/api/bookings/create-payment-intent`,
+          `${import.meta.env.VITE_API_URL || ""}/api/bookings/create-payment-intent`,
           {
             method: "POST",
             headers: {

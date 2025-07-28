@@ -155,7 +155,7 @@ export const BookingFormWithPayment: React.FC<BookingFormWithPaymentProps> = ({
     setLoading(true);
 
     try {
-      const apiUrl = `${import.meta.env.VITE_API_URL}/api/bookings/create-payment-intent`;
+      const apiUrl = `${import.meta.env.VITE_API_URL || ""}/api/bookings/create-payment-intent`;
       const requestBody = {
         courseSessionId: courseSchedule.id,
         amount: Math.round(finalPrice * 100), // Convert to pence
