@@ -186,7 +186,7 @@ const Header: React.FC = () => {
 
               {/* CTA Button */}
               <Link
-                to="/booking"
+                to="/contact"
                 className="hidden sm:inline-flex btn btn-primary btn-yorkshire shadow-blue text-sm lg:text-base px-3 py-2 lg:px-4 lg:py-2.5"
               >
                 Book Course
@@ -279,7 +279,7 @@ const Header: React.FC = () => {
 
                 <div className="mt-6 sm:mt-8 pt-6 sm:pt-8 border-t border-gray-200 dark:border-gray-700">
                   <Link
-                    to="/booking"
+                    to="/contact"
                     className="btn btn-primary w-full text-center min-h-[52px] flex items-center justify-center text-lg font-semibold"
                   >
                     Book Course

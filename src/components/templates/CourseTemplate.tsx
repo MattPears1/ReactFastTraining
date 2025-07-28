@@ -106,7 +106,7 @@ const CourseTemplate: React.FC<CourseTemplateProps> = ({
                 size="lg"
                 className="group"
                 as={Link}
-                to={`/booking?course=${courseAcronym || courseName.toUpperCase().replace(/\s+/g, "_")}`}
+                to="/contact"
               >
                 Book Your Place - {price}
                 <CheckCircle className="w-5 h-5 ml-2 group-hover:scale-110 transition-transform" />
@@ -428,7 +428,7 @@ const CourseTemplate: React.FC<CourseTemplateProps> = ({
                 size="lg"
                 variant="secondary"
                 as={Link}
-                to={`/booking?course=${courseAcronym || courseName.toUpperCase().replace(/\s+/g, "_")}`}
+                to="/contact"
               >
                 Book Now - {price}
               </Button>

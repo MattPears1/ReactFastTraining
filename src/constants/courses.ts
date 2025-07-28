@@ -14,7 +14,7 @@ export type CourseName = (typeof COURSE_LIST)[number];
 export const COURSE_CATEGORIES = {
   workplace: {
     title: "Workplace First Aid",
-    description: "HSE approved courses for workplace compliance",
+    description: "Ofqual regulated and HSE approved courses for workplace compliance",
     courses: [
       "Emergency First Aid at Work",
       "First Aid at Work",
@@ -42,13 +42,13 @@ export const COURSE_CATEGORIES = {
 
 export const COURSE_DURATIONS: Record<CourseName, string> = {
   "Emergency First Aid at Work": "Full Day (6 hours)",
-  "First Aid at Work": "Full Day (6 hours)",
-  "Paediatric First Aid": "Full Day (6 hours)",
-  "Emergency Paediatric First Aid": "Full Day (5 hours)",
+  "First Aid at Work": "3-Day Course",
+  "Paediatric First Aid": "2-Day Course",
+  "Emergency Paediatric First Aid": "1-Day Course",
   "Activity First Aid": "Full Day (5 hours)",
   "CPR and AED": "3 Hours",
   "Annual Skills Refresher": "3 Hours",
-  "Oxygen Therapy": "3 Hours",
+  "Oxygen Therapy": "1-Day Course",
 };
 
 export const COURSE_PRICES: Record<CourseName, number> = {
@@ -59,5 +59,5 @@ export const COURSE_PRICES: Record<CourseName, number> = {
   "Activity First Aid": 175,
   "CPR and AED": 50,
   "Annual Skills Refresher": 50,
-  "Oxygen Therapy": 75,
+  "Oxygen Therapy": 60,
 };

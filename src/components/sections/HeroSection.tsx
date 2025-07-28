@@ -42,7 +42,7 @@ const HeroSection: React.FC = () => {
               className="inline-flex items-center gap-2 px-3 py-1.5 sm:px-4 sm:py-2 bg-gradient-to-r from-primary-100 to-secondary-100 dark:from-primary-900/30 dark:to-secondary-900/30 text-primary-700 dark:text-primary-300 rounded-full text-xs sm:text-sm font-medium mb-4 sm:mb-6"
             >
               <Award className="w-3 h-3 sm:w-4 sm:h-4" />
-              <span className="whitespace-nowrap">HSE Approved</span>
+              <span className="whitespace-nowrap">Ofqual Regulated and HSE Approved</span>
             </motion.div>
 
             {/* Mobile-Optimized Title */}

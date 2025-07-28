@@ -140,7 +140,7 @@ const Footer: React.FC = () => {
               Courses
             </Link>
             <Link
-              to="/booking"
+              to="/contact"
               className="text-gray-600 dark:text-gray-400 hover:text-primary-600 dark:hover:text-primary-400 transition-colors"
             >
               Book Now

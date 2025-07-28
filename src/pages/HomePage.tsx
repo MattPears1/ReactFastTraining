@@ -91,7 +91,7 @@ const HomePage: React.FC = () => {
       // Row 1
       {
         title: "First Aid at Work (FAW)",
-        duration: "1 Day",
+        duration: "3-Day Course",
         price: "£200",
         href: "/courses/faw",
       },
@@ -104,40 +104,40 @@ const HomePage: React.FC = () => {
       // Row 2
       {
         title: "Paediatric First Aid (PFA)",
-        duration: "1 Day",
-        price: "£120",
+        duration: "2-Day Course",
+        price: "£150",
         href: "/courses/paediatric",
       },
       {
         title: "Emergency Paediatric First Aid (EPFA)",
-        duration: "5 Hours",
+        duration: "1-Day Course",
         price: "£100",
         href: "/courses/emergency-paediatric",
       },
       // Row 3
       {
         title: "Activity First Aid (Act FA)",
-        duration: "1 Day",
-        price: "£120",
+        duration: "Full Day (5 hours)",
+        price: "£175",
         href: "/courses/activity-first-aid",
       },
       {
         title: "CPR and AED",
         duration: "3 Hours",
-        price: "£60",
+        price: "£50",
         href: "/courses/cpr-aed",
       },
       // Row 4
       {
         title: "Annual Skills Refresher",
         duration: "3 Hours",
-        price: "£60",
+        price: "£50",
         href: "/courses/annual-skills-refresher",
       },
       {
         title: "Oxygen Therapy Course",
-        duration: "3 Hours",
-        price: "£80",
+        duration: "1-Day Course",
+        price: "£60",
         href: "/courses/oxygen-therapy",
       },
     ],
