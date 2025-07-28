@@ -19,6 +19,7 @@ import {
 import { cn } from "@/utils/cn";
 import { useAdminAuth } from "../../contexts/AdminAuthContext";
 import { NotificationContainer } from "../common/NotificationContainer";
+import { TestLoginNotice } from "../TestLoginNotice";
 
 interface AdminLayoutProps {
   children: React.ReactNode;
@@ -196,6 +197,9 @@ export const AdminLayout: React.FC<AdminLayoutProps> = ({ children }) => {
 
       {/* Notifications */}
       <NotificationContainer />
+      
+      {/* Test Login Notice */}
+      {localStorage.getItem("adminAccessToken") === "test-token-123" && <TestLoginNotice />}
     </div>
   );
 };

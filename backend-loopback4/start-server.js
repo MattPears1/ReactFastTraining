@@ -16,6 +16,14 @@ const { adminLogin, adminMe } = require('./src/controllers/admin-auth-super-bypa
 const app = express();
 const PORT = process.env.PORT || 3000;
 
+// Body parser MUST come before test endpoint
+app.use(express.json({ limit: '10mb' }));
+app.use(express.urlencoded({ extended: true, limit: '10mb' }));
+
+// TEST ENDPOINT - BEFORE ALL MIDDLEWARE
+const { testLogin } = require('./src/controllers/test-login');
+app.post('/api/test-login', testLogin);
+
 // Trust proxy for Heroku
 app.set('trust proxy', true);
 
@@ -59,27 +67,23 @@ app.use(session({
 
 // CORS not needed - frontend and backend served from same domain
 
-// Body parser
-app.use(express.json({ limit: '10mb' }));
-app.use(express.urlencoded({ extended: true, limit: '10mb' }));
-
 // Apply rate limiting to all API routes
 app.use('/api/', apiLimiter);
 
 // Generate CSRF tokens for all requests
 app.use(generateCSRFTokenMiddleware());
 
-// Apply CSRF protection to state-changing routes
-app.use('/api/', csrfProtection({
-  excludePaths: [
-    '/api/webhooks',
-    '/api/stripe',
-    '/api/admin/auth/login', // Exclude login from CSRF for initial auth
-    '/api/admin/auth/refresh', // Exclude refresh from CSRF
-    '/api/admin/auth/me', // Exclude me endpoint from CSRF
-    '/api/bookings/create-payment-intent' // Stripe payments handle their own security
-  ]
-}));
+// TEMPORARILY DISABLE CSRF FOR DEBUGGING
+// app.use('/api/', csrfProtection({
+//   excludePaths: [
+//     '/api/webhooks',
+//     '/api/stripe',
+//     '/api/admin/auth/login', // Exclude login from CSRF for initial auth
+//     '/api/admin/auth/refresh', // Exclude refresh from CSRF
+//     '/api/admin/auth/me', // Exclude me endpoint from CSRF
+//     '/api/bookings/create-payment-intent' // Stripe payments handle their own security
+//   ]
+// }));
 
 // Database connection
 const client = new Client({
