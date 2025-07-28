@@ -43,6 +43,17 @@ async function runAllMigrations() {
         console.log(`\n🚀 Running migration: ${file}`);
         
         try {
+          // Special handling for migration 002 which is partially applied
+          if (file === '002_create_payment_system.sql') {
+            console.log('⚠️  Skipping 002_create_payment_system.sql - already partially applied');
+            // Mark it as complete without running
+            await client.query(
+              'INSERT INTO migrations (filename) VALUES ($1) ON CONFLICT (filename) DO NOTHING',
+              [file]
+            );
+            continue;
+          }
+          
           const migrationPath = path.join(migrationsDir, file);
           const migrationSQL = fs.readFileSync(migrationPath, 'utf8');
           
