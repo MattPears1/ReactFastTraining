@@ -52,6 +52,9 @@ const CPRAEDPage = lazy(() => import("@pages/courses/CPRAEDPage"));
 const OxygenTherapyPage = lazy(
   () => import("@pages/courses/OxygenTherapyPage"),
 );
+const AnnualSkillsRefresherPage = lazy(
+  () => import("@pages/courses/AnnualSkillsRefresherPage"),
+);
 const FAQPage = lazy(() => import("@pages/FAQPage"));
 const ProductsPage = lazy(() => import("@pages/ProductsPage"));
 const NotFoundPage = lazy(() => import("@pages/NotFoundPage"));
@@ -214,6 +217,10 @@ function App() {
                         <Route
                           path="/courses/oxygen-therapy"
                           element={<OxygenTherapyPage />}
+                        />
+                        <Route
+                          path="/courses/annual-skills-refresher"
+                          element={<AnnualSkillsRefresherPage />}
                         />
                         <Route path="/booking" element={<BookingPage />} />
                         <Route path="/faq" element={<FAQPage />} />

@@ -31,11 +31,12 @@ const navItems: NavItem[] = [
         href: "/courses/emergency-paediatric",
       },
       { label: "Activity First Aid", href: "/courses/activity-first-aid" },
+      { label: "Annual Skills Refresher", href: "/courses/annual-skills-refresher" },
       { label: "CPR and AED", href: "/courses/cpr-aed" },
       { label: "Oxygen Therapy", href: "/courses/oxygen-therapy" },
     ],
   },
-  { label: "Contact", href: "/contact" },
+  { label: "Contact and Bookings", href: "/contact" },
 ];
 
 const Header: React.FC = () => {
@@ -146,11 +147,13 @@ const Header: React.FC = () => {
                       to={item.href}
                       className={cn(
                         "inline-block px-4 py-2 rounded-lg text-sm font-medium transition-all duration-300",
-                        "backdrop-blur-sm bg-white/10 dark:bg-gray-800/20",
-                        "border border-gray-200/30 dark:border-gray-700/30",
-                        isActive(item.href)
-                          ? "bg-gradient-to-r from-secondary-500/20 to-accent-500/20 border-secondary-500/50 dark:border-accent-500/50 text-gray-900 dark:text-white shadow-lg"
-                          : "hover:bg-white/20 dark:hover:bg-gray-800/30 hover:border-gray-300/50 dark:hover:border-gray-600/50 text-gray-700 dark:text-gray-300",
+                        item.label === "Contact and Bookings"
+                          ? "bg-gradient-to-r from-primary-500 to-primary-600 hover:from-primary-600 hover:to-primary-700 text-white shadow-lg border border-primary-600"
+                          : "backdrop-blur-sm bg-white/10 dark:bg-gray-800/20 border border-gray-200/30 dark:border-gray-700/30",
+                        item.label !== "Contact and Bookings" &&
+                          (isActive(item.href)
+                            ? "bg-gradient-to-r from-secondary-500/20 to-accent-500/20 border-secondary-500/50 dark:border-accent-500/50 text-gray-900 dark:text-white shadow-lg"
+                            : "hover:bg-white/20 dark:hover:bg-gray-800/30 hover:border-gray-300/50 dark:hover:border-gray-600/50 text-gray-700 dark:text-gray-300"),
                       )}
                     >
                       {item.label}
@@ -260,7 +263,9 @@ const Header: React.FC = () => {
                           className={cn(
                             "block py-4 px-4 text-base sm:text-lg font-medium transition-all duration-300 rounded-lg min-h-[56px] flex items-center mobile-nav-item",
                             "backdrop-blur-sm border",
-                            isActive(item.href)
+                            item.label === "Contact and Bookings"
+                              ? "bg-gradient-to-r from-primary-500 to-primary-600 text-white border-primary-600"
+                              : isActive(item.href)
                               ? "bg-gradient-to-r from-secondary-500/10 to-accent-500/10 border-secondary-500/30 dark:border-accent-500/30 text-gray-900 dark:text-white"
                               : "bg-gray-50/50 dark:bg-gray-800/50 border-gray-200/50 dark:border-gray-700/50 hover:bg-gray-100/70 dark:hover:bg-gray-700/70 text-gray-700 dark:text-gray-300",
                           )}

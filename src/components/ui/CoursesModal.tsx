@@ -50,6 +50,13 @@ const courses: Course[] = [
     icon: "⚽",
   },
   {
+    label: "Annual Skills Refresher",
+    href: "/courses/annual-skills-refresher",
+    duration: "3 Hours",
+    description: "HSE recommended annual skills update",
+    icon: "🔄",
+  },
+  {
     label: "CPR and AED",
     href: "/courses/cpr-aed",
     duration: "3 Hours",
@@ -59,7 +66,7 @@ const courses: Course[] = [
   {
     label: "Oxygen Therapy",
     href: "/courses/oxygen-therapy",
-    duration: "1 Day",
+    duration: "3 Hours",
     description: "Safe administration of emergency oxygen",
     icon: "💨",
   },
@@ -74,6 +81,20 @@ export const CoursesModal: React.FC<CoursesModalProps> = ({
   isOpen,
   onClose,
 }) => {
+  // Handle escape key press
+  React.useEffect(() => {
+    const handleEscape = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') {
+        onClose();
+      }
+    };
+
+    if (isOpen) {
+      document.addEventListener('keydown', handleEscape);
+      return () => document.removeEventListener('keydown', handleEscape);
+    }
+  }, [isOpen, onClose]);
+
   return (
     <AnimatePresence>
       {isOpen && (
@@ -88,13 +109,14 @@ export const CoursesModal: React.FC<CoursesModalProps> = ({
           />
 
           {/* Modal */}
-          <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
+          <div className="fixed inset-0 z-50 flex items-center justify-center p-4" onClick={onClose}>
             <motion.div
               initial={{ opacity: 0, scale: 0.95 }}
               animate={{ opacity: 1, scale: 1 }}
               exit={{ opacity: 0, scale: 0.95 }}
               transition={{ duration: 0.2 }}
               className="w-full max-w-6xl max-h-[90vh] bg-white dark:bg-gray-900 rounded-2xl shadow-2xl overflow-hidden flex flex-col"
+              onClick={(e) => e.stopPropagation()}
             >
               {/* Header */}
               <div className="flex items-center justify-between p-4 sm:p-6 border-b border-gray-200 dark:border-gray-700 flex-shrink-0">

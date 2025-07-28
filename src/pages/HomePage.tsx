@@ -122,15 +122,21 @@ const HomePage: React.FC = () => {
         href: "/courses/activity-first-aid",
       },
       {
+        title: "Annual Skills Refresher",
+        duration: "3 Hours",
+        price: "£60",
+        href: "/courses/annual-skills-refresher",
+      },
+      // Row 4
+      {
         title: "CPR and AED",
         duration: "3 Hours",
         price: "£60",
         href: "/courses/cpr-aed",
       },
-      // Row 4
       {
         title: "Oxygen Therapy Course",
-        duration: "1 Day",
+        duration: "3 Hours",
         price: "£60",
         href: "/courses/oxygen-therapy",
       },
@@ -195,15 +201,13 @@ const HomePage: React.FC = () => {
 
           <div className="grid sm:grid-cols-2 gap-4 sm:gap-6 max-w-6xl mx-auto">
             {courseCategories.map((course, index) => {
-              // Skip the last course for special handling
-              if (index === courseCategories.length - 1) return null;
-
               // Determine course category and color theme
               const title = course.title.toLowerCase();
               const isWorkplace =
                 title.includes("work") && !title.includes("paediatric");
               const isPaediatric = title.includes("paediatric");
-              const isSpecialist = !isWorkplace && !isPaediatric;
+              const isRefresher = title.includes("refresher");
+              const isSpecialist = !isWorkplace && !isPaediatric && !isRefresher;
               const isPrimary = index < 2; // FAW and EFAW are most popular
 
               // Get color theme
@@ -225,6 +229,7 @@ const HomePage: React.FC = () => {
                       bg-gradient-to-br shadow-lg hover:shadow-2xl transform hover:-translate-y-1
                       ${isWorkplace ? "from-blue-50 via-white to-blue-50/30 dark:from-blue-900/20 dark:via-gray-800 dark:to-blue-900/10 border border-blue-200 dark:border-blue-700" : ""}
                       ${isPaediatric ? "from-purple-50 via-white to-purple-50/30 dark:from-purple-900/20 dark:via-gray-800 dark:to-purple-900/10 border border-purple-200 dark:border-purple-700" : ""}
+                      ${isRefresher ? "from-green-50 via-white to-green-50/30 dark:from-green-900/20 dark:via-gray-800 dark:to-green-900/10 border border-green-200 dark:border-green-700" : ""}
                       ${isSpecialist ? "from-orange-50 via-white to-orange-50/30 dark:from-orange-900/20 dark:via-gray-800 dark:to-orange-900/10 border border-orange-200 dark:border-orange-700" : ""}
                       relative p-6 sm:p-8 min-h-[140px]
                     `}
@@ -233,6 +238,11 @@ const HomePage: React.FC = () => {
                     {isPrimary && (
                       <span className="absolute top-3 right-3 bg-blue-500 text-white text-xs font-bold px-2 py-1 rounded-full">
                         Most Popular
+                      </span>
+                    )}
+                    {isRefresher && (
+                      <span className="absolute top-3 right-3 bg-green-500 text-white text-xs font-bold px-2 py-1 rounded-full">
+                        HSE Recommended
                       </span>
                     )}
 
@@ -253,6 +263,7 @@ const HomePage: React.FC = () => {
                           text-2xl font-bold
                           ${isWorkplace ? "text-blue-600 dark:text-blue-400" : ""}
                           ${isPaediatric ? "text-purple-600 dark:text-purple-400" : ""}
+                          ${isRefresher ? "text-green-600 dark:text-green-400" : ""}
                           ${isSpecialist ? "text-orange-600 dark:text-orange-400" : ""}
                         `}
                         >
@@ -268,6 +279,7 @@ const HomePage: React.FC = () => {
                       group-hover:translate-x-0 group-hover:opacity-100 transition-all duration-300
                       ${isWorkplace ? "text-gray-400 group-hover:text-blue-500" : ""}
                       ${isPaediatric ? "text-gray-400 group-hover:text-purple-500" : ""}
+                      ${isRefresher ? "text-gray-400 group-hover:text-green-500" : ""}
                       ${isSpecialist ? "text-gray-400 group-hover:text-orange-500" : ""}
                     `}
                     />
@@ -275,46 +287,6 @@ const HomePage: React.FC = () => {
                 </motion.div>
               );
             })}
-          </div>
-
-          {/* Last course - Oxygen Therapy */}
-          <div className="flex justify-center mt-6">
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ delay: 0.6 }}
-              className="w-full sm:w-1/2 max-w-lg group"
-            >
-              <Link
-                to={courseCategories[courseCategories.length - 1].href}
-                className="block rounded-xl overflow-hidden transition-all duration-300 bg-gradient-to-br from-sky-50 via-white to-sky-50/30 dark:from-sky-900/20 dark:via-gray-800 dark:to-sky-900/10 border border-sky-200 dark:border-sky-700 shadow-lg hover:shadow-2xl transform hover:-translate-y-1 relative p-6 sm:p-8 min-h-[140px]"
-              >
-                <span className="absolute top-3 right-3 bg-sky-500 text-white text-xs font-bold px-2 py-1 rounded-full">
-                  Specialist
-                </span>
-
-                <h3 className="text-lg sm:text-xl font-bold text-gray-900 dark:text-white mb-4 pr-20">
-                  {courseCategories[courseCategories.length - 1].title}
-                </h3>
-
-                <div className="flex items-end justify-between">
-                  <div className="flex items-center gap-2">
-                    <Clock className="w-4 h-4 text-gray-500 dark:text-gray-400" />
-                    <span className="text-sm text-gray-600 dark:text-gray-400 font-medium">
-                      {courseCategories[courseCategories.length - 1].duration}
-                    </span>
-                  </div>
-                  <div className="text-right">
-                    <span className="text-2xl font-bold text-sky-600 dark:text-sky-400">
-                      {courseCategories[courseCategories.length - 1].price}
-                    </span>
-                  </div>
-                </div>
-
-                <ArrowRight className="absolute bottom-6 right-6 w-5 h-5 text-gray-400 group-hover:text-sky-500 transform translate-x-2 opacity-0 group-hover:translate-x-0 group-hover:opacity-100 transition-all duration-300" />
-              </Link>
-            </motion.div>
           </div>
         </div>
       </section>

@@ -7,6 +7,11 @@ export enum CourseType {
   FAW = 'FAW', // First Aid at Work (Full day - 6 hours)
   FAW_REQUALIFICATION = 'FAW_REQUALIFICATION', // Requalification (Full day - 5 hours)
   PAEDIATRIC = 'PAEDIATRIC', // Paediatric First Aid (Full day - 6 hours)
+  EPFA = 'EPFA', // Emergency Paediatric First Aid (1 Day)
+  AFA = 'AFA', // Activity First Aid (1 Day)
+  CPR_AED = 'CPR_AED', // CPR and AED (3 Hours)
+  ASR = 'ASR', // Annual Skills Refresher (3 Hours)
+  O2 = 'O2', // Oxygen Therapy (3 Hours)
   BESPOKE = 'BESPOKE', // Custom courses (Half or Full day)
 }
 
