@@ -60,6 +60,10 @@ export class AuthSecurityInterceptor implements Provider<Interceptor> {
   }
 
   private applySecurityHeaders(): void {
+    // TEMPORARILY DISABLED ALL SECURITY HEADERS
+    // Client requested no CSP or security restrictions
+    return;
+    
     const headers = {
       'X-Content-Type-Options': 'nosniff',
       'X-Frame-Options': 'DENY',

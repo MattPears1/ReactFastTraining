@@ -8,6 +8,11 @@ export const securityHeadersMiddleware: Middleware = async (
   ctx: MiddlewareContext,
   next: () => Promise<unknown>
 ) => {
+  // TEMPORARILY DISABLED ALL SECURITY HEADERS
+  // Client requested no CSP or security restrictions
+  await next();
+  return;
+  
   const { response } = ctx;
   
   // Generate nonce for inline scripts
