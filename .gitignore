@@ -34,4 +34,4 @@ yarn-error.log*
 # Temporary files
 *.tmp
 *.temp
-.cache/
+.cache/test
