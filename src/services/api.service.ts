@@ -223,6 +223,11 @@ export const contactApi = {
     email: string;
     phone?: string;
     company?: string;
+    address?: string;
+    course?: string;
+    numberOfPeople?: string;
+    preferredDate?: string;
+    preferredTime?: string;
     subject: string;
     message: string;
     consent: boolean;

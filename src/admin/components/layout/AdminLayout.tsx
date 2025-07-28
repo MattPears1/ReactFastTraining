@@ -65,21 +65,6 @@ const navigationItems: NavItem[] = [
     icon: Activity,
   },
   {
-    label: "Alerts",
-    href: "/admin/alerts",
-    icon: AlertTriangle,
-  },
-  {
-    label: "Analytics",
-    href: "/admin/analytics",
-    icon: BarChart3,
-  },
-  {
-    label: "Testimonials",
-    href: "/admin/testimonials",
-    icon: MessageSquare,
-  },
-  {
     label: "Settings",
     href: "/admin/settings",
     icon: Settings,

@@ -19,7 +19,7 @@ const faqData: FAQItem[] = [
     question:
       "What first aid courses does React Fast Training offer in Yorkshire?",
     answer:
-      "We offer Emergency First Aid at Work (EFAW), First Aid at Work (FAW), Paediatric First Aid, and Mental Health First Aid courses. All courses are HSE approved and Ofqual regulated, delivered across Yorkshire with flexible venues arranged per booking.",
+      "We offer Emergency First Aid at Work (EFAW), First Aid at Work (FAW), Paediatric First Aid, and Mental Health First Aid courses. All courses are Ofqual regulated and HSE approved, delivered across Yorkshire with flexible venues arranged per booking.",
     category: "Courses",
   },
   {

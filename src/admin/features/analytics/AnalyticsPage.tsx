@@ -143,28 +143,28 @@ export const AnalyticsPage: React.FC = () => {
 
       {/* Course Popularity */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        <AdminCard title="Course Popularity by Bookings" icon={<BarChart3 />}>
+        <AdminCard title="Course Popularity by Bookings" icon={BarChart3}>
           <CoursePopularityChart data={analyticsData?.coursePopularity || []} />
         </AdminCard>
 
-        <AdminCard title="Revenue by Course" icon={<PoundSterling />}>
+        <AdminCard title="Revenue by Course" icon={PoundSterling}>
           <RevenueByCoursePie data={analyticsData?.revenueByCourse || []} />
         </AdminCard>
       </div>
 
       {/* Time-based Analytics */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        <AdminCard title="Popular Days of the Week" icon={<Calendar />}>
+        <AdminCard title="Popular Days of the Week" icon={Calendar}>
           <DayOfWeekHeatmap data={analyticsData?.dayOfWeekAnalysis || []} />
         </AdminCard>
 
-        <AdminCard title="Monthly Booking Trends" icon={<TrendingUp />}>
+        <AdminCard title="Monthly Booking Trends" icon={TrendingUp}>
           <MonthlyTrendChart data={analyticsData?.monthlyTrends || []} />
         </AdminCard>
       </div>
 
       {/* Booking Funnel */}
-      <AdminCard title="Booking Funnel Analysis" icon={<Activity />}>
+      <AdminCard title="Booking Funnel Analysis" icon={Activity}>
         <BookingFunnelChart data={analyticsData?.bookingFunnel || {}} />
       </AdminCard>
 

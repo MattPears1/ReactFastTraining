@@ -2595,6 +2595,118 @@ app.post('/api/bookings/confirm-with-payment', bookingLimiter, async (req, res) 
   }
 });
 
+// Contact form submission endpoint
+app.post('/api/v1/contact/submit', async (req, res) => {
+  try {
+    console.log('📧 Contact form submission received');
+    const {
+      firstName,
+      lastName,
+      email,
+      phone,
+      company,
+      address,
+      course,
+      numberOfPeople,
+      preferredDate,
+      preferredTime,
+      subject,
+      message,
+      consent
+    } = req.body;
+
+    // Validate required fields
+    if (!firstName || !lastName || !email || !subject || !message || !consent) {
+      return res.status(400).json({
+        success: false,
+        message: 'Please fill in all required fields'
+      });
+    }
+
+    // Format the email content
+    const emailContent = `
+      <h2>New Contact Form Submission</h2>
+      <p><strong>From:</strong> ${firstName} ${lastName}</p>
+      <p><strong>Email:</strong> ${email}</p>
+      ${phone ? `<p><strong>Phone:</strong> ${phone}</p>` : ''}
+      ${company ? `<p><strong>Company:</strong> ${company}</p>` : ''}
+      ${address ? `<p><strong>Address:</strong> ${address}</p>` : ''}
+      ${course && course !== 'General Enquiry' ? `<p><strong>Course Interested In:</strong> ${course}</p>` : ''}
+      ${numberOfPeople ? `<p><strong>Number of People:</strong> ${numberOfPeople}</p>` : ''}
+      ${preferredDate ? `<p><strong>Preferred Date:</strong> ${new Date(preferredDate).toLocaleDateString('en-GB')}</p>` : ''}
+      ${preferredTime ? `<p><strong>Preferred Time:</strong> ${preferredTime}</p>` : ''}
+      <p><strong>Subject:</strong> ${subject}</p>
+      <p><strong>Message:</strong></p>
+      <p>${message.replace(/\n/g, '<br>')}</p>
+    `;
+
+    // Save to database if needed
+    const result = await client.query(
+      `INSERT INTO contact_submissions (
+        first_name, last_name, email, phone, company, address,
+        course, number_of_people, preferred_date, preferred_time,
+        subject, message, consent_given, created_at
+      ) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, NOW())
+      RETURNING id`,
+      [
+        firstName, lastName, email, phone, company, address,
+        course, numberOfPeople ? parseInt(numberOfPeople) : null, 
+        preferredDate, preferredTime, subject, message, consent
+      ]
+    );
+
+    // Send email notification to admin
+    if (emailService && emailService.sendEmail) {
+      try {
+        await emailService.sendEmail({
+          to: 'info@reactfasttraining.co.uk',
+          subject: `New Contact Form: ${subject}`,
+          html: emailContent
+        });
+
+        // Send auto-reply to customer
+        const autoReplyContent = `
+          <h2>Thank you for contacting React Fast Training</h2>
+          <p>Dear ${firstName},</p>
+          <p>We have received your enquiry and will get back to you within 24 hours.</p>
+          <p>Here's a summary of your enquiry:</p>
+          <ul>
+            ${course && course !== 'General Enquiry' ? `<li>Course: ${course}</li>` : ''}
+            ${numberOfPeople ? `<li>Number of people: ${numberOfPeople}</li>` : ''}
+            ${preferredDate ? `<li>Preferred date: ${new Date(preferredDate).toLocaleDateString('en-GB')}</li>` : ''}
+            ${preferredTime ? `<li>Preferred time: ${preferredTime}</li>` : ''}
+          </ul>
+          <p>If you have any urgent questions, please call us on 07447 485644.</p>
+          <p>Best regards,<br>React Fast Training Team</p>
+        `;
+
+        await emailService.sendEmail({
+          to: email,
+          subject: 'Thank you for your enquiry - React Fast Training',
+          html: autoReplyContent
+        });
+      } catch (emailError) {
+        console.error('Failed to send email:', emailError);
+        // Don't fail the submission if email fails
+      }
+    }
+
+    console.log('✅ Contact form submission saved:', result.rows[0].id);
+
+    res.json({
+      success: true,
+      message: 'Thank you for your enquiry. We will get back to you soon.'
+    });
+
+  } catch (error) {
+    console.error('❌ Contact form submission error:', error);
+    res.status(500).json({
+      success: false,
+      message: 'Sorry, there was an error submitting your enquiry. Please try again or call us directly.'
+    });
+  }
+});
+
 // Health check
 app.get('/ping', (req, res) => {
   res.json({ message: 'pong' });

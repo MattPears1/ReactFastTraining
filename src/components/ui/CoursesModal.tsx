@@ -160,7 +160,7 @@ export const CoursesModal: React.FC<CoursesModalProps> = ({
               <div className="p-4 sm:p-6 border-t border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800/50 flex-shrink-0">
                 <div className="flex flex-col sm:flex-row items-center justify-between gap-3 sm:gap-4">
                   <p className="text-xs sm:text-sm text-gray-600 dark:text-gray-400 text-center sm:text-left">
-                    All courses are HSE approved and Ofqual regulated
+                    All courses are Ofqual regulated and HSE approved
                   </p>
                   <div className="flex gap-3 sm:gap-4 w-full sm:w-auto">
                     <Link

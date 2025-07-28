@@ -13,5 +13,6 @@ export * from './admin/payments.controller';
 export * from './admin/dashboard.controller';
 export * from './admin/bookings.controller';
 export * from './admin/course-admin.controller';
+export * from './admin/alerts.controller';
 export * from './stripe-webhook.controller';
 export * from './test-availability.controller';

@@ -16,6 +16,9 @@ const contactSchema = z.object({
   company: z.string().optional(),
   address: z.string().optional(),
   course: z.string().optional(),
+  numberOfPeople: z.string().optional(),
+  preferredDate: z.string().optional(),
+  preferredTime: z.string().optional(),
   subject: z.string().min(5, "Subject must be at least 5 characters"),
   message: z.string().min(20, "Message must be at least 20 characters"),
   consent: z.boolean().refine((val) => val === true, {
@@ -195,6 +198,63 @@ const ContactForm: React.FC = () => {
           <option value="General Enquiry">General Enquiry</option>
         </select>
         {errors.course && <p className="form-error">{errors.course.message}</p>}
+      </div>
+
+      <div className="grid sm:grid-cols-2 gap-4 sm:gap-6">
+        <div>
+          <label htmlFor="numberOfPeople" className="form-label">
+            How many people will be attending?
+          </label>
+          <input
+            id="numberOfPeople"
+            type="number"
+            min="1"
+            className="form-input"
+            placeholder="e.g., 5"
+            {...register("numberOfPeople")}
+            disabled={isLoading}
+          />
+          {errors.numberOfPeople && (
+            <p className="form-error">{errors.numberOfPeople.message}</p>
+          )}
+        </div>
+
+        <div>
+          <label htmlFor="preferredTime" className="form-label">
+            Preferred time of day
+          </label>
+          <select
+            id="preferredTime"
+            className="form-input"
+            {...register("preferredTime")}
+            disabled={isLoading}
+          >
+            <option value="">Select a time...</option>
+            <option value="Morning">Morning</option>
+            <option value="Afternoon">Afternoon</option>
+            <option value="Evening">Evening</option>
+          </select>
+          {errors.preferredTime && (
+            <p className="form-error">{errors.preferredTime.message}</p>
+          )}
+        </div>
+      </div>
+
+      <div>
+        <label htmlFor="preferredDate" className="form-label">
+          Preferred date for training
+        </label>
+        <input
+          id="preferredDate"
+          type="date"
+          className="form-input"
+          min={new Date().toISOString().split('T')[0]}
+          {...register("preferredDate")}
+          disabled={isLoading}
+        />
+        {errors.preferredDate && (
+          <p className="form-error">{errors.preferredDate.message}</p>
+        )}
       </div>
 
       <div>

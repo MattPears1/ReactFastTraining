@@ -130,9 +130,9 @@ export const siteConfig = {
       description: "All our courses are Ofqual regulated",
     },
     {
-      name: "HSE Approved",
+      name: "Ofqual Regulated and HSE Approved",
       logo: "/images/certifications/hse.png",
-      description: "Health and Safety Executive approved training",
+      description: "Ofqual regulated and Health and Safety Executive approved training",
     },
     {
       name: "First Aid Awards",

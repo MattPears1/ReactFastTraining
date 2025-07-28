@@ -25,9 +25,6 @@ import { UsersPage } from "./features/users/UsersPage";
 import { UserDetailsPage } from "./features/users/UserDetailsPage";
 import { SettingsPage } from "./features/settings/SettingsPage";
 import { ActivityLogPage } from "./features/activity/ActivityLogPage";
-import { AlertsPage } from "./features/alerts/AlertsPage";
-import { AnalyticsPage } from "./features/analytics/AnalyticsPage";
-import { TestimonialsPage } from "./features/testimonials/TestimonialsPage";
 import { AdminErrorTest } from "./pages/AdminErrorTest";
 import { AdminTestPage } from "./components/AdminTestPage";
 
@@ -98,17 +95,7 @@ export const AdminApp: React.FC = () => {
                       {/* Activity Log */}
                       <Route path="activity" element={<ActivityLogPage />} />
 
-                      {/* Admin Alerts */}
-                      <Route path="alerts" element={<AlertsPage />} />
 
-                      {/* Analytics */}
-                      <Route path="analytics" element={<AnalyticsPage />} />
-
-                      {/* Testimonials */}
-                      <Route
-                        path="testimonials"
-                        element={<TestimonialsPage />}
-                      />
 
                       {/* Catch all */}
                       <Route
