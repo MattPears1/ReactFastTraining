@@ -7,16 +7,25 @@ BEGIN;
 ALTER TABLE bookings 
 ADD COLUMN IF NOT EXISTS user_email VARCHAR(255);
 
--- Update user_email from contact_details for existing bookings
+-- Update user_email from users table for existing bookings
 UPDATE bookings 
-SET user_email = LOWER(contact_details->>'email')
-WHERE user_email IS NULL 
-AND contact_details->>'email' IS NOT NULL;
+SET user_email = LOWER(u.email)
+FROM users u
+WHERE bookings.user_id = u.id
+AND bookings.user_email IS NULL;
 
 -- 2. Add capacity constraint to course_schedules
-ALTER TABLE course_schedules
-ADD CONSTRAINT check_capacity_not_exceeded 
-CHECK (current_capacity >= 0 AND current_capacity <= max_capacity);
+DO $$ 
+BEGIN
+    IF NOT EXISTS (
+        SELECT 1 FROM pg_constraint 
+        WHERE conname = 'check_capacity_not_exceeded'
+    ) THEN
+        ALTER TABLE course_schedules
+        ADD CONSTRAINT check_capacity_not_exceeded 
+        CHECK (current_capacity >= 0 AND current_capacity <= max_capacity);
+    END IF;
+END $$;
 
 -- 3. Create unique index for duplicate booking prevention
 -- This prevents the same email from booking the same session multiple times
