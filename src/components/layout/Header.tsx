@@ -162,28 +162,6 @@ const Header: React.FC = () => {
 
             {/* Right Side Actions */}
             <div className="flex items-center space-x-2 sm:space-x-3 md:space-x-4">
-              {/* Phone Number - visible on mobile and desktop */}
-              <a
-                href="tel:07447485644"
-                className="flex items-center space-x-1 sm:space-x-2 text-primary-600 dark:text-primary-400 font-semibold hover:text-primary-700 dark:hover:text-primary-300 transition-colors text-base sm:text-sm lg:text-base min-w-[44px] min-h-[44px] sm:min-w-0 sm:min-h-0 p-2 sm:p-0 justify-center sm:justify-start rounded-lg"
-              >
-                <svg
-                  className="w-6 h-6 sm:w-4 sm:h-4 lg:w-5 lg:h-5"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                  xmlns="http://www.w3.org/2000/svg"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"
-                  />
-                </svg>
-                <span className="hidden sm:inline">07447 485644</span>
-              </a>
-
               {/* Search */}
               <button
                 onClick={() => setShowSearch(true)}
@@ -302,30 +280,10 @@ const Header: React.FC = () => {
                 <div className="mt-6 sm:mt-8 pt-6 sm:pt-8 border-t border-gray-200 dark:border-gray-700">
                   <Link
                     to="/booking"
-                    className="btn btn-primary w-full text-center mb-3 sm:mb-4 min-h-[52px] flex items-center justify-center text-lg font-semibold"
+                    className="btn btn-primary w-full text-center min-h-[52px] flex items-center justify-center text-lg font-semibold"
                   >
                     Book Course
                   </Link>
-                  <a
-                    href="tel:07447485644"
-                    className="btn btn-outline w-full text-center flex items-center justify-center gap-3 min-h-[52px] text-base font-medium"
-                  >
-                    <svg
-                      className="w-5 h-5"
-                      fill="none"
-                      stroke="currentColor"
-                      viewBox="0 0 24 24"
-                      xmlns="http://www.w3.org/2000/svg"
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth={2}
-                        d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"
-                      />
-                    </svg>
-                    Call 07447 485644
-                  </a>
                 </div>
               </div>
             </motion.nav>

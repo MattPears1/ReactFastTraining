@@ -113,18 +113,24 @@ class AdminAuthService {
   ): Promise<LoginResponse> {
     console.log("🔐 [AdminAuthService] Attempting login...");
     console.log("📧 [AdminAuthService] Email:", email);
-    console.log("🚨 [AdminAuthService] USING TEST LOGIN ENDPOINT");
 
     try {
-      // TEMPORARY: Use test login endpoint that bypasses all middleware
+      // Use the proper admin auth endpoint
       const response = await this.api.post<LoginResponse>(
-        "/api/test-login",
+        "/api/admin/auth/login",
         {
           email,
           password,
+          captcha,
         },
       );
-      console.log("✅ [AdminAuthService] Test login successful:", response.data);
+      console.log("✅ [AdminAuthService] Login successful");
+      
+      // Store the access token
+      if (response.data.accessToken) {
+        localStorage.setItem("adminAccessToken", response.data.accessToken);
+      }
+      
       return response.data;
     } catch (error: any) {
       console.error("❌ [AdminAuthService] Login failed:", error);
@@ -182,20 +188,6 @@ class AdminAuthService {
   }
 
   async getCurrentUser(): Promise<CurrentUserResponse> {
-    // TEMPORARY: Check if using test token
-    const token = localStorage.getItem("adminAccessToken");
-    if (token === 'test-token-123') {
-      console.log("🚨 [AdminAuthService] Using test token - returning hardcoded user");
-      return {
-        id: 1,
-        email: 'lex@reactfasttraining.co.uk',
-        name: 'Lex Admin',
-        role: 'admin',
-        lastLogin: new Date(),
-        permissions: ['all']
-      };
-    }
-    
     const response =
       await this.api.get<CurrentUserResponse>("/api/admin/auth/me");
     return response.data;
