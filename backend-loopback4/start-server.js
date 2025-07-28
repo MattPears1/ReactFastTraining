@@ -300,7 +300,7 @@ app.get('/api/admin/dashboard/overview', async (req, res) => {
         client.query('SELECT COUNT(*) as count FROM bookings WHERE created_at >= NOW() - INTERVAL \'7 days\''),
         client.query('SELECT COALESCE(SUM(payment_amount), 0) as revenue FROM bookings WHERE status = \'confirmed\' AND created_at >= NOW() - INTERVAL \'30 days\''),
         client.query('SELECT COUNT(*) as count FROM bookings WHERE status = \'pending\''),
-        client.query('SELECT COUNT(*) as count FROM course_schedules WHERE start_datetime >= CURRENT_DATE'),
+        client.query('SELECT COUNT(*) as count FROM course_sessions WHERE session_date >= CURRENT_DATE'),
         client.query('SELECT COUNT(*) as count FROM users WHERE role = \'customer\''),
         client.query('SELECT COUNT(DISTINCT id) as count FROM bookings WHERE status = \'completed\' AND created_at >= NOW() - INTERVAL \'30 days\'')
       ]);
@@ -310,7 +310,7 @@ app.get('/api/admin/dashboard/overview', async (req, res) => {
         SELECT b.*, u.first_name, u.last_name, u.email, c.name as course_name
         FROM bookings b
         LEFT JOIN users u ON b.user_id = u.id
-        LEFT JOIN course_schedules cs ON b.course_schedule_id = cs.id
+        LEFT JOIN course_sessions cs ON b.session_id = cs.id
         LEFT JOIN courses c ON cs.course_id = c.id
         ORDER BY b.created_at DESC
         LIMIT 10
@@ -318,18 +318,17 @@ app.get('/api/admin/dashboard/overview', async (req, res) => {
 
       // Get upcoming sessions
       const upcomingSessions = await client.query(`
-        SELECT cs.*, c.name as course_name, c.price, v.name as location_name,
+        SELECT cs.*, c.name as course_name, c.price, cs.location as location_name,
                COUNT(DISTINCT b.id) as booked_count,
-               DATE(cs.start_datetime) as session_date,
-               TO_CHAR(cs.start_datetime, 'HH24:MI') as start_time,
-               TO_CHAR(cs.end_datetime, 'HH24:MI') as end_time
-        FROM course_schedules cs
+               cs.session_date,
+               cs.start_time,
+               cs.end_time
+        FROM course_sessions cs
         LEFT JOIN courses c ON cs.course_id = c.id
-        LEFT JOIN venues v ON cs.venue_id = v.id
-        LEFT JOIN bookings b ON cs.id = b.course_schedule_id AND b.status IN ('confirmed', 'pending')
-        WHERE cs.start_datetime >= CURRENT_DATE
-        GROUP BY cs.id, c.id, v.id
-        ORDER BY cs.start_datetime
+        LEFT JOIN bookings b ON cs.id = b.session_id AND b.status IN ('confirmed', 'pending')
+        WHERE cs.session_date >= CURRENT_DATE
+        GROUP BY cs.id, c.id, cs.session_date, cs.start_time
+        ORDER BY cs.session_date, cs.start_time
         LIMIT 10
       `);
 
@@ -382,9 +381,10 @@ app.get('/api/admin/dashboard/overview', async (req, res) => {
             upcoming: parseInt(stats[3].rows[0].count),
             inProgress: parseInt((await client.query(`
               SELECT COUNT(*) as count 
-              FROM course_schedules 
-              WHERE start_datetime <= NOW() 
-                AND end_datetime >= NOW()
+              FROM course_sessions 
+              WHERE session_date = CURRENT_DATE 
+                AND start_time <= CURRENT_TIME 
+                AND end_time >= CURRENT_TIME
             `)).rows[0].count),
             completed: parseInt(stats[5].rows[0].count)
           }
@@ -415,7 +415,7 @@ app.get('/api/admin/dashboard/overview', async (req, res) => {
           time: `${session.start_time} - ${session.end_time}`,
           venue: session.location_name,
           currentCapacity: session.booked_count,
-          maxCapacity: session.current_capacity || 20
+          maxCapacity: session.max_participants || 20
         })),
         recentActivity: await (async () => {
           try {
@@ -449,7 +449,7 @@ app.get('/api/admin/dashboard/overview', async (req, res) => {
                 details: (() => {
                   // Format activity details based on action type
                   if (log.action === 'booking.created' && log.details) {
-                    const courseId = log.details.course_schedule_id;
+                    const courseId = log.details.session_id;
                     return `Booked course #${courseId}`;
                   } else if (log.action === 'payment.completed' && log.details) {
                     return `£${(log.details.amount / 100).toFixed(2)} payment`;
@@ -578,9 +578,9 @@ app.get('/api/admin/bookings', authenticateToken, async (req, res) => {
         b.id::text as id,
         cs.course_id as "courseId",
         c.name as "courseName",
-        DATE(cs.start_datetime)::text as "courseDate",
-        TO_CHAR(cs.start_datetime, 'HH24:MI') || ' - ' || TO_CHAR(cs.end_datetime, 'HH24:MI') as "courseTime",
-        v.name as "courseVenue",
+        cs.session_date::text as "courseDate",
+        cs.start_time || ' - ' || cs.end_time as "courseTime",
+        cs.location as "courseVenue",
         c.price as "coursePrice",
         COALESCE(u.first_name || ' ' || u.last_name, b.contact_details->>'name') as "customerName",
         COALESCE(u.email, b.contact_details->>'email') as "customerEmail",
@@ -599,9 +599,8 @@ app.get('/api/admin/bookings', authenticateToken, async (req, res) => {
         b.updated_at::text as "updatedAt"
       FROM bookings b
       LEFT JOIN users u ON b.user_id = u.id
-      LEFT JOIN course_schedules cs ON b.course_schedule_id = cs.id
+      LEFT JOIN course_sessions cs ON b.session_id = cs.id
       LEFT JOIN courses c ON cs.course_id = c.id
-      LEFT JOIN venues v ON cs.venue_id = v.id
       ${whereClause}
       ORDER BY b.created_at DESC
     `, params);
@@ -711,12 +710,12 @@ app.get('/api/admin/bookings/export', authenticateToken, async (req, res) => {
     let params = [];
     
     if (dateFrom) {
-      whereConditions.push(`DATE(cs.start_datetime) >= $1`);
+      whereConditions.push(`cs.session_date >= $1`);
       params.push(dateFrom);
     }
     
     if (dateTo) {
-      whereConditions.push(`DATE(cs.start_datetime) <= $${params.length + 1}`);
+      whereConditions.push(`cs.session_date <= $${params.length + 1}`);
       params.push(dateTo);
     }
     
@@ -729,9 +728,9 @@ app.get('/api/admin/bookings/export', authenticateToken, async (req, res) => {
         COALESCE(u.email, b.contact_details->>'email') as "Email",
         COALESCE(u.phone, b.contact_details->>'phone') as "Phone",
         c.name as "Course",
-        DATE(cs.start_datetime)::text as "Date",
-        TO_CHAR(cs.start_datetime, 'HH24:MI') as "Start Time",
-        v.name as "Venue",
+        cs.session_date::text as "Date",
+        cs.start_time as "Start Time",
+        cs.location as "Venue",
         b.number_of_attendees as "Attendees",
         b.status as "Status",
         b.payment_status as "Payment Status",
@@ -739,9 +738,8 @@ app.get('/api/admin/bookings/export', authenticateToken, async (req, res) => {
         TO_CHAR(b.created_at, 'YYYY-MM-DD HH24:MI') as "Booking Date"
       FROM bookings b
       LEFT JOIN users u ON b.user_id = u.id
-      LEFT JOIN course_schedules cs ON b.course_schedule_id = cs.id
+      LEFT JOIN course_sessions cs ON b.session_id = cs.id
       LEFT JOIN courses c ON cs.course_id = c.id
-      LEFT JOIN venues v ON cs.venue_id = v.id
       ${whereClause}
       ORDER BY b.created_at DESC
     `, params);
@@ -789,17 +787,16 @@ app.get('/api/admin/schedule', async (req, res) => {
       
       const schedule = await client.query(`
         SELECT cs.*, c.name as course_name, c.duration, c.price,
-               v.name as location_name, v.address as location_address,
+               cs.location as location_name,
                COUNT(DISTINCT b.id) as booked_count,
-               DATE(cs.start_datetime) as session_date,
-               TO_CHAR(cs.start_datetime, 'HH24:MI') as start_time,
-               TO_CHAR(cs.end_datetime, 'HH24:MI') as end_time
-        FROM course_schedules cs
+               cs.session_date,
+               cs.start_time,
+               cs.end_time
+        FROM course_sessions cs
         LEFT JOIN courses c ON cs.course_id = c.id
-        LEFT JOIN venues v ON cs.venue_id = v.id
-        LEFT JOIN bookings b ON cs.id = b.course_schedule_id AND b.status IN ('confirmed', 'pending')
+          LEFT JOIN bookings b ON cs.id = b.session_id AND b.status IN ('confirmed', 'pending')
         GROUP BY cs.id, c.id, v.id
-        ORDER BY cs.start_datetime
+        ORDER BY cs.session_date, cs.start_time
       `);
 
       res.json(schedule.rows.map(session => ({
@@ -809,8 +806,8 @@ app.get('/api/admin/schedule', async (req, res) => {
         end: `${session.session_date}T${session.end_time}`,
         location: session.location_name,
         address: session.location_address,
-        spotsAvailable: (session.current_capacity || 20) - (parseInt(session.booked_count) || 0),
-        totalSpots: session.current_capacity || 20,
+        spotsAvailable: (session.max_participants || 20) - (parseInt(session.booked_count) || 0),
+        totalSpots: session.max_participants || 20,
         price: session.price,
         status: session.status
       })));
@@ -881,10 +878,10 @@ app.get('/api/admin/users', authenticateToken, async (req, res) => {
     
     if (search) {
       whereConditions.push(`(
-        u.name ILIKE $${paramIndex} OR 
+        COALESCE(u.name, '') ILIKE $${paramIndex} OR 
         u.email ILIKE $${paramIndex} OR 
-        u.phone ILIKE $${paramIndex} OR 
-        u.company_name ILIKE $${paramIndex}
+        COALESCE(u.phone, '') ILIKE $${paramIndex} OR 
+        COALESCE(u.company_name, '') ILIKE $${paramIndex}
       )`);
       params.push(`%${search}%`);
       paramIndex++;
@@ -918,7 +915,7 @@ app.get('/api/admin/users', authenticateToken, async (req, res) => {
       SELECT 
         u.id,
         u.email,
-        u.name,
+        COALESCE(u.name, u.email) as "name",
         u.phone,
         u.role,
         u.customer_type as "customerType",
@@ -933,7 +930,7 @@ app.get('/api/admin/users', authenticateToken, async (req, res) => {
       FROM users u
       LEFT JOIN bookings b ON u.id = b.user_id AND b.status IN ('confirmed', 'completed')
       ${whereClause}
-      GROUP BY u.id
+      GROUP BY u.id, u.email, u.phone, u.role, u.customer_type, u.company_name, u.city, u.postcode, u.newsletter_subscribed, u.created_at
       ${hasBookings === 'true' ? 'HAVING COUNT(DISTINCT b.id) > 0' : ''}
       ${hasBookings === 'false' ? 'HAVING COUNT(DISTINCT b.id) = 0' : ''}
       ORDER BY u.created_at DESC
@@ -991,13 +988,13 @@ app.get('/api/admin/users/:id', authenticateToken, async (req, res) => {
       SELECT 
         b.*,
         c.name as course_name,
-        cs.start_datetime,
-        cs.end_datetime,
-        v.name as venue_name
+        cs.session_date,
+        cs.start_time,
+        cs.end_time,
+        cs.location as venue_name
       FROM bookings b
       JOIN course_schedules cs ON b.course_schedule_id = cs.id
       JOIN courses c ON cs.course_id = c.id
-      LEFT JOIN venues v ON cs.venue_id = v.id
       WHERE b.user_id = $1
       ORDER BY cs.start_datetime DESC
     `;
@@ -1091,23 +1088,23 @@ app.get('/course-sessions', authenticateToken, async (req, res) => {
       SELECT 
         cs.id,
         cs.course_id,
-        cs.venue_id,
+        cs.location,
         cs.trainer_id,
-        cs.start_datetime,
-        cs.end_datetime,
+        cs.session_date,
+        cs.start_time,
+        cs.end_time,
         cs.status,
-        cs.current_capacity,
-        cs.notes,
+        cs.current_bookings,
+        '' as notes,
         c.name as course_name,
         c.course_type,
         c.price,
-        c.max_capacity,
+        cs.max_participants,
         v.name as venue_name,
         v.address_line1,
         v.city
       FROM course_schedules cs
       LEFT JOIN courses c ON cs.course_id = c.id
-      LEFT JOIN venues v ON cs.venue_id = v.id
       ORDER BY cs.start_datetime ASC
     `;
     
@@ -1129,7 +1126,7 @@ app.get('/course-sessions', authenticateToken, async (req, res) => {
         },
         trainerId: row.trainer_id ? row.trainer_id.toString() : null,
         trainer: { name: 'Lex Richardson' }, // Default trainer for now
-        locationId: row.venue_id.toString(),
+        locationId: row.id.toString(),
         location: { 
           name: row.venue_name, 
           address: `${row.address_line1}, ${row.city}` 
@@ -1138,8 +1135,8 @@ app.get('/course-sessions', authenticateToken, async (req, res) => {
         endDate: row.end_datetime,
         startTime: new Date(row.start_datetime).toTimeString().substring(0, 5),
         endTime: new Date(row.end_datetime).toTimeString().substring(0, 5),
-        maxParticipants: row.max_capacity,
-        currentParticipants: row.current_capacity || 0,
+        maxParticipants: row.max_participants,
+        currentParticipants: row.current_bookings || 0,
         pricePerPerson: parseFloat(row.price),
         status: row.status?.toUpperCase() || 'SCHEDULED'
       };
@@ -1170,24 +1167,24 @@ app.get('/course-sessions/available', async (req, res) => {
       SELECT 
         cs.id,
         cs.course_id,
-        cs.venue_id,
-        cs.start_datetime,
-        cs.end_datetime,
+        cs.location,
+        cs.session_date,
+        cs.start_time,
+        cs.end_time,
         cs.status,
-        cs.current_capacity,
+        cs.current_bookings,
         c.name as course_name,
         c.course_type,
         c.price,
-        c.max_capacity,
+        cs.max_participants,
         v.name as venue_name,
         v.address_line1,
         v.city
       FROM course_schedules cs
       LEFT JOIN courses c ON cs.course_id = c.id
-      LEFT JOIN venues v ON cs.venue_id = v.id
       WHERE cs.status IN ('published', 'draft')
-        AND cs.start_datetime > NOW()
-        AND cs.current_capacity < c.max_capacity
+        AND cs.session_date >= CURRENT_DATE
+        AND cs.current_bookings < cs.max_participants
       ORDER BY cs.start_datetime ASC
     `;
     
@@ -1231,23 +1228,23 @@ app.get('/course-sessions/:id', async (req, res) => {
       SELECT 
         cs.id,
         cs.course_id,
-        cs.venue_id,
+        cs.location,
         cs.trainer_id,
-        cs.start_datetime,
-        cs.end_datetime,
+        cs.session_date,
+        cs.start_time,
+        cs.end_time,
         cs.status,
-        cs.current_capacity,
-        cs.notes,
+        cs.current_bookings,
+        '' as notes,
         c.name as course_name,
         c.course_type,
         c.price,
-        c.max_capacity,
+        cs.max_participants,
         v.name as venue_name,
         v.address_line1,
         v.city
       FROM course_schedules cs
       LEFT JOIN courses c ON cs.course_id = c.id
-      LEFT JOIN venues v ON cs.venue_id = v.id
       WHERE cs.id = $1
     `;
     
@@ -1294,21 +1291,21 @@ app.post('/course-sessions', authenticateToken, async (req, res) => {
   try {
     console.log('Create new course session:', req.body);
     
-    const { courseId, venueId, startDatetime, endDatetime, notes } = req.body;
+    const { courseId, location, sessionDate, startTime, endTime, maxParticipants } = req.body;
     
     const query = `
-      INSERT INTO course_schedules (course_id, venue_id, start_datetime, end_datetime, status, current_capacity, notes, created_by)
-      VALUES ($1, $2, $3, $4, 'published', 0, $5, $6)
+      INSERT INTO course_sessions (course_id, location, session_date, start_time, end_time, status, max_participants, current_bookings)
+      VALUES ($1, $2, $3::date, $4::time, $5::time, 'scheduled', $6, 0)
       RETURNING *
     `;
     
     const result = await client.query(query, [
       courseId,
-      venueId, 
-      startDatetime,
-      endDatetime,
-      notes || null,
-      req.user.id
+      location || 'React Fast Training Centre', 
+      sessionDate,
+      startTime,
+      endTime,
+      maxParticipants || 20
     ]);
     
     res.status(201).json(result.rows[0]);
@@ -1323,7 +1320,7 @@ app.delete('/course-sessions/:id', authenticateToken, async (req, res) => {
   try {
     console.log('Delete course session:', req.params.id);
     
-    const query = 'DELETE FROM course_schedules WHERE id = $1 RETURNING *';
+    const query = 'DELETE FROM course_sessions WHERE id = $1 RETURNING *';
     const result = await client.query(query, [req.params.id]);
     
     if (result.rows.length === 0) {
@@ -1348,20 +1345,18 @@ app.get('/api/admin/schedules', authenticateToken, async (req, res) => {
         cs.course_id,
         c.name as "courseName",
         c.course_type as "courseType",
-        cs.start_datetime::date::text as date,
-        TO_CHAR(cs.start_datetime, 'HH24:MI') as "startTime",
-        TO_CHAR(cs.end_datetime, 'HH24:MI') as "endTime",
-        v.name as location,
-        cs.venue_id,
-        cs.max_capacity as "maxParticipants",
-        cs.current_capacity as "currentBookings",
+        cs.session_date::text as date,
+        cs.start_time as "startTime",
+        cs.end_time as "endTime",
+        cs.location,
+        cs.max_participants as "maxParticipants",
+        cs.current_bookings as "currentBookings",
         cs.status,
         c.price,
         cs.notes
       FROM course_schedules cs
       JOIN courses c ON cs.course_id = c.id
-      LEFT JOIN venues v ON cs.venue_id = v.id
-      WHERE cs.start_datetime >= CURRENT_DATE - INTERVAL '1 month'
+      WHERE cs.session_date >= CURRENT_DATE - INTERVAL '1 month'
       ORDER BY cs.start_datetime ASC
     `;
     
@@ -1388,18 +1383,18 @@ app.get('/api/admin/schedules/:id', authenticateToken, async (req, res) => {
         c.name as "courseName",
         c.course_type as "courseType",
         c.description as "courseDescription",
-        cs.start_datetime,
-        cs.end_datetime,
-        cs.start_datetime::date::text as date,
-        TO_CHAR(cs.start_datetime, 'HH24:MI') as "startTime",
-        TO_CHAR(cs.end_datetime, 'HH24:MI') as "endTime",
-        v.name as "venueName",
-        v.address_line1 as "venueAddress",
-        v.city as "venueCity",
-        v.postcode as "venuePostcode",
-        cs.venue_id,
-        cs.max_capacity as "maxParticipants",
-        cs.current_capacity as "currentBookings",
+        cs.session_date,
+        cs.start_time,
+        cs.end_time,
+        cs.session_date::text as date,
+        cs.start_time as "startTime",
+        cs.end_time as "endTime",
+        cs.location as "venueName",
+        '' as "venueAddress",
+        '' as "venueCity",
+        '' as "venuePostcode",
+        cs.max_participants as "maxParticipants",
+        cs.current_bookings as "currentBookings",
         cs.status,
         c.price,
         cs.notes,
@@ -1407,7 +1402,6 @@ app.get('/api/admin/schedules/:id', authenticateToken, async (req, res) => {
         cs.updated_at
       FROM course_schedules cs
       JOIN courses c ON cs.course_id = c.id
-      LEFT JOIN venues v ON cs.venue_id = v.id
       WHERE cs.id = $1
     `;
     
@@ -1430,7 +1424,7 @@ app.get('/api/admin/schedules/:id', authenticateToken, async (req, res) => {
         u.phone as "userPhone"
       FROM bookings b
       JOIN users u ON b.user_id = u.id
-      WHERE b.course_schedule_id = $1
+      WHERE b.session_id = $1
       ORDER BY b.created_at DESC
     `;
     
@@ -1460,24 +1454,32 @@ app.put('/api/admin/schedules/:id', authenticateToken, async (req, res) => {
     const values = [];
     let paramIndex = 1;
     
-    if (updates.date && updates.startTime && updates.endTime) {
-      updateFields.push(`start_datetime = $${paramIndex}::timestamp`);
-      values.push(`${updates.date} ${updates.startTime}:00`);
-      paramIndex++;
-      
-      updateFields.push(`end_datetime = $${paramIndex}::timestamp`);
-      values.push(`${updates.date} ${updates.endTime}:00`);
+    if (updates.date) {
+      updateFields.push(`session_date = $${paramIndex}::date`);
+      values.push(updates.date);
       paramIndex++;
     }
     
-    if (updates.venueId) {
-      updateFields.push(`venue_id = $${paramIndex}`);
-      values.push(updates.venueId);
+    if (updates.startTime) {
+      updateFields.push(`start_time = $${paramIndex}::time`);
+      values.push(updates.startTime);
+      paramIndex++;
+    }
+    
+    if (updates.endTime) {
+      updateFields.push(`end_time = $${paramIndex}::time`);
+      values.push(updates.endTime);
+      paramIndex++;
+    }
+    
+    if (updates.location) {
+      updateFields.push(`location = $${paramIndex}`);
+      values.push(updates.location);
       paramIndex++;
     }
     
     if (updates.maxCapacity) {
-      updateFields.push(`max_capacity = $${paramIndex}`);
+      updateFields.push(`max_participants = $${paramIndex}`);
       values.push(updates.maxCapacity);
       paramIndex++;
     }
@@ -1488,17 +1490,12 @@ app.put('/api/admin/schedules/:id', authenticateToken, async (req, res) => {
       paramIndex++;
     }
     
-    if (updates.notes !== undefined) {
-      updateFields.push(`notes = $${paramIndex}`);
-      values.push(updates.notes);
-      paramIndex++;
-    }
     
     updateFields.push(`updated_at = CURRENT_TIMESTAMP`);
     values.push(id);
     
     const query = `
-      UPDATE course_schedules 
+      UPDATE course_sessions 
       SET ${updateFields.join(', ')}
       WHERE id = $${paramIndex}
       RETURNING *
@@ -1543,7 +1540,6 @@ app.post('/api/admin/schedules/:id/cancel', authenticateToken, async (req, res) 
         v.name as venue_name
       FROM course_schedules cs
       JOIN courses c ON cs.course_id = c.id
-      LEFT JOIN venues v ON cs.venue_id = v.id
       WHERE cs.id = $1
     `;
     
@@ -1564,7 +1560,7 @@ app.post('/api/admin/schedules/:id/cancel', authenticateToken, async (req, res) 
         u.name as user_name
       FROM bookings b
       JOIN users u ON b.user_id = u.id
-      WHERE b.course_schedule_id = $1 
+      WHERE b.session_id = $1 
         AND b.status IN ('confirmed', 'pending')
     `;
     
@@ -1572,25 +1568,30 @@ app.post('/api/admin/schedules/:id/cancel', authenticateToken, async (req, res) 
     
     // Update session status to cancelled
     await client.query(
-      'UPDATE course_schedules SET status = $1, updated_at = CURRENT_TIMESTAMP WHERE id = $2',
+      'UPDATE course_sessions SET status = $1, updated_at = CURRENT_TIMESTAMP WHERE id = $2',
       ['cancelled', id]
     );
     
-    // Log the cancellation
-    const cancellationResult = await client.query(`
-      INSERT INTO session_cancellations (
-        course_schedule_id, cancelled_by, cancellation_reason_id, 
-        reason_details, affected_bookings, total_refund_amount
-      ) VALUES ($1, $2, $3, $4, $5, $6)
-      RETURNING id
-    `, [
-      id, 
-      req.user.id, 
-      cancellationReasonId || null,
-      reasonDetails || null,
-      bookingsResult.rows.length,
-      bookingsResult.rows.reduce((sum, b) => sum + parseFloat(b.payment_amount || 0), 0)
-    ]);
+    // Log the cancellation (skip if table doesn't exist)
+    let cancellationResult = null;
+    try {
+      cancellationResult = await client.query(`
+        INSERT INTO session_cancellations (
+          session_id, cancelled_by, cancellation_reason_id, 
+          reason_details, affected_bookings, total_refund_amount
+        ) VALUES ($1, $2, $3, $4, $5, $6)
+        RETURNING id
+      `, [
+        id, 
+        req.user.id, 
+        cancellationReasonId || null,
+        reasonDetails || null,
+        bookingsResult.rows.length,
+        bookingsResult.rows.reduce((sum, b) => sum + parseFloat(b.payment_amount || 0), 0)
+      ]);
+    } catch (error) {
+      console.log('Session cancellations table not found, skipping log');
+    }
     
     let emailsSent = 0;
     let refundsProcessed = 0;
@@ -1747,7 +1748,7 @@ app.delete('/api/admin/schedules/:id', authenticateToken, async (req, res) => {
     
     // Check if there are any bookings
     const bookingsCheck = await client.query(
-      'SELECT COUNT(*) FROM bookings WHERE course_schedule_id = $1 AND status != $2',
+      'SELECT COUNT(*) FROM bookings WHERE session_id = $1 AND status != $2',
       [id, 'cancelled']
     );
     
@@ -1758,7 +1759,7 @@ app.delete('/api/admin/schedules/:id', authenticateToken, async (req, res) => {
     }
     
     const result = await client.query(
-      'DELETE FROM course_schedules WHERE id = $1 RETURNING *',
+      'DELETE FROM course_sessions WHERE id = $1 RETURNING *',
       [id]
     );
     
@@ -1820,7 +1821,7 @@ app.get('/api/admin/courses', authenticateToken, async (req, res) => {
       completedSessions: parseInt(row.completed_sessions) || 0,
       courseType: row.course_type,
       description: row.description,
-      maxCapacity: row.max_capacity,
+      maxCapacity: row.max_participants || 20,
       minAttendees: row.min_attendees,
       isActive: row.is_active,
       isFeatured: row.is_featured,
@@ -1933,7 +1934,7 @@ app.post('/api/admin/courses', authenticateToken, async (req, res) => {
     const result = await client.query(
       `INSERT INTO courses (
         name, description, course_type, category, duration, duration_hours,
-        price, max_capacity, min_attendees, certification_validity_years,
+        price, 20 as max_capacity, 1 as min_attendees, certificate_validity_years,
         learning_outcomes, prerequisites, included_materials, target_audience,
         accreditation_body, accreditation_number, slug, is_active, is_featured,
         created_at, updated_at
@@ -1981,7 +1982,7 @@ app.put('/api/admin/courses/:id', authenticateToken, async (req, res) => {
     
     const allowedFields = [
       'name', 'description', 'category', 'duration', 'duration_hours',
-      'price', 'max_capacity', 'min_attendees', 'certification_validity_years',
+      'price', 'certificate_validity_years',
       'learning_outcomes', 'prerequisites', 'included_materials', 'target_audience',
       'accreditation_body', 'accreditation_number', 'is_active', 'is_featured',
       'early_bird_discount_percentage', 'early_bird_days_before',
@@ -2078,7 +2079,7 @@ app.get('/api/admin/courses/export', authenticateToken, async (req, res) => {
         c.course_type as "Type",
         c.duration as "Duration",
         c.price as "Price (£)",
-        c.max_capacity as "Max Capacity",
+        cs.max_participants as "Max Capacity",
         CASE WHEN c.is_active THEN 'Active' ELSE 'Inactive' END as "Status",
         CASE WHEN c.is_featured THEN 'Yes' ELSE 'No' END as "Featured",
         cs.total_bookings as "Total Bookings",
@@ -2317,14 +2318,13 @@ app.get('/api/admin/bookings-temp', async (req, res) => {
       SELECT 
         b.id, b.booking_reference, b.status as booking_status,
         b.total_amount, b.created_at, b.updated_at,
-        cs.id as session_id, cs.start_datetime, cs.end_datetime,
+        cs.id as session_id, cs.session_date, cs.start_time, cs.end_time,
         c.name as course_name, c.course_type, c.price,
-        v.name as venue_name, v.address_line1, v.city,
+        cs.location as venue_name, '' as address_line1, '' as city,
         u.first_name, u.last_name, u.email, u.phone
       FROM bookings b
-      LEFT JOIN course_schedules cs ON b.course_session_id = cs.id
+      LEFT JOIN course_sessions cs ON b.session_id = cs.id
       LEFT JOIN courses c ON cs.course_id = c.id
-      LEFT JOIN venues v ON cs.venue_id = v.id
       LEFT JOIN users u ON b.user_id = u.id
       ORDER BY b.created_at DESC
       LIMIT 50
@@ -2509,7 +2509,7 @@ app.post('/api/bookings/confirm-with-payment', bookingLimiter, async (req, res) 
     // Create booking
     const bookingResult = await client.query(
       `INSERT INTO bookings (
-        booking_reference, course_schedule_id, user_id, 
+        booking_reference, session_id, user_id, 
         status, payment_status, payment_method,
         payment_amount, stripe_payment_intent_id,
         number_of_attendees, contact_details,
@@ -2541,8 +2541,8 @@ app.post('/api/bookings/confirm-with-payment', bookingLimiter, async (req, res) 
     
     // Update course session capacity
     await client.query(
-      `UPDATE course_schedules 
-       SET current_capacity = current_capacity + $1
+      `UPDATE course_sessions 
+       SET current_bookings = current_bookings + $1
        WHERE id = $2`,
       [numberOfParticipants, courseSessionId]
     );
@@ -2553,7 +2553,7 @@ app.post('/api/bookings/confirm-with-payment', bookingLimiter, async (req, res) 
        VALUES ('booking.created', 'booking', $1, $2, $3)`,
       [booking.id, email, { 
         booking_reference: bookingReference,
-        course_schedule_id: courseSessionId,
+        session_id: courseSessionId,
         amount: totalAmount
       }]
     );

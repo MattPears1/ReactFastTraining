@@ -13,13 +13,19 @@ export class DashboardMockDataService {
     ];
 
     const venues = [
-      'Location 1',
-      'Location 2',
-      'Location 3',
-      'Location 4'
+      'Location 1 - To be announced',
+      'Location 2 - To be announced',  
+      'Location 3 - To be announced',
+      'Location 4 - To be announced'
     ];
 
-    const times = ['09:00', '09:30', '10:00', '13:00', '14:00'];
+    const times = [
+      '09:00 - 17:00',
+      '09:30 - 16:30', 
+      '10:00 - 17:00',
+      '13:00 - 16:00',
+      '14:00 - 17:00'
+    ];
     
     const schedules = [];
     const baseDate = new Date();
@@ -39,7 +45,7 @@ export class DashboardMockDataService {
       const currentCapacity = Math.floor(Math.random() * (maxCapacity - 2)) + 2; // Between 2 and 10
       
       schedules.push({
-        id: `mock-${i + 1}`,
+        id: i + 1,
         courseName: course.name,
         date: format(scheduleDate, 'yyyy-MM-dd'),
         time: time,
