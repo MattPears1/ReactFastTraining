@@ -825,6 +825,7 @@ app.get('/api/admin/schedule', async (req, res) => {
       const schedule = await client.query(`
         SELECT cs.*, c.name as course_name, c.duration, c.price,
                v.name as location_name,
+               COALESCE(v.address_line1 || ', ' || v.city || ' ' || v.postcode, 'TBA') as location_address,
                COUNT(DISTINCT b.id) as booked_count,
                DATE(cs.start_datetime) as session_date,
                TO_CHAR(cs.start_datetime, 'HH24:MI') as start_time,
@@ -833,7 +834,7 @@ app.get('/api/admin/schedule', async (req, res) => {
         LEFT JOIN courses c ON cs.course_id = c.id
         LEFT JOIN venues v ON cs.venue_id = v.id
         LEFT JOIN bookings b ON cs.id = b.course_schedule_id AND b.status IN ('confirmed', 'pending')
-        GROUP BY cs.id, c.id, v.id
+        GROUP BY cs.id, c.id, v.id, v.address_line1, v.city, v.postcode
         ORDER BY cs.start_datetime
       `);
 
