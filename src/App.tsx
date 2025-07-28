@@ -13,8 +13,24 @@ import { AnalyticsProvider } from "@components/providers/AnalyticsProvider";
 import VersionInfo from "@components/common/VersionInfo";
 import { visitorTracker } from "@utils/visitor-tracking";
 
+console.log('🚀 [APP] App.tsx starting initialization...', {
+  timestamp: new Date().toISOString()
+});
+
+// Log lazy loading setup
+console.log('📦 [LAZY] Setting up lazy-loaded pages...');
+
 // Lazy load pages for better performance
-const HomePage = lazy(() => import("@pages/HomePage"));
+const HomePage = lazy(() => {
+  console.log('🏠 [LAZY] Loading HomePage component...');
+  return import("@pages/HomePage").then(module => {
+    console.log('✅ [LAZY] HomePage loaded successfully');
+    return module;
+  }).catch(error => {
+    console.error('❌ [LAZY] Failed to load HomePage:', error);
+    throw error;
+  });
+});
 const AboutPage = lazy(() => import("@pages/AboutPage"));
 const ContactPage = lazy(() => import("@pages/ContactPage"));
 const CoursesPage = lazy(() => import("@pages/CoursesPage"));
@@ -88,20 +104,65 @@ const AdminRoutes = lazy(() => {
 
 function App() {
   const location = useLocation();
+  
+  console.log('🎨 [APP] App component rendering...', {
+    pathname: location.pathname,
+    search: location.search,
+    hash: location.hash,
+    timestamp: new Date().toISOString()
+  });
 
   // Initialize performance monitoring
   useEffect(() => {
-    console.log("App mounted");
-    initPerformanceMonitoring();
-    trackBundleSize();
+    console.log('🏁 [APP] App mounted - initializing...', {
+      timestamp: new Date().toISOString(),
+      performanceNow: performance.now()
+    });
+    
+    try {
+      console.log('📊 [PERF] Initializing performance monitoring...');
+      initPerformanceMonitoring();
+      console.log('✅ [PERF] Performance monitoring initialized');
+    } catch (error) {
+      console.error('❌ [PERF] Failed to initialize performance monitoring:', error);
+    }
+    
+    try {
+      console.log('📏 [BUNDLE] Tracking bundle size...');
+      trackBundleSize();
+      console.log('✅ [BUNDLE] Bundle size tracked');
+    } catch (error) {
+      console.error('❌ [BUNDLE] Failed to track bundle size:', error);
+    }
+    
+    console.log('🎯 [APP] App initialization complete');
+    
+    // Log visitor tracking
+    try {
+      console.log('👤 [VISITOR] Visitor tracking status:', {
+        visitorTracker: !!visitorTracker,
+        timestamp: new Date().toISOString()
+      });
+    } catch (error) {
+      console.error('❌ [VISITOR] Error checking visitor tracker:', error);
+    }
   }, []);
 
   // Scroll to top on route change
   useEffect(() => {
+    console.log('📍 [NAVIGATION] Route changed:', {
+      pathname: location.pathname,
+      previousScroll: window.scrollY,
+      timestamp: new Date().toISOString()
+    });
+    
     window.scrollTo(0, 0);
+    
+    console.log('✅ [NAVIGATION] Scrolled to top');
   }, [location.pathname]);
 
-  console.log("App rendering, location:", location.pathname);
+  // Log theme and context providers initialization
+  console.log('🔧 [PROVIDERS] Initializing context providers...');
 
   return (
     <ErrorBoundary>
@@ -112,7 +173,14 @@ function App() {
               <AnalyticsProvider>
                 <Layout>
                   <AnimatePresence mode="wait">
-                    <Suspense fallback={<LoadingScreen />}>
+                    <Suspense 
+                      fallback={
+                        <div>
+                          {console.log('⏳ [SUSPENSE] Loading route component...')}
+                          <LoadingScreen />
+                        </div>
+                      }
+                    >
                       <Routes location={location} key={location.pathname}>
                         <Route path="/" element={<HomePage />} />
                         <Route path="/about" element={<AboutPage />} />

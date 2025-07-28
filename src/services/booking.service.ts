@@ -34,24 +34,54 @@ class BookingService {
   private apiUrl = "";
 
   constructor() {
-    this.mockSchedules = generateMockSchedules();
+    console.log('📚 [BOOKING] Initializing Booking Service...', {
+      timestamp: new Date().toISOString()
+    });
+    
+    try {
+      this.mockSchedules = generateMockSchedules();
+      console.log('✅ [BOOKING] Mock schedules generated:', {
+        count: this.mockSchedules.length,
+        timestamp: new Date().toISOString()
+      });
+    } catch (error) {
+      console.error('❌ [BOOKING] Failed to generate mock schedules:', error);
+    }
+    
+    console.log('✅ [BOOKING] Booking Service initialized');
   }
 
   async getAvailableCourses(
     params: GetAvailableCoursesParams = {},
   ): Promise<CourseSchedule[]> {
-    console.log("=== BOOKING SERVICE: Get Available Courses ===");
-    console.log("Parameters:", params);
+    console.log('🔍 [BOOKING] Getting available courses...', {
+      params: params,
+      timestamp: new Date().toISOString()
+    });
 
     try {
       // Try to fetch from the real API first
-      const response = await fetch(
-        `${this.apiUrl}/api/courses/sessions/available`,
-      );
+      const apiUrl = `${this.apiUrl}/api/courses/sessions/available`;
+      console.log('🌐 [BOOKING] Fetching from API:', {
+        url: apiUrl,
+        timestamp: new Date().toISOString()
+      });
+      
+      const response = await fetch(apiUrl);
+      
+      console.log('📡 [BOOKING] API response received:', {
+        status: response.status,
+        statusText: response.statusText,
+        ok: response.ok,
+        timestamp: new Date().toISOString()
+      });
 
       if (response.ok) {
         const sessions = await response.json();
-        console.log("Fetched sessions from API:", sessions.length);
+        console.log('✅ [BOOKING] Sessions fetched from API:', {
+          count: sessions.length,
+          timestamp: new Date().toISOString()
+        });
 
         // Transform API response to match CourseSchedule interface
         const schedules: CourseSchedule[] = sessions.map((session: any) => ({
@@ -108,15 +138,20 @@ class BookingService {
         return filteredSchedules;
       }
     } catch (error) {
-      console.error(
-        "Failed to fetch from API, falling back to mock data:",
-        error,
-      );
+      console.error('❌ [BOOKING] API fetch failed, falling back to mock data:', {
+        error: error,
+        message: error instanceof Error ? error.message : 'Unknown error',
+        timestamp: new Date().toISOString()
+      });
     }
 
     // Fallback to mock data if API fails
+    console.log('📦 [BOOKING] Using mock schedules as fallback');
     let schedules = [...this.mockSchedules];
-    console.log("Using mock schedules:", schedules.length);
+    console.log('📊 [BOOKING] Mock schedules loaded:', {
+      totalCount: schedules.length,
+      timestamp: new Date().toISOString()
+    });
 
     // Filter by course type
     if (params.courseType) {
@@ -143,18 +178,34 @@ class BookingService {
   }
 
   async getCourseSchedule(id: number): Promise<CourseSchedule | null> {
-    console.log("=== BOOKING SERVICE: Get Course Schedule ===");
-    console.log("Schedule ID:", id);
+    console.log('📅 [BOOKING] Getting course schedule...', {
+      scheduleId: id,
+      timestamp: new Date().toISOString()
+    });
 
     try {
       // Try to fetch from the real API first
-      const response = await fetch(
-        `${this.apiUrl}/api/courses/sessions/${id}/availability`,
-      );
+      const apiUrl = `${this.apiUrl}/api/courses/sessions/${id}/availability`;
+      console.log('🌐 [BOOKING] Fetching schedule from API:', {
+        url: apiUrl,
+        timestamp: new Date().toISOString()
+      });
+      
+      const response = await fetch(apiUrl);
+      
+      console.log('📡 [BOOKING] Schedule API response:', {
+        status: response.status,
+        ok: response.ok,
+        timestamp: new Date().toISOString()
+      });
 
       if (response.ok) {
         const data = await response.json();
-        console.log("Fetched session from API:", data);
+        console.log('✅ [BOOKING] Schedule fetched from API:', {
+          sessionId: data.sessionId,
+          availableSpots: data.availableSpots,
+          timestamp: new Date().toISOString()
+        });
 
         // Get additional session details if needed
         const sessionResponse = await fetch(
@@ -465,4 +516,6 @@ class BookingService {
   }
 }
 
+console.log('📚 [BOOKING] Creating singleton booking service instance...');
 export const bookingService = new BookingService();
+console.log('✅ [BOOKING] Booking service singleton created and exported');

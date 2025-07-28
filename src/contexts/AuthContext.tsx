@@ -38,6 +38,8 @@ interface AuthProviderProps {
 }
 
 export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
+  console.log('🔐 [AUTH] AuthProvider initializing...');
+  
   const [user, setUser] = useState<User | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<ApiError | null>(null);
@@ -45,6 +47,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
 
   // Check for existing auth on mount
   useEffect(() => {
+    console.log('🔐 [AUTH] Checking authentication on mount...');
     checkAuth();
   }, []);
 
@@ -74,24 +77,39 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   }, [user]);
 
   const checkAuth = useCallback(async () => {
+    console.log('🔍 [AUTH] Checking authentication status...');
     try {
       setIsLoading(true);
       const token = tokenService.getAccessToken();
+      
+      console.log('🔑 [AUTH] Token found:', !!token);
 
       if (token) {
         // TODO: Validate token with backend when endpoint is available
         // For now, decode JWT to get user info (insecure, replace with API call)
         try {
           const payload = JSON.parse(atob(token.split(".")[1]));
+          console.log('📋 [AUTH] Token payload decoded:', {
+            hasUser: !!payload.user,
+            exp: payload.exp,
+            iat: payload.iat
+          });
+          
           if (payload.user) {
             setUser(payload.user);
+            console.log('✅ [AUTH] User authenticated:', payload.user.email);
           }
-        } catch {
+        } catch (error) {
+          console.error('❌ [AUTH] Failed to decode token:', error);
           tokenService.clearTokens();
+          console.log('🗑️ [AUTH] Tokens cleared due to decode error');
         }
+      } else {
+        console.log('❌ [AUTH] No token found, user not authenticated');
       }
     } finally {
       setIsLoading(false);
+      console.log('✅ [AUTH] Auth check complete');
     }
   }, []);
 

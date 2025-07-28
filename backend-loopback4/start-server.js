@@ -1,4 +1,12 @@
+console.log('🚀 [SERVER] Starting React Fast Training server...', {
+  timestamp: new Date().toISOString(),
+  nodeVersion: process.version,
+  env: process.env.NODE_ENV || 'development'
+});
+
 require('dotenv').config();
+console.log('✅ [SERVER] Environment variables loaded');
+
 const express = require('express');
 const path = require('path');
 const bcrypt = require('bcryptjs');
@@ -13,23 +21,67 @@ const EmailService = require('./src/services/email.service');
 const RefundService = require('./src/services/refund.service');
 const { adminLogin, adminMe } = require('./src/controllers/admin-auth-super-bypass');
 
+console.log('✅ [SERVER] All modules imported successfully');
+
 const app = express();
 const PORT = process.env.PORT || 3000;
+
+console.log('🔧 [SERVER] Express app created', {
+  port: PORT,
+  hasStripeKey: !!process.env.STRIPE_SECRET_KEY,
+  hasDatabaseUrl: !!process.env.DATABASE_URL,
+  timestamp: new Date().toISOString()
+});
 
 // Body parser MUST come before test endpoint
 app.use(express.json({ limit: '10mb' }));
 app.use(express.urlencoded({ extended: true, limit: '10mb' }));
+console.log('✅ [SERVER] Body parsers configured');
 
 // TEST ENDPOINT - BEFORE ALL MIDDLEWARE
 const { testLogin } = require('./src/controllers/test-login');
 app.post('/api/test-login', testLogin);
+console.log('✅ [SERVER] Test login endpoint registered');
 
 // Trust proxy for Heroku
 app.set('trust proxy', true);
+console.log('✅ [SERVER] Trust proxy enabled');
+
+// Request logging middleware
+app.use((req, res, next) => {
+  const startTime = Date.now();
+  
+  console.log('📥 [REQUEST]', {
+    method: req.method,
+    url: req.url,
+    ip: req.ip,
+    userAgent: req.get('user-agent'),
+    timestamp: new Date().toISOString()
+  });
+  
+  // Log response when finished
+  res.on('finish', () => {
+    const duration = Date.now() - startTime;
+    console.log('📤 [RESPONSE]', {
+      method: req.method,
+      url: req.url,
+      status: res.statusCode,
+      duration: `${duration}ms`,
+      timestamp: new Date().toISOString()
+    });
+  });
+  
+  next();
+});
 
 // Force HTTPS redirect in production
 app.use((req, res, next) => {
   if (process.env.NODE_ENV === 'production' && req.header('x-forwarded-proto') !== 'https') {
+    console.log('🔐 [HTTPS] Redirecting to HTTPS:', {
+      host: req.header('host'),
+      url: req.url,
+      timestamp: new Date().toISOString()
+    });
     res.redirect(`https://${req.header('host')}${req.url}`);
   } else {
     next();
@@ -37,16 +89,21 @@ app.use((req, res, next) => {
 });
 
 // Initialize services
+console.log('🔧 [SERVER] Initializing services...');
 const emailService = new EmailService();
 const refundService = new RefundService();
+console.log('✅ [SERVER] Services initialized');
 
 // Security headers - minimal restrictions
+console.log('🛡️ [SECURITY] Configuring Helmet security headers...');
 app.use(helmet({
   contentSecurityPolicy: false, // Disable CSP entirely
   hsts: false // Disable HSTS for now
 }));
+console.log('✅ [SECURITY] Helmet configured (CSP disabled, HSTS disabled)');
 
 // Session configuration
+console.log('🍪 [SESSION] Configuring session middleware...');
 app.use(session({
   secret: process.env.SESSION_SECRET || require('crypto').randomBytes(64).toString('hex'),
   resave: false,
@@ -59,6 +116,11 @@ app.use(session({
     domain: undefined // Let browser handle domain for same-origin
   }
 }));
+console.log('✅ [SESSION] Session middleware configured', {
+  secure: process.env.NODE_ENV === 'production',
+  maxAge: '24 hours',
+  sameSite: 'strict'
+});
 
 // CORS not needed - frontend and backend served from same domain
 

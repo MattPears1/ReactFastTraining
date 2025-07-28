@@ -187,6 +187,88 @@
     </script>
   </head>
   <body>
+    <!-- CSP Violation Reporter and Early Logging -->
+    <script>
+      // Log when HTML starts loading
+      console.log('🌐 [HTML] Document loading started', {
+        timestamp: new Date().toISOString(),
+        readyState: document.readyState,
+        url: window.location.href
+      });
+
+      // CSP Violation Reporter
+      window.addEventListener('securitypolicyviolation', function(e) {
+        console.error('🔒 [CSP] Content Security Policy violation detected:', {
+          violatedDirective: e.violatedDirective,
+          blockedURI: e.blockedURI,
+          originalPolicy: e.originalPolicy,
+          disposition: e.disposition,
+          documentURI: e.documentURI,
+          effectiveDirective: e.effectiveDirective,
+          lineNumber: e.lineNumber,
+          columnNumber: e.columnNumber,
+          sourceFile: e.sourceFile,
+          statusCode: e.statusCode,
+          timestamp: new Date().toISOString()
+        });
+        
+        // Store violations for later analysis
+        window.__CSP_VIOLATIONS__ = window.__CSP_VIOLATIONS__ || [];
+        window.__CSP_VIOLATIONS__.push({
+          directive: e.violatedDirective,
+          blocked: e.blockedURI,
+          timestamp: new Date().toISOString()
+        });
+      });
+
+      // Log when DOM is interactive
+      document.addEventListener('readystatechange', function() {
+        console.log('📄 [HTML] Document ready state changed:', {
+          readyState: document.readyState,
+          timestamp: new Date().toISOString()
+        });
+      });
+
+      // Log script loading errors
+      window.addEventListener('error', function(event) {
+        if (event.filename && event.filename.includes('.js')) {
+          console.error('❌ [SCRIPT] JavaScript loading error:', {
+            message: event.message,
+            filename: event.filename,
+            lineno: event.lineno,
+            colno: event.colno,
+            timestamp: new Date().toISOString()
+          });
+        }
+      }, true);
+
+      // Log resource loading errors
+      window.addEventListener('error', function(event) {
+        if (event.target && event.target !== window) {
+          console.error('❌ [RESOURCE] Resource loading error:', {
+            tagName: event.target.tagName,
+            src: event.target.src || event.target.href,
+            type: event.target.type,
+            timestamp: new Date().toISOString()
+          });
+        }
+      }, true);
+
+      // Check if critical resources are blocked
+      window.addEventListener('load', function() {
+        console.log('✅ [HTML] Window loaded', {
+          timestamp: new Date().toISOString(),
+          performanceNow: performance.now()
+        });
+        
+        // Check for CSP violations
+        if (window.__CSP_VIOLATIONS__ && window.__CSP_VIOLATIONS__.length > 0) {
+          console.error('⚠️ [CSP] Total CSP violations:', window.__CSP_VIOLATIONS__.length);
+          console.table(window.__CSP_VIOLATIONS__);
+        }
+      });
+    </script>
+    
     <div id="root"></div>
     <!-- React polyfill for production -->
     <script src="/react-polyfill.js"></script>

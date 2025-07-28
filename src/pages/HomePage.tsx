@@ -26,27 +26,64 @@ import { getCourseColorTheme } from "@/config/courseColorThemes.config";
 import { TestimonialsSection } from "@/components/testimonials/TestimonialsSection";
 
 const HomePage: React.FC = () => {
+  console.log('🏠 [HOMEPAGE] HomePage component rendering...', {
+    timestamp: new Date().toISOString(),
+    url: window.location.href
+  });
+
   const { addNotification } = useNotifications();
   const { setTheme } = useTheme();
+  
+  console.log('🔧 [HOMEPAGE] Hooks initialized:', {
+    hasNotificationContext: !!addNotification,
+    hasThemeContext: !!setTheme,
+    timestamp: new Date().toISOString()
+  });
 
   useEffect(() => {
-    const firstVisit = localStorage.getItem("firstVisit");
-    if (!firstVisit) {
-      addNotification({
-        type: "info",
-        title: "Light Mode Available",
-        message: "Prefer a lighter background? Switch to light mode.",
-        persistent: true,
-        icon: <Sun className="w-5 h-5" />,
-        actions: [
-          {
-            label: "Switch to Light Mode",
-            onClick: () => setTheme("light"),
-          },
-        ],
+    console.log('🏁 [HOMEPAGE] HomePage mounted', {
+      timestamp: new Date().toISOString(),
+      performanceNow: performance.now()
+    });
+    
+    try {
+      const firstVisit = localStorage.getItem("firstVisit");
+      console.log('💾 [STORAGE] First visit check:', {
+        firstVisit: firstVisit,
+        isFirstVisit: !firstVisit,
+        timestamp: new Date().toISOString()
       });
-      localStorage.setItem("firstVisit", "false");
+      
+      if (!firstVisit) {
+        console.log('🔔 [NOTIFICATION] Adding first visit notification...');
+        addNotification({
+          type: "info",
+          title: "Light Mode Available",
+          message: "Prefer a lighter background? Switch to light mode.",
+          persistent: true,
+          icon: <Sun className="w-5 h-5" />,
+          actions: [
+            {
+              label: "Switch to Light Mode",
+              onClick: () => {
+                console.log('🎨 [THEME] User switching to light mode');
+                setTheme("light");
+              },
+            },
+          ],
+        });
+        localStorage.setItem("firstVisit", "false");
+        console.log('✅ [STORAGE] First visit flag set');
+      }
+    } catch (error) {
+      console.error('❌ [HOMEPAGE] Error in first visit check:', error);
     }
+    
+    return () => {
+      console.log('🏁 [HOMEPAGE] HomePage unmounting', {
+        timestamp: new Date().toISOString()
+      });
+    };
   }, [addNotification, setTheme]);
 
   const courseCategories = useMemo(

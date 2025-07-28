@@ -32,6 +32,15 @@ class ErrorBoundary extends Component<Props, State> {
 
   public static getDerivedStateFromError(error: Error): Partial<State> {
     const errorId = `error-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
+    
+    console.error('🚨 [ERROR BOUNDARY] Error caught in getDerivedStateFromError:', {
+      errorId: errorId,
+      error: error.toString(),
+      message: error.message,
+      name: error.name,
+      timestamp: new Date().toISOString()
+    });
+    
     return {
       hasError: true,
       error,
@@ -53,7 +62,10 @@ class ErrorBoundary extends Component<Props, State> {
   }
 
   public componentDidCatch(error: Error, errorInfo: ErrorInfo) {
-    console.error("ErrorBoundary caught error:", error, errorInfo);
+    console.group('❌ [ERROR BOUNDARY] Component error caught');
+    console.error('Error object:', error);
+    console.error('Error info:', errorInfo);
+    console.groupEnd();
 
     // Update state with error info
     this.setState((prevState) => ({
@@ -61,24 +73,52 @@ class ErrorBoundary extends Component<Props, State> {
       errorCount: prevState.errorCount + 1,
     }));
 
-    // Log error details for debugging
-    console.error("ErrorBoundary Details:", {
-      error: error.toString(),
-      stack: error.stack,
-      componentStack: errorInfo.componentStack,
+    // Log comprehensive error details
+    const errorDetails = {
       errorId: this.state.errorId,
       errorCount: this.state.errorCount + 1,
-      isolate: this.props.isolate,
-      pathname: window.location.pathname,
-    });
+      timestamp: new Date().toISOString(),
+      error: {
+        name: error.name,
+        message: error.message,
+        stack: error.stack,
+        toString: error.toString()
+      },
+      errorInfo: {
+        componentStack: errorInfo.componentStack
+      },
+      environment: {
+        pathname: window.location.pathname,
+        href: window.location.href,
+        userAgent: navigator.userAgent,
+        timestamp: new Date().toISOString(),
+        viewport: {
+          width: window.innerWidth,
+          height: window.innerHeight
+        }
+      },
+      component: {
+        isolate: this.props.isolate,
+        hasCustomFallback: !!this.props.fallback,
+        hasErrorHandler: !!this.props.onError
+      }
+    };
+
+    console.error('🔍 [ERROR BOUNDARY] Detailed error information:', errorDetails);
+
+    // Store error in window for debugging
+    (window as any).__LAST_ERROR__ = errorDetails;
+    console.log('💾 [ERROR BOUNDARY] Error details saved to window.__LAST_ERROR__');
 
     // Call custom error handler if provided
     if (this.props.onError) {
+      console.log('🔔 [ERROR BOUNDARY] Calling custom error handler');
       this.props.onError(error, errorInfo);
     }
 
     // Auto-reset after 3 consecutive errors to prevent infinite loops
     if (this.state.errorCount >= 2) {
+      console.warn('⚠️ [ERROR BOUNDARY] Multiple errors detected, scheduling auto-reset in 5 seconds');
       this.scheduleAutoReset();
     }
   }
@@ -94,6 +134,8 @@ class ErrorBoundary extends Component<Props, State> {
   };
 
   private resetErrorBoundary = () => {
+    console.log('🔄 [ERROR BOUNDARY] Resetting error boundary');
+    
     if (this.resetTimeoutId) {
       clearTimeout(this.resetTimeoutId);
       this.resetTimeoutId = null;
@@ -106,6 +148,8 @@ class ErrorBoundary extends Component<Props, State> {
       errorCount: 0,
       errorId: "",
     });
+    
+    console.log('✅ [ERROR BOUNDARY] Error boundary reset complete');
   };
 
   private handleReload = () => {

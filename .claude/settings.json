@@ -85,11 +85,10 @@
             "run_in_background": true
           }
         ]
-      }
-    ],
-    "PostResponse": [
+      },
       {
         "comment": "Check for uncommitted changes after Claude's work",
+        "matcher": "Edit|MultiEdit|Write",
         "hooks": [
           {
             "type": "command",
@@ -98,22 +97,6 @@
           }
         ]
       }
-    ]
-  },
-  "security": {
-    "blocked_patterns": [
-      "**/node_modules/**",
-      "**/.git/**",
-      "**/dist/**",
-      "**/build/**",
-      "**/*.env*",
-      "**/secrets/**",
-      "**/credentials/**"
-    ],
-    "require_confirmation": [
-      "**/backend-loopback4/src/datasources/*.datasource.ts",
-      "**/src/config/*.ts",
-      "**/package.json"
     ]
   }
 }
