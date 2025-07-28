@@ -24,7 +24,7 @@
     "version:inject": "node scripts/inject-version.js",
     "prebuild": "npm run version:inject",
     "build": "npm run version:bump && npm run version:inject && vite build",
-    "build:prod": "npm run version:bump && npm run version:inject && vite build --mode production",
+    "build:prod": "npm run version:bump && npm run version:inject && vite build --config vite.config.prod.ts --mode production",
     "build:no-bump": "vite build",
     "preview": "vite preview",
     "showcase": "http-server showcase -p 8080",
@@ -42,7 +42,7 @@
     "migrate:prod": "cd backend && npm run migrate:prod",
     "worker:prod": "cd backend && npm run worker:prod",
     "heroku-prebuild": "echo Disabling Heroku cache && rm -rf node_modules && npm cache clean --force",
-    "heroku-postbuild": "npm run build && cd backend-loopback4 && npm run heroku-postbuild",
+    "heroku-postbuild": "npm run build:prod && cd backend-loopback4 && npm run heroku-postbuild",
     "start:backend": "cd backend-loopback4 && npm start",
     "build:backend": "cd backend-loopback4 && npm run build"
   },

@@ -41,6 +41,10 @@ export default defineConfig({
     outDir: 'dist',
     sourcemap: true,
     rollupOptions: {
+      // Ensure React is in the first chunk
+      input: {
+        main: path.resolve(__dirname, 'index.html'),
+      },
       output: {
         // Cache busting: Add timestamp to chunk names
         chunkFileNames: (chunkInfo) => {
@@ -61,6 +65,11 @@ export default defineConfig({
           return `assets/[ext]/[name]-${timestamp}-[hash].[ext]`;
         },
         manualChunks(id) {
+          // Disable manual chunks in production to fix loading order issue
+          if (process.env.NODE_ENV === 'production') {
+            return undefined;
+          }
+          
           if (id.includes('node_modules')) {
             // Core React dependencies - keep react and react-dom together
             if (id.includes('react') && !id.includes('react-router') && !id.includes('react-hook-form') && !id.includes('react-helmet')) {

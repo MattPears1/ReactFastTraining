@@ -1,7 +1,7 @@
 console.log("[main.tsx] Starting application...");
 
-import React from "react";
-import ReactDOM from "react-dom/client";
+// Import React through our init module to ensure proper loading order
+import { React, ReactDOM } from "./react-init";
 import { BrowserRouter } from "react-router-dom";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { HelmetProvider } from "react-helmet-async";
@@ -9,6 +9,12 @@ import App from "./App";
 import "./styles/index.css";
 import "./styles/theme.css";
 import { initSentry } from "./config/sentry-safe";
+
+// Ensure React is available globally
+if (typeof window !== 'undefined' && !(window as any).React) {
+  (window as any).React = React;
+  (window as any).ReactDOM = ReactDOM;
+}
 
 console.log("[main.tsx] Imports completed. React version:", React.version);
 
