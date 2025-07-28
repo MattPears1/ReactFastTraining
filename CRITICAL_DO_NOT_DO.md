@@ -27,6 +27,9 @@
 ### 3. Frontend Features
 - **NO** Comments sections on any pages
 - **NO** Multi-language support (i18n)
+- **CRITICAL**: Frontend MUST run on port 3004 ONLY
+- **NO** Changing frontend port from 3004
+- **NO** Port auto-increment for frontend (strictPort: true in vite.config.ts)
 
 ### 4. Backend Infrastructure
 - **NO** Server-side caching (Redis, Memcached)

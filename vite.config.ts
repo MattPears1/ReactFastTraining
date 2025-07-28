@@ -19,7 +19,8 @@ export default defineConfig({
     },
   },
   server: {
-    port: 3003,
+    port: 3004,
+    strictPort: true, // CRITICAL: Do NOT allow Vite to use any other port
     open: true,
     host: '0.0.0.0', // Listen on all network interfaces
     proxy: {

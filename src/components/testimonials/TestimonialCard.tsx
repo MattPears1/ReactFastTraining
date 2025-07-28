@@ -24,16 +24,44 @@ export const TestimonialCard: React.FC<TestimonialCardProps> = ({
   testimonial,
   variant = "default",
 }) => {
-  const displayName = testimonial.showFullName
-    ? testimonial.authorName
-    : `${testimonial.authorName.split(" ")[0]} ${testimonial.authorName.split(" ").slice(-1)[0][0]}.`;
+  const displayName = (() => {
+    if (!testimonial.authorName) {
+      return "Anonymous";
+    }
+    
+    if (testimonial.showFullName) {
+      return testimonial.authorName;
+    }
+    
+    const nameParts = testimonial.authorName.split(" ");
+    if (nameParts.length === 0) {
+      return "Anonymous";
+    }
+    
+    const firstName = nameParts[0];
+    const lastName = nameParts[nameParts.length - 1];
+    const lastInitial = lastName && lastName[0] ? lastName[0] : "";
+    
+    return `${firstName} ${lastInitial}.`;
+  })();
 
   const formatDate = (dateStr: string) => {
-    const date = new Date(dateStr);
-    return date.toLocaleDateString("en-GB", {
-      month: "long",
-      year: "numeric",
-    });
+    if (!dateStr) {
+      return "";
+    }
+    try {
+      const date = new Date(dateStr);
+      if (isNaN(date.getTime())) {
+        return "";
+      }
+      return date.toLocaleDateString("en-GB", {
+        month: "long",
+        year: "numeric",
+      });
+    } catch (error) {
+      console.error("Error formatting date:", error);
+      return "";
+    }
   };
 
   if (variant === "compact") {
