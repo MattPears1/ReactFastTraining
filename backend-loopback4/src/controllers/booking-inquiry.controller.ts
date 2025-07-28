@@ -56,7 +56,7 @@ export class BookingInquiryController {
       }
       
       // Check if there are enough available spaces
-      const availableSpaces = session[0].maxParticipants - session[0].bookedParticipants;
+      const availableSpaces = session[0].maxCapacity - session[0].currentCapacity;
       if (availableSpaces < inquiryData.numberOfPeople) {
         throw new HttpErrors.BadRequest(`Only ${availableSpaces} spaces available for this session`);
       }
@@ -316,7 +316,7 @@ export class BookingInquiryController {
         throw new HttpErrors.NotFound('Course session no longer available');
       }
       
-      const availableSpaces = session.maxParticipants - session.bookedParticipants;
+      const availableSpaces = session.maxCapacity - session.currentCapacity;
       
       return {
         inquiry: {

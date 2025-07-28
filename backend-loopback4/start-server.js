@@ -74,6 +74,8 @@ app.use('/api/', csrfProtection({
     '/api/webhooks',
     '/api/stripe',
     '/api/admin/auth/login', // Exclude login from CSRF for initial auth
+    '/api/admin/auth/refresh', // Exclude refresh from CSRF
+    '/api/admin/auth/me', // Exclude me endpoint from CSRF
     '/api/bookings/create-payment-intent' // Stripe payments handle their own security
   ]
 }));
@@ -2149,6 +2151,9 @@ app.get('/api/admin/venues', authenticateToken, async (req, res) => {
 });
 
 // TEMPORARY: Non-authenticated admin endpoints for testing
+// WARNING: These endpoints are ONLY for development/testing and should NEVER be used in production
+// They bypass authentication and are a security risk
+/*
 app.get('/api/admin/courses-temp', async (req, res) => {
   try {
     console.log('🔧 TEMP: Get courses for admin (no auth)');
@@ -2214,17 +2219,64 @@ app.get('/api/admin/bookings-temp', async (req, res) => {
     res.status(500).json({ error: 'Failed to fetch bookings' });
   }
 });
+*/
 
-// Testimonials endpoint (temporary mock)
+// Testimonials endpoint - Real implementation with proper view handling
 app.get('/api/testimonials/approved', async (req, res) => {
   try {
     const { limit = 10, featured } = req.query;
     
-    // Return mock data for now
+    // Build query based on parameters
+    let query = `
+      SELECT 
+        id,
+        display_name,
+        author_location,
+        course_taken,
+        course_date,
+        content,
+        rating,
+        is_featured,
+        verified_booking,
+        photo_url,
+        created_at,
+        published_at,
+        helpful_count,
+        has_response
+      FROM public_testimonials
+      WHERE 1=1
+    `;
+    
+    const params = [];
+    let paramCount = 0;
+    
+    if (featured === 'true') {
+      paramCount++;
+      query += ` AND is_featured = $${paramCount}`;
+      params.push(true);
+    }
+    
+    query += ' ORDER BY published_at DESC';
+    
+    if (limit) {
+      paramCount++;
+      query += ` LIMIT $${paramCount}`;
+      params.push(parseInt(limit));
+    }
+    
+    // Execute query using existing client connection
+    const result = await client.query(query, params);
+    
+    // Calculate average rating
+    const ratingResult = await client.query(
+      'SELECT AVG(rating)::numeric(3,1) as avg_rating, COUNT(*) as total FROM testimonials WHERE status = $1',
+      ['approved']
+    );
+    
     res.json({
-      testimonials: [],
-      averageRating: 4.8,
-      totalCount: 0
+      testimonials: result.rows,
+      averageRating: parseFloat(ratingResult.rows[0].avg_rating) || 4.8,
+      totalCount: parseInt(ratingResult.rows[0].total) || 0
     });
   } catch (error) {
     console.error('Testimonials error:', error);
@@ -2270,34 +2322,141 @@ app.post('/api/bookings/create-payment-intent', async (req, res) => {
   }
 });
 
-// Confirm booking with payment endpoint with rate limiting
+// Confirm booking with payment endpoint with rate limiting - Real implementation
 app.post('/api/bookings/confirm-with-payment', bookingLimiter, async (req, res) => {
+  const transaction = await client.query('BEGIN');
+  
   try {
     console.log('📊 Booking confirmation request received');
-    const bookingData = req.body;
+    const { 
+      courseSessionId, 
+      paymentIntentId,
+      firstName,
+      lastName,
+      email,
+      phone,
+      company,
+      numberOfParticipants = 1,
+      specialRequirements,
+      emergencyContact,
+      totalAmount
+    } = req.body;
     
-    // Generate a confirmation code
-    const confirmationCode = `RFT-${Date.now().toString(36).toUpperCase()}-${Math.random().toString(36).substring(2, 6).toUpperCase()}`;
+    // Verify payment intent with Stripe
+    const paymentIntent = await stripe.paymentIntents.retrieve(paymentIntentId);
     
-    // In production, this would save to database
-    const mockBooking = {
-      id: Date.now(),
-      confirmationCode,
-      ...bookingData,
-      status: 'confirmed',
-      createdAt: new Date().toISOString()
-    };
+    if (paymentIntent.status !== 'succeeded') {
+      await client.query('ROLLBACK');
+      return res.status(400).json({ error: 'Payment not completed' });
+    }
     
-    console.log('✅ Booking confirmed:', confirmationCode);
+    // Generate booking reference
+    const bookingReference = `RFT-${Date.now().toString(36).toUpperCase()}-${Math.random().toString(36).substring(2, 6).toUpperCase()}`;
+    
+    // Check if user exists
+    let userId;
+    const userCheck = await client.query(
+      'SELECT id FROM users WHERE email = $1',
+      [email]
+    );
+    
+    if (userCheck.rows.length > 0) {
+      userId = userCheck.rows[0].id;
+    } else {
+      // Create new user
+      const newUser = await client.query(
+        `INSERT INTO users (email, name, phone, company_name, role, created_at, updated_at)
+         VALUES ($1, $2, $3, $4, 'customer', NOW(), NOW())
+         RETURNING id`,
+        [email, `${firstName} ${lastName}`, phone, company]
+      );
+      userId = newUser.rows[0].id;
+    }
+    
+    // Create booking
+    const bookingResult = await client.query(
+      `INSERT INTO bookings (
+        booking_reference, course_schedule_id, user_id, 
+        status, payment_status, payment_method,
+        payment_amount, stripe_payment_intent_id,
+        number_of_attendees, contact_details,
+        created_at, updated_at
+      ) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, NOW(), NOW())
+      RETURNING *`,
+      [
+        bookingReference,
+        courseSessionId,
+        userId,
+        'confirmed',
+        'paid',
+        'card',
+        totalAmount,
+        paymentIntentId,
+        numberOfParticipants,
+        JSON.stringify({
+          name: `${firstName} ${lastName}`,
+          email,
+          phone,
+          company,
+          specialRequirements,
+          emergencyContact
+        })
+      ]
+    );
+    
+    const booking = bookingResult.rows[0];
+    
+    // Update course session capacity
+    await client.query(
+      `UPDATE course_schedules 
+       SET current_capacity = current_capacity + $1
+       WHERE id = $2`,
+      [numberOfParticipants, courseSessionId]
+    );
+    
+    // Log activity
+    await client.query(
+      `INSERT INTO activity_logs (action, resource_type, resource_id, user_email, details)
+       VALUES ('booking.created', 'booking', $1, $2, $3)`,
+      [booking.id, email, { 
+        booking_reference: bookingReference,
+        course_schedule_id: courseSessionId,
+        amount: totalAmount
+      }]
+    );
+    
+    // Send confirmation email
+    try {
+      await emailService.sendBookingConfirmation(
+        client,
+        booking.id,
+        email,
+        `${firstName} ${lastName}`,
+        bookingReference
+      );
+    } catch (emailError) {
+      console.error('Failed to send confirmation email:', emailError);
+      // Don't fail the booking if email fails
+    }
+    
+    await client.query('COMMIT');
+    
+    console.log('✅ Booking confirmed:', bookingReference);
     
     res.json({
       success: true,
       data: {
-        booking: mockBooking,
-        confirmationCode
+        booking: {
+          id: booking.id,
+          confirmationCode: bookingReference,
+          status: 'confirmed',
+          createdAt: booking.created_at
+        },
+        confirmationCode: bookingReference
       }
     });
   } catch (error) {
+    await client.query('ROLLBACK');
     console.error('❌ Booking confirmation error:', error);
     res.status(500).json({ error: 'Failed to confirm booking' });
   }

@@ -88,11 +88,19 @@ const TermsPage = lazy(() => import("@pages/TermsPage"));
 
 // Admin Pages
 const AdminPage = lazy(() => import("@pages/AdminPage"));
-const AdminRoutes = lazy(() =>
-  import("@/routes/AdminRoutes").then((module) => ({
-    default: module.AdminRoutes,
-  })),
-);
+const DirectAdminTest = lazy(() => import("@/admin/components/DirectAdminTest").then(module => ({ default: module.DirectAdminTest })));
+const AdminRoutes = lazy(() => {
+  console.log("Loading AdminRoutes module...");
+  return import("@/routes/AdminRoutes").then((module) => {
+    console.log("AdminRoutes module loaded:", module);
+    return {
+      default: module.AdminRoutes,
+    };
+  }).catch(error => {
+    console.error("Failed to load AdminRoutes:", error);
+    throw error;
+  });
+});
 
 function App() {
   const location = useLocation();
@@ -236,6 +244,7 @@ function App() {
                         />
 
                         {/* Admin Routes */}
+                        <Route path="/admin-test-direct" element={<DirectAdminTest />} />
                         <Route path="/admin/*" element={<AdminRoutes />} />
                         <Route path="/admin-legacy" element={<AdminPage />} />
 

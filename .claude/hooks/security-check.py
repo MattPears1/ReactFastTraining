@@ -56,9 +56,14 @@ BLOCKED_FILES = [
     '.env',
     '.env.local',
     '.env.production',
+    '.env.development',
     'credentials.json',
     'serviceAccount.json',
     'firebase-admin.json',
+    'key.pem',
+    'cert.pem',
+    'id_rsa',
+    'id_ed25519',
 ]
 
 BLOCKED_PATHS = [
@@ -67,6 +72,18 @@ BLOCKED_PATHS = [
     'dist/',
     'build/',
     '.claude/secrets/',
+    '.ssh/',
+    'coverage/',
+    '.next/',
+]
+
+# Whitelist patterns that are safe (to reduce false positives)
+WHITELIST_PATTERNS = [
+    r'process\.env\.[A-Z_]+',  # Environment variable references
+    r'import\.meta\.env\.[A-Z_]+',  # Vite env references
+    r'example\.com',  # Example domains
+    r'localhost',  # Local development
+    r'127\.0\.0\.1',  # Local IP
 ]
 
 def check_file_path(file_path):
@@ -88,13 +105,36 @@ def check_file_path(file_path):
     return True, None
 
 def check_content_security(content):
-    """Check content for security issues"""
+    """Check content for security issues with whitelist filtering"""
     issues = []
+    found_patterns = {}
+    
+    # First check if content matches any whitelist patterns
+    for whitelist_pattern in WHITELIST_PATTERNS:
+        content = re.sub(whitelist_pattern, '', content, flags=re.IGNORECASE)
     
     for category, patterns in SENSITIVE_PATTERNS.items():
         for pattern in patterns:
-            if re.search(pattern, content, re.IGNORECASE | re.MULTILINE):
-                issues.append(f"Potential {category.replace('_', ' ')} detected")
+            matches = list(re.finditer(pattern, content, re.IGNORECASE | re.MULTILINE))
+            if matches:
+                # Extract the actual matched text for better reporting
+                for match in matches[:3]:  # Limit to first 3 matches
+                    matched_text = match.group(0)
+                    # Truncate long matches
+                    if len(matched_text) > 50:
+                        matched_text = matched_text[:47] + "..."
+                    if category not in found_patterns:
+                        found_patterns[category] = []
+                    found_patterns[category].append(matched_text)
+    
+    # Convert to issues list with specific details
+    for category, matches in found_patterns.items():
+        issue_text = f"Potential {category.replace('_', ' ')} detected"
+        if len(matches) == 1:
+            issue_text += f": {matches[0]}"
+        else:
+            issue_text += f" ({len(matches)} occurrences)"
+        issues.append(issue_text)
     
     return issues
 

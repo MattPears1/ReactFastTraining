@@ -20,7 +20,7 @@ import {
   Request,
 } from '@loopback/rest';
 import {inject} from '@loopback/core';
-import {Booking} from '../models';
+import {Booking, BookingStatus, BookingType, PaymentMethod} from '../models';
 import {BookingRepository, CourseSessionRepository, UserRepository} from '../repositories';
 import Stripe from 'stripe';
 
@@ -133,7 +133,7 @@ export class BookingPaymentController {
       // Check availability
       const currentBookings = await this.bookingRepository.count({
         sessionId: request.courseSessionId,
-        status: {inq: ['CONFIRMED', 'PENDING']},
+        status: {inq: [BookingStatus.CONFIRMED, BookingStatus.PENDING]},
       });
 
       if (currentBookings.count >= (courseSession.maxParticipants || 0)) {
@@ -260,7 +260,7 @@ export class BookingPaymentController {
       const booking = await this.bookingRepository.create({
         sessionId: request.courseSessionId,
         bookingReference,
-        type: 'INDIVIDUAL',
+        type: BookingType.INDIVIDUAL,
         contactDetails: {
           firstName: request.bookingData.firstName,
           lastName: request.bookingData.lastName,
@@ -278,8 +278,8 @@ export class BookingPaymentController {
         totalAmount: request.totalAmount / 100,
         discountAmount: 0,
         finalAmount: request.totalAmount / 100,
-        status: 'CONFIRMED',
-        paymentMethod: 'CARD',
+        status: BookingStatus.CONFIRMED,
+        paymentMethod: PaymentMethod.CARD,
         paymentDate: new Date(),
         paymentReference: request.paymentIntentId,
         specialRequirements: request.bookingData.specialRequirements,

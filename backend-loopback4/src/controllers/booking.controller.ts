@@ -21,7 +21,7 @@ import {
 import {inject} from '@loopback/core';
 import {authenticate} from '@loopback/authentication';
 import {authorize} from '@loopback/authorization';
-import {Booking, Certificate} from '../models';
+import {Booking, Certificate, BookingStatus} from '../models';
 import {BookingRepository} from '../repositories';
 import {BookingService, CreateBookingData} from '../services';
 import {BookingServiceEnhanced, CreateBookingData as CreateBookingDataEnhanced} from '../services/booking-service-enhanced';
@@ -320,7 +320,7 @@ export class BookingController {
     @param.path.string('id') id: string,
   ): Promise<void> {
     await this.bookingRepository.updateById(id, {
-      status: 'ATTENDED',
+      status: BookingStatus.ATTENDED,
       updatedAt: new Date(),
     });
   }

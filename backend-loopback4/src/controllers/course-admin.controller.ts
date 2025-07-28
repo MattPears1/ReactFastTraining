@@ -79,7 +79,7 @@ export class CourseAdminController {
         .values(courseData as NewCourse)
         .returning();
 
-      MonitoringService.info('Course created', {
+      MonitoringService.info('Course created', {}, {
         courseId: newCourse.id,
         name: newCourse.name,
       });

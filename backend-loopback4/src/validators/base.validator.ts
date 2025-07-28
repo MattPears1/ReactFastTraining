@@ -1,4 +1,4 @@
-import {ValidationError} from '@loopback/rest';
+import {HttpErrors} from '@loopback/rest';
 import DOMPurify from 'isomorphic-dompurify';
 import validator from 'validator';
 
@@ -293,7 +293,7 @@ export class BaseValidator {
 
   protected throwIfInvalid(): void {
     if (this.hasErrors()) {
-      const error = new ValidationError('Validation failed');
+      const error = new HttpErrors.UnprocessableEntity('Validation failed');
       error.details = this.getErrors();
       throw error;
     }

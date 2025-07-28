@@ -7,6 +7,7 @@ import { Eye, EyeOff, Lock, Mail, AlertCircle } from "lucide-react";
 import { useAdminAuth } from "../../contexts/AdminAuthContext";
 import { useNotifications } from "../../contexts/NotificationContext";
 import { cn } from "@/utils/cn";
+import { AdminDebug } from "../../components/AdminDebug";
 
 const loginSchema = z.object({
   email: z.string().email("Please enter a valid email address"),
@@ -222,6 +223,7 @@ export const LoginPage: React.FC = () => {
           </p>
         </div>
       </div>
+      <AdminDebug />
     </div>
   );
 };

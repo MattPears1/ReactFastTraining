@@ -6,6 +6,7 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 // Contexts
 import { AdminAuthProvider } from "./contexts/AdminAuthContext";
 import { NotificationProvider } from "./contexts/NotificationContext";
+import { AdminErrorBoundary } from "./components/AdminErrorBoundary";
 
 // Layout
 import { AdminLayout } from "./components/layout/AdminLayout";
@@ -27,6 +28,8 @@ import { ActivityLogPage } from "./features/activity/ActivityLogPage";
 import { AlertsPage } from "./features/alerts/AlertsPage";
 import { AnalyticsPage } from "./features/analytics/AnalyticsPage";
 import { TestimonialsPage } from "./features/testimonials/TestimonialsPage";
+import { AdminErrorTest } from "./pages/AdminErrorTest";
+import { AdminTestPage } from "./components/AdminTestPage";
 
 // Create a separate QueryClient for admin
 const queryClient = new QueryClient({
@@ -42,12 +45,14 @@ const queryClient = new QueryClient({
 
 export const AdminApp: React.FC = () => {
   return (
-    <QueryClientProvider client={queryClient}>
-      <NotificationProvider>
-        <AdminAuthProvider>
-          <Routes>
+    <AdminErrorBoundary>
+      <QueryClientProvider client={queryClient}>
+        <NotificationProvider>
+          <AdminAuthProvider>
+            <Routes>
             {/* Public routes */}
             <Route path="login" element={<LoginPage />} />
+            <Route path="test" element={<AdminTestPage />} />
 
             {/* Protected routes */}
             <Route
@@ -115,10 +120,11 @@ export const AdminApp: React.FC = () => {
                 </ProtectedRoute>
               }
             />
-          </Routes>
-        </AdminAuthProvider>
-      </NotificationProvider>
-      {/* {process.env.NODE_ENV === 'development' && <ReactQueryDevtools initialIsOpen={false} />} */}
-    </QueryClientProvider>
+            </Routes>
+          </AdminAuthProvider>
+        </NotificationProvider>
+        {/* {process.env.NODE_ENV === 'development' && <ReactQueryDevtools initialIsOpen={false} />} */}
+      </QueryClientProvider>
+    </AdminErrorBoundary>
   );
 };

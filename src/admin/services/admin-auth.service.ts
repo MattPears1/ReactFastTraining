@@ -44,6 +44,12 @@ class AdminAuthService {
       "🌐 [AdminAuthService] Using backend URL:",
       baseURL || "relative URLs",
     );
+    console.log("🔧 [AdminAuthService] Environment:", {
+      PROD: import.meta.env.PROD,
+      DEV: import.meta.env.DEV,
+      MODE: import.meta.env.MODE,
+      VITE_API_URL: import.meta.env.VITE_API_URL,
+    });
 
     this.api = axios.create({
       baseURL,

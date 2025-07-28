@@ -1,6 +1,5 @@
 import React, { Component, ErrorInfo, ReactNode } from "react";
 import { AlertTriangle, RefreshCw, Home } from "lucide-react";
-import * as Sentry from "@sentry/react";
 
 interface Props {
   children: ReactNode;
@@ -62,23 +61,16 @@ class ErrorBoundary extends Component<Props, State> {
       errorCount: prevState.errorCount + 1,
     }));
 
-    // Report to Sentry with enhanced context (only if Sentry is configured)
-    if (typeof Sentry !== 'undefined' && Sentry.getCurrentHub) {
-      try {
-        Sentry.withScope((scope) => {
-          scope.setContext("errorBoundary", {
-            componentStack: errorInfo.componentStack,
-            errorId: this.state.errorId,
-            errorCount: this.state.errorCount + 1,
-            isolate: this.props.isolate,
-          });
-          scope.setTag("error.boundary", true);
-          Sentry.captureException(error);
-        });
-      } catch (sentryError) {
-        console.warn("Failed to report error to Sentry:", sentryError);
-      }
-    }
+    // Log error details for debugging
+    console.error("ErrorBoundary Details:", {
+      error: error.toString(),
+      stack: error.stack,
+      componentStack: errorInfo.componentStack,
+      errorId: this.state.errorId,
+      errorCount: this.state.errorCount + 1,
+      isolate: this.props.isolate,
+      pathname: window.location.pathname,
+    });
 
     // Call custom error handler if provided
     if (this.props.onError) {

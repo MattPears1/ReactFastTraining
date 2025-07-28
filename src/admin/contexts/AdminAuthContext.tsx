@@ -5,7 +5,7 @@ import React, {
   useCallback,
   useEffect,
 } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import { adminAuthService } from "../services/admin-auth.service";
 
 interface AdminUser {
@@ -49,6 +49,7 @@ export const AdminAuthProvider: React.FC<AdminAuthProviderProps> = ({
   const [user, setUser] = useState<AdminUser | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const navigate = useNavigate();
+  const location = useLocation();
 
   // Initialize auth state
   useEffect(() => {
@@ -97,14 +98,16 @@ export const AdminAuthProvider: React.FC<AdminAuthProviderProps> = ({
         const response = await adminAuthService.login(email, password);
         localStorage.setItem("adminAccessToken", response.accessToken);
         setUser(response.user);
-        navigate("/admin/dashboard");
+        // Navigate after state update
+        const from = location.state?.from?.pathname || "/admin/dashboard";
+        navigate(from, { replace: true });
       } catch (error) {
         throw error;
       } finally {
         setIsLoading(false);
       }
     },
-    [navigate],
+    [navigate, location],
   );
 
   const logout = useCallback(async () => {

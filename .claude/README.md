@@ -1,33 +1,66 @@
-# Claude Code Hooks Configuration
+# Claude Code Hooks Configuration - Enhanced Edition
 
-This directory contains custom hooks configuration for Claude Code to enhance security, code quality, and workflow automation for the React Fast Training project.
+This directory contains the enhanced Claude Code hooks configuration for the React Fast Training project, migrated from JSON to TOML format with significant improvements.
 
 ## What are Claude Code Hooks?
 
-Claude Code Hooks are shell commands that automatically execute at specific points in Claude's workflow. They provide:
-- **Security**: Block modifications to sensitive files
-- **Quality**: Auto-format and lint code
-- **Testing**: Run tests automatically
-- **Workflow**: Track changes and suggest commits
+Claude Code Hooks are shell commands that automatically execute at specific points in Claude's workflow. They provide deterministic control over:
+- **Security**: Block modifications to sensitive files and detect credentials
+- **Quality**: Auto-format, lint, and validate code
+- **Testing**: Run tests automatically for modified files
+- **Workflow**: Track changes, suggest commits, and monitor performance
+- **Dependencies**: Check for vulnerabilities and outdated packages
+
+## Configuration Files
+
+### `settings.toml` (Primary)
+The main configuration using TOML format (recommended by Claude Code docs). Features:
+- Cleaner syntax with better readability
+- Enhanced matching patterns
+- Comprehensive error handling
+- Improved timeout management
+
+### `settings.json` (Legacy)
+Original JSON configuration kept for reference. Superseded by `settings.toml`.
 
 ## Configured Hooks
 
 ### 1. Security Hooks (PreToolUse)
-- **security-check.py**: Validates all file modifications
-  - Blocks changes to `.env`, credentials, and sensitive files
-  - Detects API keys, passwords, and secrets in code
-  - Prevents path traversal attacks
-  - Checks for database URLs and private keys
+- **security-check.py**: Enhanced security validation
+  - Expanded pattern detection (Stripe, SendGrid, cloud services)
+  - Whitelist filtering to reduce false positives
+  - Detailed issue reporting with matched text
+  - Blocks modifications to protected files
+  - Path traversal prevention
 
 ### 2. Code Quality Hooks (PostToolUse)
-- **Prettier**: Auto-formats JS/TS files after edits
-- **ESLint**: Runs linting with auto-fix on modified files
-- **Test Runner**: Automatically runs related tests
+- **Prettier**: Auto-formats JS/TS/JSX/TSX files
+- **ESLint**: Validation with auto-fix capabilities
+- **lint-check.sh**: Comprehensive quality validation
+  - TypeScript type checking
+  - Unused import detection
+  - Tailwind CSS duplicate class detection
+  - React accessibility validation
+  - Performance issue detection
+- **test-runner.sh**: Intelligent test execution
+  - Enhanced test file detection
+  - Colored output for better visibility
+  - Support for backend tests
+  - Parallel test execution
 
-### 3. Workflow Hooks
-- **Activity Logging**: Tracks all prompts in `.claude/activity.log`
-- **Git Status**: Shows uncommitted changes after Claude's work
-- **Commit Suggestions**: Alerts when 10+ files are modified
+### 3. Dependency Management
+- **dependency-check.sh**: Security and version management
+  - npm audit vulnerability scanning
+  - Outdated package detection
+  - Duplicate dependency identification
+  - Unused dependency analysis
+
+### 4. Workflow Hooks
+- **Activity Logging**: Tracks all prompts with timestamps
+- **Git Status**: Enhanced change tracking with file counts
+- **Commit Suggestions**: Smart notifications for large changes
+- **Session Summary**: Detailed statistics on session end
+- **Resource Monitoring**: Memory and load tracking
 
 ## Hook Events
 

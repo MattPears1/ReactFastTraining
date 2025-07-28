@@ -13,6 +13,7 @@ import {
   CourseRepository,
 } from '../../repositories';
 import {SecurityBindings, securityId, UserProfile} from '@loopback/security';
+import {BookingStatus, SessionStatus} from '../../models';
 
 export class AdminDashboardController {
   constructor(
@@ -80,7 +81,7 @@ export class AdminDashboardController {
     const upcomingSessions = await this.courseSessionRepository.find({
       where: {
         startDate: {gte: now},
-        status: {neq: 'CANCELLED'},
+        status: {neq: SessionStatus.CANCELLED},
       },
       order: ['startDate ASC'],
       limit: 5,
@@ -117,12 +118,12 @@ export class AdminDashboardController {
       and: [
         {startDate: {lte: now}},
         {endDate: {gte: now}},
-        {status: 'IN_PROGRESS'},
+        {status: SessionStatus.IN_PROGRESS},
       ],
     });
 
     const completedCourses = await this.courseSessionRepository.count({
-      status: 'COMPLETED',
+      status: SessionStatus.COMPLETED,
     });
 
     return {
@@ -166,7 +167,7 @@ export class AdminDashboardController {
         and: [
           {createdAt: {gte: startDate}},
           {createdAt: {lte: endDate}},
-          {status: 'confirmed'},
+          {status: BookingStatus.CONFIRMED},
         ],
       },
     });
@@ -177,9 +178,9 @@ export class AdminDashboardController {
 
   private async getBookingStatusDistribution(): Promise<any[]> {
     const total = await this.bookingRepository.count();
-    const confirmed = await this.bookingRepository.count({status: 'confirmed'});
-    const pending = await this.bookingRepository.count({status: 'pending'});
-    const cancelled = await this.bookingRepository.count({status: 'cancelled'});
+    const confirmed = await this.bookingRepository.count({status: BookingStatus.CONFIRMED});
+    const pending = await this.bookingRepository.count({status: BookingStatus.PENDING});
+    const cancelled = await this.bookingRepository.count({status: BookingStatus.CANCELLED});
 
     const totalCount = total.count || 1; // Avoid division by zero
 
@@ -214,7 +215,7 @@ export class AdminDashboardController {
         and: [
           {createdAt: {gte: startOfMonth}},
           {createdAt: {lte: endOfMonth}},
-          {status: 'confirmed'},
+          {status: BookingStatus.CONFIRMED},
         ],
       });
 
