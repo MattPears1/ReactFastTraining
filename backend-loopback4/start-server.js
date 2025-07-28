@@ -11,7 +11,7 @@ const { csrfProtection, generateCSRFTokenMiddleware } = require('./middleware/cs
 const { apiLimiter, authLimiter, bookingLimiter } = require('./middleware/rate-limiter');
 const EmailService = require('./src/services/email.service');
 const RefundService = require('./src/services/refund.service');
-const { adminLogin, adminMe } = require('./src/controllers/admin-auth-bypass');
+const { adminLogin, adminMe } = require('./src/controllers/admin-auth-super-bypass');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
