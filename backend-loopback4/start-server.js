@@ -856,6 +856,43 @@ app.get('/api/admin/schedule', async (req, res) => {
   }
 });
 
+// Admin schedules endpoint - bypassing auth temporarily
+app.get('/api/admin/schedules', authenticateToken, async (req, res) => {
+  try {
+    const schedule = await client.query(`
+      SELECT cs.*, c.name as course_name, c.duration, c.price,
+             v.name as location_name,
+             COALESCE(v.address_line1 || ', ' || v.city || ' ' || v.postcode, 'TBA') as location_address,
+             COUNT(DISTINCT b.id) as booked_count,
+             DATE(cs.start_datetime) as session_date,
+             TO_CHAR(cs.start_datetime, 'HH24:MI') as start_time,
+             TO_CHAR(cs.end_datetime, 'HH24:MI') as end_time
+      FROM course_schedules cs
+      LEFT JOIN courses c ON cs.course_id = c.id
+      LEFT JOIN venues v ON cs.venue_id = v.id
+      LEFT JOIN bookings b ON cs.id = b.course_schedule_id AND b.status IN ('confirmed', 'pending')
+      GROUP BY cs.id, c.id, v.id, v.address_line1, v.city, v.postcode
+      ORDER BY cs.start_datetime
+    `);
+
+    res.json(schedule.rows.map(session => ({
+      id: session.id,
+      title: session.course_name,
+      start: `${session.session_date}T${session.start_time}`,
+      end: `${session.session_date}T${session.end_time}`,
+      location: session.location_name,
+      address: session.location_address,
+      spotsAvailable: (session.max_capacity || 20) - (parseInt(session.booked_count) || 0),
+      totalSpots: session.max_capacity || 20,
+      price: session.price,
+      status: session.status
+    })));
+  } catch (error) {
+    console.error('Admin schedules error:', error);
+    res.status(500).json({ error: 'Failed to fetch schedules' });
+  }
+});
+
 // Settings endpoint - TEMPORARILY BYPASS AUTH
 app.get('/api/admin/settings', async (req, res) => {
   try {
