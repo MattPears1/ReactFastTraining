@@ -9,8 +9,8 @@ const helmet = require('helmet');
 const session = require('express-session');
 const { csrfProtection, generateCSRFTokenMiddleware } = require('./middleware/csrf-protection');
 const { apiLimiter, authLimiter, bookingLimiter } = require('./middleware/rate-limiter');
-const EmailService = require('./backend-loopback4/src/services/email.service');
-const RefundService = require('./backend-loopback4/src/services/refund.service');
+const EmailService = require('./src/services/email.service');
+const RefundService = require('./src/services/refund.service');
 
 const app = express();
 const PORT = process.env.PORT || 3000;

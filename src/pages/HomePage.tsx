@@ -9,6 +9,7 @@ import { Link } from 'react-router-dom'
 import { useNotifications } from '@contexts/NotificationContext'
 import { useTheme } from '@contexts/ThemeContext'
 import { getCourseColorTheme } from '@/config/courseColorThemes.config'
+import { TestimonialsSection } from '@/components/testimonials/TestimonialsSection'
 
 const HomePage: React.FC = () => {
   const { addNotification } = useNotifications()
@@ -461,6 +462,9 @@ const HomePage: React.FC = () => {
           </div>
         </div>
       </section>
+
+      {/* Testimonials Section */}
+      <TestimonialsSection />
 
       {/* Yorkshire Locations Section */}
       <section className="py-12 sm:py-16 md:py-20 bg-white dark:bg-gray-900">

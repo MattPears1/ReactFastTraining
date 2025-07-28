@@ -9,7 +9,8 @@ import './styles/theme.css'
 import { initSentry } from './config/sentry'
 
 // Initialize Sentry before rendering the app
-initSentry()
+// Temporarily disabled to debug blank page issue
+// initSentry()
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -34,19 +35,33 @@ const queryClient = new QueryClient({
   },
 })
 
-ReactDOM.createRoot(document.getElementById('root')!).render(
-  <React.StrictMode>
-    <HelmetProvider>
-      <QueryClientProvider client={queryClient}>
-        <BrowserRouter
-          future={{
-            v7_startTransition: true,
-            v7_relativeSplatPath: true,
-          }}
-        >
-          <App />
-        </BrowserRouter>
-      </QueryClientProvider>
-    </HelmetProvider>
-  </React.StrictMode>,
-)
+const rootElement = document.getElementById('root')
+console.log('Root element:', rootElement)
+
+if (!rootElement) {
+  console.error('Root element not found!')
+  document.body.innerHTML = '<div style="color: red; padding: 20px;">Error: Root element not found!</div>'
+} else {
+  try {
+    ReactDOM.createRoot(rootElement).render(
+      <React.StrictMode>
+        <HelmetProvider>
+          <QueryClientProvider client={queryClient}>
+            <BrowserRouter
+              future={{
+                v7_startTransition: true,
+                v7_relativeSplatPath: true,
+              }}
+            >
+              <App />
+            </BrowserRouter>
+          </QueryClientProvider>
+        </HelmetProvider>
+      </React.StrictMode>,
+    )
+    console.log('React app rendered successfully')
+  } catch (error) {
+    console.error('Error rendering app:', error)
+    rootElement.innerHTML = `<div style="color: red; padding: 20px;">Error rendering app: ${error}</div>`
+  }
+}

@@ -20,12 +20,12 @@ async function setupTestData() {
     const hashedPassword = await bcrypt.hash('test123', 10);
     
     const adminUser = await pool.query(`
-      INSERT INTO users (email, password, name, role, is_active)
-      VALUES ($1, $2, $3, $4, $5)
+      INSERT INTO users (email, password_hash, first_name, last_name, role, is_active)
+      VALUES ($1, $2, $3, $4, $5, $6)
       ON CONFLICT (email) DO UPDATE
-      SET password = $2, name = $3, role = $4, is_active = $5
+      SET password_hash = $2, first_name = $3, last_name = $4, role = $5, is_active = $6
       RETURNING id, email
-    `, ['test.admin@reactfasttraining.co.uk', hashedPassword, 'Test Admin', 'admin', true]);
+    `, ['test.admin@reactfasttraining.co.uk', hashedPassword, 'Test', 'Admin', 'admin', true]);
     
     console.log('✅ Admin user created:', adminUser.rows[0].email);
 
@@ -35,15 +35,16 @@ async function setupTestData() {
     
     for (let i = 1; i <= 5; i++) {
       const customer = await pool.query(`
-        INSERT INTO users (email, password, name, phone, role, is_active)
-        VALUES ($1, $2, $3, $4, $5, $6)
+        INSERT INTO users (email, password_hash, first_name, last_name, phone, role, is_active)
+        VALUES ($1, $2, $3, $4, $5, $6, $7)
         ON CONFLICT (email) DO UPDATE
-        SET name = $3, phone = $4
-        RETURNING id, email, name
+        SET first_name = $3, last_name = $4, phone = $5
+        RETURNING id, email, first_name || ' ' || last_name as name
       `, [
         `test.customer${i}@example.com`,
         hashedPassword,
-        `Test Customer ${i}`,
+        'Test',
+        `Customer ${i}`,
         `0770000000${i}`,
         'customer',
         true
@@ -56,7 +57,7 @@ async function setupTestData() {
     console.log('\n3️⃣ Ensuring courses exist...');
     const courses = await pool.query(`
       SELECT id, name, price FROM courses 
-      WHERE status = 'active' 
+      WHERE is_active = true 
       ORDER BY id 
       LIMIT 3
     `);
@@ -117,8 +118,8 @@ async function setupTestData() {
     const session1 = await pool.query(`
       INSERT INTO course_schedules (
         course_id, venue_id, start_datetime, end_datetime, 
-        max_capacity, status
-      ) VALUES ($1, $2, $3, $4, $5, $6)
+        status
+      ) VALUES ($1, $2, $3, $4, $5)
       ON CONFLICT DO NOTHING
       RETURNING id
     `, [
@@ -126,8 +127,7 @@ async function setupTestData() {
       venues.rows[0].id,
       tomorrow.toISOString(),
       new Date(tomorrow.getTime() + 6 * 60 * 60 * 1000).toISOString(), // 6 hours later
-      3, // Small capacity for testing
-      'scheduled'
+      'published'
     ]);
     
     if (session1.rows[0]) {
@@ -143,8 +143,8 @@ async function setupTestData() {
     const session2 = await pool.query(`
       INSERT INTO course_schedules (
         course_id, venue_id, start_datetime, end_datetime, 
-        max_capacity, status
-      ) VALUES ($1, $2, $3, $4, $5, $6)
+        status
+      ) VALUES ($1, $2, $3, $4, $5)
       ON CONFLICT DO NOTHING
       RETURNING id
     `, [
@@ -152,8 +152,7 @@ async function setupTestData() {
       venues.rows[0].id,
       nextWeek.toISOString(),
       new Date(nextWeek.getTime() + 6 * 60 * 60 * 1000).toISOString(),
-      10,
-      'scheduled'
+      'published'
     ]);
     
     if (session2.rows[0]) {
@@ -169,8 +168,8 @@ async function setupTestData() {
     const session3 = await pool.query(`
       INSERT INTO course_schedules (
         course_id, venue_id, start_datetime, end_datetime, 
-        max_capacity, status
-      ) VALUES ($1, $2, $3, $4, $5, $6)
+        status
+      ) VALUES ($1, $2, $3, $4, $5)
       ON CONFLICT DO NOTHING
       RETURNING id
     `, [
@@ -178,8 +177,7 @@ async function setupTestData() {
       venues.rows[0].id,
       twoWeeks.toISOString(),
       new Date(twoWeeks.getTime() + 6 * 60 * 60 * 1000).toISOString(),
-      12,
-      'scheduled'
+      'published'
     ]);
     
     if (session3.rows[0]) {
@@ -196,17 +194,16 @@ async function setupTestData() {
         await pool.query(`
           INSERT INTO bookings (
             user_id, course_schedule_id, status, payment_status,
-            payment_amount, payment_method, stripe_payment_intent_id,
+            payment_amount, stripe_payment_intent_id,
             booking_reference
-          ) VALUES ($1, $2, $3, $4, $5, $6, $7, $8)
+          ) VALUES ($1, $2, $3, $4, $5, $6, $7)
           ON CONFLICT DO NOTHING
         `, [
           customers[i].id,
           sessions[0].id,
           'confirmed',
-          'completed',
+          'paid',
           courses.rows[0].price,
-          'card',
           `pi_test_${Date.now()}_${i}`,
           `TEST${Date.now()}${i}`
         ]);
@@ -220,17 +217,16 @@ async function setupTestData() {
         await pool.query(`
           INSERT INTO bookings (
             user_id, course_schedule_id, status, payment_status,
-            payment_amount, payment_method, stripe_payment_intent_id,
+            payment_amount, stripe_payment_intent_id,
             booking_reference
-          ) VALUES ($1, $2, $3, $4, $5, $6, $7, $8)
+          ) VALUES ($1, $2, $3, $4, $5, $6, $7)
           ON CONFLICT DO NOTHING
         `, [
           customers[i].id,
           sessions[1].id,
           'confirmed',
-          'completed',
+          'paid',
           courses.rows[1] ? courses.rows[1].price : courses.rows[0].price,
-          'card',
           `pi_test_${Date.now()}_${i}_s2`,
           `TEST${Date.now()}${i}S2`
         ]);

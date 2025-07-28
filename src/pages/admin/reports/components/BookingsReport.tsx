@@ -37,7 +37,7 @@ export const BookingsReport: React.FC<BookingsReportProps> = ({ data, dateRangeL
   const completionRate = (data.bookings.completed / data.bookings.total) * 100;
   const cancellationRate = (data.bookings.cancelled / data.bookings.total) * 100;
 
-  const CustomTooltip = ({ active, payload, label }: any) => {
+  const CustomTooltip = ({ active, payload, label }: { active?: boolean; payload?: Array<{ value: number }>; label?: string }) => {
     if (active && payload && payload.length) {
       return (
         <div className="bg-white p-3 rounded-lg shadow-lg border border-gray-200">

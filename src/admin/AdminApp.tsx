@@ -26,6 +26,7 @@ import { SettingsPage } from './features/settings/SettingsPage';
 import { ActivityLogPage } from './features/activity/ActivityLogPage';
 import { AlertsPage } from './features/alerts/AlertsPage';
 import { AnalyticsPage } from './features/analytics/AnalyticsPage';
+import { TestimonialsPage } from './features/testimonials/TestimonialsPage';
 
 // Create a separate QueryClient for admin
 const queryClient = new QueryClient({
@@ -94,6 +95,9 @@ export const AdminApp: React.FC = () => {
                       
                       {/* Analytics */}
                       <Route path="analytics" element={<AnalyticsPage />} />
+                      
+                      {/* Testimonials */}
+                      <Route path="testimonials" element={<TestimonialsPage />} />
                       
                       {/* Catch all */}
                       <Route path="*" element={<Navigate to="dashboard" replace />} />

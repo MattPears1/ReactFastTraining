@@ -521,10 +521,208 @@ app.post('/api/admin/bookings/:id/email', (req, res) => {
   });
 });
 
+// Mock testimonials database
+let testimonials = [
+  {
+    id: 1,
+    authorName: 'Sarah Johnson',
+    authorEmail: 'sarah.j@example.com',
+    authorLocation: 'Leeds, Yorkshire',
+    courseTaken: 'Emergency First Aid at Work',
+    courseDate: '2025-01-15',
+    content: 'Absolutely brilliant course! The instructor was incredibly knowledgeable and made everything easy to understand. The hands-on practice really helped build my confidence. I now feel prepared to handle emergency situations both at work and in everyday life. Highly recommend React Fast Training!',
+    rating: 5,
+    photoUrl: null,
+    photoConsent: 'not_given',
+    showFullName: true,
+    status: 'approved',
+    showOnHomepage: true,
+    verifiedBooking: true,
+    bookingReference: 'RFT-2025-0001',
+    createdAt: '2025-01-16T10:00:00Z',
+    approvedAt: '2025-01-17T09:00:00Z',
+    approvedBy: 'Admin'
+  },
+  {
+    id: 2,
+    authorName: 'Michael Chen',
+    authorEmail: 'michael.c@nursery.co.uk',
+    authorLocation: 'Sheffield',
+    courseTaken: 'Paediatric First Aid',
+    courseDate: '2025-01-10',
+    content: 'As a nursery teacher, this course was invaluable. The instructor covered everything from basic first aid to specific scenarios with infants and children. The small class size meant we all got plenty of hands-on practice. I especially appreciated the sections on choking and CPR for different age groups.',
+    rating: 5,
+    photoUrl: null,
+    photoConsent: 'not_given',
+    showFullName: true,
+    status: 'featured',
+    showOnHomepage: true,
+    verifiedBooking: true,
+    bookingReference: 'RFT-2025-0002',
+    createdAt: '2025-01-11T14:30:00Z',
+    approvedAt: '2025-01-12T10:00:00Z',
+    approvedBy: 'Admin'
+  },
+  {
+    id: 3,
+    authorName: 'Emma Williams',
+    authorEmail: 'emma.w@company.com',
+    authorLocation: 'Bradford',
+    courseTaken: 'Mental Health First Aid',
+    courseDate: '2025-01-05',
+    content: 'This course completely changed my perspective on mental health in the workplace. The trainer created a safe, non-judgmental environment where we could discuss sensitive topics openly. I learned practical strategies for supporting colleagues and recognizing warning signs. Essential training for any workplace.',
+    rating: 5,
+    photoUrl: null,
+    photoConsent: 'not_given',
+    showFullName: false,
+    status: 'approved',
+    showOnHomepage: true,
+    verifiedBooking: true,
+    bookingReference: 'RFT-2025-0003',
+    createdAt: '2025-01-06T11:00:00Z',
+    approvedAt: '2025-01-07T09:30:00Z',
+    approvedBy: 'Admin'
+  }
+];
+
+// Public testimonials endpoints
+app.get('/api/testimonials/approved', (req, res) => {
+  console.log('Fetching approved testimonials');
+  
+  let approvedTestimonials = testimonials.filter(t => 
+    t.status === 'approved' || t.status === 'featured'
+  );
+  
+  // Apply filters
+  if (req.query.course && req.query.course !== 'all') {
+    approvedTestimonials = approvedTestimonials.filter(t => 
+      t.courseTaken === req.query.course
+    );
+  }
+  
+  // Apply sorting
+  if (req.query.sort === 'rating') {
+    approvedTestimonials.sort((a, b) => b.rating - a.rating);
+  } else {
+    // Default to recent
+    approvedTestimonials.sort((a, b) => 
+      new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
+    );
+  }
+  
+  res.json({ testimonials: approvedTestimonials });
+});
+
+// Submit new testimonial
+app.post('/api/testimonials/submit', (req, res) => {
+  console.log('New testimonial submission:', req.body);
+  
+  const newTestimonial = {
+    id: testimonials.length + 1,
+    ...req.body,
+    status: 'pending',
+    showOnHomepage: false,
+    verifiedBooking: false, // Would be verified against actual bookings
+    createdAt: new Date().toISOString()
+  };
+  
+  testimonials.push(newTestimonial);
+  
+  res.json({ 
+    success: true,
+    message: 'Thank you for your testimonial! It will be reviewed shortly.',
+    testimonialId: newTestimonial.id
+  });
+});
+
+// Admin testimonials endpoints
+app.get('/api/admin/testimonials', (req, res) => {
+  console.log('Admin fetching testimonials');
+  
+  let filteredTestimonials = [...testimonials];
+  
+  if (req.query.status && req.query.status !== 'all') {
+    filteredTestimonials = filteredTestimonials.filter(t => 
+      t.status === req.query.status
+    );
+  }
+  
+  res.json(filteredTestimonials);
+});
+
+// Get testimonials stats
+app.get('/api/admin/testimonials/stats', (req, res) => {
+  const stats = {
+    total: testimonials.length,
+    pending: testimonials.filter(t => t.status === 'pending').length,
+    approved: testimonials.filter(t => t.status === 'approved').length,
+    rejected: testimonials.filter(t => t.status === 'rejected').length,
+    featured: testimonials.filter(t => t.status === 'featured').length,
+    averageRating: testimonials.reduce((acc, t) => acc + t.rating, 0) / testimonials.length || 0
+  };
+  
+  res.json(stats);
+});
+
+// Update testimonial status
+app.put('/api/admin/testimonials/:id/status', (req, res) => {
+  console.log('Updating testimonial status:', req.params.id, req.body);
+  
+  const testimonialIndex = testimonials.findIndex(t => t.id === parseInt(req.params.id));
+  
+  if (testimonialIndex !== -1) {
+    testimonials[testimonialIndex] = {
+      ...testimonials[testimonialIndex],
+      status: req.body.status,
+      rejectionReason: req.body.rejectionReason,
+      approvedAt: req.body.status === 'approved' || req.body.status === 'featured' 
+        ? new Date().toISOString() 
+        : testimonials[testimonialIndex].approvedAt,
+      approvedBy: req.body.status === 'approved' || req.body.status === 'featured'
+        ? 'Admin'
+        : testimonials[testimonialIndex].approvedBy
+    };
+    
+    res.json({ success: true });
+  } else {
+    res.status(404).json({ error: 'Testimonial not found' });
+  }
+});
+
+// Toggle homepage display
+app.put('/api/admin/testimonials/:id/homepage', (req, res) => {
+  console.log('Toggling homepage display:', req.params.id, req.body);
+  
+  const testimonialIndex = testimonials.findIndex(t => t.id === parseInt(req.params.id));
+  
+  if (testimonialIndex !== -1) {
+    testimonials[testimonialIndex].showOnHomepage = req.body.showOnHomepage;
+    res.json({ success: true });
+  } else {
+    res.status(404).json({ error: 'Testimonial not found' });
+  }
+});
+
+// Homepage testimonials
+app.get('/api/testimonials/homepage', (req, res) => {
+  const homepageTestimonials = testimonials
+    .filter(t => t.showOnHomepage && (t.status === 'approved' || t.status === 'featured'))
+    .sort((a, b) => {
+      // Featured first, then by rating
+      if (a.status === 'featured' && b.status !== 'featured') return -1;
+      if (b.status === 'featured' && a.status !== 'featured') return 1;
+      return b.rating - a.rating;
+    })
+    .slice(0, 3); // Show top 3
+  
+  res.json({ testimonials: homepageTestimonials });
+});
+
 app.listen(PORT, () => {
   console.log(`🚀 Temporary backend running on port ${PORT}`);
   console.log(`✅ CORS enabled for frontend domains`);
   console.log(`🔐 Admin login endpoint: POST /api/admin/auth/login`);
   console.log(`💳 Payment endpoint: POST /api/bookings/create-payment-intent`);
   console.log(`📚 Courses endpoint: GET /api/admin/courses`);
+  console.log(`💬 Testimonials endpoints: GET /api/testimonials/approved, POST /api/testimonials/submit`);
 });

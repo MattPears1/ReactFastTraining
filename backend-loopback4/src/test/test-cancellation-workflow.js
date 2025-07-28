@@ -21,6 +21,11 @@ async function login() {
     const response = await axios.post(`${API_URL}/api/admin/auth/login`, {
       email: 'test.admin@reactfasttraining.co.uk',
       password: 'test123'
+    }, {
+      headers: {
+        'Content-Type': 'application/json',
+        'X-Requested-With': 'XMLHttpRequest'
+      }
     });
     
     authToken = response.data.accessToken;

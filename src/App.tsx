@@ -48,6 +48,8 @@ const ProfilePage = lazy(() => import('@pages/ProfilePage'))
 const TrainingVenuePage = lazy(() => import('@pages/TrainingVenuePage'))
 const BookingPage = lazy(() => import('@pages/BookingPageEnhanced'))
 const BookingSuccessPage = lazy(() => import('@pages/BookingSuccessPage'))
+const TestimonialsPage = lazy(() => import('@pages/TestimonialsPage'))
+const TestimonialSubmitPage = lazy(() => import('@pages/TestimonialSubmitPage'))
 
 // Client Portal Pages
 const ClientDashboardPage = lazy(() => import('@pages/client/DashboardPage'))
@@ -65,6 +67,7 @@ function App() {
 
   // Initialize performance monitoring
   useEffect(() => {
+    console.log('App mounted')
     initPerformanceMonitoring()
     trackBundleSize()
   }, [])
@@ -74,16 +77,22 @@ function App() {
     window.scrollTo(0, 0)
   }, [location.pathname])
 
+  console.log('App rendering, location:', location.pathname)
+
   return (
-    <ErrorBoundary>
-      <ThemeProvider>
-        <ToastProvider>
-          <NotificationProvider>
-            <AuthProvider>
-              <AnalyticsProvider>
-                <Layout>
-            <AnimatePresence mode="wait">
-              <Suspense fallback={<LoadingScreen />}>
+    <>
+      <div style={{ background: 'red', color: 'white', padding: '20px', position: 'fixed', top: 0, left: 0, zIndex: 9999 }}>
+        App is rendering! Path: {location.pathname}
+      </div>
+      <ErrorBoundary>
+        <ThemeProvider>
+          <ToastProvider>
+            <NotificationProvider>
+              <AuthProvider>
+                <AnalyticsProvider>
+                  <Layout>
+                    <AnimatePresence mode="wait">
+                      <Suspense fallback={<LoadingScreen />}>
                 <Routes location={location} key={location.pathname}>
                   <Route path="/" element={<HomePage />} />
                   <Route path="/about" element={<AboutPage />} />
@@ -116,6 +125,10 @@ function App() {
                   <Route path="/reset-password" element={<ResetPasswordPage />} />
                   <Route path="/forgot-password" element={<ForgotPasswordPage />} />
                   
+                  {/* Testimonial Routes */}
+                  <Route path="/testimonials" element={<TestimonialsPage />} />
+                  <Route path="/testimonials/submit" element={<TestimonialSubmitPage />} />
+                  
                   {/* Legal Pages */}
                   <Route path="/terms" element={<TermsPage />} />
                   
@@ -134,16 +147,17 @@ function App() {
                   <Route path="/maintenance" element={<MaintenancePage />} />
                   <Route path="*" element={<NotFoundPage />} />
                 </Routes>
-              </Suspense>
-            </AnimatePresence>
-                </Layout>
-              </AnalyticsProvider>
-            </AuthProvider>
-          </NotificationProvider>
-        </ToastProvider>
-      </ThemeProvider>
-      <VersionInfo />
-    </ErrorBoundary>
+                      </Suspense>
+                    </AnimatePresence>
+                  </Layout>
+                </AnalyticsProvider>
+              </AuthProvider>
+            </NotificationProvider>
+          </ToastProvider>
+        </ThemeProvider>
+        <VersionInfo />
+      </ErrorBoundary>
+    </>
   )
 }
 

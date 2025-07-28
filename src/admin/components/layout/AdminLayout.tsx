@@ -13,7 +13,8 @@ import {
   ChevronDown,
   Activity,
   AlertTriangle,
-  BarChart3
+  BarChart3,
+  MessageSquare
 } from 'lucide-react';
 import { cn } from '@/utils/cn';
 import { useAdminAuth } from '../../contexts/AdminAuthContext';
@@ -71,6 +72,11 @@ const navigationItems: NavItem[] = [
     label: 'Analytics',
     href: '/admin/analytics',
     icon: BarChart3,
+  },
+  {
+    label: 'Testimonials',
+    href: '/admin/testimonials',
+    icon: MessageSquare,
   },
   {
     label: 'Settings',
