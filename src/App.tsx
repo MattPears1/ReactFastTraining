@@ -48,8 +48,8 @@ const ProfilePage = lazy(() => import('@pages/ProfilePage'))
 const TrainingVenuePage = lazy(() => import('@pages/TrainingVenuePage'))
 const BookingPage = lazy(() => import('@pages/BookingPageEnhanced'))
 const BookingSuccessPage = lazy(() => import('@pages/BookingSuccessPage'))
-// const TestimonialsPage = lazy(() => import('@pages/TestimonialsPage'))
-// const TestimonialSubmitPage = lazy(() => import('@pages/TestimonialSubmitPage'))
+const TestimonialsPage = lazy(() => import('@pages/TestimonialsPage'))
+const TestimonialSubmitPage = lazy(() => import('@pages/TestimonialSubmitPage'))
 
 // Client Portal Pages
 const ClientDashboardPage = lazy(() => import('@pages/client/DashboardPage'))
@@ -125,9 +125,9 @@ function App() {
                   <Route path="/reset-password" element={<ResetPasswordPage />} />
                   <Route path="/forgot-password" element={<ForgotPasswordPage />} />
                   
-                  {/* Testimonial Routes - Temporarily disabled */}
-                  {/* <Route path="/testimonials" element={<TestimonialsPage />} />
-                  <Route path="/testimonials/submit" element={<TestimonialSubmitPage />} /> */}
+                  {/* Testimonial Routes */}
+                  <Route path="/testimonials" element={<TestimonialsPage />} />
+                  <Route path="/testimonials/submit" element={<TestimonialSubmitPage />} />
                   
                   {/* Legal Pages */}
                   <Route path="/terms" element={<TermsPage />} />
