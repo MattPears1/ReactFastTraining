@@ -113,7 +113,7 @@ export const RevenueChartJS: React.FC<RevenueChartProps> = ({ data }) => {
         ],
       });
     }
-  }, [data, labels, revenueData, bookingsData]);
+  }, [data]);
 
   // Initial chart config before gradient is applied
   const initialChartConfig = {

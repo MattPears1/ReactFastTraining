@@ -61,7 +61,7 @@ export const BookingStatusChartJS: React.FC<BookingStatusChartProps> = ({
 
   const total = chartData.reduce((sum, item) => sum + item.count, 0);
 
-  const chartConfig = {
+  const chartConfig = React.useMemo(() => ({
     labels: chartData.map(item => item.status),
     datasets: [
       {
@@ -77,7 +77,7 @@ export const BookingStatusChartJS: React.FC<BookingStatusChartProps> = ({
         spacing: 2,
       },
     ],
-  };
+  }), [chartData, hoveredIndex]);
 
   const options: ChartOptions<'doughnut'> = {
     responsive: true,
@@ -85,9 +85,10 @@ export const BookingStatusChartJS: React.FC<BookingStatusChartProps> = ({
     cutout: '60%',
     onHover: (event, activeElements) => {
       if (activeElements.length > 0) {
-        setHoveredIndex(activeElements[0].index);
+        const newIndex = activeElements[0].index;
+        setHoveredIndex(prev => prev !== newIndex ? newIndex : prev);
       } else {
-        setHoveredIndex(null);
+        setHoveredIndex(prev => prev !== null ? null : prev);
       }
     },
     plugins: {

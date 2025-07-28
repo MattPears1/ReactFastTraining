@@ -64,68 +64,15 @@ export const SchedulePage: React.FC = () => {
       currentDate.getFullYear(),
     ],
     queryFn: async () => {
-      // DEBUG: Environment and configuration
-      console.log("🔍 DEBUG: Schedule page query starting");
-      console.log("🔍 DEBUG: import.meta.env.PROD:", import.meta.env.PROD);
-      console.log(
-        "🔍 DEBUG: import.meta.env.VITE_API_URL:",
-        import.meta.env.VITE_API_URL,
-      );
-      console.log("🔍 DEBUG: window.location.origin:", window.location.origin);
-
-      // In production, use the same domain as the frontend
-      const apiUrl = import.meta.env.PROD
-        ? ""
-        : import.meta.env.VITE_API_URL || "http://localhost:3000";
-      const token = localStorage.getItem("adminAccessToken");
-
-      console.log("🔍 DEBUG: Calculated apiUrl:", apiUrl);
-      console.log("🔍 DEBUG: Token exists:", !!token);
-      console.log(
-        "🔍 DEBUG: Token preview:",
-        token ? token.substring(0, 20) + "..." : "null",
-      );
-
-      const fullUrl = `${apiUrl}/api/admin/schedules`;
-      console.log("🔍 DEBUG: Full request URL:", fullUrl);
-
       try {
-        console.log("🔍 DEBUG: Making fetch request...");
-        const response = await fetch(fullUrl, {
-          headers: {
-            Authorization: `Bearer ${token}`,
-            "Content-Type": "application/json",
-            "Cache-Control": "no-cache",
-          },
+        // Use the admin API service which handles the correct URL routing
+        const response = await adminCourseSessionService.getSessions({
+          page: 1,
+          limit: 100,
         });
 
-        console.log("🔍 DEBUG: Response received");
-        console.log("🔍 DEBUG: Response status:", response.status);
-        console.log("🔍 DEBUG: Response statusText:", response.statusText);
-        console.log("🔍 DEBUG: Response ok:", response.ok);
-        console.log(
-          "🔍 DEBUG: Response headers:",
-          Object.fromEntries(response.headers.entries()),
-        );
-
-        if (!response.ok && response.status !== 304) {
-          const errorText = await response.text();
-          console.error("🔍 DEBUG: Error response body:", errorText);
-          throw new Error(
-            `Failed to fetch course sessions: ${response.status} ${response.statusText} - ${errorText}`,
-          );
-        }
-
-        // Handle 304 Not Modified - return empty array as we can't get the body
-        if (response.status === 304) {
-          console.log(
-            "🔍 DEBUG: 304 Not Modified response, returning empty array",
-          );
-          return [];
-        }
-
-        console.log("🔍 DEBUG: Parsing JSON response...");
-        const courseSessions = await response.json();
+        console.log("🔍 DEBUG: Response received from adminCourseSessionService");
+        const courseSessions = response.items || [];
         console.log("🔍 DEBUG: Raw course sessions data:", courseSessions);
         console.log(
           "🔍 DEBUG: Number of sessions:",
