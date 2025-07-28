@@ -1,17 +1,9 @@
 import React, { useState } from "react";
-import {
-  Chart as ChartJS,
-  ArcElement,
-  Tooltip,
-  Legend,
-  ChartOptions,
-  TooltipItem,
-} from 'chart.js';
+import { ChartOptions, TooltipItem } from 'chart.js';
 import { Doughnut } from 'react-chartjs-2';
 import { animationConfig } from './ChartPlugins';
+import '../../../utils/chartSetup'; // Import central Chart.js setup
 import './charts.css';
-
-ChartJS.register(ArcElement, Tooltip, Legend);
 
 interface BookingStatusData {
   status: string;

@@ -1,34 +1,10 @@
 import React, { useRef, useEffect } from "react";
-import {
-  Chart as ChartJS,
-  CategoryScale,
-  LinearScale,
-  PointElement,
-  LineElement,
-  BarElement,
-  Title,
-  Tooltip,
-  Legend,
-  ChartOptions,
-  TooltipItem,
-  Filler,
-} from 'chart.js';
+import { Chart as ChartJS, ChartOptions, TooltipItem } from 'chart.js';
 import { Chart } from 'react-chartjs-2';
 import { format } from "date-fns";
 import { gradientPlugin, createGradient, animationConfig } from './ChartPlugins';
+import '../../../utils/chartSetup'; // Import central Chart.js setup
 import './charts.css';
-
-ChartJS.register(
-  CategoryScale,
-  LinearScale,
-  PointElement,
-  LineElement,
-  BarElement,
-  Title,
-  Tooltip,
-  Legend,
-  Filler
-);
 
 interface RevenueData {
   date: string;
