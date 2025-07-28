@@ -460,9 +460,6 @@ app.get('/api/admin/activity-logs', async (req, res) => {
         timestamp: log.created_at,
         ipAddress: log.ip_address
       })));
-    } catch (error) {
-      return res.status(401).json({ error: 'Invalid token' });
-    }
   } catch (error) {
     console.error('Activity logs error:', error);
     res.status(500).json({ error: 'Internal server error' });
@@ -778,7 +775,6 @@ app.get('/api/admin/settings', async (req, res) => {
       return res.status(401).json({ error: 'Invalid token' });
     }
     */
-      }
       
       const settings = await client.query(`
         SELECT * FROM settings ORDER BY category, key
