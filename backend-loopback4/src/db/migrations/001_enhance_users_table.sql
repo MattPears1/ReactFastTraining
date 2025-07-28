@@ -60,7 +60,6 @@ WHERE email IN (
   FROM users 
   WHERE password_hash IS NOT NULL 
   AND password_hash != ''
-  AND email_verified = true
 );
 
 -- Add comment to table
