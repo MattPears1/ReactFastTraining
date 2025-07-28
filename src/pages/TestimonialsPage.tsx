@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { SEO } from '@/components/common/SEO';
 import { TestimonialCard, TestimonialData } from '@/components/testimonials/TestimonialCard';
-import { LoadingSpinner } from '@/components/common/LoadingSpinner';
+import { LoadingSpinner } from '@/components/common/LoadingStates';
 import { Link } from 'react-router-dom';
 import { Plus, Star } from 'lucide-react';
 
