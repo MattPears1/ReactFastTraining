@@ -157,19 +157,19 @@ export const CourseFilters: React.FC<CourseFiltersProps> = ({
       {/* Location */}
       <div>
         <label className="block text-sm font-medium text-gray-700 mb-2">
-          Location
+          Preferred Area
         </label>
         <select
           value={filters.location}
           onChange={(e) => updateFilter("location", e.target.value)}
           className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
         >
-          <option value="">All Locations</option>
-          <option value="SHEFFIELD">Sheffield</option>
-          <option value="LEEDS">Leeds</option>
-          <option value="BARNSLEY">Barnsley</option>
-          <option value="DONCASTER">Doncaster</option>
-          <option value="ROTHERHAM">Rotherham</option>
+          <option value="">All Areas</option>
+          <option value="SHEFFIELD">Sheffield Area</option>
+          <option value="LEEDS">Leeds Area</option>
+          <option value="BARNSLEY">Barnsley Area</option>
+          <option value="DONCASTER">Doncaster Area</option>
+          <option value="ROTHERHAM">Rotherham Area</option>
         </select>
       </div>
 

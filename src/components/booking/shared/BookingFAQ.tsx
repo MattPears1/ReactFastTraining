@@ -44,7 +44,7 @@ const bookingFAQs: FAQItem[] = [
     id: "venue",
     question: "Where are the courses held?",
     answer:
-      "We have training venues across Yorkshire including Leeds, Sheffield, Bradford, York, and Huddersfield. The exact venue details will be provided in your booking confirmation. We also offer on-site training at your premises.",
+      "We work flexibly to find the most practical location for your training needs. Before or after booking, we'll discuss and confirm a suitable venue that works best for all attendees. This could be at your workplace, a convenient local venue, or another agreed location.",
   },
 ];
 

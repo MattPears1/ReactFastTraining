@@ -127,7 +127,7 @@ const Footer: React.FC = () => {
             </a>
             <div className="flex items-center gap-2 text-gray-600 dark:text-gray-400">
               <MapPin className="w-4 h-4" />
-              <span>South Yorkshire</span>
+              <span>Yorkshire - Flexible Locations</span>
             </div>
           </div>
 
