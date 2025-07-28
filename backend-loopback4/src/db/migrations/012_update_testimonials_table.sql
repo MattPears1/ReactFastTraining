@@ -1,5 +1,31 @@
 -- Add missing columns to testimonials table for admin interface
 
+-- Create testimonials table if it doesn't exist
+CREATE TABLE IF NOT EXISTS testimonials (
+    id SERIAL PRIMARY KEY,
+    author_name VARCHAR(255) NOT NULL,
+    author_title VARCHAR(255),
+    author_company VARCHAR(255),
+    content TEXT NOT NULL,
+    rating INTEGER CHECK (rating >= 1 AND rating <= 5),
+    course_type VARCHAR(100),
+    is_featured BOOLEAN DEFAULT false,
+    is_verified BOOLEAN DEFAULT false,
+    display_order INTEGER DEFAULT 0,
+    status VARCHAR(50) DEFAULT 'pending',
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
+    published_at TIMESTAMP WITH TIME ZONE,
+    submitted_by VARCHAR(255),
+    email VARCHAR(255),
+    phone VARCHAR(50),
+    consent_given BOOLEAN DEFAULT false,
+    consent_date TIMESTAMP WITH TIME ZONE,
+    moderation_notes TEXT,
+    google_review_id VARCHAR(255),
+    source VARCHAR(50) DEFAULT 'website'
+);
+
 -- Add show_on_homepage column
 ALTER TABLE testimonials 
 ADD COLUMN IF NOT EXISTS show_on_homepage BOOLEAN DEFAULT false;
