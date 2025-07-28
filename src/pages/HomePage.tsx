@@ -92,44 +92,11 @@ const HomePage: React.FC = () => {
       },
       // Row 4
       {
-        title: "First Aid at Work Requalification (FAW Requal)",
-        duration: "5 Hours",
-        price: "£150",
-        href: "/courses/faw-requalification",
-      },
-      {
-        title: "Emergency First Aid at Work Requalification (EFAW Requal)",
-        duration: "3 Hours",
-        price: "£70",
-        href: "/courses/efaw-requalification",
-      },
-      // Row 5
-      {
-        title: "Paediatric First Aid Requalification (PFA Requal)",
-        duration: "3 Hours",
-        price: "£90",
-        href: "/courses/paediatric-requalification",
-      },
-      {
-        title: "Emergency Paediatric First Aid Requalification (EPFA Requal)",
-        duration: "3 Hours",
-        price: "£70",
-        href: "/courses/emergency-paediatric-requalification",
-      },
-      // Row 6
-      {
-        title: "Activity First Aid Requalification (Act FA Requal)",
-        duration: "3 Hours",
-        price: "£90",
-        href: "/courses/activity-first-aid-requalification",
-      },
-      {
         title: "Annual Skills Refresher",
         duration: "3 Hours",
         price: "£60",
         href: "/courses/annual-skills-refresher",
       },
-      // Row 7
       {
         title: "Oxygen Therapy Course",
         duration: "3 Hours",
@@ -144,9 +111,9 @@ const HomePage: React.FC = () => {
     () => [
       {
         icon: MapPin,
-        title: "Onsite training",
+        title: "Flexible Training Locations",
         description:
-          "With the option of onsite first aid training for your flexibility and convenience",
+          "Training venues arranged per booking to suit your needs - at your workplace or a convenient location",
       },
       {
         icon: Users,
@@ -592,11 +559,11 @@ const HomePage: React.FC = () => {
             className="text-center mb-8 sm:mb-10 md:mb-12"
           >
             <h2 className="text-2xl sm:text-3xl md:text-4xl font-heading font-bold text-gray-900 dark:text-white mb-3 sm:mb-4 px-4 sm:px-0">
-              Training Locations Across South Yorkshire
+              Flexible Training Across South Yorkshire
             </h2>
             <p className="text-base sm:text-lg text-gray-600 dark:text-gray-400 max-w-2xl mx-auto px-4 sm:px-0">
-              We can come to your workplace anywhere in South Yorkshire and
-              surrounding areas, or training venues are available if needed.
+              We arrange training venues to suit each booking - whether at your workplace or a convenient 
+              location. We'll work with you to find the best venue for your needs.
             </p>
           </motion.div>
 
@@ -611,7 +578,7 @@ const HomePage: React.FC = () => {
               size="md"
               className="bg-gradient-to-r from-primary-500 to-primary-600 hover:from-primary-600 hover:to-primary-700 text-white min-h-[48px] px-6 sm:px-8"
             >
-              Contact Us for Your Location
+              Contact Us to Arrange Training
             </Button>
           </motion.div>
         </div>

@@ -19,7 +19,7 @@ const faqData: FAQItem[] = [
     question:
       "What first aid courses does React Fast Training offer in Yorkshire?",
     answer:
-      "We offer Emergency First Aid at Work (EFAW), First Aid at Work (FAW), Paediatric First Aid, and Mental Health First Aid courses. All courses are HSE approved and Ofqual regulated, delivered at venues in Leeds, Sheffield, Bradford and across Yorkshire.",
+      "We offer Emergency First Aid at Work (EFAW), First Aid at Work (FAW), Paediatric First Aid, and Mental Health First Aid courses. All courses are HSE approved and Ofqual regulated, delivered across Yorkshire with flexible venues arranged per booking.",
     category: "Courses",
   },
   {
@@ -31,9 +31,9 @@ const faqData: FAQItem[] = [
   },
   {
     id: "3",
-    question: "Where are your training venues located?",
+    question: "How are training venues arranged?",
     answer:
-      "We have training venues across South Yorkshire. Exact venue details will be provided in your booking confirmation. We also offer on-site training at your workplace anywhere in Yorkshire.",
+      "Training venues are flexible and arranged per booking to suit your needs. We can deliver training at your workplace or arrange a convenient location. Venue details will be confirmed when you book, ensuring the best location for your group.",
     category: "Locations",
   },
   {
@@ -115,9 +115,9 @@ const faqData: FAQItem[] = [
   },
   {
     id: "15",
-    question: "How will I know the exact training venue?",
+    question: "When will I know the training venue?",
     answer:
-      "The exact venue details will be provided in your booking confirmation email. All our venues are easily accessible with good transport links. If you have any specific accessibility requirements, please let us know when booking.",
+      "Training venues are arranged per booking and the details will be provided in your booking confirmation email. We ensure all locations are easily accessible with good transport links. If you have any specific accessibility requirements, please let us know when booking.",
     category: "Booking",
   },
   {

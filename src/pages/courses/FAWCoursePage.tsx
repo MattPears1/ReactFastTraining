@@ -79,7 +79,6 @@ const FAWCoursePage: React.FC = () => {
       "Written and practical assessments",
       "Certificate issued on successful completion",
       "Refreshments and lunch provided",
-      "Free parking at all venues",
     ],
 
     seoKeywords:

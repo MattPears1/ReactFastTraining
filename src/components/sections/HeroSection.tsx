@@ -78,41 +78,6 @@ const HeroSection: React.FC = () => {
               Learn life-saving skills from an experienced professional. For
               businesses and individuals.
             </p>
-
-            {/* Mobile-Optimized CTA Buttons */}
-            <div className="flex flex-col sm:flex-row sm:flex-wrap gap-3 sm:gap-4 mb-6 sm:mb-8 px-4 sm:px-0">
-              {/* Primary CTA - Full Width on Mobile */}
-              <MagneticButton
-                size="lg"
-                href="/booking"
-                className="w-full sm:w-auto bg-gradient-to-r from-primary-500 to-primary-600 hover:from-primary-600 hover:to-primary-700 text-white min-h-[48px] text-base sm:text-lg"
-                rightIcon={<ArrowRight className="w-5 h-5" />}
-              >
-                Book Now
-              </MagneticButton>
-
-              {/* Secondary CTAs - Side by Side on Mobile */}
-              <div className="grid grid-cols-2 gap-3 w-full sm:w-auto sm:flex">
-                <MagneticButton
-                  variant="outline"
-                  size="md"
-                  href="/courses"
-                  className="border-2 border-secondary-500 text-secondary-600 hover:bg-secondary-50 min-h-[44px] text-sm sm:text-base"
-                >
-                  View Courses
-                </MagneticButton>
-                <MagneticButton
-                  variant="outline"
-                  size="md"
-                  href="tel:07447485644"
-                  className="border-2 border-accent-500 text-accent-600 hover:bg-accent-50 min-h-[44px] text-sm sm:text-base flex items-center justify-center gap-1"
-                >
-                  <Phone className="w-4 h-4" />
-                  <span className="hidden xs:inline">Call Now</span>
-                  <span className="xs:hidden">Call</span>
-                </MagneticButton>
-              </div>
-            </div>
           </motion.div>
 
           {/* Visual Element - Hidden on Mobile, Shown on Desktop */}

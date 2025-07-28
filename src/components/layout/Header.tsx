@@ -30,21 +30,7 @@ const navItems: NavItem[] = [
         label: "Emergency Paediatric First Aid",
         href: "/courses/emergency-paediatric",
       },
-      { label: "FAW Requalification", href: "/courses/faw-requalification" },
-      { label: "EFAW Requalification", href: "/courses/efaw-requalification" },
-      {
-        label: "Paediatric Requalification",
-        href: "/courses/paediatric-requalification",
-      },
-      {
-        label: "Emergency Paediatric Requalification",
-        href: "/courses/emergency-paediatric-requalification",
-      },
       { label: "Activity First Aid", href: "/courses/activity-first-aid" },
-      {
-        label: "Activity First Aid Requalification",
-        href: "/courses/activity-first-aid-requalification",
-      },
       { label: "CPR and AED", href: "/courses/cpr-aed" },
       {
         label: "Annual Skills Refresher",
@@ -53,7 +39,6 @@ const navItems: NavItem[] = [
       { label: "Oxygen Therapy", href: "/courses/oxygen-therapy" },
     ],
   },
-  { label: "Training Venue", href: "/venue" },
   { label: "Contact", href: "/contact" },
 ];
 
