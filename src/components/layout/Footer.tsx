@@ -21,27 +21,7 @@ const footerLinks = {
       label: "Emergency Paediatric First Aid",
       href: "/courses/emergency-paediatric",
     },
-    {
-      label: "First Aid at Work Requalification",
-      href: "/courses/faw-requalification",
-    },
-    {
-      label: "Emergency First Aid at Work Requalification",
-      href: "/courses/efaw-requalification",
-    },
-    {
-      label: "Paediatric First Aid Requalification",
-      href: "/courses/paediatric-requalification",
-    },
-    {
-      label: "Emergency Paediatric First Aid Requalification",
-      href: "/courses/emergency-paediatric-requalification",
-    },
     { label: "Activity First Aid", href: "/courses/activity-first-aid" },
-    {
-      label: "Activity First Aid Requalification",
-      href: "/courses/activity-first-aid-requalification",
-    },
     { label: "CPR and AED", href: "/courses/cpr-aed" },
     {
       label: "Annual Skills Refresher",

@@ -145,18 +145,7 @@ export const CourseFilters: React.FC<CourseFiltersProps> = ({
           <option value="Emergency Paediatric First Aid">
             Emergency Paediatric First Aid
           </option>
-          <option value="FAW Requalification">FAW Requalification</option>
-          <option value="EFAW Requalification">EFAW Requalification</option>
-          <option value="Paediatric Requalification">
-            Paediatric Requalification
-          </option>
-          <option value="Emergency Paediatric Requalification">
-            Emergency Paediatric Requalification
-          </option>
           <option value="Activity First Aid">Activity First Aid</option>
-          <option value="Activity First Aid Requalification">
-            Activity First Aid Requalification
-          </option>
           <option value="CPR and AED">CPR and AED</option>
           <option value="Annual Skills Refresher">
             Annual Skills Refresher

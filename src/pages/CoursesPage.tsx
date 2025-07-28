@@ -255,7 +255,7 @@ const CoursesPage: React.FC = () => {
               Specialist & Refresher Courses
             </h2>
             <p className="text-base sm:text-lg text-gray-600 dark:text-gray-400 max-w-2xl mx-auto px-4 sm:px-0">
-              Keep your skills current with our range of requalification and
+              Keep your skills current with our range of refresher and
               specialist courses
             </p>
           </motion.div>

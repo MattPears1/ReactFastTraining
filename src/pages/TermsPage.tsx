@@ -245,15 +245,6 @@ const TermsPage: React.FC = () => {
                   </li>
                 </ul>
 
-                <h3 className="text-xl font-semibold mb-3">
-                  5.3 Requalification Requirements
-                </h3>
-                <p>
-                  For requalification courses, delegates must provide proof of
-                  their current valid certificate. Expired certificates may
-                  require attendance on a full course rather than
-                  requalification.
-                </p>
               </section>
 
               <section className="mb-8">

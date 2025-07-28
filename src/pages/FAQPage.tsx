@@ -40,7 +40,7 @@ const faqData: FAQItem[] = [
     id: "4",
     question: "How long is a first aid certificate valid?",
     answer:
-      "Emergency First Aid at Work (EFAW) and First Aid at Work (FAW) certificates are valid for 3 years. After this, you'll need to complete a requalification course. We recommend annual refresher training to keep skills current.",
+      "Emergency First Aid at Work (EFAW) and First Aid at Work (FAW) certificates are valid for 3 years. After this, you'll need to complete a new course. We recommend annual refresher training to keep skills current.",
     category: "Certification",
   },
   {

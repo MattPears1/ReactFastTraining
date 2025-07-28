@@ -38,7 +38,7 @@ const bookingFAQs: FAQItem[] = [
     id: "requirements",
     question: "Are there any prerequisites for the courses?",
     answer:
-      "Most of our courses have no prerequisites. However, requalification courses require a valid or recently expired (within 28 days) certificate. All participants must be at least 16 years old and have a basic understanding of English.",
+      "Most of our courses have no prerequisites. All participants must be at least 16 years old and have a basic understanding of English.",
   },
   {
     id: "venue",
