@@ -51,12 +51,12 @@ CREATE TABLE IF NOT EXISTS payments (
 );
 
 -- Indexes for payments
-CREATE INDEX idx_payments_booking ON payments(booking_id);
-CREATE INDEX idx_payments_user ON payments(user_id);
-CREATE INDEX idx_payments_status ON payments(status);
-CREATE INDEX idx_payments_payment_date ON payments(payment_date);
-CREATE INDEX idx_payments_stripe_ids ON payments(stripe_payment_intent_id, stripe_charge_id);
-CREATE INDEX idx_payments_reference ON payments(payment_reference);
+CREATE INDEX IF NOT EXISTS idx_payments_booking ON payments(booking_id);
+CREATE INDEX IF NOT EXISTS idx_payments_user ON payments(user_id);
+CREATE INDEX IF NOT EXISTS idx_payments_status ON payments(status);
+CREATE INDEX IF NOT EXISTS idx_payments_payment_date ON payments(payment_date);
+CREATE INDEX IF NOT EXISTS idx_payments_stripe_ids ON payments(stripe_payment_intent_id, stripe_charge_id);
+CREATE INDEX IF NOT EXISTS idx_payments_reference ON payments(payment_reference);
 
 -- 2. Refunds Table
 CREATE TABLE IF NOT EXISTS refunds (
@@ -92,11 +92,11 @@ CREATE TABLE IF NOT EXISTS refunds (
 );
 
 -- Indexes for refunds
-CREATE INDEX idx_refunds_payment ON refunds(payment_id);
-CREATE INDEX idx_refunds_booking ON refunds(booking_id);
-CREATE INDEX idx_refunds_user ON refunds(user_id);
-CREATE INDEX idx_refunds_status ON refunds(status);
-CREATE INDEX idx_refunds_reference ON refunds(refund_reference);
+CREATE INDEX IF NOT EXISTS idx_refunds_payment ON refunds(payment_id);
+CREATE INDEX IF NOT EXISTS idx_refunds_booking ON refunds(booking_id);
+CREATE INDEX IF NOT EXISTS idx_refunds_user ON refunds(user_id);
+CREATE INDEX IF NOT EXISTS idx_refunds_status ON refunds(status);
+CREATE INDEX IF NOT EXISTS idx_refunds_reference ON refunds(refund_reference);
 
 -- 3. Payment Methods Table
 CREATE TABLE IF NOT EXISTS payment_methods (
@@ -122,8 +122,8 @@ CREATE TABLE IF NOT EXISTS payment_methods (
 );
 
 -- Indexes for payment_methods
-CREATE INDEX idx_payment_methods_user ON payment_methods(user_id);
-CREATE INDEX idx_payment_methods_active ON payment_methods(is_active);
+CREATE INDEX IF NOT EXISTS idx_payment_methods_user ON payment_methods(user_id);
+CREATE INDEX IF NOT EXISTS idx_payment_methods_active ON payment_methods(is_active);
 
 -- 4. Payment Reconciliations Table
 CREATE TABLE IF NOT EXISTS payment_reconciliations (
@@ -159,8 +159,8 @@ CREATE TABLE IF NOT EXISTS payment_reconciliations (
 );
 
 -- Indexes for payment_reconciliations
-CREATE INDEX idx_reconciliations_date ON payment_reconciliations(reconciliation_date);
-CREATE INDEX idx_reconciliations_status ON payment_reconciliations(status);
+CREATE INDEX IF NOT EXISTS idx_reconciliations_date ON payment_reconciliations(reconciliation_date);
+CREATE INDEX IF NOT EXISTS idx_reconciliations_status ON payment_reconciliations(status);
 
 -- 5. Payment Events Log
 CREATE TABLE IF NOT EXISTS payment_events (
@@ -184,11 +184,11 @@ CREATE TABLE IF NOT EXISTS payment_events (
 );
 
 -- Indexes for payment_events
-CREATE INDEX idx_payment_events_payment ON payment_events(payment_id);
-CREATE INDEX idx_payment_events_refund ON payment_events(refund_id);
-CREATE INDEX idx_payment_events_type ON payment_events(event_type);
-CREATE INDEX idx_payment_events_created ON payment_events(created_at);
-CREATE INDEX idx_payment_events_stripe_event ON payment_events(stripe_event_id);
+CREATE INDEX IF NOT EXISTS idx_payment_events_payment ON payment_events(payment_id);
+CREATE INDEX IF NOT EXISTS idx_payment_events_refund ON payment_events(refund_id);
+CREATE INDEX IF NOT EXISTS idx_payment_events_type ON payment_events(event_type);
+CREATE INDEX IF NOT EXISTS idx_payment_events_created ON payment_events(created_at);
+CREATE INDEX IF NOT EXISTS idx_payment_events_stripe_event ON payment_events(stripe_event_id);
 
 -- 6. Add payment tracking to bookings table if not exists
 ALTER TABLE bookings 
