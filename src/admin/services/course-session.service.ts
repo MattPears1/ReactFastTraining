@@ -1,4 +1,5 @@
-import axios, { AxiosInstance } from "axios";
+import { AxiosInstance } from "axios";
+import axios from "./axios-init";
 
 export interface CreateCourseSessionData {
   courseId: string;

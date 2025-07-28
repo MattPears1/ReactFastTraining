@@ -1,5 +1,6 @@
 // Bootstrap file to ensure proper initialization order
 import './react-init';
+import './admin/services/axios-init';
 
 // Import React and ReactDOM first
 import React from 'react';

@@ -29,9 +29,9 @@ export default defineConfig({
         // Preserve module structure to avoid initialization issues
         preserveModules: false,
         manualChunks: {
-          'vendor': ['react', 'react-dom', 'react-router-dom'],
+          'vendor': ['react', 'react-dom', 'react-router-dom', 'axios'],
           'ui': ['@headlessui/react', '@heroicons/react', 'lucide-react'],
-          'utils': ['axios', 'date-fns', 'clsx', 'tailwind-merge'],
+          'utils': ['date-fns', 'clsx', 'tailwind-merge'],
         },
       },
     },
@@ -45,7 +45,7 @@ export default defineConfig({
     minifyWhitespace: true,
   },
   optimizeDeps: {
-    include: ['react', 'react-dom', 'react-router-dom'],
+    include: ['react', 'react-dom', 'react-router-dom', 'axios'],
     esbuildOptions: {
       target: 'es2015',
     },

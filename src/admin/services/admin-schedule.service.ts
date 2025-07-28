@@ -1,4 +1,5 @@
-import axios, { AxiosInstance } from "axios";
+import { AxiosInstance } from "axios";
+import axios from "./axios-init";
 import { format } from "date-fns";
 
 // Comprehensive types for schedule details
