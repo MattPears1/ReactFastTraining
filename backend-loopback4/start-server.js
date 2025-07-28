@@ -27,6 +27,15 @@ app.post('/api/test-login', testLogin);
 // Trust proxy for Heroku
 app.set('trust proxy', true);
 
+// Force HTTPS redirect in production
+app.use((req, res, next) => {
+  if (process.env.NODE_ENV === 'production' && req.header('x-forwarded-proto') !== 'https') {
+    res.redirect(`https://${req.header('host')}${req.url}`);
+  } else {
+    next();
+  }
+});
+
 // Initialize services
 const emailService = new EmailService();
 const refundService = new RefundService();
