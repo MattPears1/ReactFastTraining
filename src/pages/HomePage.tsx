@@ -91,7 +91,7 @@ const HomePage: React.FC = () => {
       // Row 1
       {
         title: "First Aid at Work (FAW)",
-        duration: "1 Day",
+        duration: "3 Days",
         price: "£200",
         href: "/courses/faw",
       },
@@ -104,13 +104,13 @@ const HomePage: React.FC = () => {
       // Row 2
       {
         title: "Paediatric First Aid (PFA)",
-        duration: "1 Day",
+        duration: "2 Days",
         price: "£120",
         href: "/courses/paediatric",
       },
       {
         title: "Emergency Paediatric First Aid (EPFA)",
-        duration: "5 Hours",
+        duration: "1 Day",
         price: "£100",
         href: "/courses/emergency-paediatric",
       },

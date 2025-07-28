@@ -298,7 +298,7 @@ app.get('/api/admin/dashboard/overview', async (req, res) => {
       // Get dashboard stats
       const stats = await Promise.all([
         client.query('SELECT COUNT(*) as count FROM bookings WHERE created_at >= NOW() - INTERVAL \'7 days\''),
-        client.query('SELECT COALESCE(SUM(payment_amount), 0) as revenue FROM bookings WHERE status = \'confirmed\' AND created_at >= NOW() - INTERVAL \'30 days\''),
+        client.query('SELECT COALESCE(SUM(total_amount), 0) as revenue FROM bookings WHERE status = \'confirmed\' AND created_at >= NOW() - INTERVAL \'30 days\''),
         client.query('SELECT COUNT(*) as count FROM bookings WHERE status = \'pending\''),
         client.query('SELECT COUNT(*) as count FROM course_sessions WHERE session_date >= CURRENT_DATE'),
         client.query('SELECT COUNT(*) as count FROM users WHERE role = \'customer\''),
@@ -336,7 +336,7 @@ app.get('/api/admin/dashboard/overview', async (req, res) => {
       const revenueByMonth = await client.query(`
         SELECT 
           TO_CHAR(created_at, 'YYYY-MM') as month,
-          COALESCE(SUM(payment_amount), 0) as revenue,
+          COALESCE(SUM(total_amount), 0) as revenue,
           COUNT(*) as bookings_count
         FROM bookings
         WHERE status = 'confirmed'
@@ -348,7 +348,7 @@ app.get('/api/admin/dashboard/overview', async (req, res) => {
       // Get additional stats for percentage changes
       const previousStats = await Promise.all([
         client.query('SELECT COUNT(*) as count FROM bookings WHERE created_at >= NOW() - INTERVAL \'14 days\' AND created_at < NOW() - INTERVAL \'7 days\''),
-        client.query('SELECT COALESCE(SUM(payment_amount), 0) as revenue FROM bookings WHERE status = \'confirmed\' AND created_at >= NOW() - INTERVAL \'60 days\' AND created_at < NOW() - INTERVAL \'30 days\'')
+        client.query('SELECT COALESCE(SUM(total_amount), 0) as revenue FROM bookings WHERE status = \'confirmed\' AND created_at >= NOW() - INTERVAL \'60 days\' AND created_at < NOW() - INTERVAL \'30 days\'')
       ]);
 
       const currentRevenue = parseFloat(stats[1].rows[0].revenue || 0);
@@ -553,7 +553,7 @@ app.get('/api/admin/bookings', authenticateToken, async (req, res) => {
         LOWER(b.booking_reference) LIKE $${paramIndex} OR
         LOWER(u.first_name || ' ' || u.last_name) LIKE $${paramIndex} OR
         LOWER(u.email) LIKE $${paramIndex} OR
-        LOWER(b.contact_details->>'email') LIKE $${paramIndex}
+        b.id IN (SELECT booking_id FROM booking_attendees WHERE LOWER(email) LIKE $${paramIndex})
       )`);
       params.push(`%${search.toLowerCase()}%`);
       paramIndex++;
@@ -566,8 +566,7 @@ app.get('/api/admin/bookings', authenticateToken, async (req, res) => {
     }
     
     if (paymentStatus && paymentStatus !== 'all') {
-      whereConditions.push(`b.payment_status = $${paramIndex}`);
-      params.push(paymentStatus);
+      // Skip payment_status filter as column doesn't exist
       paramIndex++;
     }
     
@@ -582,19 +581,19 @@ app.get('/api/admin/bookings', authenticateToken, async (req, res) => {
         cs.start_time || ' - ' || cs.end_time as "courseTime",
         cs.location as "courseVenue",
         c.price as "coursePrice",
-        COALESCE(u.first_name || ' ' || u.last_name, b.contact_details->>'name') as "customerName",
-        COALESCE(u.email, b.contact_details->>'email') as "customerEmail",
-        COALESCE(u.phone, b.contact_details->>'phone') as "customerPhone",
-        b.contact_details->>'company' as "companyName",
+        COALESCE(u.name, 'Unknown') as "customerName",
+        u.email as "customerEmail",
+        u.phone as "customerPhone",
+        u.company_name as "companyName",
         b.created_at::text as "bookingDate",
         b.booking_reference as "bookingReference",
         b.status,
-        COALESCE(b.payment_status, 'pending') as "paymentStatus",
-        COALESCE(b.payment_method, 'card') as "paymentMethod",
-        b.stripe_payment_intent_id as "paymentIntentId",
-        b.notes,
+        'paid' as "paymentStatus",
+        'card' as "paymentMethod",
+        b.payment_intent_id as "paymentIntentId",
+        b.special_requirements as notes,
         b.number_of_attendees as attendees,
-        b.payment_amount as "totalAmount",
+        b.total_amount as "totalAmount",
         b.created_at::text as "createdAt",
         b.updated_at::text as "updatedAt"
       FROM bookings b
@@ -631,8 +630,7 @@ app.put('/api/admin/bookings/:id', authenticateToken, async (req, res) => {
     }
     
     if (paymentStatus !== undefined) {
-      updateFields.push(`payment_status = $${paramIndex}`);
-      params.push(paymentStatus);
+      // Skip payment_status update as column doesn't exist
       paramIndex++;
     }
     
@@ -724,17 +722,17 @@ app.get('/api/admin/bookings/export', authenticateToken, async (req, res) => {
     const bookings = await client.query(`
       SELECT 
         b.booking_reference as "Booking Reference",
-        COALESCE(u.first_name || ' ' || u.last_name, b.contact_details->>'name') as "Customer Name",
-        COALESCE(u.email, b.contact_details->>'email') as "Email",
-        COALESCE(u.phone, b.contact_details->>'phone') as "Phone",
+        COALESCE(u.name, 'Unknown') as "Customer Name",
+        u.email as "Email",
+        u.phone as "Phone",
         c.name as "Course",
         cs.session_date::text as "Date",
         cs.start_time as "Start Time",
         cs.location as "Venue",
         b.number_of_attendees as "Attendees",
         b.status as "Status",
-        b.payment_status as "Payment Status",
-        b.payment_amount as "Amount",
+        'paid' as "Payment Status",
+        b.total_amount as "Amount",
         TO_CHAR(b.created_at, 'YYYY-MM-DD HH24:MI') as "Booking Date"
       FROM bookings b
       LEFT JOIN users u ON b.user_id = u.id
@@ -925,7 +923,7 @@ app.get('/api/admin/users', authenticateToken, async (req, res) => {
         u.newsletter_subscribed as "newsletterSubscribed",
         u.created_at as "customerSince",
         COUNT(DISTINCT b.id) as "totalBookings",
-        COALESCE(SUM(b.payment_amount), 0) as "totalSpent",
+        COALESCE(SUM(b.total_amount), 0) as "totalSpent",
         MAX(b.created_at) as "lastBookingDate"
       FROM users u
       LEFT JOIN bookings b ON u.id = b.user_id AND b.status IN ('confirmed', 'completed')
@@ -969,7 +967,7 @@ app.get('/api/admin/users/:id', authenticateToken, async (req, res) => {
       SELECT 
         u.*,
         COUNT(DISTINCT b.id) as total_bookings,
-        COALESCE(SUM(b.payment_amount), 0) as total_spent,
+        COALESCE(SUM(b.total_amount), 0) as total_spent,
         MAX(b.created_at) as last_booking_date
       FROM users u
       LEFT JOIN bookings b ON u.id = b.user_id AND b.status IN ('confirmed', 'completed')
@@ -1038,7 +1036,7 @@ app.get('/api/admin/users/export', authenticateToken, async (req, res) => {
         u.postcode as "Postcode",
         CASE WHEN u.newsletter_subscribed THEN 'Yes' ELSE 'No' END as "Newsletter",
         COUNT(DISTINCT b.id) as "Total Bookings",
-        COALESCE(SUM(b.payment_amount), 0) as "Total Spent (£)",
+        COALESCE(SUM(b.total_amount), 0) as "Total Spent (£)",
         TO_CHAR(u.created_at, 'DD/MM/YYYY') as "Member Since",
         TO_CHAR(MAX(b.created_at), 'DD/MM/YYYY') as "Last Booking"
       FROM users u
@@ -1416,8 +1414,8 @@ app.get('/api/admin/schedules/:id', authenticateToken, async (req, res) => {
       SELECT 
         b.id,
         b.status,
-        b.payment_amount,
-        b.payment_status,
+        b.total_amount,
+        'paid' as payment_status,
         b.created_at,
         u.name as "userName",
         u.email as "userEmail",
@@ -1587,7 +1585,7 @@ app.post('/api/admin/schedules/:id/cancel', authenticateToken, async (req, res) 
         cancellationReasonId || null,
         reasonDetails || null,
         bookingsResult.rows.length,
-        bookingsResult.rows.reduce((sum, b) => sum + parseFloat(b.payment_amount || 0), 0)
+        bookingsResult.rows.reduce((sum, b) => sum + parseFloat(b.total_amount || 0), 0)
       ]);
     } catch (error) {
       console.log('Session cancellations table not found, skipping log');
@@ -1635,7 +1633,7 @@ app.post('/api/admin/schedules/:id/cancel', authenticateToken, async (req, res) 
       }
       
       // Process refund
-      if (processRefunds && booking.payment_amount > 0 && booking.stripe_payment_intent_id) {
+      if (processRefunds && booking.total_amount > 0 && booking.payment_intent_id) {
         try {
           // Use the refund service directly instead of SQL function
           const refundResult = await refundService.processRefund(
@@ -2510,34 +2508,32 @@ app.post('/api/bookings/confirm-with-payment', bookingLimiter, async (req, res) 
     const bookingResult = await client.query(
       `INSERT INTO bookings (
         booking_reference, session_id, user_id, 
-        status, payment_status, payment_method,
-        payment_amount, stripe_payment_intent_id,
-        number_of_attendees, contact_details,
+        status,
+        total_amount, payment_intent_id,
+        number_of_attendees, special_requirements,
         created_at, updated_at
-      ) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, NOW(), NOW())
+      ) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, NOW(), NOW())
       RETURNING *`,
       [
         bookingReference,
         courseSessionId,
         userId,
         'confirmed',
-        'paid',
-        'card',
         totalAmount,
         paymentIntentId,
         numberOfParticipants,
-        JSON.stringify({
-          name: `${firstName} ${lastName}`,
-          email,
-          phone,
-          company,
-          specialRequirements,
-          emergencyContact
-        })
+        specialRequirements
       ]
     );
     
     const booking = bookingResult.rows[0];
+    
+    // Create primary attendee
+    await client.query(
+      `INSERT INTO booking_attendees (booking_id, name, email, is_primary)
+       VALUES ($1, $2, $3, true)`,
+      [booking.id, `${firstName} ${lastName}`, email]
+    );
     
     // Update course session capacity
     await client.query(

@@ -48,8 +48,8 @@ async function seed() {
     {
       type: CourseType.FAW,
       name: 'First Aid at Work',
-      description: 'This comprehensive full-day course provides extensive training for workplace first aiders. Suitable for higher-risk environments and larger organizations.',
-      durationDays: 1,
+      description: 'This comprehensive 3-day course provides extensive training for workplace first aiders. Suitable for higher-risk environments and larger organizations.',
+      durationDays: 3,
       pricePerPerson: 250,
       maxParticipants: 12,
       minParticipants: 4,
@@ -78,8 +78,8 @@ async function seed() {
     {
       type: CourseType.FAW_REQUALIFICATION,
       name: 'First Aid at Work Requalification',
-      description: 'This full-day course is for those whose First Aid at Work certificate is due to expire. Must be completed before current certificate expires.',
-      durationDays: 1,
+      description: 'This 2-day requalification course is for those whose First Aid at Work certificate is due to expire. Must be completed before current certificate expires.',
+      durationDays: 2,
       pricePerPerson: 175,
       maxParticipants: 12,
       minParticipants: 4,
@@ -105,8 +105,8 @@ async function seed() {
     {
       type: CourseType.PAEDIATRIC,
       name: 'Paediatric First Aid',
-      description: 'Essential training for those working with children. Covers specific first aid techniques for infants and children.',
-      durationDays: 1,
+      description: 'Essential 2-day training for those working with children. Covers specific first aid techniques for infants and children.',
+      durationDays: 2,
       pricePerPerson: 195,
       maxParticipants: 12,
       minParticipants: 4,

@@ -107,9 +107,9 @@ export async function seed(knex: Knex): Promise<void> {
       id: knex.raw('gen_random_uuid()'),
       title: 'Paediatric First Aid',
       slug: 'paediatric-first-aid',
-      description: 'Essential first aid training for those working with infants and children.',
+      description: 'Essential 2-day first aid training for those working with infants and children.',
       price: 95.00,
-      duration: '6 hours',
+      duration: '2 days (12 hours)',
       maxStudents: 12,
       certificateValidity: '3 years',
       features: JSON.stringify([
