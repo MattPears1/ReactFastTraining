@@ -1,6 +1,5 @@
 import React from 'react';
 import { SEO } from '@/components/common/SEO';
-import { HeroSection } from '@/components/common/HeroSection';
 import { TestimonialForm } from '@/components/testimonials/TestimonialForm';
 import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
@@ -14,11 +13,13 @@ const TestimonialSubmitPage: React.FC = () => {
         description="Share your first aid training experience with React Fast Training. Help others learn about our courses by leaving a testimonial."
       />
 
-      <HeroSection
-        title="Share Your Training Experience"
-        subtitle="Your feedback helps us improve and helps others choose the right course"
-        backgroundImage="/images/testimonial-hero.jpg"
-      />
+      {/* Hero Section */}
+      <section className="relative bg-gradient-to-r from-primary-600 to-primary-700 text-white py-20">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+          <h1 className="text-4xl md:text-5xl font-bold mb-4">Share Your Training Experience</h1>
+          <p className="text-xl mb-8 text-primary-50">Your feedback helps us improve and helps others choose the right course</p>
+        </div>
+      </section>
 
       <section className="py-16">
         <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">

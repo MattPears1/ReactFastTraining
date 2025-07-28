@@ -1,0 +1,119 @@
+{
+  "hooks": {
+    "PreToolUse": [
+      {
+        "comment": "Enhanced security check for all file modifications",
+        "matcher": "Edit|MultiEdit|Write",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "$CLAUDE_PROJECT_DIR/.claude/hooks/security-check.py",
+            "stderr_on_fail": "Security check failed. Review the warnings above."
+          }
+        ]
+      },
+      {
+        "comment": "Validate TypeScript files before editing",
+        "matcher": "Edit|MultiEdit|Write",
+        "file_paths": ["*.ts", "*.tsx"],
+        "hooks": [
+          {
+            "type": "command",
+            "command": "echo 'Validating TypeScript syntax...'",
+            "run_in_background": true
+          }
+        ]
+      }
+    ],
+    "PostToolUse": [
+      {
+        "comment": "Auto-format TypeScript/JavaScript after edits",
+        "matcher": "Edit|MultiEdit|Write",
+        "file_paths": ["*.ts", "*.tsx", "*.js", "*.jsx"],
+        "hooks": [
+          {
+            "type": "command",
+            "command": "cd $CLAUDE_PROJECT_DIR && npx prettier --write $CLAUDE_FILE_PATHS 2>/dev/null || true",
+            "run_in_background": true
+          }
+        ]
+      },
+      {
+        "comment": "Run ESLint on modified files",
+        "matcher": "Edit|MultiEdit|Write",
+        "file_paths": ["src/**/*.ts", "src/**/*.tsx"],
+        "hooks": [
+          {
+            "type": "command",
+            "command": "cd $CLAUDE_PROJECT_DIR && npx eslint $CLAUDE_FILE_PATHS --fix 2>&1 | grep -E '(error|warning)' | head -20 || true",
+            "run_in_background": true
+          }
+        ]
+      },
+      {
+        "comment": "Run tests for modified files",
+        "matcher": "Edit|MultiEdit|Write",
+        "file_paths": ["src/**/*.ts", "src/**/*.tsx", "src/**/*.js", "src/**/*.jsx"],
+        "hooks": [
+          {
+            "type": "command",
+            "command": "$CLAUDE_PROJECT_DIR/.claude/hooks/test-runner.sh",
+            "run_in_background": true
+          }
+        ]
+      },
+      {
+        "comment": "Auto-commit checkpoint after major changes",
+        "matcher": "Edit|MultiEdit",
+        "file_paths": ["src/**/*.tsx", "src/**/*.ts"],
+        "hooks": [
+          {
+            "type": "command",
+            "command": "cd $CLAUDE_PROJECT_DIR && if [ $(git diff --numstat | wc -l) -gt 10 ]; then echo 'Consider committing changes - 10+ files modified'; fi",
+            "run_in_background": true
+          }
+        ]
+      }
+    ],
+    "UserPromptSubmit": [
+      {
+        "comment": "Log all user prompts for audit",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "echo \"[$(date '+%Y-%m-%d %H:%M:%S')] User prompt submitted\" >> $CLAUDE_PROJECT_DIR/.claude/activity.log",
+            "run_in_background": true
+          }
+        ]
+      }
+    ],
+    "PostResponse": [
+      {
+        "comment": "Check for uncommitted changes after Claude's work",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "cd $CLAUDE_PROJECT_DIR && git status --porcelain | wc -l | xargs -I {} sh -c 'if [ {} -gt 0 ]; then echo \"📝 {} files with uncommitted changes\"; fi'",
+            "run_in_background": false
+          }
+        ]
+      }
+    ]
+  },
+  "security": {
+    "blocked_patterns": [
+      "**/node_modules/**",
+      "**/.git/**",
+      "**/dist/**",
+      "**/build/**",
+      "**/*.env*",
+      "**/secrets/**",
+      "**/credentials/**"
+    ],
+    "require_confirmation": [
+      "**/backend-loopback4/src/datasources/*.datasource.ts",
+      "**/src/config/*.ts",
+      "**/package.json"
+    ]
+  }
+}

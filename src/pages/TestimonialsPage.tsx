@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import { SEO } from '@/components/common/SEO';
-import { HeroSection } from '@/components/common/HeroSection';
 import { TestimonialCard, TestimonialData } from '@/components/testimonials/TestimonialCard';
 import { LoadingSpinner } from '@/components/common/LoadingSpinner';
 import { Link } from 'react-router-dom';
@@ -66,15 +65,27 @@ const TestimonialsPage: React.FC = () => {
         description="Read what our students say about their first aid training experience with React Fast Training. Real reviews from real people across Yorkshire."
       />
 
-      <HeroSection
-        title="Student Testimonials"
-        subtitle="Hear from our satisfied students about their training experience"
-        backgroundImage="/images/testimonials-hero.jpg"
-        ctaText="Share Your Story"
-        ctaLink="/testimonials/submit"
-        secondaryCtaText="Book a Course"
-        secondaryCtaLink="/booking"
-      />
+      {/* Hero Section */}
+      <section className="relative bg-gradient-to-r from-primary-600 to-primary-700 text-white py-20">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+          <h1 className="text-4xl md:text-5xl font-bold mb-4">Student Testimonials</h1>
+          <p className="text-xl mb-8 text-primary-50">Hear from our satisfied students about their training experience</p>
+          <div className="flex flex-col sm:flex-row gap-4 justify-center">
+            <Link
+              to="/testimonials/submit"
+              className="bg-white text-primary-600 px-6 py-3 rounded-lg font-semibold hover:bg-primary-50 transition"
+            >
+              Share Your Story
+            </Link>
+            <Link
+              to="/booking"
+              className="bg-primary-500 text-white px-6 py-3 rounded-lg font-semibold hover:bg-primary-400 transition border border-primary-400"
+            >
+              Book a Course
+            </Link>
+          </div>
+        </div>
+      </section>
 
       <section className="py-16">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
