@@ -752,9 +752,6 @@ app.get('/api/admin/schedule', async (req, res) => {
         price: session.price,
         status: session.status
       })));
-    } catch (error) {
-      return res.status(401).json({ error: 'Invalid token' });
-    }
   } catch (error) {
     console.error('Schedule error:', error);
     res.status(500).json({ error: 'Internal server error' });
@@ -785,28 +782,25 @@ app.get('/api/admin/settings', async (req, res) => {
     }
     */
       
-      const settings = await client.query(`
-        SELECT * FROM settings ORDER BY category, key
-      `);
+    const settings = await client.query(`
+      SELECT * FROM settings ORDER BY category, key
+    `);
 
-      // Group settings by category
-      const groupedSettings = {};
-      settings.rows.forEach(setting => {
-        if (!groupedSettings[setting.category]) {
-          groupedSettings[setting.category] = [];
-        }
-        groupedSettings[setting.category].push({
-          key: setting.key,
-          value: setting.value,
-          description: setting.description,
-          type: setting.type
-        });
+    // Group settings by category
+    const groupedSettings = {};
+    settings.rows.forEach(setting => {
+      if (!groupedSettings[setting.category]) {
+        groupedSettings[setting.category] = [];
+      }
+      groupedSettings[setting.category].push({
+        key: setting.key,
+        value: setting.value,
+        description: setting.description,
+        type: setting.type
       });
+    });
 
-      res.json(groupedSettings);
-    } catch (error) {
-      return res.status(401).json({ error: 'Invalid token' });
-    }
+    res.json(groupedSettings);
   } catch (error) {
     console.error('Settings error:', error);
     res.status(500).json({ error: 'Internal server error' });
