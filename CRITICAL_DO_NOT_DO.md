@@ -14,6 +14,7 @@
 - **NO** Offline functionality
 - **NO** Background sync
 - **NO** Push notifications via service workers
+- Do not add rate limits in development or production until the user asks you to.
 
 ### 2. Fake/Placeholder Content
 - **NO** Testimonials (fake or real)

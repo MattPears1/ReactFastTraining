@@ -97,7 +97,6 @@ export const CoursesPage: React.FC = () => {
       const data = await response.json();
       return data as Course[];
     },
-    staleTime: 5 * 60 * 1000, // 5 minutes
   });
 
   // Filter courses locally
@@ -221,7 +220,7 @@ export const CoursesPage: React.FC = () => {
         return "primary";
       case "paediatric":
         return "secondary";
-      case "requalification":
+      case "specialist":
         return "neutral";
       default:
         return "neutral";
@@ -305,7 +304,6 @@ export const CoursesPage: React.FC = () => {
               <option value="workplace">Workplace</option>
               <option value="paediatric">Paediatric</option>
               <option value="specialist">Specialist</option>
-              <option value="requalification">Requalification</option>
             </select>
           </div>
           <div className="flex justify-end">

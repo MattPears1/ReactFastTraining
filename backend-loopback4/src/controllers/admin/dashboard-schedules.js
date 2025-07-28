@@ -35,7 +35,7 @@ function generateDashboardSchedules() {
       courseName: courses[i % courses.length],
       date: scheduleDate.toISOString().split('T')[0],
       time: times[i % times.length],
-      venue: `Location ${locationNumber} - To be announced`,
+      venue: `Location ${locationNumber} - TBA`,
       currentCapacity: currentCapacity,
       maxCapacity: 12
     });

@@ -32,10 +32,10 @@ import { AdminTestPage } from "./components/AdminTestPage";
 const queryClient = new QueryClient({
   defaultOptions: {
     queries: {
-      staleTime: 60 * 1000, // 1 minute
-      cacheTime: 5 * 60 * 1000, // 5 minutes
+      staleTime: 0, // No caching - always fresh
+      cacheTime: 0, // No cache storage
       retry: 3,
-      refetchOnWindowFocus: false,
+      refetchOnWindowFocus: true, // Always refetch on focus
     },
   },
 });

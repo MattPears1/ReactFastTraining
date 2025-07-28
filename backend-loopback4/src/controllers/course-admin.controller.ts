@@ -38,6 +38,48 @@ const UpdateCourseSchema = CreateCourseSchema.partial();
 export class CourseAdminController {
   constructor() {}
 
+  @get('/api/admin/courses')
+  @response(200, {
+    description: 'Get all courses with statistics',
+    content: {
+      'application/json': {
+        schema: {
+          type: 'array',
+          items: { type: 'object' },
+        },
+      },
+    },
+  })
+  async getAllCourses(): Promise<any[]> {
+    try {
+      // Get all courses from database
+      const allCourses = await db.select().from(courses);
+      
+      // TODO: In a real implementation, you would join with sessions, bookings, etc.
+      // to get real statistics. For now, return the courses with some mock statistics
+      return allCourses.map(course => ({
+        ...course,
+        // Statistics that would come from joins/aggregations
+        totalBookings: 0,
+        uniqueStudents: 0,
+        totalRevenue: 0,
+        averageBookingValue: 0,
+        totalSessions: 0,
+        completedSessions: 0,
+        upcomingSessions: 0,
+        averageFillRate: 0,
+        lastBookingDate: null,
+        firstSessionDate: null,
+        lastSessionDate: null,
+        averageRating: 0,
+        totalReviews: 0,
+      }));
+    } catch (error) {
+      MonitoringService.error('Failed to fetch courses', error);
+      throw new HttpErrors.InternalServerError('Failed to fetch courses');
+    }
+  }
+
   @post('/api/admin/courses')
   @response(200, {
     description: 'Create a new course and sync with Stripe',

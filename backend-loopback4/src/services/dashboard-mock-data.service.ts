@@ -13,10 +13,11 @@ export class DashboardMockDataService {
     ];
 
     const venues = [
-      'Location 1 - To be announced',
-      'Location 2 - To be announced',  
-      'Location 3 - To be announced',
-      'Location 4 - To be announced'
+      'Location 1 - TBA',
+      'Location 2 - TBA',  
+      'Location 3 - TBA',
+      'Location 4 - TBA',
+      'Location 5 - TBA'
     ];
 
     const times = [
@@ -30,9 +31,12 @@ export class DashboardMockDataService {
     const schedules = [];
     const baseDate = new Date();
     
+    // Shuffle courses array to get different order
+    const shuffledCourses = [...courses].sort(() => Math.random() - 0.5);
+    
     // Generate 5 different upcoming schedules
     for (let i = 0; i < 5; i++) {
-      const course = courses[i % courses.length];
+      const course = shuffledCourses[i % shuffledCourses.length];
       const venue = venues[i % venues.length];
       const time = times[i % times.length];
       
@@ -42,7 +46,7 @@ export class DashboardMockDataService {
       
       // Calculate current capacity to show variety
       const maxCapacity = 12;
-      const currentCapacity = Math.floor(Math.random() * (maxCapacity - 2)) + 2; // Between 2 and 10
+      const currentCapacity = i === 0 ? 0 : Math.floor(Math.random() * (maxCapacity - 2)) + 1; // First one has 0, others have 1-10
       
       schedules.push({
         id: i + 1,

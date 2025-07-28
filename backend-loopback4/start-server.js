@@ -16,7 +16,8 @@ const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY);
 const helmet = require('helmet');
 const session = require('express-session');
 const { csrfProtection, generateCSRFTokenMiddleware } = require('./middleware/csrf-protection');
-const { apiLimiter, authLimiter, bookingLimiter } = require('./middleware/rate-limiter');
+// TEMPORARILY DISABLED - Rate limiting causing issues
+// const { apiLimiter, authLimiter, bookingLimiter } = require('./middleware/rate-limiter');
 const EmailService = require('./src/services/email.service');
 const RefundService = require('./src/services/refund.service');
 const { adminLogin, adminMe } = require('./src/controllers/admin-auth-super-bypass');
@@ -125,7 +126,8 @@ console.log('✅ [SESSION] Session middleware configured', {
 // CORS not needed - frontend and backend served from same domain
 
 // Apply rate limiting to all API routes
-app.use('/api/', apiLimiter);
+// TEMPORARILY DISABLED FOR DEVELOPMENT
+// app.use('/api/', apiLimiter);
 
 // Generate CSRF tokens for all requests
 app.use(generateCSRFTokenMiddleware());
@@ -616,7 +618,7 @@ app.get('/api/admin/bookings', authenticateToken, async (req, res) => {
         TO_CHAR(cs.start_datetime, 'HH24:MI') || ' - ' || TO_CHAR(cs.end_datetime, 'HH24:MI') as "courseTime",
         v.name as "courseVenue",
         c.price as "coursePrice",
-        COALESCE(u.name, 'Unknown') as "customerName",
+        COALESCE(u.first_name || ' ' || u.last_name, u.email, 'Unknown') as "customerName",
         u.email as "customerEmail",
         u.phone as "customerPhone",
         u.company_name as "companyName",
@@ -758,7 +760,7 @@ app.get('/api/admin/bookings/export', authenticateToken, async (req, res) => {
     const bookings = await client.query(`
       SELECT 
         b.booking_reference as "Booking Reference",
-        COALESCE(u.name, 'Unknown') as "Customer Name",
+        COALESCE(u.first_name || ' ' || u.last_name, u.email, 'Unknown') as "Customer Name",
         u.email as "Email",
         u.phone as "Phone",
         c.name as "Course",
@@ -914,7 +916,7 @@ app.get('/api/admin/users', authenticateToken, async (req, res) => {
     
     if (search) {
       whereConditions.push(`(
-        COALESCE(u.name, '') ILIKE $${paramIndex} OR 
+        COALESCE(u.first_name || ' ' || u.last_name, '') ILIKE $${paramIndex} OR 
         u.email ILIKE $${paramIndex} OR 
         COALESCE(u.phone, '') ILIKE $${paramIndex} OR 
         COALESCE(u.company_name, '') ILIKE $${paramIndex}
@@ -951,7 +953,7 @@ app.get('/api/admin/users', authenticateToken, async (req, res) => {
       SELECT 
         u.id,
         u.email,
-        COALESCE(u.name, u.email) as "name",
+        COALESCE(u.first_name || ' ' || u.last_name, u.email) as "name",
         u.phone,
         u.role,
         u.customer_type as "customerType",
@@ -1064,7 +1066,7 @@ app.get('/api/admin/users/export', authenticateToken, async (req, res) => {
     
     const query = `
       SELECT 
-        u.name as "Name",
+        COALESCE(u.first_name || ' ' || u.last_name, u.email) as "Name",
         u.email as "Email",
         u.phone as "Phone",
         u.role as "Role",
@@ -1384,7 +1386,7 @@ app.get('/api/admin/schedules', authenticateToken, async (req, res) => {
         cs.start_datetime::date::text as date,
         TO_CHAR(cs.start_datetime, 'HH24:MI') as "startTime",
         TO_CHAR(cs.end_datetime, 'HH24:MI') as "endTime",
-        v.name,
+        cs.location as "location",
         cs.max_capacity as "maxParticipants",
         cs.current_capacity as "currentBookings",
         cs.status,
@@ -1425,7 +1427,7 @@ app.get('/api/admin/schedules/:id', authenticateToken, async (req, res) => {
         cs.start_datetime::date::text as date,
         TO_CHAR(cs.start_datetime, 'HH24:MI') as "startTime",
         TO_CHAR(cs.end_datetime, 'HH24:MI') as "endTime",
-        v.name as "venueName",
+        cs.location as "venueName",
         '' as "venueAddress",
         '' as "venueCity",
         '' as "venuePostcode",
@@ -1455,7 +1457,7 @@ app.get('/api/admin/schedules/:id', authenticateToken, async (req, res) => {
         b.payment_amount,
         'paid' as payment_status,
         b.created_at,
-        u.name as "userName",
+        COALESCE(u.first_name || ' ' || u.last_name, u.email) as "userName",
         u.email as "userEmail",
         u.phone as "userPhone"
       FROM bookings b
@@ -1591,7 +1593,7 @@ app.post('/api/admin/schedules/:id/cancel', authenticateToken, async (req, res) 
       SELECT 
         b.*,
         u.email,
-        u.name as user_name
+        COALESCE(u.first_name || ' ' || u.last_name, u.email) as user_name
       FROM bookings b
       JOIN users u ON b.user_id = u.id
       WHERE b.course_schedule_id = $1 
@@ -2185,7 +2187,7 @@ app.get('/api/admin/testimonials', authenticateToken, async (req, res) => {
         t.booking_reference as "bookingReference",
         t.created_at as "createdAt",
         t.approved_at as "approvedAt",
-        u.name as "approvedBy"
+        COALESCE(u.first_name || ' ' || u.last_name, u.email) as "approvedBy"
       FROM testimonials t
       LEFT JOIN users u ON t.approved_by = u.id
     `;
@@ -2490,7 +2492,8 @@ app.post('/api/bookings/create-payment-intent', async (req, res) => {
 });
 
 // Confirm booking with payment endpoint with rate limiting - Real implementation
-app.post('/api/bookings/confirm-with-payment', bookingLimiter, async (req, res) => {
+// TEMPORARILY REMOVED bookingLimiter
+app.post('/api/bookings/confirm-with-payment', async (req, res) => {
   const transaction = await client.query('BEGIN');
   
   try {

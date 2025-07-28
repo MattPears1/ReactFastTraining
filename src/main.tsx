@@ -86,9 +86,9 @@ console.log('🔄 [QUERY] Creating QueryClient...');
 const queryClient = new QueryClient({
   defaultOptions: {
     queries: {
-      staleTime: 1000 * 60 * 5, // 5 minutes
-      cacheTime: 1000 * 60 * 30, // 30 minutes cache
-      refetchOnWindowFocus: false,
+      staleTime: 0, // No caching - always fresh
+      cacheTime: 0, // No cache storage
+      refetchOnWindowFocus: true, // Always refetch on focus
       refetchOnReconnect: "always",
       retry: (failureCount, error) => {
         // Don't retry on 4xx errors
@@ -107,9 +107,9 @@ const queryClient = new QueryClient({
 });
 
 console.log('✅ [QUERY] QueryClient created with options:', {
-  staleTime: '5 minutes',
-  cacheTime: '30 minutes',
-  refetchOnWindowFocus: false,
+  staleTime: '0 (no caching)',
+  cacheTime: '0 (no cache storage)',
+  refetchOnWindowFocus: true,
   refetchOnReconnect: 'always'
 });
 

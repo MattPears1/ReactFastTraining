@@ -30,12 +30,9 @@ class AdminCourseSessionService {
   private api: AxiosInstance;
 
   constructor() {
-    const baseURL = import.meta.env.PROD
-      ? ""
-      : import.meta.env.VITE_API_URL || "http://localhost:3000";
-
+    // Use relative URLs to work with the same port as the frontend
     this.api = axios.create({
-      baseURL,
+      baseURL: "",
       withCredentials: true,
       timeout: 10000,
     });
@@ -48,6 +45,17 @@ class AdminCourseSessionService {
       }
       return config;
     });
+  }
+
+  async getSessions(params?: {
+    page?: number;
+    limit?: number;
+    startDate?: string;
+    endDate?: string;
+    status?: string;
+  }) {
+    const response = await this.api.get("/api/admin/schedules", { params });
+    return response.data;
   }
 
   async createSession(data: CreateCourseSessionData) {

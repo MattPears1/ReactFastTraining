@@ -58,9 +58,9 @@ console.log('🔄 [BOOTSTRAP] Creating QueryClient...');
 const queryClient = new QueryClient({
   defaultOptions: {
     queries: {
-      staleTime: 1000 * 60 * 5, // 5 minutes
-      cacheTime: 1000 * 60 * 30, // 30 minutes cache
-      refetchOnWindowFocus: false,
+      staleTime: 0, // No caching - always fresh
+      cacheTime: 0, // No cache storage
+      refetchOnWindowFocus: true, // Always refetch on focus
       refetchOnReconnect: 'always',
       retry: (failureCount, error) => {
         // Don't retry on 4xx errors
@@ -78,7 +78,7 @@ const queryClient = new QueryClient({
   },
 });
 
-console.log('✅ [BOOTSTRAP] QueryClient created');
+console.log('✅ [BOOTSTRAP] QueryClient created with no caching');
 
 // Bootstrap function
 export function bootstrap() {

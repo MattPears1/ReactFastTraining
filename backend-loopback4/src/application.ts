@@ -79,9 +79,10 @@ export class ReactFastTrainingApiApplication extends BootMixin(
     this.bind('services.JWTService').toClass(
       require('./services/jwt.service').JWTService,
     );
-    this.bind('services.RateLimitService').toClass(
-      require('./services/rate-limit.service').RateLimitService,
-    );
+    // TEMPORARILY DISABLED - Rate limiting causing issues
+    // this.bind('services.RateLimitService').toClass(
+    //   require('./services/rate-limit.service').RateLimitService,
+    // );
 
     // Configure JWT
     this.bind(TokenServiceBindings.TOKEN_SECRET).to(

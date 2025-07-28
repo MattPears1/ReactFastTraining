@@ -27,7 +27,6 @@ export const DashboardPage: React.FC = () => {
   } = useQuery({
     queryKey: ["admin-dashboard"],
     queryFn: () => adminDashboardService.getDashboardOverview(),
-    refetchInterval: 5 * 60 * 1000, // Refresh every 5 minutes
   });
 
   if (isLoading) {
