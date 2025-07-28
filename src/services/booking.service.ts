@@ -31,7 +31,7 @@ interface ConfirmBookingWithPaymentData extends BookingFormData {
 
 class BookingService {
   private mockSchedules: CourseSchedule[] = [];
-  private apiUrl = import.meta.env.VITE_API_URL || "http://localhost:3000";
+  private apiUrl = "";
 
   constructor() {
     this.mockSchedules = generateMockSchedules();

@@ -77,7 +77,6 @@ export const siteConfig = {
       { label: "Home", href: "/" },
       { label: "About Us", href: "/about" },
       { label: "Courses", href: "/courses" },
-      { label: "Training Venue", href: "/venue" },
       { label: "Contact", href: "/contact" },
     ],
   },
