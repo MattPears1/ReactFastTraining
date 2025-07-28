@@ -15,6 +15,9 @@ const RefundService = require('./src/services/refund.service');
 const app = express();
 const PORT = process.env.PORT || 3000;
 
+// Trust proxy for Heroku
+app.set('trust proxy', true);
+
 // Initialize services
 const emailService = new EmailService();
 const refundService = new RefundService();
