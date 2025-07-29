@@ -328,6 +328,58 @@ React Fast Training Team
   }
 
   /**
+   * Send contact form notification email
+   */
+  async sendContactNotification({ submissionId, name, email, phone, subject, message, type }) {
+    try {
+      console.log('📧 [EMAIL] Sending contact notification:', { submissionId, name, email, subject });
+      
+      const htmlBody = `
+        <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
+          <h2 style="color: #0EA5E9;">New Contact Form Submission</h2>
+          
+          <div style="background-color: #f8f9fa; padding: 20px; border-radius: 8px; margin: 20px 0;">
+            <h3 style="margin-top: 0;">Contact Details</h3>
+            <p><strong>Submission ID:</strong> ${submissionId}</p>
+            <p><strong>Name:</strong> ${name}</p>
+            <p><strong>Email:</strong> ${email}</p>
+            <p><strong>Phone:</strong> ${phone || 'Not provided'}</p>
+            <p><strong>Subject:</strong> ${subject}</p>
+            <p><strong>Type:</strong> ${type}</p>
+          </div>
+          
+          <div style="background-color: #fff; padding: 20px; border: 1px solid #dee2e6; border-radius: 8px;">
+            <h3 style="margin-top: 0;">Message</h3>
+            <p style="white-space: pre-line;">${message}</p>
+          </div>
+          
+          <div style="margin-top: 20px; padding: 15px; background-color: #e3f2fd; border-radius: 8px;">
+            <p style="margin: 0; font-size: 14px; color: #666;">
+              This message was sent from the React Fast Training contact form.
+            </p>
+          </div>
+        </div>
+      `;
+
+      const mailOptions = {
+        from: process.env.EMAIL_FROM || 'noreply@reactfasttraining.co.uk',
+        to: process.env.EMAIL_INFO || 'info@reactfasttraining.co.uk',
+        subject: `Contact Form: ${subject}`,
+        html: htmlBody,
+        replyTo: email
+      };
+
+      const result = await this.transporter.sendMail(mailOptions);
+      console.log('✅ [EMAIL] Contact notification sent successfully:', result.messageId);
+      
+      return { success: true, messageId: result.messageId };
+    } catch (error) {
+      console.error('❌ [EMAIL] Failed to send contact notification:', error);
+      throw error;
+    }
+  }
+
+  /**
    * Test email configuration
    */
   async testEmailConfiguration() {

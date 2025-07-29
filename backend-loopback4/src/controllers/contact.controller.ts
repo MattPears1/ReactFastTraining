@@ -27,7 +27,7 @@ export class ContactController {
     private emailService: EmailService,
   ) {}
 
-  @post('/contact/submit')
+  @post('/api/contact/submit')
   @response(200, {
     description: 'Contact form submission',
     content: {

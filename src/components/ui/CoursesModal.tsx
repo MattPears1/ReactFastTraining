@@ -109,13 +109,13 @@ export const CoursesModal: React.FC<CoursesModalProps> = ({
           />
 
           {/* Modal */}
-          <div className="fixed inset-0 z-50 flex items-center justify-center p-4" onClick={onClose}>
+          <div className="fixed inset-0 z-50 flex items-center justify-center p-2 sm:p-4" onClick={onClose}>
             <motion.div
               initial={{ opacity: 0, scale: 0.95 }}
               animate={{ opacity: 1, scale: 1 }}
               exit={{ opacity: 0, scale: 0.95 }}
               transition={{ duration: 0.2 }}
-              className="w-full max-w-6xl max-h-[90vh] bg-white dark:bg-gray-900 rounded-2xl shadow-2xl overflow-hidden flex flex-col"
+              className="w-full max-w-sm sm:max-w-6xl max-h-[95vh] sm:max-h-[90vh] bg-white dark:bg-gray-900 rounded-xl sm:rounded-2xl shadow-2xl overflow-hidden flex flex-col mx-auto"
               onClick={(e) => e.stopPropagation()}
             >
               {/* Header */}
@@ -139,26 +139,26 @@ export const CoursesModal: React.FC<CoursesModalProps> = ({
               </div>
 
               {/* Content */}
-              <div className="flex-1 overflow-y-auto p-4 sm:p-6">
-                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3 sm:gap-4">
+              <div className="flex-1 overflow-y-auto p-3 sm:p-6">
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-2 sm:gap-4">
                   {courses.map((course) => (
                     <Link
                       key={course.href}
                       to={course.href}
                       onClick={onClose}
-                      className="group relative bg-white dark:bg-gray-800 rounded-lg sm:rounded-xl border border-gray-200 dark:border-gray-700 p-4 sm:p-5 lg:p-6 hover:shadow-lg hover:border-primary-300 dark:hover:border-primary-700 transition-all duration-300 hover:-translate-y-0.5 lg:hover:-translate-y-1"
+                      className="group relative bg-white dark:bg-gray-800 rounded-lg sm:rounded-xl border border-gray-200 dark:border-gray-700 p-3 sm:p-5 lg:p-6 hover:shadow-lg hover:border-primary-300 dark:hover:border-primary-700 transition-all duration-300 hover:-translate-y-0.5 lg:hover:-translate-y-1"
                     >
                       {/* Icon */}
-                      <div className="text-2xl sm:text-3xl lg:text-4xl mb-3 lg:mb-4">
+                      <div className="text-xl sm:text-3xl lg:text-4xl mb-2 sm:mb-3 lg:mb-4">
                         {course.icon}
                       </div>
 
                       {/* Content */}
-                      <h3 className="font-semibold text-sm sm:text-base text-gray-900 dark:text-white mb-1.5 sm:mb-2 group-hover:text-primary-600 dark:group-hover:text-primary-400 transition-colors line-clamp-2">
+                      <h3 className="font-semibold text-sm sm:text-base text-gray-900 dark:text-white mb-1 sm:mb-2 group-hover:text-primary-600 dark:group-hover:text-primary-400 transition-colors line-clamp-2">
                         {course.label}
                       </h3>
 
-                      <p className="text-xs sm:text-sm text-gray-600 dark:text-gray-400 mb-3 sm:mb-4 line-clamp-2 sm:line-clamp-3">
+                      <p className="text-xs sm:text-sm text-gray-600 dark:text-gray-400 mb-2 sm:mb-4 line-clamp-2 sm:line-clamp-3">
                         {course.description}
                       </p>
 
@@ -179,12 +179,12 @@ export const CoursesModal: React.FC<CoursesModalProps> = ({
               </div>
 
               {/* Footer */}
-              <div className="p-4 sm:p-6 border-t border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800/50 flex-shrink-0">
-                <div className="flex flex-col sm:flex-row items-center justify-between gap-3 sm:gap-4">
+              <div className="p-3 sm:p-6 border-t border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800/50 flex-shrink-0">
+                <div className="flex flex-col sm:flex-row items-center justify-between gap-2 sm:gap-4">
                   <p className="text-xs sm:text-sm text-gray-600 dark:text-gray-400 text-center sm:text-left">
                     All courses are Ofqual regulated and HSE approved
                   </p>
-                  <div className="flex gap-3 sm:gap-4 w-full sm:w-auto">
+                  <div className="flex gap-2 sm:gap-4 w-full sm:w-auto">
                     <Link
                       to="/courses"
                       onClick={onClose}

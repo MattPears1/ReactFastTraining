@@ -166,7 +166,7 @@ function setupApiRoutes(app, db, emailService) {
   });
 
   // Contact form submission
-  app.post('/api/v1/contact/submit', async (req, res) => {
+  app.post('/api/contact/submit', async (req, res) => {
     try {
       const { name, email, phone, subject, message, type } = req.body;
 

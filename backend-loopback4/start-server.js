@@ -45,6 +45,17 @@ async function main() {
       openApiSpec: {
         setServersFromRequest: true,
       },
+      cors: {
+        origin: [
+          'http://localhost:8081',
+          'http://192.168.0.84:8081',
+          'https://www.reactfasttraining.co.uk',
+          'https://reactfasttraining.co.uk'
+        ],
+        methods: 'GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS',
+        credentials: true,
+        allowedHeaders: 'Origin,X-Requested-With,Content-Type,Accept,Authorization,X-API-Key'
+      }
     },
   });
 
@@ -61,7 +72,7 @@ async function main() {
   console.log('🔧 [SERVER] RestServer properties:', Object.keys(restServer || {}));
   
   // Try different ways to get the Express app
-  const expressApp = restServer.expressApp || restServer.requestHandler || restServer.httpServer?.expressApp;
+  const expressApp = restServer._requestHandler || restServer.requestHandler || restServer._expressApp;
   console.log('✅ [SERVER] Express app instance:', typeof expressApp, expressApp?.constructor?.name);
 
   // Initialize services
