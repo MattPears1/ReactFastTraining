@@ -109,19 +109,19 @@ export const CoursesModal: React.FC<CoursesModalProps> = ({
           />
 
           {/* Modal */}
-          <div className="fixed inset-0 z-50 flex items-center justify-center p-2 sm:p-4" onClick={onClose}>
+          <div className="fixed inset-0 z-50 flex items-center justify-center p-4" onClick={onClose}>
             <motion.div
               initial={{ opacity: 0, scale: 0.95 }}
               animate={{ opacity: 1, scale: 1 }}
               exit={{ opacity: 0, scale: 0.95 }}
               transition={{ duration: 0.2 }}
-              className="w-full max-w-sm sm:max-w-6xl max-h-[95vh] sm:max-h-[90vh] bg-white dark:bg-gray-900 rounded-xl sm:rounded-2xl shadow-2xl overflow-hidden flex flex-col mx-auto"
+              className="w-[95vw] sm:w-full max-w-[95vw] sm:max-w-6xl max-h-[90vh] bg-white dark:bg-gray-900 rounded-xl sm:rounded-2xl shadow-2xl overflow-hidden flex flex-col"
               onClick={(e) => e.stopPropagation()}
             >
               {/* Header */}
-              <div className="flex items-center justify-between p-4 sm:p-6 border-b border-gray-200 dark:border-gray-700 flex-shrink-0">
-                <div>
-                  <h2 className="text-xl sm:text-2xl font-bold text-gray-900 dark:text-white">
+              <div className="flex items-center justify-between p-3 sm:p-6 border-b border-gray-200 dark:border-gray-700 flex-shrink-0">
+                <div className="flex-1 min-w-0">
+                  <h2 className="text-lg sm:text-2xl font-bold text-gray-900 dark:text-white truncate">
                     Our Training Courses
                   </h2>
                   <p className="text-xs sm:text-sm text-gray-600 dark:text-gray-400 mt-1 hidden sm:block">
@@ -131,7 +131,7 @@ export const CoursesModal: React.FC<CoursesModalProps> = ({
                 </div>
                 <button
                   onClick={onClose}
-                  className="p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors ml-4"
+                  className="p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors ml-2 flex-shrink-0"
                   aria-label="Close modal"
                 >
                   <X className="w-5 h-5 sm:w-6 sm:h-6" />
@@ -140,13 +140,13 @@ export const CoursesModal: React.FC<CoursesModalProps> = ({
 
               {/* Content */}
               <div className="flex-1 overflow-y-auto p-3 sm:p-6">
-                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-2 sm:gap-4">
+                <div className="w-full max-w-full grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3 sm:gap-4 mx-auto">
                   {courses.map((course) => (
                     <Link
                       key={course.href}
                       to={course.href}
                       onClick={onClose}
-                      className="group relative bg-white dark:bg-gray-800 rounded-lg sm:rounded-xl border border-gray-200 dark:border-gray-700 p-3 sm:p-5 lg:p-6 hover:shadow-lg hover:border-primary-300 dark:hover:border-primary-700 transition-all duration-300 hover:-translate-y-0.5 lg:hover:-translate-y-1"
+                      className="group relative bg-white dark:bg-gray-800 rounded-lg sm:rounded-xl border border-gray-200 dark:border-gray-700 p-4 sm:p-5 lg:p-6 hover:shadow-lg hover:border-primary-300 dark:hover:border-primary-700 transition-all duration-300 hover:-translate-y-0.5 lg:hover:-translate-y-1 w-full max-w-full"
                     >
                       {/* Icon */}
                       <div className="text-xl sm:text-3xl lg:text-4xl mb-2 sm:mb-3 lg:mb-4">
