@@ -50,7 +50,7 @@
     "db:verify": "ts-node src/database/setup.ts verify",
     "db:test": "ts-node src/database/config.ts",
     "setup:database": "node src/scripts/setup-database.js",
-    "heroku-postbuild": "npm install && npm run build"
+    "heroku-postbuild": "npm install --legacy-peer-deps && npm run build"
   },
   "repository": {
     "type": "git",
