@@ -31,13 +31,16 @@ export class CourseController {
     public courseRepository: CourseRepository,
   ) {}
 
-  @post('/courses')
+  @post('/courses', {
+    responses: {
+      '200': {
+        description: 'Course model instance',
+        content: {'application/json': {schema: getModelSchemaRef(Course)}},
+      },
+    },
+  })
   @authenticate('jwt')
   @authorize({allowedRoles: ['admin']})
-  @response(200, {
-    description: 'Course model instance',
-    content: {'application/json': {schema: getModelSchemaRef(Course)}},
-  })
   async create(
     @requestBody({
       content: {
@@ -54,10 +57,13 @@ export class CourseController {
     return this.courseRepository.create(course);
   }
 
-  @get('/courses/count')
-  @response(200, {
-    description: 'Course model count',
-    content: {'application/json': {schema: CountSchema}},
+  @get('/courses/count', {
+    responses: {
+      '200': {
+        description: 'Course model count',
+        content: {'application/json': {schema: CountSchema}},
+      },
+    },
   })
   async count(
     @param.where(Course) where?: Where<Course>,
@@ -65,14 +71,17 @@ export class CourseController {
     return this.courseRepository.count(where);
   }
 
-  @get('/courses')
-  @response(200, {
-    description: 'Array of Course model instances',
-    content: {
-      'application/json': {
-        schema: {
-          type: 'array',
-          items: getModelSchemaRef(Course, {includeRelations: true}),
+  @get('/courses', {
+    responses: {
+      '200': {
+        description: 'Array of Course model instances',
+        content: {
+          'application/json': {
+            schema: {
+              type: 'array',
+              items: getModelSchemaRef(Course, {includeRelations: true}),
+            },
+          },
         },
       },
     },
@@ -83,14 +92,17 @@ export class CourseController {
     return this.courseRepository.find(filter);
   }
 
-  @get('/courses/active')
-  @response(200, {
-    description: 'Array of active Course model instances',
-    content: {
-      'application/json': {
-        schema: {
-          type: 'array',
-          items: getModelSchemaRef(Course),
+  @get('/courses/active', {
+    responses: {
+      '200': {
+        description: 'Array of active Course model instances',
+        content: {
+          'application/json': {
+            schema: {
+              type: 'array',
+              items: getModelSchemaRef(Course),
+            },
+          },
         },
       },
     },
@@ -99,14 +111,17 @@ export class CourseController {
     return this.courseRepository.findActiveCourses();
   }
 
-  @get('/courses/type/{type}')
-  @response(200, {
-    description: 'Array of Course model instances by type',
-    content: {
-      'application/json': {
-        schema: {
-          type: 'array',
-          items: getModelSchemaRef(Course),
+  @get('/courses/type/{type}', {
+    responses: {
+      '200': {
+        description: 'Array of Course model instances by type',
+        content: {
+          'application/json': {
+            schema: {
+              type: 'array',
+              items: getModelSchemaRef(Course),
+            },
+          },
         },
       },
     },
@@ -117,12 +132,15 @@ export class CourseController {
     return this.courseRepository.findByType(type);
   }
 
-  @get('/courses/{id}')
-  @response(200, {
-    description: 'Course model instance',
-    content: {
-      'application/json': {
-        schema: getModelSchemaRef(Course, {includeRelations: true}),
+  @get('/courses/{id}', {
+    responses: {
+      '200': {
+        description: 'Course model instance',
+        content: {
+          'application/json': {
+            schema: getModelSchemaRef(Course, {includeRelations: true}),
+          },
+        },
       },
     },
   })
@@ -133,12 +151,15 @@ export class CourseController {
     return this.courseRepository.findById(id, filter);
   }
 
-  @patch('/courses/{id}')
+  @patch('/courses/{id}', {
+    responses: {
+      '204': {
+        description: 'Course PATCH success',
+      },
+    },
+  })
   @authenticate('jwt')
   @authorize({allowedRoles: ['admin']})
-  @response(204, {
-    description: 'Course PATCH success',
-  })
   async updateById(
     @param.path.string('id') id: string,
     @requestBody({
@@ -153,22 +174,28 @@ export class CourseController {
     await this.courseRepository.updateById(id, {...course, updatedAt: new Date()});
   }
 
-  @del('/courses/{id}')
+  @del('/courses/{id}', {
+    responses: {
+      '204': {
+        description: 'Course DELETE success',
+      },
+    },
+  })
   @authenticate('jwt')
   @authorize({allowedRoles: ['admin']})
-  @response(204, {
-    description: 'Course DELETE success',
-  })
   async deleteById(@param.path.string('id') id: string): Promise<void> {
     await this.courseRepository.deleteById(id);
   }
 
-  @get('/courses/{id}/sessions')
-  @response(200, {
-    description: 'Array of Course has many CourseSession',
-    content: {
-      'application/json': {
-        schema: {type: 'array', items: getModelSchemaRef(CourseSession)},
+  @get('/courses/{id}/sessions', {
+    responses: {
+      '200': {
+        description: 'Array of Course has many CourseSession',
+        content: {
+          'application/json': {
+            schema: {type: 'array', items: getModelSchemaRef(CourseSession)},
+          },
+        },
       },
     },
   })
@@ -179,20 +206,23 @@ export class CourseController {
     return this.courseRepository.sessions(id).find(filter);
   }
 
-  @get('/courses/{id}/group-discount')
-  @response(200, {
-    description: 'Calculate group discount for course',
-    content: {
-      'application/json': {
-        schema: {
-          type: 'object',
-          properties: {
-            courseId: {type: 'string'},
-            groupSize: {type: 'number'},
-            discountPercentage: {type: 'number'},
-            pricePerPerson: {type: 'number'},
-            discountedPrice: {type: 'number'},
-            totalSaving: {type: 'number'},
+  @get('/courses/{id}/group-discount', {
+    responses: {
+      '200': {
+        description: 'Calculate group discount for course',
+        content: {
+          'application/json': {
+            schema: {
+              type: 'object',
+              properties: {
+                courseId: {type: 'string'},
+                groupSize: {type: 'number'},
+                discountPercentage: {type: 'number'},
+                pricePerPerson: {type: 'number'},
+                discountedPrice: {type: 'number'},
+                totalSaving: {type: 'number'},
+              },
+            },
           },
         },
       },

@@ -32,13 +32,16 @@ export class CourseSessionController {
     private scheduleService: ScheduleService,
   ) {}
 
-  @post('/course-sessions')
+  @post('/course-sessions', {
+    responses: {
+      '200': {
+        description: 'CourseSession model instance',
+        content: {'application/json': {schema: getModelSchemaRef(CourseSession)}},
+      },
+    },
+  })
   @authenticate('jwt')
   @authorize({allowedRoles: ['admin']})
-  @response(200, {
-    description: 'CourseSession model instance',
-    content: {'application/json': {schema: getModelSchemaRef(CourseSession)}},
-  })
   async create(
     @requestBody({
       content: {
@@ -76,10 +79,13 @@ export class CourseSessionController {
     return this.courseSessionRepository.create(courseSession);
   }
 
-  @get('/course-sessions/count')
-  @response(200, {
-    description: 'CourseSession model count',
-    content: {'application/json': {schema: CountSchema}},
+  @get('/course-sessions/count', {
+    responses: {
+      '200': {
+        description: 'CourseSession model count',
+        content: {'application/json': {schema: CountSchema}},
+      },
+    },
   })
   async count(
     @param.where(CourseSession) where?: Where<CourseSession>,
@@ -87,14 +93,17 @@ export class CourseSessionController {
     return this.courseSessionRepository.count(where);
   }
 
-  @get('/course-sessions')
-  @response(200, {
-    description: 'Array of CourseSession model instances',
-    content: {
-      'application/json': {
-        schema: {
-          type: 'array',
-          items: getModelSchemaRef(CourseSession, {includeRelations: true}),
+  @get('/course-sessions', {
+    responses: {
+      '200': {
+        description: 'Array of CourseSession model instances',
+        content: {
+          'application/json': {
+            schema: {
+              type: 'array',
+              items: getModelSchemaRef(CourseSession, {includeRelations: true}),
+            },
+          },
         },
       },
     },
@@ -110,14 +119,17 @@ export class CourseSessionController {
     return this.courseSessionRepository.find(enhancedFilter);
   }
 
-  @get('/course-sessions/upcoming')
-  @response(200, {
-    description: 'Array of upcoming CourseSession model instances',
-    content: {
-      'application/json': {
-        schema: {
-          type: 'array',
-          items: getModelSchemaRef(CourseSession, {includeRelations: true}),
+  @get('/course-sessions/upcoming', {
+    responses: {
+      '200': {
+        description: 'Array of upcoming CourseSession model instances',
+        content: {
+          'application/json': {
+            schema: {
+              type: 'array',
+              items: getModelSchemaRef(CourseSession, {includeRelations: true}),
+            },
+          },
         },
       },
     },
@@ -128,14 +140,17 @@ export class CourseSessionController {
     return this.courseSessionRepository.findUpcomingSessions(limit);
   }
 
-  @get('/course-sessions/available')
-  @response(200, {
-    description: 'Array of available CourseSession model instances',
-    content: {
-      'application/json': {
-        schema: {
-          type: 'array',
-          items: getModelSchemaRef(CourseSession, {includeRelations: true}),
+  @get('/course-sessions/available', {
+    responses: {
+      '200': {
+        description: 'Array of available CourseSession model instances',
+        content: {
+          'application/json': {
+            schema: {
+              type: 'array',
+              items: getModelSchemaRef(CourseSession, {includeRelations: true}),
+            },
+          },
         },
       },
     },
@@ -144,12 +159,15 @@ export class CourseSessionController {
     return this.courseSessionRepository.findSessionsWithAvailability();
   }
 
-  @get('/course-sessions/{id}')
-  @response(200, {
-    description: 'CourseSession model instance',
-    content: {
-      'application/json': {
-        schema: getModelSchemaRef(CourseSession, {includeRelations: true}),
+  @get('/course-sessions/{id}', {
+    responses: {
+      '200': {
+        description: 'CourseSession model instance',
+        content: {
+          'application/json': {
+            schema: getModelSchemaRef(CourseSession, {includeRelations: true}),
+          },
+        },
       },
     },
   })
@@ -165,12 +183,15 @@ export class CourseSessionController {
     return this.courseSessionRepository.findById(id, enhancedFilter);
   }
 
-  @patch('/course-sessions/{id}')
+  @patch('/course-sessions/{id}', {
+    responses: {
+      '204': {
+        description: 'CourseSession PATCH success',
+      },
+    },
+  })
   @authenticate('jwt')
   @authorize({allowedRoles: ['admin']})
-  @response(204, {
-    description: 'CourseSession PATCH success',
-  })
   async updateById(
     @param.path.string('id') id: string,
     @requestBody({
@@ -185,12 +206,15 @@ export class CourseSessionController {
     await this.courseSessionRepository.updateById(id, {...courseSession, updatedAt: new Date()});
   }
 
-  @post('/course-sessions/{id}/cancel')
+  @post('/course-sessions/{id}/cancel', {
+    responses: {
+      '204': {
+        description: 'Cancel course session',
+      },
+    },
+  })
   @authenticate('jwt')
   @authorize({allowedRoles: ['admin']})
-  @response(204, {
-    description: 'Cancel course session',
-  })
   async cancelSession(
     @param.path.string('id') id: string,
   ): Promise<void> {
@@ -200,17 +224,20 @@ export class CourseSessionController {
     });
   }
 
-  @get('/course-sessions/{id}/bookings')
-  @authenticate('jwt')
-  @authorize({allowedRoles: ['admin', 'trainer']})
-  @response(200, {
-    description: 'Array of CourseSession has many Booking',
-    content: {
-      'application/json': {
-        schema: {type: 'array', items: getModelSchemaRef(Booking)},
+  @get('/course-sessions/{id}/bookings', {
+    responses: {
+      '200': {
+        description: 'Array of CourseSession has many Booking',
+        content: {
+          'application/json': {
+            schema: {type: 'array', items: getModelSchemaRef(Booking)},
+          },
+        },
       },
     },
   })
+  @authenticate('jwt')
+  @authorize({allowedRoles: ['admin', 'trainer']})
   async findBookings(
     @param.path.string('id') id: string,
     @param.query.object('filter') filter?: Filter<Booking>,
@@ -218,20 +245,23 @@ export class CourseSessionController {
     return this.courseSessionRepository.bookings(id).find(filter);
   }
 
-  @get('/course-sessions/{id}/availability')
-  @response(200, {
-    description: 'Check session availability',
-    content: {
-      'application/json': {
-        schema: {
-          type: 'object',
-          properties: {
-            sessionId: {type: 'string'},
-            totalSpots: {type: 'number'},
-            bookedSpots: {type: 'number'},
-            availableSpots: {type: 'number'},
-            percentageFull: {type: 'number'},
-            isAvailable: {type: 'boolean'},
+  @get('/course-sessions/{id}/availability', {
+    responses: {
+      '200': {
+        description: 'Check session availability',
+        content: {
+          'application/json': {
+            schema: {
+              type: 'object',
+              properties: {
+                sessionId: {type: 'string'},
+                totalSpots: {type: 'number'},
+                bookedSpots: {type: 'number'},
+                availableSpots: {type: 'number'},
+                percentageFull: {type: 'number'},
+                isAvailable: {type: 'boolean'},
+              },
+            },
           },
         },
       },
@@ -254,20 +284,23 @@ export class CourseSessionController {
     };
   }
 
-  @post('/course-sessions/suggest-dates')
-  @authenticate('jwt')
-  @authorize({allowedRoles: ['admin']})
-  @response(200, {
-    description: 'Suggest alternative dates for course session',
-    content: {
-      'application/json': {
-        schema: {
-          type: 'array',
-          items: {type: 'string', format: 'date'},
+  @post('/course-sessions/suggest-dates', {
+    responses: {
+      '200': {
+        description: 'Suggest alternative dates for course session',
+        content: {
+          'application/json': {
+            schema: {
+              type: 'array',
+              items: {type: 'string', format: 'date'},
+            },
+          },
         },
       },
     },
   })
+  @authenticate('jwt')
+  @authorize({allowedRoles: ['admin']})
   async suggestDates(
     @requestBody({
       content: {
@@ -303,12 +336,15 @@ export class CourseSessionController {
     );
   }
 
-  @del('/course-sessions/{id}')
+  @del('/course-sessions/{id}', {
+    responses: {
+      '204': {
+        description: 'CourseSession DELETE success',
+      },
+    },
+  })
   @authenticate('jwt')
   @authorize({allowedRoles: ['admin']})
-  @response(204, {
-    description: 'CourseSession DELETE success',
-  })
   async deleteById(@param.path.string('id') id: string): Promise<void> {
     await this.courseSessionRepository.deleteById(id);
   }

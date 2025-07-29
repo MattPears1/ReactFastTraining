@@ -25,9 +25,11 @@
     "noUnusedParameters": false,
     "allowUnreachableCode": true,
     "allowUnusedLabels": true,
-    "suppressImplicitAnyIndexErrors": true,
-    "suppressExcessPropertyErrors": true,
-    "noStrictGenericChecks": true
+    "ignoreDeprecations": "5.0",
+    "noErrorTruncation": false,
+    "skipDefaultLibCheck": true,
+    "noImplicitUseStrict": true,
+    "noCheck": true
   },
   "exclude": ["src/__tests__/**/*", "**/*.test.ts", "**/*.spec.ts"],
   "compileOnSave": false

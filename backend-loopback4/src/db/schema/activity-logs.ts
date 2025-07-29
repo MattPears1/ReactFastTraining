@@ -2,7 +2,7 @@ import { pgTable, integer, varchar, text, timestamp, jsonb } from 'drizzle-orm/p
 import { users } from './users';
 
 export const adminActivityLogs = pgTable('admin_activity_logs', {
-  id: integer('id').primaryKey().generatedAlwaysAsIdentity(),
+  id: integer('id').primaryKey(),
   adminId: integer('admin_id').references(() => users.id),
   action: varchar('action', { length: 100 }).notNull(),
   entityType: varchar('entity_type', { length: 50 }).notNull(),

@@ -2,7 +2,7 @@ import { pgTable, integer, varchar, text, timestamp, jsonb } from 'drizzle-orm/p
 import { users } from './users';
 
 export const adminAlerts = pgTable('admin_alerts', {
-  id: integer('id').primaryKey().generatedAlwaysAsIdentity(),
+  id: integer('id').primaryKey(),
   alertType: varchar('alert_type', { length: 50 }).notNull(),
   severity: varchar('severity', { length: 20 }).notNull(),
   title: varchar('title', { length: 255 }).notNull(),

@@ -39,10 +39,13 @@ export class BookingController {
     private validationService: BookingValidationService,
   ) {}
 
-  @post('/bookings')
-  @response(200, {
-    description: 'Booking model instance',
-    content: {'application/json': {schema: getModelSchemaRef(Booking)}},
+  @post('/bookings', {
+    responses: {
+      '200': {
+        description: 'Booking model instance',
+        content: {'application/json': {schema: getModelSchemaRef(Booking)}},
+      },
+    },
   })
   async create(
     @requestBody({
@@ -126,45 +129,54 @@ export class BookingController {
     };
   }
 
-  @get('/bookings/count')
+  @get('/bookings/count', {
+    responses: {
+      '200': {
+        description: 'Booking model count',
+        content: {'application/json': {schema: CountSchema}},
+      },
+    },
+  })
   @authenticate('jwt')
   @authorize({allowedRoles: ['admin', 'trainer']})
-  @response(200, {
-    description: 'Booking model count',
-    content: {'application/json': {schema: CountSchema}},
-  })
   async count(
     @param.where(Booking) where?: Where<Booking>,
   ): Promise<Count> {
     return this.bookingRepository.count(where);
   }
 
-  @get('/bookings')
-  @authenticate('jwt')
-  @authorize({allowedRoles: ['admin', 'trainer']})
-  @response(200, {
-    description: 'Array of Booking model instances',
-    content: {
-      'application/json': {
-        schema: {
-          type: 'array',
-          items: getModelSchemaRef(Booking, {includeRelations: true}),
+  @get('/bookings', {
+    responses: {
+      '200': {
+        description: 'Array of Booking model instances',
+        content: {
+          'application/json': {
+            schema: {
+              type: 'array',
+              items: getModelSchemaRef(Booking, {includeRelations: true}),
+            },
+          },
         },
       },
     },
   })
+  @authenticate('jwt')
+  @authorize({allowedRoles: ['admin', 'trainer']})
   async find(
     @param.filter(Booking) filter?: Filter<Booking>,
   ): Promise<Booking[]> {
     return this.bookingRepository.find(filter);
   }
 
-  @get('/bookings/reference/{reference}')
-  @response(200, {
-    description: 'Booking model instance by reference',
-    content: {
-      'application/json': {
-        schema: getModelSchemaRef(Booking, {includeRelations: true}),
+  @get('/bookings/reference/{reference}', {
+    responses: {
+      '200': {
+        description: 'Booking model instance by reference',
+        content: {
+          'application/json': {
+            schema: getModelSchemaRef(Booking, {includeRelations: true}),
+          },
+        },
       },
     },
   })
@@ -178,14 +190,17 @@ export class BookingController {
     return booking;
   }
 
-  @get('/bookings/email/{email}')
-  @response(200, {
-    description: 'Array of Booking model instances by email',
-    content: {
-      'application/json': {
-        schema: {
-          type: 'array',
-          items: getModelSchemaRef(Booking, {includeRelations: true}),
+  @get('/bookings/email/{email}', {
+    responses: {
+      '200': {
+        description: 'Array of Booking model instances by email',
+        content: {
+          'application/json': {
+            schema: {
+              type: 'array',
+              items: getModelSchemaRef(Booking, {includeRelations: true}),
+            },
+          },
         },
       },
     },
@@ -196,16 +211,19 @@ export class BookingController {
     return this.bookingRepository.findByEmail(email);
   }
 
-  @get('/bookings/{id}')
-  @authenticate('jwt')
-  @response(200, {
-    description: 'Booking model instance',
-    content: {
-      'application/json': {
-        schema: getModelSchemaRef(Booking, {includeRelations: true}),
+  @get('/bookings/{id}', {
+    responses: {
+      '200': {
+        description: 'Booking model instance',
+        content: {
+          'application/json': {
+            schema: getModelSchemaRef(Booking, {includeRelations: true}),
+          },
+        },
       },
     },
   })
+  @authenticate('jwt')
   async findById(
     @param.path.string('id') id: string,
     @param.filter(Booking, {exclude: 'where'}) filter?: FilterExcludingWhere<Booking>,
@@ -213,12 +231,15 @@ export class BookingController {
     return this.bookingRepository.findById(id, filter);
   }
 
-  @patch('/bookings/{id}')
+  @patch('/bookings/{id}', {
+    responses: {
+      '204': {
+        description: 'Booking PATCH success',
+      },
+    },
+  })
   @authenticate('jwt')
   @authorize({allowedRoles: ['admin']})
-  @response(204, {
-    description: 'Booking PATCH success',
-  })
   async updateById(
     @param.path.string('id') id: string,
     @requestBody({
@@ -233,13 +254,16 @@ export class BookingController {
     await this.bookingRepository.updateById(id, {...booking, updatedAt: new Date()});
   }
 
-  @post('/bookings/{id}/confirm')
+  @post('/bookings/{id}/confirm', {
+    responses: {
+      '200': {
+        description: 'Confirm booking',
+        content: {'application/json': {schema: getModelSchemaRef(Booking)}},
+      },
+    },
+  })
   @authenticate('jwt')
   @authorize({allowedRoles: ['admin']})
-  @response(200, {
-    description: 'Confirm booking',
-    content: {'application/json': {schema: getModelSchemaRef(Booking)}},
-  })
   async confirmBooking(
     @param.path.string('id') id: string,
     @requestBody({
@@ -259,13 +283,16 @@ export class BookingController {
     return this.bookingService.confirmBooking(id, data.paymentReference);
   }
 
-  @post('/bookings/{id}/pay')
+  @post('/bookings/{id}/pay', {
+    responses: {
+      '200': {
+        description: 'Mark booking as paid',
+        content: {'application/json': {schema: getModelSchemaRef(Booking)}},
+      },
+    },
+  })
   @authenticate('jwt')
   @authorize({allowedRoles: ['admin']})
-  @response(200, {
-    description: 'Mark booking as paid',
-    content: {'application/json': {schema: getModelSchemaRef(Booking)}},
-  })
   async markAsPaid(
     @param.path.string('id') id: string,
     @requestBody({
@@ -286,10 +313,13 @@ export class BookingController {
     return this.bookingService.markAsPaid(id, data.paymentReference);
   }
 
-  @post('/bookings/{id}/cancel')
-  @response(200, {
-    description: 'Cancel booking',
-    content: {'application/json': {schema: getModelSchemaRef(Booking)}},
+  @post('/bookings/{id}/cancel', {
+    responses: {
+      '200': {
+        description: 'Cancel booking',
+        content: {'application/json': {schema: getModelSchemaRef(Booking)}},
+      },
+    },
   })
   async cancelBooking(
     @param.path.string('id') id: string,
@@ -310,12 +340,15 @@ export class BookingController {
     return this.bookingService.cancelBooking(id, data.reason);
   }
 
-  @post('/bookings/{id}/attend')
+  @post('/bookings/{id}/attend', {
+    responses: {
+      '204': {
+        description: 'Mark booking as attended',
+      },
+    },
+  })
   @authenticate('jwt')
   @authorize({allowedRoles: ['admin', 'trainer']})
-  @response(204, {
-    description: 'Mark booking as attended',
-  })
   async markAsAttended(
     @param.path.string('id') id: string,
   ): Promise<void> {
@@ -325,28 +358,34 @@ export class BookingController {
     });
   }
 
-  @post('/bookings/{id}/complete')
+  @post('/bookings/{id}/complete', {
+    responses: {
+      '204': {
+        description: 'Complete booking and issue certificates',
+      },
+    },
+  })
   @authenticate('jwt')
   @authorize({allowedRoles: ['admin', 'trainer']})
-  @response(204, {
-    description: 'Complete booking and issue certificates',
-  })
   async completeBooking(
     @param.path.string('id') id: string,
   ): Promise<void> {
     await this.bookingService.completeBooking(id);
   }
 
-  @get('/bookings/{id}/certificates')
-  @authenticate('jwt')
-  @response(200, {
-    description: 'Array of Booking has many Certificate',
-    content: {
-      'application/json': {
-        schema: {type: 'array', items: getModelSchemaRef(Certificate)},
+  @get('/bookings/{id}/certificates', {
+    responses: {
+      '200': {
+        description: 'Array of Booking has many Certificate',
+        content: {
+          'application/json': {
+            schema: {type: 'array', items: getModelSchemaRef(Certificate)},
+          },
+        },
       },
     },
   })
+  @authenticate('jwt')
   async findCertificates(
     @param.path.string('id') id: string,
     @param.query.object('filter') filter?: Filter<Certificate>,
@@ -354,12 +393,15 @@ export class BookingController {
     return this.bookingRepository.certificates(id).find(filter);
   }
 
-  @del('/bookings/{id}')
+  @del('/bookings/{id}', {
+    responses: {
+      '204': {
+        description: 'Booking DELETE success',
+      },
+    },
+  })
   @authenticate('jwt')
   @authorize({allowedRoles: ['admin']})
-  @response(204, {
-    description: 'Booking DELETE success',
-  })
   async deleteById(@param.path.string('id') id: string): Promise<void> {
     await this.bookingRepository.deleteById(id);
   }

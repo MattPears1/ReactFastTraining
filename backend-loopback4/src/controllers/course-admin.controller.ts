@@ -38,14 +38,17 @@ const UpdateCourseSchema = CreateCourseSchema.partial();
 export class CourseAdminController {
   constructor() {}
 
-  @get('/api/admin/courses')
-  @response(200, {
-    description: 'Get all courses with statistics',
-    content: {
-      'application/json': {
-        schema: {
-          type: 'array',
-          items: { type: 'object' },
+  @get('/api/admin/courses', {
+    responses: {
+      '200': {
+        description: 'Get all courses with statistics',
+        content: {
+          'application/json': {
+            schema: {
+              type: 'array',
+              items: {type: 'object'},
+            },
+          },
         },
       },
     },
@@ -80,20 +83,23 @@ export class CourseAdminController {
     }
   }
 
-  @post('/api/admin/courses')
-  @response(200, {
-    description: 'Create a new course and sync with Stripe',
-    content: {
-      'application/json': {
-        schema: {
-          type: 'object',
-          properties: {
-            course: { type: 'object' },
-            stripeSync: {
+  @post('/api/admin/courses', {
+    responses: {
+      '200': {
+        description: 'Create a new course and sync with Stripe',
+        content: {
+          'application/json': {
+            schema: {
               type: 'object',
               properties: {
-                productId: { type: 'string' },
-                priceId: { type: 'string' },
+                course: {type: 'object'},
+                stripeSync: {
+                  type: 'object',
+                  properties: {
+                    productId: {type: 'string'},
+                    priceId: {type: 'string'},
+                  },
+                },
               },
             },
           },
@@ -169,9 +175,12 @@ export class CourseAdminController {
     }
   }
 
-  @put('/api/admin/courses/{id}')
-  @response(200, {
-    description: 'Update course and sync with Stripe',
+  @put('/api/admin/courses/{id}', {
+    responses: {
+      '200': {
+        description: 'Update course and sync with Stripe',
+      },
+    },
   })
   async updateCourse(
     @param.path.string('id') id: string,
@@ -245,9 +254,12 @@ export class CourseAdminController {
     }
   }
 
-  @del('/api/admin/courses/{id}')
-  @response(204, {
-    description: 'Deactivate course',
+  @del('/api/admin/courses/{id}', {
+    responses: {
+      '204': {
+        description: 'Deactivate course',
+      },
+    },
   })
   async deactivateCourse(@param.path.string('id') id: string): Promise<void> {
     try {
@@ -283,9 +295,12 @@ export class CourseAdminController {
     }
   }
 
-  @post('/api/admin/courses/sync-all')
-  @response(200, {
-    description: 'Sync all courses with Stripe',
+  @post('/api/admin/courses/sync-all', {
+    responses: {
+      '200': {
+        description: 'Sync all courses with Stripe',
+      },
+    },
   })
   async syncAllCourses(): Promise<{
     message: string;
@@ -312,9 +327,12 @@ export class CourseAdminController {
     }
   }
 
-  @get('/api/admin/courses/{id}/stripe-info')
-  @response(200, {
-    description: 'Get Stripe information for a course',
+  @get('/api/admin/courses/{id}/stripe-info', {
+    responses: {
+      '200': {
+        description: 'Get Stripe information for a course',
+      },
+    },
   })
   async getCourseStripeInfo(
     @param.path.string('id') id: string
@@ -362,9 +380,12 @@ export class CourseAdminController {
     }
   }
 
-  @patch('/api/admin/courses/{id}/price')
-  @response(200, {
-    description: 'Update course price and create new Stripe price',
+  @patch('/api/admin/courses/{id}/price', {
+    responses: {
+      '200': {
+        description: 'Update course price and create new Stripe price',
+      },
+    },
   })
   async updateCoursePrice(
     @param.path.string('id') id: string,

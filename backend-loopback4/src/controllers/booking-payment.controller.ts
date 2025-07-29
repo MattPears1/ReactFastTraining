@@ -67,23 +67,26 @@ export class BookingPaymentController {
     });
   }
 
-  @post('/api/bookings/create-payment-intent')
-  @response(200, {
-    description: 'Create Stripe payment intent for booking',
-    content: {
-      'application/json': {
-        schema: {
-          type: 'object',
-          properties: {
-            success: {type: 'boolean'},
-            paymentIntent: {
+  @post('/api/bookings/create-payment-intent', {
+    responses: {
+      '200': {
+        description: 'Create Stripe payment intent for booking',
+        content: {
+          'application/json': {
+            schema: {
               type: 'object',
               properties: {
-                id: {type: 'string'},
-                client_secret: {type: 'string'},
-                status: {type: 'string'},
-                amount: {type: 'number'},
-                currency: {type: 'string'},
+                success: {type: 'boolean'},
+                paymentIntent: {
+                  type: 'object',
+                  properties: {
+                    id: {type: 'string'},
+                    client_secret: {type: 'string'},
+                    status: {type: 'string'},
+                    amount: {type: 'number'},
+                    currency: {type: 'string'},
+                  },
+                },
               },
             },
           },
@@ -170,17 +173,20 @@ export class BookingPaymentController {
     }
   }
 
-  @post('/api/bookings/confirm-with-payment')
-  @response(200, {
-    description: 'Confirm booking after successful payment',
-    content: {
-      'application/json': {
-        schema: {
-          type: 'object',
-          properties: {
-            success: {type: 'boolean'},
-            booking: {type: 'object'},
-            confirmationCode: {type: 'string'},
+  @post('/api/bookings/confirm-with-payment', {
+    responses: {
+      '200': {
+        description: 'Confirm booking after successful payment',
+        content: {
+          'application/json': {
+            schema: {
+              type: 'object',
+              properties: {
+                success: {type: 'boolean'},
+                booking: {type: 'object'},
+                confirmationCode: {type: 'string'},
+              },
+            },
           },
         },
       },
@@ -317,16 +323,19 @@ export class BookingPaymentController {
     }
   }
 
-  @get('/api/bookings/{id}')
-  @response(200, {
-    description: 'Get booking details',
-    content: {
-      'application/json': {
-        schema: {
-          type: 'object',
-          properties: {
-            success: {type: 'boolean'},
-            booking: {type: 'object'},
+  @get('/api/bookings/{id}', {
+    responses: {
+      '200': {
+        description: 'Get booking details',
+        content: {
+          'application/json': {
+            schema: {
+              type: 'object',
+              properties: {
+                success: {type: 'boolean'},
+                booking: {type: 'object'},
+              },
+            },
           },
         },
       },
@@ -348,17 +357,20 @@ export class BookingPaymentController {
     }
   }
 
-  @get('/api/health')
-  @response(200, {
-    description: 'Health check endpoint',
-    content: {
-      'application/json': {
-        schema: {
-          type: 'object',
-          properties: {
-            status: {type: 'string'},
-            timestamp: {type: 'string'},
-            database: {type: 'string'},
+  @get('/api/health', {
+    responses: {
+      '200': {
+        description: 'Health check endpoint',
+        content: {
+          'application/json': {
+            schema: {
+              type: 'object',
+              properties: {
+                status: {type: 'string'},
+                timestamp: {type: 'string'},
+                database: {type: 'string'},
+              },
+            },
           },
         },
       },

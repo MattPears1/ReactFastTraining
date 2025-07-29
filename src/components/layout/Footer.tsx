@@ -98,7 +98,8 @@ const Footer: React.FC = () => {
       role="contentinfo"
     >
       <FooterFloatingIcons />
-      {/* Newsletter Section */}
+      {/* Newsletter Section - Hidden temporarily */}
+      {/*
       <div className="bg-primary-600 dark:bg-primary-700">
         <div className="container px-5 sm:px-6 lg:px-8 py-8 sm:py-10 md:py-12">
           <div className="flex flex-col md:flex-row items-center justify-between gap-6 md:gap-8">
@@ -116,6 +117,7 @@ const Footer: React.FC = () => {
           </div>
         </div>
       </div>
+      */}
 
       {/* Main Footer Content - Compact Single Row */}
       <div className="container px-5 sm:px-6 lg:px-8 py-8 sm:py-10">

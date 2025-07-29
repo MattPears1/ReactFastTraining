@@ -29,18 +29,55 @@ interface ConfirmBookingRequest {
 export class BookingController {
   constructor() {}
 
-  @post('/api/bookings/validate-session')
+  @post('/api/bookings/validate-session', {
+    responses: {
+      '200': {
+        description: 'Validate session availability',
+        content: {
+          'application/json': {
+            schema: {
+              type: 'object',
+              properties: {
+                valid: {type: 'boolean'},
+                message: {type: 'string'},
+                remainingSpots: {type: 'number'},
+              },
+            },
+          },
+        },
+      },
+    },
+  })
   async validateSession(
-    @requestBody() data: ValidateSessionRequest
+    @requestBody() data: ValidateSessionRequest,
   ) {
     return await BookingService.validateSession(data.sessionId, data.attendeeCount);
   }
 
-  @post('/api/bookings/create')
+  @post('/api/bookings/create', {
+    responses: {
+      '200': {
+        description: 'Create a new booking',
+        content: {
+          'application/json': {
+            schema: {
+              type: 'object',
+              properties: {
+                bookingId: {type: 'string'},
+                bookingReference: {type: 'string'},
+                clientSecret: {type: 'string'},
+                amount: {type: 'string'},
+              },
+            },
+          },
+        },
+      },
+    },
+  })
   @authenticate('jwt')
   async createBooking(
     @requestBody() bookingData: CreateBookingRequest,
-    @inject(SecurityBindings.USER) user: UserProfile
+    @inject(SecurityBindings.USER) user: UserProfile,
   ) {
     try {
       // Create booking
@@ -74,9 +111,26 @@ export class BookingController {
     }
   }
 
-  @post('/api/bookings/confirm')
+  @post('/api/bookings/confirm', {
+    responses: {
+      '200': {
+        description: 'Confirm a booking after payment',
+        content: {
+          'application/json': {
+            schema: {
+              type: 'object',
+              properties: {
+                success: {type: 'boolean'},
+                message: {type: 'string'},
+              },
+            },
+          },
+        },
+      },
+    },
+  })
   async confirmBooking(
-    @requestBody() data: ConfirmBookingRequest
+    @requestBody() data: ConfirmBookingRequest,
   ) {
     try {
       // Verify payment with Stripe

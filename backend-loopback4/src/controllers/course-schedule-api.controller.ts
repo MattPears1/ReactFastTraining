@@ -30,31 +30,34 @@ export class CourseSessionApiController {
     public courseRepository: CourseRepository,
   ) {}
 
-  @get('/api/course-sessions')
-  @response(200, {
-    description: 'Array of CourseSession model instances with availability',
-    content: {
-      'application/json': {
-        schema: {
-          type: 'array',
-          items: {
-            type: 'object',
-            properties: {
-              id: {type: 'number'},
-              courseId: {type: 'number'},
-              courseName: {type: 'string'},
-              courseType: {type: 'string'},
-              startDate: {type: 'string'},
-              endDate: {type: 'string'},
-              startTime: {type: 'string'},
-              endTime: {type: 'string'},
-              location: {type: 'string'},
-              maxParticipants: {type: 'number'},
-              currentBookings: {type: 'number'},
-              availableSpots: {type: 'number'},
-              price: {type: 'number'},
-              status: {type: 'string'},
-              instructor: {type: 'string'},
+  @get('/api/course-sessions', {
+    responses: {
+      '200': {
+        description: 'Array of CourseSession model instances with availability',
+        content: {
+          'application/json': {
+            schema: {
+              type: 'array',
+              items: {
+                type: 'object',
+                properties: {
+                  id: {type: 'number'},
+                  courseId: {type: 'number'},
+                  courseName: {type: 'string'},
+                  courseType: {type: 'string'},
+                  startDate: {type: 'string'},
+                  endDate: {type: 'string'},
+                  startTime: {type: 'string'},
+                  endTime: {type: 'string'},
+                  location: {type: 'string'},
+                  maxParticipants: {type: 'number'},
+                  currentBookings: {type: 'number'},
+                  availableSpots: {type: 'number'},
+                  price: {type: 'number'},
+                  status: {type: 'string'},
+                  instructor: {type: 'string'},
+                },
+              },
             },
           },
         },
@@ -112,29 +115,32 @@ export class CourseSessionApiController {
     }
   }
 
-  @get('/api/course-sessions/{id}')
-  @response(200, {
-    description: 'CourseSession model instance with availability',
-    content: {
-      'application/json': {
-        schema: {
-          type: 'object',
-          properties: {
-            id: {type: 'number'},
-            courseId: {type: 'number'},
-            courseName: {type: 'string'},
-            courseType: {type: 'string'},
-            startDate: {type: 'string'},
-            endDate: {type: 'string'},
-            startTime: {type: 'string'},
-            endTime: {type: 'string'},
-            location: {type: 'string'},
-            maxParticipants: {type: 'number'},
-            currentBookings: {type: 'number'},
-            availableSpots: {type: 'number'},
-            price: {type: 'number'},
-            status: {type: 'string'},
-            instructor: {type: 'string'},
+  @get('/api/course-sessions/{id}', {
+    responses: {
+      '200': {
+        description: 'CourseSession model instance with availability',
+        content: {
+          'application/json': {
+            schema: {
+              type: 'object',
+              properties: {
+                id: {type: 'number'},
+                courseId: {type: 'number'},
+                courseName: {type: 'string'},
+                courseType: {type: 'string'},
+                startDate: {type: 'string'},
+                endDate: {type: 'string'},
+                startTime: {type: 'string'},
+                endTime: {type: 'string'},
+                location: {type: 'string'},
+                maxParticipants: {type: 'number'},
+                currentBookings: {type: 'number'},
+                availableSpots: {type: 'number'},
+                price: {type: 'number'},
+                status: {type: 'string'},
+                instructor: {type: 'string'},
+              },
+            },
           },
         },
       },
@@ -181,14 +187,17 @@ export class CourseSessionApiController {
     }
   }
 
-  @get('/api/course-sessions/available')
-  @response(200, {
-    description: 'Array of available CourseSession model instances',
-    content: {
-      'application/json': {
-        schema: {
-          type: 'array',
-          items: {type: 'object'},
+  @get('/api/course-sessions/available', {
+    responses: {
+      '200': {
+        description: 'Array of available CourseSession model instances',
+        content: {
+          'application/json': {
+            schema: {
+              type: 'array',
+              items: {type: 'object'},
+            },
+          },
         },
       },
     },
@@ -262,14 +271,17 @@ export class CourseSessionApiController {
     }
   }
 
-  @get('/api/courses')
-  @response(200, {
-    description: 'Array of Course model instances',
-    content: {
-      'application/json': {
-        schema: {
-          type: 'array',
-          items: {type: 'object'},
+  @get('/api/courses', {
+    responses: {
+      '200': {
+        description: 'Array of Course model instances',
+        content: {
+          'application/json': {
+            schema: {
+              type: 'array',
+              items: {type: 'object'},
+            },
+          },
         },
       },
     },

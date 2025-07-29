@@ -14,8 +14,8 @@ const path = require('path');
 const { Pool } = require('pg');
 
 // Import our modular components
-const { EmailService } = require('./dist/services/email.service');
-const { RefundService } = require('./dist/services/refund.service');
+const EmailService = require('./dist/services/email.service');
+const RefundService = require('./dist/services/refund.service');
 const { setupMiddleware } = require('./config/middleware');
 const { setupAdminRoutes } = require('./routes/admin');
 const { setupApiRoutes } = require('./routes/api');

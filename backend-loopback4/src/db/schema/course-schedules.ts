@@ -4,7 +4,7 @@ import { users } from './users';
 
 // Course schedules table - represents specific scheduled instances of courses
 export const courseSchedules = pgTable('course_schedules', {
-  id: integer('id').primaryKey().generatedAlwaysAsIdentity(),
+  id: integer('id').primaryKey(),
   courseId: integer('course_id').notNull(),
   startDatetime: timestamp('start_datetime').notNull(),
   endDatetime: timestamp('end_datetime').notNull(),
@@ -20,7 +20,7 @@ export const courseSchedules = pgTable('course_schedules', {
 
 // Venues table
 export const venues = pgTable('venues', {
-  id: integer('id').primaryKey().generatedAlwaysAsIdentity(),
+  id: integer('id').primaryKey(),
   name: varchar('name', { length: 255 }).notNull(),
   code: varchar('code', { length: 50 }).notNull(),
   address: text('address').notNull(),

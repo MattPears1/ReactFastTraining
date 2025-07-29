@@ -109,17 +109,17 @@ export const CoursesModal: React.FC<CoursesModalProps> = ({
           />
 
           {/* Modal */}
-          <div className="fixed inset-0 z-50 flex items-center justify-center p-4" onClick={onClose}>
+          <div className="fixed inset-0 z-50 flex items-start sm:items-center justify-center p-4 pt-16 sm:pt-4" onClick={onClose}>
             <motion.div
               initial={{ opacity: 0, scale: 0.95 }}
               animate={{ opacity: 1, scale: 1 }}
               exit={{ opacity: 0, scale: 0.95 }}
               transition={{ duration: 0.2 }}
-              className="w-[95vw] sm:w-full max-w-[95vw] sm:max-w-6xl max-h-[90vh] bg-white dark:bg-gray-900 rounded-xl sm:rounded-2xl shadow-2xl overflow-hidden flex flex-col"
+              className="w-[95vw] sm:w-full max-w-[95vw] sm:max-w-6xl max-h-[85vh] sm:max-h-[90vh] bg-white dark:bg-gray-900 rounded-xl sm:rounded-2xl shadow-2xl overflow-hidden"
               onClick={(e) => e.stopPropagation()}
             >
               {/* Header */}
-              <div className="flex items-center justify-between p-3 sm:p-6 border-b border-gray-200 dark:border-gray-700 flex-shrink-0">
+              <div className="flex items-center justify-between p-4 sm:p-6 border-b border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900 relative z-10">
                 <div className="flex-1 min-w-0">
                   <h2 className="text-lg sm:text-2xl font-bold text-gray-900 dark:text-white truncate">
                     Our Training Courses
@@ -139,8 +139,8 @@ export const CoursesModal: React.FC<CoursesModalProps> = ({
               </div>
 
               {/* Content */}
-              <div className="flex-1 overflow-y-auto p-3 sm:p-6">
-                <div className="w-full max-w-full grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3 sm:gap-4 mx-auto">
+              <div className="overflow-y-auto p-4 sm:p-6" style={{ maxHeight: 'calc(85vh - 120px)' }}>
+                <div className="w-full grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 sm:gap-4">
                   {courses.map((course) => (
                     <Link
                       key={course.href}

@@ -27,16 +27,19 @@ export class ContactController {
     private emailService: EmailService,
   ) {}
 
-  @post('/api/contact/submit')
-  @response(200, {
-    description: 'Contact form submission',
-    content: {
-      'application/json': {
-        schema: {
-          type: 'object',
-          properties: {
-            success: { type: 'boolean' },
-            message: { type: 'string' },
+  @post('/api/contact/submit', {
+    responses: {
+      '200': {
+        description: 'Contact form submission',
+        content: {
+          'application/json': {
+            schema: {
+              type: 'object',
+              properties: {
+                success: {type: 'boolean'},
+                message: {type: 'string'},
+              },
+            },
           },
         },
       },
@@ -110,16 +113,19 @@ export class ContactController {
     }
   }
 
-  @post('/newsletter/subscribe')
-  @response(200, {
-    description: 'Newsletter subscription',
-    content: {
-      'application/json': {
-        schema: {
-          type: 'object',
-          properties: {
-            success: { type: 'boolean' },
-            message: { type: 'string' },
+  @post('/newsletter/subscribe', {
+    responses: {
+      '200': {
+        description: 'Newsletter subscription',
+        content: {
+          'application/json': {
+            schema: {
+              type: 'object',
+              properties: {
+                success: {type: 'boolean'},
+                message: {type: 'string'},
+              },
+            },
           },
         },
       },
