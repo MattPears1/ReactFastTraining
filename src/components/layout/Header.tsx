@@ -1,11 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
-import { Menu, X, Sun, Moon, Bell, Search } from "lucide-react";
+import { Menu, X, Sun, Moon, Search } from "lucide-react";
 import { useTheme } from "@contexts/ThemeContext";
-import { useNotifications } from "@contexts/NotificationContext";
-import { NotificationCenter } from "@components/ui/NotificationCenter";
-import { NotificationBadge } from "@components/ui/NotificationBadge";
 import { SearchModal } from "@components/ui/SearchModal";
 import { CoursesModal } from "@components/ui/CoursesModal";
 import { cn } from "@utils/cn";
@@ -36,26 +33,17 @@ const navItems: NavItem[] = [
       { label: "Oxygen Therapy", href: "/courses/oxygen-therapy" },
     ],
   },
-  { label: "Contact and Bookings", href: "/contact" },
+  { label: "Contact", href: "/contact" },
 ];
 
 const Header: React.FC = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const [openDropdown, setOpenDropdown] = useState<string | null>(null);
-  const [showNotifications, setShowNotifications] = useState(false);
   const [showSearch, setShowSearch] = useState(false);
   const [showCoursesModal, setShowCoursesModal] = useState(false);
   const location = useLocation();
   const { theme, toggleTheme } = useTheme();
-  const {
-    notifications,
-    unreadCount,
-    markAsRead,
-    markAllAsRead,
-    removeNotification,
-    clearAll,
-  } = useNotifications();
 
   useEffect(() => {
     const handleScroll = () => {
@@ -69,27 +57,8 @@ const Header: React.FC = () => {
   useEffect(() => {
     setIsOpen(false);
     setOpenDropdown(null);
-    setShowNotifications(false);
     setShowCoursesModal(false);
   }, [location]);
-
-  // Close notifications on click outside
-  useEffect(() => {
-    const handleClickOutside = (event: MouseEvent) => {
-      const target = event.target as HTMLElement;
-      if (
-        !target.closest(".notification-center-container") &&
-        !target.closest('[aria-label="View notifications"]')
-      ) {
-        setShowNotifications(false);
-      }
-    };
-
-    if (showNotifications) {
-      document.addEventListener("click", handleClickOutside);
-      return () => document.removeEventListener("click", handleClickOutside);
-    }
-  }, [showNotifications]);
 
   const isActive = (href: string) => {
     if (href === "/") return location.pathname === "/";
@@ -100,12 +69,16 @@ const Header: React.FC = () => {
     <>
       <header
         className={cn(
-          "fixed top-0 left-0 right-0 z-40 transition-all duration-300",
+          "fixed top-0 left-0 right-0 z-40 transition-all duration-300 border-b border-gray-200/30 dark:border-gray-700/30",
           scrolled
-            ? "bg-white/95 dark:bg-gray-900/95 backdrop-blur-xl shadow-lg border-b border-gray-100 dark:border-gray-800"
+            ? "bg-white/95 dark:bg-gray-900/95 backdrop-blur-xl shadow-lg border-b-gray-100 dark:border-b-gray-800"
             : "bg-gradient-to-b from-white/10 to-transparent dark:from-gray-900/20",
         )}
         role="banner"
+        style={{
+          borderTop: "3px solid",
+          borderImage: "linear-gradient(to right, #0EA5E9, #F97316, #10B981) 1"
+        }}
       >
         <nav
           id="main-navigation"
@@ -113,13 +86,13 @@ const Header: React.FC = () => {
           role="navigation"
           aria-label="Main navigation"
         >
-          <div className="flex items-center justify-between h-16 sm:h-18 md:h-20 lg:h-24">
+          <div className="flex items-center justify-between h-16 sm:h-20 lg:h-24">
             {/* Logo on the left */}
             <Link to="/" className="flex items-center flex-shrink-0">
               <img
                 src="/images/logos/fulllogo_transparent.png"
                 alt="React Fast Training"
-                className="h-16 sm:h-20 md:h-24 lg:h-28 xl:h-32 w-auto"
+                className="h-48 sm:h-16 md:h-20 lg:h-24 xl:h-28 w-auto object-contain"
               />
             </Link>
 
@@ -147,10 +120,10 @@ const Header: React.FC = () => {
                       to={item.href}
                       className={cn(
                         "inline-block px-4 py-2 rounded-lg text-sm font-medium transition-all duration-300",
-                        item.label === "Contact and Bookings"
+                        item.label === "Contact"
                           ? "bg-gradient-to-r from-primary-500 to-primary-600 hover:from-primary-600 hover:to-primary-700 text-white shadow-lg border border-primary-600"
                           : "backdrop-blur-sm bg-white/10 dark:bg-gray-800/20 border border-gray-200/30 dark:border-gray-700/30",
-                        item.label !== "Contact and Bookings" &&
+                        item.label !== "Contact" &&
                           (isActive(item.href)
                             ? "bg-gradient-to-r from-secondary-500/20 to-accent-500/20 border-secondary-500/50 dark:border-accent-500/50 text-gray-900 dark:text-white shadow-lg"
                             : "hover:bg-white/20 dark:hover:bg-gray-800/30 hover:border-gray-300/50 dark:hover:border-gray-600/50 text-gray-700 dark:text-gray-300"),
@@ -222,11 +195,11 @@ const Header: React.FC = () => {
               animate={{ x: 0 }}
               exit={{ x: "100%" }}
               transition={{ type: "tween", duration: 0.3 }}
-              className="fixed top-0 right-0 bottom-0 w-full sm:w-80 bg-white dark:bg-gray-900 z-50 lg:hidden overflow-y-auto shadow-2xl mobile-menu"
+              className="fixed top-0 right-0 bottom-0 w-full sm:w-80 bg-white dark:bg-gray-900 z-50 lg:hidden overflow-y-auto shadow-2xl mobile-menu safe-area-inset"
             >
-              <div className="p-4 sm:p-6">
-                <div className="flex items-center justify-between mb-6 sm:mb-8">
-                  <span className="text-lg sm:text-xl font-bold text-gray-900 dark:text-white">
+              <div className="p-5 sm:p-6">
+                <div className="flex items-center justify-between mb-8">
+                  <span className="text-xl font-bold text-gray-900 dark:text-white">
                     Menu
                   </span>
                   <button
@@ -238,7 +211,7 @@ const Header: React.FC = () => {
                   </button>
                 </div>
 
-                <div className="space-y-2">
+                <div className="space-y-4">
                   {navItems.map((item) => (
                     <div key={item.label}>
                       {item.label === "Courses" ? (
@@ -247,30 +220,16 @@ const Header: React.FC = () => {
                             setIsOpen(false);
                             setShowCoursesModal(true);
                           }}
-                          className={cn(
-                            "w-full flex items-center justify-between py-4 px-4 text-base sm:text-lg font-medium transition-all duration-300 rounded-lg min-h-[56px] mobile-nav-item",
-                            "backdrop-blur-sm border",
-                            isActive(item.href)
-                              ? "bg-gradient-to-r from-secondary-500/10 to-accent-500/10 border-secondary-500/30 dark:border-accent-500/30 text-gray-900 dark:text-white"
-                              : "bg-gray-50/50 dark:bg-gray-800/50 border-gray-200/50 dark:border-gray-700/50 hover:bg-gray-100/70 dark:hover:bg-gray-700/70 text-gray-700 dark:text-gray-300",
-                          )}
+                          className="w-full h-16 flex items-center justify-center text-center px-6 text-lg font-semibold transition-all duration-300 rounded-xl shadow-lg bg-gradient-to-r from-primary-500 to-primary-600 hover:from-primary-600 hover:to-primary-700 text-white border border-primary-600 transform hover:scale-105 active:scale-95"
                         >
-                          <span>{item.label}</span>
+                          <span className="text-center">{item.label}</span>
                         </button>
                       ) : (
                         <Link
                           to={item.href}
-                          className={cn(
-                            "block py-4 px-4 text-base sm:text-lg font-medium transition-all duration-300 rounded-lg min-h-[56px] flex items-center mobile-nav-item",
-                            "backdrop-blur-sm border",
-                            item.label === "Contact and Bookings"
-                              ? "bg-gradient-to-r from-primary-500 to-primary-600 text-white border-primary-600"
-                              : isActive(item.href)
-                              ? "bg-gradient-to-r from-secondary-500/10 to-accent-500/10 border-secondary-500/30 dark:border-accent-500/30 text-gray-900 dark:text-white"
-                              : "bg-gray-50/50 dark:bg-gray-800/50 border-gray-200/50 dark:border-gray-700/50 hover:bg-gray-100/70 dark:hover:bg-gray-700/70 text-gray-700 dark:text-gray-300",
-                          )}
+                          className="w-full h-16 flex items-center justify-center text-center px-6 text-lg font-semibold transition-all duration-300 rounded-xl shadow-lg bg-gradient-to-r from-primary-500 to-primary-600 hover:from-primary-600 hover:to-primary-700 text-white border border-primary-600 transform hover:scale-105 active:scale-95"
                         >
-                          {item.label}
+                          <span className="text-center">{item.label}</span>
                         </Link>
                       )}
                     </div>

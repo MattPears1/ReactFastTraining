@@ -5,6 +5,7 @@
 @import './admin-calendar.css';
 @import './responsive-utilities.css';
 @import './mobile-optimizations.css';
+@import './micro-interactions.css';
 
 @tailwind base;
 @tailwind components;
@@ -134,14 +135,47 @@
   /* Buttons - Enhanced for better mobile experience */
   .btn {
     @apply inline-flex items-center justify-center px-5 sm:px-6 py-3 font-medium rounded-lg transition-all duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed min-h-[48px] sm:min-h-[44px] transform hover:-translate-y-0.5 active:translate-y-0;
+    position: relative;
+    overflow: hidden;
+  }
+  
+  /* Button hover effect overlay */
+  .btn::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 0;
+    height: 0;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.15);
+    transform: translate(-50%, -50%);
+    transition: width 0.6s, height 0.6s;
+  }
+  
+  .btn:hover::before {
+    width: 300px;
+    height: 300px;
   }
 
   .btn-primary {
     @apply bg-gradient-to-r from-primary-500 to-primary-600 text-white hover:from-primary-600 hover:to-primary-700 shadow-blue hover:shadow-lg focus-visible:ring-primary-500;
+    box-shadow: 0 4px 15px -3px rgba(14, 165, 233, 0.4);
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+  
+  .btn-primary:hover {
+    box-shadow: 0 8px 25px -5px rgba(14, 165, 233, 0.6);
   }
 
   .btn-secondary {
     @apply bg-gradient-to-r from-secondary-500 to-secondary-600 text-white hover:from-secondary-600 hover:to-secondary-700 shadow-green hover:shadow-lg focus-visible:ring-secondary-500;
+    box-shadow: 0 4px 15px -3px rgba(16, 185, 129, 0.4);
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+  
+  .btn-secondary:hover {
+    box-shadow: 0 8px 25px -5px rgba(16, 185, 129, 0.6);
   }
 
   .btn-outline {
@@ -155,6 +189,30 @@
   /* Cards - Enhanced depth and visual appeal */
   .card {
     @apply bg-white dark:bg-gray-800 rounded-xl shadow-md hover:shadow-lg border border-gray-100 dark:border-gray-700/50 overflow-hidden transition-all duration-300;
+    transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1), box-shadow 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+  
+  .card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 20px 40px -15px rgba(0, 0, 0, 0.15);
+  }
+  
+  /* Card shimmer effect on hover */
+  .card::after {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: linear-gradient(45deg, transparent 30%, rgba(255, 255, 255, 0.1) 50%, transparent 70%);
+    transform: rotate(45deg) translateX(-100%);
+    transition: transform 0.6s;
+    pointer-events: none;
+  }
+  
+  .card:hover::after {
+    transform: rotate(45deg) translateX(100%);
   }
 
   .card-body {
@@ -172,6 +230,16 @@
 
   .form-input {
     @apply w-full px-4 py-3 sm:py-2.5 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-800 text-gray-900 dark:text-white placeholder-gray-400 dark:placeholder-gray-500 focus:border-primary-500 focus:ring-2 focus:ring-primary-500/30 focus:shadow-blue text-base transition-all duration-200 min-h-[48px] sm:min-h-[42px];
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+  
+  .form-input:hover {
+    border-color: rgba(14, 165, 233, 0.4);
+  }
+  
+  .form-input:focus {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 20px -5px rgba(14, 165, 233, 0.3);
   }
 
   .form-textarea {
@@ -231,6 +299,31 @@
   /* Loading states */
   .skeleton {
     @apply animate-pulse bg-gray-200 dark:bg-gray-700 rounded;
+    background: linear-gradient(90deg, #e5e7eb 0%, #f3f4f6 50%, #e5e7eb 100%);
+    background-size: 200% 100%;
+    animation: skeleton-shimmer 1.5s ease-in-out infinite;
+  }
+  
+  @keyframes skeleton-shimmer {
+    0% {
+      background-position: 200% 0;
+    }
+    100% {
+      background-position: -200% 0;
+    }
+  }
+  
+  /* Skeleton variants */
+  .skeleton-text {
+    @apply h-4 w-full rounded mb-2;
+  }
+  
+  .skeleton-button {
+    @apply h-10 w-24 rounded-lg;
+  }
+  
+  .skeleton-card {
+    @apply h-64 w-full rounded-xl;
   }
 
   /* Badges - Enhanced with gradients */
@@ -306,5 +399,100 @@
   .dot-pattern {
     background-image: radial-gradient(circle, rgba(0,0,0,.1) 1px, transparent 1px);
     background-size: 20px 20px;
+  }
+  
+  /* Enhanced focus ring */
+  .focus-ring {
+    @apply focus:outline-none focus-visible:ring-2 focus-visible:ring-primary-500 focus-visible:ring-offset-2 focus-visible:ring-offset-white dark:focus-visible:ring-offset-gray-900;
+  }
+  
+  /* Smooth transitions */
+  .transition-smooth {
+    @apply transition-all duration-300 ease-in-out;
+  }
+  
+  /* Hover brightness effect */
+  .hover-brightness:hover {
+    filter: brightness(1.1);
+  }
+  
+  /* Glass morphism effect */
+  .glass {
+    @apply bg-white/70 dark:bg-gray-800/70 backdrop-blur-lg border border-white/20 dark:border-gray-700/20;
+  }
+  
+  /* Gradient text */
+  .gradient-text {
+    @apply bg-gradient-to-r from-primary-600 to-secondary-600 bg-clip-text text-transparent;
+  }
+  
+  /* Pulse animation */
+  .animate-pulse-slow {
+    animation: pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+  }
+  
+  /* Bounce animation */
+  .animate-bounce-slow {
+    animation: bounce 2s infinite;
+  }
+  
+  /* Floating animation */
+  @keyframes float {
+    0%, 100% {
+      transform: translateY(0px);
+    }
+    50% {
+      transform: translateY(-10px);
+    }
+  }
+  
+  .animate-float {
+    animation: float 3s ease-in-out infinite;
+  }
+  
+  /* Shake animation */
+  @keyframes shake {
+    0%, 100% {
+      transform: translateX(0);
+    }
+    10%, 30%, 50%, 70%, 90% {
+      transform: translateX(-2px);
+    }
+    20%, 40%, 60%, 80% {
+      transform: translateX(2px);
+    }
+  }
+  
+  .animate-shake {
+    animation: shake 0.5s ease-in-out;
+  }
+  
+  /* Interactive list items */
+  .list-item-interactive {
+    @apply relative pl-6 py-3 rounded-lg transition-all duration-200 hover:bg-gray-50 dark:hover:bg-gray-800 hover:pl-8;
+  }
+  
+  .list-item-interactive::before {
+    @apply absolute left-2 top-1/2 -translate-y-1/2 w-1.5 h-1.5 bg-primary-500 rounded-full transition-all duration-200;
+    content: '';
+  }
+  
+  .list-item-interactive:hover::before {
+    @apply w-2 h-2 left-2.5;
+  }
+  
+  /* Gradient borders */
+  .gradient-border {
+    @apply relative;
+  }
+  
+  .gradient-border::before {
+    content: '';
+    @apply absolute inset-0 p-[2px] -z-10 rounded-lg;
+    background: linear-gradient(45deg, rgb(var(--primary-500)), rgb(var(--secondary-500)));
+    mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+    -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+    mask-composite: exclude;
+    -webkit-mask-composite: xor;
   }
 }

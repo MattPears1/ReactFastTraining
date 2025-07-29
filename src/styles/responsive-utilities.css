@@ -241,4 +241,30 @@
   .shadow-responsive-sm {
     @apply shadow sm:shadow-md md:shadow-lg;
   }
+  
+  /* Prevent overlapping elements */
+  .no-overlap {
+    @apply relative z-10;
+  }
+  
+  /* Safe area spacing for mobile devices */
+  .safe-area-inset {
+    padding-bottom: env(safe-area-inset-bottom);
+    padding-left: env(safe-area-inset-left);
+    padding-right: env(safe-area-inset-right);
+  }
+  
+  /* Full bleed on mobile */
+  .full-bleed-mobile {
+    @apply -mx-4 sm:mx-0;
+  }
+  
+  /* Responsive aspect ratios */
+  .aspect-responsive-video {
+    @apply aspect-video sm:aspect-[16/9];
+  }
+  
+  .aspect-responsive-square {
+    @apply aspect-square sm:aspect-[4/3];
+  }
 }

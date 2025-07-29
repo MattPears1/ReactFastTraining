@@ -46,6 +46,7 @@ const Button = forwardRef<HTMLButtonElement, ButtonProps>(
     ref,
   ) => {
     const [ripples, setRipples] = useState<Ripple[]>([]);
+    const [isHovered, setIsHovered] = useState(false);
 
     const createRipple = (event: React.MouseEvent<HTMLElement>) => {
       const button = event.currentTarget;
@@ -64,7 +65,7 @@ const Button = forwardRef<HTMLButtonElement, ButtonProps>(
       }
     };
     const baseStyles =
-      "relative inline-flex items-center justify-center font-medium transition-all duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed overflow-hidden transform hover:-translate-y-0.5 active:translate-y-0";
+      "relative inline-flex items-center justify-center font-medium transition-all duration-300 focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed overflow-hidden transform hover:-translate-y-0.5 active:translate-y-0 hover-elevation";
 
     const variants = {
       primary:
@@ -82,10 +83,10 @@ const Button = forwardRef<HTMLButtonElement, ButtonProps>(
     };
 
     const sizes = {
-      sm: "px-3 py-2.5 sm:py-1.5 text-sm rounded-md gap-1.5 min-h-[44px] sm:min-h-0",
-      md: "px-4 py-3 sm:py-2 text-sm rounded-lg gap-2 min-h-[44px] sm:min-h-0",
-      lg: "px-5 sm:px-6 py-3.5 sm:py-3 text-base rounded-lg gap-2 min-h-[48px] sm:min-h-0",
-      xl: "px-6 sm:px-8 py-4 text-base sm:text-lg rounded-xl gap-3 min-h-[52px] sm:min-h-0",
+      sm: "px-4 py-3 sm:px-3 sm:py-1.5 text-base sm:text-sm rounded-md gap-1.5 min-h-[48px] sm:min-h-[32px]",
+      md: "px-5 py-3.5 sm:px-4 sm:py-2 text-base sm:text-sm rounded-lg gap-2 min-h-[48px] sm:min-h-[36px]",
+      lg: "px-6 py-4 sm:px-5 sm:py-3 text-base rounded-lg gap-2 min-h-[52px] sm:min-h-[42px]",
+      xl: "px-8 py-4 sm:px-6 sm:py-3.5 text-lg sm:text-base rounded-xl gap-3 min-h-[56px] sm:min-h-[48px]",
     };
 
     const iconSizes = {
@@ -115,12 +116,39 @@ const Button = forwardRef<HTMLButtonElement, ButtonProps>(
             )}
           />
         ) : leftIcon ? (
-          <span className={loadingIconSize}>{leftIcon}</span>
+          <motion.span 
+            className={cn(loadingIconSize, "transition-transform duration-300")}
+            animate={{ x: isHovered ? -2 : 0 }}
+          >
+            {leftIcon}
+          </motion.span>
         ) : null}
-        <span>{children}</span>
+        <span className="relative z-10">{children}</span>
         {!loading && rightIcon && (
-          <span className={loadingIconSize}>{rightIcon}</span>
+          <motion.span 
+            className={cn(loadingIconSize, "transition-transform duration-300")}
+            animate={{ x: isHovered ? 2 : 0 }}
+          >
+            {rightIcon}
+          </motion.span>
         )}
+        {/* Ripple effects container */}
+        <AnimatePresence>
+          {ripples.map((ripple) => (
+            <motion.span
+              key={ripple.id}
+              className="absolute bg-white/30 rounded-full pointer-events-none"
+              style={{
+                left: ripple.x,
+                top: ripple.y,
+              }}
+              initial={{ width: 0, height: 0, opacity: 0.5 }}
+              animate={{ width: 400, height: 400, opacity: 0 }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: 0.6, ease: "easeOut" }}
+            />
+          ))}
+        </AnimatePresence>
       </>
     );
 
@@ -150,9 +178,12 @@ const Button = forwardRef<HTMLButtonElement, ButtonProps>(
         ref={ref}
         className={buttonClasses}
         disabled={disabled || loading}
-        whileHover={{ scale: disabled || loading ? 1 : 1.01 }}
-        whileTap={{ scale: disabled || loading ? 1 : 0.99 }}
+        whileHover={{ scale: disabled || loading ? 1 : 1.02 }}
+        whileTap={{ scale: disabled || loading ? 1 : 0.98 }}
+        onHoverStart={() => setIsHovered(true)}
+        onHoverEnd={() => setIsHovered(false)}
         onClick={createRipple}
+        transition={{ type: "spring", stiffness: 400, damping: 25 }}
         {...props}
       >
         {content}

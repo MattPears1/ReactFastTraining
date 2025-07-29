@@ -3,7 +3,6 @@ import { motion } from "framer-motion";
 import { ArrowRight, Award, Phone } from "lucide-react";
 import MagneticButton from "@components/ui/MagneticButton";
 import { useKineticTypography } from "@hooks/useAnimation";
-import { FloatingIcons } from "@components/ui/FloatingIcons";
 import { AnimatedGradientText } from "@components/ui/AnimatedGradientText";
 
 const HeroSection: React.FC = () => {
@@ -12,7 +11,7 @@ const HeroSection: React.FC = () => {
   );
 
   return (
-    <section className="relative min-h-[100vh] flex items-center overflow-hidden">
+    <section className="relative min-h-[100vh] flex items-start sm:items-center overflow-hidden pt-20 sm:pt-0">
       {/* Simplified Background for Mobile Performance */}
       <div className="absolute inset-0">
         <div className="absolute inset-0 bg-gradient-to-br from-primary-50 via-white to-secondary-50 dark:from-gray-900 dark:via-gray-900 dark:to-gray-800" />
@@ -20,10 +19,7 @@ const HeroSection: React.FC = () => {
         <div className="absolute inset-0 opacity-5 bg-medical-pattern" />
       </div>
 
-      {/* Reduced floating icons on mobile */}
-      <div className="hidden sm:block">
-        <FloatingIcons />
-      </div>
+      {/* Background floating icons handled by HomepageFloatingIcons at page level */}
 
       <div className="container relative z-10 px-4 sm:px-6 lg:px-8">
         <div className="grid lg:grid-cols-12 gap-6 lg:gap-8 items-center">
@@ -78,6 +74,24 @@ const HeroSection: React.FC = () => {
               Learn life-saving skills from an experienced professional. For
               businesses and individuals.
             </p>
+
+            {/* CTA Buttons - Stack on Mobile */}
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.4 }}
+              className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start"
+            >
+              <MagneticButton
+                href="/courses"
+                variant="primary"
+                size="lg"
+                rightIcon={<ArrowRight className="w-5 h-5" />}
+                className="w-full sm:w-auto px-6 py-4 text-base sm:text-lg"
+              >
+                View Courses
+              </MagneticButton>
+            </motion.div>
           </motion.div>
 
           {/* Visual Element - Hidden on Mobile, Shown on Desktop */}
@@ -131,19 +145,48 @@ const HeroSection: React.FC = () => {
           </motion.div>
         </div>
 
-        {/* Mobile Logo - Shown only on Mobile */}
+        {/* Mobile Logo with Animated Frame - Shown only on Mobile */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.6 }}
           className="mt-8 sm:mt-12 lg:hidden text-center"
         >
-          <img
-            src="/images/logos/fulllogo_transparent.png"
-            alt="React Fast Training"
-            className="w-48 sm:w-64 h-auto mx-auto opacity-80"
-            loading="lazy"
-          />
+          <div className="relative inline-block">
+            {/* Back Card */}
+            <motion.div
+              className="absolute inset-0 bg-gradient-to-br from-secondary-400 to-secondary-600 rounded-2xl transform rotate-3 scale-95"
+              animate={{
+                rotate: [3, 5, 3],
+              }}
+              transition={{
+                duration: 10,
+                repeat: Infinity,
+                ease: "easeInOut",
+              }}
+            />
+            {/* Front Card */}
+            <motion.div
+              className="absolute inset-0 bg-gradient-to-br from-accent-400 to-accent-600 rounded-2xl transform -rotate-2"
+              animate={{
+                rotate: [-2, -3, -2],
+              }}
+              transition={{
+                duration: 12,
+                repeat: Infinity,
+                ease: "easeInOut",
+              }}
+            />
+            {/* White background for logo */}
+            <div className="relative bg-white rounded-2xl p-4 shadow-xl">
+              <img
+                src="/images/logos/fulllogo_transparent.png"
+                alt="React Fast Training"
+                className="w-40 sm:w-56 h-auto"
+                loading="lazy"
+              />
+            </div>
+          </div>
         </motion.div>
       </div>
 

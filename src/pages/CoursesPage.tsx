@@ -138,8 +138,8 @@ const CoursesPage: React.FC = () => {
       />
 
       {/* Hero Section */}
-      <section className="relative py-16 sm:py-20 md:py-28 lg:py-32 overflow-hidden bg-gradient-to-br from-primary-50 to-secondary-50 dark:from-gray-900 dark:to-gray-800">
-        <div className="container px-4 sm:px-6 lg:px-8 relative z-10">
+      <section className="relative py-20 sm:py-24 md:py-28 lg:py-32 overflow-hidden bg-gradient-to-br from-primary-50 to-secondary-50 dark:from-gray-900 dark:to-gray-800">
+        <div className="container px-5 sm:px-6 lg:px-8 relative z-10">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
@@ -161,9 +161,9 @@ const CoursesPage: React.FC = () => {
       </section>
 
       {/* Courses Grid */}
-      <section className="py-12 sm:py-16 md:py-20">
-        <div className="container px-4 sm:px-6 lg:px-8">
-          <div className="grid sm:grid-cols-2 gap-4 sm:gap-6 md:gap-8">
+      <section className="py-16 sm:py-20 md:py-24">
+        <div className="container px-5 sm:px-6 lg:px-8">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 sm:gap-6 lg:gap-8">
             {courses.map((course, index) => (
               <motion.div
                 key={course.id}
@@ -176,8 +176,8 @@ const CoursesPage: React.FC = () => {
                   <div
                     className={`h-2 bg-gradient-to-r from-${course.color}-500 to-${course.color}-600`}
                   />
-                  <div className="p-5 sm:p-6 md:p-8">
-                    <div className="flex items-start justify-between mb-4 sm:mb-6">
+                  <div className="p-6 sm:p-6 md:p-8">
+                    <div className="flex items-start justify-between mb-6">
                       <div
                         className={`w-12 h-12 sm:w-14 sm:h-14 md:w-16 md:h-16 bg-${course.color}-100 dark:bg-${course.color}-900/30 rounded-lg sm:rounded-xl flex items-center justify-center`}
                       >
@@ -243,8 +243,8 @@ const CoursesPage: React.FC = () => {
       </section>
 
       {/* Additional Courses */}
-      <section className="py-12 sm:py-16 md:py-20 bg-gray-50 dark:bg-gray-900">
-        <div className="container px-4 sm:px-6 lg:px-8">
+      <section className="py-16 sm:py-20 md:py-24 bg-gray-50 dark:bg-gray-900">
+        <div className="container px-5 sm:px-6 lg:px-8">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
@@ -260,7 +260,7 @@ const CoursesPage: React.FC = () => {
             </p>
           </motion.div>
 
-          <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
             {additionalCourses.map((course, index) => (
               <motion.div
                 key={course.id}

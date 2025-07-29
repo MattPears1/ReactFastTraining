@@ -260,7 +260,7 @@ function getMockTestimonials(): TestimonialData[] {
       courseTaken: "Mental Health First Aid",
       courseDate: "2025-01-05",
       content:
-        "This course completely changed my perspective on mental health in the workplace. The trainer created a safe, non-judgmental environment where we could discuss sensitive topics openly. I learned practical strategies for supporting colleagues and recognizing warning signs. Essential training for any workplace.",
+        "This course completely changed my perspective on mental health in the workplace. The trainer created a safe, non-judgmental environment where we could discuss sensitive topics openly. I learned practical strategies for supporting colleagues and recognising warning signs. Essential training for any workplace.",
       rating: 5,
       photoUrl: null,
       showFullName: false,

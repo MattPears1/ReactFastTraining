@@ -14,13 +14,12 @@ const FAWCoursePage: React.FC = () => {
     learningOutcomes: [
       "Understand the roles and responsibilities of a first aider",
       "Assess an incident and manage the scene safely",
-      "Provide Cardiopulmonary Resuscitation (CPR) and use an Automated External Defibrillator (AED) for adults",
+      "Use CPR and AED for adults",
       "Manage an unresponsive casualty effectively",
       "Treat choking, bleeding (including catastrophic bleeding), shock, and burns",
       "Manage fractures, dislocations, and head, neck, and spinal injuries",
-      "Respond to medical emergencies such as heart attacks, strokes, seizures, asthma, and diabetic emergencies",
-      "Handle eye injuries and poisoning",
-      "Complete accident report forms and understand first aid regulations",
+      "Respond to heart attacks, strokes, seizures, asthma, and diabetic emergencies",
+      "Handle eye injuries",
     ],
 
     whoShouldAttend: [
@@ -38,8 +37,8 @@ const FAWCoursePage: React.FC = () => {
         topics: [
           "Roles and responsibilities of a first aider",
           "Assessing an incident and managing the scene safely",
-          "Cardiopulmonary Resuscitation (CPR) for adults",
-          "Automated External Defibrillator (AED) use and maintenance",
+          "CPR for adults",
+          "Use an AED for adults",
           "Managing an unresponsive casualty",
           "Recovery position techniques",
         ],
@@ -78,11 +77,10 @@ const FAWCoursePage: React.FC = () => {
       "Comprehensive course manual to keep",
       "Written and practical assessments",
       "Certificate issued on successful completion",
-      "Refreshments and lunch provided",
     ],
 
     seoKeywords:
-      "first aid at work course Yorkshire, FAW training South Yorkshire, full day first aid course, workplace first aider training, HSE approved first aid",
+      "first aid at work course, FAW training, full day first aid course, workplace first aider training, HSE approved first aid",
   };
 
   return <CourseTemplate {...courseData} />;

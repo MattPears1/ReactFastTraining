@@ -13,7 +13,6 @@ import {
 } from "lucide-react";
 import SEO from "@components/common/SEO";
 import Button from "@components/ui/Button";
-import { Link } from "react-router-dom";
 
 export interface CourseTemplateProps {
   courseName: string;
@@ -59,7 +58,7 @@ const CourseTemplate: React.FC<CourseTemplateProps> = ({
     ? `${courseName} (${courseAcronym}) | React Fast Training`
     : `${courseName} | React Fast Training`;
 
-  const seoDescription = `${description} ${duration} course in Yorkshire. ${accreditations.join(", ")}. Book now from ${price}.`;
+  const seoDescription = `${description} ${duration} course in Yorkshire. ${accreditations.join(", ")}. Contact us for pricing.`;
 
   return (
     <div className="relative">
@@ -92,7 +91,7 @@ const CourseTemplate: React.FC<CourseTemplateProps> = ({
               {courseName}
               {courseAcronym && (
                 <span className="block text-3xl md:text-4xl lg:text-5xl text-primary-600 dark:text-primary-400 mt-2">
-                  ({courseAcronym}) Course Yorkshire
+                  ({courseAcronym})
                 </span>
               )}
             </h1>
@@ -102,18 +101,9 @@ const CourseTemplate: React.FC<CourseTemplateProps> = ({
             </p>
 
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <Button
-                size="lg"
-                className="group"
-                as={Link}
-                to={`/booking?course=${courseAcronym || courseName.toUpperCase().replace(/\s+/g, "_")}`}
-              >
-                Book Your Place - {price}
-                <CheckCircle className="w-5 h-5 ml-2 group-hover:scale-110 transition-transform" />
-              </Button>
-              <Button variant="outline" size="lg" as="a" href="tel:07447485644">
+              <Button variant="primary" size="lg" href="/contact">
                 <Phone className="w-5 h-5 mr-2" />
-                Call 07447 485644
+                Contact Us For Details
               </Button>
             </div>
           </motion.div>
@@ -417,7 +407,7 @@ const CourseTemplate: React.FC<CourseTemplateProps> = ({
             className="text-center"
           >
             <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">
-              Ready to Book Your {courseName} Course?
+              Ready to Learn {courseName}?
             </h2>
             <p className="text-xl text-white/90 mb-8 max-w-2xl mx-auto">
               Professional first aid training delivered by experienced
@@ -427,20 +417,18 @@ const CourseTemplate: React.FC<CourseTemplateProps> = ({
               <Button
                 size="lg"
                 variant="secondary"
-                as={Link}
-                to={`/booking?course=${courseAcronym || courseName.toUpperCase().replace(/\s+/g, "_")}`}
+                href="/contact"
               >
-                Book Now - {price}
+                Contact Us for Details
               </Button>
               <Button
                 size="lg"
                 variant="outline"
                 className="border-white text-white hover:bg-white/10"
-                as="a"
                 href="tel:07447485644"
               >
                 <Phone className="w-5 h-5 mr-2" />
-                Call for Group Bookings
+                Call for Group Training
               </Button>
             </div>
           </motion.div>

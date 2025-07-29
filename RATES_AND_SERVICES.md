@@ -133,7 +133,7 @@ Managing head, neck, and spinal injuries.[23][24]
 Treating the effects of heat and cold.[21][23]
 Responding to major illnesses in an activity setting.[23]
 CPR and AED
-Overview: This course provides focused training on performing Cardiopulmonary Resuscitation (CPR) and using an Automated External Defibrillator (AED).[25][26] It is often aimed at both the general public and healthcare professionals needing annual updates.[27]
+Overview: This course provides focussed training on performing Cardiopulmonary Resuscitation (CPR) and using an Automated External Defibrillator (AED).[25][26] It is often aimed at both the general public and healthcare professionals needing annual updates.[27]
 Duration: Typically a half-day course, around 3 to 4 hours.[27][28]
 Course Content:
 Recognising cardiac arrest.[29]

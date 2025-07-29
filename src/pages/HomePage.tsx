@@ -24,6 +24,7 @@ import { useNotifications } from "@contexts/NotificationContext";
 import { useTheme } from "@contexts/ThemeContext";
 import { getCourseColorTheme } from "@/config/courseColorThemes.config";
 import { TestimonialsSection } from "@/components/testimonials/TestimonialsSection";
+import { HomepageFloatingIcons } from "@/components/ui/HomepageFloatingIcons";
 
 const HomePage: React.FC = () => {
   console.log('🏠 [HOMEPAGE] HomePage component rendering...', {
@@ -136,7 +137,7 @@ const HomePage: React.FC = () => {
       },
       {
         title: "Oxygen Therapy Course",
-        duration: "3 Hours",
+        duration: "1 Day",
         price: "£60",
         href: "/courses/oxygen-therapy",
       },
@@ -170,6 +171,8 @@ const HomePage: React.FC = () => {
 
   return (
     <div className="relative bg-white dark:bg-gray-900">
+      <HomepageFloatingIcons />
+      
       <SEO
         title="First Aid Training Yorkshire | EFAW Courses Leeds, Sheffield, Bradford | React Fast Training"
         description="Professional first aid training across Yorkshire from £75. Emergency First Aid at Work (EFAW), HSE approved courses in Leeds, Sheffield, Bradford. Led by ex-military trainer Lex. Book today!"
@@ -199,7 +202,7 @@ const HomePage: React.FC = () => {
             </p>
           </motion.div>
 
-          <div className="grid sm:grid-cols-2 gap-4 sm:gap-6 max-w-6xl mx-auto">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4 md:gap-6 max-w-6xl mx-auto">
             {courseCategories.map((course, index) => {
               // Determine course category and color theme
               const title = course.title.toLowerCase();
@@ -220,47 +223,47 @@ const HomePage: React.FC = () => {
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true }}
                   transition={{ delay: index * 0.05 }}
-                  className="group"
+                  className="group w-full"
                 >
                   <Link
                     to={course.href}
                     className={`
-                      block rounded-xl overflow-hidden transition-all duration-300
+                      block w-full rounded-xl overflow-hidden transition-all duration-300
                       bg-gradient-to-br shadow-lg hover:shadow-2xl transform hover:-translate-y-1
                       ${isWorkplace ? "from-blue-50 via-white to-blue-50/30 dark:from-blue-900/20 dark:via-gray-800 dark:to-blue-900/10 border border-blue-200 dark:border-blue-700" : ""}
                       ${isPaediatric ? "from-purple-50 via-white to-purple-50/30 dark:from-purple-900/20 dark:via-gray-800 dark:to-purple-900/10 border border-purple-200 dark:border-purple-700" : ""}
                       ${isRefresher ? "from-green-50 via-white to-green-50/30 dark:from-green-900/20 dark:via-gray-800 dark:to-green-900/10 border border-green-200 dark:border-green-700" : ""}
                       ${isSpecialist ? "from-orange-50 via-white to-orange-50/30 dark:from-orange-900/20 dark:via-gray-800 dark:to-orange-900/10 border border-orange-200 dark:border-orange-700" : ""}
-                      relative p-6 sm:p-8 min-h-[140px]
+                      relative p-4 sm:p-6 md:p-8 h-[140px] sm:min-h-[160px] flex flex-col justify-between
                     `}
                   >
                     {/* Badge for primary courses */}
                     {isPrimary && (
-                      <span className="absolute top-3 right-3 bg-blue-500 text-white text-xs font-bold px-2 py-1 rounded-full">
+                      <span className="absolute top-0 left-0 bg-blue-500 text-white text-[10px] sm:text-xs font-bold px-3 py-1.5 rounded-full z-20">
                         Most Popular
                       </span>
                     )}
                     {isRefresher && (
-                      <span className="absolute top-3 right-3 bg-green-500 text-white text-xs font-bold px-2 py-1 rounded-full">
+                      <span className="absolute top-0 left-0 bg-green-500 text-white text-[10px] sm:text-xs font-bold px-3 py-1.5 rounded-full z-20">
                         HSE Recommended
                       </span>
                     )}
 
-                    <h3 className="text-lg sm:text-xl font-bold text-gray-900 dark:text-white mb-4 pr-20">
+                    <h3 className="text-base sm:text-lg md:text-xl font-bold text-gray-900 dark:text-white mb-3 sm:mb-4 px-4 leading-tight text-center">
                       {course.title}
                     </h3>
 
-                    <div className="flex items-end justify-between">
-                      <div className="flex items-center gap-2">
+                    <div className="flex items-center justify-center gap-3 mt-auto">
+                      <div className="flex items-center gap-1.5">
                         <Clock className="w-4 h-4 text-gray-500 dark:text-gray-400" />
                         <span className="text-sm text-gray-600 dark:text-gray-400 font-medium">
                           {course.duration}
                         </span>
                       </div>
-                      <div className="text-right">
+                      <div>
                         <span
                           className={`
-                          text-2xl font-bold
+                          text-2xl sm:text-2xl font-bold
                           ${isWorkplace ? "text-blue-600 dark:text-blue-400" : ""}
                           ${isPaediatric ? "text-purple-600 dark:text-purple-400" : ""}
                           ${isRefresher ? "text-green-600 dark:text-green-400" : ""}
@@ -275,7 +278,7 @@ const HomePage: React.FC = () => {
                     {/* Hover effect arrow */}
                     <ArrowRight
                       className={`
-                      absolute bottom-6 right-6 w-5 h-5 transform translate-x-2 opacity-0 
+                      absolute bottom-4 right-4 w-5 h-5 transform translate-x-2 opacity-0 
                       group-hover:translate-x-0 group-hover:opacity-100 transition-all duration-300
                       ${isWorkplace ? "text-gray-400 group-hover:text-blue-500" : ""}
                       ${isPaediatric ? "text-gray-400 group-hover:text-purple-500" : ""}
@@ -292,8 +295,8 @@ const HomePage: React.FC = () => {
       </section>
 
       {/* Training Approach Section - Bento Box Layout */}
-      <section className="py-12 sm:py-16 md:py-20 bg-gradient-to-b from-primary-50 via-white to-secondary-50 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900">
-        <div className="container px-4 sm:px-6 lg:px-8">
+      <section className="relative py-16 sm:py-20 md:py-24 bg-gradient-to-b from-primary-50 via-white to-secondary-50 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900 z-10">
+        <div className="container px-5 sm:px-6 lg:px-8">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
@@ -308,7 +311,7 @@ const HomePage: React.FC = () => {
             </p>
           </motion.div>
 
-          <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-6 lg:gap-8">
             {trainingApproach.slice(0, 3).map((item, index) => (
               <motion.div
                 key={item.title}
@@ -316,7 +319,7 @@ const HomePage: React.FC = () => {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ delay: index * 0.1 }}
-                className="bg-white dark:bg-gray-800 rounded-xl sm:rounded-2xl p-5 sm:p-6 shadow-lg hover:shadow-xl transition-all duration-300"
+                className="bg-white dark:bg-gray-800 rounded-xl sm:rounded-2xl p-6 sm:p-6 lg:p-8 shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1"
               >
                 <div
                   className={`
@@ -350,7 +353,7 @@ const HomePage: React.FC = () => {
       </section>
 
       {/* Why Choose Section - Unique Cards */}
-      <section className="py-12 sm:py-16 md:py-20 bg-white dark:bg-gray-900">
+      <section className="relative py-12 sm:py-16 md:py-20 bg-white dark:bg-gray-900 z-10">
         <div className="container px-4 sm:px-6 lg:px-8">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -450,21 +453,20 @@ const HomePage: React.FC = () => {
                 Ready to Learn Life-Saving Skills?
               </h3>
               <p className="text-base sm:text-lg md:text-xl mb-6 sm:mb-8 text-white/90">
-                Contact us today for a personalized quote for your team
+                Contact us today for a personalised quote for your team
               </p>
-              <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center">
+              <div className="flex flex-col sm:flex-row gap-6 sm:gap-4 justify-center">
                 <Button
                   href="/contact"
                   size="md"
-                  className="bg-white/20 text-white hover:bg-white/30 backdrop-blur border-2 border-white min-h-[48px]"
+                  className="bg-white/20 text-white hover:bg-white/30 backdrop-blur border-2 border-white min-h-[48px] flex items-center justify-center whitespace-nowrap"
                 >
-                  <Phone className="w-4 h-4 sm:w-5 sm:h-5 mr-2" />
-                  Get in Touch
+                  <span>Get in Touch 📱</span>
                 </Button>
                 <Button
                   href="/courses"
                   size="md"
-                  className="bg-white/20 text-white hover:bg-white/30 backdrop-blur border-2 border-white min-h-[48px]"
+                  className="bg-white/20 text-white hover:bg-white/30 backdrop-blur border-2 border-white min-h-[48px] flex items-center justify-center"
                 >
                   View All Courses
                 </Button>
@@ -475,7 +477,7 @@ const HomePage: React.FC = () => {
       </section>
 
       {/* Trust Section */}
-      <section className="py-12 sm:py-16 md:py-20 bg-gray-50 dark:bg-gray-800">
+      <section className="relative py-12 sm:py-16 md:py-20 bg-gray-50 dark:bg-gray-800 z-10">
         <div className="container px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-8 sm:mb-10 md:mb-12">
             <h2 className="text-2xl sm:text-3xl font-heading font-bold text-gray-900 dark:text-white mb-3 sm:mb-4">
@@ -553,7 +555,7 @@ const HomePage: React.FC = () => {
       <TestimonialsSection />
 
       {/* Yorkshire Locations Section */}
-      <section className="py-12 sm:py-16 md:py-20 bg-white dark:bg-gray-900">
+      <section className="relative py-12 sm:py-16 md:py-20 bg-white dark:bg-gray-900 z-10">
         <div className="container px-4 sm:px-6 lg:px-8">
           <motion.div
             initial={{ opacity: 0, y: 20 }}

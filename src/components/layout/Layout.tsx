@@ -1,7 +1,6 @@
 import React from "react";
 import Header from "./Header";
 import Footer from "./Footer";
-import SkipLinks from "@components/common/SkipLinks";
 import { motion } from "framer-motion";
 import { SystemAlert } from "@components/ui/AlertBanner";
 import { useNotifications } from "@contexts/NotificationContext";
@@ -18,7 +17,6 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
 
   return (
     <div className="min-h-screen flex flex-col bg-white dark:bg-gray-900">
-      <SkipLinks />
       {systemAlert && (
         <SystemAlert
           show={true}

@@ -41,9 +41,9 @@ export const AnimatedFAQ: React.FC<AnimatedFAQProps> = ({
           >
             <button
               onClick={() => toggleItem(item.id)}
-              className="w-full px-6 py-4 flex items-center justify-between text-left hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors duration-200 rounded-lg"
+              className="w-full px-5 sm:px-6 py-4 sm:py-4 flex items-center justify-between text-left hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors duration-200 rounded-lg min-h-[60px] sm:min-h-[56px]"
             >
-              <span className="font-medium text-gray-900 dark:text-white pr-4">
+              <span className="font-medium text-base sm:text-base text-gray-900 dark:text-white pr-3 sm:pr-4">
                 {item.question}
               </span>
               <motion.div
@@ -63,7 +63,7 @@ export const AnimatedFAQ: React.FC<AnimatedFAQProps> = ({
                   transition={{ duration: 0.3, ease: "easeInOut" }}
                   className="overflow-hidden"
                 >
-                  <div className="px-6 pb-4 text-gray-600 dark:text-gray-400">
+                  <div className="px-5 sm:px-6 pb-4 text-base sm:text-base text-gray-600 dark:text-gray-400 leading-relaxed">
                     {item.answer}
                   </div>
                 </motion.div>

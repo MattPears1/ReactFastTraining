@@ -10,7 +10,6 @@ import { NotificationProvider } from "@contexts/NotificationContext";
 import { AuthProvider } from "@contexts/AuthContext";
 import { initPerformanceMonitoring, trackBundleSize } from "@utils/performance";
 import { AnalyticsProvider } from "@components/providers/AnalyticsProvider";
-import VersionInfo from "@components/common/VersionInfo";
 import { visitorTracker } from "@utils/visitor-tracking";
 
 console.log('🚀 [APP] App.tsx starting initialization...', {
@@ -70,8 +69,6 @@ const ForbiddenPage = lazy(() => import("@pages/ForbiddenPage"));
 const MaintenancePage = lazy(() => import("@pages/MaintenancePage"));
 const SearchPage = lazy(() => import("@pages/SearchPage"));
 const ProfilePage = lazy(() => import("@pages/ProfilePage"));
-const BookingPage = lazy(() => import("@pages/BookingPageEnhanced"));
-const BookingSuccessPage = lazy(() => import("@pages/BookingSuccessPage"));
 const TestimonialsPage = lazy(() => import("@pages/TestimonialsPage"));
 const TestimonialSubmitPage = lazy(
   () => import("@pages/TestimonialSubmitPage"),
@@ -79,12 +76,11 @@ const TestimonialSubmitPage = lazy(
 
 // Client Portal Pages
 const ClientDashboardPage = lazy(() => import("@pages/client/DashboardPage"));
-const ClientBookingHistoryPage = lazy(
-  () => import("@pages/client/BookingHistoryPage"),
-);
 
 // Legal Pages
 const TermsPage = lazy(() => import("@pages/TermsPage"));
+const PrivacyPage = lazy(() => import("@pages/PrivacyPage"));
+const CookiePage = lazy(() => import("@pages/CookiePage"));
 
 // Admin Pages
 const AdminPage = lazy(() => import("@pages/AdminPage"));
@@ -174,12 +170,7 @@ function App() {
                 <Layout>
                   <AnimatePresence mode="wait">
                     <Suspense 
-                      fallback={
-                        <div>
-                          {console.log('⏳ [SUSPENSE] Loading route component...')}
-                          <LoadingScreen />
-                        </div>
-                      }
+                      fallback={<LoadingScreen />}
                     >
                       <Routes location={location} key={location.pathname}>
                         <Route path="/" element={<HomePage />} />
@@ -222,7 +213,8 @@ function App() {
                           path="/courses/annual-skills-refresher"
                           element={<AnnualSkillsRefresherPage />}
                         />
-                        <Route path="/booking" element={<BookingPage />} />
+                        {/* Booking functionality hidden
+                        <Route path="/booking" element={<BookingPage />} /> */}
                         <Route path="/faq" element={<FAQPage />} />
                         <Route path="/products" element={<ProductsPage />} />
                         <Route path="/services" element={<ProductsPage />} />
@@ -255,6 +247,8 @@ function App() {
 
                         {/* Legal Pages */}
                         <Route path="/terms" element={<TermsPage />} />
+                        <Route path="/privacy" element={<PrivacyPage />} />
+                        <Route path="/cookies" element={<CookiePage />} />
 
                         {/* Client Portal Routes */}
                         <Route
@@ -264,14 +258,6 @@ function App() {
                         <Route
                           path="/client/dashboard"
                           element={<ClientDashboardPage />}
-                        />
-                        <Route
-                          path="/client/bookings"
-                          element={<ClientBookingHistoryPage />}
-                        />
-                        <Route
-                          path="/client/bookings/:id"
-                          element={<ClientBookingHistoryPage />}
                         />
 
                         {/* Admin Routes */}
@@ -295,7 +281,6 @@ function App() {
           </NotificationProvider>
         </ToastProvider>
       </ThemeProvider>
-      <VersionInfo />
     </ErrorBoundary>
   );
 }

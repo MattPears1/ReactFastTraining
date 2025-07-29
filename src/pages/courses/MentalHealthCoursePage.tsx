@@ -85,7 +85,7 @@ const MentalHealthCoursePage: React.FC = () => {
       "Continuous assessment through participation and engagement",
 
     seoKeywords:
-      "mental health first aid course Yorkshire, MHFA training South Yorkshire, workplace mental health, wellbeing training, mental health awareness course",
+      "mental health first aid course, MHFA training, workplace mental health, wellbeing training, mental health awareness course",
   };
 
   return <CourseTemplate {...courseData} />;

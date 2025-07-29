@@ -232,23 +232,34 @@ export const contactApi = {
     message: string;
     consent: boolean;
   }) => {
-    return apiService.post<{ success: boolean; message: string }>(
-      "/v1/contact/submit",
-      data,
+    // Combine first and last name for the backend
+    const formData = {
+      name: `${data.firstName} ${data.lastName}`,
+      email: data.email,
+      phone: data.phone,
+      subject: data.subject,
+      message: data.message,
+      courseInterest: data.course,
+    };
+    const response = await apiService.post<{ message: string }>(
+      "/contact/submit",
+      formData,
     );
+    return { success: true, message: response.message };
   },
 };
 
 export const newsletterApi = {
   subscribe: async (email: string) => {
-    return apiService.post<{ success: boolean; message: string }>(
-      "/v1/newsletter/subscribe",
+    const response = await apiService.post<{ message: string }>(
+      "/newsletter/subscribe",
       { email },
     );
+    return { success: true, message: response.message };
   },
   unsubscribe: async (token: string) => {
     return apiService.post<{ success: boolean; message: string }>(
-      "/v1/newsletter/unsubscribe",
+      "/newsletter/unsubscribe",
       { token },
     );
   },
@@ -256,22 +267,22 @@ export const newsletterApi = {
 
 export const authApi = {
   login: async (email: string, password: string) => {
-    return apiService.post<{ token: string; user: any }>("/v1/auth/login", {
+    return apiService.post<{ token: string; user: any }>("/auth/login", {
       email,
       password,
     });
   },
   register: async (data: any) => {
     return apiService.post<{ token: string; user: any }>(
-      "/v1/auth/register",
+      "/auth/register",
       data,
     );
   },
   logout: async () => {
-    return apiService.post("/v1/auth/logout");
+    return apiService.post("/auth/logout");
   },
   refreshToken: async () => {
-    return apiService.post<{ token: string }>("/v1/auth/refresh");
+    return apiService.post<{ token: string }>("/auth/refresh");
   },
 };
 
@@ -283,7 +294,7 @@ export const bookingApi = {
     month?: string;
   }) => {
     return apiService.get<{ success: boolean; data: any[] }>(
-      "/v1/bookings/courses/available",
+      "/bookings/courses/available",
       { params },
     );
   },
@@ -307,18 +318,18 @@ export const bookingApi = {
         confirmationCode: string;
         totalPrice: number;
       };
-    }>("/v1/bookings/create", data);
+    }>("/bookings/create", data);
   },
 
   getBookingByCode: async (confirmationCode: string) => {
     return apiService.get<{ success: boolean; data: any }>(
-      `/v1/bookings/confirmation/${confirmationCode}`,
+      `/bookings/confirmation/${confirmationCode}`,
     );
   },
 
   getUserBookings: async (status?: string) => {
     return apiService.get<{ success: boolean; data: any[] }>(
-      "/v1/bookings/my-bookings",
+      "/bookings/my-bookings",
       {
         params: status ? { status } : undefined,
       },
@@ -327,7 +338,7 @@ export const bookingApi = {
 
   cancelBooking: async (id: number, reason: string) => {
     return apiService.put<{ success: boolean; message: string }>(
-      `/v1/bookings/${id}/cancel`,
+      `/bookings/${id}/cancel`,
       { reason },
     );
   },

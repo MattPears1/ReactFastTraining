@@ -55,7 +55,7 @@ const PaediatricRequalificationPage: React.FC = () => {
         "Ofsted compliant certification",
         "Experienced paediatric trainer",
       ]}
-      seoKeywords="paediatric first aid requalification, childcare first aid renewal, ofsted approved training Yorkshire"
+      seoKeywords="paediatric first aid requalification, childcare first aid renewal, ofsted approved training"
     />
   );
 };

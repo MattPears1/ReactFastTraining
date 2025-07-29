@@ -33,19 +33,85 @@
   /* Global text size fixes */
   body {
     font-size: 16px !important;
+    line-height: 1.6 !important;
   }
   
   /* Fix small text across components */
   .text-xs {
     font-size: 14px !important; /* Never go below 14px */
+    line-height: 1.5 !important;
   }
   
   .text-sm {
     font-size: 16px !important; /* Minimum readable size */
+    line-height: 1.5 !important;
   }
   
   .text-base {
     font-size: 16px !important;
+    line-height: 1.6 !important;
+  }
+  
+  .text-lg {
+    font-size: 18px !important;
+    line-height: 1.6 !important;
+  }
+  
+  .text-xl {
+    font-size: 20px !important;
+    line-height: 1.4 !important;
+  }
+  
+  .text-2xl {
+    font-size: 24px !important;
+    line-height: 1.3 !important;
+  }
+  
+  .text-3xl {
+    font-size: 28px !important;
+    line-height: 1.2 !important;
+  }
+  
+  .text-4xl {
+    font-size: 32px !important;
+    line-height: 1.2 !important;
+  }
+  
+  /* Headings with better mobile sizing */
+  h1 {
+    font-size: 32px !important;
+    line-height: 1.2 !important;
+    margin-bottom: 16px !important;
+  }
+  
+  h2 {
+    font-size: 28px !important;
+    line-height: 1.3 !important;
+    margin-bottom: 16px !important;
+  }
+  
+  h3 {
+    font-size: 24px !important;
+    line-height: 1.3 !important;
+    margin-bottom: 12px !important;
+  }
+  
+  h4 {
+    font-size: 20px !important;
+    line-height: 1.4 !important;
+    margin-bottom: 12px !important;
+  }
+  
+  h5 {
+    font-size: 18px !important;
+    line-height: 1.4 !important;
+    margin-bottom: 8px !important;
+  }
+  
+  h6 {
+    font-size: 16px !important;
+    line-height: 1.5 !important;
+    margin-bottom: 8px !important;
   }
   
   /* Form elements must be readable */
@@ -56,6 +122,22 @@
   /* Labels and helper text */
   label, .form-label, .helper-text {
     font-size: 16px !important;
+  }
+  
+  /* Paragraph spacing */
+  p {
+    margin-bottom: 16px !important;
+    line-height: 1.6 !important;
+  }
+  
+  /* List spacing */
+  ul, ol {
+    padding-left: 24px !important;
+  }
+  
+  li {
+    margin-bottom: 8px !important;
+    line-height: 1.6 !important;
   }
 }
 
@@ -518,5 +600,133 @@
     font-size: 18px;
     font-weight: 600;
     border-radius: 8px;
+  }
+}
+
+/* ============================================
+   OVERLAP PREVENTION & SPACING FIXES
+   ============================================ */
+
+@media (max-width: 767px) {
+  /* Prevent text overflow in all containers */
+  * {
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+    hyphens: auto;
+  }
+  
+  /* Fix overlapping flex items */
+  .flex {
+    flex-wrap: wrap !important;
+    gap: 8px !important;
+  }
+  
+  .flex-col {
+    gap: 12px !important;
+  }
+  
+  /* Fix grid layouts on mobile */
+  .grid {
+    gap: 16px !important;
+  }
+  
+  /* Prevent button text overflow */
+  .btn, button {
+    white-space: normal !important;
+    text-align: center !important;
+    padding: 12px 16px !important;
+    min-height: 48px !important;
+  }
+  
+  /* Fix spacing between sections */
+  section + section {
+    margin-top: 32px !important;
+  }
+  
+  /* Prevent absolute positioned elements from overlapping */
+  .absolute, [class*="absolute"] {
+    position: relative !important;
+  }
+  
+  /* Fix z-index stacking issues */
+  .z-10 { z-index: 10 !important; }
+  .z-20 { z-index: 20 !important; }
+  .z-30 { z-index: 30 !important; }
+  .z-40 { z-index: 40 !important; }
+  .z-50 { z-index: 50 !important; }
+  
+  /* Ensure proper spacing for stacked elements */
+  .space-y-1 > * + * { margin-top: 8px !important; }
+  .space-y-2 > * + * { margin-top: 12px !important; }
+  .space-y-3 > * + * { margin-top: 16px !important; }
+  .space-y-4 > * + * { margin-top: 20px !important; }
+  .space-y-5 > * + * { margin-top: 24px !important; }
+  .space-y-6 > * + * { margin-top: 28px !important; }
+  
+  /* Fix horizontal spacing */
+  .space-x-1 > * + * { margin-left: 8px !important; }
+  .space-x-2 > * + * { margin-left: 12px !important; }
+  .space-x-3 > * + * { margin-left: 16px !important; }
+  .space-x-4 > * + * { margin-left: 20px !important; }
+  
+  /* Prevent badge overflow */
+  .badge {
+    max-width: 100% !important;
+    white-space: normal !important;
+    padding: 6px 12px !important;
+  }
+  
+  /* Fix notification positioning */
+  .notification, .toast {
+    max-width: calc(100vw - 32px) !important;
+    margin: 16px !important;
+  }
+}
+
+/* ============================================
+   MOBILE-SPECIFIC LAYOUT HELPERS
+   ============================================ */
+
+@media (max-width: 639px) {
+  /* Convert multi-column layouts to single column */
+  .sm\:grid-cols-2,
+  .sm\:grid-cols-3,
+  .sm\:grid-cols-4 {
+    grid-template-columns: 1fr !important;
+  }
+  
+  /* Stack flex items vertically */
+  .sm\:flex-row {
+    flex-direction: column !important;
+  }
+  
+  /* Full width on mobile */
+  .sm\:w-auto,
+  .sm\:w-1\/2,
+  .sm\:w-1\/3,
+  .sm\:w-1\/4 {
+    width: 100% !important;
+  }
+  
+  /* Reset max-widths */
+  .sm\:max-w-sm,
+  .sm\:max-w-md,
+  .sm\:max-w-lg {
+    max-width: 100% !important;
+  }
+}
+
+/* Tablet-specific fixes */
+@media (min-width: 640px) and (max-width: 1023px) {
+  /* Adjust grid columns for tablets */
+  .md\:grid-cols-3,
+  .md\:grid-cols-4 {
+    grid-template-columns: repeat(2, 1fr) !important;
+  }
+  
+  .lg\:grid-cols-4,
+  .lg\:grid-cols-5,
+  .lg\:grid-cols-6 {
+    grid-template-columns: repeat(3, 1fr) !important;
   }
 }

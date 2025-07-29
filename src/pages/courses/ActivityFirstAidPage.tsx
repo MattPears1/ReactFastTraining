@@ -5,7 +5,7 @@ const ActivityFirstAidPage: React.FC = () => {
   const courseData = {
     courseName: "Activity First Aid",
     courseAcronym: "AFA",
-    duration: "5 Hours",
+    duration: "one day",
     price: "£120",
     certificateValidity: "Valid for 3 years",
     description:
@@ -54,17 +54,15 @@ const ActivityFirstAidPage: React.FC = () => {
           "Neck and spinal injury management",
           "Heat exhaustion and heat stroke",
           "Hypothermia and cold injuries",
-          "Altitude sickness basics",
           "Improvised first aid techniques",
           "Major illness recognition in activity settings",
-          "Emergency evacuation planning",
         ],
       },
     ],
 
     accreditations: [
       "HSE Approved",
-      "Adventure Activities Licensing Authority Recognized",
+      "Adventure Activities Licensing Authority Recognised",
       "Sports England Endorsed",
     ],
 
@@ -76,7 +74,7 @@ const ActivityFirstAidPage: React.FC = () => {
       "Small group sizes for personalized training",
       "Activity-specific risk assessment skills",
       "Comprehensive course manual",
-      "Certificate recognized by sports governing bodies",
+      "Certificate recognised by sports governing bodies",
     ],
 
     assessmentMethod:
@@ -85,7 +83,7 @@ const ActivityFirstAidPage: React.FC = () => {
     prerequisites: "None - suitable for beginners",
 
     seoKeywords:
-      "activity first aid course Yorkshire, sports first aid training South Yorkshire, outdoor first aid South Yorkshire, activity instructor first aid",
+      "activity first aid course, sports first aid training, outdoor first aid, activity instructor first aid",
   };
 
   return <CourseTemplate {...courseData} />;

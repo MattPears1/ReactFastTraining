@@ -4,7 +4,7 @@
   "description": "Flexible business website with e-commerce and service showcase capabilities",
   "main": "src/index.js",
   "scripts": {
-    "dev": "npx concurrently \"npm run dev:backend\" \"npm run dev:frontend\" --names \"BACKEND,FRONTEND\" --prefix-colors \"yellow,cyan\"",
+    "dev": "npx concurrently \"npm run dev:backend\" \"npm run dev:frontend\" --names \"BACKEND,FRONTEND\" --prefix-colors \"yellow,cyan\" --kill-others",
     "dev:frontend": "vite",
     "dev:backend": "cd backend-loopback4 && node start-server.js",
     "dev:old": "vite",

@@ -49,12 +49,12 @@ const ActivityFirstAidRequalificationPage: React.FC = () => {
       ]}
       accreditations={[
         "HSE Approved",
-        "Adventure Activities Licensing Authority Recognized",
+        "Adventure Activities Licensing Authority Recognised",
         "Sports England Endorsed",
       ]}
       assessmentMethod="Practical demonstration and scenario-based assessment"
       prerequisites="Valid or recently expired Activity First Aid certificate"
-      seoKeywords="activity first aid requalification, AFA renewal, sports first aid refresher Yorkshire, outdoor first aid requalification South Yorkshire"
+      seoKeywords="activity first aid requalification, AFA renewal, sports first aid refresher, outdoor first aid requalification"
     />
   );
 };

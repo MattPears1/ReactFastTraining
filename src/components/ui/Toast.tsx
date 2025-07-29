@@ -52,14 +52,28 @@ export const Toast: React.FC<ToastProps> = ({
   action,
 }) => {
   const Icon = icons[type];
+  const [progress, setProgress] = React.useState(100);
 
   useEffect(() => {
     if (duration > 0) {
+      const interval = setInterval(() => {
+        setProgress((prev) => {
+          if (prev <= 0) {
+            clearInterval(interval);
+            return 0;
+          }
+          return prev - (100 / (duration / 100));
+        });
+      }, 100);
+
       const timer = setTimeout(() => {
         onClose(id);
       }, duration);
 
-      return () => clearTimeout(timer);
+      return () => {
+        clearInterval(interval);
+        clearTimeout(timer);
+      };
     }
   }, [id, duration, onClose]);
 
@@ -69,19 +83,21 @@ export const Toast: React.FC<ToastProps> = ({
       initial={{ opacity: 0, y: 50, scale: 0.3 }}
       animate={{ opacity: 1, y: 0, scale: 1 }}
       exit={{ opacity: 0, scale: 0.5, transition: { duration: 0.2 } }}
+      whileHover={{ scale: 1.02 }}
       className={clsx(
-        "pointer-events-auto w-full max-w-sm overflow-hidden rounded-xl border shadow-lg backdrop-blur-sm",
+        "pointer-events-auto w-[calc(100vw-2rem)] sm:w-full max-w-sm overflow-hidden rounded-xl border shadow-lg backdrop-blur-sm relative",
+        "transition-all duration-300 hover:shadow-xl",
         colors[type],
       )}
     >
       <div className="p-4">
-        <div className="flex items-start">
+        <div className="flex items-start gap-3">
           <div className="flex-shrink-0">
             <Icon className={clsx("h-6 w-6", iconColors[type])} />
           </div>
-          <div className="ml-3 w-0 flex-1 pt-0.5">
-            <p className="text-sm font-medium">{title}</p>
-            {message && <p className="mt-1 text-sm opacity-90">{message}</p>}
+          <div className="flex-1 min-w-0 pt-0.5">
+            <p className="text-base sm:text-sm font-medium">{title}</p>
+            {message && <p className="mt-1 text-base sm:text-sm opacity-90 break-words">{message}</p>}
             {action && (
               <div className="mt-3">
                 <button
@@ -94,16 +110,39 @@ export const Toast: React.FC<ToastProps> = ({
             )}
           </div>
           <div className="ml-4 flex flex-shrink-0">
-            <button
-              className="inline-flex rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2"
+            <motion.button
+              className="inline-flex rounded-md p-2 sm:p-1 hover:bg-black/10 dark:hover:bg-white/10 transition-colors focus:outline-none focus:ring-2 focus:ring-offset-2 min-w-[44px] min-h-[44px] sm:min-w-0 sm:min-h-0 items-center justify-center"
               onClick={() => onClose(id)}
+              whileHover={{ scale: 1.1 }}
+              whileTap={{ scale: 0.9 }}
             >
               <span className="sr-only">Close</span>
               <X className="h-5 w-5" />
-            </button>
+            </motion.button>
           </div>
         </div>
       </div>
+      {/* Progress bar */}
+      {duration > 0 && (
+        <motion.div 
+          className="absolute bottom-0 left-0 right-0 h-1 bg-black/10 dark:bg-white/10"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: 0.5 }}
+        >
+          <motion.div
+            className={clsx(
+              "h-full transition-all duration-100",
+              type === "success" && "bg-secondary-500",
+              type === "error" && "bg-red-500",
+              type === "warning" && "bg-accent-500",
+              type === "info" && "bg-primary-500"
+            )}
+            initial={{ width: "100%" }}
+            animate={{ width: `${progress}%` }}
+          />
+        </motion.div>
+      )}
     </motion.div>
   );
 };
@@ -137,8 +176,9 @@ export const ToastContainer: React.FC<ToastContainerProps> = ({
   return (
     <div
       className={clsx(
-        "pointer-events-none fixed z-50 flex flex-col gap-4 p-4 sm:p-6",
+        "pointer-events-none fixed z-50 flex flex-col gap-3 sm:gap-4 p-4 sm:p-6 w-full sm:w-auto",
         positionClasses[position],
+        "safe-area-inset",
       )}
       aria-live="assertive"
       aria-atomic="true"

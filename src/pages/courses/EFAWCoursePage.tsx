@@ -12,12 +12,12 @@ const EFAWCoursePage: React.FC = () => {
       "This course is designed for individuals in lower-risk workplaces, such as offices, shops, and restaurants. It provides the essential skills to manage an emergency until professional help arrives.",
 
     learningOutcomes: [
-      "The role of the emergency first aider",
-      "Assessing an emergency situation",
-      "CPR and AED use for adults",
-      "Managing an unresponsive casualty and using the recovery position",
-      "Treating choking, seizures, shock, and bleeding",
-      "Dealing with minor injuries and burns",
+      "Understand the role of an emergency first aider",
+      "Assess an emergency situation",
+      "Use CPR and AED on adults",
+      "Manage an unresponsive casualty and use the recovery position",
+      "Treat choking, seizures, shock, and bleeding",
+      "Deal with minor injuries and burns",
     ],
 
     whoShouldAttend: [
@@ -55,11 +55,10 @@ const EFAWCoursePage: React.FC = () => {
       "Course manual to keep for reference",
       "Written and practical assessments",
       "Certificate issued on successful completion",
-      "Refreshments provided throughout the day",
     ],
 
     seoKeywords:
-      "emergency first aid at work Yorkshire, EFAW course South Yorkshire, 1 day first aid training, workplace first aid South Yorkshire, EFAW certification",
+      "emergency first aid at work, EFAW course, 1 day first aid training, workplace first aid, EFAW certification",
   };
 
   return <CourseTemplate {...courseData} />;

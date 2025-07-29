@@ -1,6 +1,6 @@
-# Specialized Agents for Flexible Business Website
+# Specialised Agents for Flexible Business Website
 
-This directory contains configuration files for specialized agents that handle different aspects of the website project. Each agent has specific responsibilities, tools, and triggers for automated execution.
+This directory contains configuration files for specialised agents that handle different aspects of the website project. Each agent has specific responsibilities, tools, and triggers for automated execution.
 
 ## Available Agents
 

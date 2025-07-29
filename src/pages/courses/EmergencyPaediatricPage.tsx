@@ -3,13 +3,13 @@ import CourseTemplate from "@components/templates/CourseTemplate";
 
 const EmergencyPaediatricPage: React.FC = () => {
   const courseData = {
-    courseName: "Emergency Paediatric First Aid",
+    courseName: "Emergency Paediatric First Aid (EPFA)",
     courseAcronym: "EPFA",
     duration: "1 Day",
     price: "£100",
     certificateValidity: "Valid for 3 years",
     description:
-      "This course focuses on emergency scenarios involving infants and children and is suitable for those who do not require the full 12-hour Paediatric First Aid qualification. It provides essential skills for managing emergency situations with babies and young children.",
+      "This course focuses on emergency scenarios involving infants and children and is suitable for those who do not require the two-day paediatric first aid qualification. It provides essential skills for managing emergency situations with babies and young children.",
 
     learningOutcomes: [
       "Assessing an emergency and prioritising actions",
@@ -29,7 +29,7 @@ const EmergencyPaediatricPage: React.FC = () => {
 
     courseContent: [
       {
-        title: "Emergency Paediatric First Aid Programme",
+        title: "Course Overview",
         topics: [
           "Assessing an emergency situation involving children",
           "Prioritising actions in an emergency",
@@ -72,7 +72,7 @@ const EmergencyPaediatricPage: React.FC = () => {
     prerequisites: "None - suitable for beginners",
 
     seoKeywords:
-      "emergency paediatric first aid Yorkshire, EPFA course South Yorkshire, 1 day children first aid South Yorkshire, emergency childcare first aid",
+      "emergency paediatric first aid, EPFA course, 1 day children first aid, emergency childcare first aid",
   };
 
   return <CourseTemplate {...courseData} />;

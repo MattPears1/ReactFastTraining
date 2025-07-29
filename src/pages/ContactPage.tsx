@@ -50,27 +50,27 @@ const ContactPage: React.FC = () => {
       />
 
       {/* Hero Section */}
-      <section className="relative py-20 md:py-32 overflow-hidden">
+      <section className="relative py-20 sm:py-24 md:py-32 overflow-hidden">
         <div className="absolute inset-0 bg-gradient-to-br from-primary-50 to-secondary-50 dark:from-gray-900 dark:to-gray-800">
           <div className="absolute inset-0 bg-dot-pattern opacity-5" />
         </div>
 
-        <div className="container relative z-10">
+        <div className="container px-5 sm:px-6 lg:px-8 relative z-10">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             className="max-w-4xl mx-auto text-center"
           >
-            <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-gray-900 dark:text-white mb-6">
+            <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold text-gray-900 dark:text-white mb-4 sm:mb-6 px-4 sm:px-0">
               Book Your{" "}
               <span className="text-gradient gradient-primary">
                 South Yorkshire
               </span>{" "}
               First Aid Course
             </h1>
-            <p className="text-lg md:text-xl text-gray-600 dark:text-gray-400">
+            <p className="text-base sm:text-lg md:text-xl text-gray-600 dark:text-gray-400 px-4 sm:px-0">
               Contact us today to book your first aid training in South
-              Yorkshire and beyond. Courses available from £75 with flexible
+              Yorkshire and beyond. Courses available from £60 with flexible
               scheduling.
             </p>
           </motion.div>
@@ -78,9 +78,9 @@ const ContactPage: React.FC = () => {
       </section>
 
       {/* Contact Info Cards */}
-      <section className="section">
-        <div className="container">
-          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6 mb-16">
+      <section className="py-16 sm:py-20 md:py-24">
+        <div className="container px-5 sm:px-6 lg:px-8">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-16">
             {contactInfo.map((info, index) => (
               <motion.div
                 key={info.title}
@@ -88,9 +88,9 @@ const ContactPage: React.FC = () => {
                 whileInView={{ opacity: 1, y: 0 }}
                 transition={{ delay: index * 0.1 }}
                 viewport={{ once: true }}
-                className="card hover:shadow-xl transition-shadow duration-300"
+                className="bg-white dark:bg-gray-800 rounded-xl p-6 shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1"
               >
-                <div className="card-body text-center">
+                <div className="text-center">
                   <div className="w-12 h-12 bg-primary-100 dark:bg-primary-900/30 rounded-lg flex items-center justify-center mx-auto mb-4">
                     {info.icon === MapPin ? (
                       <MapPinAnimation size={30} />
@@ -128,10 +128,10 @@ const ContactPage: React.FC = () => {
               viewport={{ once: true }}
             >
               <div className="mb-8 text-center">
-                <h2 className="text-3xl font-bold text-gray-900 dark:text-white mb-4">
+                <h2 className="text-2xl sm:text-3xl font-bold text-gray-900 dark:text-white mb-4">
                   Send Us a Message
                 </h2>
-                <p className="text-gray-600 dark:text-gray-400">
+                <p className="text-base sm:text-lg text-gray-600 dark:text-gray-400 px-4 sm:px-0">
                   Fill out the form below and we'll get back to you as soon as
                   possible.
                 </p>

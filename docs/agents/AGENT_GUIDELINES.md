@@ -215,7 +215,7 @@ This document provides comprehensive guidelines for all agents working on the bu
 ### Escalation Path
 1. Agent detects issue
 2. Attempt automated resolution
-3. Alert relevant specialized agents
+3. Alert relevant specialised agents
 4. Human intervention if needed
 
 ## Continuous Improvement

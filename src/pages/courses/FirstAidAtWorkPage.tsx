@@ -56,9 +56,9 @@ const FirstAidAtWorkPage: React.FC = () => {
   return (
     <div className="relative bg-white dark:bg-gray-900">
       <SEO
-        title="First Aid at Work Course Yorkshire | Full Day FAW Training"
-        description="Comprehensive full day First Aid at Work course in Yorkshire. HSE approved FAW training for designated workplace first aiders. Book your place today."
-        keywords="first aid at work course, FAW training Yorkshire, full day first aid course, HSE first aid training, workplace first aider"
+        title="First Aid at Work Course | Full Day FAW Training"
+        description="Comprehensive full day First Aid at Work course. HSE approved FAW training for designated workplace first aiders. Book your place today."
+        keywords="first aid at work course, FAW training, full day first aid course, HSE first aid training, workplace first aider"
         canonical="/courses/first-aid-at-work"
       />
 

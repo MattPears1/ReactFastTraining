@@ -9,7 +9,7 @@ const PaediatricCoursePage: React.FC = () => {
     price: "£120",
     certificateValidity: "Valid for 3 years",
     description:
-      "This is a comprehensive course covering a wide range of first aid emergencies affecting infants and children. It's often delivered in a blended format, with online theory and in-person practical sessions. This course is essential for anyone working with children, including those in nurseries, schools, and as childminders, and is compliant with OFSTED and Early Years Foundation Stage (EYFS) requirements.",
+      "This is a comprehensive course covering a wide range of first aid emergencies affecting infants and children. This course is essential for anyone working with children, including those in nurseries, schools, and as childminders, and is compliant with OFSTED and Early Years Foundation Stage (EYFS) requirements.",
 
     learningOutcomes: [
       "Roles and responsibilities of a paediatric first aider",
@@ -17,7 +17,6 @@ const PaediatricCoursePage: React.FC = () => {
       "CPR and AED use on children and infants",
       "Managing choking, bleeding, shock, and anaphylaxis in children",
       "Treating burns, fractures, and head, neck, and spinal injuries",
-      "Recognising and responding to medical conditions like meningitis, diabetes, asthma, and febrile convulsions",
     ],
 
     whoShouldAttend: [
@@ -27,7 +26,6 @@ const PaediatricCoursePage: React.FC = () => {
       "Parents and grandparents",
       "Youth workers and sports coaches",
       "Anyone responsible for children's welfare",
-      "Those requiring OFSTED compliance",
     ],
 
     courseContent: [
@@ -69,9 +67,7 @@ const PaediatricCoursePage: React.FC = () => {
     ],
 
     whatToExpect: [
-      "Child-friendly training environment",
       "Pediatric manikins for realistic practice",
-      "Blended learning options available (6 hours online + 6 hours practical)",
       "Focus on age-appropriate techniques",
       "Scenarios based on real childcare settings",
       "Comprehensive course handbook",
@@ -83,7 +79,7 @@ const PaediatricCoursePage: React.FC = () => {
     prerequisites: "None - suitable for all levels of experience",
 
     seoKeywords:
-      "paediatric first aid course Yorkshire, childcare first aid training, EYFS first aid, Ofsted compliant training, baby first aid course",
+      "paediatric first aid course, childcare first aid training, EYFS first aid, Ofsted compliant training, baby first aid course",
   };
 
   return <CourseTemplate {...courseData} />;

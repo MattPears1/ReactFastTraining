@@ -66,7 +66,7 @@ const courses: Course[] = [
   {
     label: "Oxygen Therapy",
     href: "/courses/oxygen-therapy",
-    duration: "3 Hours",
+    duration: "1 Day",
     description: "Safe administration of emergency oxygen",
     icon: "💨",
   },

@@ -25,7 +25,7 @@ const OxygenTherapyPage: React.FC = () => {
       "Care home and nursing staff",
       "Industrial first aiders in high-risk environments",
       "Event and festival medical staff",
-      "Ambulance community first responders",
+      "Ambulance community first aiders",
       "Anyone responsible for emergency oxygen equipment",
     ],
 
@@ -55,7 +55,7 @@ const OxygenTherapyPage: React.FC = () => {
 
     accreditations: [
       "BOC Medical Approved",
-      "First Aid Industry Body (FAIB) Recognized",
+      "First Aid Industry Body (FAIB) Recognised",
       "CPD Certified",
     ],
 
@@ -67,7 +67,6 @@ const OxygenTherapyPage: React.FC = () => {
       "Cylinder changing and safety procedures",
       "Practical scenarios with oxygen administration",
       "Written and practical assessments",
-      "Reference manual to keep",
       "Certificate valid for 3 years",
     ],
 
@@ -78,7 +77,7 @@ const OxygenTherapyPage: React.FC = () => {
       "Current first aid certificate (FAW, EFAW or equivalent) required",
 
     seoKeywords:
-      "oxygen therapy course Yorkshire, emergency oxygen training South Yorkshire, O2 administration South Yorkshire, medical oxygen first aid",
+      "oxygen therapy course, emergency oxygen training, O2 administration, medical oxygen first aid",
   };
 
   return <CourseTemplate {...courseData} />;

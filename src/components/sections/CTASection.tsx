@@ -14,7 +14,7 @@ interface CTASectionProps {
 const CTASection: React.FC<CTASectionProps> = ({
   title = "Ready to Learn First Aid?",
   description = "Start your first aid training journey with React Fast Training.",
-  primaryButtonText = "Book Your Course",
+  primaryButtonText = "Get in Touch",
   secondaryButtonText = "Call 07447 485644",
   features = ["Ofqual Regulated", "HSE Approved", "CPD Certified"],
 }) => {
@@ -68,7 +68,7 @@ const CTASection: React.FC<CTASectionProps> = ({
               <Button
                 size="md"
                 variant="secondary"
-                href="/booking"
+                href="/contact"
                 rightIcon={<ArrowRight className="w-4 h-4 sm:w-5 sm:h-5" />}
                 className="bg-white text-primary-600 hover:bg-gray-100 min-h-[48px]"
               >

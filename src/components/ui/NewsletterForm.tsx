@@ -37,8 +37,17 @@ const NewsletterForm: React.FC<NewsletterFormProps> = ({
     setIsLoading(true);
 
     try {
-      // Simulate API call
-      await new Promise((resolve) => setTimeout(resolve, 1500));
+      const response = await fetch('/api/newsletter/subscribe', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(data),
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to subscribe');
+      }
 
       showToast("success", "Successfully subscribed to newsletter!");
       reset();

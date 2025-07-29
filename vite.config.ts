@@ -19,10 +19,10 @@ export default defineConfig({
     },
   },
   server: {
-    port: 3004,
+    port: 8081,
     strictPort: true, // CRITICAL: Do NOT allow Vite to use any other port
     open: true,
-    host: '0.0.0.0', // Listen on all network interfaces
+    host: '192.168.0.84', // Only show this specific IP
     proxy: {
       '/api': {
         target: 'http://localhost:3000',

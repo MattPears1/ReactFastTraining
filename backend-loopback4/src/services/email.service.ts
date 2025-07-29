@@ -31,15 +31,19 @@ export class EmailService {
     @repository(BookingRepository)
     private bookingRepository: BookingRepository,
   ) {
-    this.transporter = nodemailer.createTransport({
+    const transportConfig = {
       host: process.env.SMTP_HOST || 'smtp.gmail.com',
       port: parseInt(process.env.SMTP_PORT || '587'),
-      secure: false,
+      secure: false, // for STARTTLS
       auth: {
         user: process.env.SMTP_USER,
-        pass: process.env.SMTP_PASS,
+        pass: process.env.SMTP_PASS ? '********' : 'NOT SET',
       },
-    });
+    };
+    console.log('📧 [EmailService] Initializing transporter with config:', transportConfig);
+
+    this.transporter = nodemailer.createTransport(transportConfig);
+    console.log('✅ [EmailService] Nodemailer transporter created.');
   }
 
   async sendEmail(options: EmailOptions): Promise<void> {
@@ -48,11 +52,21 @@ export class EmailService {
       ...options,
     };
 
-    await this.transporter.sendMail(mailOptions);
+    console.log('📤 [EmailService] Attempting to send email to:', mailOptions.to);
+    try {
+      const info = await this.transporter.sendMail(mailOptions);
+      console.log('✅ [EmailService] Email sent successfully. Message ID:', info.messageId);
+    } catch (error) {
+      console.error('❌ [EmailService] Error sending email:', {
+        code: error.code,
+        message: error.message,
+      });
+      throw error;
+    }
   }
 
   async sendBookingConfirmation(booking: Booking, session: CourseSession): Promise<void> {
-    const sessionDate = new Date(session.sessionDate || session.startDate);
+    const sessionDate = new Date(session.startDate);
     const formattedDate = sessionDate.toLocaleDateString('en-GB', {
       weekday: 'long',
       day: 'numeric',
@@ -99,7 +113,7 @@ export class EmailService {
         <h2 style="margin-top: 0; color: #1F2937;">Course Details</h2>
         <div class="detail-row">
           <span class="detail-label">Course:</span>
-          <span class="detail-value">${session.courseName || session.courseId}</span>
+          <span class="detail-value">${session.courseId}</span>
         </div>
         <div class="detail-row">
           <span class="detail-label">Date:</span>
@@ -141,12 +155,12 @@ export class EmailService {
         <p>The venue will be in <strong>South Yorkshire</strong> with easy access and free parking.</p>
       </div>
 
-      ${booking.participantDetails && booking.participantDetails.length > 1 ? `
+      ${booking.participants && booking.participants.length > 1 ? `
       <div class="booking-box">
         <h3 style="margin-top: 0;">Participant Details</h3>
         <p>The following participants are registered for this course:</p>
         <ol style="margin: 10px 0; padding-left: 20px;">
-          ${booking.participantDetails.map(p => `
+          ${booking.participants.map(p => `
             <li>${p.firstName} ${p.lastName}${p.email ? ` (${p.email})` : ''}</li>
           `).join('')}
         </ol>
@@ -176,8 +190,8 @@ export class EmailService {
       <p style="margin: 0 0 10px 0;"><strong>React Fast Training</strong></p>
       <p style="margin: 0 0 10px 0;">Yorkshire's Premier First Aid Training Provider</p>
       <p style="margin: 0 0 10px 0;">
-        📧 <a href="mailto:info@reactfasttraining.co.uk">info@reactfasttraining.co.uk</a> | 
-        📞 07447 485644 | 
+        📧 <a href="mailto:info@reactfasttraining.co.uk">info@reactfasttraining.co.uk</a> |
+        📞 07447 485644 |
         🌐 <a href="https://reactfasttraining.co.uk">reactfasttraining.co.uk</a>
       </p>
       <p style="margin: 0; font-size: 12px; color: #9CA3AF;">
@@ -191,7 +205,7 @@ export class EmailService {
 
     await this.sendEmail({
       to: booking.contactDetails.email,
-      subject: `Booking Confirmation - ${session.courseName || 'First Aid Course'} - ${booking.bookingReference}`,
+      subject: `Booking Confirmation - ${session.courseId} - ${booking.bookingReference}`,
       html,
     });
 
@@ -480,7 +494,7 @@ export class EmailService {
   }
 
   async sendVenueDetails(booking: Booking, session: CourseSession): Promise<void> {
-    const sessionDate = new Date(session.sessionDate || session.startDate);
+    const sessionDate = new Date(session.startDate);
     const formattedDate = sessionDate.toLocaleDateString('en-GB', {
       weekday: 'long',
       day: 'numeric',
@@ -514,7 +528,7 @@ export class EmailService {
     
     <div class="content">
       <p>Dear ${booking.contactDetails.firstName},</p>
-      <p>Your <strong>${session.courseName || 'First Aid'}</strong> course is coming up soon! Here are the venue details for your training:</p>
+      <p>Your <strong>${session.courseId}</strong> course is coming up soon! Here are the venue details for your training:</p>
 
       <div class="venue-box">
         <h2 style="margin-top: 0; color: #1F2937;">Venue Information</h2>
@@ -574,7 +588,7 @@ export class EmailService {
     <div class="footer">
       <p style="margin: 0 0 10px 0;"><strong>React Fast Training</strong></p>
       <p style="margin: 0 0 10px 0;">
-        📧 <a href="mailto:info@reactfasttraining.co.uk">info@reactfasttraining.co.uk</a> | 
+        📧 <a href="mailto:info@reactfasttraining.co.uk">info@reactfasttraining.co.uk</a> |
         📞 07447 485644
       </p>
       <p style="margin: 0; font-size: 12px; color: #9CA3AF;">
@@ -588,13 +602,10 @@ export class EmailService {
 
     await this.sendEmail({
       to: booking.contactDetails.email,
-      subject: `Venue Details - ${session.courseName || 'First Aid Course'} - ${formattedDate}`,
+      subject: `Venue Details - ${session.courseId} - ${formattedDate}`,
       html,
     });
 
-    await this.bookingRepository.updateById(booking.id, {
-      venueDetailsSentAt: new Date(),
-    });
   }
 
   async sendPasswordChangedEmail(user: User): Promise<void> {

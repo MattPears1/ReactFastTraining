@@ -24,7 +24,8 @@
         .floating-icon {
             position: absolute;
             animation: float 20s infinite linear;
-            opacity: 0.1;
+            opacity: 0.6;
+            filter: drop-shadow(0 4px 6px rgba(0,0,0,0.1));
         }
         
         @keyframes float {
@@ -84,40 +85,95 @@
         
         /* Progress Bar Animation */
         .progress-fill {
+            background: var(--fill-color);
             animation: fillProgress 2s ease-out forwards;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .progress-fill::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            bottom: 0;
+            right: 0;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+            animation: shimmer 2s infinite;
         }
         
         @keyframes fillProgress {
             from { width: 0%; }
         }
         
+        @keyframes shimmer {
+            from { transform: translateX(-100%); }
+            to { transform: translateX(100%); }
+        }
+        
         /* Medical Cursor */
-        .medical-cursor {
-            cursor: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="%23ef4444" stroke-width="2"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5Z"/></svg>'), auto;
+        .medical-cursor-heart {
+            cursor: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="%230EA5E9" stroke-width="2"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5Z"/></svg>'), auto;
+        }
+        .medical-cursor-plus {
+            cursor: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="%2310B981" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="16"/><line x1="8" y1="12" x2="16" y2="12"/></svg>'), auto;
+        }
+        .medical-cursor-shield {
+            cursor: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="%236366F1" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>'), auto;
         }
         
         /* Staggered Animation */
         .stagger-item {
             opacity: 0;
-            transform: translateY(50px);
-            animation: staggerIn 0.6s ease-out forwards;
+            transform: translateY(50px) scale(0.9);
+            animation: staggerIn 0.8s cubic-bezier(0.68, -0.55, 0.265, 1.55) forwards;
         }
         
         @keyframes staggerIn {
             to {
                 opacity: 1;
-                transform: translateY(0);
+                transform: translateY(0) scale(1);
             }
         }
         
         /* Morphing Shapes */
         .morph-shape {
+            animation: morph 8s ease-in-out infinite, pulse 4s ease-in-out infinite;
+            position: relative;
+        }
+        
+        .morph-shape::before {
+            content: '';
+            position: absolute;
+            inset: -20px;
+            background: inherit;
+            filter: blur(20px);
+            opacity: 0.5;
             animation: morph 8s ease-in-out infinite;
         }
         
         @keyframes morph {
-            0%, 100% { border-radius: 60% 40% 30% 70% / 60% 30% 70% 40%; }
-            50% { border-radius: 30% 60% 70% 40% / 50% 60% 30% 60%; }
+            0%, 100% { 
+                border-radius: 60% 40% 30% 70% / 60% 30% 70% 40%;
+                transform: rotate(0deg) scale(1);
+            }
+            25% { 
+                border-radius: 40% 60% 60% 40% / 60% 30% 70% 40%;
+                transform: rotate(90deg) scale(1.1);
+            }
+            50% { 
+                border-radius: 30% 60% 70% 40% / 50% 60% 30% 60%;
+                transform: rotate(180deg) scale(1);
+            }
+            75% { 
+                border-radius: 40% 50% 60% 30% / 40% 60% 30% 70%;
+                transform: rotate(270deg) scale(0.9);
+            }
+        }
+        
+        @keyframes pulse {
+            0%, 100% { opacity: 0.3; }
+            50% { opacity: 0.6; }
         }
         
         /* Gradient Mesh Animation */
@@ -145,6 +201,9 @@
             position: relative;
             overflow: hidden;
             transition: all 0.3s;
+            background: linear-gradient(135deg, #0EA5E9 0%, #0284C7 100%);
+            border: none;
+            box-shadow: 0 2px 10px rgba(14, 165, 233, 0.2);
         }
         
         .liquid-button::before {
@@ -160,6 +219,11 @@
             transition: width 0.6s, height 0.6s;
         }
         
+        .liquid-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 20px rgba(14, 165, 233, 0.3);
+        }
+        
         .liquid-button:hover::before {
             width: 300px;
             height: 300px;
@@ -168,12 +232,22 @@
         /* Magnetic Button Effect */
         .magnetic-button {
             transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            background: linear-gradient(135deg, #0EA5E9 0%, #0284C7 100%);
+            border: none;
+            box-shadow: 0 4px 15px rgba(14, 165, 233, 0.3);
+        }
+        
+        .magnetic-button:hover {
+            box-shadow: 0 6px 20px rgba(14, 165, 233, 0.4);
         }
         
         /* Emergency Lights */
         .emergency-lights {
             position: relative;
             overflow: hidden;
+            background: linear-gradient(135deg, #F97316 0%, #EA580C 100%);
+            border: none;
+            box-shadow: 0 2px 10px rgba(249, 115, 22, 0.3);
         }
         
         .emergency-lights::before,
@@ -188,12 +262,12 @@
         
         .emergency-lights::before {
             left: -40%;
-            background: linear-gradient(90deg, transparent, #ef4444, transparent);
+            background: linear-gradient(90deg, transparent, #fbbf24, transparent);
         }
         
         .emergency-lights::after {
             right: -40%;
-            background: linear-gradient(90deg, transparent, #3b82f6, transparent);
+            background: linear-gradient(90deg, transparent, #fbbf24, transparent);
             animation-delay: 1s;
         }
         
@@ -206,6 +280,19 @@
             background: linear-gradient(90deg, #f3f4f6 25%, #e5e7eb 50%, #f3f4f6 75%);
             background-size: 200% 100%;
             animation: loading 1.5s infinite;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .skeleton-text::after {
+            content: 'Loading...';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            color: #9ca3af;
+            font-size: 12px;
+            font-weight: 500;
         }
         
         @keyframes loading {
@@ -219,12 +306,25 @@
             width: 10px;
             height: 10px;
             background: #10B981;
-            animation: confettiFall 3s linear forwards;
+            animation: confettiFall 3s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
         }
         
         @keyframes confettiFall {
-            to {
-                transform: translateY(300px) rotate(360deg);
+            0% {
+                transform: translateY(-20px) rotate(0deg) scale(1);
+                opacity: 1;
+            }
+            20% {
+                transform: translateY(40px) translateX(20px) rotate(90deg) scale(1.2);
+            }
+            40% {
+                transform: translateY(100px) translateX(-10px) rotate(180deg) scale(1);
+            }
+            60% {
+                transform: translateY(180px) translateX(15px) rotate(270deg) scale(0.8);
+            }
+            100% {
+                transform: translateY(300px) translateX(-5px) rotate(360deg) scale(0.5);
                 opacity: 0;
             }
         }
@@ -245,7 +345,8 @@
             border-radius: 8px;
             white-space: nowrap;
             transition: transform 0.3s;
-            margin-bottom: 8px;
+            margin-bottom: 16px;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
         }
         
         .tooltip:hover .tooltip-content {
@@ -257,23 +358,16 @@
             font-variant-numeric: tabular-nums;
         }
         
-        /* Timeline Animation */
-        .timeline-line {
-            height: 2px;
-            background: #0EA5E9;
-            transform-origin: left;
-            animation: growLine 2s ease-out forwards;
-        }
-        
-        @keyframes growLine {
-            from { transform: scaleX(0); }
-            to { transform: scaleX(1); }
-        }
-        
         /* Certificate 3D */
         .certificate-3d {
             transform-style: preserve-3d;
             animation: rotate3d 10s linear infinite;
+            perspective: 1000px;
+        }
+        
+        .certificate-3d-inner {
+            transform-style: preserve-3d;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
         }
         
         @keyframes rotate3d {
@@ -283,7 +377,20 @@
         
         /* Live Feed Ticker */
         .ticker {
-            animation: ticker 20s linear infinite;
+            animation: ticker 30s linear infinite;
+            display: flex;
+            gap: 80px;
+        }
+        
+        .ticker-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            white-space: nowrap;
+            padding: 8px 16px;
+            background: rgba(16, 185, 129, 0.1);
+            border-radius: 20px;
+            border: 1px solid rgba(16, 185, 129, 0.2);
         }
         
         @keyframes ticker {
@@ -303,9 +410,11 @@
     <nav class="bg-white shadow-lg sticky top-0 z-50">
         <div class="container mx-auto px-4 py-3">
             <div class="flex flex-wrap gap-2 justify-center text-sm">
+                <a href="#certificate" class="px-3 py-1 rounded hover:bg-blue-100">3D Certificate</a>
+                <a href="#ticker" class="px-3 py-1 rounded hover:bg-blue-100">Live Feed</a>
+                <a href="#quiz" class="px-3 py-1 rounded hover:bg-blue-100">Refresher Quiz</a>
                 <a href="#heartbeat" class="px-3 py-1 rounded hover:bg-blue-100">Heartbeat</a>
                 <a href="#floating" class="px-3 py-1 rounded hover:bg-blue-100">Floating Icons</a>
-                <a href="#counter" class="px-3 py-1 rounded hover:bg-blue-100">Counter</a>
                 <a href="#cards" class="px-3 py-1 rounded hover:bg-blue-100">3D Cards</a>
                 <a href="#progress" class="px-3 py-1 rounded hover:bg-blue-100">Progress Bars</a>
                 <a href="#pulse" class="px-3 py-1 rounded hover:bg-blue-100">Pulse Effect</a>
@@ -316,11 +425,7 @@
                 <a href="#magnetic" class="px-3 py-1 rounded hover:bg-blue-100">Magnetic</a>
                 <a href="#skeleton" class="px-3 py-1 rounded hover:bg-blue-100">Skeleton</a>
                 <a href="#tooltip" class="px-3 py-1 rounded hover:bg-blue-100">Tooltips</a>
-                <a href="#timeline" class="px-3 py-1 rounded hover:bg-blue-100">Timeline</a>
-                <a href="#certificate" class="px-3 py-1 rounded hover:bg-blue-100">3D Certificate</a>
-                <a href="#ticker" class="px-3 py-1 rounded hover:bg-blue-100">Live Feed</a>
-                <a href="#quiz" class="px-3 py-1 rounded hover:bg-blue-100">Quiz</a>
-                <a href="#map" class="px-3 py-1 rounded hover:bg-blue-100">Map</a>
+                <a href="#timer" class="px-3 py-1 rounded hover:bg-blue-100">Response Timer</a>
                 <a href="#myths" class="px-3 py-1 rounded hover:bg-blue-100">Myths</a>
             </div>
         </div>
@@ -328,6 +433,127 @@
 
     <div class="container mx-auto px-4 py-8 space-y-16">
         
+        <!-- 3D Certificate (Moved to top) -->
+        <section id="certificate" class="bg-white rounded-lg shadow-lg p-8">
+            <h2 class="text-2xl font-bold mb-4">Enhanced 3D Rotating Certificate Preview</h2>
+            <div class="flex justify-center">
+                <div class="certificate-3d">
+                    <div class="certificate-3d-inner bg-gradient-to-br from-amber-50 to-amber-100 p-10 rounded-lg border-8 border-double border-amber-700">
+                        <div class="text-center">
+                            <div class="flex justify-center mb-4">
+                                <i data-lucide="award" class="w-20 h-20 text-amber-700"></i>
+                            </div>
+                            <h3 class="text-3xl font-serif font-bold text-gray-800 mb-1">Certificate of Achievement</h3>
+                            <div class="w-32 h-1 bg-amber-600 mx-auto mb-4"></div>
+                            <p class="text-lg text-gray-700 mb-2">This is to certify that</p>
+                            <p class="text-2xl font-bold text-gray-900 mb-2">[Student Name]</p>
+                            <p class="text-lg text-gray-700 mb-1">has successfully completed</p>
+                            <p class="text-xl font-bold text-amber-700 mb-4">Emergency First Aid at Work</p>
+                            <div class="flex justify-center gap-8 mb-6">
+                                <div>
+                                    <p class="text-sm text-gray-600">Date Issued</p>
+                                    <p class="font-semibold">[Date]</p>
+                                </div>
+                                <div>
+                                    <p class="text-sm text-gray-600">Certificate No.</p>
+                                    <p class="font-semibold">RFT-2024-0001</p>
+                                </div>
+                            </div>
+                            <div class="mt-6 pt-6 border-t-2 border-amber-400">
+                                <div class="flex justify-between items-center">
+                                    <div class="text-left">
+                                        <p class="text-xs text-gray-500">Instructor</p>
+                                        <p class="font-signature text-lg">Lex Karakaxas</p>
+                                    </div>
+                                    <div class="flex gap-4">
+                                        <div class="text-center">
+                                            <i data-lucide="shield-check" class="w-8 h-8 text-amber-600 mx-auto"></i>
+                                            <p class="text-xs mt-1">Ofqual</p>
+                                        </div>
+                                        <div class="text-center">
+                                            <i data-lucide="check-circle" class="w-8 h-8 text-amber-600 mx-auto"></i>
+                                            <p class="text-xs mt-1">HSE</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Course Refresher Quiz (Modified) -->
+        <section id="quiz" class="bg-white rounded-lg shadow-lg p-8">
+            <h2 class="text-2xl font-bold mb-4">First Aid Knowledge Check - Do You Need a Refresher?</h2>
+            <div class="max-w-2xl mx-auto">
+                <div class="bg-blue-50 border-2 border-blue-200 rounded-lg p-6 mb-6">
+                    <p class="text-blue-800 font-semibold mb-2">Quick Assessment</p>
+                    <p class="text-blue-700">Answer these 3 questions to see if your first aid skills need updating</p>
+                </div>
+                
+                <div class="space-y-6">
+                    <div>
+                        <p class="font-semibold mb-3">1. How long should you cool a burn with water?</p>
+                        <div class="space-y-2">
+                            <label class="flex items-center p-3 border-2 rounded-lg hover:bg-blue-50 hover:border-blue-300 cursor-pointer transition-all">
+                                <input type="radio" name="q1" class="mr-3 text-blue-600">
+                                <span>5 minutes</span>
+                            </label>
+                            <label class="flex items-center p-3 border-2 rounded-lg hover:bg-blue-50 hover:border-blue-300 cursor-pointer transition-all">
+                                <input type="radio" name="q1" class="mr-3 text-blue-600">
+                                <span>10 minutes</span>
+                            </label>
+                            <label class="flex items-center p-3 border-2 rounded-lg hover:bg-blue-50 hover:border-blue-300 cursor-pointer transition-all">
+                                <input type="radio" name="q1" class="mr-3 text-blue-600">
+                                <span>20 minutes</span>
+                            </label>
+                        </div>
+                    </div>
+                    
+                    <div>
+                        <p class="font-semibold mb-3">2. What's the correct CPR compression to breath ratio for adults?</p>
+                        <div class="space-y-2">
+                            <label class="flex items-center p-3 border-2 rounded-lg hover:bg-blue-50 hover:border-blue-300 cursor-pointer transition-all">
+                                <input type="radio" name="q2" class="mr-3 text-blue-600">
+                                <span>15:2</span>
+                            </label>
+                            <label class="flex items-center p-3 border-2 rounded-lg hover:bg-blue-50 hover:border-blue-300 cursor-pointer transition-all">
+                                <input type="radio" name="q2" class="mr-3 text-blue-600">
+                                <span>30:2</span>
+                            </label>
+                            <label class="flex items-center p-3 border-2 rounded-lg hover:bg-blue-50 hover:border-blue-300 cursor-pointer transition-all">
+                                <input type="radio" name="q2" class="mr-3 text-blue-600">
+                                <span>5:1</span>
+                            </label>
+                        </div>
+                    </div>
+                    
+                    <div>
+                        <p class="font-semibold mb-3">3. When was your last first aid training?</p>
+                        <div class="space-y-2">
+                            <label class="flex items-center p-3 border-2 rounded-lg hover:bg-blue-50 hover:border-blue-300 cursor-pointer transition-all">
+                                <input type="radio" name="q3" class="mr-3 text-blue-600">
+                                <span>Within the last year</span>
+                            </label>
+                            <label class="flex items-center p-3 border-2 rounded-lg hover:bg-blue-50 hover:border-blue-300 cursor-pointer transition-all">
+                                <input type="radio" name="q3" class="mr-3 text-blue-600">
+                                <span>1-3 years ago</span>
+                            </label>
+                            <label class="flex items-center p-3 border-2 rounded-lg hover:bg-blue-50 hover:border-blue-300 cursor-pointer transition-all">
+                                <input type="radio" name="q3" class="mr-3 text-blue-600">
+                                <span>More than 3 years ago</span>
+                            </label>
+                        </div>
+                    </div>
+                    
+                    <button class="w-full bg-gradient-to-r from-blue-600 to-blue-700 text-white py-4 rounded-lg font-semibold hover:from-blue-700 hover:to-blue-800 transition-all transform hover:scale-[1.02]">
+                        Check My Knowledge
+                    </button>
+                </div>
+            </div>
+        </section>
+
         <!-- Heartbeat Animation -->
         <section id="heartbeat" class="bg-white rounded-lg shadow-lg p-8">
             <h2 class="text-2xl font-bold mb-4">Heartbeat Animation (Hero Background)</h2>
@@ -345,38 +571,27 @@
             </div>
         </section>
 
-        <!-- Floating Medical Icons -->
+        <!-- Floating Medical Icons (Enhanced) -->
         <section id="floating" class="bg-white rounded-lg shadow-lg p-8">
-            <h2 class="text-2xl font-bold mb-4">Floating Medical Icons (Subtle Background)</h2>
+            <h2 class="text-2xl font-bold mb-4">Enhanced Floating Medical Icons</h2>
             <div class="relative h-64 bg-gradient-to-br from-blue-50 to-green-50 rounded-lg overflow-hidden">
                 <div class="floating-icon" style="left: 10%; animation-delay: 0s;">
-                    <i data-lucide="heart" class="w-8 h-8 text-red-400"></i>
+                    <i data-lucide="heart" class="w-12 h-12 text-red-500"></i>
                 </div>
-                <div class="floating-icon" style="left: 30%; animation-delay: 5s;">
-                    <i data-lucide="shield" class="w-8 h-8 text-blue-400"></i>
+                <div class="floating-icon" style="left: 25%; animation-delay: 5s;">
+                    <i data-lucide="shield" class="w-12 h-12 text-blue-500"></i>
                 </div>
-                <div class="floating-icon" style="left: 50%; animation-delay: 10s;">
-                    <i data-lucide="plus" class="w-8 h-8 text-green-400"></i>
+                <div class="floating-icon" style="left: 45%; animation-delay: 10s;">
+                    <i data-lucide="plus-circle" class="w-12 h-12 text-green-500"></i>
                 </div>
-                <div class="floating-icon" style="left: 70%; animation-delay: 15s;">
-                    <i data-lucide="activity" class="w-8 h-8 text-purple-400"></i>
+                <div class="floating-icon" style="left: 65%; animation-delay: 15s;">
+                    <i data-lucide="activity" class="w-12 h-12 text-orange-500"></i>
+                </div>
+                <div class="floating-icon" style="left: 80%; animation-delay: 20s;">
+                    <i data-lucide="stethoscope" class="w-12 h-12 text-indigo-500"></i>
                 </div>
                 <div class="absolute inset-0 flex items-center justify-center">
                     <h3 class="text-2xl font-semibold text-gray-800">Professional First Aid Training</h3>
-                </div>
-            </div>
-        </section>
-
-        <!-- Emergency Counter -->
-        <section id="counter" class="bg-white rounded-lg shadow-lg p-8">
-            <h2 class="text-2xl font-bold mb-4">Emergency Counter Animation</h2>
-            <div class="text-center">
-                <div class="inline-flex items-center gap-4 bg-red-50 px-8 py-6 rounded-lg">
-                    <i data-lucide="heart" class="w-12 h-12 text-red-500"></i>
-                    <div>
-                        <div class="text-4xl font-bold text-red-600 counter" id="livesCounter">0</div>
-                        <p class="text-gray-600">Lives Impacted This Year</p>
-                    </div>
                 </div>
             </div>
         </section>
@@ -387,12 +602,12 @@
             <div class="grid md:grid-cols-3 gap-6">
                 <div class="flip-card">
                     <div class="flip-card-inner">
-                        <div class="flip-card-front bg-blue-500 text-white flex flex-col justify-center">
-                            <i data-lucide="briefcase" class="w-16 h-16 mx-auto mb-4"></i>
-                            <h3 class="text-xl font-bold">First Aid at Work</h3>
-                            <p class="mt-2">3 Days • £200</p>
+                        <div class="flip-card-front bg-gradient-to-br from-blue-50 via-white to-blue-50/30 border-2 border-blue-200 text-gray-800 flex flex-col justify-center">
+                            <i data-lucide="briefcase" class="w-16 h-16 mx-auto mb-4 text-blue-600"></i>
+                            <h3 class="text-xl font-bold text-gray-900">First Aid at Work</h3>
+                            <p class="mt-2 text-gray-600">3 Days • £200</p>
                         </div>
-                        <div class="flip-card-back bg-blue-600 text-white">
+                        <div class="flip-card-back bg-gradient-to-br from-blue-500 to-blue-600 text-white">
                             <h3 class="text-xl font-bold mb-4">What You'll Learn</h3>
                             <ul class="text-left space-y-2">
                                 <li>✓ Emergency procedures</li>
@@ -407,12 +622,12 @@
                 
                 <div class="flip-card">
                     <div class="flip-card-inner">
-                        <div class="flip-card-front bg-purple-500 text-white flex flex-col justify-center">
-                            <i data-lucide="baby" class="w-16 h-16 mx-auto mb-4"></i>
-                            <h3 class="text-xl font-bold">Paediatric First Aid</h3>
-                            <p class="mt-2">2 Days • £120</p>
+                        <div class="flip-card-front bg-gradient-to-br from-orange-50 via-white to-orange-50/30 border-2 border-orange-200 text-gray-800 flex flex-col justify-center">
+                            <i data-lucide="baby" class="w-16 h-16 mx-auto mb-4 text-orange-600"></i>
+                            <h3 class="text-xl font-bold text-gray-900">Paediatric First Aid</h3>
+                            <p class="mt-2 text-gray-600">2 Days • £120</p>
                         </div>
-                        <div class="flip-card-back bg-purple-600 text-white">
+                        <div class="flip-card-back bg-gradient-to-br from-orange-500 to-orange-600 text-white">
                             <h3 class="text-xl font-bold mb-4">What You'll Learn</h3>
                             <ul class="text-left space-y-2">
                                 <li>✓ Child CPR</li>
@@ -420,7 +635,7 @@
                                 <li>✓ Common injuries</li>
                                 <li>✓ Emergency care</li>
                             </ul>
-                            <button class="mt-4 bg-white text-purple-600 px-4 py-2 rounded">Book Now</button>
+                            <button class="mt-4 bg-white text-orange-600 px-4 py-2 rounded hover:bg-orange-50 transition">Book Now</button>
                         </div>
                     </div>
                 </div>
@@ -447,7 +662,7 @@
             </div>
         </section>
 
-        <!-- Progress Bars -->
+        <!-- Enhanced Progress Bars -->
         <section id="progress" class="bg-white rounded-lg shadow-lg p-8">
             <h2 class="text-2xl font-bold mb-4">Animated Progress Bars (Course Duration)</h2>
             <div class="space-y-6">
@@ -456,8 +671,8 @@
                         <span class="font-semibold">Emergency First Aid at Work</span>
                         <span class="text-gray-600">1 Day</span>
                     </div>
-                    <div class="h-4 bg-gray-200 rounded-full overflow-hidden">
-                        <div class="progress-fill h-full bg-blue-500" style="width: 33%"></div>
+                    <div class="h-6 bg-gray-200 rounded-full overflow-hidden">
+                        <div class="progress-fill h-full" style="width: 33%; --fill-color: #60A5FA"></div>
                     </div>
                 </div>
                 <div>
@@ -465,8 +680,8 @@
                         <span class="font-semibold">First Aid at Work</span>
                         <span class="text-gray-600">3 Days</span>
                     </div>
-                    <div class="h-4 bg-gray-200 rounded-full overflow-hidden">
-                        <div class="progress-fill h-full bg-green-500" style="width: 100%; animation-delay: 0.3s"></div>
+                    <div class="h-6 bg-gray-200 rounded-full overflow-hidden">
+                        <div class="progress-fill h-full" style="width: 100%; animation-delay: 0.3s; --fill-color: #34D399"></div>
                     </div>
                 </div>
                 <div>
@@ -474,8 +689,8 @@
                         <span class="font-semibold">Annual Refresher</span>
                         <span class="text-gray-600">3 Hours</span>
                     </div>
-                    <div class="h-4 bg-gray-200 rounded-full overflow-hidden">
-                        <div class="progress-fill h-full bg-purple-500" style="width: 10%; animation-delay: 0.6s"></div>
+                    <div class="h-6 bg-gray-200 rounded-full overflow-hidden">
+                        <div class="progress-fill h-full" style="width: 10%; animation-delay: 0.6s; --fill-color: #FB923C"></div>
                     </div>
                 </div>
             </div>
@@ -485,10 +700,10 @@
         <section id="pulse" class="bg-white rounded-lg shadow-lg p-8">
             <h2 class="text-2xl font-bold mb-4">Emergency Pulse Effect</h2>
             <div class="flex gap-4 justify-center">
-                <button class="pulse-emergency bg-red-500 text-white px-8 py-4 rounded-lg font-semibold">
+                <button class="pulse-emergency bg-gradient-to-r from-orange-400 to-orange-500 text-white px-8 py-4 rounded-lg font-semibold shadow-lg hover:shadow-xl transition-shadow">
                     Emergency First Aid
                 </button>
-                <button class="bg-blue-500 text-white px-8 py-4 rounded-lg font-semibold hover:bg-blue-600 transition">
+                <button class="bg-gradient-to-r from-blue-400 to-blue-500 text-white px-8 py-4 rounded-lg font-semibold hover:from-blue-500 hover:to-blue-600 transition shadow-lg hover:shadow-xl">
                     Standard Course
                 </button>
             </div>
@@ -496,57 +711,60 @@
 
         <!-- Medical Cursor -->
         <section class="bg-white rounded-lg shadow-lg p-8">
-            <h2 class="text-2xl font-bold mb-4">Medical Cursor (Hover over cards)</h2>
+            <h2 class="text-2xl font-bold mb-4">Medical Cursor (Different icons on hover)</h2>
             <div class="grid md:grid-cols-3 gap-4">
-                <div class="medical-cursor bg-blue-100 p-6 rounded-lg hover:bg-blue-200 transition">
+                <div class="medical-cursor-heart bg-gradient-to-br from-blue-50 to-blue-100 p-6 rounded-lg hover:from-blue-100 hover:to-blue-200 transition">
                     <i data-lucide="stethoscope" class="w-12 h-12 text-blue-600 mb-4"></i>
-                    <h3 class="font-semibold">Professional Training</h3>
+                    <h3 class="font-semibold text-gray-800">Professional Training</h3>
+                    <p class="text-sm text-gray-600 mt-2">Expert-led courses</p>
                 </div>
-                <div class="medical-cursor bg-green-100 p-6 rounded-lg hover:bg-green-200 transition">
+                <div class="medical-cursor-plus bg-gradient-to-br from-green-50 to-green-100 p-6 rounded-lg hover:from-green-100 hover:to-green-200 transition">
                     <i data-lucide="shield-check" class="w-12 h-12 text-green-600 mb-4"></i>
-                    <h3 class="font-semibold">Certified Courses</h3>
+                    <h3 class="font-semibold text-gray-800">Certified Courses</h3>
+                    <p class="text-sm text-gray-600 mt-2">HSE approved</p>
                 </div>
-                <div class="medical-cursor bg-purple-100 p-6 rounded-lg hover:bg-purple-200 transition">
-                    <i data-lucide="award" class="w-12 h-12 text-purple-600 mb-4"></i>
-                    <h3 class="font-semibold">Recognized Certificates</h3>
+                <div class="medical-cursor-shield bg-gradient-to-br from-orange-50 to-orange-100 p-6 rounded-lg hover:from-orange-100 hover:to-orange-200 transition">
+                    <i data-lucide="award" class="w-12 h-12 text-orange-600 mb-4"></i>
+                    <h3 class="font-semibold text-gray-800">Recognised Certificates</h3>
+                    <p class="text-sm text-gray-600 mt-2">Ofqual regulated</p>
                 </div>
             </div>
         </section>
 
-        <!-- Staggered Animations -->
+        <!-- Enhanced Staggered Animations -->
         <section id="stagger" class="bg-white rounded-lg shadow-lg p-8">
-            <h2 class="text-2xl font-bold mb-4">Staggered Card Animations</h2>
+            <h2 class="text-2xl font-bold mb-4">Enhanced Staggered Card Animations</h2>
             <div class="grid md:grid-cols-4 gap-4">
-                <div class="stagger-item bg-gradient-to-br from-blue-400 to-blue-600 text-white p-6 rounded-lg" style="animation-delay: 0.1s">
+                <div class="stagger-item bg-gradient-to-br from-blue-400 to-blue-600 text-white p-6 rounded-lg shadow-xl" style="animation-delay: 0.1s">
                     <i data-lucide="users" class="w-8 h-8 mb-2"></i>
-                    <div class="text-2xl font-bold">500+</div>
-                    <p class="text-sm">Trained Students</p>
+                    <div class="text-3xl font-bold">500+</div>
+                    <p class="text-sm opacity-90">Trained Students</p>
                 </div>
-                <div class="stagger-item bg-gradient-to-br from-green-400 to-green-600 text-white p-6 rounded-lg" style="animation-delay: 0.2s">
+                <div class="stagger-item bg-gradient-to-br from-green-400 to-green-600 text-white p-6 rounded-lg shadow-xl" style="animation-delay: 0.2s">
                     <i data-lucide="star" class="w-8 h-8 mb-2"></i>
-                    <div class="text-2xl font-bold">4.9/5</div>
-                    <p class="text-sm">Average Rating</p>
+                    <div class="text-3xl font-bold">4.9/5</div>
+                    <p class="text-sm opacity-90">Average Rating</p>
                 </div>
-                <div class="stagger-item bg-gradient-to-br from-purple-400 to-purple-600 text-white p-6 rounded-lg" style="animation-delay: 0.3s">
+                <div class="stagger-item bg-gradient-to-br from-orange-400 to-orange-600 text-white p-6 rounded-lg shadow-xl" style="animation-delay: 0.3s">
                     <i data-lucide="award" class="w-8 h-8 mb-2"></i>
-                    <div class="text-2xl font-bold">100%</div>
-                    <p class="text-sm">Pass Rate</p>
+                    <div class="text-3xl font-bold">100%</div>
+                    <p class="text-sm opacity-90">Pass Rate</p>
                 </div>
-                <div class="stagger-item bg-gradient-to-br from-orange-400 to-orange-600 text-white p-6 rounded-lg" style="animation-delay: 0.4s">
+                <div class="stagger-item bg-gradient-to-br from-orange-400 to-orange-600 text-white p-6 rounded-lg shadow-xl" style="animation-delay: 0.4s">
                     <i data-lucide="clock" class="w-8 h-8 mb-2"></i>
-                    <div class="text-2xl font-bold">24/7</div>
-                    <p class="text-sm">Support</p>
+                    <div class="text-3xl font-bold">24/7</div>
+                    <p class="text-sm opacity-90">Support</p>
                 </div>
             </div>
         </section>
 
-        <!-- Morphing Shapes -->
+        <!-- Enhanced Morphing Shapes -->
         <section class="bg-white rounded-lg shadow-lg p-8">
-            <h2 class="text-2xl font-bold mb-4">Morphing Medical Shapes</h2>
+            <h2 class="text-2xl font-bold mb-4">Enhanced Morphing Medical Shapes</h2>
             <div class="flex justify-center gap-8">
-                <div class="morph-shape w-32 h-32 bg-gradient-to-br from-red-400 to-pink-500 opacity-20"></div>
-                <div class="morph-shape w-32 h-32 bg-gradient-to-br from-blue-400 to-cyan-500 opacity-20" style="animation-delay: 2s"></div>
-                <div class="morph-shape w-32 h-32 bg-gradient-to-br from-green-400 to-emerald-500 opacity-20" style="animation-delay: 4s"></div>
+                <div class="morph-shape w-32 h-32 bg-gradient-to-br from-red-400 to-pink-500"></div>
+                <div class="morph-shape w-32 h-32 bg-gradient-to-br from-blue-400 to-cyan-500" style="animation-delay: 2s"></div>
+                <div class="morph-shape w-32 h-32 bg-gradient-to-br from-green-400 to-emerald-500" style="animation-delay: 4s"></div>
             </div>
         </section>
 
@@ -561,10 +779,10 @@
             </div>
         </section>
 
-        <!-- Glassmorphism -->
+        <!-- Glassmorphism (Green background) -->
         <section id="glass" class="bg-white rounded-lg shadow-lg p-8">
             <h2 class="text-2xl font-bold mb-4">Glassmorphism Cards</h2>
-            <div class="relative h-64 bg-gradient-to-br from-blue-400 via-purple-500 to-pink-500 rounded-lg p-8">
+            <div class="relative h-64 bg-gradient-to-br from-blue-400 via-green-500 to-teal-500 rounded-lg p-8">
                 <div class="grid md:grid-cols-3 gap-4">
                     <div class="glass-card p-6 rounded-lg text-white">
                         <i data-lucide="book-open" class="w-8 h-8 mb-2"></i>
@@ -585,39 +803,39 @@
             </div>
         </section>
 
-        <!-- Liquid Buttons -->
+        <!-- Enhanced Liquid Buttons -->
         <section id="liquid" class="bg-white rounded-lg shadow-lg p-8">
-            <h2 class="text-2xl font-bold mb-4">Liquid Button Effects</h2>
+            <h2 class="text-2xl font-bold mb-4">Professional Liquid Button Effects</h2>
             <div class="flex gap-4 justify-center">
-                <button class="liquid-button bg-blue-500 text-white px-8 py-4 rounded-lg font-semibold relative">
+                <button class="liquid-button text-white px-8 py-4 rounded-lg font-semibold relative hover:scale-[1.02] transition-transform">
                     Book Course
                 </button>
-                <button class="liquid-button bg-green-500 text-white px-8 py-4 rounded-lg font-semibold relative">
+                <button class="bg-gradient-to-r from-green-400 to-green-500 text-white px-8 py-4 rounded-lg font-semibold shadow-lg hover:shadow-xl hover:scale-[1.02] transition-all">
                     Get Quote
                 </button>
-                <button class="emergency-lights bg-red-500 text-white px-8 py-4 rounded-lg font-semibold relative">
+                <button class="emergency-lights text-white px-8 py-4 rounded-lg font-semibold relative hover:scale-[1.02] transition-transform">
                     Emergency Course
                 </button>
             </div>
         </section>
 
-        <!-- Magnetic Buttons -->
+        <!-- Enhanced Magnetic Buttons -->
         <section id="magnetic" class="bg-white rounded-lg shadow-lg p-8">
-            <h2 class="text-2xl font-bold mb-4">Magnetic Button Effect</h2>
+            <h2 class="text-2xl font-bold mb-4">Professional Magnetic Button Effect</h2>
             <div class="flex justify-center">
-                <button class="magnetic-button bg-purple-500 text-white px-12 py-6 rounded-lg font-semibold text-lg" id="magneticBtn">
+                <button class="magnetic-button text-white px-12 py-6 rounded-lg font-semibold text-lg" id="magneticBtn">
                     Hover Near Me
                 </button>
             </div>
             <p class="text-center text-gray-600 mt-4">Move your cursor near the button to see the magnetic effect</p>
         </section>
 
-        <!-- Skeleton Loading -->
+        <!-- Enhanced Skeleton Loading -->
         <section id="skeleton" class="bg-white rounded-lg shadow-lg p-8">
-            <h2 class="text-2xl font-bold mb-4">Skeleton Loading States</h2>
+            <h2 class="text-2xl font-bold mb-4">Enhanced Skeleton Loading States</h2>
             <div class="space-y-4">
                 <div class="border rounded-lg p-4">
-                    <div class="skeleton h-6 w-3/4 rounded mb-2"></div>
+                    <div class="skeleton skeleton-text h-6 w-3/4 rounded mb-2"></div>
                     <div class="skeleton h-4 w-full rounded mb-2"></div>
                     <div class="skeleton h-4 w-5/6 rounded"></div>
                 </div>
@@ -625,31 +843,34 @@
                     <div class="flex gap-4">
                         <div class="skeleton w-16 h-16 rounded-full"></div>
                         <div class="flex-1">
-                            <div class="skeleton h-4 w-1/2 rounded mb-2"></div>
+                            <div class="skeleton skeleton-text h-4 w-1/2 rounded mb-2"></div>
                             <div class="skeleton h-3 w-3/4 rounded"></div>
                         </div>
                     </div>
                 </div>
+                <div class="border rounded-lg p-4">
+                    <div class="skeleton skeleton-text h-32 w-full rounded"></div>
+                </div>
             </div>
         </section>
 
-        <!-- Success Animation -->
+        <!-- Enhanced Success Animation -->
         <section class="bg-white rounded-lg shadow-lg p-8">
-            <h2 class="text-2xl font-bold mb-4">Success Animation (Form Submission)</h2>
+            <h2 class="text-2xl font-bold mb-4">Enhanced Success Animation (Form Submission)</h2>
             <div class="text-center">
-                <button class="bg-green-500 text-white px-8 py-4 rounded-lg font-semibold" onclick="showSuccess()">
+                <button class="bg-gradient-to-r from-green-400 to-green-500 text-white px-8 py-4 rounded-lg font-semibold shadow-md hover:shadow-lg hover:scale-[1.02] transition-all" onclick="showSuccess()">
                     Submit Form
                 </button>
                 <div id="successContainer" class="relative inline-block"></div>
             </div>
         </section>
 
-        <!-- Tooltips -->
+        <!-- Enhanced Tooltips -->
         <section id="tooltip" class="bg-white rounded-lg shadow-lg p-8">
-            <h2 class="text-2xl font-bold mb-4">Rich Tooltips</h2>
+            <h2 class="text-2xl font-bold mb-4">Rich Tooltips (Higher Position)</h2>
             <div class="flex gap-6 justify-center">
                 <div class="tooltip">
-                    <button class="bg-blue-500 text-white px-6 py-3 rounded-lg">
+                    <button class="bg-gradient-to-r from-blue-400 to-blue-500 text-white px-6 py-3 rounded-lg shadow-lg hover:shadow-xl transition-shadow">
                         EFAW Course
                     </button>
                     <div class="tooltip-content">
@@ -658,7 +879,7 @@
                     </div>
                 </div>
                 <div class="tooltip">
-                    <button class="bg-purple-500 text-white px-6 py-3 rounded-lg">
+                    <button class="bg-gradient-to-r from-orange-400 to-orange-500 text-white px-6 py-3 rounded-lg shadow-lg hover:shadow-xl transition-shadow">
                         PFA Course
                     </button>
                     <div class="tooltip-content">
@@ -667,7 +888,7 @@
                     </div>
                 </div>
                 <div class="tooltip">
-                    <button class="bg-green-500 text-white px-6 py-3 rounded-lg">
+                    <button class="bg-gradient-to-r from-green-400 to-green-500 text-white px-6 py-3 rounded-lg shadow-lg hover:shadow-xl transition-shadow">
                         Refresher
                     </button>
                     <div class="tooltip-content">
@@ -678,130 +899,15 @@
             </div>
         </section>
 
-        <!-- Timeline Animation -->
-        <section id="timeline" class="bg-white rounded-lg shadow-lg p-8">
-            <h2 class="text-2xl font-bold mb-4">Animated Timeline (3-Step Process)</h2>
-            <div class="max-w-2xl mx-auto">
-                <div class="flex items-center justify-between">
-                    <div class="text-center z-10">
-                        <div class="w-16 h-16 bg-blue-500 rounded-full flex items-center justify-center text-white font-bold text-xl mb-2">1</div>
-                        <p class="font-semibold">Choose Course</p>
-                    </div>
-                    <div class="flex-1 px-4">
-                        <div class="timeline-line bg-blue-500"></div>
-                    </div>
-                    <div class="text-center z-10">
-                        <div class="w-16 h-16 bg-green-500 rounded-full flex items-center justify-center text-white font-bold text-xl mb-2">2</div>
-                        <p class="font-semibold">Book Date</p>
-                    </div>
-                    <div class="flex-1 px-4">
-                        <div class="timeline-line bg-green-500" style="animation-delay: 0.5s"></div>
-                    </div>
-                    <div class="text-center z-10">
-                        <div class="w-16 h-16 bg-purple-500 rounded-full flex items-center justify-center text-white font-bold text-xl mb-2">3</div>
-                        <p class="font-semibold">Get Certified</p>
-                    </div>
+        <!-- Enhanced Emergency Response Timer -->
+        <section id="timer" class="bg-white rounded-lg shadow-lg p-8">
+            <h2 class="text-2xl font-bold mb-4">Emergency Response Timer with Facts</h2>
+            <div class="text-center">
+                <div class="inline-block bg-red-50 rounded-lg p-8 border-2 border-red-200">
+                    <div class="text-6xl font-bold text-red-600 counter" id="responseTimer">4:00</div>
+                    <p class="text-gray-700 mt-4 font-semibold" id="factText">Brain cells begin to die after 4 minutes without oxygen</p>
+                    <p class="text-green-600 font-semibold mt-4">With our training: Immediate response can save lives</p>
                 </div>
-            </div>
-        </section>
-
-        <!-- 3D Certificate -->
-        <section id="certificate" class="bg-white rounded-lg shadow-lg p-8">
-            <h2 class="text-2xl font-bold mb-4">3D Rotating Certificate Preview</h2>
-            <div class="flex justify-center">
-                <div class="certificate-3d">
-                    <div class="bg-gradient-to-br from-yellow-100 to-yellow-200 p-8 rounded-lg shadow-2xl border-4 border-yellow-600">
-                        <div class="text-center">
-                            <i data-lucide="award" class="w-16 h-16 text-yellow-600 mx-auto mb-4"></i>
-                            <h3 class="text-2xl font-bold text-gray-800 mb-2">Certificate of Completion</h3>
-                            <p class="text-gray-600">First Aid at Work</p>
-                            <div class="mt-4 pt-4 border-t border-yellow-400">
-                                <p class="text-sm text-gray-500">Ofqual Regulated • HSE Approved</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- Live Training Feed -->
-        <section id="ticker" class="bg-white rounded-lg shadow-lg p-8">
-            <h2 class="text-2xl font-bold mb-4">Live Training Feed Ticker</h2>
-            <div class="bg-gray-100 rounded-lg p-4 overflow-hidden">
-                <div class="ticker whitespace-nowrap">
-                    <span class="inline-block px-8">
-                        <i data-lucide="check-circle" class="inline w-4 h-4 text-green-500"></i>
-                        John from Leeds completed EFAW training
-                    </span>
-                    <span class="inline-block px-8">
-                        <i data-lucide="check-circle" class="inline w-4 h-4 text-green-500"></i>
-                        Sarah from Sheffield passed First Aid at Work
-                    </span>
-                    <span class="inline-block px-8">
-                        <i data-lucide="check-circle" class="inline w-4 h-4 text-green-500"></i>
-                        Team from Bradford completed workplace training
-                    </span>
-                </div>
-            </div>
-        </section>
-
-        <!-- Course Recommendation Quiz -->
-        <section id="quiz" class="bg-white rounded-lg shadow-lg p-8">
-            <h2 class="text-2xl font-bold mb-4">Course Recommendation Quiz</h2>
-            <div class="max-w-md mx-auto">
-                <div class="space-y-4">
-                    <div>
-                        <p class="font-semibold mb-2">What type of environment?</p>
-                        <div class="space-y-2">
-                            <label class="flex items-center p-3 border rounded-lg hover:bg-blue-50 cursor-pointer">
-                                <input type="radio" name="env" class="mr-3">
-                                <span>Workplace/Office</span>
-                            </label>
-                            <label class="flex items-center p-3 border rounded-lg hover:bg-blue-50 cursor-pointer">
-                                <input type="radio" name="env" class="mr-3">
-                                <span>Working with children</span>
-                            </label>
-                            <label class="flex items-center p-3 border rounded-lg hover:bg-blue-50 cursor-pointer">
-                                <input type="radio" name="env" class="mr-3">
-                                <span>Outdoor activities</span>
-                            </label>
-                        </div>
-                    </div>
-                    <button class="w-full bg-blue-500 text-white py-3 rounded-lg font-semibold hover:bg-blue-600">
-                        Get Recommendation
-                    </button>
-                </div>
-            </div>
-        </section>
-
-        <!-- Interactive Map -->
-        <section id="map" class="bg-white rounded-lg shadow-lg p-8">
-            <h2 class="text-2xl font-bold mb-4">Interactive Yorkshire Map</h2>
-            <div class="bg-gray-100 rounded-lg p-8 text-center">
-                <div class="inline-block relative">
-                    <svg viewBox="0 0 400 300" class="w-full max-w-md">
-                        <!-- Simplified Yorkshire map -->
-                        <path d="M100 50 L300 50 L320 150 L280 250 L120 250 L80 150 Z" 
-                              fill="#e0e7ff" stroke="#3730a3" stroke-width="2"/>
-                        
-                        <!-- Cities -->
-                        <circle cx="200" cy="120" r="8" fill="#3730a3" class="hover:r-12 transition-all cursor-pointer">
-                            <title>Leeds</title>
-                        </circle>
-                        <text x="200" y="140" text-anchor="middle" class="text-sm font-semibold">Leeds</text>
-                        
-                        <circle cx="150" cy="180" r="8" fill="#3730a3" class="hover:r-12 transition-all cursor-pointer">
-                            <title>Sheffield</title>
-                        </circle>
-                        <text x="150" y="200" text-anchor="middle" class="text-sm font-semibold">Sheffield</text>
-                        
-                        <circle cx="250" cy="160" r="8" fill="#3730a3" class="hover:r-12 transition-all cursor-pointer">
-                            <title>York</title>
-                        </circle>
-                        <text x="250" y="180" text-anchor="middle" class="text-sm font-semibold">York</text>
-                    </svg>
-                </div>
-                <p class="mt-4 text-gray-600">Click on a city to see available training locations</p>
             </div>
         </section>
 
@@ -893,14 +999,36 @@
             </div>
         </section>
 
-        <!-- Emergency Response Timer -->
-        <section class="bg-white rounded-lg shadow-lg p-8">
-            <h2 class="text-2xl font-bold mb-4">Emergency Response Timer</h2>
-            <div class="text-center">
-                <div class="inline-block">
-                    <div class="text-6xl font-bold text-red-600 counter" id="responseTimer">4:00</div>
-                    <p class="text-gray-600 mt-2">Average time before brain damage begins without CPR</p>
-                    <p class="text-green-600 font-semibold mt-4">With our training: Immediate response</p>
+        <!-- Live Training Feed (Moved to bottom) -->
+        <section id="ticker" class="bg-white rounded-lg shadow-lg p-8">
+            <h2 class="text-2xl font-bold mb-4">Enhanced Live Training Feed Ticker</h2>
+            <div class="bg-gradient-to-r from-green-50 to-blue-50 rounded-lg p-6 overflow-hidden">
+                <div class="ticker">
+                    <div class="ticker-item">
+                        <i data-lucide="user-check" class="w-5 h-5 text-green-600"></i>
+                        <span class="font-semibold">John Smith</span> from Leeds completed EFAW training
+                        <span class="text-xs text-gray-500 ml-2">2 mins ago</span>
+                    </div>
+                    <div class="ticker-item">
+                        <i data-lucide="users" class="w-5 h-5 text-blue-600"></i>
+                        <span class="font-semibold">Team of 12</span> from Sheffield NHS Trust passed FAW
+                        <span class="text-xs text-gray-500 ml-2">15 mins ago</span>
+                    </div>
+                    <div class="ticker-item">
+                        <i data-lucide="baby" class="w-5 h-5 text-orange-600"></i>
+                        <span class="font-semibold">Sarah Johnson</span> certified in Paediatric First Aid
+                        <span class="text-xs text-gray-500 ml-2">1 hour ago</span>
+                    </div>
+                    <div class="ticker-item">
+                        <i data-lucide="building" class="w-5 h-5 text-orange-600"></i>
+                        <span class="font-semibold">Bradford Council</span> completed workplace training
+                        <span class="text-xs text-gray-500 ml-2">3 hours ago</span>
+                    </div>
+                    <div class="ticker-item">
+                        <i data-lucide="refresh-cw" class="w-5 h-5 text-green-600"></i>
+                        <span class="font-semibold">5 professionals</span> renewed their certifications
+                        <span class="text-xs text-gray-500 ml-2">Today</span>
+                    </div>
                 </div>
             </div>
         </section>
@@ -911,35 +1039,40 @@
         // Initialize Lucide icons
         lucide.createIcons();
 
-        // Counter Animation
-        function animateCounter(id, target, duration = 2000) {
-            const element = document.getElementById(id);
-            const start = 0;
-            const increment = target / (duration / 16);
-            let current = start;
-            
-            const timer = setInterval(() => {
-                current += increment;
-                if (current >= target) {
-                    current = target;
-                    clearInterval(timer);
-                }
-                element.textContent = Math.floor(current);
-            }, 16);
-        }
+        // Counter Animation - removed emergency counter
 
-        // Start counter when visible
-        const observer = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting && entry.target.id === 'livesCounter') {
-                    animateCounter('livesCounter', 523);
-                    observer.unobserve(entry.target);
+        // Response timer with changing facts
+        const facts = [
+            "Brain cells begin to die after 4 minutes without oxygen",
+            "70% of cardiac arrests happen at home",
+            "Effective CPR can double survival chances",
+            "Only 2% of people feel confident to give first aid",
+            "Every year 150,000 people die from situations where first aid could help"
+        ];
+        
+        let currentFactIndex = 0;
+        let responseTime = 240; // 4 minutes in seconds
+        const responseTimer = document.getElementById('responseTimer');
+        const factText = document.getElementById('factText');
+        
+        setInterval(() => {
+            if (responseTime > 0) {
+                responseTime--;
+                const minutes = Math.floor(responseTime / 60);
+                const seconds = responseTime % 60;
+                responseTimer.textContent = `${minutes}:${seconds.toString().padStart(2, '0')}`;
+                
+                if (responseTime < 60) {
+                    responseTimer.classList.add('text-red-700');
                 }
-            });
-        });
-
-        const counter = document.getElementById('livesCounter');
-        if (counter) observer.observe(counter);
+            } else {
+                // Reset timer and change fact
+                responseTime = 240;
+                currentFactIndex = (currentFactIndex + 1) % facts.length;
+                factText.textContent = facts[currentFactIndex];
+                responseTimer.classList.remove('text-red-700');
+            }
+        }, 1000);
 
         // Magnetic button effect
         const magneticBtn = document.getElementById('magneticBtn');
@@ -960,45 +1093,31 @@
             });
         }
 
-        // Success animation
+        // Enhanced success animation
         function showSuccess() {
             const container = document.getElementById('successContainer');
             container.innerHTML = '';
             
-            // Create checkmark
+            // Create checkmark with animation
             const checkmark = document.createElement('div');
             checkmark.className = 'text-green-500 text-6xl';
             checkmark.innerHTML = '✓';
             checkmark.style.animation = 'countUp 0.5s ease-out';
             container.appendChild(checkmark);
             
-            // Create confetti
-            for (let i = 0; i < 20; i++) {
+            // Create floating confetti
+            const colors = ['#10B981', '#3B82F6', '#F59E0B', '#EF4444', '#8B5CF6'];
+            for (let i = 0; i < 30; i++) {
                 const confetti = document.createElement('div');
                 confetti.className = 'confetti';
-                confetti.style.left = Math.random() * 100 + '%';
-                confetti.style.backgroundColor = ['#10B981', '#3B82F6', '#F59E0B', '#EF4444'][Math.floor(Math.random() * 4)];
-                confetti.style.animationDelay = Math.random() * 0.5 + 's';
+                confetti.style.left = (Math.random() * 200 - 100) + 'px';
+                confetti.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+                confetti.style.animationDelay = Math.random() * 0.3 + 's';
+                confetti.style.width = Math.random() * 10 + 5 + 'px';
+                confetti.style.height = confetti.style.width;
                 container.appendChild(confetti);
             }
         }
-
-        // Response timer countdown
-        let responseTime = 240; // 4 minutes in seconds
-        const responseTimer = document.getElementById('responseTimer');
-        
-        setInterval(() => {
-            if (responseTime > 0) {
-                responseTime--;
-                const minutes = Math.floor(responseTime / 60);
-                const seconds = responseTime % 60;
-                responseTimer.textContent = `${minutes}:${seconds.toString().padStart(2, '0')}`;
-                
-                if (responseTime < 60) {
-                    responseTimer.classList.add('text-red-700');
-                }
-            }
-        }, 1000);
     </script>
 </body>
 </html>

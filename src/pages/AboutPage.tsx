@@ -16,7 +16,7 @@ const values = [
     icon: Shield,
     title: "Royal Navy and Policing Background",
     description:
-      "Our founder's Navy and policing background brings discipline, clarity, and real-world experience to every course.",
+      "Our founder's Royal Navy and policing background brings discipline, clarity, and real-world experience to every course.",
   },
   {
     icon: Users,
@@ -96,9 +96,9 @@ const AboutPage: React.FC = () => {
                 Our Mission
               </h2>
               <p className="text-sm sm:text-base text-gray-600 dark:text-gray-400 mb-4 sm:mb-6">
-                To provide Yorkshire businesses and individuals with the highest
-                quality first aid training, delivered by experienced
-                professionals who understand that knowledge saves lives.
+                To provide South Yorkshire businesses and individuals with the highest
+                quality first aid training, delivered by an experienced
+                professional who understands that the knowledge of first aid saves lives.
               </p>
               <p className="text-sm sm:text-base text-gray-600 dark:text-gray-400">
                 We believe that everyone should have access to life-saving
@@ -118,10 +118,7 @@ const AboutPage: React.FC = () => {
                 Our Story
               </h2>
               <p className="text-sm sm:text-base text-gray-600 dark:text-gray-400 mb-4 sm:mb-6">
-                Founded by Lex, React Fast Training brings together the
-                discipline from Royal Navy and policing service. This background
-                shapes our approach to training - practical, no-nonsense, and
-                focused on real-world application.
+                Founded by Lex, React Fast Training is an organisation led by an experienced instructor who brings together the discipline from the Royal Navy and policing services. This background shapes our approach to training: practical, no-nonsense, and focussed on real-world application.
               </p>
               <p className="text-sm sm:text-base text-gray-600 dark:text-gray-400">
                 We're not a faceless corporation - we're a small, personal
@@ -259,12 +256,9 @@ const AboutPage: React.FC = () => {
               <div className="grid md:grid-cols-2 gap-8">
                 <div className="relative">
                   <img
-                    src="/images/homepage1.png"
+                    src="/images/placeholder-course.jpg"
                     alt="Lead Instructor teaching first aid"
                     className="w-full h-full object-cover"
-                    onError={(e) => {
-                      e.currentTarget.src = "/images/placeholder-course.jpg";
-                    }}
                   />
                 </div>
                 <div className="p-8">
@@ -272,17 +266,7 @@ const AboutPage: React.FC = () => {
                     Lex - Founder & Lead Instructor
                   </h3>
                   <p className="text-gray-600 dark:text-gray-400 mb-4">
-                    With a background in the Royal Navy and law enforcement, Lex
-                    brings a unique perspective to first aid training. This
-                    means you're learning from someone who understands the
-                    importance of clear instruction and practical skills.
-                  </p>
-                  <p className="text-gray-600 dark:text-gray-400">
-                    "I founded React Fast Training because I saw a need for
-                    practical, no-nonsense first aid training delivered by
-                    people who truly understand emergencies. Every course I
-                    teach is informed by real experiences, not just textbook
-                    theory."
+                    Hi, I'm Lex, the founder and lead instructor here at React Fast Training. As an experienced instructor with a background in the Royal Navy and policing services, I bring a unique perspective to our first aid training. Having been first aid qualified since the age of 12, I understand the importance of clear instruction and practical skills. I founded React Fast Training because I saw a need for practical, no-nonsense, first aid training delivered by someone who truly understands applying first aid in real emergencies. Every course I teach is informed by real, first-hand experiences, not just textbook theory.
                   </p>
                   <div className="mt-6 flex flex-wrap justify-center gap-4">
                     <div className="flex items-center gap-2">
@@ -294,7 +278,7 @@ const AboutPage: React.FC = () => {
                     <div className="flex items-center gap-2">
                       <Award className="w-5 h-5 text-primary-600 dark:text-primary-400" />
                       <span className="text-gray-700 dark:text-gray-300">
-                        Police Service
+                        Policing Services
                       </span>
                     </div>
                     <div className="flex items-center gap-2">
@@ -313,8 +297,8 @@ const AboutPage: React.FC = () => {
 
       <CTASection
         title="Ready to Learn First Aid?"
-        description="Join our training courses and gain essential skills. Book your course today."
-        primaryButtonText="Book Your Course"
+        description="Join our training courses and gain essential skills. Contact us today."
+        primaryButtonText="Contact Us"
         secondaryButtonText="Call 07447 485644"
         features={["Ofqual Regulated", "HSE Approved"]}
       />

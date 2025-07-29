@@ -9,11 +9,11 @@ const CPRAEDPage: React.FC = () => {
     price: "£60",
     certificateValidity: "Valid for 1 year",
     description:
-      "This course provides focused training on performing Cardiopulmonary Resuscitation (CPR) and using an Automated External Defibrillator (AED). It is often aimed at both the general public and healthcare professionals needing annual updates.",
+      "This course provides focussed training on performing Cardiopulmonary Resuscitation (CPR) and using an Automated External Defibrillator (AED). It is aimed at both the general public and healthcare professionals needing annual updates.",
 
     learningOutcomes: [
       "Recognising cardiac arrest",
-      "Performing CPR on adults, with variations for children and infants often included",
+      "Performing CPR on adults, with variations for children and infants included",
       "Safe and effective use of an AED",
       "Dealing with an unresponsive casualty",
     ],
@@ -24,7 +24,7 @@ const CPRAEDPage: React.FC = () => {
       "Care home and healthcare staff",
       "Security personnel",
       "Teachers and school staff",
-      "Community volunteers and first responders",
+      "Community volunteers and first aiders",
       "Sports coaches and fitness instructors",
       "Anyone wanting essential life-saving skills",
       "Those requiring annual CPR recertification",
@@ -56,7 +56,6 @@ const CPRAEDPage: React.FC = () => {
     accreditations: [
       "Resuscitation Council UK Guidelines",
       "HSE Approved",
-      "First Aid Industry Body (FAIB) Member",
     ],
 
     whatToExpect: [
@@ -77,7 +76,7 @@ const CPRAEDPage: React.FC = () => {
       "None - suitable for complete beginners and those needing refresher training",
 
     seoKeywords:
-      "CPR course Yorkshire, AED training South Yorkshire, defibrillator course South Yorkshire, CPR certification, resuscitation training",
+      "CPR course, AED training, defibrillator course, CPR certification, resuscitation training",
   };
 
   return <CourseTemplate {...courseData} />;
