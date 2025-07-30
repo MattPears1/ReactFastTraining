@@ -12,7 +12,7 @@ const OxygenTherapyPage: React.FC = () => {
       "This specialised course is for qualified first aiders and healthcare professionals who may need to administer oxygen during a medical emergency. Learn the safe use, storage, and handling of oxygen equipment in emergency situations.",
 
     learningOutcomes: [
-      "Recognize the indications and contraindications of oxygen therapy",
+      "Recognise the indications and contraindications of oxygen therapy",
       "Understand the health and safety guidelines for use, storage, and handling of oxygen",
       "Conduct operational checks of oxygen equipment",
       "Administer oxygen using various delivery devices like non-rebreather masks and bag valve masks",

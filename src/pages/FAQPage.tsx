@@ -19,7 +19,7 @@ const faqData: FAQItem[] = [
     question:
       "What first aid courses does React Fast Training offer?",
     answer:
-      "We offer Emergency First Aid at Work (EFAW), First Aid at Work (FAW), Paediatric First Aid (PFA), Emergency Paediatric First Aid (EPFA), Activity First Aid (AFA), Annual Refreshers, Oxygen Therapy courses, and CPR and AED. All courses are Ofqual regulated and HSE approved.",
+      "We offer Emergency First Aid at Work (EFAW), First Aid at Work (FAW), Paediatric First Aid (PFA), Emergency Paediatric First Aid (EPFA), Activity First Aid (AFA), Annual Refreshers, Oxygen Therapy Course, and CPR and AED. All courses are Ofqual regulated and HSE approved.",
     category: "Courses",
   },
   {
@@ -40,7 +40,7 @@ const faqData: FAQItem[] = [
     id: "5",
     question: "Do I need any prior experience to attend a first aid course?",
     answer:
-      "The majority of our courses require no prior experience or qualifications other than the oxygen therapy course, which the participant is required to have a valid first aid at work or emergency first aid at work certificate. Our training is designed for complete beginners and our experienced trainer will guide you through everything step by step.",
+      "The majority of our courses require no prior experience or qualifications other than the Oxygen Therapy Course, which the participant is required to have a valid First Aid at Work or Emergency First Aid at Work certificate. Our training is designed for complete beginners and our experienced trainer will guide you through everything step by step.",
     category: "Requirements",
   },
   {
@@ -68,7 +68,7 @@ const faqData: FAQItem[] = [
     id: "9",
     question: "Are your courses HSE approved?",
     answer:
-      "Yes, all our first aid courses are fully HSE (Health and Safety Executive) approved and meet the requirements of the Health and Safety (First Aid) Regulations 1981. We're also Ofqual regulated.",
+      "Yes, all our first aid courses are fully HSE (Health and Safety Executive) approved and meet the requirements of the Health and Safety (First-Aid) Regulations 1981. We're also Ofqual regulated.",
     category: "Accreditation",
   },
   {
@@ -171,7 +171,7 @@ const FAQPage: React.FC = () => {
               <span className="text-gradient gradient-primary">FAQs</span>
             </h1>
             <p className="text-base sm:text-lg md:text-xl text-gray-600 dark:text-gray-400 px-4 sm:px-0">
-              The majority of our courses require no prior experience or qualifications other than the oxygen therapy course, which the participant is required to have a valid first aid at work or emergency first aid at work certificate. Our training is designed for complete beginners and our experienced trainer will guide you through everything step by step.
+              The majority of our courses require no prior experience or qualifications other than the Oxygen Therapy Course, which the participant is required to have a valid First Aid at Work or Emergency First Aid at Work certificate. Our training is designed for complete beginners and our experienced trainer will guide you through everything step by step.
             </p>
           </motion.div>
         </div>

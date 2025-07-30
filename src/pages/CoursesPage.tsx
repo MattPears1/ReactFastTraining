@@ -23,18 +23,6 @@ import { AnimatedCourseCard } from "@components/ui/AnimatedCourseCard";
 const courses = [
   // Primary courses - ordered as requested
   {
-    id: "efaw",
-    title: "Emergency First Aid at Work",
-    acronym: "EFAW",
-    duration: "1 Day",
-    price: "£100",
-    icon: Heart,
-    color: "primary",
-    description: "Essential life-saving skills for workplace emergencies",
-    highlights: ["CPR & Resuscitation", "Wound Management", "HSE Approved"],
-    href: "/courses/efaw",
-  },
-  {
     id: "faw",
     title: "First Aid at Work",
     acronym: "FAW",
@@ -49,6 +37,18 @@ const courses = [
       "3-Year Certificate",
     ],
     href: "/courses/faw",
+  },
+  {
+    id: "efaw",
+    title: "Emergency First Aid at Work",
+    acronym: "EFAW",
+    duration: "1 Day",
+    price: "£100",
+    icon: Heart,
+    color: "primary",
+    description: "Essential life-saving skills for workplace emergencies",
+    highlights: ["CPR & Resuscitation", "Wound Management", "HSE Approved"],
+    href: "/courses/efaw",
   },
   {
     id: "paediatric",

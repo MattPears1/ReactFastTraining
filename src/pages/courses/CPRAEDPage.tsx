@@ -9,7 +9,7 @@ const CPRAEDPage: React.FC = () => {
     price: "£60",
     certificateValidity: "Valid for 1 year",
     description:
-      "This course provides focussed training on performing Cardiopulmonary Resuscitation (CPR) and using an Automated External Defibrillator (AED). It is aimed at both the general public and healthcare professionals needing annual updates.",
+      "This course provides focused training on performing Cardiopulmonary Resuscitation (CPR) and using an Automated External Defibrillator (AED). It is aimed at both the general public and healthcare professionals needing annual updates.",
 
     learningOutcomes: [
       "Recognise a cardiac arrest",

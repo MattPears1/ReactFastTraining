@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import { Star, Upload, CheckCircle, AlertCircle, Loader2 } from "lucide-react";
 import { useToast } from "@contexts/ToastContext";
-import { testimonialApi } from "@services/api.service";
 
 interface TestimonialFormProps {
   onSuccess?: () => void;
@@ -139,23 +138,35 @@ export const TestimonialForm: React.FC<TestimonialFormProps> = ({
     setIsSubmitting(true);
 
     try {
-      const response = await testimonialApi.submitForm({
-        authorName: formData.authorName,
-        authorEmail: formData.authorEmail,
-        authorLocation: formData.authorLocation,
-        courseTaken: formData.courseTaken,
-        courseDate: formData.courseDate,
-        content: formData.content,
-        rating: rating,
-        showFullName: formData.showFullName,
-        photoConsent: formData.photoConsent,
-        bookingReference: formData.bookingReference,
-        photo: photoFile || undefined,
+      const submitData = new FormData();
+
+      // Add form data
+      Object.entries(formData).forEach(([key, value]) => {
+        submitData.append(key, value.toString());
       });
+
+      // Add rating
+      submitData.append("rating", rating.toString());
+
+      // Add photo if provided
+      if (photoFile) {
+        submitData.append("photo", photoFile);
+      }
+
+      const response = await fetch("/api/testimonials/submit", {
+        method: "POST",
+        body: submitData,
+      });
+
+      if (!response.ok) {
+        throw new Error("Failed to submit testimonial");
+      }
+
+      const result = await response.json();
 
       showToast(
         "success",
-        response.message || "Thank you for your testimonial! We appreciate your feedback and will review it shortly.",
+        result.message || "Thank you for your testimonial! We appreciate your feedback and will review it shortly.",
       );
 
       // Reset form

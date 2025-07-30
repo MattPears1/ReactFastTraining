@@ -3,6 +3,7 @@ const path = require('path');
 const compression = require('compression');
 const cors = require('cors');
 const nodemailer = require('nodemailer');
+const multer = require('multer');
 const dotenv = require('dotenv');
 const fs = require('fs');
 
@@ -71,6 +72,21 @@ const transporter = nodemailer.createTransport({
     user: process.env.SMTP_USER || process.env.EMAIL_USER,
     pass: process.env.SMTP_PASS || process.env.EMAIL_PASS
   }
+});
+
+// Configure multer for file uploads
+const upload = multer({
+  storage: multer.memoryStorage(),
+  limits: {
+    fileSize: 5 * 1024 * 1024, // 5MB limit
+  },
+  fileFilter: (req, file, cb) => {
+    if (file.mimetype.startsWith('image/')) {
+      cb(null, true);
+    } else {
+      cb(new Error('Only image files are allowed'));
+    }
+  },
 });
 
 // Health check endpoint
@@ -163,6 +179,113 @@ async function handleContactForm(req, res) {
     });
   }
 }
+
+// Testimonial submission endpoint - same pattern as contact form
+app.post('/api/testimonials/submit', upload.single('photo'), async (req, res) => {
+  try {
+    // Extract testimonial data
+    const testimonialData = {
+      authorName: req.body.authorName,
+      authorEmail: req.body.authorEmail,
+      authorLocation: req.body.authorLocation,
+      courseTaken: req.body.courseTaken,
+      courseDate: req.body.courseDate,
+      content: req.body.content,
+      rating: parseInt(req.body.rating, 10),
+      showFullName: req.body.showFullName === 'true',
+      photoConsent: req.body.photoConsent,
+      bookingReference: req.body.bookingReference,
+      photoFile: req.file
+    };
+
+    console.log('📝 Testimonial submission received:', {
+      authorName: testimonialData.authorName,
+      authorEmail: testimonialData.authorEmail,
+      courseTaken: testimonialData.courseTaken,
+      rating: testimonialData.rating,
+      hasPhoto: !!testimonialData.photoFile,
+      timestamp: new Date().toISOString()
+    });
+
+    // Basic validation - same as contact form
+    if (!testimonialData.authorName || !testimonialData.authorEmail || !testimonialData.content || !testimonialData.courseTaken || !testimonialData.rating) {
+      return res.status(400).json({
+        success: false,
+        message: 'Name, email, course, rating, and testimonial content are required'
+      });
+    }
+
+    // Send notification email to business - exactly like contact form
+    const businessEmailOptions = {
+      from: process.env.EMAIL_FROM || 'noreply@reactfasttraining.co.uk',
+      to: 'info@reactfasttraining.co.uk',
+      subject: `New Testimonial Received - ${testimonialData.courseTaken}`,
+      html: `
+        <h2>New Testimonial Received</h2>
+        <p><strong>From:</strong> ${testimonialData.authorName} (${testimonialData.authorEmail})</p>
+        <p><strong>Course:</strong> ${testimonialData.courseTaken}</p>
+        ${testimonialData.courseDate ? `<p><strong>Course Date:</strong> ${testimonialData.courseDate}</p>` : ''}
+        ${testimonialData.authorLocation ? `<p><strong>Location:</strong> ${testimonialData.authorLocation}</p>` : ''}
+        <p><strong>Rating:</strong> ${'⭐'.repeat(testimonialData.rating)} (${testimonialData.rating}/5)</p>
+        ${testimonialData.bookingReference ? `<p><strong>Booking Reference:</strong> ${testimonialData.bookingReference}</p>` : ''}
+        <p><strong>Show Full Name:</strong> ${testimonialData.showFullName ? 'Yes' : 'No'}</p>
+        <p><strong>Photo Consent:</strong> ${testimonialData.photoConsent === 'given' ? 'Yes' : 'No'}</p>
+        ${testimonialData.photoFile ? `<p><strong>Photo:</strong> Attached (${testimonialData.photoFile.originalname})</p>` : ''}
+        
+        <h3>Testimonial:</h3>
+        <p>${testimonialData.content}</p>
+        <hr>
+        <p><em>This email was sent from the React Fast Training website testimonial form.</em></p>
+      `,
+      attachments: testimonialData.photoFile ? [{
+        filename: testimonialData.photoFile.originalname,
+        content: testimonialData.photoFile.buffer,
+        contentType: testimonialData.photoFile.mimetype
+      }] : []
+    };
+
+    // Send confirmation email to customer - exactly like contact form
+    const customerEmailOptions = {
+      from: process.env.EMAIL_FROM || 'noreply@reactfasttraining.co.uk',
+      to: testimonialData.authorEmail,
+      subject: 'Thank you for your testimonial - React Fast Training',
+      html: `
+        <h2>Thank you for your testimonial!</h2>
+        <p>Dear ${testimonialData.authorName},</p>
+        <p>We have received your testimonial and truly appreciate your feedback.</p>
+        <p>If you have any questions, please call us on 07447 485644.</p>
+        
+        <hr>
+        <h3>Copy of your testimonial:</h3>
+        <p><strong>Name:</strong> ${testimonialData.authorName}</p>
+        <p><strong>Email:</strong> ${testimonialData.authorEmail}</p>
+        <p><strong>Course:</strong> ${testimonialData.courseTaken}</p>
+        <p><strong>Rating:</strong> ${'⭐'.repeat(testimonialData.rating)} (${testimonialData.rating}/5)</p>
+        <p><strong>Testimonial:</strong></p>
+        <p>${testimonialData.content}</p>
+        <hr>
+        
+        <p>Best regards,<br>React Fast Training Team</p>
+        <p><em>This is an automated response. Please do not reply to this email.</em></p>
+      `
+    };
+
+    // Send both emails - exactly like contact form
+    await transporter.sendMail(businessEmailOptions);
+    await transporter.sendMail(customerEmailOptions);
+
+    res.json({
+      success: true,
+      message: 'Thank you for your testimonial! We appreciate your feedback and will review it shortly.'
+    });
+  } catch (error) {
+    console.error('Testimonial email error:', error);
+    res.status(500).json({
+      success: false,
+      message: 'Failed to submit testimonial. Please try again later.'
+    });
+  }
+});
 
 // Track page views
 app.get('/', (req, res, next) => {

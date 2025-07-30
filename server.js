@@ -4,6 +4,8 @@ const compression = require('compression');
 const cors = require('cors');
 const crypto = require('crypto');
 const bcrypt = require('bcryptjs');
+const nodemailer = require('nodemailer');
+const multer = require('multer');
 const { createRateLimiter } = require('./middleware/rateLimiter');
 
 const app = express();
@@ -13,6 +15,32 @@ const PORT = process.env.PORT || 3002;
 const ADMIN_EMAIL = process.env.ADMIN_EMAIL || 'lex@reactfasttraining.co.uk';
 const ADMIN_PASSWORD_HASH = process.env.ADMIN_PASSWORD_HASH || '$2a$10$hashed_password_here'; // bcrypt hash
 const JWT_SECRET = process.env.JWT_SECRET || crypto.randomBytes(32).toString('hex');
+
+// Email configuration
+const emailTransporter = nodemailer.createTransporter({
+  host: process.env.SMTP_HOST || 'smtp.gmail.com',
+  port: process.env.SMTP_PORT || 587,
+  secure: false, // true for 465, false for other ports
+  auth: {
+    user: process.env.SMTP_USER || 'reactfasttrain@gmail.com',
+    pass: process.env.SMTP_PASS || 'hjqs xpli xxov bolc'
+  }
+});
+
+// Configure multer for file uploads
+const upload = multer({
+  storage: multer.memoryStorage(),
+  limits: {
+    fileSize: 5 * 1024 * 1024, // 5MB limit
+  },
+  fileFilter: (req, file, cb) => {
+    if (file.mimetype.startsWith('image/')) {
+      cb(null, true);
+    } else {
+      cb(new Error('Only image files are allowed'));
+    }
+  },
+});
 
 // In-memory storage for course sessions (temporary until database is connected)
 let courseSessions = [
@@ -681,22 +709,132 @@ app.get('/api/admin/analytics/comprehensive', verifyAdminToken, (req, res) => {
   res.json(analytics);
 });
 
-// Testimonial submission endpoint
-app.post('/api/testimonials/submit', createRateLimiter('api'), (req, res) => {
+// Testimonial submission endpoint with email functionality
+app.post('/api/testimonials/submit', createRateLimiter('api'), upload.single('photo'), async (req, res) => {
   try {
-    // Log the testimonial data
-    console.log('📝 Testimonial submission received:', {
+    // Extract testimonial data
+    const testimonialData = {
       authorName: req.body.authorName,
       authorEmail: req.body.authorEmail,
+      authorLocation: req.body.authorLocation,
       courseTaken: req.body.courseTaken,
-      rating: req.body.rating,
+      courseDate: req.body.courseDate,
+      content: req.body.content,
+      rating: parseInt(req.body.rating, 10),
+      showFullName: req.body.showFullName === 'true',
+      photoConsent: req.body.photoConsent,
+      bookingReference: req.body.bookingReference,
+      photoFile: req.file
+    };
+
+    console.log('📝 Testimonial submission received:', {
+      authorName: testimonialData.authorName,
+      authorEmail: testimonialData.authorEmail,
+      courseTaken: testimonialData.courseTaken,
+      rating: testimonialData.rating,
+      hasPhoto: !!testimonialData.photoFile,
       timestamp: new Date().toISOString()
     });
+
+    // Validate required fields
+    if (!testimonialData.authorName || !testimonialData.authorEmail || !testimonialData.content || !testimonialData.courseTaken || !testimonialData.rating) {
+      return res.status(400).json({
+        success: false,
+        message: 'Missing required fields'
+      });
+    }
+
+    // Validate email format
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(testimonialData.authorEmail)) {
+      return res.status(400).json({
+        success: false,
+        message: 'Invalid email format'
+      });
+    }
+
+    // Send notification email to business
+    const businessEmailOptions = {
+      from: process.env.EMAIL_FROM || 'reactfasttrain@gmail.com',
+      to: 'info@reactfasttraining.co.uk',
+      subject: `New Testimonial Received - ${testimonialData.courseTaken}`,
+      html: `
+        <h2>New Testimonial Received</h2>
+        <p><strong>From:</strong> ${testimonialData.authorName} (${testimonialData.authorEmail})</p>
+        <p><strong>Course:</strong> ${testimonialData.courseTaken}</p>
+        ${testimonialData.courseDate ? `<p><strong>Course Date:</strong> ${testimonialData.courseDate}</p>` : ''}
+        ${testimonialData.authorLocation ? `<p><strong>Location:</strong> ${testimonialData.authorLocation}</p>` : ''}
+        <p><strong>Rating:</strong> ${'⭐'.repeat(testimonialData.rating)} (${testimonialData.rating}/5)</p>
+        ${testimonialData.bookingReference ? `<p><strong>Booking Reference:</strong> ${testimonialData.bookingReference}</p>` : ''}
+        <p><strong>Show Full Name:</strong> ${testimonialData.showFullName ? 'Yes' : 'No'}</p>
+        <p><strong>Photo Consent:</strong> ${testimonialData.photoConsent === 'given' ? 'Yes' : 'No'}</p>
+        ${testimonialData.photoFile ? `<p><strong>Photo:</strong> Attached (${testimonialData.photoFile.originalname})</p>` : ''}
+        
+        <h3>Testimonial:</h3>
+        <div style="background-color: #f5f5f5; padding: 15px; border-left: 4px solid #0EA5E9; margin: 15px 0;">
+          ${testimonialData.content}
+        </div>
+        
+        <p style="color: #666; font-size: 12px;">
+          Submitted: ${new Date().toLocaleString('en-GB')}
+        </p>
+      `,
+      attachments: testimonialData.photoFile ? [{
+        filename: testimonialData.photoFile.originalname,
+        content: testimonialData.photoFile.buffer,
+        contentType: testimonialData.photoFile.mimetype
+      }] : []
+    };
+
+    // Send confirmation email to customer
+    const customerEmailOptions = {
+      from: process.env.EMAIL_FROM || 'reactfasttrain@gmail.com',
+      to: testimonialData.authorEmail,
+      subject: 'Thank you for your testimonial - React Fast Training',
+      html: `
+        <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
+          <h2 style="color: #0EA5E9;">Thank you for your testimonial!</h2>
+          
+          <p>Dear ${testimonialData.authorName},</p>
+          
+          <p>Thank you for taking the time to share your experience with React Fast Training. We truly appreciate your feedback!</p>
+          
+          <div style="background-color: #f0f9ff; padding: 20px; border-radius: 8px; margin: 20px 0;">
+            <h3 style="color: #0369A1; margin-top: 0;">Your Testimonial Summary:</h3>
+            <p><strong>Course:</strong> ${testimonialData.courseTaken}</p>
+            <p><strong>Rating:</strong> ${'⭐'.repeat(testimonialData.rating)} (${testimonialData.rating}/5)</p>
+            ${testimonialData.courseDate ? `<p><strong>Course Date:</strong> ${testimonialData.courseDate}</p>` : ''}
+          </div>
+          
+          <p>Your testimonial is important to us and will be reviewed by our team. If approved, it may be featured on our website to help others understand the value of our training programs.</p>
+          
+          <p>If you have any questions or need any further assistance, please don't hesitate to contact us.</p>
+          
+          <p>Thank you once again for choosing React Fast Training!</p>
+          
+          <div style="border-top: 2px solid #0EA5E9; padding-top: 20px; margin-top: 30px;">
+            <p><strong>React Fast Training</strong><br>
+            Yorkshire's Premier First Aid Training Provider<br>
+            Email: info@reactfasttraining.co.uk<br>
+            Phone: 07447 485644<br>
+            Website: reactfasttraining.co.uk</p>
+          </div>
+        </div>
+      `
+    };
+
+    // Send both emails
+    await Promise.all([
+      emailTransporter.sendMail(businessEmailOptions),
+      emailTransporter.sendMail(customerEmailOptions)
+    ]);
+
+    console.log('✅ Testimonial emails sent successfully');
     
     // Return success response
     res.json({
       success: true,
-      message: 'Thank you for your testimonial! We appreciate your feedback.'
+      message: 'Thank you for your testimonial! We appreciate your feedback and will review it shortly.'
     });
   } catch (error) {
     console.error('❌ Testimonial submission error:', error);
