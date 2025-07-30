@@ -2,29 +2,17 @@ import Stripe from 'stripe';
 import { db } from '../config/database.config';
 import { 
   payments, 
-  paymentLogs, 
   bookings, 
   webhookEvents,
-  PaymentStatus,
   PaymentEventType,
-  NewPayment,
-  NewPaymentLog
 } from '../db/schema';
 import { eq, and } from 'drizzle-orm';
-import { v4 as uuidv4 } from 'uuid';
-import * as crypto from 'crypto';
-
-interface CreatePaymentIntentData {
-  amount: number; // in pounds
-  bookingId: string;
-  customerEmail: string;
-  customerName?: string;
-  metadata?: Record<string, string>;
-  statementDescriptor?: string;
-  description?: string;
-  setupFutureUsage?: 'on_session' | 'off_session';
-  savePaymentMethod?: boolean;
-}
+import { PaymentError, StripeErrorService } from './stripe/stripe-error.service';
+import { StripeValidationService, CreatePaymentIntentData } from './stripe/stripe-validation.service';
+import { StripeRetryService } from './stripe/stripe-retry.service';
+import { StripeMetricsService } from './stripe/stripe-metrics.service';
+import { StripePaymentLoggerService } from './stripe/stripe-payment-logger.service';
+import { StripeWebhookHandlersService } from './stripe/stripe-webhook-handlers.service';
 
 interface PaymentUpdateData {
   status: string;
@@ -39,45 +27,9 @@ interface PaymentUpdateData {
   riskScore?: number;
 }
 
-interface RetryOptions {
-  maxAttempts?: number;
-  initialDelay?: number;
-  maxDelay?: number;
-  backoffMultiplier?: number;
-}
-
-// Enhanced error types for better error handling
-export class PaymentError extends Error {
-  constructor(
-    message: string,
-    public code: string,
-    public statusCode: number = 400,
-    public details?: any
-  ) {
-    super(message);
-    this.name = 'PaymentError';
-  }
-}
-
 export class StripeServiceEnhanced {
   private static stripe: Stripe;
   private static initialized = false;
-  private static readonly DEFAULT_RETRY_OPTIONS: Required<RetryOptions> = {
-    maxAttempts: 3,
-    initialDelay: 1000,
-    maxDelay: 10000,
-    backoffMultiplier: 2
-  };
-
-  // Performance monitoring
-  private static metrics = {
-    paymentIntentsCreated: 0,
-    paymentIntentsSucceeded: 0,
-    paymentIntentsFailed: 0,
-    webhooksProcessed: 0,
-    webhooksFailed: 0,
-    averageProcessingTime: 0,
-  };
 
   static initialize() {
     if (this.initialized) return;
@@ -109,10 +61,10 @@ export class StripeServiceEnhanced {
     const startTime = Date.now();
 
     // Validate input data
-    this.validatePaymentData(data);
+    StripeValidationService.validatePaymentData(data);
 
     // Generate idempotency key with booking ID and timestamp
-    const idempotencyKey = this.generateIdempotencyKey(data.bookingId);
+    const idempotencyKey = StripeValidationService.generateIdempotencyKey(data.bookingId);
 
     try {
       // Check for existing payment for this booking
@@ -127,7 +79,7 @@ export class StripeServiceEnhanced {
       }
 
       // Convert pounds to pence with proper rounding
-      const amountInPence = this.convertToPence(data.amount);
+      const amountInPence = StripeValidationService.convertToPence(data.amount);
 
       // Prepare payment intent data with enhanced options
       const paymentIntentData: Stripe.PaymentIntentCreateParams = {
@@ -137,7 +89,7 @@ export class StripeServiceEnhanced {
         capture_method: 'automatic',
         receipt_email: data.customerEmail,
         description: data.description || `React Fast Training - Course Booking #${data.bookingId}`,
-        statement_descriptor: this.sanitizeStatementDescriptor(
+        statement_descriptor: StripeValidationService.sanitizeStatementDescriptor(
           data.statementDescriptor || 'REACT FAST TRAIN'
         ),
         metadata: {
@@ -158,7 +110,7 @@ export class StripeServiceEnhanced {
       }
 
       // Create payment intent with retry logic
-      const paymentIntent = await this.retryStripeOperation(
+      const paymentIntent = await StripeRetryService.retryOperation(
         () => this.stripe.paymentIntents.create(paymentIntentData, { idempotencyKey }),
         'createPaymentIntent'
       );
@@ -181,16 +133,20 @@ export class StripeServiceEnhanced {
       }).returning();
 
       // Log payment creation with performance metrics
-      await this.logPaymentEvent(paymentRecord.id, PaymentEventType.CREATED, {
-        paymentIntentId: paymentIntent.id,
-        amount: data.amount,
-        bookingId: data.bookingId,
-        processingTime: Date.now() - startTime,
-      });
+      await StripePaymentLoggerService.logPaymentEvent(
+        paymentRecord.id, 
+        PaymentEventType.CREATED, 
+        {
+          paymentIntentId: paymentIntent.id,
+          amount: data.amount,
+          bookingId: data.bookingId,
+          processingTime: Date.now() - startTime,
+        }
+      );
 
       // Update metrics
-      this.metrics.paymentIntentsCreated++;
-      this.updateAverageProcessingTime(Date.now() - startTime);
+      StripeMetricsService.incrementPaymentIntentsCreated();
+      StripeMetricsService.updateAverageProcessingTime(Date.now() - startTime);
 
       return { 
         paymentIntent, 
@@ -201,15 +157,19 @@ export class StripeServiceEnhanced {
       console.error('Stripe payment intent creation failed:', error);
       
       // Log the error with detailed context
-      await this.logPaymentEvent(null, PaymentEventType.FAILED, {
-        error: this.formatError(error),
-        bookingId: data.bookingId,
-        amount: data.amount,
-        processingTime: Date.now() - startTime,
-      });
+      await StripePaymentLoggerService.logPaymentEvent(
+        null, 
+        PaymentEventType.FAILED, 
+        {
+          error: StripeErrorService.formatError(error),
+          bookingId: data.bookingId,
+          amount: data.amount,
+          processingTime: Date.now() - startTime,
+        }
+      );
 
       // Update failure metrics
-      this.metrics.paymentIntentsFailed++;
+      StripeMetricsService.incrementPaymentIntentsFailed();
 
       // Re-throw with appropriate error type
       if (error instanceof PaymentError) {
@@ -220,7 +180,7 @@ export class StripeServiceEnhanced {
         'Payment processing failed. Please try again.',
         'PAYMENT_CREATION_FAILED',
         500,
-        { originalError: this.formatError(error) }
+        { originalError: StripeErrorService.formatError(error) }
       );
     }
   }
@@ -238,7 +198,7 @@ export class StripeServiceEnhanced {
 
     try {
       // Retrieve payment intent with expanded data
-      const paymentIntent = await this.retryStripeOperation(
+      const paymentIntent = await StripeRetryService.retryOperation(
         () => this.stripe.paymentIntents.retrieve(
           paymentIntentId,
           { 
@@ -296,11 +256,15 @@ export class StripeServiceEnhanced {
     } catch (error) {
       console.error('Payment confirmation failed:', error);
       
-      await this.logPaymentEvent(null, PaymentEventType.FAILED, {
-        error: this.formatError(error),
-        paymentIntentId,
-        processingTime: Date.now() - startTime,
-      });
+      await StripePaymentLoggerService.logPaymentEvent(
+        null, 
+        PaymentEventType.FAILED, 
+        {
+          error: StripeErrorService.formatError(error),
+          paymentIntentId,
+          processingTime: Date.now() - startTime,
+        }
+      );
 
       throw error instanceof PaymentError ? error : new PaymentError(
         'Failed to confirm payment',
@@ -344,10 +308,14 @@ export class StripeServiceEnhanced {
     } catch (err) {
       console.error('Webhook signature verification failed:', err);
       
-      await this.logPaymentEvent(null, PaymentEventType.WEBHOOK_FAILED, {
-        error: 'Invalid webhook signature',
-        headers: this.sanitizeHeaders(headers),
-      });
+      await StripePaymentLoggerService.logPaymentEvent(
+        null, 
+        PaymentEventType.WEBHOOK_FAILED, 
+        {
+          error: 'Invalid webhook signature',
+          headers: StripeValidationService.sanitizeHeaders(headers),
+        }
+      );
 
       throw new PaymentError(
         'Invalid webhook signature',
@@ -374,7 +342,7 @@ export class StripeServiceEnhanced {
         stripeEventId: event.id,
         eventType: event.type,
         eventData: event.data.object as any,
-        headers: this.sanitizeHeaders(headers),
+        headers: StripeValidationService.sanitizeHeaders(headers),
         signatureVerified: true,
       })
       .onConflictDoNothing()
@@ -404,24 +372,28 @@ export class StripeServiceEnhanced {
         .where(eq(webhookEvents.id, webhookRecord.id));
 
       // Log successful processing
-      await this.logPaymentEvent(null, PaymentEventType.WEBHOOK_PROCESSED, {
-        eventId: event.id,
-        eventType: event.type,
-        processingTime: Date.now() - startTime,
-      });
+      await StripePaymentLoggerService.logPaymentEvent(
+        null, 
+        PaymentEventType.WEBHOOK_PROCESSED, 
+        {
+          eventId: event.id,
+          eventType: event.type,
+          processingTime: Date.now() - startTime,
+        }
+      );
 
       // Update metrics
-      this.metrics.webhooksProcessed++;
+      StripeMetricsService.incrementWebhooksProcessed();
 
     } catch (error) {
       // Enhanced error handling with retry scheduling
       const retryCount = webhookRecord.retryCount + 1;
-      const nextRetryAt = this.calculateNextRetryTime(retryCount);
+      const nextRetryAt = StripeRetryService.calculateNextRetryTime(retryCount);
 
       await db
         .update(webhookEvents)
         .set({
-          errorMessage: this.formatError(error),
+          errorMessage: StripeErrorService.formatError(error),
           retryCount,
           nextRetryAt,
           processingDurationMs: Date.now() - startTime,
@@ -429,7 +401,7 @@ export class StripeServiceEnhanced {
         .where(eq(webhookEvents.id, webhookRecord.id));
 
       // Update failure metrics
-      this.metrics.webhooksFailed++;
+      StripeMetricsService.incrementWebhooksFailed();
 
       // Re-throw for Stripe retry
       throw error;
@@ -463,60 +435,60 @@ export class StripeServiceEnhanced {
     switch (event.type) {
       // Payment intent events
       case 'payment_intent.succeeded':
-        await this.handlePaymentSuccess(event.data.object as Stripe.PaymentIntent);
+        await StripeWebhookHandlersService.handlePaymentSuccess(event.data.object as Stripe.PaymentIntent);
         break;
 
       case 'payment_intent.payment_failed':
-        await this.handlePaymentFailed(event.data.object as Stripe.PaymentIntent);
+        await StripeWebhookHandlersService.handlePaymentFailed(event.data.object as Stripe.PaymentIntent);
         break;
 
       case 'payment_intent.processing':
-        await this.handlePaymentProcessing(event.data.object as Stripe.PaymentIntent);
+        await StripeWebhookHandlersService.handlePaymentProcessing(event.data.object as Stripe.PaymentIntent);
         break;
 
       case 'payment_intent.requires_action':
-        await this.handlePaymentActionRequired(event.data.object as Stripe.PaymentIntent);
+        await StripeWebhookHandlersService.handlePaymentActionRequired(event.data.object as Stripe.PaymentIntent);
         break;
 
       // Charge events
       case 'charge.succeeded':
-        await this.handleChargeSucceeded(event.data.object as Stripe.Charge);
+        await StripeWebhookHandlersService.handleChargeSucceeded(event.data.object as Stripe.Charge);
         break;
 
       case 'charge.failed':
-        await this.handleChargeFailed(event.data.object as Stripe.Charge);
+        await StripeWebhookHandlersService.handleChargeFailed(event.data.object as Stripe.Charge);
         break;
 
       case 'charge.dispute.created':
-        await this.handleDispute(event.data.object as Stripe.Dispute);
+        await StripeWebhookHandlersService.handleDispute(event.data.object as Stripe.Dispute);
         break;
 
       case 'charge.refunded':
-        await this.handleChargeRefunded(event.data.object as Stripe.Charge);
+        await StripeWebhookHandlersService.handleChargeRefunded(event.data.object as Stripe.Charge);
         break;
 
       case 'charge.refund.updated':
-        await this.handleRefundUpdated(event.data.object as Stripe.Refund);
+        await StripeWebhookHandlersService.handleRefundUpdated(event.data.object as Stripe.Refund);
         break;
 
       // Payment method events
       case 'payment_method.attached':
-        await this.handlePaymentMethodAttached(event.data.object as Stripe.PaymentMethod);
+        await StripeWebhookHandlersService.handlePaymentMethodAttached(event.data.object as Stripe.PaymentMethod);
         break;
 
       case 'payment_method.detached':
-        await this.handlePaymentMethodDetached(event.data.object as Stripe.PaymentMethod);
+        await StripeWebhookHandlersService.handlePaymentMethodDetached(event.data.object as Stripe.PaymentMethod);
         break;
 
       // Customer events
       case 'customer.created':
       case 'customer.updated':
-        await this.handleCustomerEvent(event.data.object as Stripe.Customer);
+        await StripeWebhookHandlersService.handleCustomerEvent(event.data.object as Stripe.Customer);
         break;
 
       // Radar events
       case 'radar.early_fraud_warning.created':
-        await this.handleFraudWarning(event.data.object as any);
+        await StripeWebhookHandlersService.handleFraudWarning(event.data.object as any);
         break;
 
       default:
@@ -525,54 +497,6 @@ export class StripeServiceEnhanced {
   }
 
   // Helper methods
-
-  private static validatePaymentData(data: CreatePaymentIntentData): void {
-    if (!data.amount || data.amount <= 0) {
-      throw new PaymentError('Invalid payment amount', 'INVALID_AMOUNT', 400);
-    }
-
-    if (!data.bookingId) {
-      throw new PaymentError('Booking ID is required', 'MISSING_BOOKING_ID', 400);
-    }
-
-    if (!data.customerEmail || !this.isValidEmail(data.customerEmail)) {
-      throw new PaymentError('Valid customer email is required', 'INVALID_EMAIL', 400);
-    }
-
-    // Validate amount precision (max 2 decimal places)
-    if (Math.round(data.amount * 100) !== data.amount * 100) {
-      throw new PaymentError(
-        'Amount must have maximum 2 decimal places',
-        'INVALID_AMOUNT_PRECISION',
-        400
-      );
-    }
-  }
-
-  private static isValidEmail(email: string): boolean {
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    return emailRegex.test(email);
-  }
-
-  private static generateIdempotencyKey(bookingId: string): string {
-    const timestamp = Date.now();
-    const random = crypto.randomBytes(8).toString('hex');
-    return `${bookingId}-${timestamp}-${random}`;
-  }
-
-  private static convertToPence(pounds: number): number {
-    return Math.round(pounds * 100);
-  }
-
-  private static sanitizeStatementDescriptor(descriptor: string): string {
-    // Stripe statement descriptor requirements:
-    // - Max 22 characters
-    // - No special characters except spaces and periods
-    return descriptor
-      .substring(0, 22)
-      .replace(/[^a-zA-Z0-9\s.]/g, '')
-      .trim();
-  }
 
   private static async checkExistingPayment(bookingId: string): Promise<any> {
     const [existing] = await db
@@ -586,68 +510,6 @@ export class StripeServiceEnhanced {
       );
     
     return existing;
-  }
-
-  private static async retryStripeOperation<T>(
-    operation: () => Promise<T>,
-    operationName: string,
-    options: RetryOptions = {}
-  ): Promise<T> {
-    const opts = { ...this.DEFAULT_RETRY_OPTIONS, ...options };
-    let lastError: any;
-    let delay = opts.initialDelay;
-
-    for (let attempt = 1; attempt <= opts.maxAttempts; attempt++) {
-      try {
-        return await operation();
-      } catch (error: any) {
-        lastError = error;
-        
-        // Don't retry on certain errors
-        if (this.isNonRetryableError(error)) {
-          throw error;
-        }
-
-        if (attempt === opts.maxAttempts) {
-          break;
-        }
-
-        console.warn(
-          `${operationName} attempt ${attempt} failed, retrying in ${delay}ms...`,
-          error.message
-        );
-
-        await new Promise(resolve => setTimeout(resolve, delay));
-        delay = Math.min(delay * opts.backoffMultiplier, opts.maxDelay);
-      }
-    }
-
-    throw lastError;
-  }
-
-  private static isNonRetryableError(error: any): boolean {
-    if (!error.type) return false;
-    
-    const nonRetryableTypes = [
-      'StripeCardError',
-      'StripeInvalidRequestError',
-      'StripeAuthenticationError',
-    ];
-    
-    return nonRetryableTypes.includes(error.type);
-  }
-
-  private static formatError(error: any): any {
-    if (error instanceof Error) {
-      return {
-        message: error.message,
-        type: error.name,
-        stack: process.env.NODE_ENV === 'development' ? error.stack : undefined,
-        code: (error as any).code,
-        statusCode: (error as any).statusCode,
-      };
-    }
-    return error;
   }
 
   private static async preparePaymentUpdateData(
@@ -701,12 +563,16 @@ export class StripeServiceEnhanced {
       .where(eq(bookings.id, paymentRecord.bookingId));
 
     // Log success with detailed metrics
-    await this.logPaymentEvent(paymentRecord.id, PaymentEventType.SUCCEEDED, {
-      chargeId: (paymentIntent.latest_charge as Stripe.Charge)?.id,
-      receiptUrl: (paymentIntent.latest_charge as Stripe.Charge)?.receipt_url,
-      processingTime: Date.now() - startTime,
-      paymentMethodType: (paymentIntent.payment_method as Stripe.PaymentMethod)?.type,
-    });
+    await StripePaymentLoggerService.logPaymentEvent(
+      paymentRecord.id, 
+      PaymentEventType.SUCCEEDED, 
+      {
+        chargeId: (paymentIntent.latest_charge as Stripe.Charge)?.id,
+        receiptUrl: (paymentIntent.latest_charge as Stripe.Charge)?.receipt_url,
+        processingTime: Date.now() - startTime,
+        paymentMethodType: (paymentIntent.payment_method as Stripe.PaymentMethod)?.type,
+      }
+    );
 
     // Get updated booking
     const [booking] = await db
@@ -715,8 +581,8 @@ export class StripeServiceEnhanced {
       .where(eq(bookings.id, paymentRecord.bookingId));
 
     // Update success metrics
-    this.metrics.paymentIntentsSucceeded++;
-    this.updateAverageProcessingTime(Date.now() - startTime);
+    StripeMetricsService.incrementPaymentIntentsSucceeded();
+    StripeMetricsService.updateAverageProcessingTime(Date.now() - startTime);
 
     return { 
       success: true, 
@@ -729,9 +595,13 @@ export class StripeServiceEnhanced {
     paymentRecord: any,
     paymentIntent: Stripe.PaymentIntent
   ): Promise<any> {
-    await this.logPaymentEvent(paymentRecord.id, PaymentEventType.REQUIRES_ACTION, {
-      actionType: paymentIntent.next_action?.type,
-    });
+    await StripePaymentLoggerService.logPaymentEvent(
+      paymentRecord.id, 
+      PaymentEventType.REQUIRES_ACTION, 
+      {
+        actionType: paymentIntent.next_action?.type,
+      }
+    );
 
     return {
       success: false,
@@ -742,9 +612,13 @@ export class StripeServiceEnhanced {
   }
 
   private static async handleProcessingPayment(paymentRecord: any): Promise<any> {
-    await this.logPaymentEvent(paymentRecord.id, PaymentEventType.PROCESSING, {
-      status: 'processing',
-    });
+    await StripePaymentLoggerService.logPaymentEvent(
+      paymentRecord.id, 
+      PaymentEventType.PROCESSING, 
+      {
+        status: 'processing',
+      }
+    );
 
     return {
       success: false,
@@ -757,10 +631,14 @@ export class StripeServiceEnhanced {
     paymentRecord: any,
     paymentIntent: Stripe.PaymentIntent
   ): Promise<any> {
-    await this.logPaymentEvent(paymentRecord.id, PaymentEventType.INCOMPLETE, {
-      status: paymentIntent.status,
-      reason: paymentIntent.last_payment_error?.message,
-    });
+    await StripePaymentLoggerService.logPaymentEvent(
+      paymentRecord.id, 
+      PaymentEventType.INCOMPLETE, 
+      {
+        status: paymentIntent.status,
+        reason: paymentIntent.last_payment_error?.message,
+      }
+    );
 
     return {
       success: false,
@@ -773,13 +651,17 @@ export class StripeServiceEnhanced {
     paymentRecord: any,
     paymentIntent: Stripe.PaymentIntent
   ): Promise<any> {
-    await this.logPaymentEvent(paymentRecord.id, PaymentEventType.FAILED, {
-      status: paymentIntent.status,
-      error: paymentIntent.last_payment_error,
-    });
+    await StripePaymentLoggerService.logPaymentEvent(
+      paymentRecord.id, 
+      PaymentEventType.FAILED, 
+      {
+        status: paymentIntent.status,
+        error: paymentIntent.last_payment_error,
+      }
+    );
 
     // Update failure metrics
-    this.metrics.paymentIntentsFailed++;
+    StripeMetricsService.incrementPaymentIntentsFailed();
 
     return {
       success: false,
@@ -800,296 +682,6 @@ export class StripeServiceEnhanced {
       );
     
     return !!existing;
-  }
-
-  private static sanitizeHeaders(headers?: Record<string, string>): any {
-    if (!headers) return {};
-    
-    const sanitized: Record<string, string> = {};
-    const allowedHeaders = [
-      'stripe-signature',
-      'content-type',
-      'user-agent',
-      'x-forwarded-for',
-      'x-real-ip',
-    ];
-    
-    for (const [key, value] of Object.entries(headers)) {
-      if (allowedHeaders.includes(key.toLowerCase())) {
-        sanitized[key] = value;
-      }
-    }
-    
-    return sanitized;
-  }
-
-  private static calculateNextRetryTime(retryCount: number): Date {
-    // Exponential backoff: 5min, 30min, 2hr, 6hr, 24hr
-    const delays = [5, 30, 120, 360, 1440];
-    const delayMinutes = delays[Math.min(retryCount - 1, delays.length - 1)];
-    
-    return new Date(Date.now() + delayMinutes * 60 * 1000);
-  }
-
-  private static updateAverageProcessingTime(newTime: number): void {
-    const totalProcessed = this.metrics.paymentIntentsSucceeded + this.metrics.paymentIntentsFailed;
-    if (totalProcessed === 0) {
-      this.metrics.averageProcessingTime = newTime;
-    } else {
-      this.metrics.averageProcessingTime = 
-        (this.metrics.averageProcessingTime * (totalProcessed - 1) + newTime) / totalProcessed;
-    }
-  }
-
-  // Enhanced webhook handlers
-
-  private static async handlePaymentSuccess(paymentIntent: Stripe.PaymentIntent): Promise<void> {
-    await this.confirmPayment(paymentIntent.id);
-  }
-
-  private static async handlePaymentFailed(paymentIntent: Stripe.PaymentIntent): Promise<void> {
-    const [paymentRecord] = await db
-      .select()
-      .from(payments)
-      .where(eq(payments.stripePaymentIntentId, paymentIntent.id));
-
-    if (paymentRecord) {
-      await db
-        .update(payments)
-        .set({
-          status: 'failed',
-          failureCode: paymentIntent.last_payment_error?.code || undefined,
-          failureMessage: paymentIntent.last_payment_error?.message || undefined,
-          updatedAt: new Date(),
-        })
-        .where(eq(payments.id, paymentRecord.id));
-
-      await this.logPaymentEvent(paymentRecord.id, PaymentEventType.FAILED, {
-        error: paymentIntent.last_payment_error,
-        declineCode: paymentIntent.last_payment_error?.decline_code,
-      });
-
-      // Update booking status
-      await db
-        .update(bookings)
-        .set({
-          status: 'payment_failed',
-          updatedAt: new Date(),
-        })
-        .where(eq(bookings.id, paymentRecord.bookingId));
-    }
-  }
-
-  private static async handlePaymentProcessing(paymentIntent: Stripe.PaymentIntent): Promise<void> {
-    const [paymentRecord] = await db
-      .select()
-      .from(payments)
-      .where(eq(payments.stripePaymentIntentId, paymentIntent.id));
-
-    if (paymentRecord) {
-      await db
-        .update(payments)
-        .set({
-          status: 'processing',
-          updatedAt: new Date(),
-        })
-        .where(eq(payments.id, paymentRecord.id));
-
-      await this.logPaymentEvent(paymentRecord.id, PaymentEventType.PROCESSING, {
-        paymentIntentId: paymentIntent.id,
-      });
-    }
-  }
-
-  private static async handlePaymentActionRequired(paymentIntent: Stripe.PaymentIntent): Promise<void> {
-    const [paymentRecord] = await db
-      .select()
-      .from(payments)
-      .where(eq(payments.stripePaymentIntentId, paymentIntent.id));
-
-    if (paymentRecord) {
-      await this.logPaymentEvent(paymentRecord.id, PaymentEventType.REQUIRES_ACTION, {
-        actionType: paymentIntent.next_action?.type,
-        paymentIntentId: paymentIntent.id,
-      });
-    }
-  }
-
-  private static async handleChargeSucceeded(charge: Stripe.Charge): Promise<void> {
-    if (!charge.payment_intent) return;
-
-    const [paymentRecord] = await db
-      .select()
-      .from(payments)
-      .where(eq(payments.stripePaymentIntentId, charge.payment_intent as string));
-
-    if (paymentRecord) {
-      const updateData: any = {
-        stripeChargeId: charge.id,
-        receiptUrl: charge.receipt_url || undefined,
-        updatedAt: new Date(),
-      };
-
-      // Add risk assessment data
-      if (charge.outcome) {
-        updateData.riskLevel = charge.outcome.risk_level || undefined;
-        updateData.riskScore = charge.outcome.risk_score || undefined;
-      }
-
-      await db
-        .update(payments)
-        .set(updateData)
-        .where(eq(payments.id, paymentRecord.id));
-
-      await this.logPaymentEvent(paymentRecord.id, PaymentEventType.CHARGE_SUCCEEDED, {
-        chargeId: charge.id,
-        amount: charge.amount / 100,
-        riskLevel: charge.outcome?.risk_level,
-      });
-    }
-  }
-
-  private static async handleChargeFailed(charge: Stripe.Charge): Promise<void> {
-    if (!charge.payment_intent) return;
-
-    const [paymentRecord] = await db
-      .select()
-      .from(payments)
-      .where(eq(payments.stripePaymentIntentId, charge.payment_intent as string));
-
-    if (paymentRecord) {
-      await this.logPaymentEvent(paymentRecord.id, PaymentEventType.CHARGE_FAILED, {
-        chargeId: charge.id,
-        failureCode: charge.failure_code,
-        failureMessage: charge.failure_message,
-      });
-    }
-  }
-
-  private static async handleDispute(dispute: Stripe.Dispute): Promise<void> {
-    console.error('Payment dispute created:', dispute.id);
-    
-    // Find the payment record
-    const chargeId = dispute.charge as string;
-    const [paymentRecord] = await db
-      .select()
-      .from(payments)
-      .where(eq(payments.stripeChargeId, chargeId));
-
-    if (paymentRecord) {
-      // Log dispute event
-      await this.logPaymentEvent(paymentRecord.id, PaymentEventType.DISPUTE_CREATED, {
-        disputeId: dispute.id,
-        amount: dispute.amount / 100,
-        reason: dispute.reason,
-        status: dispute.status,
-      });
-
-      // Update booking status
-      await db
-        .update(bookings)
-        .set({
-          status: 'disputed',
-          updatedAt: new Date(),
-        })
-        .where(eq(bookings.id, paymentRecord.bookingId));
-
-      // TODO: Send admin notification
-    }
-  }
-
-  private static async handleChargeRefunded(charge: Stripe.Charge): Promise<void> {
-    if (!charge.payment_intent) return;
-
-    const [paymentRecord] = await db
-      .select()
-      .from(payments)
-      .where(eq(payments.stripePaymentIntentId, charge.payment_intent as string));
-
-    if (paymentRecord) {
-      await this.logPaymentEvent(paymentRecord.id, PaymentEventType.REFUND_PROCESSED, {
-        chargeId: charge.id,
-        refundAmount: charge.amount_refunded / 100,
-        refunded: charge.refunded,
-      });
-
-      // Update payment status if fully refunded
-      if (charge.refunded) {
-        await db
-          .update(payments)
-          .set({
-            status: 'refunded',
-            updatedAt: new Date(),
-          })
-          .where(eq(payments.id, paymentRecord.id));
-      }
-    }
-  }
-
-  private static async handleRefundUpdated(refund: Stripe.Refund): Promise<void> {
-    await this.logPaymentEvent(null, PaymentEventType.REFUND_UPDATED, {
-      refundId: refund.id,
-      status: refund.status,
-      amount: refund.amount / 100,
-      reason: refund.reason,
-    });
-  }
-
-  private static async handlePaymentMethodAttached(paymentMethod: Stripe.PaymentMethod): Promise<void> {
-    console.log('Payment method attached:', paymentMethod.id);
-    // TODO: Store payment method for future use if needed
-  }
-
-  private static async handlePaymentMethodDetached(paymentMethod: Stripe.PaymentMethod): Promise<void> {
-    console.log('Payment method detached:', paymentMethod.id);
-    // TODO: Remove stored payment method if needed
-  }
-
-  private static async handleCustomerEvent(customer: Stripe.Customer): Promise<void> {
-    console.log('Customer event:', customer.id);
-    // TODO: Sync customer data if needed
-  }
-
-  private static async handleFraudWarning(warning: any): Promise<void> {
-    console.error('Early fraud warning received:', warning);
-    
-    // Log the warning
-    await this.logPaymentEvent(null, PaymentEventType.FRAUD_WARNING, {
-      warningId: warning.id,
-      chargeId: warning.charge,
-      actionableDate: warning.actionable_date,
-      fraudType: warning.fraud_type,
-    });
-
-    // TODO: Take appropriate action (notify admin, pause booking, etc.)
-  }
-
-  // Enhanced logging with structured data
-  private static async logPaymentEvent(
-    paymentId: string | null,
-    eventType: PaymentEventType,
-    eventData: any,
-    eventSource: string = 'system'
-  ): Promise<void> {
-    try {
-      const logData: NewPaymentLog = {
-        paymentId,
-        eventType,
-        eventSource,
-        eventData: {
-          ...eventData,
-          timestamp: new Date().toISOString(),
-          environment: process.env.NODE_ENV,
-        },
-        ipAddress: eventData.ipAddress,
-        userAgent: eventData.userAgent,
-      };
-
-      await db.insert(paymentLogs).values(logData);
-    } catch (error) {
-      console.error('Failed to log payment event:', error);
-      // Don't throw - logging failures shouldn't break payment processing
-    }
   }
 
   // Enhanced refund creation with better validation
@@ -1130,7 +722,7 @@ export class StripeServiceEnhanced {
           throw new PaymentError('Refund amount must be positive', 'INVALID_REFUND_AMOUNT', 400);
         }
         
-        const amountInPence = this.convertToPence(data.amount);
+        const amountInPence = StripeValidationService.convertToPence(data.amount);
         if (amountInPence > paymentIntent.amount) {
           throw new PaymentError(
             'Refund amount exceeds payment amount',
@@ -1151,7 +743,7 @@ export class StripeServiceEnhanced {
       }
 
       // Create refund with retry logic
-      const refund = await this.retryStripeOperation(
+      const refund = await StripeRetryService.retryOperation(
         () => this.stripe.refunds.create(refundData),
         'createRefund'
       );
@@ -1168,7 +760,7 @@ export class StripeServiceEnhanced {
         'Refund processing failed',
         'REFUND_FAILED',
         500,
-        { originalError: this.formatError(error) }
+        { originalError: StripeErrorService.formatError(error) }
       );
     }
   }
@@ -1180,7 +772,7 @@ export class StripeServiceEnhanced {
   ): Promise<Stripe.PaymentIntent> {
     this.initialize();
     
-    return await this.retryStripeOperation(
+    return await StripeRetryService.retryOperation(
       () => this.stripe.paymentIntents.retrieve(paymentIntentId, options),
       'retrievePaymentIntent'
     );
@@ -1193,26 +785,19 @@ export class StripeServiceEnhanced {
   ): Promise<Stripe.Charge> {
     this.initialize();
     
-    return await this.retryStripeOperation(
+    return await StripeRetryService.retryOperation(
       () => this.stripe.charges.retrieve(chargeId, options),
       'retrieveCharge'
     );
   }
 
   // Get service metrics
-  static getMetrics(): typeof StripeServiceEnhanced.metrics {
-    return { ...this.metrics };
+  static getMetrics() {
+    return StripeMetricsService.getMetrics();
   }
 
   // Reset metrics (for testing)
   static resetMetrics(): void {
-    this.metrics = {
-      paymentIntentsCreated: 0,
-      paymentIntentsSucceeded: 0,
-      paymentIntentsFailed: 0,
-      webhooksProcessed: 0,
-      webhooksFailed: 0,
-      averageProcessingTime: 0,
-    };
+    StripeMetricsService.resetMetrics();
   }
 }

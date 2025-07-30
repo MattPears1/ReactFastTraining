@@ -1,5 +1,7 @@
+// Calendar filters component
 import React from "react";
 import { FilterState } from "../types";
+import { COURSE_TYPES, LOCATIONS, INSTRUCTORS } from "../constants";
 
 interface CalendarFiltersProps {
   filters: FilterState;
@@ -18,11 +20,11 @@ export const CalendarFilters: React.FC<CalendarFiltersProps> = ({
           onChange={(e) => onChange({ ...filters, courseType: e.target.value })}
           className="px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-primary-500"
         >
-          <option value="">All Course Types</option>
-          <option value="EFAW">Emergency First Aid at Work</option>
-          <option value="FAW">First Aid at Work</option>
-          <option value="Paediatric">Paediatric First Aid</option>
-          <option value="Mental Health">Mental Health First Aid</option>
+          {COURSE_TYPES.map((type) => (
+            <option key={type.value} value={type.value}>
+              {type.label}
+            </option>
+          ))}
         </select>
 
         <select
@@ -30,11 +32,11 @@ export const CalendarFilters: React.FC<CalendarFiltersProps> = ({
           onChange={(e) => onChange({ ...filters, location: e.target.value })}
           className="px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-primary-500"
         >
-          <option value="">All Locations</option>
-          <option value="Leeds Training Center">Leeds Training Center</option>
-          <option value="Sheffield Venue">Sheffield Venue</option>
-          <option value="Bradford Office">Bradford Office</option>
-          <option value="Client Site">Client Site</option>
+          {LOCATIONS.map((location) => (
+            <option key={location.value} value={location.value}>
+              {location.label}
+            </option>
+          ))}
         </select>
 
         <select
@@ -42,10 +44,11 @@ export const CalendarFilters: React.FC<CalendarFiltersProps> = ({
           onChange={(e) => onChange({ ...filters, instructor: e.target.value })}
           className="px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-primary-500"
         >
-          <option value="">All Instructors</option>
-          <option value="John Smith">John Smith</option>
-          <option value="Sarah Johnson">Sarah Johnson</option>
-          <option value="Mike Wilson">Mike Wilson</option>
+          {INSTRUCTORS.map((instructor) => (
+            <option key={instructor.value} value={instructor.value}>
+              {instructor.label}
+            </option>
+          ))}
         </select>
       </div>
 

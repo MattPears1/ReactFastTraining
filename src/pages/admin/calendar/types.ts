@@ -1,6 +1,3 @@
-// Calendar types
-import { Views } from "react-big-calendar";
-
 export interface CalendarEvent {
   id: string;
   title: string;
@@ -34,13 +31,7 @@ export interface FilterState {
   instructor: string;
 }
 
-export type CalendarView = (typeof Views)[keyof typeof Views];
-
-export interface EventStyleResult {
-  style: React.CSSProperties;
-}
-
-export interface DateRange {
+export interface CalendarRange {
   start: Date;
   end: Date;
 }

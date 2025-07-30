@@ -12,7 +12,6 @@ import {
 import { inject } from '@loopback/core';
 import { authenticate } from '@loopback/authentication';
 import { authorize } from '@loopback/authorization';
-import { repository } from '@loopback/repository';
 import { 
   StripeServiceEnhanced as StripeService, 
   PaymentError 
@@ -22,123 +21,21 @@ import { InvoiceService } from '../services/invoice.service';
 import { db } from '../config/database.config';
 import { payments, bookings, paymentLogs, users } from '../db/schema';
 import { eq, and, desc, gte, lte, sql, or } from 'drizzle-orm';
-import { z } from 'zod';
-import * as crypto from 'crypto';
-
-// Enhanced validation schemas
-const CreatePaymentIntentSchema = z.object({
-  bookingId: z.string().uuid('Invalid booking ID format'),
-  savePaymentMethod: z.boolean().optional(),
-  returnUrl: z.string().url().optional(),
-});
-
-const ConfirmPaymentSchema = z.object({
-  paymentIntentId: z.string().min(1, 'Payment intent ID is required'),
-  paymentMethodId: z.string().optional(),
-});
-
-const ListPaymentsSchema = z.object({
-  limit: z.number().int().min(1).max(100).default(50),
-  offset: z.number().int().min(0).default(0),
-  status: z.enum([
-    'pending',
-    'processing',
-    'succeeded',
-    'failed',
-    'canceled',
-    'refunded'
-  ]).optional(),
-  startDate: z.string().datetime().optional(),
-  endDate: z.string().datetime().optional(),
-  bookingReference: z.string().optional(),
-  customerEmail: z.string().email().optional(),
-});
-
-// Response types with OpenAPI specifications
-interface PaymentIntentResponse {
-  clientSecret: string;
-  paymentIntentId: string;
-  amount: number;
-  currency: string;
-  bookingReference: string;
-  status: string;
-  requiresAction?: boolean;
-  actionUrl?: string;
-}
-
-interface PaymentConfirmationResponse {
-  success: boolean;
-  status: string;
-  bookingReference?: string;
-  receiptUrl?: string;
-  invoiceId?: string;
-  error?: string;
-  requiresAction?: boolean;
-  actionUrl?: string;
-}
-
-interface PaymentDetailsResponse {
-  id: string;
-  amount: string;
-  currency: string;
-  status: string;
-  paymentMethod?: {
-    type: string;
-    brand?: string;
-    last4?: string;
-  };
-  receiptUrl?: string;
-  refundable: boolean;
-  refundedAmount?: string;
-  createdAt: string;
-  updatedAt: string;
-  booking: {
-    id: string;
-    reference: string;
-    status: string;
-    courseType: string;
-    sessionDate: string;
-  };
-  riskAssessment?: {
-    level?: string;
-    score?: number;
-  };
-}
-
-// Rate limiting decorator
-function rateLimit(requests: number, windowMs: number) {
-  const requests_map = new Map<string, { count: number; resetTime: number }>();
-  
-  return function (target: any, propertyKey: string, descriptor: PropertyDescriptor) {
-    const originalMethod = descriptor.value;
-    
-    descriptor.value = async function (...args: any[]) {
-      const request = args.find(arg => arg?.user?.id);
-      const userId = request?.user?.id || 'anonymous';
-      const now = Date.now();
-      
-      const userLimit = requests_map.get(userId);
-      if (userLimit) {
-        if (now < userLimit.resetTime) {
-          if (userLimit.count >= requests) {
-            throw new HttpErrors.TooManyRequests(
-              `Rate limit exceeded. Try again in ${Math.ceil((userLimit.resetTime - now) / 1000)} seconds`
-            );
-          }
-          userLimit.count++;
-        } else {
-          requests_map.set(userId, { count: 1, resetTime: now + windowMs });
-        }
-      } else {
-        requests_map.set(userId, { count: 1, resetTime: now + windowMs });
-      }
-      
-      return originalMethod.apply(this, args);
-    };
-    
-    return descriptor;
-  };
-}
+import { rateLimit } from '../decorators/rate-limit.decorator';
+import {
+  CreatePaymentIntentSchema,
+  ConfirmPaymentSchema,
+  ListPaymentsSchema,
+  PaymentValidationService
+} from '../services/payment/payment-validation.service';
+import { PaymentStatisticsService } from '../services/payment/payment-statistics.service';
+import { PaymentActivityLoggerService } from '../services/payment/payment-activity-logger.service';
+import {
+  PaymentIntentResponse,
+  PaymentConfirmationResponse,
+  PaymentDetailsResponse,
+  PaymentListResponse
+} from '../types/payment.types';
 
 // Enhanced Payment Controller
 export class PaymentControllerEnhanced {
@@ -267,7 +164,7 @@ export class PaymentControllerEnhanced {
           .where(eq(bookings.id, booking.id));
 
         // Log payment intent creation
-        await this.logActivity(
+        await PaymentActivityLoggerService.logActivity(
           request,
           'payment_intent_created',
           {
@@ -289,7 +186,7 @@ export class PaymentControllerEnhanced {
         };
       } catch (error) {
         // Log error
-        await this.logActivity(
+        await PaymentActivityLoggerService.logActivity(
           request,
           'payment_intent_failed',
           {
@@ -380,7 +277,7 @@ export class PaymentControllerEnhanced {
         }
 
         // Log successful confirmation
-        await this.logActivity(
+        await PaymentActivityLoggerService.logActivity(
           request,
           'payment_confirmed',
           {
@@ -415,7 +312,7 @@ export class PaymentControllerEnhanced {
       console.error('Payment confirmation error:', error);
       
       // Log error
-      await this.logActivity(
+      await PaymentActivityLoggerService.logActivity(
         request,
         'payment_confirmation_failed',
         {
@@ -465,7 +362,7 @@ export class PaymentControllerEnhanced {
     // Verify webhook source IP (optional security measure)
     const allowedIPs = process.env.STRIPE_WEBHOOK_IPS?.split(',') || [];
     if (allowedIPs.length > 0) {
-      const clientIP = this.getClientIP(request);
+      const clientIP = PaymentValidationService.getClientIP(request);
       if (!allowedIPs.includes(clientIP)) {
         console.warn(`Webhook request from unauthorized IP: ${clientIP}`);
         throw new HttpErrors.Forbidden('Unauthorized webhook source');
@@ -516,7 +413,7 @@ export class PaymentControllerEnhanced {
     @inject(RestBindings.Http.REQUEST) request: Request & { user?: any }
   ): Promise<PaymentDetailsResponse> {
     // Validate UUID format
-    if (!this.isValidUUID(paymentId)) {
+    if (!PaymentValidationService.isValidUUID(paymentId)) {
       throw new HttpErrors.BadRequest('Invalid payment ID format');
     }
 
@@ -539,7 +436,7 @@ export class PaymentControllerEnhanced {
     }
 
     // Calculate refunded amount
-    const refundedAmount = await this.getRefundedAmount(paymentId);
+    const refundedAmount = await PaymentStatisticsService.getRefundedAmount(paymentId);
     const isRefundable = result.payment.status === 'succeeded' && 
                         parseFloat(result.payment.amount) > refundedAmount;
 
@@ -579,7 +476,7 @@ export class PaymentControllerEnhanced {
     @inject(RestBindings.Http.REQUEST) request: Request & { user?: any }
   ): Promise<any> {
     // Validate UUID format
-    if (!this.isValidUUID(bookingId)) {
+    if (!PaymentValidationService.isValidUUID(bookingId)) {
       throw new HttpErrors.BadRequest('Invalid booking ID format');
     }
 
@@ -655,8 +552,8 @@ export class PaymentControllerEnhanced {
     @inject(RestBindings.Http.REQUEST) request: Request & { user?: any }
   ): Promise<any> {
     // Validate pagination
-    const validatedLimit = Math.min(Math.max(1, limit), 100);
-    const validatedOffset = Math.max(0, offset);
+    const { limit: validatedLimit, offset: validatedOffset } = 
+      PaymentValidationService.validatePagination(limit, offset);
 
     // Get user's payments
     const results = await db
@@ -705,7 +602,7 @@ export class PaymentControllerEnhanced {
   @authorize({ allowedRoles: ['admin'] })
   async listPayments(
     @param.query.object('filters') filters: any = {}
-  ): Promise<any> {
+  ): Promise<PaymentListResponse> {
     // Validate filters
     const validatedFilters = ListPaymentsSchema.parse(filters);
 
@@ -768,7 +665,7 @@ export class PaymentControllerEnhanced {
     const [{ count }] = await countQuery;
 
     // Calculate statistics
-    const stats = await this.getPaymentStatistics(validatedFilters);
+    const stats = await PaymentStatisticsService.getPaymentStatistics(validatedFilters);
 
     return {
       payments: results.map(r => ({
@@ -808,7 +705,7 @@ export class PaymentControllerEnhanced {
   async getPaymentLogs(
     @param.path.string('paymentId') paymentId: string
   ): Promise<any> {
-    if (!this.isValidUUID(paymentId)) {
+    if (!PaymentValidationService.isValidUUID(paymentId)) {
       throw new HttpErrors.BadRequest('Invalid payment ID format');
     }
 
@@ -837,32 +734,11 @@ export class PaymentControllerEnhanced {
   @authorize({ allowedRoles: ['admin'] })
   async getPaymentMetrics(): Promise<any> {
     const metrics = StripeService.getMetrics();
-    
-    // Get additional metrics from database
-    const today = new Date();
-    today.setHours(0, 0, 0, 0);
-    
-    const [todayStats] = await db
-      .select({
-        count: sql<number>`count(*)`,
-        totalAmount: sql<number>`sum(amount)`,
-        successCount: sql<number>`count(*) filter (where status = 'succeeded')`,
-        failedCount: sql<number>`count(*) filter (where status = 'failed')`,
-      })
-      .from(payments)
-      .where(gte(payments.createdAt, today));
+    const todayStats = await PaymentStatisticsService.getTodayMetrics();
 
     return {
       stripe: metrics,
-      today: {
-        totalPayments: Number(todayStats.count),
-        totalAmount: Number(todayStats.totalAmount) || 0,
-        successCount: Number(todayStats.successCount),
-        failedCount: Number(todayStats.failedCount),
-        successRate: todayStats.count > 0 
-          ? (Number(todayStats.successCount) / Number(todayStats.count) * 100).toFixed(2)
-          : 0,
-      },
+      today: todayStats,
       performance: {
         averageProcessingTime: metrics.averageProcessingTime,
         webhookSuccessRate: metrics.webhooksProcessed > 0
@@ -870,117 +746,5 @@ export class PaymentControllerEnhanced {
           : 100,
       },
     };
-  }
-
-  // Helper methods
-  private isValidUUID(uuid: string): boolean {
-    const uuidRegex = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
-    return uuidRegex.test(uuid);
-  }
-
-  private getClientIP(request: Request): string {
-    const forwarded = request.headers['x-forwarded-for'] as string;
-    const realIP = request.headers['x-real-ip'] as string;
-    const socketIP = request.socket?.remoteAddress;
-    
-    if (forwarded) {
-      return forwarded.split(',')[0].trim();
-    }
-    if (realIP) {
-      return realIP;
-    }
-    return socketIP || 'unknown';
-  }
-
-  private async getRefundedAmount(paymentId: string): Promise<number> {
-    const result = await db
-      .select({
-        totalRefunded: sql<number>`coalesce(sum(amount), 0)`,
-      })
-      .from('refunds')
-      .where(
-        and(
-          eq('refunds.paymentId', paymentId),
-          or(
-            eq('refunds.status', 'processed'),
-            eq('refunds.status', 'processing')
-          )
-        )
-      );
-
-    return Number(result[0]?.totalRefunded) || 0;
-  }
-
-  private async getPaymentStatistics(filters: any): Promise<any> {
-    const conditions = [];
-
-    if (filters.startDate) {
-      conditions.push(gte(payments.createdAt, new Date(filters.startDate)));
-    }
-
-    if (filters.endDate) {
-      conditions.push(lte(payments.createdAt, new Date(filters.endDate)));
-    }
-
-    const query = db
-      .select({
-        totalAmount: sql<number>`sum(case when status = 'succeeded' then amount else 0 end)`,
-        totalCount: sql<number>`count(*)`,
-        successCount: sql<number>`count(*) filter (where status = 'succeeded')`,
-        failedCount: sql<number>`count(*) filter (where status = 'failed')`,
-        pendingCount: sql<number>`count(*) filter (where status in ('pending', 'processing'))`,
-        avgAmount: sql<number>`avg(case when status = 'succeeded' then amount else null end)`,
-      })
-      .from(payments)
-      .$dynamic();
-
-    if (conditions.length > 0) {
-      query.where(and(...conditions));
-    }
-
-    const [stats] = await query;
-
-    return {
-      totalRevenue: Number(stats.totalAmount) || 0,
-      totalPayments: Number(stats.totalCount),
-      successfulPayments: Number(stats.successCount),
-      failedPayments: Number(stats.failedCount),
-      pendingPayments: Number(stats.pendingCount),
-      averagePaymentAmount: Number(stats.avgAmount) || 0,
-      successRate: stats.totalCount > 0
-        ? (Number(stats.successCount) / Number(stats.totalCount) * 100).toFixed(2)
-        : 0,
-    };
-  }
-
-  private async logActivity(
-    request: Request & { user?: any },
-    action: string,
-    data: any
-  ): Promise<void> {
-    try {
-      // Log to payment logs if payment ID available
-      if (data.paymentId) {
-        await db.insert(paymentLogs).values({
-          paymentId: data.paymentId,
-          eventType: action,
-          eventSource: 'api',
-          eventData: {
-            ...data,
-            userId: request.user?.id,
-            timestamp: new Date().toISOString(),
-          },
-          ipAddress: this.getClientIP(request),
-          userAgent: request.headers['user-agent'] as string,
-          adminUserId: request.user?.roles?.includes('admin') ? request.user.id : undefined,
-        });
-      }
-      
-      // Also log to general activity log if available
-      // TODO: Implement general activity logging
-    } catch (error) {
-      console.error('Failed to log activity:', error);
-      // Don't throw - logging should not break the main flow
-    }
   }
 }

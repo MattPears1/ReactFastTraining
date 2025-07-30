@@ -4,9 +4,6 @@ import {
   bookings,
   users,
   payments,
-  courseSessions,
-  bookingAttendees,
-  courses,
   Invoice,
   NewInvoice,
 } from '../db/schema';
@@ -14,117 +11,22 @@ import { eq, desc, sql, and, gte, lte, or, not } from 'drizzle-orm';
 import { EmailService } from './email.service';
 import { StorageService } from './storage.service';
 import { InvoicePDFGenerator } from './pdf/invoice-generator';
-import NodeCache from 'node-cache';
-import crypto from 'crypto';
-
-interface InvoiceWithDetails extends Invoice {
-  booking: any;
-  user: any;
-  payment?: any;
-  courseDetails?: any;
-  attendees?: any[];
-  company?: CompanyDetails;
-}
-
-interface CompanyDetails {
-  name: string;
-  address: string;
-  city: string;
-  postcode: string;
-  country: string;
-  phone: string;
-  email: string;
-  website: string;
-  vatNumber?: string;
-  registrationNumber?: string;
-}
-
-interface InvoiceGenerationOptions {
-  skipEmail?: boolean;
-  skipPDF?: boolean;
-  regenerate?: boolean;
-  customNotes?: string;
-  dueDate?: Date;
-}
-
-interface InvoiceFilters {
-  status?: string;
-  startDate?: Date;
-  endDate?: Date;
-  userId?: string;
-  bookingReference?: string;
-  minAmount?: number;
-  maxAmount?: number;
-  search?: string;
-}
-
-interface InvoiceMetrics {
-  total: number;
-  totalAmount: number;
-  paidCount: number;
-  paidAmount: number;
-  voidCount: number;
-  overdueCount: number;
-  overdueAmount: number;
-  thisMonthCount: number;
-  thisMonthAmount: number;
-  lastMonthCount: number;
-  lastMonthAmount: number;
-  averageAmount: number;
-  largestInvoice: number;
-}
+import { retryOperation } from '../utils/retry.util';
+import {
+  InvoiceWithDetails,
+  InvoiceGenerationOptions,
+  InvoiceFilters,
+  InvoiceMetrics,
+  BulkInvoiceResult,
+  COMPANY_DETAILS,
+} from './invoice/invoice.types';
+import { InvoiceCacheService } from './invoice/invoice-cache.service';
+import { InvoiceNumberService } from './invoice/invoice-number.service';
+import { InvoiceMetricsService } from './invoice/invoice-metrics.service';
+import { InvoiceQueryService } from './invoice/invoice-query.service';
 
 // Enhanced Invoice Service with caching and performance optimizations
 export class InvoiceServiceEnhanced {
-  // Cache configuration
-  private static cache = new NodeCache({ 
-    stdTTL: 300, // 5 minutes default TTL
-    checkperiod: 60, // Check for expired keys every 60 seconds
-    useClones: false, // Don't clone objects for better performance
-  });
-
-  // Company details (should come from config/database)
-  private static readonly COMPANY_DETAILS: CompanyDetails = {
-    name: 'React Fast Training',
-    address: 'Yorkshire Business Centre',
-    city: 'Leeds',
-    postcode: 'LS1 1AA',
-    country: 'United Kingdom',
-    phone: '07447 485644',
-    email: 'info@reactfasttraining.co.uk',
-    website: 'https://reactfasttraining.co.uk',
-    registrationNumber: '12345678', // Replace with actual
-  };
-
-  /**
-   * Generate a unique invoice number with better concurrency handling
-   */
-  static async generateInvoiceNumber(): Promise<string> {
-    const year = new Date().getFullYear();
-    
-    // Use a transaction to ensure atomicity
-    return await db.transaction(async (tx) => {
-      const result = await tx.execute(sql`
-        SELECT nextval('invoice_number_seq') as seq
-      `);
-      const sequence = result.rows[0].seq;
-      
-      // Verify uniqueness
-      const invoiceNumber = `INV-${year}-${sequence.toString().padStart(5, '0')}`;
-      const [existing] = await tx
-        .select()
-        .from(invoices)
-        .where(eq(invoices.invoiceNumber, invoiceNumber));
-      
-      if (existing) {
-        // Rare case: sequence collision, try again
-        return this.generateInvoiceNumber();
-      }
-      
-      return invoiceNumber;
-    });
-  }
-
   /**
    * Create an invoice for a booking with enhanced options
    */
@@ -139,7 +41,7 @@ export class InvoiceServiceEnhanced {
     
     // Check cache first (unless regenerating)
     if (!options.regenerate) {
-      const cached = this.cache.get<Invoice>(cacheKey);
+      const cached = InvoiceCacheService.get<Invoice>(cacheKey);
       if (cached) {
         console.log(`Invoice found in cache for booking ${data.bookingId}`);
         return cached;
@@ -147,7 +49,7 @@ export class InvoiceServiceEnhanced {
     }
 
     // Get booking with all details in one query
-    const bookingDetails = await this.getBookingFullDetailsOptimized(data.bookingId);
+    const bookingDetails = await InvoiceQueryService.getBookingFullDetailsOptimized(data.bookingId);
     
     if (!bookingDetails) {
       throw new Error('Booking not found');
@@ -171,7 +73,7 @@ export class InvoiceServiceEnhanced {
 
       if (existingInvoice) {
         // Cache and return existing invoice
-        this.cache.set(cacheKey, existingInvoice);
+        InvoiceCacheService.set(cacheKey, existingInvoice);
         return existingInvoice;
       }
     }
@@ -184,7 +86,7 @@ export class InvoiceServiceEnhanced {
 
     // Prepare invoice data
     const invoiceData: NewInvoice = {
-      invoiceNumber: await this.generateInvoiceNumber(),
+      invoiceNumber: await InvoiceNumberService.generateInvoiceNumber(),
       bookingId: data.bookingId,
       userId: bookingDetails.booking.userId,
       paymentId: data.paymentId || bookingDetails.payment?.id,
@@ -195,7 +97,7 @@ export class InvoiceServiceEnhanced {
       issueDate: new Date().toISOString().split('T')[0],
       dueDate: options.dueDate?.toISOString().split('T')[0] || null,
       notes: options.customNotes || null,
-      company_details: this.COMPANY_DETAILS,
+      company_details: COMPANY_DETAILS,
       customer_details: {
         name: bookingDetails.user.name || `${bookingDetails.user.firstName} ${bookingDetails.user.lastName}`,
         email: bookingDetails.user.email,
@@ -244,8 +146,8 @@ export class InvoiceServiceEnhanced {
     }
 
     // Cache the invoice
-    this.cache.set(cacheKey, invoice);
-    this.cache.set(`invoice_${invoice.id}`, invoice);
+    InvoiceCacheService.set(cacheKey, invoice);
+    InvoiceCacheService.set(`invoice_${invoice.id}`, invoice);
 
     return invoice;
   }
@@ -258,7 +160,7 @@ export class InvoiceServiceEnhanced {
       const startTime = Date.now();
       
       // Get full invoice details
-      const invoiceData = await this.getInvoiceWithDetailsOptimized(invoiceId);
+      const invoiceData = await InvoiceQueryService.getInvoiceWithDetailsOptimized(invoiceId);
       
       if (!invoiceData) {
         throw new Error('Invoice not found');
@@ -268,7 +170,7 @@ export class InvoiceServiceEnhanced {
       const pdfBuffer = await InvoicePDFGenerator.generate(invoiceData);
       
       // Store PDF with retry logic
-      const pdfPath = await this.retryOperation(
+      const pdfPath = await retryOperation(
         () => StorageService.saveInvoicePDF(invoiceData.invoiceNumber, pdfBuffer),
         3,
         1000
@@ -293,7 +195,7 @@ export class InvoiceServiceEnhanced {
       console.log(`PDF generated for invoice ${invoiceId} in ${Date.now() - startTime}ms`);
       
       // Clear cache for this invoice
-      this.clearInvoiceCache(invoiceId);
+      InvoiceCacheService.clearInvoiceCache(invoiceId);
       
       return pdfPath;
     } catch (error) {
@@ -318,7 +220,7 @@ export class InvoiceServiceEnhanced {
    * Send invoice via email with retry logic
    */
   static async sendInvoice(invoiceId: string): Promise<void> {
-    const invoice = await this.getInvoiceWithDetailsOptimized(invoiceId);
+    const invoice = await InvoiceQueryService.getInvoiceWithDetailsOptimized(invoiceId);
     
     if (!invoice) {
       throw new Error('Invoice not found');
@@ -340,7 +242,7 @@ export class InvoiceServiceEnhanced {
     }
 
     // Send email with retry
-    await this.retryOperation(
+    await retryOperation(
       () => EmailService.sendInvoiceEmail(
         invoice.user.email,
         invoice,
@@ -366,66 +268,14 @@ export class InvoiceServiceEnhanced {
       .where(eq(invoices.id, invoiceId));
     
     // Clear cache
-    this.clearInvoiceCache(invoiceId);
+    InvoiceCacheService.clearInvoiceCache(invoiceId);
   }
 
   /**
    * Get invoice with full details - optimized version
    */
   static async getInvoiceWithDetailsOptimized(invoiceId: string): Promise<InvoiceWithDetails | null> {
-    const cacheKey = `invoice_details_${invoiceId}`;
-    
-    // Check cache
-    const cached = this.cache.get<InvoiceWithDetails>(cacheKey);
-    if (cached) {
-      return cached;
-    }
-
-    // Single query with all joins
-    const [result] = await db
-      .select({
-        invoice: invoices,
-        booking: bookings,
-        user: users,
-        payment: payments,
-        courseSession: courseSessions,
-        course: courses,
-      })
-      .from(invoices)
-      .innerJoin(bookings, eq(invoices.bookingId, bookings.id))
-      .innerJoin(users, eq(invoices.userId, users.id))
-      .leftJoin(payments, eq(invoices.paymentId, payments.id))
-      .innerJoin(courseSessions, eq(bookings.sessionId, courseSessions.id))
-      .leftJoin(courses, eq(courseSessions.courseId, courses.id))
-      .where(eq(invoices.id, invoiceId));
-
-    if (!result) {
-      return null;
-    }
-
-    // Get attendees in parallel
-    const attendees = await db
-      .select()
-      .from(bookingAttendees)
-      .where(eq(bookingAttendees.bookingId, result.booking.id));
-
-    const invoiceWithDetails: InvoiceWithDetails = {
-      ...result.invoice,
-      booking: result.booking,
-      user: result.user,
-      payment: result.payment,
-      courseDetails: {
-        ...result.course,
-        session: result.courseSession,
-      },
-      attendees,
-      company: this.COMPANY_DETAILS,
-    };
-
-    // Cache for 5 minutes
-    this.cache.set(cacheKey, invoiceWithDetails, 300);
-
-    return invoiceWithDetails;
+    return InvoiceQueryService.getInvoiceWithDetailsOptimized(invoiceId);
   }
 
   /**
@@ -443,7 +293,7 @@ export class InvoiceServiceEnhanced {
     const cacheKey = `user_invoices_${userId}_${limit}_${offset}`;
     
     // Check cache
-    const cached = this.cache.get<any>(cacheKey);
+    const cached = InvoiceCacheService.get<any>(cacheKey);
     if (cached) {
       return cached;
     }
@@ -483,7 +333,7 @@ export class InvoiceServiceEnhanced {
     };
 
     // Cache for 2 minutes
-    this.cache.set(cacheKey, response, 120);
+    InvoiceCacheService.set(cacheKey, response, 120);
 
     return response;
   }
@@ -565,7 +415,7 @@ export class InvoiceServiceEnhanced {
         .orderBy(desc(invoices.issueDate), desc(invoices.createdAt))
         .limit(limit)
         .offset(offset),
-      this.getInvoiceMetrics(filters),
+      InvoiceMetricsService.getInvoiceMetrics(filters),
     ]);
 
     const invoicesWithDetails = results.map(r => ({
@@ -585,77 +435,7 @@ export class InvoiceServiceEnhanced {
    * Get comprehensive invoice metrics
    */
   static async getInvoiceMetrics(filters: InvoiceFilters = {}): Promise<InvoiceMetrics> {
-    const cacheKey = `invoice_metrics_${JSON.stringify(filters)}`;
-    
-    // Check cache
-    const cached = this.cache.get<InvoiceMetrics>(cacheKey);
-    if (cached) {
-      return cached;
-    }
-
-    const now = new Date();
-    const startOfMonth = new Date(now.getFullYear(), now.getMonth(), 1);
-    const startOfLastMonth = new Date(now.getFullYear(), now.getMonth() - 1, 1);
-    const endOfLastMonth = new Date(now.getFullYear(), now.getMonth(), 0);
-
-    // Build base conditions
-    const baseConditions = [];
-    if (filters.startDate) {
-      baseConditions.push(gte(invoices.issueDate, filters.startDate.toISOString().split('T')[0]));
-    }
-    if (filters.endDate) {
-      baseConditions.push(lte(invoices.issueDate, filters.endDate.toISOString().split('T')[0]));
-    }
-    if (filters.userId) {
-      baseConditions.push(eq(invoices.userId, filters.userId));
-    }
-
-    // Get all metrics in one query
-    const metricsQuery = db
-      .select({
-        total: sql<number>`count(*)`,
-        totalAmount: sql<number>`sum(cast(total_amount as decimal))`,
-        paidCount: sql<number>`count(*) filter (where status = 'paid')`,
-        paidAmount: sql<number>`coalesce(sum(cast(total_amount as decimal)) filter (where status = 'paid'), 0)`,
-        voidCount: sql<number>`count(*) filter (where status = 'void')`,
-        overdueCount: sql<number>`count(*) filter (where status = 'issued' and due_date < current_date)`,
-        overdueAmount: sql<number>`coalesce(sum(cast(total_amount as decimal)) filter (where status = 'issued' and due_date < current_date), 0)`,
-        thisMonthCount: sql<number>`count(*) filter (where issue_date >= ${startOfMonth.toISOString().split('T')[0]})`,
-        thisMonthAmount: sql<number>`coalesce(sum(cast(total_amount as decimal)) filter (where issue_date >= ${startOfMonth.toISOString().split('T')[0]}), 0)`,
-        lastMonthCount: sql<number>`count(*) filter (where issue_date >= ${startOfLastMonth.toISOString().split('T')[0]} and issue_date <= ${endOfLastMonth.toISOString().split('T')[0]})`,
-        lastMonthAmount: sql<number>`coalesce(sum(cast(total_amount as decimal)) filter (where issue_date >= ${startOfLastMonth.toISOString().split('T')[0]} and issue_date <= ${endOfLastMonth.toISOString().split('T')[0]}), 0)`,
-        averageAmount: sql<number>`coalesce(avg(cast(total_amount as decimal)), 0)`,
-        largestInvoice: sql<number>`coalesce(max(cast(total_amount as decimal)), 0)`,
-      })
-      .from(invoices)
-      .$dynamic();
-
-    if (baseConditions.length > 0) {
-      metricsQuery.where(and(...baseConditions));
-    }
-
-    const [metrics] = await metricsQuery;
-
-    const result: InvoiceMetrics = {
-      total: Number(metrics.total) || 0,
-      totalAmount: Number(metrics.totalAmount) || 0,
-      paidCount: Number(metrics.paidCount) || 0,
-      paidAmount: Number(metrics.paidAmount) || 0,
-      voidCount: Number(metrics.voidCount) || 0,
-      overdueCount: Number(metrics.overdueCount) || 0,
-      overdueAmount: Number(metrics.overdueAmount) || 0,
-      thisMonthCount: Number(metrics.thisMonthCount) || 0,
-      thisMonthAmount: Number(metrics.thisMonthAmount) || 0,
-      lastMonthCount: Number(metrics.lastMonthCount) || 0,
-      lastMonthAmount: Number(metrics.lastMonthAmount) || 0,
-      averageAmount: Number(metrics.averageAmount) || 0,
-      largestInvoice: Number(metrics.largestInvoice) || 0,
-    };
-
-    // Cache for 5 minutes
-    this.cache.set(cacheKey, result, 300);
-
-    return result;
+    return InvoiceMetricsService.getInvoiceMetrics(filters);
   }
 
   /**
@@ -702,15 +482,15 @@ export class InvoiceServiceEnhanced {
       .where(eq(invoices.id, invoiceId));
 
     // Clear cache
-    this.clearInvoiceCache(invoiceId);
-    this.clearAllInvoiceCaches();
+    InvoiceCacheService.clearInvoiceCache(invoiceId);
+    InvoiceCacheService.clearAllInvoiceCaches();
   }
 
   /**
    * Regenerate invoice PDF
    */
   static async regenerateInvoicePDF(invoiceId: string): Promise<string> {
-    const invoice = await this.getInvoiceWithDetailsOptimized(invoiceId);
+    const invoice = await InvoiceQueryService.getInvoiceWithDetailsOptimized(invoiceId);
     
     if (!invoice) {
       throw new Error('Invoice not found');
@@ -733,7 +513,7 @@ export class InvoiceServiceEnhanced {
     const cacheKey = `invoice_number_${invoiceNumber}`;
     
     // Check cache
-    const cached = this.cache.get<Invoice>(cacheKey);
+    const cached = InvoiceCacheService.get<Invoice>(cacheKey);
     if (cached) {
       return cached;
     }
@@ -745,7 +525,7 @@ export class InvoiceServiceEnhanced {
 
     if (invoice) {
       // Cache for 10 minutes
-      this.cache.set(cacheKey, invoice, 600);
+      InvoiceCacheService.set(cacheKey, invoice, 600);
     }
 
     return invoice || null;
@@ -757,13 +537,10 @@ export class InvoiceServiceEnhanced {
   static async bulkCreateInvoices(
     bookingIds: string[],
     options: InvoiceGenerationOptions = {}
-  ): Promise<{
-    successful: string[];
-    failed: Array<{ bookingId: string; error: string }>;
-  }> {
-    const results = {
-      successful: [] as string[],
-      failed: [] as Array<{ bookingId: string; error: string }>,
+  ): Promise<BulkInvoiceResult> {
+    const results: BulkInvoiceResult = {
+      successful: [],
+      failed: [],
     };
 
     // Process in batches to avoid overwhelming the system
@@ -793,104 +570,7 @@ export class InvoiceServiceEnhanced {
    * Mark invoices as overdue
    */
   static async markOverdueInvoices(): Promise<number> {
-    const today = new Date().toISOString().split('T')[0];
-    
-    const result = await db
-      .update(invoices)
-      .set({
-        status: 'overdue',
-        updatedAt: new Date(),
-      })
-      .where(
-        and(
-          eq(invoices.status, 'issued'),
-          lte(invoices.dueDate, today),
-          sql`due_date IS NOT NULL`
-        )
-      );
-
-    // Clear all caches as status changed
-    this.clearAllInvoiceCaches();
-
-    return result.rowCount || 0;
-  }
-
-  // Helper methods
-
-  private static async getBookingFullDetailsOptimized(bookingId: string): Promise<any> {
-    const [result] = await db
-      .select({
-        booking: bookings,
-        payment: payments,
-        user: users,
-        courseSession: courseSessions,
-        course: courses,
-      })
-      .from(bookings)
-      .leftJoin(payments, and(
-        eq(bookings.id, payments.bookingId),
-        eq(payments.status, 'succeeded')
-      ))
-      .innerJoin(users, eq(bookings.userId, users.id))
-      .innerJoin(courseSessions, eq(bookings.sessionId, courseSessions.id))
-      .leftJoin(courses, eq(courseSessions.courseId, courses.id))
-      .where(eq(bookings.id, bookingId));
-
-    if (!result) return null;
-
-    return {
-      booking: result.booking,
-      payment: result.payment,
-      user: result.user,
-      courseSession: result.courseSession,
-      courseDetails: result.course || {
-        name: 'Emergency First Aid at Work',
-        type: result.booking.courseType,
-        price: 75,
-      },
-    };
-  }
-
-  private static async retryOperation<T>(
-    operation: () => Promise<T>,
-    maxAttempts: number,
-    delayMs: number
-  ): Promise<T> {
-    let lastError: any;
-    
-    for (let attempt = 1; attempt <= maxAttempts; attempt++) {
-      try {
-        return await operation();
-      } catch (error) {
-        lastError = error;
-        if (attempt < maxAttempts) {
-          await new Promise(resolve => setTimeout(resolve, delayMs * attempt));
-        }
-      }
-    }
-    
-    throw lastError;
-  }
-
-  private static clearInvoiceCache(invoiceId: string): void {
-    this.cache.del([
-      `invoice_${invoiceId}`,
-      `invoice_details_${invoiceId}`,
-    ]);
-  }
-
-  private static clearAllInvoiceCaches(): void {
-    // Clear all invoice-related caches
-    const keys = this.cache.keys();
-    const invoiceKeys = keys.filter(key => 
-      key.startsWith('invoice_') || 
-      key.startsWith('user_invoices_') || 
-      key.startsWith('invoice_metrics_')
-    );
-    
-    if (invoiceKeys.length > 0) {
-      this.cache.del(invoiceKeys);
-    }
+    return InvoiceMetricsService.markOverdueInvoices();
   }
 
   /**
@@ -907,8 +587,8 @@ export class InvoiceServiceEnhanced {
 
       // Cache them
       for (const invoice of recentInvoices) {
-        this.cache.set(`invoice_${invoice.id}`, invoice, 600); // 10 minutes
-        this.cache.set(`invoice_number_${invoice.invoiceNumber}`, invoice, 600);
+        InvoiceCacheService.set(`invoice_${invoice.id}`, invoice, 600); // 10 minutes
+        InvoiceCacheService.set(`invoice_number_${invoice.invoiceNumber}`, invoice, 600);
       }
 
       console.log(`Warmed up cache with ${recentInvoices.length} invoices`);
@@ -920,20 +600,7 @@ export class InvoiceServiceEnhanced {
   /**
    * Get cache statistics
    */
-  static getCacheStats(): {
-    keys: number;
-    hits: number;
-    misses: number;
-    hitRate: string;
-  } {
-    const stats = this.cache.getStats();
-    return {
-      keys: this.cache.keys().length,
-      hits: stats.hits,
-      misses: stats.misses,
-      hitRate: stats.hits + stats.misses > 0
-        ? ((stats.hits / (stats.hits + stats.misses)) * 100).toFixed(2) + '%'
-        : '0%',
-    };
+  static getCacheStats() {
+    return InvoiceCacheService.getCacheStats();
   }
 }
