@@ -14,10 +14,6 @@ import {
   AuthenticationBindings,
   AuthenticateFn,
 } from '@loopback/authentication';
-import {
-  AuthorizationBindings,
-  AuthorizeFn,
-} from '@loopback/authorization';
 
 const SequenceActions = RestBindings.SequenceActions;
 
@@ -33,8 +29,6 @@ export class MySequence implements SequenceHandler {
     @inject(SequenceActions.REJECT) public reject: Reject,
     @inject(AuthenticationBindings.AUTH_ACTION)
     protected authenticateRequest: AuthenticateFn,
-    @inject(AuthorizationBindings.AUTHORIZE_ACTION, {optional: true})
-    protected authorizeRequest?: AuthorizeFn,
   ) {}
 
   async handle(context: RequestContext) {
@@ -50,19 +44,6 @@ export class MySequence implements SequenceHandler {
       // Authentication
       await this.authenticateRequest(request);
 
-      // Authorization (only if available)
-      if (this.authorizeRequest) {
-        try {
-          const authorizationMetadata = await context.get(AuthorizationBindings.METADATA, {optional: true});
-          if (authorizationMetadata) {
-            await this.authorizeRequest(context, authorizationMetadata);
-          }
-        } catch (authError) {
-          // Log authorization error but don't block request processing
-          console.warn('Authorization check failed:', authError.message);
-        }
-      }
-      
       const args = await this.parseParams(request, route);
       const result = await this.invoke(route, args);
       this.send(response, result);
