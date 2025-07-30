@@ -156,7 +156,7 @@ const AboutPage: React.FC = () => {
               transition={{ delay: 0.1 }}
             >
               <AnimatedCounter
-                target={13}
+                target={8}
                 className="text-primary-600 dark:text-primary-400"
               />
               <p className="text-xs sm:text-sm text-gray-600 dark:text-gray-400 mt-2">
