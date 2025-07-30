@@ -41,12 +41,12 @@ app.use('/api', express.json());
 
 // Email transporter setup
 const transporter = nodemailer.createTransport({
-  host: process.env.EMAIL_HOST || 'smtp.gmail.com',
-  port: parseInt(process.env.EMAIL_PORT || '587'),
+  host: process.env.SMTP_HOST || process.env.EMAIL_HOST || 'smtp.gmail.com',
+  port: parseInt(process.env.SMTP_PORT || process.env.EMAIL_PORT || '587'),
   secure: false,
   auth: {
-    user: process.env.EMAIL_USER,
-    pass: process.env.EMAIL_PASS
+    user: process.env.SMTP_USER || process.env.EMAIL_USER,
+    pass: process.env.SMTP_PASS || process.env.EMAIL_PASS
   }
 });
 
@@ -63,8 +63,11 @@ app.get('/ping', (req, res) => {
   });
 });
 
-// Contact form endpoint
-app.post('/api/contact', async (req, res) => {
+// Contact form endpoints (support both paths)
+app.post('/api/contact', handleContactForm);
+app.post('/api/contact/submit', handleContactForm);
+
+async function handleContactForm(req, res) {
   try {
     const { name, email, phone, subject, message } = req.body;
 
@@ -124,7 +127,7 @@ app.post('/api/contact', async (req, res) => {
       message: 'Failed to send email. Please try again later.' 
     });
   }
-});
+}
 
 // Serve static files in production
 if (process.env.NODE_ENV === 'production') {
