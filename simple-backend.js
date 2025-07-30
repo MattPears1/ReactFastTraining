@@ -132,7 +132,7 @@ async function handleContactForm(req, res) {
         <h2>Thank you for your enquiry</h2>
         <p>Dear ${name},</p>
         <p>We have received your message and will get back to you as soon as possible.</p>
-        <p>If your enquiry is urgent, please call us on 07123 456789.</p>
+        <p>If your enquiry is urgent, please call us on 07447 485644.</p>
         
         <hr>
         <h3>Copy of your inquiry:</h3>
