@@ -6,6 +6,7 @@ import { SystemAlert } from "@components/ui/AlertBanner";
 import { useNotifications } from "@contexts/NotificationContext";
 import { SessionTimeoutWarning } from "@components/auth/SessionTimeoutWarning";
 import { useAuth } from "@contexts/AuthContext";
+import CookieConsent from "@components/ui/CookieConsent";
 
 interface LayoutProps {
   children: React.ReactNode;
@@ -43,6 +44,11 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
         {children}
       </motion.main>
       <Footer />
+      <CookieConsent 
+        position="bottom"
+        privacyPolicyUrl="/privacy"
+        cookiePolicyUrl="/cookies"
+      />
     </div>
   );
 };
