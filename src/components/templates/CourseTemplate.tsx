@@ -172,25 +172,72 @@ const CourseTemplate: React.FC<CourseTemplateProps> = ({
             </motion.div>
           </div>
 
-          {/* Learning Outcomes */}
-          <div className="max-w-3xl mx-auto">
+          {/* Course Overview & Learning Outcomes Side by Side */}
+          <div className="grid md:grid-cols-2 gap-12">
             <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
+              initial={{ opacity: 0, x: -20 }}
+              whileInView={{ opacity: 1, x: 0 }}
               viewport={{ once: true }}
-              className="text-center mb-8"
             >
-              <h2 className="text-3xl font-bold text-gray-900 dark:text-white mb-4">
+              <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-4">
+                Course Overview
+              </h2>
+              <p className="text-gray-600 dark:text-gray-400 mb-4">
+                Essential course information at a glance:
+              </p>
+              <div className="space-y-3">
+                <div className="flex items-start gap-2">
+                  <CheckCircle className="w-5 h-5 text-primary-600 dark:text-primary-400 mt-0.5" />
+                  <div>
+                    <span className="font-medium text-gray-900 dark:text-white">
+                      Prerequisites:
+                    </span>
+                    <span className="text-gray-600 dark:text-gray-400 ml-2">
+                      {prerequisites}
+                    </span>
+                  </div>
+                </div>
+                <div className="flex items-start gap-2">
+                  <CheckCircle className="w-5 h-5 text-primary-600 dark:text-primary-400 mt-0.5" />
+                  <div>
+                    <span className="font-medium text-gray-900 dark:text-white">
+                      Assessment:
+                    </span>
+                    <span className="text-gray-600 dark:text-gray-400 ml-2">
+                      {assessmentMethod}
+                    </span>
+                  </div>
+                </div>
+                <div className="flex items-start gap-2">
+                  <CheckCircle className="w-5 h-5 text-primary-600 dark:text-primary-400 mt-0.5" />
+                  <div>
+                    <span className="font-medium text-gray-900 dark:text-white">
+                      Certificate:
+                    </span>
+                    <span className="text-gray-600 dark:text-gray-400 ml-2">
+                      {certificateValidity}
+                    </span>
+                  </div>
+                </div>
+              </div>
+            </motion.div>
+
+            <motion.div
+              initial={{ opacity: 0, x: 20 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              viewport={{ once: true }}
+            >
+              <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-4">
                 Learning Outcomes
               </h2>
-              <p className="text-gray-600 dark:text-gray-400 mb-6">
+              <p className="text-gray-600 dark:text-gray-400 mb-4">
                 By the end of this course, you will be able to:
               </p>
-              <ul className="space-y-3">
+              <ul className="space-y-2">
                 {learningOutcomes.map((outcome, index) => (
-                  <li key={index} className="flex items-start gap-3 justify-start">
-                    <Target className="w-5 h-5 text-secondary-600 dark:text-secondary-400 mt-0.5 flex-shrink-0" />
-                    <span className="text-gray-600 dark:text-gray-400 text-left">
+                  <li key={index} className="flex items-start gap-2">
+                    <Target className="w-5 h-5 text-secondary-600 dark:text-secondary-400 mt-0.5" />
+                    <span className="text-gray-600 dark:text-gray-400">
                       {outcome}
                     </span>
                   </li>
@@ -211,7 +258,7 @@ const CourseTemplate: React.FC<CourseTemplateProps> = ({
             className="text-center mb-12"
           >
             <h2 className="text-3xl font-bold text-gray-900 dark:text-white mb-4">
-              What You Will Learn
+              What You'll Learn
             </h2>
             <p className="text-gray-600 dark:text-gray-400 max-w-3xl mx-auto">
               Detailed course content designed to give you practical, real-world skills
@@ -252,55 +299,6 @@ const CourseTemplate: React.FC<CourseTemplateProps> = ({
             ))}
           </div>
 
-          {/* Course Overview - Centered */}
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            className="max-w-2xl mx-auto text-center"
-          >
-            <h2 className="text-3xl font-bold text-gray-900 dark:text-white mb-6">
-              Course Overview
-            </h2>
-            <p className="text-gray-600 dark:text-gray-400 mb-8">
-              {description}
-            </p>
-            <div className="space-y-4">
-              <div className="flex items-center justify-center gap-3">
-                <CheckCircle className="w-5 h-5 text-primary-600 dark:text-primary-400" />
-                <div>
-                  <span className="font-medium text-gray-900 dark:text-white">
-                    Prerequisites:
-                  </span>
-                  <span className="text-gray-600 dark:text-gray-400 ml-2">
-                    {prerequisites}
-                  </span>
-                </div>
-              </div>
-              <div className="flex items-center justify-center gap-3">
-                <CheckCircle className="w-5 h-5 text-primary-600 dark:text-primary-400" />
-                <div>
-                  <span className="font-medium text-gray-900 dark:text-white">
-                    Assessment:
-                  </span>
-                  <span className="text-gray-600 dark:text-gray-400 ml-2">
-                    {assessmentMethod}
-                  </span>
-                </div>
-              </div>
-              <div className="flex items-center justify-center gap-3">
-                <CheckCircle className="w-5 h-5 text-primary-600 dark:text-primary-400" />
-                <div>
-                  <span className="font-medium text-gray-900 dark:text-white">
-                    Certificate:
-                  </span>
-                  <span className="text-gray-600 dark:text-gray-400 ml-2">
-                    {certificateValidity}
-                  </span>
-                </div>
-              </div>
-            </div>
-          </motion.div>
         </div>
       </section>
 

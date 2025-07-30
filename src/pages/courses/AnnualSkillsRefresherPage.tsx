@@ -13,7 +13,7 @@ const AnnualSkillsRefresherPage: React.FC = () => {
       "The HSE strongly recommends that qualified first aiders complete an annual refresher course to maintain their skills and confidence. This is not a formal requalification but a skills update designed to keep first aiders competent between their formal requalification courses.",
 
     learningOutcomes: [
-      "Recap of key lifesaving skills such as CPR and AED use",
+      "Recap key lifesaving skills such as CPR and AED use",
       "Manage an unresponsive casualty, choking, severe bleeding and shock",
     ],
 

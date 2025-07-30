@@ -13,7 +13,7 @@ const PaediatricCoursePage: React.FC = () => {
       "This is a comprehensive course covering a wide range of first aid emergencies affecting babies and infants. This course is essential for anyone working with children, including those in nurseries, schools, and as childminders, and is compliant with OFSTED and Early Years Foundation Stage (EYFS) requirements.",
 
     learningOutcomes: [
-      "Understand the roles and responsibilities of a pediatric first-aider",
+      "Understand the roles and responsibilities of a paediatric first-aider",
       "Assess an emergency situation involving a child or infant",
       "Use CPR and AED on children and infants",
       "Manage choking, bleeding, shock, and anaphylaxis in children",
@@ -67,7 +67,7 @@ const PaediatricCoursePage: React.FC = () => {
     ],
 
     whatToExpect: [
-      "Pediatric manikins for realistic practice",
+      "Paediatric manikins for realistic practice",
       "Focus on age-appropriate techniques",
       "Scenarios based on real childcare settings",
       "Comprehensive course handbook",
