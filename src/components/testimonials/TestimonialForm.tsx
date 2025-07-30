@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { Star, Upload, CheckCircle, AlertCircle, Loader2 } from "lucide-react";
-import { useToast } from "@/contexts/ToastContext";
+import { useToast } from "@contexts/ToastContext";
+import { testimonialApi } from "@services/api.service";
 
 interface TestimonialFormProps {
   onSuccess?: () => void;
@@ -11,7 +12,7 @@ export const TestimonialForm: React.FC<TestimonialFormProps> = ({
   onSuccess,
   bookingReference,
 }) => {
-  const { addToast } = useToast();
+  const { showToast } = useToast();
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [rating, setRating] = useState(5);
   const [hoveredRating, setHoveredRating] = useState(0);
@@ -138,40 +139,24 @@ export const TestimonialForm: React.FC<TestimonialFormProps> = ({
     setIsSubmitting(true);
 
     try {
-      const submitData = new FormData();
-
-      // Add form data
-      Object.entries(formData).forEach(([key, value]) => {
-        submitData.append(key, value.toString());
+      const response = await testimonialApi.submitForm({
+        authorName: formData.authorName,
+        authorEmail: formData.authorEmail,
+        authorLocation: formData.authorLocation,
+        courseTaken: formData.courseTaken,
+        courseDate: formData.courseDate,
+        content: formData.content,
+        rating: rating,
+        showFullName: formData.showFullName,
+        photoConsent: formData.photoConsent,
+        bookingReference: formData.bookingReference,
+        photo: photoFile || undefined,
       });
 
-      // Add rating
-      submitData.append("rating", rating.toString());
-
-      // Add photo if provided
-      if (photoFile) {
-        submitData.append("photo", photoFile);
-      }
-
-      const response = await fetch("/api/testimonials/submit", {
-        method: "POST",
-        body: submitData,
-      });
-
-      if (!response.ok) {
-        throw new Error("Failed to submit testimonial");
-      }
-
-      const result = await response.json();
-
-      addToast({
-        id: Date.now().toString(),
-        type: "success",
-        title: "Thank you for your testimonial!",
-        message:
-          "Your testimonial has been sent to our team for review. We appreciate your feedback!",
-        duration: 5000,
-      });
+      showToast(
+        "success",
+        response.message || "Thank you for your testimonial! We appreciate your feedback and will review it shortly.",
+      );
 
       // Reset form
       setFormData({
@@ -190,16 +175,13 @@ export const TestimonialForm: React.FC<TestimonialFormProps> = ({
       setPhotoPreview("");
 
       onSuccess?.();
-    } catch (error) {
+    } catch (error: any) {
       console.error("Testimonial submission error:", error);
-      addToast({
-        id: Date.now().toString(),
-        type: "error",
-        title: "Submission failed",
-        message:
+      showToast(
+        "error",
+        error.response?.data?.message ||
           "There was an error submitting your testimonial. Please try again.",
-        duration: 5000,
-      });
+      );
     } finally {
       setIsSubmitting(false);
     }

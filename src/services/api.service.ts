@@ -287,6 +287,56 @@ export const authApi = {
 };
 
 // Export booking API
+export const testimonialApi = {
+  submitForm: async (data: {
+    authorName: string;
+    authorEmail: string;
+    authorLocation?: string;
+    courseTaken: string;
+    courseDate?: string;
+    content: string;
+    rating: number;
+    showFullName: boolean;
+    photoConsent: string;
+    bookingReference?: string;
+    photo?: File;
+  }) => {
+    const formData = new FormData();
+    
+    formData.append('authorName', data.authorName);
+    formData.append('authorEmail', data.authorEmail);
+    formData.append('courseTaken', data.courseTaken);
+    formData.append('content', data.content);
+    formData.append('rating', data.rating.toString());
+    formData.append('showFullName', data.showFullName.toString());
+    formData.append('photoConsent', data.photoConsent);
+    
+    if (data.authorLocation) {
+      formData.append('authorLocation', data.authorLocation);
+    }
+    if (data.courseDate) {
+      formData.append('courseDate', data.courseDate);
+    }
+    if (data.bookingReference) {
+      formData.append('bookingReference', data.bookingReference);
+    }
+    if (data.photo) {
+      formData.append('photo', data.photo);
+    }
+
+    const response = await apiService.post<{ success: boolean; message: string }>(
+      "/testimonials/submit",
+      formData,
+      {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
+      }
+    );
+    return response;
+  },
+};
+
 export const bookingApi = {
   getAvailableCourses: async (params?: {
     courseType?: string;
