@@ -1,6 +1,6 @@
-import React, { forwardRef } from "react";
+import { forwardRef } from "react";
 import { Link } from "react-router-dom";
-import { motion } from "framer-motion";
+import { motion, PanInfo } from "framer-motion";
 import { cn } from "@utils/cn";
 import { useMagneticEffect } from "@hooks/useAnimation";
 import { ButtonProps } from "./Button";
@@ -79,25 +79,33 @@ const MagneticButton = forwardRef<HTMLButtonElement, ButtonProps>(
         {/* Ripple effect container */}
         <motion.div
           className="absolute inset-0"
-          onTap={(e) => {
-            const button = e.currentTarget;
-            const rect = button.getBoundingClientRect();
-            const ripple = document.createElement("span");
-            const size = Math.max(rect.width, rect.height);
-            const x = e.clientX - rect.left - size / 2;
-            const y = e.clientY - rect.top - size / 2;
+          onTap={(e: MouseEvent | TouchEvent | PointerEvent) => {
+            // FIX: Cast currentTarget to HTMLElement to access DOM properties
+            const button = e.currentTarget as HTMLElement;
+            if (button) {
+              const rect = button.getBoundingClientRect();
+              const ripple = document.createElement("span");
+              const size = Math.max(rect.width, rect.height);
 
-            ripple.style.width = ripple.style.height = size + "px";
-            ripple.style.left = x + "px";
-            ripple.style.top = y + "px";
-            ripple.className =
-              "absolute rounded-full bg-white/30 animate-ripple pointer-events-none";
+              // FIX: Handle both MouseEvent and TouchEvent coordinates
+              const clientX = 'touches' in e ? e.touches[0].clientX : e.clientX;
+              const clientY = 'touches' in e ? e.touches[0].clientY : e.clientY;
 
-            button.appendChild(ripple);
+              const x = clientX - rect.left - size / 2;
+              const y = clientY - rect.top - size / 2;
 
-            setTimeout(() => {
-              ripple.remove();
-            }, 600);
+              ripple.style.width = ripple.style.height = size + "px";
+              ripple.style.left = x + "px";
+              ripple.style.top = y + "px";
+              ripple.className =
+                "absolute rounded-full bg-white/30 animate-ripple pointer-events-none";
+
+              button.appendChild(ripple);
+
+              setTimeout(() => {
+                ripple.remove();
+              }, 600);
+            }
           }}
         />
 
@@ -205,10 +213,12 @@ const MagneticButton = forwardRef<HTMLButtonElement, ButtonProps>(
           // Combine refs
           if (ref) {
             if (typeof ref === "function") ref(node);
-            else ref.current = node;
+            // FIX: Cast forwarded ref to allow assignment
+            else (ref as React.MutableRefObject<HTMLButtonElement | null>).current = node;
           }
           if (magneticRef.current !== node) {
-            magneticRef.current = node;
+            // FIX: Cast magneticRef to allow assignment
+            (magneticRef as React.MutableRefObject<HTMLButtonElement | null>).current = node;
           }
         }}
         className={buttonClasses}
