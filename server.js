@@ -681,6 +681,39 @@ app.get('/api/admin/analytics/comprehensive', verifyAdminToken, (req, res) => {
   res.json(analytics);
 });
 
+// Testimonial submission endpoint
+app.post('/api/testimonials/submit', createRateLimiter('api'), (req, res) => {
+  try {
+    // Log the testimonial data
+    console.log('📝 Testimonial submission received:', {
+      authorName: req.body.authorName,
+      authorEmail: req.body.authorEmail,
+      courseTaken: req.body.courseTaken,
+      rating: req.body.rating,
+      timestamp: new Date().toISOString()
+    });
+    
+    // Return success response
+    res.json({
+      success: true,
+      message: 'Thank you for your testimonial! We appreciate your feedback.'
+    });
+  } catch (error) {
+    console.error('❌ Testimonial submission error:', error);
+    res.status(500).json({
+      success: false,
+      message: 'Failed to submit testimonial. Please try again.'
+    });
+  }
+});
+
+// Analytics endpoint
+app.post('/api/analytics', createRateLimiter('api'), (req, res) => {
+  // Just log analytics data for now
+  console.log('📊 Analytics data received');
+  res.json({ success: true });
+});
+
 // Serve static files for frontend
 app.use(express.static(path.join(__dirname, 'dist')));
 
