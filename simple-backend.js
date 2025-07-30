@@ -4,11 +4,34 @@ const compression = require('compression');
 const cors = require('cors');
 const nodemailer = require('nodemailer');
 const dotenv = require('dotenv');
+const fs = require('fs');
 
 dotenv.config();
 
 const app = express();
 const PORT = process.env.PORT || 3000;
+
+// Simple analytics storage
+let analytics = {
+  totalViews: 0,
+  weeklyViews: 0,
+  lastWeekViews: 0,
+  lastReset: new Date().toISOString()
+};
+
+// Load analytics from file if exists
+try {
+  if (fs.existsSync('analytics.json')) {
+    analytics = JSON.parse(fs.readFileSync('analytics.json', 'utf8'));
+  }
+} catch (e) {
+  console.log('Starting fresh analytics');
+}
+
+// Save analytics every 5 minutes
+setInterval(() => {
+  fs.writeFileSync('analytics.json', JSON.stringify(analytics));
+}, 5 * 60 * 1000);
 
 // Enable gzip compression
 app.use(compression());
@@ -141,12 +164,69 @@ async function handleContactForm(req, res) {
   }
 }
 
+// Track page views
+app.get('/', (req, res, next) => {
+  analytics.totalViews++;
+  analytics.weeklyViews++;
+  next();
+});
+
+// Weekly analytics email
+async function sendWeeklyAnalytics() {
+  const percentChange = analytics.lastWeekViews > 0 
+    ? ((analytics.weeklyViews - analytics.lastWeekViews) / analytics.lastWeekViews * 100).toFixed(1)
+    : 100;
+  
+  const emailHtml = `
+    <h2>React Fast Training - Weekly Analytics Report</h2>
+    <p>Here's your website performance for the week:</p>
+    
+    <div style="background: #f0f0f0; padding: 20px; border-radius: 8px; margin: 20px 0;">
+      <h3 style="color: #0EA5E9;">📊 Total Views Since Launch: <strong>${analytics.totalViews}</strong></h3>
+      <h3 style="color: #10B981;">📈 This Week's Views: <strong>${analytics.weeklyViews}</strong></h3>
+      <h3 style="color: ${percentChange >= 0 ? '#10B981' : '#EF4444'};">
+        ${percentChange >= 0 ? '📈' : '📉'} Change from Last Week: <strong>${percentChange >= 0 ? '+' : ''}${percentChange}%</strong>
+      </h3>
+    </div>
+    
+    <p>Keep up the great work!</p>
+    <p><em>This is an automated weekly report from React Fast Training</em></p>
+  `;
+  
+  try {
+    await transporter.sendMail({
+      from: process.env.EMAIL_FROM || 'noreply@reactfasttraining.co.uk',
+      to: 'info@reactfasttraining.co.uk',
+      subject: `Weekly Analytics Report - ${new Date().toLocaleDateString()}`,
+      html: emailHtml
+    });
+    
+    // Reset weekly counters
+    analytics.lastWeekViews = analytics.weeklyViews;
+    analytics.weeklyViews = 0;
+    analytics.lastReset = new Date().toISOString();
+    fs.writeFileSync('analytics.json', JSON.stringify(analytics));
+  } catch (error) {
+    console.error('Failed to send weekly analytics:', error);
+  }
+}
+
+// Schedule weekly email - every Friday at 9 AM
+setInterval(() => {
+  const now = new Date();
+  if (now.getDay() === 5 && now.getHours() === 9 && now.getMinutes() === 0) {
+    sendWeeklyAnalytics();
+  }
+}, 60 * 1000); // Check every minute
+
 // Serve static files in production
 if (process.env.NODE_ENV === 'production') {
   app.use(express.static(path.join(__dirname, 'dist')));
   
   // Handle React routing
   app.get('*', (req, res) => {
+    analytics.totalViews++;
+    analytics.weeklyViews++;
     res.sendFile(path.join(__dirname, 'dist', 'index.html'));
   });
 }
