@@ -121,9 +121,19 @@ export const CoursesModal: React.FC<CoursesModalProps> = ({
               {/* Header */}
               <div className="flex items-center justify-between p-4 sm:p-6 border-b border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900 relative z-10">
                 <div className="flex-1 min-w-0">
-                  <h2 className="text-lg sm:text-2xl font-bold text-gray-900 dark:text-white truncate">
-                    Our Training Courses
-                  </h2>
+                  <div className="flex items-center gap-4">
+                    <h2 className="text-lg sm:text-2xl font-bold text-gray-900 dark:text-white truncate">
+                      Our Training Courses
+                    </h2>
+                    <Link
+                      to="/courses"
+                      onClick={onClose}
+                      className="hidden sm:inline-flex items-center gap-2 px-4 py-2 bg-primary-600 text-white text-sm font-medium rounded-lg hover:bg-primary-700 transition-colors"
+                    >
+                      View All Courses
+                      <ArrowRight className="w-4 h-4" />
+                    </Link>
+                  </div>
                   <p className="text-xs sm:text-sm text-gray-600 dark:text-gray-400 mt-1 hidden sm:block">
                     Select a course to learn more about our Ofqual regulated and HSE approved
                     training
