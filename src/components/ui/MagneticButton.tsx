@@ -1,4 +1,5 @@
 import React, { forwardRef } from "react";
+import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
 import { cn } from "@utils/cn";
 import { useMagneticEffect } from "@hooks/useAnimation";
@@ -14,6 +15,8 @@ const MagneticButton = forwardRef<HTMLButtonElement, ButtonProps>(
       loading = false,
       leftIcon,
       rightIcon,
+      href,
+      external,
       className,
       disabled,
       ...props
@@ -63,32 +66,9 @@ const MagneticButton = forwardRef<HTMLButtonElement, ButtonProps>(
       className,
     );
 
-    return (
-      <motion.button
-        ref={(node) => {
-          // Combine refs
-          if (ref) {
-            if (typeof ref === "function") ref(node);
-            else ref.current = node;
-          }
-          if (magneticRef.current !== node) {
-            magneticRef.current = node;
-          }
-        }}
-        className={buttonClasses}
-        disabled={disabled || loading}
-        animate={{
-          x: position.x,
-          y: position.y,
-        }}
-        transition={{
-          type: "spring",
-          stiffness: 150,
-          damping: 15,
-          mass: 0.1,
-        }}
-        {...props}
-      >
+    // Create the content that will be shared across all render variations
+    const content = (
+      <>
         {/* Liquid effect background */}
         <motion.div
           className="absolute inset-0 bg-gradient-to-r from-primary-400 to-secondary-400 opacity-0"
@@ -170,6 +150,82 @@ const MagneticButton = forwardRef<HTMLButtonElement, ButtonProps>(
           whileHover={{ opacity: 1 }}
           transition={{ duration: 0.3 }}
         />
+      </>
+    );
+
+    // Handle href navigation like the Button component
+    if (href && !disabled) {
+      if (external) {
+        return (
+          <motion.a
+            href={href}
+            target="_blank"
+            rel="noopener noreferrer"
+            className={buttonClasses}
+            animate={{
+              x: position.x,
+              y: position.y,
+            }}
+            transition={{
+              type: "spring",
+              stiffness: 150,
+              damping: 15,
+              mass: 0.1,
+            }}
+          >
+            {content}
+          </motion.a>
+        );
+      }
+
+      return (
+        <Link to={href} className="block">
+          <motion.div
+            className={buttonClasses}
+            animate={{
+              x: position.x,
+              y: position.y,
+            }}
+            transition={{
+              type: "spring",
+              stiffness: 150,
+              damping: 15,
+              mass: 0.1,
+            }}
+          >
+            {content}
+          </motion.div>
+        </Link>
+      );
+    }
+
+    return (
+      <motion.button
+        ref={(node) => {
+          // Combine refs
+          if (ref) {
+            if (typeof ref === "function") ref(node);
+            else ref.current = node;
+          }
+          if (magneticRef.current !== node) {
+            magneticRef.current = node;
+          }
+        }}
+        className={buttonClasses}
+        disabled={disabled || loading}
+        animate={{
+          x: position.x,
+          y: position.y,
+        }}
+        transition={{
+          type: "spring",
+          stiffness: 150,
+          damping: 15,
+          mass: 0.1,
+        }}
+        {...props}
+      >
+        {content}
       </motion.button>
     );
   },

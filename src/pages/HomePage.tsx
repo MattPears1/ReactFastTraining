@@ -163,7 +163,7 @@ const HomePage: React.FC = () => {
         icon: Award,
         title: "Experienced trainer",
         description:
-          "Learn life-saving skills from an experienced veteran and emergency services professional",
+          "Learn lifesaving skills from an experienced veteran and emergency services professional",
       },
     ],
     [],
@@ -449,7 +449,7 @@ const HomePage: React.FC = () => {
           >
             <div className="bg-gradient-to-r from-primary-500 to-secondary-500 rounded-2xl sm:rounded-3xl p-6 sm:p-8 md:p-12 text-white text-center shadow-2xl">
               <h3 className="text-2xl sm:text-3xl font-bold mb-3 sm:mb-4">
-                Ready to Learn Life-Saving Skills?
+                Ready to Learn Lifesaving Skills?
               </h3>
               <p className="text-base sm:text-lg md:text-xl mb-6 sm:mb-8 text-white/90">
                 Contact us today for a personalised quote for you or your team

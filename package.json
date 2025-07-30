@@ -1,6 +1,6 @@
 {
   "name": "lex-business-website",
-  "version": "1.0.25",
+  "version": "1.0.26",
   "description": "Flexible business website with e-commerce and service showcase capabilities",
   "main": "src/index.js",
   "scripts": {
