@@ -1,12 +1,13 @@
+// Minimal repository exports for basic functionality
 export * from './testimonial.repository';
-export * from './booking.repository';
+// export * from './booking.repository';
 export * from './contact-submission.repository';
-export * from './course-session.repository';
-export * from './course.repository';
-export * from './certificate.repository';
-export * from './trainer.repository';
-export * from './location.repository';
-export * from './admin-activity-log.repository';
-export * from './attendance.repository';
-export * from './base.repository';
-export * from './user.repository';
+// export * from './course-session.repository';
+// export * from './course.repository';
+// export * from './certificate.repository';
+// export * from './trainer.repository';
+// export * from './location.repository';
+// export * from './admin-activity-log.repository';
+// export * from './attendance.repository';
+// export * from './base.repository';
+// export * from './user.repository';
