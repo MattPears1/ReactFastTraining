@@ -7,13 +7,14 @@ const AnnualSkillsRefresherPage: React.FC = () => {
     courseAcronym: "ASR",
     duration: "3 Hours",
     price: "£60",
+    groupSize: "Maximum 12 participants",
     certificateValidity: "Certificate of Attendance",
     description:
       "The HSE strongly recommends that qualified first aiders complete an annual refresher course to maintain their skills and confidence. This is not a formal requalification but a skills update designed to keep first aiders competent between their formal requalification courses.",
 
     learningOutcomes: [
-      "A recap of key life-saving skills such as CPR and AED use",
-      "Managing an unresponsive casualty, choking, severe bleeding, and shock",
+      "Recap of key life-saving skills such as CPR and AED use",
+      "Manage an unresponsive casualty, choking, severe bleeding and shock",
     ],
 
     whoShouldAttend: [
@@ -21,7 +22,7 @@ const AnnualSkillsRefresherPage: React.FC = () => {
       "Workplace first aiders between requalifications",
       "Those wanting to maintain confidence and competence",
       "Anyone required by their employer to complete annual updates",
-      "Organizations following HSE best practice guidelines",
+      "Organisations following HSE best practice guidelines",
       "First aiders who haven't used their skills recently",
     ],
 

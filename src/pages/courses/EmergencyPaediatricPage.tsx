@@ -12,9 +12,9 @@ const EmergencyPaediatricPage: React.FC = () => {
       "This course focuses on emergency scenarios involving infants and children and is suitable for those who do not require the two-day paediatric first aid qualification. It provides essential skills for managing emergency situations with babies and young children.",
 
     learningOutcomes: [
-      "Assessing an emergency and prioritising actions",
-      "CPR and AED use for children and infants",
-      "Managing an unresponsive casualty, choking, bleeding, and shock",
+      "Assess an emergency and prioritize actions",
+      "Use CPR and AED for children and infants",
+      "Manage an unresponsive casualty, choking, bleeding, and shock",
     ],
 
     whoShouldAttend: [
@@ -70,6 +70,8 @@ const EmergencyPaediatricPage: React.FC = () => {
     assessmentMethod: "Continuous observation and practical demonstration",
 
     prerequisites: "None - suitable for beginners",
+
+    groupSize: "Maximum 12 participants",
 
     seoKeywords:
       "emergency paediatric first aid, EPFA course, 1 day children first aid, emergency childcare first aid",

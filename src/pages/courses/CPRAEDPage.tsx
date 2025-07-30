@@ -12,10 +12,10 @@ const CPRAEDPage: React.FC = () => {
       "This course provides focussed training on performing Cardiopulmonary Resuscitation (CPR) and using an Automated External Defibrillator (AED). It is aimed at both the general public and healthcare professionals needing annual updates.",
 
     learningOutcomes: [
-      "Recognising cardiac arrest",
-      "Performing CPR on adults, with variations for children and infants included",
-      "Safe and effective use of an AED",
-      "Dealing with an unresponsive casualty",
+      "Recognise a cardiac arrest",
+      "Perform CPR on adults with variations for children and infants included",
+      "Safely and effectively use an AED",
+      "Deal with an unresponsive casualty",
     ],
 
     whoShouldAttend: [
@@ -77,6 +77,8 @@ const CPRAEDPage: React.FC = () => {
 
     seoKeywords:
       "CPR course, AED training, defibrillator course, CPR certification, resuscitation training",
+
+    groupSize: "Maximum 12 participants",
   };
 
   return <CourseTemplate {...courseData} />;

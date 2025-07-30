@@ -22,10 +22,9 @@ const EFAWCoursePage: React.FC = () => {
 
     whoShouldAttend: [
       "Designated workplace first aiders in low-risk environments",
-      "Office workers and retail staff",
+      "Employees in small to medium organisations",
       "Anyone requiring basic first aid certification",
       "Those working in shops, offices, and restaurants",
-      "Employees in small to medium organizations",
     ],
 
     courseContent: [
@@ -50,7 +49,7 @@ const EFAWCoursePage: React.FC = () => {
 
     whatToExpect: [
       "Hands-on practical training with realistic scenarios",
-      "Small group sizes (maximum 12 participants)",
+      "Maximum 12 participants",
       "All equipment and materials provided",
       "Course manual to keep for reference",
       "Written and practical assessments",
@@ -59,6 +58,8 @@ const EFAWCoursePage: React.FC = () => {
 
     seoKeywords:
       "emergency first aid at work, EFAW course, 1 day first aid training, workplace first aid, EFAW certification",
+
+    groupSize: "Maximum 12 participants",
   };
 
   return <CourseTemplate {...courseData} />;

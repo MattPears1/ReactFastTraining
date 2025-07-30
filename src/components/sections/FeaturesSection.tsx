@@ -50,7 +50,7 @@ const features = [
     icon: Brain,
     title: "Mental Health First Aid",
     description:
-      "Learn to recognize and support mental health issues in the workplace. Includes crisis intervention techniques.",
+      "Learn to recognise and support mental health issues in the workplace. Includes crisis intervention techniques.",
     price: "£125",
     duration: "1 Day",
     color: "text-purple-600",

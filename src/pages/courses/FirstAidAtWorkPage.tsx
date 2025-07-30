@@ -182,7 +182,7 @@ const FirstAidAtWorkPage: React.FC = () => {
                 Group Size
               </h3>
               <p className="text-gray-600 dark:text-gray-400">
-                Maximum 12 learners
+                Maximum 12 participants
               </p>
               <p className="text-sm text-gray-500 dark:text-gray-500 mt-2">
                 Ensures personal attention

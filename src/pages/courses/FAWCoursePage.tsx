@@ -28,7 +28,7 @@ const FAWCoursePage: React.FC = () => {
       "Team leaders and supervisors",
       "Anyone requiring comprehensive first aid certification",
       "Those working in higher-risk environments",
-      "Employees in medium to large organizations",
+      "Employees in medium to large organisations",
     ],
 
     courseContent: [

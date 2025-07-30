@@ -32,7 +32,7 @@ const courses: Course[] = [
     label: "Paediatric First Aid",
     href: "/courses/paediatric",
     duration: "2 Days",
-    description: "Specialized first aid for those working with children",
+    description: "Specialised first aid for those working with children",
     icon: "👶",
   },
   {
@@ -125,7 +125,7 @@ export const CoursesModal: React.FC<CoursesModalProps> = ({
                     Our Training Courses
                   </h2>
                   <p className="text-xs sm:text-sm text-gray-600 dark:text-gray-400 mt-1 hidden sm:block">
-                    Select a course to learn more about our HSE approved
+                    Select a course to learn more about our Ofqual regulated and HSE approved
                     training
                   </p>
                 </div>
@@ -178,30 +178,6 @@ export const CoursesModal: React.FC<CoursesModalProps> = ({
                 </div>
               </div>
 
-              {/* Footer */}
-              <div className="p-3 sm:p-6 border-t border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800/50 flex-shrink-0">
-                <div className="flex flex-col sm:flex-row items-center justify-between gap-2 sm:gap-4">
-                  <p className="text-xs sm:text-sm text-gray-600 dark:text-gray-400 text-center sm:text-left">
-                    All courses are Ofqual regulated and HSE approved
-                  </p>
-                  <div className="flex gap-2 sm:gap-4 w-full sm:w-auto">
-                    <Link
-                      to="/courses"
-                      onClick={onClose}
-                      className="btn btn-outline btn-xs sm:btn-sm flex-1 sm:flex-initial"
-                    >
-                      See All Courses
-                    </Link>
-                    <Link
-                      to="/booking"
-                      onClick={onClose}
-                      className="btn btn-primary btn-xs sm:btn-sm flex-1 sm:flex-initial"
-                    >
-                      Book Your Course
-                    </Link>
-                  </div>
-                </div>
-              </div>
             </motion.div>
           </div>
         </>

@@ -4,6 +4,9 @@ import {Booking, Certificate, CourseSession} from '../models';
 import {BookingRepository} from '../repositories';
 import * as nodemailer from 'nodemailer';
 import {User} from '../db/schema/users';
+import * as fs from 'fs';
+import * as path from 'path';
+import * as handlebars from 'handlebars';
 
 /**
  * Email Configuration & Routing:
@@ -21,6 +24,20 @@ export interface EmailOptions {
     content?: Buffer;
     path?: string;
   }>;
+}
+
+export interface TestimonialSubmission {
+  authorName: string;
+  authorEmail: string;
+  authorLocation?: string;
+  courseTaken: string;
+  courseDate?: string;
+  content: string;
+  rating: number;
+  showFullName: boolean;
+  photoConsent?: string;
+  bookingReference?: string;
+  photoFile?: Express.Multer.File;
 }
 
 @injectable({scope: BindingScope.TRANSIENT})
@@ -662,5 +679,109 @@ export class EmailService {
       subject: 'Password Changed - React Fast Training',
       html,
     });
+  }
+
+  async sendTestimonialNotification(testimonial: TestimonialSubmission): Promise<void> {
+    console.log('📝 [EmailService] Sending testimonial notification email');
+
+    try {
+      // Read and compile the Handlebars template
+      const templatePath = path.join(__dirname, '../templates/emails/testimonial-submission.hbs');
+      const templateSource = fs.readFileSync(templatePath, 'utf8');
+      const template = handlebars.compile(templateSource);
+
+      // Prepare template data
+      const stars = Array.from({ length: 5 }, (_, i) => i < testimonial.rating);
+      const templateData = {
+        ...testimonial,
+        stars,
+        hasPhoto: !!testimonial.photoFile,
+        photoConsent: testimonial.photoConsent === 'given',
+        courseDate: testimonial.courseDate ? new Date(testimonial.courseDate).toLocaleDateString('en-GB') : null,
+        submittedAt: new Date().toLocaleDateString('en-GB', {
+          weekday: 'long',
+          day: 'numeric',
+          month: 'long',
+          year: 'numeric',
+          hour: '2-digit',
+          minute: '2-digit'
+        })
+      };
+
+      const html = template(templateData);
+
+      // Prepare attachments
+      const attachments: Array<{filename: string; content: Buffer}> = [];
+      if (testimonial.photoFile) {
+        attachments.push({
+          filename: testimonial.photoFile.originalname || 'testimonial-photo.jpg',
+          content: testimonial.photoFile.buffer
+        });
+      }
+
+      await this.sendEmail({
+        to: 'info@reactfasttraining.co.uk',
+        subject: `New Testimonial Submission - ${testimonial.rating} Stars - ${testimonial.courseTaken}`,
+        html,
+        attachments: attachments.length > 0 ? attachments : undefined
+      });
+
+      console.log('✅ [EmailService] Testimonial notification sent successfully');
+    } catch (error) {
+      console.error('❌ [EmailService] Error sending testimonial notification:', error);
+      throw error;
+    }
+  }
+
+  async sendTestimonialConfirmation(testimonial: TestimonialSubmission): Promise<void> {
+    console.log('📬 [EmailService] Sending testimonial confirmation copy to user');
+
+    try {
+      // Read and compile the confirmation template
+      const templatePath = path.join(__dirname, '../templates/emails/testimonial-confirmation.hbs');
+      const templateSource = fs.readFileSync(templatePath, 'utf8');
+      const template = handlebars.compile(templateSource);
+
+      // Prepare template data
+      const stars = Array.from({ length: 5 }, (_, i) => i < testimonial.rating);
+      const templateData = {
+        ...testimonial,
+        stars,
+        hasPhoto: !!testimonial.photoFile,
+        photoConsent: testimonial.photoConsent === 'given',
+        courseDate: testimonial.courseDate ? new Date(testimonial.courseDate).toLocaleDateString('en-GB') : null,
+        submittedAt: new Date().toLocaleDateString('en-GB', {
+          weekday: 'long',
+          day: 'numeric',
+          month: 'long',
+          year: 'numeric',
+          hour: '2-digit',
+          minute: '2-digit'
+        })
+      };
+
+      const html = template(templateData);
+
+      // Prepare attachments (include photo if uploaded)
+      const attachments: Array<{filename: string; content: Buffer}> = [];
+      if (testimonial.photoFile) {
+        attachments.push({
+          filename: testimonial.photoFile.originalname || 'your-testimonial-photo.jpg',
+          content: testimonial.photoFile.buffer
+        });
+      }
+
+      await this.sendEmail({
+        to: testimonial.authorEmail,
+        subject: `Thank you for your testimonial - React Fast Training`,
+        html,
+        attachments: attachments.length > 0 ? attachments : undefined
+      });
+
+      console.log('✅ [EmailService] Testimonial confirmation sent successfully to user');
+    } catch (error) {
+      console.error('❌ [EmailService] Error sending testimonial confirmation:', error);
+      throw error;
+    }
   }
 }

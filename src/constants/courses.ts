@@ -21,7 +21,7 @@ export const COURSE_CATEGORIES = {
   },
   paediatric: {
     title: "Paediatric First Aid",
-    description: "Specialized training for those working with children",
+    description: "Specialised training for those working with children",
     courses: [
       "Paediatric First Aid",
       "Emergency Paediatric First Aid",

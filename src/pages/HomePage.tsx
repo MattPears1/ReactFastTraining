@@ -157,13 +157,13 @@ const HomePage: React.FC = () => {
         icon: Users,
         title: "Group Sizes",
         description:
-          "Maximum 12 learners per course ensuring personal attention and effective learning",
+          "Maximum 12 participants per course ensuring personal attention and effective learning",
       },
       {
         icon: Award,
         title: "Experienced trainer",
         description:
-          "Learn from a professional with a military and emergency service background",
+          "Learn life-saving skills from an experienced veteran and emergency services professional",
       },
     ],
     [],
@@ -197,8 +197,7 @@ const HomePage: React.FC = () => {
               Available Training Courses
             </h2>
             <p className="text-base sm:text-lg text-gray-600 dark:text-gray-400 max-w-2xl mx-auto px-4 sm:px-0">
-              All courses are Ofqual regulated and HSE compliant, delivered by
-              an experienced professional
+              All courses are Ofqual regulated and HSE compliant
             </p>
           </motion.div>
 
@@ -365,7 +364,7 @@ const HomePage: React.FC = () => {
               Start Your First Aid Journey
             </h2>
             <p className="text-base sm:text-lg text-gray-600 dark:text-gray-400 max-w-2xl mx-auto px-4 sm:px-0">
-              Join a growing community of trained first aiders across South
+              Join a growing community of trained first aiders across
               Yorkshire
             </p>
           </motion.div>
@@ -453,7 +452,7 @@ const HomePage: React.FC = () => {
                 Ready to Learn Life-Saving Skills?
               </h3>
               <p className="text-base sm:text-lg md:text-xl mb-6 sm:mb-8 text-white/90">
-                Contact us today for a personalised quote for your team
+                Contact us today for a personalised quote for you or your team
               </p>
               <div className="flex flex-col sm:flex-row gap-6 sm:gap-4 justify-center">
                 <Button
@@ -564,7 +563,7 @@ const HomePage: React.FC = () => {
             className="text-center mb-8 sm:mb-10 md:mb-12"
           >
             <h2 className="text-2xl sm:text-3xl md:text-4xl font-heading font-bold text-gray-900 dark:text-white mb-3 sm:mb-4 px-4 sm:px-0">
-              Flexible Training Across South Yorkshire
+              Flexible Training Across Yorkshire
             </h2>
             <p className="text-base sm:text-lg text-gray-600 dark:text-gray-400 max-w-2xl mx-auto px-4 sm:px-0">
               We arrange training venues to suit each booking - whether at your workplace or a convenient 

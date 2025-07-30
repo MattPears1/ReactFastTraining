@@ -218,7 +218,7 @@ export const LoginPage: React.FC = () => {
 
         <div className="text-center text-sm text-gray-600">
           <p>
-            For security reasons, this portal is restricted to authorized
+            For security reasons, this portal is restricted to authorised
             administrators only.
           </p>
         </div>

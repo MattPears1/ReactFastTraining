@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { ChevronDown, Search, HelpCircle, MessageSquare } from "lucide-react";
+import { ChevronDown, HelpCircle, MessageSquare } from "lucide-react";
 import { cn } from "@utils/cn";
 import CTASection from "@components/sections/CTASection";
 import SEO from "@components/common/SEO";
@@ -40,14 +40,14 @@ const faqData: FAQItem[] = [
     id: "5",
     question: "Do I need any prior experience to attend a first aid course?",
     answer:
-      "No prior experience or qualifications are needed for our first aid courses. Our training is designed for complete beginners and our experienced trainer will guide you through everything step-by-step.",
+      "The majority of our courses require no prior experience or qualifications other than the oxygen therapy course, which the participant is required to have a valid first aid at work or emergency first aid at work certificate. Our training is designed for complete beginners and our experienced trainer will guide you through everything step by step.",
     category: "Requirements",
   },
   {
     id: "6",
     question: "How many people are in each training group?",
     answer:
-      "We keep our class sizes small with a maximum of 12 delegates per course. This ensures everyone gets personal attention and plenty of hands-on practice time with the equipment.",
+      "We keep our class sizes small with a maximum of 12 participants per course. This ensures everyone gets personal attention and plenty of hands-on practice time with the equipment.",
     category: "Courses",
   },
   {
@@ -61,7 +61,7 @@ const faqData: FAQItem[] = [
     id: "8",
     question: "What happens if I fail the assessment?",
     answer:
-      "If you don't pass the first time, we'll work with you to identify areas for improvement and offer a free reassessment. We want everyone to succeed and gain these vital skills.",
+      "If you don't pass the first time, we'll work with you to identify areas for improvement and offer a single free reassessment. We want everyone to succeed and gain these vital skills.",
     category: "Certification",
   },
   {
@@ -115,7 +115,6 @@ const categories = [
 ];
 
 const FAQPage: React.FC = () => {
-  const [searchTerm, setSearchTerm] = useState("");
   const [selectedCategory, setSelectedCategory] = useState("All");
   const [openItems, setOpenItems] = useState<string[]>([]);
 
@@ -126,12 +125,9 @@ const FAQPage: React.FC = () => {
   };
 
   const filteredFAQs = faqData.filter((item) => {
-    const matchesSearch =
-      item.question.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      item.answer.toLowerCase().includes(searchTerm.toLowerCase());
     const matchesCategory =
       selectedCategory === "All" || item.category === selectedCategory;
-    return matchesSearch && matchesCategory;
+    return matchesCategory;
   });
 
   // Create FAQ structured data
@@ -175,7 +171,7 @@ const FAQPage: React.FC = () => {
               <span className="text-gradient gradient-primary">FAQs</span>
             </h1>
             <p className="text-base sm:text-lg md:text-xl text-gray-600 dark:text-gray-400 px-4 sm:px-0">
-              Everything you need to know about our Yorkshire first aid courses
+              The majority of our courses require no prior experience or qualifications other than the oxygen therapy course, which the participant is required to have a valid first aid at work or emergency first aid at work certificate. Our training is designed for complete beginners and our experienced trainer will guide you through everything step by step.
             </p>
           </motion.div>
         </div>
@@ -185,21 +181,6 @@ const FAQPage: React.FC = () => {
       <section className="py-8 sm:py-12">
         <div className="container px-5 sm:px-6 lg:px-8">
           <div className="max-w-4xl mx-auto">
-            {/* Search Bar */}
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              className="relative mb-8"
-            >
-              <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400" />
-              <input
-                type="text"
-                placeholder="Search for answers..."
-                value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
-                className="w-full pl-12 pr-4 py-4 text-base sm:text-lg bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-xl focus:border-primary-500 focus:ring-2 focus:ring-primary-500 focus:ring-opacity-50 transition-all duration-200"
-              />
-            </motion.div>
 
             {/* Category Filters */}
             <motion.div
@@ -234,11 +215,10 @@ const FAQPage: React.FC = () => {
                 className="text-center py-12"
               >
                 <p className="text-gray-600 dark:text-gray-400 mb-4">
-                  No questions found matching your search.
+                  No questions found in this category.
                 </p>
                 <button
                   onClick={() => {
-                    setSearchTerm("");
                     setSelectedCategory("All");
                   }}
                   className="text-primary-600 dark:text-primary-400 hover:underline"
@@ -251,31 +231,6 @@ const FAQPage: React.FC = () => {
         </div>
       </section>
 
-      {/* Still Need Help */}
-      <section className="section bg-gray-50 dark:bg-gray-800">
-        <div className="container">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            className="max-w-4xl mx-auto text-center"
-          >
-            <MessageSquare className="w-16 h-16 text-primary-600 dark:text-primary-400 mx-auto mb-6" />
-            <h2 className="text-3xl font-bold text-gray-900 dark:text-white mb-4">
-              Still Have Questions?
-            </h2>
-            <p className="text-lg text-gray-600 dark:text-gray-400 mb-8">
-              Can't find the answer you're looking for? Contact us for
-              assistance.
-            </p>
-            <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <a href="/contact" className="btn btn-primary">
-                Contact Support
-              </a>
-            </div>
-          </motion.div>
-        </div>
-      </section>
 
       <CTASection
         title="Still Have Questions?"

@@ -71,7 +71,7 @@ const HeroSection: React.FC = () => {
             </div>
 
             <p className="text-base sm:text-lg md:text-xl text-gray-600 dark:text-gray-400 mb-6 sm:mb-8 max-w-xl mx-auto lg:mx-0 px-4 sm:px-0">
-              Learn life-saving skills from an experienced professional. For
+              Learn lifesaving skills from an experienced professional. For
               businesses and individuals.
             </p>
 

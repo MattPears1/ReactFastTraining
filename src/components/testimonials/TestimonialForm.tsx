@@ -169,7 +169,7 @@ export const TestimonialForm: React.FC<TestimonialFormProps> = ({
         type: "success",
         title: "Thank you for your testimonial!",
         message:
-          "Your testimonial has been submitted and will be reviewed shortly.",
+          "Your testimonial has been sent to our team for review. We appreciate your feedback!",
         duration: 5000,
       });
 

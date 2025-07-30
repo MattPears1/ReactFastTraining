@@ -1,9 +1,10 @@
 import { inject } from '@loopback/core';
-import { post, requestBody, get } from '@loopback/rest';
+import { post, requestBody, get, Request, Response, RestBindings } from '@loopback/rest';
 import { EmailService } from '../services/email.service';
 import { repository } from '@loopback/repository';
 import { TestimonialRepository, BookingRepository, ContactSubmissionRepository, CourseSessionRepository } from '../repositories';
 import { Testimonial, Booking, ContactSubmission, CourseSession } from '../models';
+import * as multer from 'multer';
 
 export class ApiController {
   constructor(
@@ -17,6 +18,8 @@ export class ApiController {
     public contactSubmissionRepository: ContactSubmissionRepository,
     @repository(CourseSessionRepository)
     public courseSessionRepository: CourseSessionRepository,
+    @inject(RestBindings.Http.REQUEST) private req: Request,
+    @inject(RestBindings.Http.RESPONSE) private res: Response,
   ) {}
 
   @get('/ping')
@@ -142,5 +145,99 @@ export class ApiController {
       order: ['start_datetime ASC'],
     });
     return { sessions };
+  }
+
+  @post('/api/testimonials/submit')
+  async submitTestimonial(
+    @requestBody({
+      description: 'Testimonial submission with optional photo',
+      content: {
+        'multipart/form-data': {
+          schema: {
+            type: 'object',
+            properties: {
+              authorName: { type: 'string' },
+              authorEmail: { type: 'string' },
+              authorLocation: { type: 'string' },
+              courseTaken: { type: 'string' },
+              courseDate: { type: 'string' },
+              content: { type: 'string' },
+              rating: { type: 'string' },
+              showFullName: { type: 'string' },
+              photoConsent: { type: 'string' },
+              bookingReference: { type: 'string' },
+              photo: {
+                type: 'string',
+                format: 'binary'
+              }
+            },
+            required: ['authorName', 'authorEmail', 'courseTaken', 'content', 'rating']
+          }
+        }
+      }
+    })
+    body: any,
+  ) {
+    const upload = multer({
+      storage: multer.memoryStorage(),
+      limits: { fileSize: 5 * 1024 * 1024 }, // 5MB limit
+    }).single('photo');
+
+    return new Promise((resolve, reject) => {
+      upload(this.req, this.res, async (err) => {
+        if (err) {
+          reject(new Error(`File upload error: ${err.message}`));
+          return;
+        }
+
+        try {
+          const file = (this.req as any).file;
+          const {
+            authorName,
+            authorEmail,
+            authorLocation,
+            courseTaken,
+            courseDate,
+            content,
+            rating,
+            showFullName,
+            photoConsent,
+            bookingReference
+          } = this.req.body;
+
+          // Validate required fields
+          if (!authorName || !authorEmail || !courseTaken || !content || !rating) {
+            throw new Error('Missing required fields: authorName, authorEmail, courseTaken, content, rating');
+          }
+
+          const testimonialData = {
+            authorName,
+            authorEmail,
+            authorLocation,
+            courseTaken,
+            courseDate,
+            content,
+            rating: parseInt(rating),
+            showFullName: showFullName === 'true',
+            photoConsent,
+            bookingReference,
+            photoFile: file
+          };
+
+          // Send notification email to info@reactfasttraining.co.uk
+          await this.emailService.sendTestimonialNotification(testimonialData);
+
+          // Send confirmation copy to the user
+          await this.emailService.sendTestimonialConfirmation(testimonialData);
+
+          resolve({
+            success: true,
+            message: 'Testimonial submitted successfully. We will review it shortly.'
+          });
+        } catch (error) {
+          reject(error);
+        }
+      });
+    });
   }
 }

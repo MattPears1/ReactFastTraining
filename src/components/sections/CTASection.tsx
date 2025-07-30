@@ -115,25 +115,8 @@ const CTASection: React.FC<CTASectionProps> = ({
             className="mt-8 sm:mt-12 pt-6 sm:pt-8 border-t border-white/20"
           >
             <p className="text-xs sm:text-sm text-primary-100 mb-3 sm:mb-4">
-              Available for training across South Yorkshire
+              Available for training across Yorkshire
             </p>
-            <div className="flex flex-wrap justify-center items-center gap-x-4 gap-y-2 sm:gap-6 text-white/80">
-              <span className="text-sm sm:text-base font-semibold">
-                Sheffield
-              </span>
-              <span className="text-white/40 hidden sm:inline">•</span>
-              <span className="text-sm sm:text-base font-semibold">
-                Rotherham
-              </span>
-              <span className="text-white/40 hidden sm:inline">•</span>
-              <span className="text-sm sm:text-base font-semibold">
-                Barnsley
-              </span>
-              <span className="text-white/40 hidden sm:inline">•</span>
-              <span className="text-sm sm:text-base font-semibold">
-                Doncaster
-              </span>
-            </div>
           </motion.div>
         </div>
       </div>

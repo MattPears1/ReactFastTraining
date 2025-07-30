@@ -5,18 +5,19 @@ const ActivityFirstAidPage: React.FC = () => {
   const courseData = {
     courseName: "Activity First Aid",
     courseAcronym: "AFA",
-    duration: "one day",
+    duration: "1 Day",
     price: "£120",
+    groupSize: "Maximum 12 participants",
     certificateValidity: "Valid for 3 years",
     description:
       "This course is tailored for individuals involved in sports, leisure, and recreational activities. It covers the content of the EFAW course but with a focus on activity-related injuries and emergencies that may occur in outdoor and sporting environments.",
 
     learningOutcomes: [
-      "Core first aid skills including CPR, AED use, and managing an unresponsive casualty",
-      "Dealing with fractures, dislocations, sprains, and strains",
-      "Managing head, neck, and spinal injuries",
-      "Treating the effects of heat and cold",
-      "Responding to major illnesses in an activity setting",
+      "Demonstrate core first aid skills including CPR, AED use, and managing an unresponsive casualty",
+      "Deal with fractures, dislocations, sprains, and strains",
+      "Manage head, neck, and spinal injuries",
+      "Treat the effects of heat and cold",
+      "Respond to major illnesses in activity settings",
     ],
 
     whoShouldAttend: [
@@ -26,7 +27,7 @@ const ActivityFirstAidPage: React.FC = () => {
       "Adventure activity providers",
       "Scout, guide and youth group leaders",
       "Expedition and trek leaders",
-      "Leisure center staff",
+      "Leisure centre staff",
       "Anyone leading physical activities",
     ],
 
@@ -71,7 +72,7 @@ const ActivityFirstAidPage: React.FC = () => {
       "Practice with sports and activity injuries",
       "Improvisation techniques for remote locations",
       "Weather-resistant training approaches",
-      "Small group sizes for personalized training",
+      "Small group sizes for personalised training",
       "Activity-specific risk assessment skills",
       "Comprehensive course manual",
       "Certificate recognised by sports governing bodies",

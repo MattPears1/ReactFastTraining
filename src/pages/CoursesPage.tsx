@@ -153,8 +153,8 @@ const CoursesPage: React.FC = () => {
             </h1>
             <p className="text-base sm:text-lg md:text-xl text-gray-600 dark:text-gray-400 max-w-2xl mx-auto px-4 sm:px-0">
               Professional, accredited first aid training delivered across
-              Yorkshire. Choose from our range of HSE approved and Ofqual
-              regulated courses.
+              Yorkshire. Choose from our range of Ofqual regulated and HSE
+              approved courses.
             </p>
           </motion.div>
         </div>

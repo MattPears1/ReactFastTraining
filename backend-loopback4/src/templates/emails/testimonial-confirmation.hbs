@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Thank You for Your Testimonial - React Fast Training</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f8fafc;
+            color: #1f2937;
+        }
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            background-color: #ffffff;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        .header {
+            background: linear-gradient(135deg, #0ea5e9 0%, #10b981 100%);
+            color: white;
+            text-align: center;
+            padding: 32px 24px;
+            border-radius: 8px 8px 0 0;
+        }
+        .header h1 {
+            margin: 0;
+            font-size: 28px;
+            font-weight: 700;
+        }
+        .header p {
+            margin: 8px 0 0 0;
+            opacity: 0.9;
+            font-size: 16px;
+        }
+        .content {
+            padding: 32px 24px;
+        }
+        .thank-you-box {
+            background: linear-gradient(135deg, #f0f9ff 0%, #ecfdf5 100%);
+            border: 1px solid #bfdbfe;
+            border-radius: 12px;
+            padding: 24px;
+            text-align: center;
+            margin-bottom: 32px;
+        }
+        .thank-you-box h2 {
+            color: #0ea5e9;
+            margin: 0 0 12px 0;
+            font-size: 24px;
+        }
+        .thank-you-box p {
+            color: #374151;
+            margin: 0;
+            font-size: 16px;
+            line-height: 1.6;
+        }
+        .testimonial-preview {
+            background-color: #f8fafc;
+            border-left: 4px solid #0ea5e9;
+            padding: 20px;
+            margin: 24px 0;
+            border-radius: 0 8px 8px 0;
+        }
+        .testimonial-content {
+            font-style: italic;
+            font-size: 16px;
+            line-height: 1.6;
+            color: #374151;
+            margin-bottom: 16px;
+        }
+        .rating {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            margin-bottom: 16px;
+        }
+        .star {
+            color: #fbbf24;
+            font-size: 18px;
+        }
+        .star.empty {
+            color: #d1d5db;
+        }
+        .submission-details {
+            background-color: #f9fafb;
+            border: 1px solid #e5e7eb;
+            border-radius: 8px;
+            padding: 20px;
+            margin: 24px 0;
+        }
+        .submission-details h3 {
+            margin: 0 0 16px 0;
+            color: #1f2937;
+            font-size: 18px;
+        }
+        .detail-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 8px 0;
+            border-bottom: 1px solid #e5e7eb;
+        }
+        .detail-row:last-child {
+            border-bottom: none;
+        }
+        .detail-label {
+            color: #6b7280;
+            font-weight: 500;
+        }
+        .detail-value {
+            color: #1f2937;
+            font-weight: 600;
+            text-align: right;
+        }
+        .photo-status {
+            background-color: #fef3c7;
+            border: 1px solid #f59e0b;
+            border-radius: 8px;
+            padding: 16px;
+            margin: 20px 0;
+            color: #92400e;
+        }
+        .photo-status.included {
+            background-color: #d1fae5;
+            border-color: #10b981;
+            color: #065f46;
+        }
+        .next-steps {
+            background-color: #eff6ff;
+            border: 1px solid #bfdbfe;
+            border-radius: 8px;
+            padding: 20px;
+            margin: 24px 0;
+        }
+        .next-steps h3 {
+            color: #1e40af;
+            margin: 0 0 12px 0;
+            font-size: 16px;
+        }
+        .next-steps ul {
+            margin: 0;
+            padding-left: 20px;
+            color: #374151;
+        }
+        .next-steps li {
+            margin-bottom: 8px;
+        }
+        .footer {
+            background-color: #f9fafb;
+            padding: 24px;
+            text-align: center;
+            border-radius: 0 0 8px 8px;
+            border-top: 1px solid #e5e7eb;
+        }
+        .footer p {
+            margin: 0;
+            color: #6b7280;
+            font-size: 14px;
+        }
+        .company-info {
+            margin-top: 16px;
+            color: #9ca3af;
+            font-size: 12px;
+        }
+        .social-links {
+            margin-top: 16px;
+        }
+        .social-links a {
+            color: #0ea5e9;
+            text-decoration: none;
+            margin: 0 8px;
+        }
+        @media (max-width: 600px) {
+            .detail-row {
+                flex-direction: column;
+                gap: 4px;
+            }
+            .detail-value {
+                text-align: left;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🌟 Thank You!</h1>
+            <p>Your testimonial has been received</p>
+        </div>
+
+        <div class="content">
+            <div class="thank-you-box">
+                <h2>We Appreciate Your Feedback</h2>
+                <p>
+                    Thank you {{authorName}} for taking the time to share your experience with React Fast Training. 
+                    Your feedback helps us improve our services and helps others make informed decisions about their first aid training.
+                </p>
+            </div>
+
+            <h3 style="color: #1f2937; margin-bottom: 16px;">📋 Your Testimonial Submission</h3>
+            
+            <div class="testimonial-preview">
+                <div class="rating">
+                    {{#each stars}}
+                        <span class="star{{#unless this}} empty{{/unless}}">★</span>
+                    {{/each}}
+                    <span style="margin-left: 8px; font-weight: 600;">{{rating}}/5 Stars</span>
+                </div>
+                
+                <div class="testimonial-content">
+                    "{{content}}"
+                </div>
+                
+                <p style="margin: 0; font-weight: 600; color: #374151;">
+                    — {{authorName}}{{#if authorLocation}}, {{authorLocation}}{{/if}}
+                </p>
+            </div>
+
+            <div class="submission-details">
+                <h3>Submission Details</h3>
+                
+                <div class="detail-row">
+                    <span class="detail-label">Course Taken:</span>
+                    <span class="detail-value">{{courseTaken}}</span>
+                </div>
+                
+                {{#if courseDate}}
+                <div class="detail-row">
+                    <span class="detail-label">Course Date:</span>
+                    <span class="detail-value">{{courseDate}}</span>
+                </div>
+                {{/if}}
+                
+                {{#if bookingReference}}
+                <div class="detail-row">
+                    <span class="detail-label">Booking Reference:</span>
+                    <span class="detail-value">{{bookingReference}}</span>
+                </div>
+                {{/if}}
+                
+                <div class="detail-row">
+                    <span class="detail-label">Full Name Display:</span>
+                    <span class="detail-value">{{#if showFullName}}Yes{{else}}First name + initial only{{/if}}</span>
+                </div>
+                
+                <div class="detail-row">
+                    <span class="detail-label">Submitted:</span>
+                    <span class="detail-value">{{submittedAt}}</span>
+                </div>
+            </div>
+
+            {{#if hasPhoto}}
+                <div class="photo-status included">
+                    📸 <strong>Photo Included:</strong> Your photo has been attached to this email.
+                    {{#if photoConsent}}
+                        You have given consent for us to use this photo on our website and marketing materials.
+                    {{else}}
+                        You have chosen not to give consent for public use of this photo.
+                    {{/if}}
+                </div>
+            {{else}}
+                <div class="photo-status">
+                    📷 <strong>No Photo:</strong> You did not include a photo with this testimonial.
+                </div>
+            {{/if}}
+
+            <div class="next-steps">
+                <h3>What Happens Next?</h3>
+                <ul>
+                    <li>Our team will review your testimonial within 1-2 business days</li>
+                    <li>If approved, your testimonial may be featured on our website</li>
+                    <li>We respect your display preferences and photo consent choices</li>
+                    <li>You may be contacted if we need any clarification</li>
+                </ul>
+            </div>
+
+            <p style="margin-top: 32px; padding: 16px; background-color: #f0f9ff; border-radius: 8px; border: 1px solid #bfdbfe; text-align: center;">
+                <strong>Questions?</strong> If you have any questions about your submission, please contact us at 
+                <a href="mailto:info@reactfasttraining.co.uk" style="color: #0ea5e9;">info@reactfasttraining.co.uk</a> 
+                or call <strong>07447 485644</strong>.
+            </p>
+        </div>
+
+        <div class="footer">
+            <p><strong>React Fast Training</strong> - Yorkshire's Premier First Aid Training Provider</p>
+            <div class="company-info">
+                📧 info@reactfasttraining.co.uk | 📞 07447 485644<br>
+                🌐 reactfasttraining.co.uk<br>
+                Serving Leeds, Sheffield, Bradford, York, Huddersfield, Wakefield, Halifax, Harrogate
+            </div>
+            <div class="social-links">
+                <p style="margin: 16px 0 8px 0; color: #6b7280;">Stay Connected:</p>
+                <a href="https://reactfasttraining.co.uk">Visit Our Website</a>
+            </div>
+            <p style="margin-top: 16px; font-size: 11px; color: #9ca3af;">
+                This email was sent to {{authorEmail}} as confirmation of your testimonial submission.
+            </p>
+        </div>
+    </div>
+</body>
+</html>

@@ -42,20 +42,20 @@ const PrivacyPage: React.FC = () => {
           <div className="max-w-4xl mx-auto prose prose-lg dark:prose-invert">
             <h2>Introduction</h2>
             <p>
-              React Fast Training ("we", "our", or "us") is committed to protecting your personal data and respecting your privacy. This Privacy Policy outlines how we collect, use, store and protect any personal information you provide through our website (www.reactfasttraining.co.uk).
+              React Fast Training ("we", "our", or "us") is committed to protecting your personal data and respecting your privacy. This Privacy Policy (The/This Policy) outlines how we collect, use, store and protect any personal information you provide through our website (www.reactfasttraining.co.uk).
             </p>
             <p>
-              This policy complies with the UK General Data Protection Regulation (UK GDPR) and the Data Protection Act 2018.
+              This Policy complies with the UK General Data Protection Regulation (UK GDPR) and the Data Protection Act 2018.
             </p>
 
             <h2>What Information We Collect</h2>
             <p>We may collect and process the following types of personal data:</p>
             <ul>
-              <li><strong>Contact details:</strong> Name, email address, phone number</li>
-              <li><strong>Booking information:</strong> Course type, preferred dates, location</li>
-              <li><strong>Payment details:</strong> Where applicable (handled via secure third-party processor)</li>
-              <li><strong>Website usage:</strong> IP address, browser type, time zone, cookies, and analytics data</li>
-              <li><strong>Communication history:</strong> Emails, messages, course queries or feedback</li>
+              <li>Contact details: Name, email address, phone number</li>
+              <li>Booking information: Course type, preferred dates, location</li>
+              <li>Payment details: Where applicable (handled via secure third-party processor)</li>
+              <li>Website usage: IP address, browser type, time zone, cookies, and analytics data</li>
+              <li>Communication history: Emails, messages, course queries or feedback</li>
             </ul>
 
             <h2>How We Use Your Information</h2>
@@ -73,10 +73,10 @@ const PrivacyPage: React.FC = () => {
             <h2>Legal Basis for Processing</h2>
             <p>We process your data under the following lawful bases:</p>
             <ul>
-              <li><strong>Contractual necessity:</strong> To deliver the training services you have requested</li>
-              <li><strong>Legal obligation:</strong> To meet regulatory or certification requirements</li>
-              <li><strong>Legitimate interests:</strong> To communicate with customers and improve our services</li>
-              <li><strong>Consent:</strong> For email marketing (you can opt out at any time)</li>
+              <li>Contractual necessity: To deliver the training services you have requested</li>
+              <li>Legal obligation: To meet regulatory or certification requirements</li>
+              <li>Legitimate interests: To communicate with customers and improve our services</li>
+              <li>Consent: For email marketing (you can opt out at any time)</li>
             </ul>
 
             <h2>How We Store and Protect Your Data</h2>
@@ -110,11 +110,11 @@ const PrivacyPage: React.FC = () => {
 
             <h2>Changes to This Policy</h2>
             <p>
-              We may update this policy from time to time. The latest version will always be posted on our website. Please check back regularly to stay informed.
+              We may update This Policy from time to time. The latest version will always be posted on our website. Please check back regularly to stay informed.
             </p>
 
             <h2>Contact Us</h2>
-            <p>If you have any questions about this Privacy Policy or how we handle your data, please contact:</p>
+            <p>If you have any questions about This Policy or how we handle your data, please contact:</p>
             <div className="bg-gray-100 dark:bg-gray-800 p-4 rounded-lg mt-4">
               <p className="mb-2"><strong>React Fast Training</strong></p>
               <p className="mb-1">Email: <a href="mailto:info@reactfasttraining.co.uk" className="text-primary-600 hover:text-primary-700">info@reactfasttraining.co.uk</a></p>

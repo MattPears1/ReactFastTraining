@@ -41,7 +41,7 @@ export const COURSE_TYPE_CONFIG: Record<CourseTypeCode, CourseTypeConfig> = {
       dot: "bg-purple-500",
     },
     category: "paediatric",
-    description: "Specialized first aid for those working with children",
+    description: "Specialised first aid for those working with children",
   },
   EMERGENCY_PAEDIATRIC: {
     code: "EMERGENCY_PAEDIATRIC",

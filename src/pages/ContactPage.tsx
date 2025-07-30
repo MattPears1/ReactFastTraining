@@ -11,8 +11,8 @@ import {
 const contactInfo = [
   {
     icon: MapPin,
-    title: "South Yorkshire Training",
-    details: ["Barnsley", "Doncaster", "Rotherham", "Sheffield"],
+    title: "Yorkshire Training",
+    details: ["Serving South Yorkshire and the wider Yorkshire area."],
   },
   {
     icon: Phone,
@@ -43,9 +43,9 @@ const ContactPage: React.FC = () => {
   return (
     <div className="relative">
       <SEO
-        title="Contact React Fast Training | First Aid Courses South Yorkshire"
-        description="Contact React Fast Training for first aid courses in South Yorkshire. Book professional first aid training from £60. Call 07447 485644 or email lex@reactfasttraining.com."
-        keywords="contact first aid training South Yorkshire, book first aid course Barnsley, first aid training Sheffield contact, emergency first aid Rotherham booking"
+        title="Contact React Fast Training | First Aid Courses Yorkshire"
+        description="Contact React Fast Training for first aid courses in Yorkshire. Book professional first aid training from £60. Call 07447 485644 or email lex@reactfasttraining.com."
+        keywords="contact first aid training Yorkshire, book first aid course Yorkshire, first aid training contact, emergency first aid booking"
         canonical="/contact"
       />
 
@@ -64,13 +64,13 @@ const ContactPage: React.FC = () => {
             <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold text-gray-900 dark:text-white mb-4 sm:mb-6 px-4 sm:px-0">
               Book Your{" "}
               <span className="text-gradient gradient-primary">
-                South Yorkshire
+                Yorkshire
               </span>{" "}
               First Aid Course
             </h1>
             <p className="text-base sm:text-lg md:text-xl text-gray-600 dark:text-gray-400 px-4 sm:px-0">
-              Contact us today to book your first aid training in South
-              Yorkshire and beyond. Courses available from £60 with flexible
+              Contact us today to book your first aid training in Yorkshire
+              and beyond. Courses available from £60 with flexible
               scheduling.
             </p>
           </motion.div>

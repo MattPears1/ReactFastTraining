@@ -161,12 +161,12 @@ describe("useSearch", () => {
 
     // Search by title
     await act(async () => {
-      result.current.search("catalog");
+      result.current.search("catalogue");
     });
 
     await waitFor(() => {
       expect(result.current.suggestions).toHaveLength(1);
-      expect(result.current.suggestions[0].title).toBe("Product Catalog");
+      expect(result.current.suggestions[0].title).toBe("Product Catalogue");
     });
 
     // Search by description

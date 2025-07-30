@@ -8,22 +8,23 @@ const PaediatricCoursePage: React.FC = () => {
     duration: "2 Days",
     price: "£120",
     certificateValidity: "Valid for 3 years",
+    groupSize: "Maximum 12 participants",
     description:
-      "This is a comprehensive course covering a wide range of first aid emergencies affecting infants and children. This course is essential for anyone working with children, including those in nurseries, schools, and as childminders, and is compliant with OFSTED and Early Years Foundation Stage (EYFS) requirements.",
+      "This is a comprehensive course covering a wide range of first aid emergencies affecting babies and infants. This course is essential for anyone working with children, including those in nurseries, schools, and as childminders, and is compliant with OFSTED and Early Years Foundation Stage (EYFS) requirements.",
 
     learningOutcomes: [
-      "Roles and responsibilities of a paediatric first aider",
-      "Assessing an emergency situation involving a child or infant",
-      "CPR and AED use on children and infants",
-      "Managing choking, bleeding, shock, and anaphylaxis in children",
-      "Treating burns, fractures, and head, neck, and spinal injuries",
+      "Understand the roles and responsibilities of a pediatric first-aider",
+      "Assess an emergency situation involving a child or infant",
+      "Use CPR and AED on children and infants",
+      "Manage choking, bleeding, shock, and anaphylaxis in children",
+      "Treat burns, fractures, head, neck, and spinal injuries",
     ],
 
     whoShouldAttend: [
       "Childcare professionals and nursery staff",
       "Teachers and teaching assistants",
       "Childminders and nannies",
-      "Parents and grandparents",
+      "Parents, grandparents, and carers",
       "Youth workers and sports coaches",
       "Anyone responsible for children's welfare",
     ],
@@ -50,7 +51,6 @@ const PaediatricCoursePage: React.FC = () => {
           "Burns and scalds treatment for children",
           "Fractures, dislocations and soft tissue injuries",
           "Head, neck and spinal injuries in children",
-          "Recognising meningitis symptoms",
           "Managing diabetes emergencies in children",
           "Dealing with asthma attacks",
           "Febrile convulsions and seizures",

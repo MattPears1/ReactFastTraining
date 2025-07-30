@@ -1,9 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
-import { Menu, X, Sun, Moon, Search } from "lucide-react";
+import { Menu, X, Sun, Moon } from "lucide-react";
 import { useTheme } from "@contexts/ThemeContext";
-import { SearchModal } from "@components/ui/SearchModal";
 import { CoursesModal } from "@components/ui/CoursesModal";
 import { cn } from "@utils/cn";
 
@@ -41,7 +40,6 @@ const Header: React.FC = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const [openDropdown, setOpenDropdown] = useState<string | null>(null);
-  const [showSearch, setShowSearch] = useState(false);
   const [showCoursesModal, setShowCoursesModal] = useState(false);
   const location = useLocation();
   const { theme, toggleTheme } = useTheme();
@@ -139,14 +137,6 @@ const Header: React.FC = () => {
 
             {/* Right Side Actions */}
             <div className="flex items-center space-x-2 sm:space-x-3 md:space-x-4">
-              {/* Search */}
-              <button
-                onClick={() => setShowSearch(true)}
-                className="p-3 sm:p-2 rounded-lg text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors min-w-[44px] min-h-[44px] flex items-center justify-center"
-                aria-label="Search"
-              >
-                <Search className="w-5 h-5" />
-              </button>
 
               {/* Theme Toggle */}
               <button
@@ -243,8 +233,6 @@ const Header: React.FC = () => {
         )}
       </AnimatePresence>
 
-      {/* Search Modal */}
-      <SearchModal isOpen={showSearch} onClose={() => setShowSearch(false)} />
 
       {/* Courses Modal */}
       <CoursesModal

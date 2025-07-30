@@ -4,7 +4,6 @@ import {
   Facebook,
   Instagram,
   Linkedin,
-  Youtube,
   Mail,
   Phone,
   MapPin,
@@ -61,12 +60,6 @@ const socialLinks = [
     href: "https://facebook.com",
     label: "Facebook",
     color: "hover:text-blue-600",
-  },
-  {
-    icon: Youtube,
-    href: "https://youtube.com",
-    label: "YouTube",
-    color: "hover:text-red-600",
   },
   {
     icon: TikTokIcon,

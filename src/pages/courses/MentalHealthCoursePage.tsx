@@ -9,10 +9,10 @@ const MentalHealthCoursePage: React.FC = () => {
     price: "From £200",
     certificateValidity: "Valid for 3 years",
     description:
-      "Become a certified Mental Health First Aider and support wellbeing in your workplace. This MHFA England approved course teaches you to recognize signs of mental health issues and provide initial support.",
+      "Become a certified Mental Health First Aider and support wellbeing in your workplace. This MHFA England approved course teaches you to recognise signs of mental health issues and provide initial support.",
 
     learningOutcomes: [
-      "Recognize signs and symptoms of common mental health issues",
+      "Recognise signs and symptoms of common mental health issues",
       "Provide initial help to someone experiencing a mental health crisis",
       "Guide someone towards appropriate professional help",
       "Reduce stigma around mental health in the workplace",

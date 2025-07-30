@@ -23,7 +23,7 @@ export const COURSE_COLOR_THEMES = {
   },
   specialist: {
     name: "Specialist Courses",
-    description: "Specialized and supplementary courses",
+    description: "Specialised and supplementary courses",
     primary: "orange",
     variants: {
       ACTIVITY: "orange-600",

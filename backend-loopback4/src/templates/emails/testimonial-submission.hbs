@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>New Testimonial Submission - React Fast Training</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f8fafc;
+            color: #1f2937;
+        }
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            background-color: #ffffff;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        .header {
+            background: linear-gradient(135deg, #0ea5e9 0%, #0284c7 100%);
+            color: white;
+            text-align: center;
+            padding: 32px 24px;
+            border-radius: 8px 8px 0 0;
+        }
+        .header h1 {
+            margin: 0;
+            font-size: 28px;
+            font-weight: 700;
+        }
+        .content {
+            padding: 32px 24px;
+        }
+        .testimonial-box {
+            background-color: #f8fafc;
+            border-left: 4px solid #0ea5e9;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 0 8px 8px 0;
+        }
+        .testimonial-content {
+            font-style: italic;
+            font-size: 16px;
+            line-height: 1.6;
+            color: #374151;
+            margin-bottom: 16px;
+        }
+        .rating {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            margin-bottom: 16px;
+        }
+        .star {
+            color: #fbbf24;
+            font-size: 18px;
+        }
+        .star.empty {
+            color: #d1d5db;
+        }
+        .info-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+            margin: 20px 0;
+        }
+        .info-item {
+            background-color: #f9fafb;
+            padding: 16px;
+            border-radius: 8px;
+            border: 1px solid #e5e7eb;
+        }
+        .info-label {
+            font-weight: 600;
+            color: #6b7280;
+            font-size: 12px;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            margin-bottom: 4px;
+        }
+        .info-value {
+            color: #1f2937;
+            font-size: 14px;
+        }
+        .photo-notice {
+            background-color: #fef3c7;
+            border: 1px solid #f59e0b;
+            border-radius: 8px;
+            padding: 16px;
+            margin: 20px 0;
+            color: #92400e;
+        }
+        .photo-notice.attached {
+            background-color: #d1fae5;
+            border-color: #10b981;
+            color: #065f46;
+        }
+        .footer {
+            background-color: #f9fafb;
+            padding: 24px;
+            text-align: center;
+            border-radius: 0 0 8px 8px;
+            border-top: 1px solid #e5e7eb;
+        }
+        .footer p {
+            margin: 0;
+            color: #6b7280;
+            font-size: 14px;
+        }
+        .company-info {
+            margin-top: 16px;
+            color: #9ca3af;
+            font-size: 12px;
+        }
+        @media (max-width: 600px) {
+            .info-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>📝 New Testimonial Submission</h1>
+            <p style="margin: 8px 0 0 0; opacity: 0.9;">React Fast Training</p>
+        </div>
+
+        <div class="content">
+            <p>A new testimonial has been submitted through your website:</p>
+
+            <div class="testimonial-box">
+                <div class="rating">
+                    {{#each stars}}
+                        <span class="star{{#unless this}} empty{{/unless}}">★</span>
+                    {{/each}}
+                    <span style="margin-left: 8px; font-weight: 600;">{{rating}}/5 Stars</span>
+                </div>
+                
+                <div class="testimonial-content">
+                    "{{content}}"
+                </div>
+                
+                <p style="margin: 0; font-weight: 600; color: #374151;">
+                    — {{authorName}}{{#if authorLocation}}, {{authorLocation}}{{/if}}
+                </p>
+            </div>
+
+            <div class="info-grid">
+                <div class="info-item">
+                    <div class="info-label">Customer Details</div>
+                    <div class="info-value">
+                        <strong>Name:</strong> {{authorName}}<br>
+                        <strong>Email:</strong> {{authorEmail}}
+                        {{#if authorLocation}}<br><strong>Location:</strong> {{authorLocation}}{{/if}}
+                    </div>
+                </div>
+
+                <div class="info-item">
+                    <div class="info-label">Course Information</div>
+                    <div class="info-value">
+                        <strong>Course:</strong> {{courseTaken}}
+                        {{#if courseDate}}<br><strong>Date:</strong> {{courseDate}}{{/if}}
+                        {{#if bookingReference}}<br><strong>Booking Ref:</strong> {{bookingReference}}{{/if}}
+                    </div>
+                </div>
+
+                <div class="info-item">
+                    <div class="info-label">Display Preferences</div>
+                    <div class="info-value">
+                        <strong>Show Full Name:</strong> {{#if showFullName}}Yes{{else}}No (First name + initial only){{/if}}<br>
+                        <strong>Photo Consent:</strong> {{#if hasPhoto}}{{#if photoConsent}}Given{{else}}Not given{{/if}}{{else}}No photo uploaded{{/if}}
+                    </div>
+                </div>
+
+                <div class="info-item">
+                    <div class="info-label">Submission Details</div>
+                    <div class="info-value">
+                        <strong>Submitted:</strong> {{submittedAt}}<br>
+                        <strong>Source:</strong> Website Form
+                    </div>
+                </div>
+            </div>
+
+            {{#if hasPhoto}}
+                <div class="photo-notice attached">
+                    📸 <strong>Photo Attached:</strong> Customer photo has been attached to this email.
+                    {{#if photoConsent}}
+                        Customer has given consent to use this photo on website and marketing materials.
+                    {{else}}
+                        Customer has NOT given consent to use this photo publicly.
+                    {{/if}}
+                </div>
+            {{else}}
+                <div class="photo-notice">
+                    📷 <strong>No Photo:</strong> Customer did not upload a photo with this testimonial.
+                </div>
+            {{/if}}
+
+            <p style="margin-top: 32px; padding: 16px; background-color: #eff6ff; border-radius: 8px; border: 1px solid #bfdbfe;">
+                <strong>Next Steps:</strong> Review this testimonial and decide whether to feature it on your website. 
+                If approved, you can manually add it to your testimonials section or use it in marketing materials 
+                (respecting the photo consent preferences).
+            </p>
+        </div>
+
+        <div class="footer">
+            <p><strong>React Fast Training</strong> - Yorkshire's Premier First Aid Training Provider</p>
+            <div class="company-info">
+                📧 info@reactfasttraining.co.uk | 📞 07447 485644<br>
+                Serving Leeds, Sheffield, Bradford, York, Huddersfield, Wakefield, Halifax, Harrogate
+            </div>
+        </div>
+    </div>
+</body>
+</html>

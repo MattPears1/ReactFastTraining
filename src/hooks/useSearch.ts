@@ -15,7 +15,7 @@ const mockSearchData: SearchSuggestion[] = [
   },
   {
     id: "2",
-    title: "Product Catalog",
+    title: "Product Catalogue",
     description: "Browse our complete product lineup",
     category: "product",
     url: "/products",

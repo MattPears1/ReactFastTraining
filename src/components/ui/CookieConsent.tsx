@@ -168,7 +168,7 @@ const CookieConsent: React.FC<CookieConsentProps> = ({
                   </h3>
                   <p className="text-sm text-gray-600 dark:text-gray-400 mb-4">
                     We use cookies to enhance your browsing experience, serve
-                    personalized content, and analyze our traffic. By clicking
+                    personalised content, and analyse our traffic. By clicking
                     "Accept All", you consent to our use of cookies. You can
                     manage your preferences by clicking "Cookie Settings".
                   </p>

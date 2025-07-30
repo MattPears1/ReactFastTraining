@@ -12,10 +12,10 @@ const OxygenTherapyPage: React.FC = () => {
       "This specialised course is for qualified first aiders and healthcare professionals who may need to administer oxygen during a medical emergency. Learn the safe use, storage, and handling of oxygen equipment in emergency situations.",
 
     learningOutcomes: [
-      "The indications for and contraindications of oxygen therapy",
-      "Health and safety guidelines for the use, storage, and handling of oxygen",
-      "Operational checks of oxygen equipment",
-      "Administering oxygen using various delivery devices like non-rebreather masks and bag-valve masks",
+      "Recognize the indications and contraindications of oxygen therapy",
+      "Understand the health and safety guidelines for use, storage, and handling of oxygen",
+      "Conduct operational checks of oxygen equipment",
+      "Administer oxygen using various delivery devices like non-rebreather masks and bag valve masks",
     ],
 
     whoShouldAttend: [
@@ -31,7 +31,7 @@ const OxygenTherapyPage: React.FC = () => {
 
     courseContent: [
       {
-        title: "Oxygen Therapy Training Programme",
+        title: "Oxygen Therapy Training Program",
         topics: [
           "Understanding hypoxia and oxygen deficiency",
           "Indications for emergency oxygen therapy",
@@ -63,7 +63,7 @@ const OxygenTherapyPage: React.FC = () => {
       "Comprehensive theory on oxygen physiology",
       "Hands-on practice with various oxygen equipment",
       "Safety protocols and risk assessment training",
-      "Multiple delivery device familiarization",
+      "Multiple delivery device familiarisation",
       "Cylinder changing and safety procedures",
       "Practical scenarios with oxygen administration",
       "Written and practical assessments",
@@ -75,6 +75,8 @@ const OxygenTherapyPage: React.FC = () => {
 
     prerequisites:
       "Current first aid certificate (FAW, EFAW or equivalent) required",
+
+    groupSize: "Maximum 12 participants",
 
     seoKeywords:
       "oxygen therapy course, emergency oxygen training, O2 administration, medical oxygen first aid",

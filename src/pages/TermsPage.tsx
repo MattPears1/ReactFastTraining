@@ -62,10 +62,10 @@ const TermsPage: React.FC = () => {
               All bookings will be confirmed via email, with an invoice containing full joining details.
             </p>
             <p>
-              If a delegate arrives late for a course or is absent from any session, we reserve the right not to accept them for training. In all such cases, the full cost of the fee remains payable. (To conform with RQF and Health & Safety Executive Requirements, attendance at all sessions is required).
+              If a delegate arrives late for a course, is absent from any element of the sessions or otherwise unfit to complete the course, we reserve the right not to accept them for training. In all such cases, the full cost of the fee remains payable. (To conform with RQF and Health & Safety Executive Requirements, attendance at all sessions is required).
             </p>
             <p>
-              On the rare occasion of unforeseen circumstances React Fast Training may find it necessary to cancel a course. In such circumstances you will be given as much notice as possible and the offer of a free transfer to another course date or a full refund of fees.
+              There may be rare occasion, due to unforeseen circumstances, where React Fast Training finds it necessary to cancel a course. We will always endeavour to deliver courses as planned, however, if this is not possible we will notify you at the earliest opportunity to offer a transfer to another course or a full refund of fees with be offered.
             </p>
 
             <h2>Cancellation Policy</h2>
@@ -76,26 +76,26 @@ const TermsPage: React.FC = () => {
             <h3>Change Of Course Date Request</h3>
             <p>The following terms will be applied:</p>
             <ul>
-              <li><strong>Up To 20 Working Days Before Course Start Date:</strong> 1st Request to Move Date or Cancel, No Fees Apply.</li>
-              <li><strong>Up To 15 Working Days Before Course Start Date:</strong> 25% Of Course Fee, per delegate.</li>
-              <li><strong>Up To 7 Working Days Before Course Start Date:</strong> 50% Of Course Fee, per delegate.</li>
-              <li><strong>Less Than 7 Working Days Before Course Start Date:</strong> 100% Of Course Fee, per delegate.</li>
+              <li>Up to 20 working days before course start date: 1st request to move date or cancel - No fees apply.</li>
+              <li>Up to 10 working days before course start date: 25% of course fee, per delegate.</li>
+              <li>Up To 5 working days before course start date: 50% of course fee, per delegate.</li>
+              <li>Less than 5 working days before course start date: 100% of course fee, per delegate.</li>
             </ul>
 
             <h3>Cancellation Request</h3>
             <p>The following terms will be applied:</p>
             <ul>
-              <li><strong>Up To 30 Working Days Before Course Start Date:</strong> 75% Of Course Fee per delegate.</li>
-              <li><strong>Less Than 30 Working Days Before Course Start Date:</strong> 50% Of Course Fee per delegate.</li>
-              <li><strong>Non-Attendees Of Course:</strong> 100% Of Course Fee per delegate.</li>
+              <li>Over 20 working days before course start date: 50% of course fee, per delegate.</li>
+              <li>Less than 20 working days before course start date: 75% of course, fee per delegate.</li>
+              <li>Non-Attendees Of Course: 100% Of Course Fee, per delegate.</li>
             </ul>
 
             <h2>Terms Of Payment</h2>
             <p>
-              All payments must be made within receipt of invoice. If payments are not made, the Cancellation Policy still applies.
+              All payments must be made within 48-hours upon receipt of invoice.
             </p>
             <p>
-              The certificates will be emailed only to the person who has made the booking, typically 2-3 working days after the course (subject to the invoice been paid in full). If there is any issue with non-receipts of certificates, it is suggested React Fast Training be contacted in a timely manner. If a request is made at a much later date, an additional charge per certificate of £5.00 will apply due to the additional administration time.
+              The certificates will be emailed to the person who has made the booking, typically 2-3 working days after the course has completed. If there is any issue with non-receipts of certificates, please contact React Fast Training in a timely manner. If such a request is made over 40 working days from the course date, an additional charge per certificate of £5.00 will apply.
             </p>
             <p>
               React Fast Training reserve the right to change these Terms & Conditions at any time by posting changes on our website. Your continued use of this site after changes are posted constitutes your acceptance of this agreement as modified.
@@ -107,13 +107,10 @@ const TermsPage: React.FC = () => {
                 <AlertCircle className="w-6 h-6 text-red-600 dark:text-red-400 flex-shrink-0 mt-0.5" />
                 <div>
                   <p className="font-medium text-red-900 dark:text-red-200 mb-2">
-                    In line with business practices, we operate a Dignity at Work and Zero Tolerance policy.
+                    In line with business practices, we operate a Dignity at Work and Zero Tolerance policy. Any aggressive or violent behaviour towards our staff or any participants will not be tolerated under any circumstances.
                   </p>
                   <p className="text-red-800 dark:text-red-300">
-                    Any aggressive or violent behaviour towards our staff or any learners will not be tolerated under any circumstances.
-                  </p>
-                  <p className="text-red-800 dark:text-red-300 mt-2">
-                    Anyone giving verbal abuse to a member of staff, either in person or over the phone, and any learners on the course, will be excluded from the course. In addition, a letter will be sent to the responsible person for the booking advising any such behaviour will not be tolerated, and why they were not allowed to complete the course.
+                    Anyone giving verbal abuse to a member of staff, either in person or over the phone, and/or any participants, will be excluded from the course. In addition, a letter will be sent to the responsible person for the booking advising any such behaviour will not be tolerated, and why the reason why they were not allowed to complete the course.
                   </p>
                 </div>
               </div>
