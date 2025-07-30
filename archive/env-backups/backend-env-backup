@@ -1,0 +1,29 @@
+NODE_ENV=development
+PORT=3000
+
+# CORS Configuration
+CORS_ORIGIN=https://www.reactfasttraining.co.uk,https://reactfasttraining.co.uk,http://localhost:5173,http://localhost:3000,http://127.0.0.1:5173,http://127.0.0.1:3000
+
+# JWT Configuration
+JWT_SECRET=react-fast-training-secret-key-for-admin-auth
+JWT_EXPIRES_IN=7d
+JWT_REFRESH_EXPIRES_IN=30d
+
+# Database Configuration (optional for admin auth)
+DB_HOST=localhost
+DB_PORT=5432
+DB_NAME=react_fast_training
+DB_USER=postgres
+DB_PASSWORD=
+
+# Redis Configuration (optional)
+REDIS_HOST=localhost
+REDIS_PORT=6379
+
+# Email Configuration
+EMAIL_HOST=smtp.gmail.com
+EMAIL_PORT=587
+EMAIL_SECURE=false
+EMAIL_USER=
+EMAIL_PASS=
+EMAIL_FROM=noreply@reactfasttraining.co.uk

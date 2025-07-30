@@ -1,0 +1,41 @@
+{
+  "name": "React Fast Training",
+  "description": "Yorkshire's premier first aid training provider website",
+  "repository": "https://github.com/your-repo/react-fast-training",
+  "keywords": ["node", "express", "react", "typescript", "first-aid", "training"],
+  "website": "https://reactfasttraining.co.uk",
+  "success_url": "/",
+  "env": {
+    "NODE_ENV": {
+      "description": "Node environment",
+      "value": "production"
+    },
+    "EMAIL_HOST": {
+      "description": "SMTP host for sending emails",
+      "required": true
+    },
+    "EMAIL_USER": {
+      "description": "SMTP username",
+      "required": true
+    },
+    "EMAIL_PASS": {
+      "description": "SMTP password",
+      "required": true
+    },
+    "EMAIL_FROM": {
+      "description": "Default from email address",
+      "value": "noreply@reactfasttraining.co.uk"
+    }
+  },
+  "formation": {
+    "web": {
+      "quantity": 1,
+      "size": "basic"
+    }
+  },
+  "buildpacks": [
+    {
+      "url": "heroku/nodejs"
+    }
+  ]
+}

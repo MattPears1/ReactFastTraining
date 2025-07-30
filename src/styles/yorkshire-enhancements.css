@@ -1,0 +1,265 @@
+/* Yorkshire-Inspired Design Enhancements */
+
+/* Unique gradient backgrounds inspired by Yorkshire landscapes */
+.yorkshire-gradient-sky {
+  background: linear-gradient(135deg, 
+    rgba(14, 165, 233, 0.1) 0%, 
+    rgba(59, 130, 246, 0.05) 50%, 
+    rgba(16, 185, 129, 0.1) 100%);
+}
+
+.yorkshire-gradient-moor {
+  background: linear-gradient(180deg, 
+    rgba(16, 185, 129, 0.08) 0%, 
+    rgba(16, 185, 129, 0.04) 50%, 
+    transparent 100%);
+}
+
+/* Enhanced card hover effects */
+.card-yorkshire {
+  position: relative;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.card-yorkshire::before {
+  content: '';
+  position: absolute;
+  inset: -2px;
+  background: linear-gradient(45deg, 
+    rgb(var(--color-primary) / 0.2), 
+    rgb(var(--color-secondary) / 0.2), 
+    rgb(var(--color-accent) / 0.1));
+  border-radius: inherit;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  z-index: -1;
+}
+
+.card-yorkshire:hover::before {
+  opacity: 1;
+}
+
+/* Unique button effects */
+.btn-yorkshire {
+  position: relative;
+  overflow: hidden;
+}
+
+.btn-yorkshire::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 0;
+  height: 0;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.2);
+  transform: translate(-50%, -50%);
+  transition: width 0.6s, height 0.6s;
+}
+
+.btn-yorkshire:hover::after {
+  width: 300px;
+  height: 300px;
+}
+
+/* Medical cross pattern with Yorkshire twist */
+.medical-cross-yorkshire {
+  position: relative;
+}
+
+.medical-cross-yorkshire::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image: 
+    repeating-linear-gradient(
+      45deg,
+      transparent,
+      transparent 40px,
+      rgba(14, 165, 233, 0.03) 40px,
+      rgba(14, 165, 233, 0.03) 42px
+    ),
+    repeating-linear-gradient(
+      -45deg,
+      transparent,
+      transparent 40px,
+      rgba(16, 185, 129, 0.03) 40px,
+      rgba(16, 185, 129, 0.03) 42px
+    );
+  pointer-events: none;
+}
+
+/* Enhanced focus states for accessibility */
+.focus-yorkshire:focus-visible {
+  outline: 3px solid rgb(var(--color-primary) / 0.5);
+  outline-offset: 3px;
+  box-shadow: 
+    0 0 0 3px rgb(var(--color-background)),
+    0 0 0 6px rgb(var(--color-primary) / 0.2);
+}
+
+/* Animated gradient borders */
+@keyframes gradient-border {
+  0%, 100% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+}
+
+.gradient-border-animated {
+  position: relative;
+  background: rgb(var(--color-background));
+  z-index: 0;
+}
+
+.gradient-border-animated::before {
+  content: '';
+  position: absolute;
+  inset: -2px;
+  background: linear-gradient(
+    60deg,
+    rgb(var(--color-primary)),
+    rgb(var(--color-secondary)),
+    rgb(var(--color-accent)),
+    rgb(var(--color-primary))
+  );
+  background-size: 300% 300%;
+  border-radius: inherit;
+  z-index: -1;
+  animation: gradient-border 4s ease infinite;
+}
+
+/* Professional medical aesthetic */
+.medical-professional {
+  background-image: 
+    radial-gradient(
+      circle at 25% 25%,
+      rgba(14, 165, 233, 0.05) 0%,
+      transparent 50%
+    ),
+    radial-gradient(
+      circle at 75% 75%,
+      rgba(16, 185, 129, 0.05) 0%,
+      transparent 50%
+    );
+}
+
+/* Mobile-optimized spacing utilities */
+@media (max-width: 640px) {
+  .mobile-comfortable {
+    padding-top: 1.5rem;
+    padding-bottom: 1.5rem;
+  }
+  
+  .mobile-spacious {
+    margin-top: 1.5rem;
+    margin-bottom: 1.5rem;
+  }
+  
+  .mobile-touch-target {
+    min-height: 48px;
+    display: flex;
+    align-items: center;
+  }
+}
+
+/* Unique section dividers */
+.yorkshire-divider {
+  position: relative;
+  height: 2px;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgb(var(--color-primary) / 0.3) 25%,
+    rgb(var(--color-secondary) / 0.3) 50%,
+    rgb(var(--color-accent) / 0.2) 75%,
+    transparent
+  );
+  margin: 3rem 0;
+}
+
+/* Enhanced typography for headings */
+.heading-yorkshire {
+  position: relative;
+  display: inline-block;
+}
+
+.heading-yorkshire::after {
+  content: '';
+  position: absolute;
+  bottom: -0.5rem;
+  left: 0;
+  width: 3rem;
+  height: 3px;
+  background: linear-gradient(
+    90deg,
+    rgb(var(--color-primary)),
+    rgb(var(--color-secondary))
+  );
+  border-radius: 2px;
+}
+
+/* Smooth scroll indicator */
+.scroll-indicator {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: linear-gradient(
+    90deg,
+    rgb(var(--color-primary)),
+    rgb(var(--color-secondary)),
+    rgb(var(--color-accent))
+  );
+  transform-origin: left;
+  z-index: 100;
+}
+
+/* Loading skeleton enhancement */
+.skeleton-yorkshire {
+  background: linear-gradient(
+    90deg,
+    rgb(var(--color-border)) 25%,
+    rgb(var(--color-border) / 0.5) 50%,
+    rgb(var(--color-border)) 75%
+  );
+  background-size: 200% 100%;
+  animation: skeleton-shimmer 1.5s ease-in-out infinite;
+}
+
+@keyframes skeleton-shimmer {
+  0% {
+    background-position: -200% 0;
+  }
+  100% {
+    background-position: 200% 0;
+  }
+}
+
+/* Trust indicators */
+.trust-badge {
+  position: relative;
+  padding: 0.75rem 1.5rem;
+  background: linear-gradient(
+    135deg,
+    rgba(14, 165, 233, 0.05),
+    rgba(16, 185, 129, 0.05)
+  );
+  border: 1px solid rgb(var(--color-primary) / 0.2);
+  border-radius: 2rem;
+}
+
+.trust-badge::before {
+  content: '✓';
+  position: absolute;
+  left: 0.5rem;
+  top: 50%;
+  transform: translateY(-50%);
+  color: rgb(var(--color-secondary));
+  font-weight: bold;
+}
+

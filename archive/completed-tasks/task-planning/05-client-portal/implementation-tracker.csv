@@ -1,0 +1,26 @@
+task_id,feature,component,status,priority,dependencies,notes
+1,Foundation,Client Portal Routes,completed,critical,none,Add /client/* routes to App.tsx
+2,Foundation,ClientPortalLayout,completed,critical,1,Wrapper component for portal pages
+3,Foundation,Auth Guard HOC,completed,critical,none,Integrated in ClientPortalLayout
+4,Dashboard,DashboardPage,completed,high,2,Main portal entry point
+5,Dashboard,NextCourseCard,completed,high,4,Prominent next course display
+6,Dashboard,CourseCountdown,completed,medium,5,For today's courses only
+7,Dashboard,DashboardStats,completed,medium,4,User metrics display
+8,Dashboard,CourseList,completed,high,4,List all upcoming courses
+9,Dashboard,MobileDashboard,partial,medium,4-8,Responsive design implemented
+10,Dashboard,EmptyState,completed,low,4,When no courses booked
+11,History,BookingHistoryPage,completed,high,2,Main history view
+12,History,BookingFilters,completed,medium,11,Search and filter UI
+13,History,BookingHistoryList,completed,high,11,Paginated list
+14,History,BookingDetailModal,completed,high,13,Detailed booking view
+15,History,CertificateDownload,completed,high,14,Certificate access
+16,History,CSV Export,completed,medium,11,Export functionality
+17,Shared,PreCourseMaterials,pending,medium,5,Material downloads - separate component needed
+18,API,client-portal.service.ts,completed,high,none,Dashboard API calls
+19,API,booking-history.service.ts,completed,high,none,History API calls
+20,Types,portal.types.ts,completed,high,none,TypeScript definitions
+21,Context,ClientPortalContext,pending,high,20,State management - not implemented yet
+22,Hooks,useClientPortal,pending,medium,21,Portal data hook - not implemented
+23,Hooks,useBookingHistory,pending,medium,19,History data hook - not implemented
+24,Testing,Dashboard tests,pending,medium,4-10,Unit tests
+25,Testing,History tests,pending,medium,11-16,Unit tests

@@ -1,0 +1,31 @@
+Subject: DNS Setup Instructions for reactfasttraining.co.uk - Ready with Correct DNS Targets!
+
+Hi Lex,
+
+I apologize for the confusion earlier. I now have the CORRECT DNS targets from Heroku for your .co.uk domain.
+
+I've attached a Word document with the exact DNS settings you need to enter in Wix.
+
+KEY DNS TARGETS YOU NEED:
+- For www.reactfasttraining.co.uk: clean-bitterroot-cso5qffmswm61g3re2y57u4u.herokudns.com
+- For reactfasttraining.co.uk: polished-blueberry-xcvfwormhclqwt1nouztksie.herokudns.com
+
+IMPORTANT: Do NOT use the herokuapp.com address - use these specific herokudns.com targets.
+
+WHAT YOU'LL DO:
+1. Log into Wix
+2. Delete old A records
+3. Add a CNAME record for www (using the DNS target above)
+4. Add an ALIAS record for root domain (or use redirect if ALIAS not available)
+5. Save changes
+
+The site will be live at reactfasttraining.co.uk within 1-4 hours after you make the changes.
+
+Please open the attached Word document "LEX_DNS_SETUP_FINAL_CORRECT.docx" for complete step-by-step instructions.
+
+The site is already working at https://reactfasttraining.org so you can see what it will look like.
+
+Let me know if you need any help!
+
+Best regards,
+[Your name]

@@ -1,0 +1,72 @@
+{
+  "name": "React Fast Training API",
+  "description": "Backend API for React Fast Training - Yorkshire's premier first aid training provider",
+  "keywords": ["node", "loopback", "postgresql", "api"],
+  "repository": "https://github.com/your-repo/react-fast-training",
+  "logo": "https://reactfasttraining.co.uk/logo.png",
+  "stack": "heroku-22",
+  "buildpacks": [
+    {
+      "url": "heroku/nodejs"
+    }
+  ],
+  "formation": {
+    "web": {
+      "quantity": 1,
+      "size": "basic"
+    }
+  },
+  "addons": [
+    {
+      "plan": "heroku-postgresql:essential-0",
+      "as": "DATABASE"
+    }
+  ],
+  "env": {
+    "NODE_ENV": {
+      "value": "production"
+    },
+    "JWT_SECRET": {
+      "description": "Secret key for JWT token generation",
+      "generator": "secret"
+    },
+    "JWT_REFRESH_SECRET": {
+      "description": "Secret key for JWT refresh token generation",
+      "generator": "secret"
+    },
+    "FRONTEND_URL": {
+      "description": "URL of the frontend application",
+      "value": "https://reactfasttraining.co.uk"
+    },
+    "EMAIL_HOST": {
+      "description": "SMTP host for sending emails",
+      "required": false
+    },
+    "EMAIL_PORT": {
+      "description": "SMTP port for sending emails",
+      "required": false
+    },
+    "EMAIL_USER": {
+      "description": "SMTP username for sending emails",
+      "required": false
+    },
+    "EMAIL_PASS": {
+      "description": "SMTP password for sending emails",
+      "required": false
+    },
+    "STRIPE_SECRET_KEY": {
+      "description": "Stripe secret key for payment processing",
+      "required": false
+    },
+    "STRIPE_PUBLISHABLE_KEY": {
+      "description": "Stripe publishable key for payment processing",
+      "required": false
+    }
+  },
+  "scripts": {
+    "postdeploy": "npm run setup:database"
+  },
+  "release": {
+    "command": "npm run setup:database"
+  }
+}

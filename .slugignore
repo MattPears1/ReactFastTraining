@@ -1,0 +1,8 @@
+# Force Heroku to rebuild dependencies
+*.md
+.git/
+.github/
+docs/
+task-planning/
+scripts/test-*
+*.test.*

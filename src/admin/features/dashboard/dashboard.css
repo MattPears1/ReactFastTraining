@@ -1,0 +1,92 @@
+/* Dashboard Chart Styles */
+@import '../../styles/admin-design-system.css';
+
+/* Override for backward compatibility */
+.bg-white.rounded-lg.shadow {
+  border: 1px solid rgb(14, 165, 233) !important; /* primary-500 blue */
+}
+
+/* Ensure proper responsiveness for charts */
+@media (max-width: 640px) {
+  .recharts-responsive-container {
+    min-height: 250px !important;
+  }
+  
+  .recharts-cartesian-axis-tick-value {
+    font-size: 10px !important;
+  }
+}
+
+@media (min-width: 641px) and (max-width: 1024px) {
+  .recharts-responsive-container {
+    min-height: 280px !important;
+  }
+}
+
+/* Fix for narrow column issue */
+.recharts-default-legend {
+  display: flex !important;
+  justify-content: center !important;
+  flex-wrap: wrap !important;
+  gap: 1rem !important;
+}
+
+.recharts-legend-item {
+  display: flex !important;
+  align-items: center !important;
+  margin: 0 !important;
+}
+
+/* Tooltip styling */
+.recharts-default-tooltip {
+  background-color: rgba(255, 255, 255, 0.95) !important;
+  border: 1px solid #e5e7eb !important;
+  border-radius: 6px !important;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1) !important;
+}
+
+/* Ensure charts don't overflow on mobile */
+.recharts-wrapper {
+  width: 100% !important;
+}
+
+/* Fix Y-axis label spacing */
+.recharts-yAxis .recharts-cartesian-axis-tick-value {
+  text-anchor: end !important;
+}
+
+/* Fix vertical text rotation issue */
+.recharts-text {
+  transform: none !important;
+}
+
+/* Ensure proper chart container dimensions */
+.recharts-surface {
+  width: 100% !important;
+  height: 100% !important;
+}
+
+/* Fix axis label text */
+.recharts-cartesian-axis-tick {
+  line-height: normal !important;
+}
+
+.recharts-cartesian-axis-tick-value tspan {
+  display: inline !important;
+}
+
+/* Ensure chart has minimum dimensions even with no data */
+.recharts-wrapper {
+  min-width: 300px !important;
+  width: 100% !important;
+}
+
+/* Show empty state message when no data */
+.chart-empty-state {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  color: #6B7280;
+  font-size: 14px;
+}

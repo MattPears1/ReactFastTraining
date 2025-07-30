@@ -1,0 +1,622 @@
+/* Enhanced Schedule UI Design System */
+
+/* ============================================
+   ENHANCED VARIABLES & ANIMATIONS
+   ============================================ */
+:root {
+  /* Enhanced shadows with subtle color tints */
+  --schedule-shadow-xs: 0 1px 2px 0 rgba(14, 165, 233, 0.03);
+  --schedule-shadow-sm: 0 2px 4px -1px rgba(14, 165, 233, 0.06), 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+  --schedule-shadow-md: 0 4px 6px -2px rgba(14, 165, 233, 0.08), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  --schedule-shadow-lg: 0 10px 15px -3px rgba(14, 165, 233, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+  --schedule-shadow-xl: 0 20px 25px -5px rgba(14, 165, 233, 0.12), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+  
+  /* Enhanced hover shadows */
+  --schedule-shadow-hover: 0 8px 16px -4px rgba(14, 165, 233, 0.15), 0 4px 8px -2px rgba(0, 0, 0, 0.08);
+  
+  /* Timing functions */
+  --schedule-ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+  --schedule-ease-bounce: cubic-bezier(0.68, -0.55, 0.265, 1.55);
+  
+  /* Enhanced border radius */
+  --schedule-radius-sm: 0.5rem;
+  --schedule-radius-md: 0.75rem;
+  --schedule-radius-lg: 1rem;
+  --schedule-radius-xl: 1.25rem;
+}
+
+/* ============================================
+   ENHANCED CARD STYLES
+   ============================================ */
+.schedule-card {
+  background: white;
+  border-radius: var(--schedule-radius-lg);
+  box-shadow: var(--schedule-shadow-sm);
+  border: 1px solid rgba(var(--admin-gray-200), 0.8);
+  overflow: hidden;
+  transition: all 0.3s var(--schedule-ease-out);
+  position: relative;
+}
+
+.schedule-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: linear-gradient(90deg, 
+    rgb(var(--admin-primary-500)) 0%, 
+    rgb(var(--admin-primary-400)) 50%, 
+    rgb(var(--admin-primary-600)) 100%);
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.4s var(--schedule-ease-out);
+}
+
+.schedule-card:hover {
+  box-shadow: var(--schedule-shadow-hover);
+  border-color: rgba(var(--admin-primary-300), 0.5);
+  transform: translateY(-2px);
+}
+
+.schedule-card:hover::before {
+  transform: scaleX(1);
+}
+
+/* Enhanced header with gradient background */
+.schedule-card-header {
+  padding: 1.75rem;
+  background: linear-gradient(135deg, 
+    rgba(var(--admin-gray-50), 0.95) 0%, 
+    rgba(var(--admin-primary-50), 0.3) 100%);
+  border-bottom: 1px solid rgba(var(--admin-gray-200), 0.6);
+  position: relative;
+  overflow: hidden;
+}
+
+.schedule-card-header::after {
+  content: '';
+  position: absolute;
+  top: -50%;
+  right: -10%;
+  width: 40%;
+  height: 200%;
+  background: radial-gradient(circle, 
+    rgba(var(--admin-primary-400), 0.1) 0%, 
+    transparent 70%);
+  pointer-events: none;
+}
+
+/* ============================================
+   ENHANCED BUTTON STYLES
+   ============================================ */
+.schedule-btn {
+  position: relative;
+  overflow: hidden;
+  transition: all 0.3s var(--schedule-ease-out);
+  transform-style: preserve-3d;
+}
+
+.schedule-btn::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 0;
+  height: 0;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.3);
+  transform: translate(-50%, -50%);
+  transition: width 0.6s, height 0.6s;
+}
+
+.schedule-btn:hover::before {
+  width: 300px;
+  height: 300px;
+}
+
+.schedule-btn:active {
+  transform: scale(0.98);
+}
+
+/* Primary button with gradient */
+.schedule-btn-primary {
+  background: linear-gradient(135deg, 
+    rgb(var(--admin-primary-500)) 0%, 
+    rgb(var(--admin-primary-600)) 100%);
+  color: white;
+  box-shadow: 0 4px 12px rgba(var(--admin-primary-500), 0.25);
+}
+
+.schedule-btn-primary:hover {
+  box-shadow: 0 6px 20px rgba(var(--admin-primary-500), 0.35);
+  transform: translateY(-2px);
+}
+
+/* ============================================
+   ENHANCED FORM INPUTS
+   ============================================ */
+.schedule-input,
+.schedule-select,
+.schedule-textarea {
+  transition: all 0.3s var(--schedule-ease-out);
+  border: 2px solid transparent;
+  background: rgba(var(--admin-gray-50), 0.5);
+  backdrop-filter: blur(4px);
+}
+
+.schedule-input:focus,
+.schedule-select:focus,
+.schedule-textarea:focus {
+  background: white;
+  border-color: rgb(var(--admin-primary-400));
+  box-shadow: 0 0 0 4px rgba(var(--admin-primary-500), 0.1),
+              0 2px 8px rgba(var(--admin-primary-500), 0.15);
+  transform: translateY(-1px);
+}
+
+/* Floating labels effect */
+.schedule-form-group {
+  position: relative;
+  margin-bottom: 1.5rem;
+}
+
+.schedule-floating-label {
+  position: absolute;
+  left: 1rem;
+  top: 50%;
+  transform: translateY(-50%);
+  transition: all 0.3s var(--schedule-ease-out);
+  pointer-events: none;
+  color: rgb(var(--admin-gray-500));
+  font-size: 0.875rem;
+}
+
+.schedule-input:focus ~ .schedule-floating-label,
+.schedule-input:not(:placeholder-shown) ~ .schedule-floating-label {
+  top: -0.5rem;
+  left: 0.75rem;
+  font-size: 0.75rem;
+  background: white;
+  padding: 0 0.25rem;
+  color: rgb(var(--admin-primary-600));
+}
+
+/* ============================================
+   ENHANCED STATUS INDICATORS
+   ============================================ */
+.schedule-status-badge {
+  position: relative;
+  padding-left: 1.75rem;
+  transition: all 0.3s var(--schedule-ease-out);
+}
+
+.schedule-status-badge::before {
+  content: '';
+  position: absolute;
+  left: 0.5rem;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 0.5rem;
+  height: 0.5rem;
+  border-radius: 50%;
+  background: currentColor;
+  box-shadow: 0 0 0 2px rgba(currentColor, 0.2);
+  animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+  0% {
+    box-shadow: 0 0 0 0 rgba(currentColor, 0.4);
+  }
+  70% {
+    box-shadow: 0 0 0 8px rgba(currentColor, 0);
+  }
+  100% {
+    box-shadow: 0 0 0 0 rgba(currentColor, 0);
+  }
+}
+
+/* ============================================
+   ENHANCED CAPACITY VISUALIZATION
+   ============================================ */
+.capacity-ring {
+  position: relative;
+  width: 180px;
+  height: 180px;
+  margin: 0 auto;
+}
+
+.capacity-ring svg {
+  transform: rotate(-90deg);
+}
+
+.capacity-ring-bg {
+  fill: none;
+  stroke: rgba(var(--admin-gray-200), 0.5);
+  stroke-width: 12;
+}
+
+.capacity-ring-fill {
+  fill: none;
+  stroke-width: 12;
+  stroke-linecap: round;
+  transition: stroke-dasharray 0.6s var(--schedule-ease-out);
+}
+
+.capacity-ring-text {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  text-align: center;
+}
+
+.capacity-percentage {
+  font-size: 2.5rem;
+  font-weight: 700;
+  background: linear-gradient(135deg, 
+    rgb(var(--admin-primary-600)) 0%, 
+    rgb(var(--admin-primary-400)) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* ============================================
+   ENHANCED ATTENDEE CARDS
+   ============================================ */
+.attendee-card {
+  background: white;
+  border-radius: var(--schedule-radius-md);
+  border: 1px solid rgba(var(--admin-gray-200), 0.8);
+  padding: 1.25rem;
+  transition: all 0.3s var(--schedule-ease-out);
+  position: relative;
+  overflow: hidden;
+}
+
+.attendee-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, 
+    transparent, 
+    rgba(var(--admin-primary-400), 0.05), 
+    transparent);
+  transition: left 0.6s var(--schedule-ease-out);
+}
+
+.attendee-card:hover {
+  box-shadow: var(--schedule-shadow-md);
+  border-color: rgba(var(--admin-primary-300), 0.5);
+  transform: translateY(-2px);
+}
+
+.attendee-card:hover::before {
+  left: 100%;
+}
+
+/* ============================================
+   ENHANCED FINANCIAL DISPLAY
+   ============================================ */
+.financial-metric {
+  position: relative;
+  padding: 1.5rem;
+  border-radius: var(--schedule-radius-md);
+  background: linear-gradient(135deg, 
+    rgba(var(--admin-success-50), 0.5) 0%, 
+    rgba(var(--admin-success-100), 0.3) 100%);
+  border: 1px solid rgba(var(--admin-success-300), 0.3);
+  transition: all 0.3s var(--schedule-ease-out);
+}
+
+.financial-metric:hover {
+  transform: scale(1.02);
+  box-shadow: var(--schedule-shadow-md);
+}
+
+.financial-value {
+  font-size: 2rem;
+  font-weight: 700;
+  background: linear-gradient(135deg, 
+    rgb(var(--admin-success-600)) 0%, 
+    rgb(var(--admin-success-400)) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* ============================================
+   ENHANCED LOADING STATES
+   ============================================ */
+.schedule-skeleton {
+  position: relative;
+  overflow: hidden;
+  background: linear-gradient(90deg,
+    rgba(var(--admin-gray-200), 0.8) 25%,
+    rgba(var(--admin-gray-300), 0.5) 50%,
+    rgba(var(--admin-gray-200), 0.8) 75%);
+  background-size: 200% 100%;
+  animation: shimmer 1.5s infinite;
+}
+
+@keyframes shimmer {
+  0% {
+    background-position: -200% 0;
+  }
+  100% {
+    background-position: 200% 0;
+  }
+}
+
+.schedule-loading-dots {
+  display: inline-flex;
+  gap: 0.25rem;
+}
+
+.schedule-loading-dots span {
+  width: 0.5rem;
+  height: 0.5rem;
+  background: rgb(var(--admin-primary-500));
+  border-radius: 50%;
+  animation: bounce 1.4s infinite ease-in-out both;
+}
+
+.schedule-loading-dots span:nth-child(1) {
+  animation-delay: -0.32s;
+}
+
+.schedule-loading-dots span:nth-child(2) {
+  animation-delay: -0.16s;
+}
+
+@keyframes bounce {
+  0%, 80%, 100% {
+    transform: scale(0);
+  }
+  40% {
+    transform: scale(1);
+  }
+}
+
+/* ============================================
+   ENHANCED EMPTY STATES
+   ============================================ */
+.schedule-empty-state {
+  text-align: center;
+  padding: 4rem 2rem;
+  position: relative;
+}
+
+.schedule-empty-icon {
+  width: 5rem;
+  height: 5rem;
+  margin: 0 auto 1.5rem;
+  color: rgba(var(--admin-gray-400), 0.5);
+  animation: float 3s ease-in-out infinite;
+}
+
+@keyframes float {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+}
+
+/* ============================================
+   ENHANCED TOOLTIPS
+   ============================================ */
+.schedule-tooltip {
+  position: relative;
+}
+
+.schedule-tooltip-content {
+  position: absolute;
+  bottom: 100%;
+  left: 50%;
+  transform: translateX(-50%) translateY(-0.5rem);
+  background: rgba(var(--admin-gray-900), 0.95);
+  color: white;
+  padding: 0.5rem 0.75rem;
+  border-radius: var(--schedule-radius-sm);
+  font-size: 0.75rem;
+  white-space: nowrap;
+  pointer-events: none;
+  opacity: 0;
+  transition: all 0.3s var(--schedule-ease-out);
+  backdrop-filter: blur(4px);
+}
+
+.schedule-tooltip:hover .schedule-tooltip-content {
+  opacity: 1;
+  transform: translateX(-50%) translateY(-0.75rem);
+}
+
+/* ============================================
+   ENHANCED RESPONSIVE BREAKPOINTS
+   ============================================ */
+
+/* Mobile optimizations */
+@media (max-width: 640px) {
+  .schedule-card {
+    border-radius: var(--schedule-radius-md);
+    margin: 0 -0.5rem;
+  }
+  
+  .schedule-card-header {
+    padding: 1.25rem 1rem;
+  }
+  
+  .attendee-card {
+    padding: 1rem;
+  }
+  
+  .capacity-ring {
+    width: 140px;
+    height: 140px;
+  }
+  
+  .capacity-percentage {
+    font-size: 2rem;
+  }
+  
+  .financial-value {
+    font-size: 1.5rem;
+  }
+  
+  /* Touch-friendly tap targets */
+  .schedule-btn,
+  .schedule-input,
+  .schedule-select {
+    min-height: 48px;
+    font-size: 16px; /* Prevents zoom on iOS */
+  }
+}
+
+/* Tablet optimizations */
+@media (min-width: 641px) and (max-width: 1024px) {
+  .schedule-card-header {
+    padding: 1.5rem;
+  }
+  
+  .capacity-ring {
+    width: 160px;
+    height: 160px;
+  }
+}
+
+/* Desktop optimizations */
+@media (min-width: 1025px) {
+  .schedule-card {
+    transition: all 0.4s var(--schedule-ease-out);
+  }
+  
+  .schedule-card:hover {
+    transform: translateY(-4px);
+  }
+  
+  /* Enhanced hover effects on desktop */
+  .attendee-card:hover {
+    transform: translateY(-3px) scale(1.01);
+  }
+}
+
+/* 4K display optimizations */
+@media (min-width: 2560px) {
+  .schedule-card-header {
+    padding: 2rem;
+  }
+  
+  .capacity-ring {
+    width: 220px;
+    height: 220px;
+  }
+  
+  .capacity-percentage {
+    font-size: 3rem;
+  }
+  
+  .financial-value {
+    font-size: 2.5rem;
+  }
+}
+
+/* ============================================
+   ENHANCED ANIMATIONS FOR INTERACTIONS
+   ============================================ */
+.schedule-fade-in {
+  animation: scheduleFadeIn 0.5s var(--schedule-ease-out) forwards;
+}
+
+@keyframes scheduleFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.schedule-slide-in {
+  animation: scheduleSlideIn 0.4s var(--schedule-ease-out) forwards;
+}
+
+@keyframes scheduleSlideIn {
+  from {
+    opacity: 0;
+    transform: translateX(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+/* Stagger animation for lists */
+.schedule-stagger-item {
+  opacity: 0;
+  animation: scheduleFadeIn 0.5s var(--schedule-ease-out) forwards;
+}
+
+.schedule-stagger-item:nth-child(1) { animation-delay: 0.05s; }
+.schedule-stagger-item:nth-child(2) { animation-delay: 0.1s; }
+.schedule-stagger-item:nth-child(3) { animation-delay: 0.15s; }
+.schedule-stagger-item:nth-child(4) { animation-delay: 0.2s; }
+.schedule-stagger-item:nth-child(5) { animation-delay: 0.25s; }
+
+/* Success animation */
+.schedule-success-pulse {
+  animation: successPulse 0.6s var(--schedule-ease-bounce);
+}
+
+@keyframes successPulse {
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.05);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+/* ============================================
+   ENHANCED DARK MODE SUPPORT
+   ============================================ */
+@media (prefers-color-scheme: dark) {
+  .schedule-card {
+    background: rgba(var(--admin-gray-800), 0.95);
+    border-color: rgba(var(--admin-gray-700), 0.8);
+    color: rgb(var(--admin-gray-100));
+  }
+  
+  .schedule-card-header {
+    background: linear-gradient(135deg, 
+      rgba(var(--admin-gray-900), 0.95) 0%, 
+      rgba(var(--admin-primary-900), 0.3) 100%);
+    border-color: rgba(var(--admin-gray-700), 0.6);
+  }
+  
+  .schedule-input,
+  .schedule-select,
+  .schedule-textarea {
+    background: rgba(var(--admin-gray-900), 0.5);
+    color: rgb(var(--admin-gray-100));
+  }
+  
+  .schedule-input:focus,
+  .schedule-select:focus,
+  .schedule-textarea:focus {
+    background: rgba(var(--admin-gray-800), 0.95);
+  }
+}

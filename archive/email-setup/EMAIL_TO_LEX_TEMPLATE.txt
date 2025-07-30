@@ -1,0 +1,46 @@
+Subject: DNS Setup Instructions for reactfasttraining.co.uk
+
+Hi Lex,
+
+The new React Fast Training website is ready to go live. To point your domain from Wix to the new site, I need you to update the DNS settings.
+
+I've prepared step-by-step instructions that should take about 10-15 minutes to complete.
+
+IMPORTANT INFORMATION:
+- Heroku App URL: react-fast-training-6fb9e7681eed.herokuapp.com
+- Current working example: https://reactfasttraining.org
+- DNS Target: Use the herokuapp.com URL above for both www and root domain
+
+WHAT WILL HAPPEN:
+- Your domain will point to the new site instead of Wix
+- Email services will NOT be affected
+- The change takes 1-4 hours to fully complete
+- The old Wix site will still exist but won't be accessible via the domain
+
+ATTACHED INSTRUCTIONS:
+Please see the attached "DNS_SETUP_INSTRUCTIONS_FOR_LEX.md" file for detailed steps with screenshots.
+
+TIMING:
+- Best to do this when you have 15 minutes free
+- Avoid making changes on Friday afternoon (in case support is needed)
+- The site may be intermittently available for a few hours after the change
+
+BEFORE YOU START:
+Please confirm:
+1. You have access to your Wix account
+2. You're ready to switch to the new site
+3. You understand the old Wix site won't be accessible via the domain
+
+Let me know when you're ready to proceed, and I'll be available to help if you run into any issues.
+
+The new site includes all the features we discussed:
+- Online booking system
+- Booking inquiry forms
+- Automated email confirmations
+- Mobile-responsive design
+- Fast loading times
+
+Best regards,
+[Your name]
+
+P.S. If you need to revert back to Wix for any reason, you can do so by reversing the DNS changes. I've included those instructions in the document as well.

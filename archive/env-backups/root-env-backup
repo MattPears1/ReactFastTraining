@@ -1,0 +1,29 @@
+# Frontend Environment Variables
+
+# General
+VITE_ENV=development
+VITE_API_URL=
+
+# Sentry Error Tracking (disabled in development)
+VITE_SENTRY_DSN=
+ 
+
+# Stripe (Test Key - Replace with production key for live environment)
+VITE_STRIPE_PUBLISHABLE_KEY=pk_test_51Qw5QyQSHAAMHn4tPbe31bwAtRb7qEAGms4h3kr8h8mu1nfyzzM1u9GHdnbtGtiuzJWH9NSqFoER4Wmhw3k91cKN00PQVbUU7I
+
+SMTP_HOST=smtp.gmail.com
+SMTP_PORT=587
+SMTP_USER=tubeofpears@gmail.com
+SMTP_PASS=muqy hprd upxo gloc
+EMAIL_FROM="React Fast Training <tubeofpears@gmail.com>"
+ 
+
+# Feature Flags
+VITE_ENABLE_PWA=false
+VITE_ENABLE_ANALYTICS=true
+VITE_ENABLE_CHAT=false
+
+# Email Configuration (CONFIGURED & ACTIVE)
+# info@reactfasttraining.co.uk - General info, help & troubleshooting
+# bookings@reactfasttraining.co.uk - Booking queries & course administration
+# lex@reactfasttraining.co.uk - Course content & instructor communication

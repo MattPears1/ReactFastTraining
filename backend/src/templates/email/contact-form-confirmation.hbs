@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Thank You for Contacting React Fast Training</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        .header {
+            background: linear-gradient(135deg, #0EA5E9 0%, #10B981 100%);
+            color: white;
+            padding: 30px;
+            text-align: center;
+            border-radius: 8px 8px 0 0;
+        }
+        .logo {
+            max-width: 200px;
+            margin-bottom: 20px;
+        }
+        .content {
+            background-color: #f9f9f9;
+            padding: 30px;
+            border-radius: 0 0 8px 8px;
+        }
+        .greeting {
+            font-size: 20px;
+            color: #0EA5E9;
+            margin-bottom: 20px;
+        }
+        .info-box {
+            background-color: #E0F2FE;
+            border-left: 4px solid #0EA5E9;
+            padding: 15px;
+            margin: 20px 0;
+            border-radius: 4px;
+        }
+        .button {
+            display: inline-block;
+            background-color: #10B981;
+            color: white;
+            padding: 12px 30px;
+            text-decoration: none;
+            border-radius: 5px;
+            margin-top: 20px;
+        }
+        .button:hover {
+            background-color: #059669;
+        }
+        .footer {
+            text-align: center;
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 1px solid #ddd;
+            color: #666;
+            font-size: 14px;
+        }
+        .social-links {
+            margin-top: 15px;
+        }
+        .social-links a {
+            margin: 0 10px;
+            color: #0EA5E9;
+            text-decoration: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>Thank You for Contacting Us!</h1>
+        <p>Act Fast | Save Lives</p>
+    </div>
+    
+    <div class="content">
+        <div class="greeting">
+            Hi {{firstName}},
+        </div>
+        
+        <p>Thank you for reaching out to React Fast Training. We've received your message regarding "<strong>{{subject}}</strong>" and we appreciate your interest in our first aid training courses.</p>
+        
+        <div class="info-box">
+            <strong>What happens next?</strong><br>
+            One of our team members will review your message and get back to you within 24-48 hours (Monday to Friday). We aim to respond as quickly as possible to all enquiries.
+        </div>
+        
+        <p>In the meantime, you might find these resources helpful:</p>
+        
+        <ul>
+            <li><strong>Course Information:</strong> Learn more about our <a href="https://www.reactfasttraining.co.uk/courses">first aid courses</a></li>
+            <li><strong>Training Locations:</strong> Find out about our <a href="https://www.reactfasttraining.co.uk/venue">training venues</a> across Yorkshire</li>
+            <li><strong>About Us:</strong> Discover more about <a href="https://www.reactfasttraining.co.uk/about">our instructors and mission</a></li>
+        </ul>
+        
+        <p>If your enquiry is urgent, please don't hesitate to call us directly on <strong>07447 485644</strong> during our office hours:</p>
+        <ul>
+            <li>Monday - Friday: 8:00 AM - 6:00 PM</li>
+            <li>Saturday: 9:00 AM - 4:00 PM</li>
+        </ul>
+        
+        <center>
+            <a href="https://www.reactfasttraining.co.uk/courses" class="button">Browse Our Courses</a>
+        </center>
+    </div>
+    
+    <div class="footer">
+        <p><strong>React Fast Training</strong><br>
+        Professional First Aid Training Across Yorkshire<br>
+        Leeds | Sheffield | Bradford</p>
+        
+        <div class="social-links">
+            <a href="#">Facebook</a> |
+            <a href="#">LinkedIn</a> |
+            <a href="#">Twitter</a>
+        </div>
+        
+        <p style="font-size: 12px; margin-top: 20px;">
+            This email was sent because you submitted a contact form on our website.<br>
+            If you did not submit this form, please ignore this email.
+        </p>
+    </div>
+</body>
+</html>
