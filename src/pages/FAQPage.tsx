@@ -170,9 +170,7 @@ const FAQPage: React.FC = () => {
               First Aid Training{" "}
               <span className="text-gradient gradient-primary">FAQs</span>
             </h1>
-            <p className="text-base sm:text-lg md:text-xl text-gray-600 dark:text-gray-400 px-4 sm:px-0">
-              The majority of our courses require no prior experience or qualifications other than the Oxygen Therapy Course, which the participant is required to have a valid First Aid at Work or Emergency First Aid at Work certificate. Our training is designed for complete beginners and our experienced trainer will guide you through everything step by step.
-            </p>
+            {/* The paragraph below has been removed as per the client's request */}
           </motion.div>
         </div>
       </section>

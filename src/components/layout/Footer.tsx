@@ -57,25 +57,25 @@ const TikTokIcon = () => (
 const socialLinks = [
   {
     icon: Facebook,
-    href: "https://facebook.com",
+    href: "https://facebook.com/reactfasttraining",
     label: "Facebook",
     color: "hover:text-blue-600",
   },
   {
     icon: TikTokIcon,
-    href: "https://tiktok.com",
+    href: "https://tiktok.com/reactfasttraining",
     label: "TikTok",
     color: "hover:text-gray-800",
   },
   {
     icon: Instagram,
-    href: "https://instagram.com",
+    href: "https://instagram.com/reactfasttraining",
     label: "Instagram",
     color: "hover:text-pink-600",
   },
   {
     icon: Linkedin,
-    href: "#",
+    href: " https://linkedin.com/company/reactfasttraining ",
     label: "LinkedIn",
     color: "hover:text-blue-700",
   },
