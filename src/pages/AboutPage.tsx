@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React from "react";
 import { motion } from "framer-motion";
 import { Users, Target, Award, Shield, Heart, MapPin } from "lucide-react";
 import CTASection from "@components/sections/CTASection";
@@ -47,21 +47,6 @@ const values = [
 // Real timeline will be added as the business grows
 
 const AboutPage: React.FC = () => {
-  useEffect(() => {
-    // Load TikTok embed script
-    const script = document.createElement("script");
-    script.src = "https://www.tiktok.com/embed.js";
-    script.async = true;
-    document.body.appendChild(script);
-
-    return () => {
-      // Cleanup script on unmount
-      if (document.body.contains(script)) {
-        document.body.removeChild(script);
-      }
-    };
-  }, []);
-
   return (
     <div className="relative">
       <SEO
@@ -310,69 +295,6 @@ const AboutPage: React.FC = () => {
         </div>
       </section>
 
-      {/* Social Media Section */}
-      <section className="py-12 sm:py-16 md:py-20">
-        <div className="container px-4 sm:px-6 lg:px-8">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            className="text-center mb-8 sm:mb-10 md:mb-12"
-          >
-            <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-gray-900 dark:text-white mb-3 sm:mb-4">
-              Follow Our Journey
-            </h2>
-            <p className="text-base sm:text-lg text-gray-600 dark:text-gray-400 max-w-2xl mx-auto px-4 sm:px-0">
-              Stay connected with us on social media for first aid tips, training updates, and behind-the-scenes content
-            </p>
-          </motion.div>
-
-          <div className="grid md:grid-cols-2 gap-8 max-w-6xl mx-auto">
-            {/* TikTok Embed */}
-            <motion.div
-              initial={{ opacity: 0, x: -20 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              viewport={{ once: true }}
-              transition={{ delay: 0.1 }}
-              className="flex justify-center"
-            >
-              <blockquote 
-                className="tiktok-embed" 
-                cite="https://www.tiktok.com/@reactfasttraining" 
-                data-unique-id="reactfasttraining" 
-                data-embed-type="creator" 
-                style={{ maxWidth: '380px', minWidth: '288px' }}
-              >
-                <section>
-                  <a target="_blank" rel="noopener noreferrer" href="https://www.tiktok.com/@reactfasttraining?refer=creator_embed">
-                    @reactfasttraining
-                  </a>
-                </section>
-              </blockquote>
-            </motion.div>
-
-            {/* Instagram Embed */}
-            <motion.div
-              initial={{ opacity: 0, x: 20 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              viewport={{ once: true }}
-              transition={{ delay: 0.2 }}
-              className="flex justify-center"
-            >
-              <iframe
-                src="https://www.instagram.com/reactft/embed/"
-                width="380"
-                height="480"
-                frameBorder="0"
-                scrolling="no"
-                allowTransparency={true}
-                className="instagram-embed rounded-lg shadow-lg"
-                style={{ background: 'white', border: 0, borderRadius: '12px', boxShadow: '0 2px 10px 0 rgba(0,0,0,0.1)', display: 'block', margin: '0 auto', maxWidth: '380px', minWidth: '288px', width: '100%' }}
-              ></iframe>
-            </motion.div>
-          </div>
-        </div>
-      </section>
 
       <CTASection
         title="Ready to Learn First Aid?"
