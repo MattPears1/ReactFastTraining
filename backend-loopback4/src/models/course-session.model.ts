@@ -1,45 +1,19 @@
-import {Entity, model, property, belongsTo, hasMany} from '@loopback/repository';
-import {Course} from './course.model';
-import {Trainer} from './trainer.model';
-import {Location} from './location.model';
-import {Booking} from './booking.model';
+import {Entity, model, property} from '@loopback/repository';
 
-export enum SessionStatus {
-  SCHEDULED = 'SCHEDULED',
-  CONFIRMED = 'CONFIRMED',
-  IN_PROGRESS = 'IN_PROGRESS',
-  COMPLETED = 'COMPLETED',
-  CANCELLED = 'CANCELLED',
-}
-
-@model({
-  settings: {
-    strict: true,
-    postgresql: {
-      table: 'course_sessions',
-    },
-  },
-})
+@model()
 export class CourseSession extends Entity {
   @property({
-    type: 'string',
+    type: 'number',
     id: true,
     generated: true,
-    postgresql: {
-      dataType: 'uuid',
-      defaultFn: 'uuid_generate_v4',
-    },
   })
-  id: string;
+  id?: number;
 
-  @belongsTo(() => Course)
+  @property({
+    type: 'string',
+    required: true,
+  })
   courseId: string;
-
-  @belongsTo(() => Trainer)
-  trainerId: string;
-
-  @belongsTo(() => Location)
-  locationId: string;
 
   @property({
     type: 'date',
@@ -55,17 +29,13 @@ export class CourseSession extends Entity {
 
   @property({
     type: 'string',
-    required: true,
-    default: '09:00',
   })
-  startTime: string;
+  startTime?: string;
 
   @property({
     type: 'string',
-    required: true,
-    default: '17:00',
   })
-  endTime: string;
+  endTime?: string;
 
   @property({
     type: 'number',
@@ -75,68 +45,34 @@ export class CourseSession extends Entity {
 
   @property({
     type: 'number',
-    default: 0,
+    required: true,
   })
   currentParticipants: number;
 
   @property({
-    type: 'number',
-    required: true,
+    type: 'string',
   })
-  pricePerPerson: number;
+  venue?: string;
+
+  @property({
+    type: 'string',
+  })
+  instructor?: string;
 
   @property({
     type: 'string',
     required: true,
-    default: SessionStatus.SCHEDULED,
-    jsonSchema: {
-      enum: Object.values(SessionStatus),
-    },
   })
-  status: SessionStatus;
+  status: string;
 
-  @property({
-    type: 'boolean',
-    default: false,
-  })
-  isOnsite: boolean;
-
-  @property({
-    type: 'string',
-  })
-  onsiteClientName?: string;
-
-  @property({
-    type: 'object',
-  })
-  onsiteDetails?: {
-    contactName?: string;
-    contactPhone?: string;
-    contactEmail?: string;
-    specialRequirements?: string;
-  };
-
-  @property({
-    type: 'string',
-  })
-  notes?: string;
-
-  @property({
-    type: 'date',
-    defaultFn: 'now',
-  })
-  createdAt?: Date;
-
-  @property({
-    type: 'date',
-    defaultFn: 'now',
-  })
-  updatedAt?: Date;
-
-  @hasMany(() => Booking)
-  bookings: Booking[];
 
   constructor(data?: Partial<CourseSession>) {
     super(data);
   }
 }
+
+export interface CourseSessionRelations {
+  // describe navigational properties here
+}
+
+export type CourseSessionWithRelations = CourseSession & CourseSessionRelations;

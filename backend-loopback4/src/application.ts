@@ -17,6 +17,9 @@ import {AuthorizationComponent} from '@loopback/authorization';
 import path from 'path';
 import {MySequence} from './sequence';
 import {SECURITY_SCHEME_SPEC} from './utils/security-spec';
+import {EmailService} from './services/email.service';
+import {RefundService} from './services/refund.service';
+import {DbDataSource} from './datasources';
 
 export {ApplicationConfig};
 
@@ -46,14 +49,11 @@ export class ReactFastTrainingApiApplication extends BootMixin(
     this.component(AuthorizationComponent);
 
     // Bind services
-    this.bind('services.CourseSessionCapacityService').toClass(
-      require('./services/course-session-capacity.service').CourseSessionCapacityService,
-    );
-    
-    // Bind EmailService
-    this.bind('services.EmailService').toClass(
-      require('./services/email.service').EmailService,
-    );
+    this.service(EmailService);
+    this.service(RefundService);
+
+    // Bind datasources
+    this.dataSource(DbDataSource, UserServiceBindings.DATASOURCE_NAME);
     
     // Bind UserManagementService
     this.bind('services.UserManagementService').toClass(
