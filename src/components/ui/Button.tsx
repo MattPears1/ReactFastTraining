@@ -65,13 +65,13 @@ const Button = forwardRef<HTMLButtonElement, ButtonProps>(
       }
     };
     const baseStyles =
-      "relative inline-flex items-center justify-center font-medium transition-all duration-300 focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed overflow-hidden transform hover:-translate-y-0.5 active:translate-y-0 hover-elevation";
+      "relative inline-flex items-center justify-center font-semibold transition-all duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed overflow-hidden";
 
     const variants = {
       primary:
-        "bg-gradient-to-r from-primary-500 to-primary-600 text-white hover:from-primary-600 hover:to-primary-700 shadow-blue hover:shadow-lg transition-all focus-visible:ring-primary-500",
+        "bg-primary-600 text-white hover:bg-primary-700 shadow-sm hover:shadow-md transition-all focus-visible:ring-primary-500",
       secondary:
-        "bg-gradient-to-r from-secondary-500 to-secondary-600 text-white hover:from-secondary-600 hover:to-secondary-700 shadow-green hover:shadow-lg transition-all focus-visible:ring-secondary-500",
+        "bg-secondary-600 text-white hover:bg-secondary-700 shadow-sm hover:shadow-md transition-all focus-visible:ring-secondary-500",
       outline:
         "border-2 border-primary-400 text-primary-700 dark:text-primary-300 hover:bg-primary-50 dark:hover:bg-primary-900/10 hover:border-primary-500 transition-all",
       ghost:
@@ -79,14 +79,14 @@ const Button = forwardRef<HTMLButtonElement, ButtonProps>(
       danger:
         "bg-gray-100 text-error border border-error/20 hover:bg-error/10 hover:border-error/40 focus-visible:ring-error/50 transition-all",
       success:
-        "bg-gradient-to-r from-secondary-500 to-secondary-600 text-white hover:from-secondary-600 hover:to-secondary-700 shadow-green hover:shadow-lg transition-all focus-visible:ring-secondary-500",
+        "bg-secondary-600 text-white hover:bg-secondary-700 shadow-sm hover:shadow-md transition-all focus-visible:ring-secondary-500",
     };
 
     const sizes = {
-      sm: "px-4 py-3 sm:px-3 sm:py-1.5 text-base sm:text-sm rounded-md gap-1.5 min-h-[48px] sm:min-h-[32px]",
-      md: "px-5 py-3.5 sm:px-4 sm:py-2 text-base sm:text-sm rounded-lg gap-2 min-h-[48px] sm:min-h-[36px]",
-      lg: "px-6 py-4 sm:px-5 sm:py-3 text-base rounded-lg gap-2 min-h-[52px] sm:min-h-[42px]",
-      xl: "px-8 py-4 sm:px-6 sm:py-3.5 text-lg sm:text-base rounded-xl gap-3 min-h-[56px] sm:min-h-[48px]",
+      sm: "px-4 py-3 sm:px-3 sm:py-1.5 text-base sm:text-sm rounded gap-1.5 min-h-[48px] sm:min-h-[32px]",
+      md: "px-5 py-3.5 sm:px-4 sm:py-2 text-base sm:text-sm rounded-md gap-2 min-h-[48px] sm:min-h-[36px]",
+      lg: "px-6 py-4 sm:px-5 sm:py-3 text-base rounded-md gap-2 min-h-[52px] sm:min-h-[42px]",
+      xl: "px-8 py-4 sm:px-6 sm:py-3.5 text-lg sm:text-base rounded-md gap-3 min-h-[56px] sm:min-h-[48px]",
     };
 
     const iconSizes = {
@@ -116,21 +116,15 @@ const Button = forwardRef<HTMLButtonElement, ButtonProps>(
             )}
           />
         ) : leftIcon ? (
-          <motion.span 
-            className={cn(loadingIconSize, "transition-transform duration-300")}
-            animate={{ x: isHovered ? -2 : 0 }}
-          >
+          <span className={loadingIconSize}>
             {leftIcon}
-          </motion.span>
+          </span>
         ) : null}
         <span className="relative z-10">{children}</span>
         {!loading && rightIcon && (
-          <motion.span 
-            className={cn(loadingIconSize, "transition-transform duration-300")}
-            animate={{ x: isHovered ? 2 : 0 }}
-          >
+          <span className={loadingIconSize}>
             {rightIcon}
-          </motion.span>
+          </span>
         )}
         {/* Ripple effects container */}
         <AnimatePresence>

@@ -366,10 +366,10 @@ const CoursesPage: React.FC = () => {
                 <Users className="w-7 h-7 sm:w-8 sm:h-8 text-secondary-600 dark:text-secondary-400" />
               </div>
               <h3 className="text-lg sm:text-xl font-semibold text-gray-900 dark:text-white mb-2">
-                Expert Trainers
+                Expert Trainer
               </h3>
               <p className="text-sm sm:text-base text-gray-600 dark:text-gray-400 px-4 sm:px-0">
-                Learn from professionals with real emergency experience
+                Learn from a professional with real emergency experience
               </p>
             </motion.div>
 

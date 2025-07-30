@@ -1,7 +1,7 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
-import { X, Clock, Users, Award, ArrowRight } from "lucide-react";
+import { X, Clock, Users, Award, ArrowRight, Heart, Baby, Activity, RefreshCw, Zap, Wind, Briefcase, Shield } from "lucide-react";
 import { cn } from "@utils/cn";
 
 interface Course {
@@ -9,7 +9,7 @@ interface Course {
   href: string;
   duration: string;
   description: string;
-  icon: string;
+  icon: React.ElementType;
 }
 
 const courses: Course[] = [
@@ -18,7 +18,7 @@ const courses: Course[] = [
     href: "/courses/efaw",
     duration: "1 Day",
     description: "Essential emergency first aid skills for the workplace",
-    icon: "🚑",
+    icon: Shield,
   },
   {
     label: "First Aid at Work",
@@ -26,49 +26,49 @@ const courses: Course[] = [
     duration: "3 Days",
     description:
       "Comprehensive first aid training for appointed workplace first aiders",
-    icon: "🏥",
+    icon: Briefcase,
   },
   {
     label: "Paediatric First Aid",
     href: "/courses/paediatric",
     duration: "2 Days",
     description: "Specialised first aid for those working with children",
-    icon: "👶",
+    icon: Baby,
   },
   {
     label: "Emergency Paediatric First Aid",
     href: "/courses/emergency-paediatric",
     duration: "1 Day",
     description: "Emergency first aid skills for childcare settings",
-    icon: "🧸",
+    icon: Baby,
   },
   {
     label: "Activity First Aid",
     href: "/courses/activity-first-aid",
     duration: "1 Day",
     description: "First aid for sports and outdoor activities",
-    icon: "⚽",
+    icon: Activity,
   },
   {
     label: "Annual Skills Refresher",
     href: "/courses/annual-skills-refresher",
     duration: "3 Hours",
     description: "HSE recommended annual skills update",
-    icon: "🔄",
+    icon: RefreshCw,
   },
   {
     label: "CPR and AED",
     href: "/courses/cpr-aed",
     duration: "3 Hours",
     description: "Learn life-saving CPR and defibrillator skills",
-    icon: "❤️",
+    icon: Heart,
   },
   {
     label: "Oxygen Therapy",
     href: "/courses/oxygen-therapy",
     duration: "1 Day",
     description: "Safe administration of emergency oxygen",
-    icon: "💨",
+    icon: Wind,
   },
 ];
 
@@ -159,8 +159,8 @@ export const CoursesModal: React.FC<CoursesModalProps> = ({
                       className="group relative bg-white dark:bg-gray-800 rounded-lg sm:rounded-xl border border-gray-200 dark:border-gray-700 p-4 sm:p-5 lg:p-6 hover:shadow-lg hover:border-primary-300 dark:hover:border-primary-700 transition-all duration-300 hover:-translate-y-0.5 lg:hover:-translate-y-1 w-full max-w-full"
                     >
                       {/* Icon */}
-                      <div className="text-xl sm:text-3xl lg:text-4xl mb-2 sm:mb-3 lg:mb-4">
-                        {course.icon}
+                      <div className="mb-2 sm:mb-3 lg:mb-4">
+                        <course.icon className="w-8 h-8 sm:w-10 sm:h-10 lg:w-12 lg:h-12 text-primary-600 dark:text-primary-400" />
                       </div>
 
                       {/* Content */}
