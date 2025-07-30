@@ -163,7 +163,7 @@ const HomePage: React.FC = () => {
         icon: Award,
         title: "Experienced trainer",
         description:
-          "Learn lifesaving skills from an experienced veteran and emergency services professional",
+          "Learn life saving skills from an experienced veteran and emergency services professional",
       },
     ],
     [],

@@ -281,7 +281,7 @@ const AboutPage: React.FC = () => {
                     Lex - Founder & Lead Instructor
                   </h3>
                   <p className="text-gray-600 dark:text-gray-400 mb-4">
-                    Hi, I'm Lex, the founder and lead instructor here at React Fast Training. As an experienced instructor with a background in the Royal Navy and policing services, I bring a unique perspective to our first aid training. Having been first aid qualified since the age of 12, I understand the importance of clear instruction and practical skills. I founded React First Training because I saw a need for practical, no-nonsense first aid training delivered by someone who truly understands applying first aid in emergencies. Every course I teach is informed by firsthand experiences, not just textbook theory.
+                    Hi, I'm Lex, the founder and lead instructor here at React Fast Training. As a veteran of the Royal Navy and policing services, I bring a unique perspective to our first aid training. Having been first aid qualified since the age of 12, I understand the importance of clear instruction and practical skills. I founded React First Training because I saw a need for practical, no-nonsense first aid training delivered by someone who truly understands applying first aid in emergencies. Every course I teach is informed by firsthand experiences, not just textbook theory.
                   </p>
                   <div className="mt-6 flex flex-wrap justify-center gap-4">
                     <div className="flex items-center gap-2">
