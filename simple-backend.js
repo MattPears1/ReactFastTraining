@@ -100,17 +100,29 @@ async function handleContactForm(req, res) {
     // Send email
     await transporter.sendMail(mailOptions);
 
-    // Send confirmation email to sender
+    // Send confirmation email to sender with a copy of their inquiry
     const confirmationOptions = {
       from: process.env.EMAIL_FROM || 'noreply@reactfasttraining.co.uk',
       to: email,
-      subject: 'Thank you for contacting React Fast Training',
+      subject: 'Your inquiry to React Fast Training - Copy for your records',
       html: `
         <h2>Thank you for your enquiry</h2>
         <p>Dear ${name},</p>
         <p>We have received your message and will get back to you as soon as possible.</p>
         <p>If your enquiry is urgent, please call us on 07123 456789.</p>
+        
+        <hr>
+        <h3>Copy of your inquiry:</h3>
+        <p><strong>Name:</strong> ${name}</p>
+        <p><strong>Email:</strong> ${email}</p>
+        <p><strong>Phone:</strong> ${phone || 'Not provided'}</p>
+        <p><strong>Subject:</strong> ${subject || 'General Enquiry'}</p>
+        <p><strong>Message:</strong></p>
+        <p>${message}</p>
+        <hr>
+        
         <p>Best regards,<br>React Fast Training Team</p>
+        <p><em>This is an automated response. Please do not reply to this email.</em></p>
       `
     };
 
