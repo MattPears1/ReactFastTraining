@@ -63,13 +63,13 @@ const socialLinks = [
   },
   {
     icon: TikTokIcon,
-    href: "https://tiktok.com/reactfasttraining",
+    href: "https://tiktok.com/@reactfasttraining",
     label: "TikTok",
     color: "hover:text-gray-800",
   },
   {
     icon: Instagram,
-    href: "https://instagram.com/reactfasttraining",
+    href: "https://instagram.com/reactft",
     label: "Instagram",
     color: "hover:text-pink-600",
   },
