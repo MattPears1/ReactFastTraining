@@ -158,33 +158,6 @@ const Footer: React.FC = () => {
             </div>
           </div>
 
-          {/* Quick Links */}
-          <div className="flex flex-wrap items-center gap-4 text-sm">
-            <Link
-              to="/courses"
-              className="text-gray-600 dark:text-gray-400 hover:text-primary-600 dark:hover:text-primary-400 transition-colors"
-            >
-              Courses
-            </Link>
-            <Link
-              to="/contact"
-              className="text-gray-600 dark:text-gray-400 hover:text-primary-600 dark:hover:text-primary-400 transition-colors"
-            >
-              Contact
-            </Link>
-            <Link
-              to="/faq"
-              className="text-gray-600 dark:text-gray-400 hover:text-primary-600 dark:hover:text-primary-400 transition-colors"
-            >
-              FAQ
-            </Link>
-            <Link
-              to="/contact"
-              className="text-gray-600 dark:text-gray-400 hover:text-primary-600 dark:hover:text-primary-400 transition-colors"
-            >
-              Contact
-            </Link>
-          </div>
 
           {/* Social Links */}
           <div className="flex items-center gap-4 sm:gap-6">

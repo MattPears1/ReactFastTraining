@@ -33,6 +33,7 @@ const navItems: NavItem[] = [
       { label: "Oxygen Therapy", href: "/courses/oxygen-therapy" },
     ],
   },
+  { label: "FAQ", href: "/faq" },
   { label: "Bookings and contact", href: "/contact" },
 ];
 
