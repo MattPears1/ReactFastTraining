@@ -8,7 +8,7 @@ import {
 } from '@loopback/rest';
 import {inject, service} from '@loopback/core';
 import {EmailService, TestimonialSubmission} from '../services/email.service';
-import * as multer from 'multer';
+import multer from 'multer';
 
 export class TestimonialController {
   constructor(
