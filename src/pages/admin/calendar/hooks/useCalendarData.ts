@@ -14,6 +14,9 @@ export const useCalendarData = () => {
     location: "",
     instructor: "",
   });
+  const [showFilters, setShowFilters] = useState(false);
+  const [selectedEvent, setSelectedEvent] = useState<CalendarEvent | null>(null);
+  const [showCreateModal, setShowCreateModal] = useState(false);
 
   const loadCalendarData = useCallback(async () => {
     try {
@@ -89,6 +92,12 @@ export const useCalendarData = () => {
     setDate,
     filters,
     setFilters,
+    showFilters,
+    setShowFilters,
+    selectedEvent,
+    setSelectedEvent,
+    showCreateModal,
+    setShowCreateModal,
     loadCalendarData,
     handleEventDrop,
   };
